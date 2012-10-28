@@ -109,51 +109,51 @@ def printl2 (string, parent=None, dmode= "U"):
 	if dmode == "E" :
 		verbLevel = VERB_ERROR
 		if verbLevel <= debugMode:
-			print '\033[1;41m' + "[DreamPlex] " + "E" + "  " + str(out) + '\033[1;m'
+			print "[DreamPlex] " + "E" + "  " + str(out)
 			writeToLog(dmode, out)
 	
 	elif dmode == "W":
 		verbLevel = VERB_WARNING
 		if verbLevel <= debugMode:
-			print '\033[1;33m' + "[DreamPlex] " + "W" + "  " + str(out) + '\033[1;m'
+			print "[DreamPlex] " + "W" + "  " + str(out)
 			writeToLog(dmode, out)
 	
 	elif dmode == "I":
 		verbLevel = VERB_INFORMATION
 		if verbLevel <= debugMode:
-			print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;37m' + "I" + "  " + str(out) + '\033[1;m'	
+			print "[DreamPlex] " + "I" + "  " + str(out)
 			writeToLog(dmode, out)
 	
 	elif dmode == "D":
 		verbLevel = VERB_DEBUG
 		if verbLevel <= debugMode:
-			print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;37m' + "D" + "  " + str(out) + '\033[1;m'		
+			print "[DreamPlex] " + "D" + "  " + str(out)	
 			writeToLog(dmode, out)
 	
 	elif dmode == "S":
 		verbLevel = VERB_STARTING
 		if verbLevel <= debugMode:
-			print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;32m' + "S" + "  " + str(out) + STARTING_MESSAGE + '\033[1;m'
+			print "[DreamPlex] " + "S" + "  " + str(out) + STARTING_MESSAGE
 			writeToLog(dmode, out)
 	
 	elif dmode == "C":
 		verbLevel = VERB_CLOSING
 		if verbLevel <= debugMode:
-			print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;32m' + "C" + "  " + str(out) +  CLOSING_MESSAGE + '\033[1;m'	
+			print "[DreamPlex] " + "C" + "  " + str(out) +  CLOSING_MESSAGE
 			writeToLog(dmode, out)
 	
 	elif dmode == "U":
-		print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;32m' + "U  specify me!!!!!" + "  " + str(out) + '\033[1;m'	
+		print "[DreamPlex] " + "U  specify me!!!!!" + "  " + str(out)
 		writeToLog(dmode, out)
 		
 	elif dmode == "X":
 		verbLevel = VERB_EXTENDED
 		if verbLevel <= debugMode:
-			print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;37m' + "D" + "  " + str(out) + '\033[1;m'		
+			print "[DreamPlex] " + "D" + "  " + str(out)	
 			writeToLog(dmode, out)
 		
 	else:
-		print '\033[0;36m' + "[DreamPlex] " + '\033[1;m' + '\033[1;32m' + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out) + '\033[1;m'	
+		print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
 	
 
 
