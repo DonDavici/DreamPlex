@@ -499,7 +499,7 @@ class PlexLibrary(Screen):
                 if str(sections.get('host', 'Unknow')) == str(self.g_host):
                                     
                     self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
-                                       'address': sections.get('host','Unknown')+":"+sections.get('port'),
+                                       'address': self.g_host + ":" + sections.get('port'),
                                        'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
                                        'uuid' : sections.get('machineIdentifier','Unknown') ,
                                        'path' : sections.get('path') ,
@@ -509,7 +509,8 @@ class PlexLibrary(Screen):
                                        'local' : sections.get('local') ,
                                        'type' : sections.get('type','Unknown') })
 
-                
+                    # 'address': sections.get('host','Unknown') + ":" + sections.get('port'),
+                    # for now we will not use this line of code because there are systems that are using ipv6 already
                 
                     #===>
                     path = sections.get('host','Unknown')+":"+sections.get('port')
