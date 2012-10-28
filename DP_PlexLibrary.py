@@ -132,6 +132,7 @@ class PlexLibrary(Screen):
     g_name = "Plexserver"
     g_host = "192.168.45.190"
     g_port = "32400"
+    g_address = None # is later the combination of g_host : g_port
     g_stream = "0" # 0 = autoselect, 1 = Selecting stream, 2 = Selecting smb/unc, 3 = unknown
     g_secondary = "true" # show filter for media
     g_streamControl = "3" # 1 unknown, 2 = unknown, 3 = All subs disabled
@@ -364,17 +365,19 @@ class PlexLibrary(Screen):
             #!!!!
             
             if not self.g_host or self.g_host == "<none>":
-                self.g_host=None
+                self.g_host = None
+            
             elif not self.g_port:
-                printl( "DreamPlex -> No port defined.  Using default of " + DEFAULT_PORT, self, "I")
-                self.g_host=self.g_host+":"+DEFAULT_PORT
+                printl( "No port defined.  Using default of " + DEFAULT_PORT, self, "I")
+                self.g_address = self.g_host + ":" + DEFAULT_PORT
+            
             else:
-                self.g_host=self.g_host+":"+self.g_port
-                printl( "DreamPlex -> Settings hostname and port: " + self.g_host, self, "I")
+                self.g_address = self.g_host + ":" + self.g_port
+                printl( "Settings hostname and port: " + self.g_address, self, "I")
         
-            if self.g_host is not None:
+            if self.g_address is not None:
                 self.g_serverDict.append({'serverName': self.g_name ,
-                                     'address'   : self.g_host ,
+                                     'address'   : self.g_address ,
                                      'discovery' : 'local' , 
                                      'token'     : None ,
                                      'uuid'      : None ,
@@ -475,6 +478,8 @@ class PlexLibrary(Screen):
         mainMenuList = []
         #===>
         
+        multiple = False
+        multiple_list = []
         for server in self.g_serverDict:
                                                                             
             if server['discovery'] == "local" or server['discovery'] == "bonjour":                                                
@@ -488,46 +493,59 @@ class PlexLibrary(Screen):
             tree = etree.fromstring(html).getiterator("Directory")
             
             for sections in tree:
+                printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
+                printl("host in g_host: " + str(self.g_host),self, "D")
+                
+                if str(sections.get('host', 'Unknow')) == str(self.g_host):
                                     
-                self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
-                                   'address': sections.get('host','Unknown')+":"+sections.get('port'),
-                                   'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
-                                   'uuid' : sections.get('machineIdentifier','Unknown') ,
-                                   'path' : sections.get('path') ,
-                                   'token' : sections.get('accessToken',None) ,
-                                   'location' : server['discovery'] ,
-                                   'art' : sections.get('art') ,
-                                   'local' : sections.get('local') ,
-                                   'type' : sections.get('type','Unknown') })
+                    self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
+                                       'address': sections.get('host','Unknown')+":"+sections.get('port'),
+                                       'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
+                                       'uuid' : sections.get('machineIdentifier','Unknown') ,
+                                       'path' : sections.get('path') ,
+                                       'token' : sections.get('accessToken',None) ,
+                                       'location' : server['discovery'] ,
+                                       'art' : sections.get('art') ,
+                                       'local' : sections.get('local') ,
+                                       'type' : sections.get('type','Unknown') })
+
                 
                 
-                #===>
-                path = sections.get('host','Unknown')+":"+sections.get('port')
-                address = sections.get('path')
-                
-                if self.g_secondary == "true":
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
-                
-                else:
-                    if sections.get('type') == 'show':
-                        printl( "_MODE_TVSHOWS detected", self, "D")
-                        mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-                            
-                    elif sections.get('type') == 'movie':
-                        printl( "_MODE_MOVIES detected",self, "D")
-                        mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-        
-                    elif sections.get('type') == 'artist':
-                        printl( "_MODE_ARTISTS detected", self, "D")
-                        #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-                            
-                    elif sections.get('type') == 'photo':
-                        printl( "_MODE_PHOTOS detected", self, "D")
+                    #===>
+                    path = sections.get('host','Unknown')+":"+sections.get('port')
+                    address = sections.get('path')
+                    
+                    if self.g_secondary == "true":
+                        mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
+                    
                     else:
-                        printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
-                        continue
+                        if sections.get('type') == 'show':
+                            printl( "_MODE_TVSHOWS detected", self, "D")
+                            mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+                                
+                        elif sections.get('type') == 'movie':
+                            printl( "_MODE_MOVIES detected",self, "D")
+                            mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+            
+                        elif sections.get('type') == 'artist':
+                            printl( "_MODE_ARTISTS detected", self, "D")
+                            #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+                                
+                        elif sections.get('type') == 'photo':
+                            printl( "_MODE_PHOTOS detected", self, "D")
+                        else:
+                            printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
+                            continue
+                   
+                else:
+                    multiple = True
+                    multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
+                    
+                
                 #===>
-           
+        if multiple == True:
+            printl("there are other plex servers in the network => " + str(multiple_list), self, "I")
+            
         '''If we have more than one server source, then
            we need to ensure uniqueness amonst the
            seperate sections.
