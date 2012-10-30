@@ -116,7 +116,6 @@ class DPS_MainMenu(Screen):
 		self.onFirstExecBegin.append(self.onExecRunDev)
 		
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
-		#new
 		self.session.nav.stopService()
 	
 		self.onLayoutFinish.append(self.setCustomTitle)
@@ -170,8 +169,7 @@ class DPS_MainMenu(Screen):
 		content = ""
 		content += "Information\n\n"
 		content += "Autors: \t DonDavici\n"
-		content += "Credits: \t Special thx to Schischu, Hellmaster1024, and all other autors that provided several pieces of code.\n"
-		content += "Plexclient for Enigma" 
+		content += "DreamPlex - a plex client for Enigma2" 
 		content += "Your current version is " + config.plugins.dreamplex.version.value + " "
 		
 		printl("", self, "C")
