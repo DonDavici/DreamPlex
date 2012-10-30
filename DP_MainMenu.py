@@ -649,7 +649,9 @@ class DPS_SystemCheck(Screen):
 			vlist.append((_("found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"), "oe20"))
 		
 		else:
-			printl("unknown arch ", self, "W")
+			printl("unknown oe version", self, "W")
+			vlist.append((_("Check for 'gst-plugin-fragmented if you are using OE16."), "oe16"))
+			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 		
 		self["content"] = MenuList(vlist)
 		
@@ -748,6 +750,8 @@ class DPS_SystemCheck(Screen):
 		'''
 		'''
 		printl("", self, "S")
+		
+		ARCH = "unknown"
 		
 		if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
 			ARCH = "mipsel"
