@@ -143,28 +143,6 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def checkShow(self, plugins):
-		'''
-		'''
-		printl("", self, "S")
-		l = []
-		for plugin in plugins:
-			settings = getPlugin(plugin.name, Plugin.SETTINGS)
-			show = True
-			if settings is not None:
-				settings = settings.fnc()
-				for setting in settings:
-					if setting[0] == _("Show"):
-						show = setting[1].value
-			if show: 
-				l.append(plugin)
-		
-		printl("", self, "C")
-		return l
-	
-	#===========================================================================
-	# 
-	#===========================================================================
 	def showInfo(self, visible):
 		'''
 		'''
@@ -266,7 +244,7 @@ class DPS_MainMenu(Screen):
 				l = []
 				l.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
 
-				for plugin in self.checkShow(self.selectedEntry):
+				for plugin in self.selectedEntry:
 					l.append((plugin.desc, plugin, "", "50"))
 					
 				printl(str(l), self, "D")
