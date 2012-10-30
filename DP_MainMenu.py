@@ -105,12 +105,8 @@ class DPS_MainMenu(Screen):
 				"down":  (self.down, ""),
 				"blue": (self.blue, ""),
 				"red":   (self.red, ""),
+				"cancel":   (self.cancel, ""),
 			}, -2)
-		
-		self["cancelActions"] = ActionMap(["SetupActions", "ColorActions"],
-			{
-				"cancel": self.Exit,
-			}, -1)
 		
 		self.onFirstExecBegin.append(self.onExec)
 		self.onFirstExecBegin.append(self.onExecRunDev)
@@ -421,9 +417,7 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		if self.Watch == True:
-			self["menuWatch"].setIndex(0)
-			self.Watch = False;
+		self["menu"].setList(self.menu_main_list)
 
 		printl("", self, "C")
 		return
