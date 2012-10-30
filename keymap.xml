@@ -1,70 +1,8 @@
 <keymap>
-	<map context="DP_AudioPlayerActions">
-		<key id="KEY_OK" mapto="ok" flags="m" />
-		<key id="KEY_EXIT" mapto="cancel" flags="m" />
-		<key id="KEY_HOME" mapto="cancel" flags="m" />
-		<key id="KEY_UP" mapto="up_first" flags="m" />
-		<key id="KEY_UP" mapto="up_quick" flags="mr" />
-		<key id="KEY_UP" mapto="up" flags="b" />
-		<key id="KEY_DOWN" mapto="down_first" flags="m" />
-		<key id="KEY_DOWN" mapto="down_quick" flags="mr" />
-		<key id="KEY_DOWN" mapto="down" flags="b" />
-		<key id="KEY_LEFT" mapto="left" flags="m" />
-		<key id="KEY_RIGHT" mapto="right" flags="m" />
-		<key id="KEY_MENU" mapto="menu" flags="m" />
-		<key id="KEY_VIDEO" mapto="video" flags="m" />
-		<key id="KEY_STOP" mapto="stop" flags="m" />
-		<key id="KEY_INFO" mapto="info" flags="m" />
-		<key id="KEY_CHANNELUP" mapto="nextBouquet" flags="m" />
-		<key id="KEY_CHANNELDOWN" mapto="prevBouquet" flags="m" />
-		<key id="KEY_RED" mapto="red" flags="m" />
-		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
-		<key id="KEY_GREEN" mapto="green" flags="m" />
-		<key id="KEY_BLUE" mapto="blue" flags="m" />
-	</map>
-	
-	<map context="DP_VideoPlayerActions">
-		<key id="KEY_OK" mapto="ok" flags="m" />
-		<key id="KEY_EXIT" mapto="cancel" flags="m" />
-		<key id="KEY_HOME" mapto="cancel" flags="m" />
-		<key id="KEY_UP" mapto="up" flags="m" />
-		<key id="KEY_DOWN" mapto="down" flags="m" />
-		<key id="KEY_LEFT" mapto="left" flags="m" />
-		<key id="KEY_RIGHT" mapto="right" flags="m" />
-		<key id="KEY_MENU" mapto="menu" flags="m" />
-		<key id="KEY_VIDEO" mapto="video" flags="m" />
-		<key id="KEY_TV" mapto="stop" flags="m" />
-		<key id="KEY_INFO" mapto="info" flags="m" />
-		<key id="KEY_CHANNELUP" mapto="nextBouquet" flags="m" />
-		<key id="KEY_CHANNELDOWN" mapto="prevBouquet" flags="m" />
-		<key id="KEY_RED" mapto="red" flags="m" />
-		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
-		<key id="KEY_GREEN" mapto="green" flags="m" />
-		<key id="KEY_BLUE" mapto="blue" flags="m" />
-	</map>
-	
-	<map context="DP_PictureViewerActions">
-		<key id="KEY_OK" mapto="ok" flags="m" />
-		<key id="KEY_EXIT" mapto="cancel" flags="m" />
-		<key id="KEY_HOME" mapto="cancel" flags="m" />
-		<key id="KEY_UP" mapto="up" flags="m" />
-		<key id="KEY_DOWN" mapto="down" flags="m" />
-		<key id="KEY_LEFT" mapto="left" flags="m" />
-		<key id="KEY_RIGHT" mapto="right" flags="m" />
-		<key id="KEY_MENU" mapto="menu" flags="m" />
-		<key id="KEY_VIDEO" mapto="video" flags="m" />
-		<key id="KEY_TV" mapto="stop" flags="m" />
-		<key id="KEY_INFO" mapto="info" flags="m" />
-		<key id="KEY_CHANNELUP" mapto="nextBouquet" flags="m" />
-		<key id="KEY_CHANNELDOWN" mapto="prevBouquet" flags="m" />
-		<key id="KEY_RED" mapto="red" flags="m" />
-		<key id="KEY_YELLOW" mapto="yellow" flags="m" />
-		<key id="KEY_GREEN" mapto="green" flags="m" />
-		<key id="KEY_BLUE" mapto="blue" flags="m" />
-	</map>
-
 	<map context="DP_MainMenuActions">
 		<key id="KEY_OK" mapto="ok" flags="m" />
+		<key id="KEY_EXIT" mapto="cancel" flags="m" />
+		<key id="KEY_ESC" mapto="cancel" flags="m" />
 		<key id="KEY_HOME" mapto="cancel" flags="m" />
 		<key id="KEY_UP" mapto="up" flags="m" />
 		<key id="KEY_DOWN" mapto="down" flags="m" />
@@ -73,21 +11,14 @@
 		<key id="KEY_POWER" mapto="power" flags="m" />
 		<key id="KEY_INFO" mapto="info" flags="m" />
 		<key id="KEY_BLUE" mapto="blue" flags="m" />
-	</map>
-
-	<map context="DP_PosterDemoActions">
-		<key id="KEY_OK" mapto="ok" flags="m" />
-		<key id="KEY_HOME" mapto="cancel" flags="m" />
-		<key id="KEY_UP" mapto="up" flags="m" />
-		<key id="KEY_DOWN" mapto="down" flags="m" />
-		<key id="KEY_LEFT" mapto="left" flags="m" />
-		<key id="KEY_RIGHT" mapto="right" flags="m" />
+		<key id="KEY_RED" mapto="red" flags="m" />
 	</map>
 
 	<map context="DP_View">
 		<key id="KEY_OK" mapto="ok" flags="m" />
 		<key id="KEY_MENU" mapto="menu" flags="m" />
 		<key id="KEY_EXIT" mapto="cancel" flags="m" />
+		<key id="KEY_ESC" mapto="cancel" flags="m" />
 		<key id="KEY_HOME" mapto="cancel" flags="m" />
 		<key id="KEY_UP" mapto="up_quick" flags="mr" />
 		<key id="KEY_UP" mapto="up" flags="b" />
