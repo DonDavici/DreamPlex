@@ -308,7 +308,7 @@ class DPS_MainMenu(Screen):
 					self.session.open(DPS_SystemCheck)
 				
 			elif selection[1] == "Exit":
-				printl("selcted entry is exit", self, "D")
+				printl("selected entry is exit", self, "D")
 				self.Exit()
 			
 			else:
