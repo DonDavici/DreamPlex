@@ -301,7 +301,7 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		if searchString is not "":
+		if searchString is not "" and not None:
 			self.s_url = self.s_url + "&query" + searchString
 
 		self.executeSelectedEntry()
