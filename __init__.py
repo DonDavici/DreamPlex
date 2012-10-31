@@ -101,6 +101,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
 	i = len(config.plugins.dreamplex.Entries) -1
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].showForeign		= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].ip 				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
@@ -112,6 +113,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].wol			    = ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].wol_mac         = ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
+	
 	
 	return config.plugins.dreamplex.Entries[i]
 	

@@ -132,6 +132,7 @@ class PlexLibrary(Screen):
     g_name = "Plexserver"
     g_host = "192.168.45.190"
     g_port = "32400"
+    g_showForeign = True
     g_address = None # is later the combination of g_host : g_port
     g_stream = "0" # 0 = autoselect, 1 = Selecting stream, 2 = Selecting smb/unc, 3 = unknown
     g_secondary = "true" # show filter for media
@@ -188,6 +189,7 @@ class PlexLibrary(Screen):
         self.g_name = str(serverConfig.name.value)
         self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
         self.g_port = str(serverConfig.port.value)
+        self.g_showForeign = serverConfig.name.value
         
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
@@ -496,52 +498,15 @@ class PlexLibrary(Screen):
                 printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
                 printl("host in g_host: " + str(self.g_host),self, "D")
                 
-                if str(sections.get('host', 'Unknow')) == str(self.g_host):
-                                    
-                    self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
-                                       'address': self.g_host + ":" + sections.get('port'),
-                                       'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
-                                       'uuid' : sections.get('machineIdentifier','Unknown') ,
-                                       'path' : sections.get('path') ,
-                                       'token' : sections.get('accessToken',None) ,
-                                       'location' : server['discovery'] ,
-                                       'art' : sections.get('art') ,
-                                       'local' : sections.get('local') ,
-                                       'type' : sections.get('type','Unknown') })
-
-                    # 'address': sections.get('host','Unknown') + ":" + sections.get('port'),
-                    # for now we will not use this line of code because there are systems that are using ipv6 already
+                if self.g_showForeign == False:
                 
-                    #===>
-                    path = sections.get('host','Unknown')+":"+sections.get('port')
-                    address = sections.get('path')
-                    
-                    if self.g_secondary == "true":
-                        mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
-                    
+                    if str(sections.get('host', 'Unknow')) == str(self.g_host):
+                        mainMenuList = self.appendEntry(sections, mainMenuList, server)  
                     else:
-                        if sections.get('type') == 'show':
-                            printl( "_MODE_TVSHOWS detected", self, "D")
-                            mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-                                
-                        elif sections.get('type') == 'movie':
-                            printl( "_MODE_MOVIES detected",self, "D")
-                            mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-            
-                        elif sections.get('type') == 'artist':
-                            printl( "_MODE_ARTISTS detected", self, "D")
-                            #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-                                
-                        elif sections.get('type') == 'photo':
-                            printl( "_MODE_PHOTOS detected", self, "D")
-                        else:
-                            printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
-                            continue
-                   
+                        multiple = True
+                        multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
                 else:
-                    multiple = True
-                    multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
-                    
+                   mainMenuList = self.appendEntry(sections, mainMenuList, server)     
                 
                 #===>
         if multiple == True:
@@ -589,6 +554,52 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         return mainMenuList  
 
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def appendEntry(self, sections, mainMenuList, server):
+        self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
+                               'address': self.g_host + ":" + sections.get('port'),
+                               'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
+                               'uuid' : sections.get('machineIdentifier','Unknown') ,
+                               'path' : sections.get('path') ,
+                               'token' : sections.get('accessToken',None) ,
+                               'location' : server['discovery'] ,
+                               'art' : sections.get('art') ,
+                               'local' : sections.get('local') ,
+                               'type' : sections.get('type','Unknown') })
+
+        # 'address': sections.get('host','Unknown') + ":" + sections.get('port'),
+        # for now we will not use this line of code because there are systems that are using ipv6 already
+    
+        #===>
+        path = sections.get('host','Unknown')+":"+sections.get('port')
+        address = sections.get('path')
+        
+        if self.g_secondary == "true":
+            mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
+        
+        else:
+            if sections.get('type') == 'show':
+                printl( "_MODE_TVSHOWS detected", self, "D")
+                mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+                    
+            elif sections.get('type') == 'movie':
+                printl( "_MODE_MOVIES detected",self, "D")
+                mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+
+            elif sections.get('type') == 'artist':
+                printl( "_MODE_ARTISTS detected", self, "D")
+                #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
+                    
+            elif sections.get('type') == 'photo':
+                printl( "_MODE_PHOTOS detected", self, "D")
+            else:
+                printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
+        
+        return mainMenuList
+    
     #=============================================================================
     # 
     #=============================================================================

@@ -1054,10 +1054,11 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			getConfigListEntry(_("State"), self.current.state),
 			getConfigListEntry(_("Name"), self.current.name),
 			getConfigListEntry(_("IP"), self.current.ip),
-			getConfigListEntry(_("Use Wake on Lan"), self.current.wol),
-			getConfigListEntry(_("Mac address (Size: 12 alphanumeric no seperator)"), self.current.wol_mac),
+			getConfigListEntry(_("Use Wake on Lan (WoL)"), self.current.wol),
+			getConfigListEntry(_("Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac),
 			getConfigListEntry(_("Wait for server delay (max 180 seconds)"), self.current.wol_delay),
 			getConfigListEntry(_("Port"), self.current.port),
+			getConfigListEntry(_("Plexserver ip differs due to VPN connect"), self.current.showForeign),
 
 		]
 
