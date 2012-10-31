@@ -63,6 +63,9 @@ class DPS_MainMenu(Screen):
 	selectedEntry = None
 	s_url = None
 	
+	g_serverDataMenu = None
+	g_filterDataMenu = None
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -208,7 +211,6 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings", "menu_watch", "50"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "menu_watch", "50"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "menu_watch", "50"))
-		mainMenuList.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
 		
 		printl("", self, "C")
 		return mainMenuList
@@ -236,8 +238,7 @@ class DPS_MainMenu(Screen):
 			if type(self.selectedEntry) is list:
 				printl("selected entry is list", self, "D")
 				l = []
-				l.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
-
+			
 				for plugin in self.selectedEntry:
 					l.append((plugin.desc, plugin, "", "50"))
 					
@@ -322,6 +323,8 @@ class DPS_MainMenu(Screen):
 					
 		elif self.selectedEntry.fnc is not None:
 			self.selectedEntry.fnc(self.session)
+		
+		self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
 		
 		printl("", self, "C")
 	
@@ -417,7 +420,15 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		self["menu"].setList(self.menu_main_list)
+		if self.selectedEntry == Plugin.MENU_FILTER:
+			printl("coming from MENU_FILTER", self, "D")
+			self["menu"].setList(self.g_serverDataMenu)
+			self.selectedEntry = Plugin.MENU_SERVER
+		
+		else:
+			printl("coming from ELSEWHERE", self, "D")
+			printl("selectedEntry " +  str(self.selectedEntry), self, "D")
+			self["menu"].setList(self.menu_main_list)
 
 		printl("", self, "C")
 		return
@@ -537,6 +548,7 @@ class DPS_MainMenu(Screen):
 		serverData = plexInstance.getAllSections()
 		
 		self["menu"].setList(serverData)
+		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 		self.refreshMenu(0)
 		
 		printl("", self, "C")
@@ -556,6 +568,7 @@ class DPS_MainMenu(Screen):
 		menuData = plexInstance.getSectionFilter(self.s_url)
 		
 		self["menu"].setList(menuData)
+		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
 		self.refreshMenu(0)
 
 		printl("", self, "S")

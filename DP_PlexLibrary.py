@@ -548,8 +548,6 @@ class PlexLibrary(Screen):
                 oneCount+=1
         
         #===>
-        mainMenuList.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
-        
         #printl("mainMenuList = " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
@@ -669,8 +667,6 @@ class PlexLibrary(Screen):
             t_url = None
         
         #===>
-        mainMenuList.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
-        
         #printl("mainMenuList = " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
@@ -811,8 +807,6 @@ class PlexLibrary(Screen):
         # #All XML entries have been parsed and we are ready to allow the user to browse around.  So end the screen listing.
         # xbmcplugin.endOfDirectory(pluginhandle)  
         #=======================================================================
-        
-            mainMenuList.append(("< " + _("Back"), Plugin.MENU_MAIN, "", "50"))
         
         #printl("mainMenuList = " + str(mainMenuList), self, "D")
         printl("", self, "C")
