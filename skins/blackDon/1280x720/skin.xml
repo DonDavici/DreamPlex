@@ -144,8 +144,8 @@
 		<!-- content -->
 		<widget name="state" position="5,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
 		<widget name="name" position="5,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
-		<widget name="ip" position="215,0" zPosition="2" size="140,50" font="Regular;20" halign="left"/>
-		<widget name="port" position="350,0" zPosition="2" size="80,50" font="Regular;20" halign="left"/>
+		<widget name="ip" position="215,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
+		<widget name="port" position="400,0" zPosition="2" size="80,50" font="Regular;20" halign="left"/>
 		<widget name="entrylist" zPosition="2" position="71,73" size="1155,568" scrollbarMode="showOnDemand" backgroundColor="#00000000" backgroundColorSelected="#00000000" foregroundColor="#00404040" foregroundColorSelected="#00ffffff"/>
 		
 		<!-- buttons -->

@@ -1201,9 +1201,9 @@ class DPH_ServerEntryList(MenuList):
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(c.state.value)))
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 55, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(c.name.value)))
 			ip = "%d.%d.%d.%d" % tuple(c.ip.value)
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 260, 0, 130, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(ip)))
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 260, 0, 150, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(ip)))
 			port = "%d"%(c.port.value)
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 400, 0, 80, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(port)))
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 80, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(port)))
 			self.list.append(res)
 		
 		
