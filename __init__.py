@@ -56,7 +56,6 @@ from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexS
 #===============================================================================
 # CONFIG
 #===============================================================================
-currentVersion 			= "0.5 beta"
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultConfigFolderPath = "/hdd/dreamplex/"
 defaultMediaFolderPath  = defaultConfigFolderPath + "media/"
@@ -66,7 +65,6 @@ defaultTmpFolderPath    = "/tmp/"
 defaultLogFolderPath	= defaultTmpFolderPath
 config.plugins.dreamplex = ConfigSubsection()
 
-config.plugins.dreamplex.version 		   = ConfigText(default = currentVersion)
 config.plugins.dreamplex.debugMode         = ConfigSelection(default="0", choices = [("0", _("Silent")),("1", _("Normal")),("2", _("High")),("3", _("All"))])
 config.plugins.dreamplex.pluginfolderpath  = ConfigText(default = defaultPluginFolderPath)
 config.plugins.dreamplex.skinfolderpath    = ConfigText(default = defaultSkinFolderPath)

@@ -169,7 +169,6 @@ class DPS_MainMenu(Screen):
 		content += "Information\n\n"
 		content += "Autors: \t DonDavici\n"
 		content += "DreamPlex - a plex client for Enigma2" 
-		content += "Your current version is " + config.plugins.dreamplex.version.value + " "
 		
 		printl("", self, "C")
 		return content
@@ -638,7 +637,7 @@ class DPS_SystemCheck(Screen):
 		self.session = session
 		self["actions"] = ActionMap(["ColorActions", "SetupActions" ],
 		{
-		"ok": self.checkLib,
+		"ok": self.startSelection,
 		"cancel": self.cancel,
 		"red": self.cancel,
 		}, -1)
@@ -658,28 +657,76 @@ class DPS_SystemCheck(Screen):
 			vlist.append((_("Check for 'gst-plugin-fragmented if you are using OE16."), "oe16"))
 			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 		
+		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
+		
 		self["content"] = MenuList(vlist)
 		
 		self["key_red"] = StaticText(_("Exit"))
 		
 		printl("", self, "C")
 		
-	#===============================================================================
+	
+	#===========================================================================
 	# 
-	#===============================================================================	
-	def checkLib(self):
+	#===========================================================================
+	def startSelection(self):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.oeVersion == "mipsel":
+		selection = self["content"].getCurrent()
+		
+		if selection[1] == "oe16" or selection[1] == "oe20":
+			self.checkLib(selection[1])
+		
+		if selection[1] == "check_DP":
+			self.checkDreamPlexInstallation()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def checkDreamPlexInstallation(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		command = "opkg status DreamPlex"
+		
+		self.executeCommand(command)
+		
+		
+		printl("", self, "C")
+	
+	#===============================================================================
+	# 
+	#===============================================================================	
+	def checkLib(self, arch):
+		'''
+		'''
+		printl("", self, "S")
+		
+		command = None
+		
+		if arch == "oe16":
 			command = "opkg status gst-plugin-fragmented"
 		
-		elif self.oeVersion == "mips32el":
+		elif arch == "oe20":
 			command = "opkg status gst-plugins-bad-fragmented"
 		
 		else:
 			pass
+		
+		self.executeCommand(command)
+		
+		printl("", self, "C")
+		
+	
+	def executeCommand(self, command):
+		'''
+		'''
+		printl("", self, "S")
 		
 		pipe = popen(command, "r")
 		
@@ -693,7 +740,7 @@ class DPS_SystemCheck(Screen):
 				# gst-plugins-bad is not install
 				self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 		
-		printl("", self, "C")
+		printl("", self, "S")
 		
 	#===============================================================================
 	# 
