@@ -288,7 +288,7 @@ class DP_Player(MoviePlayer):
     def __evUpdatedBufferInfo(self):
         '''
         '''
-        printl("", self, "S")
+        #printl("", self, "S")
         
         if self.localCache:
             printl("", self, "C")
@@ -309,10 +309,10 @@ class DP_Player(MoviePlayer):
         if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
             self.bufferEmpty()
         
-        printl("self.buffersize: " + str(self.buffersize), self, "D")
-        printl("self.bitrate: " + str(self.bitrate), self, "D")
-        printl("self.bufferSeconds: " + str(self.bufferSeconds), self, "D")
-        printl("self.bufferPercent: " + str(self.bufferPercent), self, "D")
+        #printl("self.buffersize: " + str(self.buffersize), self, "D")
+        #printl("self.bitrate: " + str(self.bitrate), self, "D")
+        #printl("self.bufferSeconds: " + str(self.bufferSeconds), self, "D")
+        #printl("self.bufferPercent: " + str(self.bufferPercent), self, "D")
         try:
             if self.bitrate != 0:
                 self.bufferSeconds = self.buffersize / self.bitrate
@@ -320,7 +320,7 @@ class DP_Player(MoviePlayer):
         except:
             printl("something went wrong while calculating", self, "W")
         
-        printl("", self, "C")
+        #printl("", self, "C")
 
     #===========================================================================
     # 
@@ -500,7 +500,7 @@ class DP_Player(MoviePlayer):
     def formatKBits(self, value, ending="Bit/s", roundNumbers=2):
         '''
         '''
-        printl("", self, "S")
+        #printl("", self, "S")
         
         bits = value * 8
         if bits > (1024*1024):
@@ -510,14 +510,14 @@ class DP_Player(MoviePlayer):
         else:
             return str(bits)+" "+ending
         
-        printl("", self, "C")
+        #printl("", self, "C")
     #===========================================================================
     # 
     #===========================================================================
     def formatKB(self, value, ending="B", roundNumbers=2):
         '''
         '''
-        printl("", self, "S")
+        #printl("", self, "S")
         
         byte = value
         if byte > (1024*1024):
@@ -527,7 +527,7 @@ class DP_Player(MoviePlayer):
         else:
             return str(byte)+" "+ending
         
-        printl("", self, "C")
+        #printl("", self, "C")
         
     #===========================================================================
     # 
