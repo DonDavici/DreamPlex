@@ -102,6 +102,7 @@ def initServerEntryConfig():
 	i = len(config.plugins.dreamplex.Entries) -1
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].showForeign		= ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("wan")),("1", _("lan"))])
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].ip 				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))

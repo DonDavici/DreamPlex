@@ -132,6 +132,7 @@ class PlexLibrary(Screen):
     g_name = "Plexserver"
     g_host = "192.168.45.190"
     g_port = "32400"
+    g_connectionType = None
     g_showForeign = True
     g_address = None # is later the combination of g_host : g_port
     g_stream = "0" # 0 = autoselect, 1 = Selecting stream, 2 = Selecting smb/unc, 3 = unknown
@@ -189,10 +190,11 @@ class PlexLibrary(Screen):
         self.g_name = str(serverConfig.name.value)
         self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
         self.g_port = str(serverConfig.port.value)
-        self.g_showForeign = serverConfig.name.value
+        self.g_connectionType = str(serverConfig.connectionType.value)
         
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
+        printl("using this connectionType: " +  self.g_connectionType, self, "I")
         
         #Lets print out all settings that are active so far
         self.printCurrentSettingsState()
@@ -498,7 +500,7 @@ class PlexLibrary(Screen):
                 printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
                 printl("host in g_host: " + str(self.g_host),self, "D")
                 
-                if self.g_showForeign == False:
+                if self.g_connectionType == "1":
                 
                     if str(sections.get('host', 'Unknow')) == str(self.g_host):
                         mainMenuList = self.appendEntry(sections, mainMenuList, server)  
@@ -506,7 +508,7 @@ class PlexLibrary(Screen):
                         multiple = True
                         multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
                 else:
-                   mainMenuList = self.appendEntry(sections, mainMenuList, server)     
+                   mainMenuList = self.appendEntry(sections, mainMenuList, server)
                 
                 #===>
         if multiple == True:
