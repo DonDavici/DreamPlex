@@ -15,9 +15,19 @@ def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
 
+def menu_dreamplex(menuid, **kwargs):
+	if menuid == "mainmenu":
+		return [(_("DreamPlex"), main, "dreamplex", 47)]
+	return []
+
 #===============================================================================
 # plugins
 # Actions to take place in Plugins
 #===============================================================================
 def Plugins(**kwargs):
-	return [PluginDescriptor(name = "DreamPlex", description = "Plex Client for Enigma2", where = PluginDescriptor.WHERE_PLUGINMENU, icon = "pluginLogo.png", fnc=main)]
+	list = [PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main)]
+		
+	if config.plugins.dreamplex.showInMainMenu.value == True:
+		list.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
+
+	return list

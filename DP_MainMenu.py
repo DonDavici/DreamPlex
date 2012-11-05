@@ -833,6 +833,7 @@ class DPS_Settings(Screen, ConfigListScreen):
 			self,
 			[
 				getConfigListEntry(_("Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")),
+				getConfigListEntry(_("Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")),
 				getConfigListEntry(_("Plugin Folder Path"), config.plugins.dreamplex.pluginfolderpath, _("fill me")),
 				getConfigListEntry(_("Skin Folder Path"), config.plugins.dreamplex.skinfolderpath, _("fill me")),
 				getConfigListEntry(_("Temp Folder Path"), config.plugins.dreamplex.tmpfolderpath, _("fill me")),

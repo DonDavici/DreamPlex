@@ -73,6 +73,7 @@ config.plugins.dreamplex.logfolderpath     = ConfigText(default = defaultLogFold
 config.plugins.dreamplex.configfolderpath  = ConfigText(default = defaultConfigFolderPath, fixed_size=False)
 config.plugins.dreamplex.mediafolderpath   = ConfigText(default = defaultMediaFolderPath, fixed_size=False)
 config.plugins.dreamplex.skin              = ConfigText(default = defaultSkin)
+config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
