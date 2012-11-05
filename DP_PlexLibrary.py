@@ -84,9 +84,6 @@ except ImportError:
 #===============================================================================
 # 
 #===============================================================================
-#VERSION
-VERSION="0.x beta"
-
 #DEBUG ON/OFF
 DEBUG = "true"
 
@@ -184,8 +181,6 @@ class PlexLibrary(Screen):
         self.g_session = session
 
         printl("running on " + str(sys.version_info), self, "I")
-        printl("running with DreamPlex " + str(VERSION), self, "I")
-
         
         self.g_name = str(serverConfig.name.value)
         self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
