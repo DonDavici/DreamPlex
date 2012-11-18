@@ -35,6 +35,7 @@ from Components.config import ConfigInteger
 from Components.config import ConfigSubList
 from Components.config import ConfigSubDict
 from Components.config import ConfigText
+from Components.config import ConfigNumber
 from Components.config import configfile
 from Components.config import ConfigYesNo
 from Components.config import ConfigPassword
@@ -81,7 +82,7 @@ config.plugins.dreamplex.useQuicktimeUserAgent		= ConfigYesNo(default = True)
 config.plugins.dreamplex.setBufferSize 				= ConfigYesNo(default = True)
 config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
 
-config.plugins.dreamplex.bufferSize 				= ConfigInteger(default = "8388606")
+config.plugins.dreamplex.bufferSize 				= ConfigNumber(default = 8)
 config.plugins.dreamplex.path 						= ConfigText(default = defaultConfigFolderPath, fixed_size=False)
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)

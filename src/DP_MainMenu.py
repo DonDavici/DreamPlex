@@ -839,6 +839,7 @@ class DPS_Settings(Screen, ConfigListScreen):
 				getConfigListEntry(_("Temp Folder Path"), config.plugins.dreamplex.tmpfolderpath, _("fill me")),
 				getConfigListEntry(_("Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")),
 				getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
+				getConfigListEntry(_("Plex Player Buffer Size (in MB)"), config.plugins.dreamplex.bufferSize, _("fill me")),
 			],
 			session = self.session,
 			on_change = self._changed

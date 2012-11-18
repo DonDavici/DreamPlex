@@ -115,7 +115,8 @@ class DP_Player(MoviePlayer):
         self.useBufferControl = config.plugins.dreamplex.useBufferControl.value
 
         if config.plugins.dreamplex.setBufferSize.value:
-            session.nav.getCurrentService().streamed().setBufferSize(int(config.plugins.dreamplex.bufferSize.value))
+            bufferSize = int(config.plugins.dreamplex.bufferSize.value) * 1024 * 1024
+            session.nav.getCurrentService().streamed().setBufferSize(bufferSize)
             
         service1 = self.session.nav.getCurrentService()
         seek = service1 and service1.seek()
@@ -503,6 +504,7 @@ class DP_Player(MoviePlayer):
         #printl("", self, "S")
         
         bits = value * 8
+        
         if bits > (1024*1024):
             return str(    round(float(bits)/float(1024*1024),roundNumbers)  )+" M"+ending
         if bits > 1024:
@@ -511,6 +513,7 @@ class DP_Player(MoviePlayer):
             return str(bits)+" "+ending
         
         #printl("", self, "C")
+    
     #===========================================================================
     # 
     #===========================================================================
@@ -520,10 +523,11 @@ class DP_Player(MoviePlayer):
         #printl("", self, "S")
         
         byte = value
+
         if byte > (1024*1024):
-            return str(    round(float(byte)/float(1024*1024),roundNumbers) )+" M"+ending
+            return str(    round(float(byte)/float(1024*1024),roundNumbers) ) +" M"+ending
         if byte > 1024:
-            return str(    round(float(byte)/float(1024),roundNumbers)      )+" K"+ending
+            return str(    round(float(byte)/float(1024),roundNumbers)      ) +" K"+ending
         else:
             return str(byte)+" "+ending
         
