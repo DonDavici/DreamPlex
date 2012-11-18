@@ -656,7 +656,7 @@ class PlexLibrary(Screen):
                     printl( "_MODE_PHOTOS detected", self, "X")
                     pass
                 else:
-                    printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
+                    printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
             else:
                 mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", t_url, isSearchFilter))
