@@ -64,7 +64,8 @@ class DP_Player(MoviePlayer):
         self.session = session
                 
         self.startNewServiceOnPlay = False
-        self.start = start
+        self.start = int(start)
+        
      
         printl("Checking for usable gstreamer service (built-in)... ",self, "I")
   
@@ -473,15 +474,17 @@ class DP_Player(MoviePlayer):
                         if not r[0]:
                             printl( "playbacktime " + str(r[1]), self, "I")
                             if r[1] < 90000:# ~2 sekunden
-                                printl( "do not seek yet " + r[1], self, "I")
+                                printl( "do not seek yet " + str(r[1]), self, "I")
                                 printl("", self, "C")
                                 return
                         else:
                             printl("", self, "C")
                             return
                         
-                        time = length * self.start
-                        printl( "seeking to " + time + " length " + length + " ", self, "I")
+                        #time = length * self.start
+                        #time = int(139144271)
+                        time = self.start
+                        printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "I")
                         self.start = None
                         if time < 900000:
                             printl( "skip seeking < 10s", self, "I")

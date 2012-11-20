@@ -2013,7 +2013,7 @@ class PlexLibrary(Screen):
             playurl=url
     
         try:
-            resume=int(int(streams['media']['viewOffset'])/1000)
+            resume=int(int(streams['media']['viewOffset']))
         except:
             resume=0
         
@@ -2087,8 +2087,9 @@ class PlexLibrary(Screen):
         # printl("TEST URL: " + test, False)
         #=======================================================================
         printl("PLAYURL => " + playurl, self, "I")
+        printl("RESUME => " + str(resume), self, "I")
         printl("", self, "C")
-        return playurl
+        return playurl, resume
     
     #===========================================================================
     # 

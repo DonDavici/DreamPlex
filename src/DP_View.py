@@ -30,11 +30,11 @@ from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
+from Screens.MessageBox import MessageBox
 
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
@@ -100,6 +100,9 @@ class DP_View(Screen, NumericalTextInput):
 		self.loadLibrary = loadLibrary
 		self.viewName = viewName
 		self._playEntry = playEntry
+		
+		self.playUrl = None
+		self.resumeStamp = 0
 		
 		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 		self.session.nav.stopService()
@@ -706,9 +709,26 @@ class DP_View(Screen, NumericalTextInput):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
-		url = plexInstance.playLibraryMedia(media_id, server, False)
+		self.playUrl, self.resumeStamp = plexInstance.playLibraryMedia(media_id, server, False)
 		
-		self.session.open(DP_Player, url)
+		if self.resumeStamp > 0:
+			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
+		
+		else:
+			self.session.open(DP_Player, self.playUrl)
+		
+		printl("", self, "C")
+		
+	def handleResume(self, confirm):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if confirm:
+			self.session.open(DP_Player, self.playUrl, self.resumeStamp)
+		
+		else:
+			self.session.open(DP_Player, self.playUrl)
 		
 		printl("", self, "C")
 
