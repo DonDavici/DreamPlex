@@ -713,7 +713,10 @@ class DP_View(Screen, NumericalTextInput):
 		
 		self.playerData = plexInstance.playLibraryMedia(media_id, server, False)
 		
-		if self.resumeStamp > 0:
+		resumeStamp = self.playerData['resumeStamp']
+		printl("resumeStamp: " + str(resumeStamp), self, "I")
+		
+		if resumeStamp > 0:
 			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
 		
 		else:

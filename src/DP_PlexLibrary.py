@@ -650,11 +650,10 @@ class PlexLibrary(Screen):
     
                 elif nextViewGroup == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
+                    #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
                         
                 elif nextViewGroup == 'photo':
                     printl( "_MODE_PHOTOS detected", self, "X")
-                    pass
                 else:
                     printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
@@ -2091,7 +2090,7 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         
         playerData = {}
-        playerData["playUrl"] = playUrl
+        playerData["playUrl"] = playurl
         playerData["resumeStamp"] = resume
         playerData["server"] = server
         playerData["id"] = id

@@ -43,6 +43,7 @@ from Components.Slider import Slider
 from Components.Sources.StaticText import StaticText
 from Components.ServiceEventTracker import ServiceEventTracker
 
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
 #===============================================================================
@@ -56,7 +57,8 @@ class DP_Player(MoviePlayer):
     
     startNewServiceOnPlay = False
     
-    
+    seek = None
+
     resume = False
     resumeStamp = 0
     server = None
@@ -73,7 +75,7 @@ class DP_Player(MoviePlayer):
         self.startNewServiceOnPlay = False
         
         self.resume = resume
-        self.resumeStamp = int(playerData['resumeStamp'])
+        self.resumeStamp = int(playerData['resumeStamp']) / 1000 #plex stores seconds * 1000
         self.server = str(playerData['server'])
         self.id = str(playerData['id'])
         self.url = str(playerData['playUrl'])
@@ -131,10 +133,11 @@ class DP_Player(MoviePlayer):
             session.nav.getCurrentService().streamed().setBufferSize(bufferSize)
             
         service1 = self.session.nav.getCurrentService()
-        seek = service1 and service1.seek()
-        if seek != None:
-            rLen = seek.getLength()
-            rPos = seek.getPlayPosition()
+        self.seek = service1 and service1.seek()
+        
+        if self.seek != None:
+            rLen = self.getPlayLength()
+            rPos = self.getPlayPosition()
             
             
         printl("rLen: " + str(rLen), self, "I")
@@ -156,6 +159,32 @@ class DP_Player(MoviePlayer):
             })
         
         printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def getPlayLength(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        length = self.seek.getLength()
+        
+        printl("", self, "C")
+        return length    
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def getPlayPosition(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        position = self.seek.getPlayPosition()
+        
+        printl("", self, "C")
+        return position
     
     #===========================================================================
     # 
@@ -425,7 +454,7 @@ class DP_Player(MoviePlayer):
         
         printl( "seekWatcher started", self, "I")
         try:
-            while self is not None and self.start is not None:
+            while self is not None and self.resumeStamp is not None:
                 self.seekToStartPos()
                 sleep(0.2)
         except Exception, e:
@@ -471,7 +500,7 @@ class DP_Player(MoviePlayer):
         
         time = 0
         try:
-            if self.start is not None and config.plugins.dreamplex.setSeekOnStart.value:
+            if self.resumeStamp is not None and config.plugins.dreamplex.setSeekOnStart.value:
                 service = self.session.nav.getCurrentService()
                 seek = service and service.seek()
                 if seek != None:
@@ -495,10 +524,10 @@ class DP_Player(MoviePlayer):
                         
                         #time = length * self.start
                         #time = int(139144271)
-                        time = self.start
+                        time = self.resumeStamp * 90000
                         printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "I")
-                        self.start = None
-                        if time < 900000:
+                        self.resumeStamp = None
+                        if time < 90000:
                             printl( "skip seeking < 10s", self, "I")
                             printl("", self, "C")
                             return
@@ -634,23 +663,29 @@ class DP_Player(MoviePlayer):
         '''
         '''
         printl("", self, "S")
-        currentTime = None
-        totalTime = None
-        progress = None
+        currentTime = self.getPlayPosition()[1] / 90000
+        totalTime = self.getPlayLength()[1] / 90000
+        progress = currentTime / (totalTime/100)
+        #progress = 0
+        printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+        
+        instance = Singleton()
+        plexInstance = instance.getPlexInstance()
         
         if answer:
             if currentTime < 30:
-                printl("Less that 30 seconds, will not set resume", sefl, "I")
+                printl("Less that 30 seconds, will not set resume", self, "I")
             
             #If we are less than 95% complete, store resume time
             elif progress < 95:
-                printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress) )
-                self.getURL("http://"+server+"/:/progress?key="+id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
+                printl("Less than 95% progress, will store resume time", self, "I" )
+                plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
      
             #Otherwise, mark as watched
             else:
-                printl( "Movie marked as watched. Over 95% complete")
-                self.getURL("http://"+server+"/:/scrobble?key="+id+"&identifier=com.plexapp.plugins.library",suppress=True)
+                printl( "Movie marked as watched. Over 95% complete", self, "I")
+                plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library",suppress=True)
+            
             self.close()
         
         printl("", self, "C")
