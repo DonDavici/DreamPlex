@@ -177,6 +177,7 @@ def writeToLog(dmode, out):
 		if instance.getLogFileInstance() is "":
 			openLogFile()
 			gLogFile = instance.getLogFileInstance()
+			gLogFile.truncate()
 		else:
 			gLogFile = instance.getLogFileInstance()
 			
@@ -186,6 +187,7 @@ def writeToLog(dmode, out):
 	
 	except Exception, ex:
 		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::writeToLog", "E")
+
 
 #===============================================================================
 # 
@@ -199,15 +201,13 @@ def openLogFile():
 	'''
 	#printl2("", "openLogFile", "S")
 	
-	#global gLogFile
-	
 	logDir = config.plugins.dreamplex.logfolderpath.value
 	
 	now = datetime.datetime.now()
 	try:
 		instance = Singleton()
-		instance.getLogFileInstance(open(logDir + "dreamplex_%04d%02d%02d_%02d%02d.log" % (now.year, now.month, now.day, now.hour, now.minute, ), "w"))
-		#gLogFile = open(logDir + "dreamplex_%04d%02d%02d_%02d%02d.log" % (now.year, now.month, now.day, now.hour, now.minute, ), "w")
+		instance.getLogFileInstance(open(logDir + "dreamplex.log", "w"))
+		
 	except Exception, ex:
 		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "openLogFile", "E")
 	
