@@ -696,7 +696,6 @@ class DPS_SystemCheck(Screen):
 		
 		self.executeCommand(command)
 		
-		
 		printl("", self, "C")
 	
 	#===============================================================================
@@ -718,13 +717,16 @@ class DPS_SystemCheck(Screen):
 			self.oeVersion = "mips32el"
 		
 		else:
-			pass
+			printl("someting went wrong with arch type", self, "W")
 		
 		self.executeCommand(command)
 		
 		printl("", self, "C")
 		
-	
+
+	#===============================================================================
+	# 
+	#===============================================================================
 	def executeCommand(self, command):
 		'''
 		'''
