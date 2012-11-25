@@ -182,7 +182,7 @@ class DP_Player(MoviePlayer):
         
         self.container=eConsoleAppContainer()
         self.container.appClosed.append(self.DLfinished)
-        self.container.setCWD(config.plugins.dreamplex.path.value)
+        self.container.setCWD(config.plugins.dreamplex.playerTempPath.value)
         self.startDL()
         
         printl("", self, "C")
@@ -211,7 +211,7 @@ class DP_Player(MoviePlayer):
                 useragentcmd = "--header='User-Agent: %s'" % config.mediaplayer.alternateUserAgent.value
             else:
                 useragentcmd = ""
-            cmd = "wget %s -q '%s' -O '%s/%s' &" % (useragentcmd, self.url, config.plugins.dreamplex.path.value, self.filename)
+            cmd = "wget %s -q '%s' -O '%s/%s' &" % (useragentcmd, self.url, config.plugins.dreamplex.playerTempPath.value, self.filename)
         
         else:
             self.session.open( MessageBox, _("This stream can not get saved on HDD\nProtocol %s not supported") % self.service.getPath()[0:5], MessageBox.TYPE_ERROR)
@@ -229,7 +229,7 @@ class DP_Player(MoviePlayer):
         
         printl( "execute command: " + cmd, self, "I")
         self.container.execute(cmd)
-        self.session.open(MessageBox, _("The Video will be downloaded to %s\n\nPlease wait until some MB are cached before hitting PLAY\nRecorded Videos from an iPhone/iPad need to be downloaded completely before playback is possible") % config.plugins.dreamplex.path.value, type=MessageBox.TYPE_INFO, timeout=10)
+        self.session.open(MessageBox, _("The Video will be downloaded to %s\n\nPlease wait until some MB are cached before hitting PLAY\nRecorded Videos from an iPhone/iPad need to be downloaded completely before playback is possible") % config.plugins.dreamplex.playerTempPath.value, type=MessageBox.TYPE_INFO, timeout=10)
         
         printl("", self, "C")
 
@@ -247,9 +247,9 @@ class DP_Player(MoviePlayer):
             return
         
         lastSize = 0;
-        if fileExists(config.plugins.dreamplex.path.value + self.filename, 'r'):
+        if fileExists(config.plugins.dreamplex.playerTempPath.value + self.filename, 'r'):
             lastSize = self.localsize
-            self.localsize = os.path.getsize(config.plugins.dreamplex.path.value + self.filename)
+            self.localsize = os.path.getsize(config.plugins.dreamplex.playerTempPath.value + self.filename)
         else:
             self.localsize = 0
         
@@ -596,7 +596,7 @@ class DP_Player(MoviePlayer):
             printl( "start downloaded file now", self, "I")
             self.startNewServiceOnPlay = False
             super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
-            sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.path.value + self.filename)
+            sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
             sref.setName("DreamPlex")
             self.session.nav.playService(sref)
         #self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
