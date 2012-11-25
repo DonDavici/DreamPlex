@@ -711,9 +711,11 @@ class DPS_SystemCheck(Screen):
 		
 		if arch == "oe16":
 			command = "opkg status gst-plugin-fragmented"
+			self.oeVersion = "mipsel"
 		
 		elif arch == "oe20":
 			command = "opkg status gst-plugins-bad-fragmented"
+			self.oeVersion = "mips32el"
 		
 		else:
 			pass
@@ -760,7 +762,8 @@ class DPS_SystemCheck(Screen):
 				command = "opkg update; opkg install gst-plugins-bad-fragmented"
 		
 			else:
-				pass
+				printl("something went wrong finding out the oe-version", self, "W")
+			
 			if not system(command):
 				# Successfully installed
 				#defaultServer = plexServerConfig.getDefaultServer()
