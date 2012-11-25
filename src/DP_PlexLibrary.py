@@ -2089,7 +2089,14 @@ class PlexLibrary(Screen):
         printl("PLAYURL => " + playurl, self, "I")
         printl("RESUME => " + str(resume), self, "I")
         printl("", self, "C")
-        return playurl, resume
+        
+        playerData = {}
+        playerData["playUrl"] = playUrl
+        playerData["resumeStamp"] = resume
+        playerData["server"] = server
+        playerData["id"] = id
+        
+        return playerData
     
     #===========================================================================
     # 

@@ -55,8 +55,15 @@ class DP_Player(MoviePlayer):
     ENIGMA_SERVICE_ID = 0
     
     startNewServiceOnPlay = False
+    
+    
+    resume = False
+    resumeStamp = 0
+    server = None
+    id = None
+    url = None
   
-    def __init__(self, session, url, start=None):
+    def __init__(self, session, playerData, resume=False):
         '''
         '''
         printl("", self, "S")
@@ -64,9 +71,13 @@ class DP_Player(MoviePlayer):
         self.session = session
                 
         self.startNewServiceOnPlay = False
-        self.start = int(start)
         
-     
+        self.resume = resume
+        self.resumeStamp = int(playerData['resumeStamp'])
+        self.server = str(playerData['server'])
+        self.id = str(playerData['id'])
+        self.url = str(playerData['playUrl'])
+        
         printl("Checking for usable gstreamer service (built-in)... ",self, "I")
   
         if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
@@ -81,7 +92,7 @@ class DP_Player(MoviePlayer):
                     
         #MoviePlayer.__init__(self, session, service)
         printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
-        sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, str(url))
+        sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
         sref.setName("DreamPlex")
         #MoviePlayer.__init__(self, session, service)
         MoviePlayer.__init__(self, session, sref)
@@ -129,10 +140,11 @@ class DP_Player(MoviePlayer):
         printl("rLen: " + str(rLen), self, "I")
         printl("rPos: " + str(rPos), self, "I")
 
-        if config.plugins.dreamplex.setSeekOnStart.value and self.start != None and self.start > 0.0:
+        if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
             start_new_thread(self.seekWatcher,(self,))
+        
         start_new_thread(self.bitRateWatcher,(self,))
-        start_new_thread(self.checkForUpdate,(self,))
+        #start_new_thread(self.checkForUpdate,(self,))
 
         self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
             {
@@ -622,8 +634,23 @@ class DP_Player(MoviePlayer):
         '''
         '''
         printl("", self, "S")
+        currentTime = None
+        totalTime = None
+        progress = None
         
         if answer:
+            if currentTime < 30:
+                printl("Less that 30 seconds, will not set resume", sefl, "I")
+            
+            #If we are less than 95% complete, store resume time
+            elif progress < 95:
+                printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress) )
+                self.getURL("http://"+server+"/:/progress?key="+id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
+     
+            #Otherwise, mark as watched
+            else:
+                printl( "Movie marked as watched. Over 95% complete")
+                self.getURL("http://"+server+"/:/scrobble?key="+id+"&identifier=com.plexapp.plugins.library",suppress=True)
             self.close()
         
         printl("", self, "C")

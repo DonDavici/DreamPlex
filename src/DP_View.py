@@ -101,8 +101,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.viewName = viewName
 		self._playEntry = playEntry
 		
-		self.playUrl = None
-		self.resumeStamp = 0
+		self.playerData = None
 		
 		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 		self.session.nav.stopService()
@@ -699,6 +698,9 @@ class DP_View(Screen, NumericalTextInput):
 	def _refresh(self, selection):
 		pass
 
+	#===============================================================================
+	# 
+	#===============================================================================
 	def playEntry(self, selection):
 		'''
 		'''
@@ -709,13 +711,13 @@ class DP_View(Screen, NumericalTextInput):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
-		self.playUrl, self.resumeStamp = plexInstance.playLibraryMedia(media_id, server, False)
+		self.playerData = plexInstance.playLibraryMedia(media_id, server, False)
 		
 		if self.resumeStamp > 0:
 			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
 		
 		else:
-			self.session.open(DP_Player, self.playUrl)
+			self.session.open(DP_Player, self.playerData)
 		
 		printl("", self, "C")
 		
@@ -724,11 +726,14 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
+		resume = False
+		
 		if confirm:
-			self.session.open(DP_Player, self.playUrl, self.resumeStamp)
+			resume = True
+			self.session.open(DP_Player, self.playerData, resume)
 		
 		else:
-			self.session.open(DP_Player, self.playUrl)
+			self.session.open(DP_Player, self.playerData)
 		
 		printl("", self, "C")
 
