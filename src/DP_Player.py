@@ -663,29 +663,9 @@ class DP_Player(MoviePlayer):
         '''
         '''
         printl("", self, "S")
-        currentTime = self.getPlayPosition()[1] / 90000
-        totalTime = self.getPlayLength()[1] / 90000
-        progress = currentTime / (totalTime/100)
-        #progress = 0
-        printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
-        
-        instance = Singleton()
-        plexInstance = instance.getPlexInstance()
         
         if answer:
-            if currentTime < 30:
-                printl("Less that 30 seconds, will not set resume", self, "I")
-            
-            #If we are less than 95% complete, store resume time
-            elif progress < 95:
-                printl("Less than 95% progress, will store resume time", self, "I" )
-                plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
-     
-            #Otherwise, mark as watched
-            else:
-                printl( "Movie marked as watched. Over 95% complete", self, "I")
-                plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library",suppress=True)
-            
+            self.handleProgress()
             self.close()
         
         printl("", self, "C")
@@ -698,9 +678,44 @@ class DP_Player(MoviePlayer):
         '''
         printl("", self, "S")
         
+        self.handleProgress()
+        self.close()
+        
         printl("", self, "C")
 
-            
+    #===========================================================================
+    # 
+    #===========================================================================
+    def handleProgress(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        currentTime = self.getPlayPosition()[1] / 90000
+        totalTime = self.getPlayLength()[1] / 90000
+        progress = currentTime / (totalTime/100)
+        #progress = 0
+        printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+        
+        instance = Singleton()
+        plexInstance = instance.getPlexInstance()
+        
+        
+        if currentTime < 30:
+            printl("Less that 30 seconds, will not set resume", self, "I")
+        
+        #If we are less than 95% complete, store resume time
+        elif progress < 95:
+            printl("Less than 95% progress, will store resume time", self, "I" )
+            plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
+ 
+        #Otherwise, mark as watched
+        else:
+            printl( "Movie marked as watched. Over 95% complete", self, "I")
+            plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library",suppress=True)
+        
+        printl("", self, "C")       
+        
     #===========================================================================
     # 
     #===========================================================================
