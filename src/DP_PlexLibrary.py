@@ -482,7 +482,7 @@ class PlexLibrary(Screen):
         for server in self.g_serverDict:
                                                                             
             if server['discovery'] == "local" or server['discovery'] == "bonjour":                                                
-                html = self.getURL('http://'+server['address']+'/system/library/sections')
+                html = self.getURL('http://'+server['address']+'/library/sections')
             elif server['discovery'] == "myplex":
                 html = self.getMyPlexURL('/pms/system/library/sections')
                 
@@ -555,22 +555,22 @@ class PlexLibrary(Screen):
     #===========================================================================
     def appendEntry(self, sections, mainMenuList, server):
         self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
-                               'address': self.g_host + ":" + sections.get('port'),
-                               'serverName' : sections.get('serverName','Unknown').encode('utf-8'),
+                               'address': self.g_host + ":" + self.g_port,
+                               'serverName' : self.g_name.encode('utf-8'),
                                'uuid' : sections.get('machineIdentifier','Unknown') ,
-                               'path' : sections.get('path') ,
+                               'path' : '/library/sections/' + sections.get('key') ,
                                'token' : sections.get('accessToken',None) ,
                                'location' : server['discovery'] ,
                                'art' : sections.get('art') ,
-                               'local' : sections.get('local') ,
+                               #'local' : sections.get('local') ,
                                'type' : sections.get('type','Unknown') })
 
         # 'address': sections.get('host','Unknown') + ":" + sections.get('port'),
         # for now we will not use this line of code because there are systems that are using ipv6 already
     
         #===>
-        path = sections.get('host','Unknown')+":"+sections.get('port')
-        address = sections.get('path')
+        path = self.g_host + ":" + self.g_port
+        address = '/library/sections/' +  sections.get('key')
         
         if self.g_secondary == "true":
             mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
@@ -650,11 +650,10 @@ class PlexLibrary(Screen):
     
                 elif nextViewGroup == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
+                    #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
                         
                 elif nextViewGroup == 'photo':
                     printl( "_MODE_PHOTOS detected", self, "X")
-                    pass
                 else:
                     printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
