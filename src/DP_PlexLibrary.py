@@ -2091,7 +2091,7 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         
         playerData = {}
-        playerData["playUrl"] = playUrl
+        playerData["playUrl"] = playurl
         playerData["resumeStamp"] = resume
         playerData["server"] = server
         playerData["id"] = id
