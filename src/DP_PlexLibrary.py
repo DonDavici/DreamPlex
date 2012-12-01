@@ -493,7 +493,7 @@ class PlexLibrary(Screen):
             
             for sections in tree:
                 #printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
-                printl("host in g_host: " + str(self.g_host),self, "D")
+                #printl("host in g_host: " + str(self.g_host),self, "D")
                 
                 #===============================================================
                 # if self.g_connectionType == "1":
@@ -602,11 +602,12 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getSectionFilter(self, s_url): # CHECKED
+    def getSectionFilter(self, s_url, s_type): # CHECKED
         '''
         '''
         printl("", self, "S")
         printl("s_url = " + s_url, self, "I")
+        printl("s_type = " + s_type, self, "I")
         
         #===>
         mainMenuList = []
@@ -614,34 +615,59 @@ class PlexLibrary(Screen):
         
         html = self.getURL(s_url)   
         tree = etree.fromstring(html)
-        viewGroup = tree.get("viewGroup")
-        printl("viewGroup " + str(viewGroup),self, "X")
-        
-        #=======================================================================
-        # viewGroup= mediaContainer.get("viewGroup")
-        # print "viewGroup !!!!!!!!!!!!!!!!!!!!!!!!!" + viewGroup
-        #=======================================================================
+        viewGroup = str(tree.get("viewGroup"))
+        printl("viewGroup " + str(viewGroup),self, "D")
+
         directories = tree.getiterator("Directory")
         
         for sections in directories: 
-            t_url = s_url + "/" + sections.get('key')
-            printl("t_url = " + t_url, self, "X")
+            #===================================================================
+            # getNextViewGroup = self.getURL(t_url)
+            # temp_tree = etree.fromstring(getNextViewGroup)
+            # nextViewGroup = temp_tree.get("viewGroup")
+            # 
+            # printl( "nextViewGroup " + str(nextViewGroup),self, "D")
+            #===================================================================
             
-            getNextViewGroup = self.getURL(t_url)
-            temp_tree = etree.fromstring(getNextViewGroup)
-            nextViewGroup = temp_tree.get("viewGroup")
-            
-            printl( "nextViewGroup " + str(nextViewGroup),self, "X")
+            viewGroupTypes = { "all":s_type,
+                               "unwatched":s_type,
+                               "newest":s_type,
+                               "recentlyAdded":s_type,
+                               "recentlyViewed":s_type,
+                               "onDeck":s_type,
+                               "folder":s_type,
+                               "collection": "secondary",
+                               "genre":"secondary",
+                               "year":"secondary",
+                               "decade":"secondary",
+                               "director":"secondary",
+                               "actor":"secondary",
+                               "country":"secondary",
+                               "contentRating":"secondary",
+                               "rating":"secondary",
+                               "resolution":"secondary",
+                               "firstCharacter":"secondary"
+                            }            
             
             isSearchFilter = False
+            #sample = <Directory prompt="Search Movies - Teens" search="1" key="search?type=1" title="Search..." />
+            prompt = str(sections.get('prompt', 'noSearch')) 
+            if prompt != "noSearch":
+                isSearchFilter = True
+                t_url = s_url
+                printl("t_url = " + t_url, self, "D")
+                nextViewGroup = "secondary"
+            elif s_type == "secondary":
+                t_url = s_url
+                printl("t_url = " + t_url, self, "D")
+                nextViewGroup = "movie"
+            else:
+                printl("else", self, "D")
+                nextViewGroup = viewGroupTypes[sections.get('key')]
+                t_url = s_url + "/" + str(sections.get('key'))
+                printl("t_url = " + t_url, self, "D")
             
-            searchString = t_url.split("?")
-            printl( "searchString = " + str(searchString), self, "X")
-            try:
-                if searchString[1] == "type=1" or searchString[1] == "type=2" or searchString[1] == "type=3" or searchString[1] == "type=4":
-                    isSearchFilter = True            
-            except:
-                pass
+            printl( "nextViewGroup " + str(nextViewGroup),self, "D")
             
             if nextViewGroup != "secondary": #means that the next answer is again a filter cirteria
                 if nextViewGroup == 'show' or nextViewGroup == 'episode':
@@ -662,7 +688,7 @@ class PlexLibrary(Screen):
                     printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
             else:
-                mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", t_url, isSearchFilter))
+                mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", t_url, nextViewGroup))
 
             t_url = None
         
@@ -825,7 +851,7 @@ class PlexLibrary(Screen):
 
         s_url = 'http://%s%s' % ( address, path)
         
-        printl("s_url = " + s_url, self, "X")
+        printl("s_url = " + s_url, self, "D")
         printl("", self, "C")
         return s_url
 
@@ -1158,7 +1184,7 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #printl("== ENTER: self.getURL ==", False)
+
         try:        
             if url[0:4] == "http":
                 serversplit=2
@@ -1182,16 +1208,10 @@ class PlexLibrary(Screen):
             conn = httplib.HTTPConnection(server) 
             conn.request(type, urlPath, headers=authHeader) 
             data = conn.getresponse() 
-            if int(data.status) == 200:
-                link=data.read()
-                #===============================================================
-                # printl("====== XML returned =======")
-                # printl(link, False)
-                # printl("====== XML finished ======")
-                #===============================================================
     
-            elif ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
+            if ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
                 printl("status 301 or 302 found", self, "I")
+                
                 data = data.getheader('Location')
                 printl("data: " + str(data), self, "I")
                 
@@ -1208,15 +1228,20 @@ class PlexLibrary(Screen):
                 #    else:
                 #        xbmcgui.Dialog().ok("Error",server)
                 #===============================================================
+                
                 printl("", self, "C")
                 return False
-            else:      
+            
+            else:   
                 link=data.read()
-                #===============================================================
-                # printl("====== XML returned =======")
-                # printl(link, False)
-                # printl("====== XML finished ======")
-                #===============================================================
+                
+                #printl("====== XML returned =======", self, "D")
+                #printl("data: " + link, self, "D")
+                #printl("====== XML finished ======", self, "D")
+                
+                printl("", self, "C")
+                return link
+        
         except socket.gaierror :
             error = 'Unable to lookup host: ' + server + "\nCheck host name is correct"
             #===================================================================
@@ -1227,8 +1252,10 @@ class PlexLibrary(Screen):
             #        xbmcgui.Dialog().ok("","Unable to contact host")
             #===================================================================
             printl( error, self, "I")
+            
             printl("", self, "C")
             return False
+        
         except socket.error, msg : 
             error="Unable to connect to " + server +"\nReason: " + str(msg)
             #===================================================================
@@ -1241,11 +1268,6 @@ class PlexLibrary(Screen):
             printl( error, self, "I")
             printl("", self, "C")
             return False
-        else:
-            
-            printl("link: " + link, self, "D")
-            printl("", self, "C")
-            return link
    
     #========================================================================
     # 
