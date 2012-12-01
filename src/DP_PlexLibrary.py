@@ -825,7 +825,7 @@ class PlexLibrary(Screen):
 
         s_url = 'http://%s%s' % ( address, path)
         
-        printl("s_url = " + s_url, self, "X")
+        printl("s_url = " + s_url, self, "D")
         printl("", self, "C")
         return s_url
 
@@ -1158,7 +1158,7 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #printl("== ENTER: self.getURL ==", False)
+
         try:        
             if url[0:4] == "http":
                 serversplit=2
@@ -1182,16 +1182,10 @@ class PlexLibrary(Screen):
             conn = httplib.HTTPConnection(server) 
             conn.request(type, urlPath, headers=authHeader) 
             data = conn.getresponse() 
-            if int(data.status) == 200:
-                link=data.read()
-                #===============================================================
-                # printl("====== XML returned =======")
-                # printl(link, False)
-                # printl("====== XML finished ======")
-                #===============================================================
     
-            elif ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
+            if ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
                 printl("status 301 or 302 found", self, "I")
+                
                 data = data.getheader('Location')
                 printl("data: " + str(data), self, "I")
                 
@@ -1208,15 +1202,20 @@ class PlexLibrary(Screen):
                 #    else:
                 #        xbmcgui.Dialog().ok("Error",server)
                 #===============================================================
+                
                 printl("", self, "C")
                 return False
-            else:      
+            
+            else:   
                 link=data.read()
-                #===============================================================
-                # printl("====== XML returned =======")
-                # printl(link, False)
-                # printl("====== XML finished ======")
-                #===============================================================
+                
+                printl("====== XML returned =======", self, "D")
+                printl("data: " + link, self, "D")
+                printl("====== XML finished ======", self, "D")
+                
+                printl("", self, "C")
+                return link
+        
         except socket.gaierror :
             error = 'Unable to lookup host: ' + server + "\nCheck host name is correct"
             #===================================================================
@@ -1227,8 +1226,10 @@ class PlexLibrary(Screen):
             #        xbmcgui.Dialog().ok("","Unable to contact host")
             #===================================================================
             printl( error, self, "I")
+            
             printl("", self, "C")
             return False
+        
         except socket.error, msg : 
             error="Unable to connect to " + server +"\nReason: " + str(msg)
             #===================================================================
@@ -1241,11 +1242,6 @@ class PlexLibrary(Screen):
             printl( error, self, "I")
             printl("", self, "C")
             return False
-        else:
-            
-            printl("link: " + link, self, "D")
-            printl("", self, "C")
-            return link
    
     #========================================================================
     # 
