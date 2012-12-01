@@ -1119,15 +1119,14 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			getConfigListEntry(_("State"), self.current.state),
 			getConfigListEntry(_("Name"), self.current.name),
 			getConfigListEntry(_("IP"), self.current.ip),
-			getConfigListEntry(_("Connection Type"), self.current.connectionType),
+			getConfigListEntry(_("Port"), self.current.port),
 			getConfigListEntry(_("Use Wake on Lan (WoL)"), self.current.wol),
 			getConfigListEntry(_("Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac),
 			getConfigListEntry(_("Wait for server delay (max 180 seconds)"), self.current.wol_delay),
-			getConfigListEntry(_("Port"), self.current.port),
-
 		]
 
 			#===================================================================
+			# getConfigListEntry(_("Connection Type"), self.current.connectionType),
 			# getConfigListEntry(_("Transcode (no function yet but soon ;-)"), self.current.transcode),
 			# getConfigListEntry(_("Transcode Type (no function yet but soon ;-)"), self.current.transcodeType),
 			# getConfigListEntry(_("Quality (no function yet but soon ;-)"), self.current.quality),
