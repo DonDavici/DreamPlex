@@ -492,18 +492,22 @@ class PlexLibrary(Screen):
             tree = etree.fromstring(html).getiterator("Directory")
             
             for sections in tree:
-                printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
+                #printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
                 printl("host in g_host: " + str(self.g_host),self, "D")
                 
-                if self.g_connectionType == "1":
+                #===============================================================
+                # if self.g_connectionType == "1":
+                # 
+                #    if str(sections.get('host', 'Unknow')) == str(self.g_host):
+                #        mainMenuList = self.appendEntry(sections, mainMenuList, server)  
+                #    else:
+                #        multiple = True
+                #        multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
+                # else:
+                #   mainMenuList = self.appendEntry(sections, mainMenuList, server)
+                #===============================================================
                 
-                    if str(sections.get('host', 'Unknow')) == str(self.g_host):
-                        mainMenuList = self.appendEntry(sections, mainMenuList, server)  
-                    else:
-                        multiple = True
-                        multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
-                else:
-                   mainMenuList = self.appendEntry(sections, mainMenuList, server)
+                mainMenuList = self.appendEntry(sections, mainMenuList, server)
                 
                 #===>
         if multiple == True:
