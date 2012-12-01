@@ -62,6 +62,7 @@ class DPS_MainMenu(Screen):
 	
 	selectedEntry = None
 	s_url = None
+	s_type = None
 	
 	g_serverDataMenu = None
 	g_filterDataMenu = None
@@ -248,18 +249,23 @@ class DPS_MainMenu(Screen):
 			elif type(self.selectedEntry) is int:
 				printl("selected entry is int", self, "D")
 				
-				if self.selectedEntry == Plugin.MENU_MAIN: #is 1 => __plugin__ line 77
+				if self.selectedEntry == Plugin.MENU_MAIN:
+					printl("found Plugin.MENU_MAIN", self, "D")
 					self["menu"].setList(self.menu_main_list)
 			
 				elif self.selectedEntry == Plugin.MENU_SERVER:
+					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
 					self.checkWakeOnLan()
 				
 				elif self.selectedEntry == Plugin.MENU_FILTER:
+					printl("found Plugin.MENU_FILTER", self, "D")
 					self.s_url = selection[3]
+					self.s_type = selection[4]
 					self.getFilterData()
 			
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
+					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
 					self.refreshMenu(0)
 
@@ -301,7 +307,7 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		if searchString is not "" and not None:
+		if searchString is not "" and searchString is not None:
 			self.s_url = self.s_url + "&query" + searchString
 
 		self.executeSelectedEntry()
@@ -563,8 +569,7 @@ class DPS_MainMenu(Screen):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
-		printl("self.s_url = " + self.s_url, self, "D")
-		menuData = plexInstance.getSectionFilter(self.s_url)
+		menuData = plexInstance.getSectionFilter(self.s_url, self.s_type)
 		
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
