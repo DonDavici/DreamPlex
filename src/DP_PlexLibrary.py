@@ -493,7 +493,7 @@ class PlexLibrary(Screen):
             
             for sections in tree:
                 #printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
-                printl("host in g_host: " + str(self.g_host),self, "D")
+                #printl("host in g_host: " + str(self.g_host),self, "D")
                 
                 #===============================================================
                 # if self.g_connectionType == "1":
