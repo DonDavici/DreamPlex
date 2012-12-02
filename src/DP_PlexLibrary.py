@@ -48,6 +48,8 @@ import uuid
 #===============================================================================
 from Screens.Screen import Screen
 
+from Components.config import config
+
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #from DPH_bonjourFind import *
@@ -182,13 +184,19 @@ class PlexLibrary(Screen):
 
         printl("running on " + str(sys.version_info), self, "I")
         
+                
+        # global settings
+        self.g_secondary = str(config.plugins.dreamplex.showFilter.value).lower()
+        
+        # server settings
         self.g_name = str(serverConfig.name.value)
         self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
         self.g_port = str(serverConfig.port.value)
         self.g_connectionType = str(serverConfig.connectionType.value)
-        
+
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
+        printl("using this serverPort: " +  self.g_port, self, "I")
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
         
         #Next lets check if for this server nas override is activated
@@ -281,7 +289,7 @@ class PlexLibrary(Screen):
                 elif section.get('type') == 'movie':
                     printl( "_MODE_MOVIES detected", self, "D")
                     mode= int(_MODE_MOVIES)
-                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), params))
                     if (filter is not None) and (filter != "movies"):
                         continue
     
