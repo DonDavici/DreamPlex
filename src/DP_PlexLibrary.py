@@ -212,17 +212,14 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #===================================================================
-        # xbmcplugin.setContent(pluginhandle, 'movies')
-        #===================================================================
+        #===>
+        mainMenuList = []
+        self.g_sections = []
+        #===>
         
         numOfServers=len(self.g_serverDict)
         printl( "Using list of "+str(numOfServers)+" servers: " +  str(self.g_serverDict), self, "I")
         self.getAllSections()
-        
-        #===>
-        mainMenuList = []
-        #===>
         
         for section in self.g_sections:
                 
