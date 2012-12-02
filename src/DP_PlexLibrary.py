@@ -23,15 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import urllib
-#===============================================================================
-# import urllib2
-#===============================================================================
 import re
-#===============================================================================
-# import xbmcplugin
-# import xbmcgui
-# import xbmcaddon
-#===============================================================================
 import httplib
 import socket
 import sys
@@ -43,8 +35,9 @@ import hashlib
 import random
 import hmac
 import uuid
+
 #===============================================================================
-# import cProfile
+# 
 #===============================================================================
 from Screens.Screen import Screen
 
@@ -55,7 +48,7 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #from DPH_bonjourFind import *
 
 #===============================================================================
-# 
+# import cProfile
 #===============================================================================
 try:
     from lxml import etree
