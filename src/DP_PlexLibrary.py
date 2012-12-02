@@ -471,7 +471,6 @@ class PlexLibrary(Screen):
             @return: MainMenu for DP_MainMenu and alters the global value g_sectionList for other functions
         '''
         printl("", self, "S")
-        printl("Using servers list: " + str(self.g_serverDict), self, "I")
         
         #===>
         mainMenuList = []
@@ -492,22 +491,11 @@ class PlexLibrary(Screen):
             tree = etree.fromstring(html).getiterator("Directory")
             
             for sections in tree:
-                #printl("host in section: " + str(sections.get('host', 'Unknow')),self, "D")
-                #printl("host in g_host: " + str(self.g_host),self, "D")
                 
-                #===============================================================
-                # if self.g_connectionType == "1":
-                # 
-                #    if str(sections.get('host', 'Unknow')) == str(self.g_host):
-                #        mainMenuList = self.appendEntry(sections, mainMenuList, server)  
-                #    else:
-                #        multiple = True
-                #        multiple_list.append(sections.get('host', 'Unknow') + " section => " + sections.get('title','Unknown').encode('utf-8'))
-                # else:
-                #   mainMenuList = self.appendEntry(sections, mainMenuList, server)
-                #===============================================================
-                
-                mainMenuList = self.appendEntry(sections, mainMenuList, server)
+                #we need this until we do not support music and photos
+                type = sections.get('type', 'unknown')
+                if type == "movie" or type == "show":
+                    mainMenuList = self.appendEntry(sections, mainMenuList, server)
                 
                 #===>
         if multiple == True:
@@ -594,7 +582,6 @@ class PlexLibrary(Screen):
 
             elif sections.get('type') == 'artist':
                 printl( "_MODE_ARTISTS detected", self, "D")
-                #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
                     
             elif sections.get('type') == 'photo':
                 printl( "_MODE_PHOTOS detected", self, "D")
@@ -606,72 +593,67 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getSectionFilter(self, s_url, s_type): # CHECKED
+    def getSectionFilter(self, p_url, p_type): # CHECKED
         '''
         '''
         printl("", self, "S")
-        printl("s_url = " + s_url, self, "I")
-        printl("s_type = " + s_type, self, "I")
+        printl("p_url = " + p_url, self, "I")
+        printl("p_type = " + p_type, self, "I")
         
         #===>
         mainMenuList = []
         #===>
         
-        html = self.getURL(s_url)   
+        html = self.getURL(p_url)   
         tree = etree.fromstring(html)
-        viewGroup = str(tree.get("viewGroup"))
-        printl("viewGroup " + str(viewGroup),self, "D")
-
         directories = tree.getiterator("Directory")
+        viewGroup = str(tree.get("viewGroup"))
         
-        for sections in directories: 
-            #===================================================================
-            # getNextViewGroup = self.getURL(t_url)
-            # temp_tree = etree.fromstring(getNextViewGroup)
-            # nextViewGroup = temp_tree.get("viewGroup")
-            # 
-            # printl( "nextViewGroup " + str(nextViewGroup),self, "D")
-            #===================================================================
-            
-            viewGroupTypes = { "all":s_type,
-                               "unwatched":s_type,
-                               "newest":s_type,
-                               "recentlyAdded":s_type,
-                               "recentlyViewed":s_type,
-                               "onDeck":s_type,
-                               "folder":s_type,
-                               "recentlyViewedShows":s_type,
-                               "collection": "secondary",
-                               "genre":"secondary",
-                               "year":"secondary",
-                               "decade":"secondary",
-                               "director":"secondary",
-                               "actor":"secondary",
-                               "country":"secondary",
-                               "contentRating":"secondary",
-                               "rating":"secondary",
-                               "resolution":"secondary",
-                               "firstCharacter":"secondary"
-                            }            
+        printl("directories: " + str(directories), self, "D")
+        printl("viewGroup: " + str(viewGroup),self, "D")
+
+        viewGroupTypes = { "all":p_type,
+                         "unwatched":p_type,
+                         "newest":p_type,
+                         "recentlyAdded":p_type,
+                         "recentlyViewed":p_type,
+                         "onDeck":p_type,
+                         "folder":p_type,
+                         "recentlyViewedShows":p_type,
+                         "collection": "secondary",
+                         "genre":"secondary",
+                         "year":"secondary",
+                         "decade":"secondary",
+                         "director":"secondary",
+                         "actor":"secondary",
+                         "country":"secondary",
+                         "contentRating":"secondary",
+                         "rating":"secondary",
+                         "resolution":"secondary",
+                         "firstCharacter":"secondary"
+                      }        
+        
+        for sections in directories:   
             
             isSearchFilter = False
             #sample = <Directory prompt="Search Movies - Teens" search="1" key="search?type=1" title="Search..." />
             prompt = str(sections.get('prompt', 'noSearch')) 
             if prompt != "noSearch":
+                printl("isSearchFilter", self, "D")
                 isSearchFilter = True
-                t_url = s_url
+                t_url = p_url
                 nextViewGroup = "secondary"
-            elif s_type == "secondary":
-                t_url = s_url
+            elif p_type == "secondary":
+                printl("p_type = secondary", self, "D")
+                t_url = p_url
                 nextViewGroup = "movie"
             else:
-                printl("else", self, "D")
                 nextViewGroup = viewGroupTypes[sections.get('key')]
-                t_url = s_url + "/" + str(sections.get('key'))
+                t_url = p_url + "/" + str(sections.get('key'))
             
-            printl("isSearchFilter: " + str(isSearchFilter), self, "D")   
             printl("t_url: " + str(t_url), self, "D")
-            printl( "nextViewGroup: " + str(nextViewGroup),self, "D")
+            printl("isSearchFilter: " + str(isSearchFilter), self, "D")   
+            printl("nextViewGroup: " + str(nextViewGroup),self, "D")
             
             params = {}
             params["isSearchFilter"] =isSearchFilter
@@ -679,6 +661,7 @@ class PlexLibrary(Screen):
             params["nextViewGroup"] = nextViewGroup
             
             if nextViewGroup != "secondary": #means that the next answer is again a filter cirteria
+                
                 if nextViewGroup == 'show' or nextViewGroup == 'episode':
                     printl( "_MODE_TVSHOWS detected", self, "X")
                     mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", params))
@@ -689,10 +672,10 @@ class PlexLibrary(Screen):
     
                 elif nextViewGroup == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "X")
-                    #mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
                         
                 elif nextViewGroup == 'photo':
                     printl( "_MODE_PHOTOS detected", self, "X")
+                
                 else:
                     printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
@@ -702,7 +685,7 @@ class PlexLibrary(Screen):
             t_url = None
         
         #===>
-        printl("mainMenuList: " + str(mainMenuList), self, "D")
+        #printl("mainMenuList: " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
  
@@ -777,7 +760,7 @@ class PlexLibrary(Screen):
             if self.g_skipcontext == "false":
                 context=[]
                 refreshURL="http://"+section.get('address')+section.get('path')+"/refresh"
-                libraryRefresh = "XBMC.RunScript("+self.g_loc+"/default.py, update ," + refreshURL + ")"
+                #libraryRefresh = "XBMC.RunScript("+self.g_loc+"/default.py, update ," + refreshURL + ")"
                 context.append(('Refresh library section', libraryRefresh , ))
             else:
                 context=None
@@ -792,8 +775,6 @@ class PlexLibrary(Screen):
                 mainMenuList.append((_(details['title'].encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", s_url))
             elif mode == _MODE_ARTISTS:
                 printl( "_MODE_ARTISTS detected", self, "D")
-                #deactivated for now
-                mainMenuList.append((_(details['title'].encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", s_url))
             elif mode == _MODE_PHOTOS:
                 printl( "_MODE_PHOTOS detected", self, "D")
             else:
