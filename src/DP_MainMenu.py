@@ -252,13 +252,16 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_FILTER", self, "D")
 					params = selection[2]
 					printl("params: " + str(params), self, "D")
-					isSerachFilter = params.get('isSerachFilter', "notSet")
+					isSearchFilter = params.get('isSearchFilter', "notSet")
 					t_url = params.get('t_url', "notSet")
 					nextViewGroup = params.get('nextViewGroup', "notSet")
-					
 					self.s_url = t_url
 					self.s_type = nextViewGroup
-					self.getFilterData()
+					
+					if isSearchFilter == "True" or isSearchFilter == True:
+						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
+					else:
+						self.getFilterData()
 			
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
@@ -279,18 +282,12 @@ class DPS_MainMenu(Screen):
 					self.session.open(DPS_SystemCheck)
 					
 			else:
-				printl("selected entry is executable", self, "D")
-				
-				params = selection[3]
-				isSerachFilter = params["isSearchFilter"]
-				t_url = params["t_url"]
-				nextViewGroup = params["nextViewGroup"]
-				
+				params = selection[2]
+				t_url = params.get('t_url', "notSet")
 				self.s_url = t_url
-				if isSerachFilter == True:
-					self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
-				else:
-					self.executeSelectedEntry()
+
+				printl("selected entry is executable", self, "D")
+				self.executeSelectedEntry()
 					
 			printl("", self, "C")
 					
@@ -316,6 +313,7 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
+		printl("self.s_url: " + str(self.s_url), self, "D")
 		
 		if self.selectedEntry.start is not None:
 			kwargs = {"url": self.s_url}
@@ -339,7 +337,6 @@ class DPS_MainMenu(Screen):
 		self["menu"].selectPrevious()
 		
 		printl("", self, "C")	
-		return
 	
 	#===========================================================================
 	# 
@@ -352,7 +349,6 @@ class DPS_MainMenu(Screen):
 		self["menu"].selectNext()
 		
 		printl("", self, "C")
-		return
 	
 	#===============================================================================
 	# 
@@ -369,7 +365,6 @@ class DPS_MainMenu(Screen):
 			self["menu"].selectNext()
 		
 		printl("", self, "C")
-		return
 
 	#===========================================================================
 	# 
@@ -386,7 +381,6 @@ class DPS_MainMenu(Screen):
 			self["menu"].selectPrevious()
 		
 		printl("", self, "C")
-		return
 	
 	#===========================================================================
 	# 
@@ -431,7 +425,6 @@ class DPS_MainMenu(Screen):
 			self["menu"].setList(self.menu_main_list)
 
 		printl("", self, "C")
-		return
 	
 	#===========================================================================
 	# 
@@ -545,7 +538,8 @@ class DPS_MainMenu(Screen):
 		instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 		
 		plexInstance = instance.getPlexInstance()
-		serverData = plexInstance.getAllSections()
+		#serverData = plexInstance.getAllSections()
+		serverData = plexInstance.displaySections()
 		
 		self["menu"].setList(serverData)
 		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed

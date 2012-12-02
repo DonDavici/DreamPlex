@@ -191,9 +191,6 @@ class PlexLibrary(Screen):
         printl("using this serverIp: " +  self.g_host, self, "I")
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
         
-        #Lets print out all settings that are active so far
-        self.printCurrentSettingsState()
-                
         #Next lets check if for this server nas override is activated
         self.checkNasOverride()
         
@@ -204,261 +201,159 @@ class PlexLibrary(Screen):
         global _PARAM_TOKEN
         #_PARAM_TOKEN = self.getNewMyPlexToken()
         _PARAM_TOKEN = None
-            
-    #===========================================================================
-    # g_serverDict=[]
-    # self.g_sections=[]
-    #===========================================================================
-                        
-    #===========================================================================
-    # global self.g_stream 
-    # self.g_stream = __settings__.getSetting('streaming')
-    # self.g_secondary = __settings__.getSetting('secondary')
-    # self.g_streamControl = __settings__.getSetting('streamControl')
-    # self.g_channelview = __settings__.getSetting('channelview')
-    # self.g_flatten = __settings__.getSetting('flatten')
-    # printl("DreamPlex -> Flatten is: "+ self.g_flatten, False)
-    # #self.g_playtheme = __settings__.getSetting('playtvtheme')
-    # self.g_forcedvd = __settings__.getSetting('forcedvd')
-    # g_skintype= __settings__.getSetting('skinwatch')    
-    # g_skinwatched="xbmc"
-    # g_skin = xbmc.getSkinDir()
-    # 
-    # if g_skintype == "true":
-    #    if g_skin.find('.DreamPlex'):
-    #        g_skinwatched="DreamPlex"
-    #===========================================================================
-        printl("", self, "C")
- 
-    #====================================================================
-    # 
-    #====================================================================
-    def printCurrentSettingsState(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        #TODO fill with all settings        
-        printl( "Settings streaming: " + self.g_stream, self, "I")
-        printl( "Setting filter menus: " + self.g_secondary, self, "I")
-        printl( "Setting stream Control to : " + self.g_streamControl, self, "I")
-        printl( "Force DVD playback: " + self.g_forcedvd, self, "I")
-        
-        printl("", self, "C")
-    
-    
-    def checkNasOverride(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        #NAS Override
-        #===========================================================================
-        # self.g_nasoverride = __settings__.getSetting('nasoverride')
-        #===========================================================================
-        printl("DreamPlex -> check SMB IP Override: " + self.g_nasoverride, self, "I")
-        
-        if self.g_nasoverride == "true":
-            #===================================================================
-            # self.g_nasoverrideip = __settings__.getSetting('nasoverrideip')
-            #===================================================================
-            if self.g_nasoverrideip == "":
-                printl("DreamPlex -> No NAS IP Specified.  Ignoring setting", self, "I")
-            else:
-                printl("DreamPlex -> NAS IP: " + self.g_nasoverrideip, self, "I")
-                
-            #===================================================================
-            # self.g_nasroot = __settings__.getSetting('nasroot')
-            #===================================================================
-      
-    #===========================================================================
-    # #Get look and feel
-    # if __settings__.getSetting("contextreplace") == "true":
-    #    g_contextReplace=True
-    # else:
-    #    g_contextReplace=False
-    #===========================================================================
-    
-    #===========================================================================
-    # self.g_skipcontext = __settings__.getSetting("skipcontextmenus")    
-    # self.g_skipmetadata= __settings__.getSetting("skipmetadata")
-    # self.g_skipmediaflags= __settings__.getSetting("skipflags")
-    # self.g_skipimages= __settings__.getSetting("skipimages")
-    # 
-    # self.g_loc = "special://home/addons/plugin.video.DreamPlex"
-    #===========================================================================
-    
-    #===========================================================================
-    # #Create the standard header structure and load with a User Agent to ensure we get back a response.
-    # g_txheaders = {
-    #              'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',	
-    #              }
-    #===========================================================================
-    
-    #===========================================================================
-    # #Set up holding variable for session ID
-    # global self.g_sessionID
-    # self.g_sessionID=None
-    #===========================================================================
-        
-        printl("", self, "C")
-        
-    def discoverAllServers(self): # CHECKED
-        '''
-            Take the users settings and add the required master servers
-            to the server list.  These are the devices which will be queried
-            for complete library listings.  There are 3 types:
-                local server - from IP configuration
-                bonjour server - from a bonjour lookup
-                myplex server - from myplex configuration
-            Alters the global self.g_serverDict value
-            @input: None
-            @return: None       
-        '''
-        printl("", self, "S")
-        #=======================================================================
-        # self.g_bonjour = __settings__.getSetting('bonjour')
-        #=======================================================================
-    
-        #Set to Bonjour
-        if self.g_bonjour == "1":
-            printl("DreamPlex -> local Bonjour discovery setting enabled.", self, "I")
-    #===========================================================================
-    #        try:
-    #            printl("Attempting bonjour lookup on _plexmediasvr._tcp")
-    #            bonjourServer = bonjourFind("_plexmediasvr._tcp")
-    #                                                
-    #            if bonjourServer.complete:
-    #                printl("Bonjour discovery completed")
-    #                #Add the first found server to the list - we will find rest from here
-    #                
-    #                bj_server_name = bonjourServer.bonjourName[0].encode('utf-8')
-    #                
-    #                self.g_serverDict.append({'name'      : bj_server_name.split('.')[0] ,
-    #                                     'address'   : bonjourServer.bonjourIP[0]+":"+bonjourServer.bonjourPort[0] ,
-    #                                     'discovery' : 'bonjour' , 
-    #                                     'token'     : None ,
-    #                                     'uuid'      : None })
-    #                                     
-    #                                     
-    #            else:
-    #                printl("BonjourFind was not able to discovery any servers")
-    # 
-    #        except:
-    #            print "DreamPlex -> Bonjour Issue.  Possibly not installed on system"
-    #            #TODO add message dialog to ask if it should be installed
-    #            #===============================================================
-    #            # xbmcgui.Dialog().ok("Bonjour Error","Is Bonojur installed on this system?")
-    #            #===============================================================
-    #===========================================================================
-    
-        #Set to Disabled       
-        else:
-            #===================================================================
-            # self.g_host = __settings__.getSetting('ipaddress')
-            # self.g_port =__settings__.getSetting('port')
-            #===================================================================
-            
-            #!!!!
-            self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
-            #!!!!
-            
-            if not self.g_host or self.g_host == "<none>":
-                self.g_host = None
-            
-            elif not self.g_port:
-                printl( "No port defined.  Using default of " + DEFAULT_PORT, self, "I")
-                self.g_address = self.g_host + ":" + DEFAULT_PORT
-            
-            else:
-                self.g_address = self.g_host + ":" + self.g_port
-                printl( "Settings hostname and port: " + self.g_address, self, "I")
-        
-            if self.g_address is not None:
-                self.g_serverDict.append({'serverName': self.g_name ,
-                                     'address'   : self.g_address ,
-                                     'discovery' : 'local' , 
-                                     'token'     : None ,
-                                     'uuid'      : None ,
-                                     'role'      : 'master' })    
-            
-        #=======================================================================
-        # if __settings__.getSetting('myplex_user') != "":
-        #=======================================================================
-        if self.g_myplex_username != "":
-            printl( "DreamPlex -> Adding myplex as a server location", self, "I")
-            self.g_serverDict.append({'serverName': 'MYPLEX' ,
-                                 'address'   : "my.plex.app" ,
-                                 'discovery' : 'myplex' , 
-                                 'token'     : None ,
-                                 'uuid'      : None ,
-                                 'role'      : 'master' })
-        
-        
-        printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
-        printl("", self, "C")
- 
-    #===========================================================================
-    # 
-    #===========================================================================
-    def resolveAllServers(self): # CHECKED
-        '''
-          Return list of all media sections configured
-          within DreamPlex
-          @input: None
-          @Return: unique list of media sections
-        '''
+                                   
         printl("", self, "C")
 
-        localServers=[]
-          
-        for servers in self.g_serverDict:
-        
-            if ( servers['discovery'] == 'local' ) or ( servers['discovery'] == 'bonjour' ):
-                localServers += self.getLocalServers()
-            elif servers['discovery'] == 'myplex':
-                localServers += self.getMyPlexServers()
-        
-            printl ("Resolved server List: " + str(localServers), self, "I")
-        
-        '''If we have more than one server source, then
-           we need to ensure uniqueness amonst the
-           seperate servers.
-           
-           If we have only one server source, then the assumption
-           is that Plex will deal with this for us.
+    #============================================================================
+    # 
+    #============================================================================
+    def displaySections(self, filter=None ): # CHECKED unused!?!?
         '''
+        '''
+        printl("", self, "S")
+        #===================================================================
+        # xbmcplugin.setContent(pluginhandle, 'movies')
+        #===================================================================
         
-        if len(self.g_serverDict) > 1:
-            oneCount=0
-            for onedevice in localServers:
+        numOfServers=len(self.g_serverDict)
+        printl( "Using list of "+str(numOfServers)+" servers: " +  str(self.g_serverDict), self, "I")
+        self.getAllSections()
+        
+        #===>
+        mainMenuList = []
+        #===>
+        
+        for section in self.g_sections:
+                
+            details={'title' : section.get('title', 'Unknown') }
             
-                twoCount=0
-                for twodevice in localServers:
+            if len(self.g_serverDict) > 1:
+                details['title']=section.get('serverName')+": "+details['title']
+            
+            extraData={ 'fanart_image' : self.getFanart(section, section.get('address')) ,
+                        'type'         : "Video" ,
+                        'thumb'        : self.getFanart(section, section.get('address'), False) ,
+                        'token'        : section.get('token',None) }
+                                               
+            #Determine what we are going to do process after a link is selected by the user, based on the content we find
+            
+            path = section['path']
+            address =  section['address']
+            
+            if self.g_secondary == "true":
+                printl( "_MODE_GETCONTENT detected", self, "D")
+                mode=_MODE_GETCONTENT
+            else:
+                path=path+'/all'    
+            
+            params = {}
+            params['nextViewGroup'] = str(section.get('type'))
+            params['t_url'] = self.getSectionUrl(address, path)
+            
+            if self.g_secondary == "true":
+                if section.get('type') == 'show':
+                    printl( "_MODE_TVSHOWS detected", self, "D")
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
+                        
+                elif section.get('type') == 'movie':
+                    
+                    printl( "_MODE_MOVIES detected", self, "D")
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
     
-                    printl( "["+str(oneCount)+":"+str(twoCount)+"] Checking " + onedevice['uuid'] + " and " + twodevice['uuid'])
-    
-                    if oneCount == twoCount:
-                        printl( "skip" )
-                        twoCount+=1
+                elif section.get('type') == 'artist':
+                    printl( "_MODE_ARTISTS detected", self, "D")
+
+                        
+                elif section.get('type') == 'photo':
+                    printl( "_MODE_PHOTOS detected", self, "D")
+
+                else:
+                    printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
+                    continue
+            else:       
+                if section.get('type') == 'show':
+                    printl( "_MODE_TVSHOWS detected", self, "D")
+                    mode= int(_MODE_TVSHOWS)
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
+                    if (filter is not None) and (filter != "tvshow"):
                         continue
                         
-                    if onedevice['uuid'] == twodevice['uuid']:
-                        printl ( "match" )
-                        if onedevice['discovery'] == "local":
-                            localServers.pop(twoCount)
-                        else:
-                            localServers.pop(oneCount)
-                    else:
-                        printl( "no match" )
-                    
-                    twoCount+=1
-                 
-                oneCount+=1
+                elif section.get('type') == 'movie':
+                    printl( "_MODE_MOVIES detected", self, "D")
+                    mode= int(_MODE_MOVIES)
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
+                    if (filter is not None) and (filter != "movies"):
+                        continue
+    
+                elif section.get('type') == 'artist':
+                    printl( "_MODE_ARTISTS detected", self, "D")
+                    mode= int(_MODE_ARTISTS)
+                    if (filter is not None) and (filter != "music"):
+                        continue
+                        
+                elif section.get('type') == 'photo':
+                    printl( "_MODE_PHOTOS detected", self, "D")
+                    mode= int(_MODE_PHOTOS)
+                    if (filter is not None) and (filter != "photos"):
+                        continue
+                else:
+                    printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
+                    continue
+         
+        #=======================================================================   
+        # UNUSED FOR NOW
+        #=======================================================================
+        #    if self.g_skipcontext == "false":
+        #        context=[]
+        #        refreshURL="http://"+section.get('address')+section.get('path')+"/refresh"
+        #        #libraryRefresh = "XBMC.RunScript("+self.g_loc+"/default.py, update ," + refreshURL + ")"
+        #        context.append(('Refresh library section', libraryRefresh , ))
+        #    else:
+        #        context=None
+        #    
+        #    printl("mode: " + str(mode), self, "D")
+        #         
+        # #For each of the servers we have identified
+        # allservers = self.resolveAllServers()
+        # numOfServers = len(allservers)
+        # 
+        # if self.g_myplex_username != '':
+        #    self.addGUIItem('http://myplexqueue&mode='+str(_MODE_MYPLEXQUEUE), {'title':'myplex Queue'},{'type':'Video'})
+        # 
+        # for server in allservers:
+        #                                                                                      
+        #    #Plex plugin handling 
+        #    if (filter is not None) and (filter != "plugins"):
+        #        continue 
+        #              
+        #    if numOfServers > 1:
+        #        prefix=server['serverName']+": "
+        #    else:
+        #        prefix=""
+        #    
+        #    details={'title' : prefix+"Channels" }
+        #    extraData={'type' : "Video",
+        #               'token' : server.get('token',None) }    
+        #        
+        #    u="http://"+server['address']+"/system/plugins/all&mode="+str(_MODE_CHANNELVIEW)
+        #    self.addGUIItem(u,details,extraData)
+        #            
+        #    #Create plexonline link
+        #    details['title']=prefix+"Plex Online"
+        #    extraData['type']="file"
+        #    
+        #    u="http://"+server['address']+"/system/plexonline&mode="+str(_MODE_PLEXONLINE)
+        #    self.addGUIItem(u,details,extraData)
+        #  
+        # #=======================================================================
+        # # #All XML entries have been parsed and we are ready to allow the user to browse around.  So end the screen listing.
+        # # xbmcplugin.endOfDirectory(pluginhandle)  
+        # #=======================================================================
+        #=======================================================================
         
-        printl("Unique server List: " + str(localServers), self, "I")
+        printl("mainMenuList: " + str(mainMenuList), self, "D")
         printl("", self, "C")
-        return localServers   
+        return mainMenuList  
 
     #=============================================================================
     # 
@@ -471,11 +366,7 @@ class PlexLibrary(Screen):
             @return: MainMenu for DP_MainMenu and alters the global value g_sectionList for other functions
         '''
         printl("", self, "S")
-        
-        #===>
-        mainMenuList = []
-        #===>
-        
+          
         multiple = False
         multiple_list = []
         for server in self.g_serverDict:
@@ -495,18 +386,20 @@ class PlexLibrary(Screen):
                 #we need this until we do not support music and photos
                 type = sections.get('type', 'unknown')
                 if type == "movie" or type == "show":
-                    mainMenuList = self.appendEntry(sections, mainMenuList, server)
+                    self.appendEntry(sections, server)
+                else:
+                    printl("excluded unsupported section: " + str(sections.get('title','Unknown').encode('utf-8')),self, "I")
                 
-                #===>
         if multiple == True:
             printl("there are other plex servers in the network => " + str(multiple_list), self, "I")
             
-        '''If we have more than one server source, then
-           we need to ensure uniqueness amonst the
-           seperate sections.
-           
-           If we have only one server source, then the assumption
-           is that Plex will deal with this for us
+        '''
+        If we have more than one server source, then
+        we need to ensure uniqueness amonst the
+        seperate sections.
+        
+        If we have only one server source, then the assumption
+        is that Plex will deal with this for us
         '''
         if len(self.g_serverDict) > 1:    
             oneCount=0
@@ -536,16 +429,16 @@ class PlexLibrary(Screen):
                  
                 oneCount+=1
         
-        #===>
-        #printl("mainMenuList = " + str(mainMenuList), self, "D")
         printl("", self, "C")
-        return mainMenuList  
-
 
     #===========================================================================
     # 
     #===========================================================================
-    def appendEntry(self, sections, mainMenuList, server):
+    def appendEntry(self, sections, server):
+        '''
+        '''
+        #printl("", self, "S")
+        
         self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
                                'address': self.g_host + ":" + self.g_port,
                                'serverName' : self.g_name.encode('utf-8'),
@@ -555,40 +448,11 @@ class PlexLibrary(Screen):
                                'location' : server['discovery'] ,
                                'art' : sections.get('art') ,
                                #'local' : sections.get('local') ,
-                               'type' : sections.get('type','Unknown') })
+                               'type' : sections.get('type','Unknown') }) 
+   
+        #printl("", self, "C")
 
-        # 'address': sections.get('host','Unknown') + ":" + sections.get('port'),
-        # for now we will not use this line of code because there are systems that are using ipv6 already
-    
-        #===>
-        path = self.g_host + ":" + self.g_port
-        address = '/library/sections/' +  sections.get('key')
-        
-        params = {}
-        params['nextViewGroup'] = str(sections.get('type'))
-        params['t_url'] = self.getSectionUrl(path, address)
-        
-        if self.g_secondary == "true":
-            mainMenuList.append((_(sections.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
-        
-        else:
-            if sections.get('type') == 'show':
-                printl( "_MODE_TVSHOWS detected", self, "D")
-                mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
-                    
-            elif sections.get('type') == 'movie':
-                printl( "_MODE_MOVIES detected",self, "D")
-                mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", self.getSectionUrl(path, address)))
 
-            elif sections.get('type') == 'artist':
-                printl( "_MODE_ARTISTS detected", self, "D")
-                    
-            elif sections.get('type') == 'photo':
-                printl( "_MODE_PHOTOS detected", self, "D")
-            else:
-                printl("Ignoring section "+sections.get('title')+" of type " + sections.get('type') + " as unable to process", self, "I")
-        
-        return mainMenuList
     
     #=============================================================================
     # 
@@ -639,7 +503,6 @@ class PlexLibrary(Screen):
             #sample = <Directory prompt="Search Movies - Teens" search="1" key="search?type=1" title="Search..." />
             prompt = str(sections.get('prompt', 'noSearch')) 
             if prompt != "noSearch":
-                printl("isSearchFilter", self, "D")
                 isSearchFilter = True
                 t_url = p_url
                 nextViewGroup = "secondary"
@@ -656,19 +519,19 @@ class PlexLibrary(Screen):
             printl("nextViewGroup: " + str(nextViewGroup),self, "D")
             
             params = {}
-            params["isSearchFilter"] =isSearchFilter
             params["t_url"] = t_url
+            params["isSearchFilter"] =isSearchFilter
             params["nextViewGroup"] = nextViewGroup
             
             if nextViewGroup != "secondary": #means that the next answer is again a filter cirteria
                 
                 if nextViewGroup == 'show' or nextViewGroup == 'episode':
                     printl( "_MODE_TVSHOWS detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", params))
+                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
                         
                 elif nextViewGroup == 'movie':
                     printl( "_MODE_MOVIES detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", params))
+                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), params))
     
                 elif nextViewGroup == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "X")
@@ -689,144 +552,42 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         return mainMenuList  
  
-    #============================================================================
+    #===============================================================================
     # 
-    #============================================================================
-    def displaySections(self, filter=None ): # CHECKED
+    #===============================================================================
+    def addGUIItem(self, url, details, extraData, context=None, folder=True ):
         '''
         '''
         printl("", self, "S")
-        #===================================================================
-        # xbmcplugin.setContent(pluginhandle, 'movies')
-        #===================================================================
+        #==============================================================================
+ #       if details.get('title','') == '':
+ #           
+ #           printl("", self, "C")
+ #           return
+ #             
+ #       if (extraData.get('token',None) is None) and _PARAM_TOKEN:
+ #           extraData['token']=_PARAM_TOKEN
+ # 
+ #       aToken=self.getAuthDetails(extraData)
+ #       qToken=self.getAuthDetails(extraData, prefix='?')
+        #==============================================================================
         
-        numOfServers=len(self.g_serverDict)
-        printl( "Using list of "+str(numOfServers)+" servers: " +  str(self.g_serverDict), self, "I")
-        self.getAllSections()
+        #==============================================================================
+ #       #Create the URL to pass to the item
+ #       if ( not folder) and ( extraData['type'] =="Picture" ):
+ #           u=url+qToken
+ #       else:
+ #           u=sys.argv[0]+"?url="+str(url)+aToken
+ # 
+ #       printl("URL to use for listing: " + u)
+        #==============================================================================
+    
+        content = (url, details, extraData, context)
         
-        #===>
-        mainMenuList = []
-        #===>
-        
-        for section in self.g_sections:
-                
-            details={'title' : section.get('title', 'Unknown') }
-            
-            if len(self.g_serverDict) > 1:
-                details['title']=section.get('serverName')+": "+details['title']
-            
-            extraData={ 'fanart_image' : self.getFanart(section, section.get('address')) ,
-                        'type'         : "Video" ,
-                        'thumb'        : self.getFanart(section, section.get('address'), False) ,
-                        'token'        : section.get('token',None) }
-                                               
-            #Determine what we are going to do process after a link is selected by the user, based on the content we find
-            
-            path=section['path']
-            
-            if section.get('type') == 'show':
-                mode=_MODE_TVSHOWS
-                if (filter is not None) and (filter != "tvshow"):
-                    continue
-                    
-            elif section.get('type') == 'movie':
-                mode=_MODE_MOVIES
-                if (filter is not None) and (filter != "movies"):
-                    continue
-
-            elif section.get('type') == 'artist':
-                mode=_MODE_ARTISTS
-                if (filter is not None) and (filter != "music"):
-                    continue
-                    
-            elif section.get('type') == 'photo':
-                mode=_MODE_PHOTOS
-                if (filter is not None) and (filter != "photos"):
-                    continue
-            else:
-                printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
-                continue
-
-            if self.g_secondary == "true":
-                mode=_MODE_GETCONTENT
-            else:
-                path=path+'/all'
-                
-            #===================================================================
-            # s_url= 'http://%s%s&mode=%s' % ( section['address'], path, mode )
-            #===================================================================
-            s_url= 'http://%s%s?mode=%s' % ( section['address'], path, mode )
-            
-            if self.g_skipcontext == "false":
-                context=[]
-                refreshURL="http://"+section.get('address')+section.get('path')+"/refresh"
-                #libraryRefresh = "XBMC.RunScript("+self.g_loc+"/default.py, update ," + refreshURL + ")"
-                context.append(('Refresh library section', libraryRefresh , ))
-            else:
-                context=None
-            
-
-            #===>   
-            if mode == _MODE_TVSHOWS:
-                printl( "_MODE_TVSHOWS detected", self, "D")
-                mainMenuList.append((_(details['title'].encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", s_url))
-            elif mode == _MODE_MOVIES:
-                printl( "_MODE_MOVIES detected", self, "D")
-                mainMenuList.append((_(details['title'].encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", s_url))
-            elif mode == _MODE_ARTISTS:
-                printl( "_MODE_ARTISTS detected", self, "D")
-            elif mode == _MODE_PHOTOS:
-                printl( "_MODE_PHOTOS detected", self, "D")
-            else:
-                pass
-            #===>
-            
-            #Build that listing..
-            self.addGUIItem(s_url, details, extraData, context)
-       
-        #For each of the servers we have identified
-        allservers=self.resolveAllServers()
-        numOfServers=len(allservers)
-        
-        #===================================================================
-        # if __settings__.getSetting('myplex_user') != '':
-        #===================================================================
-        if self.g_myplex_username != '':
-            self.addGUIItem('http://myplexqueue&mode='+str(_MODE_MYPLEXQUEUE), {'title':'myplex Queue'},{'type':'Video'})
-        
-        for server in allservers:
-                                                                                              
-            #Plex plugin handling 
-            if (filter is not None) and (filter != "plugins"):
-                continue 
-                      
-            if numOfServers > 1:
-                prefix=server['serverName']+": "
-            else:
-                prefix=""
-            
-            details={'title' : prefix+"Channels" }
-            extraData={'type' : "Video",
-                       'token' : server.get('token',None) }    
-                
-            u="http://"+server['address']+"/system/plugins/all&mode="+str(_MODE_CHANNELVIEW)
-            self.addGUIItem(u,details,extraData)
-                    
-            #Create plexonline link
-            details['title']=prefix+"Plex Online"
-            extraData['type']="file"
-            
-            u="http://"+server['address']+"/system/plexonline&mode="+str(_MODE_PLEXONLINE)
-            self.addGUIItem(u,details,extraData)
-          
-        #=======================================================================
-        # #All XML entries have been parsed and we are ready to allow the user to browse around.  So end the screen listing.
-        # xbmcplugin.endOfDirectory(pluginhandle)  
-        #=======================================================================
-        
-        printl("mainMenuList: " + str(mainMenuList), self, "D")
+        #printl("content = " + str(content), self, "D")
         printl("", self, "C")
-        return mainMenuList  
+        return content
+    
     
     #===============================================================================
     # 
@@ -835,15 +596,12 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        
-        if self.g_secondary == "false":
-            path = path+'/all'   
 
-        s_url = 'http://%s%s' % ( address, path)
+        sectionUrl = 'http://%s%s' % ( address, path)
         
-        printl("s_url = " + s_url, self, "D")
+        printl("sectionUrl = " + sectionUrl, self, "D")
         printl("", self, "C")
-        return s_url
+        return sectionUrl
 
     #====================================================================
     # 
@@ -967,7 +725,7 @@ class PlexLibrary(Screen):
     
             count+=1 
             
-        printl("tempServers = " + tempServers, self, "C") 
+        printl("tempServers = " + str(tempServers), self, "C")
         printl("", self, "C")                   
         return tempServers                         
 
@@ -1374,105 +1132,7 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         return filelocation
     
-    #===================================================================
-    # 
-    #===================================================================
-    def addGUIItem(self, url, details, extraData, context=None, folder=True ): # CHECKED
-        '''
-        '''
-        printl("", self, "S")
-        #printl("== ENTER: addGUIItem ==", False)
-        #=======================================================================
-        # printl("Adding Dir for [%s]" % details.get('title','Unknown'), self, "D")
-        # printl("Passed arguments are " + str(extraData), self, "D")
-        # printl("Passed details are " + str(details), self, "D")
-        #=======================================================================
-        
-        if details.get('title','') == '':
-            
-            printl("", self, "C")
-            return
-              
-        if (extraData.get('token',None) is None) and _PARAM_TOKEN:
-            extraData['token']=_PARAM_TOKEN
- 
-        aToken=self.getAuthDetails(extraData)
-        qToken=self.getAuthDetails(extraData, prefix='?')
-        
-#==============================================================================
-#       #Create the URL to pass to the item
-#       if ( not folder) and ( extraData['type'] =="Picture" ):
-#           u=url+qToken
-#       else:
-#           u=sys.argv[0]+"?url="+str(url)+aToken
-# 
-#       printl("URL to use for listing: " + u)
-#==============================================================================
-                
-#==============================================================================
-#       #Create the ListItem that will be displayed
-#       thumb=str(extraData.get('thumb',''))
-#       if '?' in thumb:
-#           liz=xbmcgui.ListItem(details.get('title','Unknown'), iconImage=thumb+aToken, thumbnailImage=thumb+aToken)
-#       else:
-#           liz=xbmcgui.ListItem(details.get('title','Unknown'), iconImage=thumb+qToken, thumbnailImage=thumb+qToken)
-#       printl("Setting thumbnail as " + thumb + qToken)
-#               
-#       #Set the properties of the item, such as summary, name, season, etc
-#       liz.setInfo( type=extraData.get('type','Video'), infoLabels=details ) 
-#       
-#       #Music related tags
-#       if extraData.get('type','').lower() == "music":
-#           liz.setProperty('Artist_Genre', details.get('genre',''))
-#           liz.setProperty('Artist_Description', details.get('plot',''))
-#           liz.setProperty('Album_Description', details.get('plot',''))
-#       
-#       if ( not folder):
-#           if self.g_skipmediaflags == "false":
-#               liz.setProperty('VideoResolution', extraData.get('VideoResolution',''))
-#               liz.setProperty('VideoCodec', extraData.get('VideoCodec',''))
-#               liz.setProperty('AudioCodec', extraData.get('AudioCodec',''))
-#               liz.setProperty('AudioChannels', extraData.get('AudioChannels',''))
-#               liz.setProperty('VideoAspect', extraData.get('VideoAspect',''))
-#               
-#               #liz.addStreamInfo('video', {'codec': extraData.get('VideoCodec','') ,
-#               #                            'aspect' : float(extraData.get('VideoAspect','')) ,
-#               #                            'height' : int(extraData.get('VideoResolution','')) } )
-#               #                            
-#               #liz.addStreamInfo('audio', {'codec': extraData.get('AudioCodec','') ,
-#               #                            'channels' : int(extraData.get('AudioChannels','')) } )
-# 
-#                                           
-#           liz.setProperty('IsPlayable', 'true')
-# 
-#           try:
-#               #Then set the number of watched and unwatched, which will be displayed per season
-#               liz.setProperty('WatchedEpisodes', str(extraData['WatchedEpisodes']))
-#               liz.setProperty('UnWatchedEpisodes', str(extraData['UnWatchedEpisodes']))
-#           except: pass
-#       
-#       #Set the fanart image if it has been enabled
-#       fanart=str(extraData.get('fanart_image',''))
-#       if '?' in fanart:
-#           liz.setProperty('fanart_image', fanart+aToken)
-#       else:
-#           liz.setProperty('fanart_image', fanart+qToken)
-#       
-#       printl( "Setting fan art as " + fanart +" with headers: "+ aToken)
-# 
-#       #===================================================================
-#       # if context is not None:
-#       #    printl("Building Context Menus")
-#       #    liz.addContextMenuItems( context, g_contextReplace )
-#       #===================================================================
-#      
-#       return xbmcplugin.addDirectoryItem(handle=pluginhandle,url=u,listitem=liz,isFolder=folder)
-#==============================================================================
-        content = (url, details, extraData, context)
-        
-        printl("content = " + str(content), self, "D")
-        printl("", self, "C")
-        return content 
+    
             
     #===========================================================================
     # 
@@ -1481,6 +1141,7 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
+        printl("url: " + str(url), self, "D")
         #=======================================================================
         # xbmcplugin.setContent(pluginhandle, 'movies')
         #=======================================================================
@@ -4089,3 +3750,223 @@ class PlexLibrary(Screen):
         
         printl("", self, "C")   
         return context
+  
+#===============================================================================
+# HELPER FUNCTIONS
+#===============================================================================
+  
+    #===============================================================================
+    # 
+    #===============================================================================
+    def checkNasOverride(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        #NAS Override
+        #===========================================================================
+        # self.g_nasoverride = __settings__.getSetting('nasoverride')
+        #===========================================================================
+        printl("DreamPlex -> check SMB IP Override: " + self.g_nasoverride, self, "I")
+        
+        if self.g_nasoverride == "true":
+            #===================================================================
+            # self.g_nasoverrideip = __settings__.getSetting('nasoverrideip')
+            #===================================================================
+            if self.g_nasoverrideip == "":
+                printl("DreamPlex -> No NAS IP Specified.  Ignoring setting", self, "I")
+            else:
+                printl("DreamPlex -> NAS IP: " + self.g_nasoverrideip, self, "I")
+                
+            #===================================================================
+            # self.g_nasroot = __settings__.getSetting('nasroot')
+            #===================================================================
+      
+    #===========================================================================
+    # #Get look and feel
+    # if __settings__.getSetting("contextreplace") == "true":
+    #    g_contextReplace=True
+    # else:
+    #    g_contextReplace=False
+    #===========================================================================
+    
+    #===========================================================================
+    # self.g_skipcontext = __settings__.getSetting("skipcontextmenus")    
+    # self.g_skipmetadata= __settings__.getSetting("skipmetadata")
+    # self.g_skipmediaflags= __settings__.getSetting("skipflags")
+    # self.g_skipimages= __settings__.getSetting("skipimages")
+    # 
+    # self.g_loc = "special://home/addons/plugin.video.DreamPlex"
+    #===========================================================================
+    
+    #===========================================================================
+    # #Create the standard header structure and load with a User Agent to ensure we get back a response.
+    # g_txheaders = {
+    #              'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',    
+    #              }
+    #===========================================================================
+    
+    #===========================================================================
+    # #Set up holding variable for session ID
+    # global self.g_sessionID
+    # self.g_sessionID=None
+    #===========================================================================
+        
+        printl("", self, "C")
+        
+    def discoverAllServers(self): # CHECKED
+        '''
+            Take the users settings and add the required master servers
+            to the server list.  These are the devices which will be queried
+            for complete library listings.  There are 3 types:
+                local server - from IP configuration
+                bonjour server - from a bonjour lookup
+                myplex server - from myplex configuration
+            Alters the global self.g_serverDict value
+            @input: None
+            @return: None       
+        '''
+        printl("", self, "S")
+        #=======================================================================
+        # self.g_bonjour = __settings__.getSetting('bonjour')
+        #=======================================================================
+    
+        #Set to Bonjour
+        if self.g_bonjour == "1":
+            printl("DreamPlex -> local Bonjour discovery setting enabled.", self, "I")
+    #===========================================================================
+    #        try:
+    #            printl("Attempting bonjour lookup on _plexmediasvr._tcp")
+    #            bonjourServer = bonjourFind("_plexmediasvr._tcp")
+    #                                                
+    #            if bonjourServer.complete:
+    #                printl("Bonjour discovery completed")
+    #                #Add the first found server to the list - we will find rest from here
+    #                
+    #                bj_server_name = bonjourServer.bonjourName[0].encode('utf-8')
+    #                
+    #                self.g_serverDict.append({'name'      : bj_server_name.split('.')[0] ,
+    #                                     'address'   : bonjourServer.bonjourIP[0]+":"+bonjourServer.bonjourPort[0] ,
+    #                                     'discovery' : 'bonjour' , 
+    #                                     'token'     : None ,
+    #                                     'uuid'      : None })
+    #                                     
+    #                                     
+    #            else:
+    #                printl("BonjourFind was not able to discovery any servers")
+    # 
+    #        except:
+    #            print "DreamPlex -> Bonjour Issue.  Possibly not installed on system"
+    #            #TODO add message dialog to ask if it should be installed
+    #            #===============================================================
+    #            # xbmcgui.Dialog().ok("Bonjour Error","Is Bonojur installed on this system?")
+    #            #===============================================================
+    #===========================================================================
+    
+        #Set to Disabled       
+        else:
+            #===================================================================
+            # self.g_host = __settings__.getSetting('ipaddress')
+            # self.g_port =__settings__.getSetting('port')
+            #===================================================================
+            
+            #!!!!
+            self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
+            #!!!!
+            
+            if not self.g_host or self.g_host == "<none>":
+                self.g_host = None
+            
+            elif not self.g_port:
+                printl( "No port defined.  Using default of " + DEFAULT_PORT, self, "I")
+                self.g_address = self.g_host + ":" + DEFAULT_PORT
+            
+            else:
+                self.g_address = self.g_host + ":" + self.g_port
+                printl( "Settings hostname and port: " + self.g_address, self, "I")
+        
+            if self.g_address is not None:
+                self.g_serverDict.append({'serverName': self.g_name ,
+                                     'address'   : self.g_address ,
+                                     'discovery' : 'local' , 
+                                     'token'     : None ,
+                                     'uuid'      : None ,
+                                     'role'      : 'master' })    
+            
+        #=======================================================================
+        # if __settings__.getSetting('myplex_user') != "":
+        #=======================================================================
+        if self.g_myplex_username != "":
+            printl( "DreamPlex -> Adding myplex as a server location", self, "I")
+            self.g_serverDict.append({'serverName': 'MYPLEX' ,
+                                 'address'   : "my.plex.app" ,
+                                 'discovery' : 'myplex' , 
+                                 'token'     : None ,
+                                 'uuid'      : None ,
+                                 'role'      : 'master' })
+        
+        
+        printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
+        printl("", self, "C")
+ 
+    #===========================================================================
+    # 
+    #===========================================================================
+    def resolveAllServers(self): # CHECKED
+        '''
+          Return list of all media sections configured
+          within DreamPlex
+          @input: None
+          @Return: unique list of media sections
+        '''
+        printl("", self, "C")
+
+        localServers=[]
+          
+        for servers in self.g_serverDict:
+        
+            if ( servers['discovery'] == 'local' ) or ( servers['discovery'] == 'bonjour' ):
+                localServers += self.getLocalServers()
+            elif servers['discovery'] == 'myplex':
+                localServers += self.getMyPlexServers()
+        
+            printl ("Resolved server List: " + str(localServers), self, "I")
+        
+        '''If we have more than one server source, then
+           we need to ensure uniqueness amonst the
+           seperate servers.
+           
+           If we have only one server source, then the assumption
+           is that Plex will deal with this for us.
+        '''
+        
+        if len(self.g_serverDict) > 1:
+            oneCount=0
+            for onedevice in localServers:
+            
+                twoCount=0
+                for twodevice in localServers:
+    
+                    printl( "["+str(oneCount)+":"+str(twoCount)+"] Checking " + onedevice['uuid'] + " and " + twodevice['uuid'])
+    
+                    if oneCount == twoCount:
+                        printl( "skip" )
+                        twoCount+=1
+                        continue
+                        
+                    if onedevice['uuid'] == twodevice['uuid']:
+                        printl ( "match" )
+                        if onedevice['discovery'] == "local":
+                            localServers.pop(twoCount)
+                        else:
+                            localServers.pop(oneCount)
+                    else:
+                        printl( "no match" )
+                    
+                    twoCount+=1
+                 
+                oneCount+=1
+        
+        printl("Unique server List: " + str(localServers), self, "I")
+        printl("", self, "C")
+        return localServers   

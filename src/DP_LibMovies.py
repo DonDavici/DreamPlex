@@ -55,6 +55,7 @@ class DP_LibMovies(DP_LibMain):
 		printl("params =" + str(params), self, "D")
 		
 		url = self.g_url
+		printl("url: " + str(url), self, "D")
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
