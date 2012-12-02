@@ -92,9 +92,9 @@ class DPS_MainMenu(Screen):
 		for serverConfig in config.plugins.dreamplex.Entries:
 			serverName = serverConfig.name.value
 		
-			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig, "50"))
+			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
 	
-		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "50"))
+		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -208,9 +208,9 @@ class DPS_MainMenu(Screen):
 		
 		mainMenuList = []
 
-		mainMenuList.append((_("Settings"), "DPS_Settings", "menu_watch", "50"))
-		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "menu_watch", "50"))
-		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "menu_watch", "50"))
+		mainMenuList.append((_("Settings"), "DPS_Settings"))
+		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
+		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
 		
 		printl("", self, "C")
 		return mainMenuList
@@ -232,21 +232,11 @@ class DPS_MainMenu(Screen):
 		printl("selection = " + str(selection), self, "D")
 		
 		if selection is not None:
+			
 			self.selectedEntry = selection[1]
 			printl("selected entry " + str(self.selectedEntry), self, "D")
 			
-			if type(self.selectedEntry) is list:
-				printl("selected entry is list", self, "D")
-				l = []
-			
-				for plugin in self.selectedEntry:
-					l.append((plugin.desc, plugin, "", "50"))
-					
-				printl(str(l), self, "D")
-				self["menu"].setList(l)
-				self.refreshMenu(0)
-
-			elif type(self.selectedEntry) is int:
+			if type(self.selectedEntry) is int:
 				printl("selected entry is int", self, "D")
 				
 				if self.selectedEntry == Plugin.MENU_MAIN:
@@ -260,8 +250,14 @@ class DPS_MainMenu(Screen):
 				
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
-					self.s_url = selection[3]
-					self.s_type = selection[4]
+					params = selection[2]
+					printl("params: " + str(params), self, "D")
+					isSerachFilter = params.get('isSerachFilter', "notSet")
+					t_url = params.get('t_url', "notSet")
+					nextViewGroup = params.get('nextViewGroup', "notSet")
+					
+					self.s_url = t_url
+					self.s_type = nextViewGroup
 					self.getFilterData()
 			
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
@@ -272,11 +268,8 @@ class DPS_MainMenu(Screen):
 				
 			elif type(self.selectedEntry) is str:
 				printl("selected entry is string", self, "D")
-				
-				if selection[1] == "InfoBar":
-					self.Exit()
 					
-				elif selection[1] == "DPS_Settings":
+				if selection[1] == "DPS_Settings":
 					self.session.open(DPS_Settings)
 					
 				elif selection[1] == "DPS_ServerEntriesListConfigScreen":
@@ -284,15 +277,17 @@ class DPS_MainMenu(Screen):
 					
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
-				
-			elif selection[1] == "Exit":
-				printl("selected entry is exit", self, "D")
-				self.Exit()
-			
+					
 			else:
 				printl("selected entry is executable", self, "D")
-				self.s_url = selection[3]
-				if selection[4] == True:
+				
+				params = selection[3]
+				isSerachFilter = params["isSearchFilter"]
+				t_url = params["t_url"]
+				nextViewGroup = params["nextViewGroup"]
+				
+				self.s_url = t_url
+				if isSerachFilter == True:
 					self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()
@@ -615,14 +610,6 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
-
-		printl(self["menu"], self, "D")
-		i = 0
-		for entry in self["menu"].list:
-			if entry[2] == "menu_tv":
-				self["menu"].setIndex(i)
-				break
-			i += 1
 	
 		printl("", self, "C")
 

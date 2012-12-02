@@ -576,8 +576,12 @@ class PlexLibrary(Screen):
         path = self.g_host + ":" + self.g_port
         address = '/library/sections/' +  sections.get('key')
         
+        params = {}
+        params['nextViewGroup'] = str(sections.get('type'))
+        params['t_url'] = self.getSectionUrl(path, address)
+        
         if self.g_secondary == "true":
-            mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", self.getSectionUrl(path, address), sections.get('type'))) # 17 Plugin.MENU_FILTER
+            mainMenuList.append((_(sections.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
         
         else:
             if sections.get('type') == 'show':
@@ -636,6 +640,7 @@ class PlexLibrary(Screen):
                                "recentlyViewed":s_type,
                                "onDeck":s_type,
                                "folder":s_type,
+                               "recentlyViewedShows":s_type,
                                "collection": "secondary",
                                "genre":"secondary",
                                "year":"secondary",
@@ -655,28 +660,32 @@ class PlexLibrary(Screen):
             if prompt != "noSearch":
                 isSearchFilter = True
                 t_url = s_url
-                printl("t_url = " + t_url, self, "D")
                 nextViewGroup = "secondary"
             elif s_type == "secondary":
                 t_url = s_url
-                printl("t_url = " + t_url, self, "D")
                 nextViewGroup = "movie"
             else:
                 printl("else", self, "D")
                 nextViewGroup = viewGroupTypes[sections.get('key')]
                 t_url = s_url + "/" + str(sections.get('key'))
-                printl("t_url = " + t_url, self, "D")
             
-            printl( "nextViewGroup " + str(nextViewGroup),self, "D")
+            printl("isSearchFilter: " + str(isSearchFilter), self, "D")   
+            printl("t_url: " + str(t_url), self, "D")
+            printl( "nextViewGroup: " + str(nextViewGroup),self, "D")
+            
+            params = {}
+            params["isSearchFilter"] =isSearchFilter
+            params["t_url"] = t_url
+            params["nextViewGroup"] = nextViewGroup
             
             if nextViewGroup != "secondary": #means that the next answer is again a filter cirteria
                 if nextViewGroup == 'show' or nextViewGroup == 'episode':
                     printl( "_MODE_TVSHOWS detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
+                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), "50", params))
                         
                 elif nextViewGroup == 'movie':
                     printl( "_MODE_MOVIES detected", self, "X")
-                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", t_url, isSearchFilter))
+                    mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), "50", params))
     
                 elif nextViewGroup == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "X")
@@ -688,12 +697,12 @@ class PlexLibrary(Screen):
                     printl("Ignoring section " + str(sections.get('title')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
                     continue
             else:
-                mainMenuList.append((_(sections.get('title').encode('utf-8')), 17, "50", t_url, nextViewGroup))
+                mainMenuList.append((_(sections.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
 
             t_url = None
         
         #===>
-        #printl("mainMenuList = " + str(mainMenuList), self, "D")
+        printl("mainMenuList: " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
  
@@ -834,7 +843,7 @@ class PlexLibrary(Screen):
         # xbmcplugin.endOfDirectory(pluginhandle)  
         #=======================================================================
         
-        #printl("mainMenuList = " + str(mainMenuList), self, "D")
+        printl("mainMenuList: " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
     
