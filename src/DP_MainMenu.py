@@ -62,7 +62,8 @@ class DPS_MainMenu(Screen):
 	
 	selectedEntry = None
 	s_url = None
-	s_type = None
+	s_mode = None
+	s_final = False
 	
 	g_serverDataMenu = None
 	g_filterDataMenu = None
@@ -252,16 +253,16 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_FILTER", self, "D")
 					params = selection[2]
 					printl("params: " + str(params), self, "D")
-					isSearchFilter = params.get('isSearchFilter', "notSet")
-					t_url = params.get('t_url', "notSet")
-					nextViewGroup = params.get('nextViewGroup', "notSet")
-					self.s_url = t_url
-					self.s_type = nextViewGroup
 					
-					if isSearchFilter == "True" or isSearchFilter == True:
-						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
-					else:
-						self.getFilterData()
+					t_url = params.get('t_url', "notSet")
+					t_mode = params.get('t_mode', "notSet")
+					t_final = params.get('t_final', "notSet")
+
+					self.s_url = t_url
+					self.s_mode = t_mode
+					self.s_final = t_final
+					
+					self.getFilterData()
 			
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
@@ -282,12 +283,16 @@ class DPS_MainMenu(Screen):
 					self.session.open(DPS_SystemCheck)
 					
 			else:
+				printl("selected entry is executable", self, "D")
 				params = selection[2]
 				t_url = params.get('t_url', "notSet")
 				self.s_url = t_url
-
-				printl("selected entry is executable", self, "D")
-				self.executeSelectedEntry()
+				isSearchFilter = params.get('isSearchFilter', "notSet")
+				
+				if isSearchFilter == "True" or isSearchFilter == True:
+						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
+				else:
+					self.executeSelectedEntry()
 					
 			printl("", self, "C")
 					
@@ -298,9 +303,15 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
+		# sample: http://192.168.45.190:32400/search?type=1&query=fringe
+		instance = Singleton()
+		instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+		
+		plexInstance = instance.getPlexInstance()
+		serverUrl = plexInstance.getServerFromURL(self.s_url)
 		
 		if searchString is not "" and searchString is not None:
-			self.s_url = self.s_url + "&query" + searchString
+			self.s_url = serverUrl + "/search?type=1&query=" + searchString
 
 		self.executeSelectedEntry()
 		
@@ -557,8 +568,9 @@ class DPS_MainMenu(Screen):
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
-		
-		menuData = plexInstance.getSectionFilter(self.s_url, self.s_type)
+
+		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
+
 		
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed

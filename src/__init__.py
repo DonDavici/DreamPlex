@@ -175,7 +175,7 @@ def localeInit():
 def _(txt):
 	'''
 	'''
-	printl("", "__init__::_(txt)", "S")
+	#printl("", "__init__::_(txt)", "S")
 	
 	if len(txt) == 0:
 		return ""
@@ -184,7 +184,7 @@ def _(txt):
 		text = gettext.gettext(txt)
 	
 	printl("text = " + str(text), "__init__::_(txt)", "X")	
-	printl("", "__init__::_(txt)", "C")
+	#printl("", "__init__::_(txt)", "C")
 	return text
 
 #===============================================================================
