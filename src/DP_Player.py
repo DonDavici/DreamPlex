@@ -639,11 +639,24 @@ class DP_Player(MoviePlayer):
             super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
             sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
             sref.setName("DreamPlex")
-            self.session.nav.playService(sref)
+            self.startPlaying(sref)
         #self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
         
         printl("", self, "C")
             
+    #===========================================================================
+    # 
+    #===========================================================================
+    def startPlaying(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.session.nav.playService(sref)
+        self.audioSelection()
+        
+        printl("", self, "C")
+    
     #===========================================================================
     # 
     #===========================================================================
@@ -741,4 +754,39 @@ class DP_Player(MoviePlayer):
         
         printl("", self, "C")
 
+    #===========================================================================
+    # 
+    #===========================================================================
+    def setAudioTrack(self):
+        '''
+        '''
+        printl("", self, "S")
+        try:
+      
+            from Tools.ISO639 import LanguageCodes as langC
+            service = self.session.nav.getCurrentService()
+
+
+            tracks = service and self.getServiceInterface("audioTracks")
+            nTracks = tracks and tracks.getNumberOfTracks() or 0
+            
+            if not nTracks: return
+            
+            trackList = []
+            
+            for i in xrange(nTracks):
+                audioInfo = tracks.getTrackInfo(i)
+                lang = audioInfo.getLanguage()
+                if langC.has_key(lang):
+                    lang = langC[lang][0]
+                
+                desc = audioInfo.getDescription()
+                trackList += [str(lang) + " " + str(desc)]
+            
+            for audiolang in [config.DreamPlex.audlang1.value]:
+                if self.tryAudioEnable(trackList, audiolang, tracks): break
         
+        except Exception, e:
+            printl("audioTrack exception: " + str(e), self, "W") 
+        
+        printl("", self, "C")    
