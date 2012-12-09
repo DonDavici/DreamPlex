@@ -189,7 +189,14 @@ class PlexLibrary(Screen):
         if self.g_connectionType == "0":
             self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
         else:
-            self.g_host = str(socket.gethostbyname(serverConfig.dns.value))
+            try:
+                self.g_host = str(socket.gethostbyname(serverConfig.dns.value))
+            except Exception, e:
+                printl("socket error: " + str(e), self, "W")
+                printl("trying fallback to ip", self, "I")
+                self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
+                
+                
 
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
