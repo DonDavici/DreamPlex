@@ -183,9 +183,13 @@ class PlexLibrary(Screen):
         
         # server settings
         self.g_name = str(serverConfig.name.value)
-        self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
-        self.g_port = str(serverConfig.port.value)
         self.g_connectionType = str(serverConfig.connectionType.value)
+        self.g_port = str(serverConfig.port.value)
+
+        if self.g_connectionType == "0":
+            self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
+        else:
+            self.g_host = str(socket.gethostbyname(serverConfig.dns.value))
 
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
