@@ -74,7 +74,7 @@ config.plugins.dreamplex.mediafolderpath   = ConfigText(default = defaultMediaFo
 config.plugins.dreamplex.skin              = ConfigText(default = defaultSkin)
 config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
-config.plugins.dreamplex.audlang1          = ConfigSelection(default="de", choices = [("de", _("Deutsch")),("en", _("English"))])
+config.plugins.dreamplex.audlang1          = ConfigSelection(default="de", choices = [("none", _("no auto select")),("de", _("Deutsch")),("en", _("English"))])
 
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)

@@ -64,6 +64,7 @@ class DP_Player(MoviePlayer):
     server = None
     id = None
     url = None
+    switchedLanguage = False
   
     def __init__(self, session, playerData, resume=False):
         '''
@@ -157,7 +158,7 @@ class DP_Player(MoviePlayer):
                 iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
                 iPlayableService.evEOF: self.__evEOF,
             })
-        
+       
         printl("", self, "C")
     
     #===========================================================================
@@ -639,21 +640,8 @@ class DP_Player(MoviePlayer):
             super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
             sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
             sref.setName("DreamPlex")
-            self.startPlaying(sref)
+            self.session.nav.playService(sref)
         #self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
-        
-        printl("", self, "C")
-            
-    #===========================================================================
-    # 
-    #===========================================================================
-    def startPlaying(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self.session.nav.playService(sref)
-        self.audioSelection()
         
         printl("", self, "C")
     
@@ -747,46 +735,73 @@ class DP_Player(MoviePlayer):
     #===========================================================================
     # 
     #===========================================================================
-    def showMovies(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
     def setAudioTrack(self):
         '''
         '''
         printl("", self, "S")
-        try:
-      
-            from Tools.ISO639 import LanguageCodes as langC
-            service = self.session.nav.getCurrentService()
-
-
-            tracks = service and self.getServiceInterface("audioTracks")
-            nTracks = tracks and tracks.getNumberOfTracks() or 0
-            
-            if not nTracks: return
-            
-            trackList = []
-            
-            for i in xrange(nTracks):
-                audioInfo = tracks.getTrackInfo(i)
-                lang = audioInfo.getLanguage()
-                if langC.has_key(lang):
-                    lang = langC[lang][0]
+        if self.switchedLanguage == False:
+            try:
+                service = self.session.nav.getCurrentService()
+        
+        
+                tracks = service and self.getServiceInterface("audioTracks")
+                nTracks = tracks and tracks.getNumberOfTracks() or 0
                 
-                desc = audioInfo.getDescription()
-                trackList += [str(lang) + " " + str(desc)]
+                if not nTracks: return
+                
+                trackList = []
+                
+                for i in xrange(nTracks):
+                    audioInfo = tracks.getTrackInfo(i)
+                    lang = audioInfo.getLanguage()
+                    printl("lang: " + str(lang), self, "D")
+                    trackList += [str(lang)]
+                
+                for audiolang in [config.plugins.dreamplex.audlang1.value]:
+                    if self.tryAudioEnable(trackList, audiolang, tracks): break
             
-            for audiolang in [config.DreamPlex.audlang1.value]:
-                if self.tryAudioEnable(trackList, audiolang, tracks): break
+            except Exception, e:
+                printl("audioTrack exception: " + str(e), self, "W") 
         
-        except Exception, e:
-            printl("audioTrack exception: " + str(e), self, "W") 
+        printl("", self, "C")   
         
-        printl("", self, "C")    
+    def tryAudioEnable(self, alist, match, tracks):
+        '''
+        '''
+        printl("", self, "S")
+        printl("alist: " + str(alist), self, "D")
+        printl("match: " + str(match), self, "D")
+        index = 0
+        for e in alist:
+            e.lower()
+            if e.find(match) >= 0:
+                printl("audio track match: " + str(e), self, "I")
+                tracks.selectTrack(index)
+                
+                printl("", self, "S")
+                return True
+                index += 1
+            else:
+                printl("no audio track match", self, "I")
+        
+        self.switchedLanguage = True
+        printl("", self, "S")
+        return False 
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def getServiceInterface(self, iface):
+        '''
+        '''
+        printl("", self, "S")
+        service = self.session.nav.getCurrentService() # self.service
+        if service:
+            attr = getattr(service, iface, None)
+            if callable(attr):
+                printl("", self, "C")   
+                return attr()
+        
+        printl("", self, "C")   
+        return None
+
