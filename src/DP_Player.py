@@ -688,7 +688,7 @@ class DP_Player(MoviePlayer):
         printl("", self, "S")
         
         try:
-            while self.nTracks == False:
+            while self.nTracks == False and self is not None:
                 self.setAudioTrack()
                 sleep(1)
         
@@ -727,7 +727,7 @@ class DP_Player(MoviePlayer):
                 
                 systemLanguage = language.getLanguage()[:2] # getLanguage returns e.g. "fi_FI" for "language_country"
                 printl("found systemLanguage: " +  systemLanguage, self, "I")
-                systemLanguage = "en"
+                #systemLanguage = "en"
                 
                 self.tryAudioEnable(trackList, systemLanguage, tracks)
             
@@ -751,7 +751,7 @@ class DP_Player(MoviePlayer):
             e.lower()
             if e.find(match) >= 0:
                 printl("audio track match: " + str(e), self, "I")
-                #sleep(2)
+                sleep(2)
                 tracks.selectTrack(index)
                 
                 printl("", self, "S")

@@ -40,8 +40,12 @@ import uuid
 # 
 #===============================================================================
 from Screens.Screen import Screen
-
+from time import time
+from urllib import urlencode, quote_plus
+from base64 import b64encode, b64decode
 from Components.config import config
+from hashlib import sha256
+from urllib2 import urlopen, Request
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
@@ -2437,46 +2441,93 @@ class PlexLibrary(Screen):
         if 'plexapp.com' in url:
             server=self.getMasterServer()
         
-        printl("Using preferred transcosing server: " + server, self, "I")
+        printl("Using preferred transcoding server: " + server, self, "I")
             
-        filestream=urllib.quote_plus("/"+"/".join(url.split('/')[3:]))
+        filename=urllib.quote_plus("/"+"/".join(url.split('/')[3:]))
       
-        if identifier is not None:
-            baseurl=url.split('url=')[1]
-            myurl="/video/:/self.transcode/segmented/start.m3u8?url="+baseurl+"&webkit=1&3g=0&offset=0&quality="+self.g_quality+"&session="+self.g_sessionID+"&identifier="+identifier
-        else:
-      
-            if self.g_transcodefmt == "m3u8":
-                myurl = "/video/:/self.transcode/segmented/start.m3u8?identifier=com.plexapp.plugins.library&ratingKey=" + id + "&offset=0&quality="+self.g_quality+"&url=http%3A%2F%2Flocalhost%3A32400" + filestream + "&3g=0&httpCookies=&userAgent=&session="+self.g_sessionID
-            elif self.g_transcodefmt == "flv":
-                myurl="/video/:/self.transcode/generic.flv?format=flv&videoCodec=libx264&vpre=video-embedded-h264&videoBitrate=5000&audioCodec=libfaac&apre=audio-embedded-aac&audioBitrate=128&size=640x480&fakeContentLength=2000000000&url=http%3A%2F%2Flocalhost%3A32400"  + filestream + "&3g=0&httpCookies=&userAgent="
-            else:
-                printl( "Woah!!  Barmey settings error....Bale.....", self, "I")
-                printl("", self, "C")   
-                return url
-        
-        now=str(int(round(time.time(),0)))
-        
-        msg = myurl+"@"+now
-        printl("Message to hash is " + msg, self, "I")
-        
+      #=========================================================================
+      #  if identifier is not None:
+      #      baseurl=url.split('url=')[1]
+      #      myurl="/video/:/self.transcode/segmented/start.m3u8?url="+baseurl+"&webkit=1&3g=0&offset=0&quality="+self.g_quality+"&session="+self.g_sessionID+"&identifier="+identifier
+      #  else:
+      # 
+      #      if self.g_transcodefmt == "m3u8":
+      #          myurl = "/video/:/self.transcode/segmented/start.m3u8?identifier=com.plexapp.plugins.library&ratingKey=" + id + "&offset=0&quality="+self.g_quality+"&url=http%3A%2F%2Flocalhost%3A32400" + filename + "&3g=0&httpCookies=&userAgent=&session="+self.g_sessionID
+      #      elif self.g_transcodefmt == "flv":
+      #          myurl="/video/:/self.transcode/generic.flv?format=flv&videoCodec=libx264&vpre=video-embedded-h264&videoBitrate=5000&audioCodec=libfaac&apre=audio-embedded-aac&audioBitrate=128&size=640x480&fakeContentLength=2000000000&url=http%3A%2F%2Flocalhost%3A32400"  + filestream + "&3g=0&httpCookies=&userAgent="
+      #      else:
+      #          printl( "Woah!!  Barmey settings error....Bale.....", self, "I")
+      #          printl("", self, "C")   
+      #          return url
+      #=========================================================================
+            
+                
         #These are the DEV API keys - may need to change them on release
-        publicKey="KQMIY6GATPC63AIMC4R2"
-        privateKey = base64.decodestring("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=")
+        publicKey="KQMIY6GATPC63AIMC4R2" #self.pKey
+        privateKey = "k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0="  #pac
+        #privateKey = base64.decodestring("k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0=")   #pac
+            
+        streamURL = ""
+        transcode = []
+
+        ts = int(time())
+        printl("Setting up HTTP Stream", self, "I")
+        streamPath = "video/:/transcode/segmented"
+        streamFile = 'start.m3u8'
+        transcode.append("identifier=com.plexapp.plugins.library")
+        transcode.append("ratingKey=%s" % id)
+        transcode.append("offset=0")
+        transcode.append("quality=%d" % int(self.g_quality ))
+        transcode.append("session=%s" % self.g_sessionID)
+        transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
+        transcode.append("3g=0")
+        transcode.append("httpCookies=")
+        transcode.append("userAgent=")
+        timestamp = "@%d" % ts
+        streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
+        pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
+        streamURL += "http://%s/%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, publicKey, ts, pac)
+        printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
+        
+        #=======================================================================
+        # now=str(int(round(time.time(),0)))
+        # 
+        # msg = myurl+"@"+now
+        # printl("Message to hash is " + msg, self, "I")
+        #=======================================================================
+
            
         #=======================================================================
-        # import hmac
+        # #=======================================================================
+        # # import hmac
+        # #=======================================================================
+        # hash = hmac.new(privateKey,msg,digestmod=hashlib.sha256)
+        # 
+        # printl("HMAC after hash is " + hash.hexdigest(), self, "I")
+        # 
+        # #Encode the binary hash in base64 for transmission
+        # token=base64.b64encode(hash.digest())
+        # 
+        # #Send as part of URL to avoid the case sensitive header issue.
+        # fullURL="http://"+server+myurl+"&X-Plex-Access-Key="+publicKey+"&X-Plex-Access-Time="+str(now)+"&X-Plex-Access-Code="+urllib.quote_plus(token)+"&"+self.g_capability
         #=======================================================================
-        hash = hmac.new(privateKey,msg,digestmod=hashlib.sha256)
         
-        printl("HMAC after hash is " + hash.hexdigest(), self, "I")
+        req = Request(streamURL)
+        req.add_header('X-Plex-Client-Capabilities', self.g_capability)
+        printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
+        resp = urlopen(req)
+        if resp is None:
+            raise IOError, "No response from Server"
+        urls = []
+        for line in resp:
+            if line[0] != '#':
+                urls.append("http://%s/%s/%s" % (server, streamPath, line[:-1]))
+                printl( "Got: http://%s/%s/%s" % (str(server), str(streamPath), str(line[:-1])),self, "I")
+        resp.close()
         
-        #Encode the binary hash in base64 for transmission
-        token=base64.b64encode(hash.digest())
+        indexURL = urls.pop()
+        fullURL = indexURL 
         
-        #Send as part of URL to avoid the case sensitive header issue.
-        fullURL="http://"+server+myurl+"&X-Plex-Access-Key="+publicKey+"&X-Plex-Access-Time="+str(now)+"&X-Plex-Access-Code="+urllib.quote_plus(token)+"&"+self.g_capability
-           
         printl("Transcoded media location URL " + fullURL, self, "I")
         
         printl("", self, "C")   
@@ -3552,44 +3603,48 @@ class PlexLibrary(Screen):
             # global self.g_quality
             # self.g_quality = str(int(__settings__.getSetting('quality'))+3)
             #===================================================================
-            printl( "Transcode format is " + self.g_transcodefmt, self, "I")
-            printl( "Transcode quality is " + self.g_quality, self, "I")
-            
-            baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-            if int(self.g_quality) >= 3:
-                baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
-            if int(self.g_quality) >= 4:
-                baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
-            if int(self.g_quality) >= 5:
-                baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
-            if int(self.g_quality) >= 6:
-                baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
-            if int(self.g_quality) >= 9:
-                baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
+            #===================================================================
+            # printl( "Transcode format is " + self.g_transcodefmt, self, "I")
+            # printl( "Transcode quality is " + self.g_quality, self, "I")
+            # 
+            # baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
+            # if int(self.g_quality) >= 3:
+            #    baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
+            # if int(self.g_quality) >= 4:
+            #    baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
+            # if int(self.g_quality) >= 5:
+            #    baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
+            # if int(self.g_quality) >= 6:
+            #    baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
+            # if int(self.g_quality) >= 9:
+            #    baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
+            #===================================================================
                 
             #===================================================================
             # self.g_audioOutput=__settings__.getSetting("audiotype")
             #===================================================================
        
-            if self.g_audioOutput == "0":
-                audio="mp3,aac"
-            elif self.g_audioOutput == "1":
-                audio="mp3,aac,ac3"
-            elif self.g_audioOutput == "2":
-                audio="mp3,aac,ac3,dts"
-        
             #===================================================================
-            # global self.g_capability   
+            # if self.g_audioOutput == "0":
+            #    audio="mp3,aac"
+            # elif self.g_audioOutput == "1":
+            #    audio="mp3,aac,ac3"
+            # elif self.g_audioOutput == "2":
+            #    audio="mp3,aac,ac3,dts"
             #===================================================================
-            self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
-            printl("Plex Client Capability = " + self.g_capability, self, "I")
+            
             
             #===================================================================
-            # import uuid
+            # from VLC defaults
             #===================================================================
-            #===================================================================
-            # global self.g_sessionID
-            #===================================================================
+            protocols = "protocols=http-video"
+            videoDecoders = "videoDecoders=mpeg2video{profile:high&resolution:1080&level:51},mpeg4{profile:high&resolution:1080&level:51},mpeg1video{profile:high&resolution:1080&level:51},mp4{profile:high&resolution:1080&level:51},h264{profile:high&resolution:1080&level:51};"
+            audioDecoders = "audioDecoders=mp3,dts{bitrate:2560000&channels:6},ac3{bitrate:2560000&channels:6}"
+
+            #self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
+            self.g_capability = protocols + ";" + videoDecoders + ";" + audioDecoders
+            printl("Plex Client Capability = " + self.g_capability, self, "I")
+
             self.g_sessionID = str(uuid.uuid4())
             
             printl("", self, "C")   
