@@ -40,6 +40,7 @@ from Tools import Notifications
 from Components.config import config
 from Components.ActionMap import ActionMap
 from Components.Slider import Slider
+from Components.Language import language
 from Components.Sources.StaticText import StaticText
 from Components.ServiceEventTracker import ServiceEventTracker
 
@@ -64,6 +65,7 @@ class DP_Player(MoviePlayer):
     server = None
     id = None
     url = None
+    nTracks = False
     switchedLanguage = False
   
     def __init__(self, session, playerData, resume=False):
@@ -97,7 +99,7 @@ class DP_Player(MoviePlayer):
         printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
         sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
         sref.setName("DreamPlex")
-        #MoviePlayer.__init__(self, session, service)
+
         MoviePlayer.__init__(self, session, sref)
         
         self.skinName = "DPS_PlexPlayer"
@@ -147,9 +149,9 @@ class DP_Player(MoviePlayer):
         if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
             start_new_thread(self.seekWatcher,(self,))
         
-        #start_new_thread(self.bitRateWatcher,(self,))
-        start_new_thread(self.audioTrackWatcher,(self,))
-
+        if config.plugins.dreamplex.autoLanguage.value: 
+            start_new_thread(self.audioTrackWatcher,(self,))
+        
         self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
             {
                 iPlayableService.evUser+10: self.__evAudioDecodeError,
@@ -301,9 +303,6 @@ class DP_Player(MoviePlayer):
             percent = float(float(self.localsize)/float(self.filesize))
             percent = percent * 100.0
             self["bufferslider"].setValue(int( percent ))
-            
-            if self.localsize - lastSize > 0:
-                self["label_speed"].setText("DL-Speed: " + self.formatKBits( self.localsize - lastSize ) )
         
         self.StatusTimer.start(1000, True)
         
@@ -341,12 +340,9 @@ class DP_Player(MoviePlayer):
         bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
         self.buffersize = bufferInfo[4]
         self.bufferPercent = bufferInfo[0]
+        #printl("bufferPercent: " + str(self.bufferPercent), self, "D")
         self["bufferslider"].setValue(int(self.bufferPercent))
-        self["label_speed"].setText("DL-Speed: " + self.formatKBits(bufferInfo[1]) )
-        
-        if bufferInfo[2] > 0:
-            self.bitrate = bufferInfo[2] 
-        
+
         if(self.bufferPercent > 95):
             self.bufferFull()
                 
@@ -354,15 +350,7 @@ class DP_Player(MoviePlayer):
             self.bufferEmpty()
         
         #printl("self.buffersize: " + str(self.buffersize), self, "D")
-        #printl("self.bitrate: " + str(self.bitrate), self, "D")
-        #printl("self.bufferSeconds: " + str(self.bufferSeconds), self, "D")
         #printl("self.bufferPercent: " + str(self.bufferPercent), self, "D")
-        try:
-            if self.bitrate != 0:
-                self.bufferSeconds = self.buffersize / self.bitrate
-                self.bufferSecondsLeft = self.bufferSeconds * self.bufferPercent / 100
-        except:
-            printl("something went wrong while calculating", self, "W")
         
         #printl("", self, "C")
 
@@ -463,34 +451,7 @@ class DP_Player(MoviePlayer):
         
         printl( "seekWatcher finished ", self, "I")
         printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
-    def bitRateWatcher(self,*args):
-        '''
-        '''
-        printl("", self, "S")
-        
-        printl ("bitrateWatcher started", self, "I")
-        try:
-            while self is not None and self.session is not None and self.session.nav is not None and self.session.nav.getCurrentService() is not None:
-                self.bitrate = self.session.nav.getCurrentService().info().getInfo(iServiceInformation.sTagBitrate)
-                if self.bitrate == 0:
-                    self.bitrate = self.session.nav.getCurrentService().info().getInfo(iServiceInformation.sTagMaximumBitrate)
-                if self.bitrate != 0:
-                    self.bufferSeconds = self.buffersize / self.bitrate
-                    self.bufferSecondsLeft = self.bufferSeconds * self.bufferPercent / 100
-                    self["label_bitrate"].setText("Bitrate: " + self.formatKBits(self.bitrate) )
-                    if not self.localCache:
-                        self["label_buffer"].setText("Buffer: " + self.formatKB(self.buffersize)+" (" + str(self.bufferSecondsLeft) + "s)" )
-                sleep(1)
-        
-        except Exception, e:
-            printl("exception: " + str(e), self, "W")
-        
-        printl("", self, "C")
-              
+            
     #===========================================================================
     # 
     #===========================================================================
@@ -535,6 +496,7 @@ class DP_Player(MoviePlayer):
                         #if config.plugins.dreamplex.setBufferSize.value:
                             #self.session.nav.getCurrentService().streamed().setBufferSize(config.plugins.dreamplex.bufferSize.value)
                         self.doSeek(int(time))
+        
         except Exception, e:
             printl("exception: " + str(e), self, "W")
             
@@ -584,15 +546,14 @@ class DP_Player(MoviePlayer):
     def bufferFull(self):
         '''
         '''
-        printl("", self, "S")
+        #printl("", self, "S")
         
         if self.useBufferControl:
             if self.seekstate != self.SEEK_STATE_PLAY :
                 printl( "Buffer filled start playing", self, "I")
                 self.setSeekState(self.SEEK_STATE_PLAY)
-                #self.unPauseService()
         
-        printl("", self, "C")
+        #printl("", self, "C")
 
     #===========================================================================
     # 
@@ -600,15 +561,14 @@ class DP_Player(MoviePlayer):
     def bufferEmpty(self):
         '''
         '''
-        printl("", self, "S")
+        #printl("", self, "S")
         
         if self.useBufferControl:
             if self.seekstate != self.SEEK_STATE_PAUSE :
                 printl( "Buffer drained pause", self, "I")
                 self.setSeekState(self.SEEK_STATE_PAUSE)
-                #self.pauseService()
         
-        printl("", self, "C")
+        #printl("", self, "C")
         
     #===========================================================================
     # 
@@ -726,10 +686,9 @@ class DP_Player(MoviePlayer):
         '''
         '''
         printl("", self, "S")
-        self.nTracks = False
         
         try:
-            while nTracks == False:
+            while self.nTracks == False:
                 self.setAudioTrack()
                 sleep(1)
         
@@ -754,7 +713,7 @@ class DP_Player(MoviePlayer):
                 nTracks = tracks and tracks.getNumberOfTracks() or 0
                 
                 if not nTracks:
-                    printl("returning", self, "D")
+                    printl("no tracks found yet ... retrying later", self, "D")
                     return
                 
                 self.nTracks = True
@@ -766,8 +725,11 @@ class DP_Player(MoviePlayer):
                     printl("lang: " + str(lang), self, "D")
                     trackList += [str(lang)]
                 
-                for audiolang in [config.plugins.dreamplex.audlang1.value]:
-                    if self.tryAudioEnable(trackList, audiolang, tracks): break
+                systemLanguage = language.getLanguage()[:2] # getLanguage returns e.g. "fi_FI" for "language_country"
+                printl("found systemLanguage: " +  systemLanguage, self, "I")
+                systemLanguage = "en"
+                
+                self.tryAudioEnable(trackList, systemLanguage, tracks)
             
             except Exception, e:
                 printl("audioTrack exception: " + str(e), self, "W") 
@@ -789,17 +751,16 @@ class DP_Player(MoviePlayer):
             e.lower()
             if e.find(match) >= 0:
                 printl("audio track match: " + str(e), self, "I")
+                #sleep(2)
                 tracks.selectTrack(index)
                 
                 printl("", self, "S")
-                return True
                 index += 1
             else:
-                printl("no audio track match", self, "I")
+                printl("no audio track match with " + str(e), self, "I")
         
         self.switchedLanguage = True
         printl("", self, "S")
-        return False 
         
     
     #===========================================================================
