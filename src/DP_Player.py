@@ -147,8 +147,8 @@ class DP_Player(MoviePlayer):
         if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
             start_new_thread(self.seekWatcher,(self,))
         
-        start_new_thread(self.bitRateWatcher,(self,))
-        #start_new_thread(self.checkForUpdate,(self,))
+        #start_new_thread(self.bitRateWatcher,(self,))
+        start_new_thread(self.audioTrackWatcher,(self,))
 
         self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
             {
@@ -577,21 +577,7 @@ class DP_Player(MoviePlayer):
             return str(byte)+" "+ending
         
         #printl("", self, "C")
-        
-    #===========================================================================
-    # 
-    #===========================================================================
-    def checkForUpdate(self,*args):
-        '''
-        '''
-        printl("", self, "S")
-        
-        url = ""
-        if url != "" and url != "up to date":
-            self["label_update"].setText("Update Available" )
-        
-        printl("", self, "C")
-                    
+                         
     #===========================================================================
     # 
     #===========================================================================
@@ -732,6 +718,26 @@ class DP_Player(MoviePlayer):
         
         printl("", self, "C")
 
+    
+    #===========================================================================
+    # audioTrackWatcher
+    #===========================================================================
+    def audioTrackWatcher(self,*args):
+        '''
+        '''
+        printl("", self, "S")
+        self.nTracks = False
+        
+        try:
+            while nTracks == False:
+                self.setAudioTrack()
+                sleep(1)
+        
+        except Exception, e:    
+            printl("exception: " + str(e), self, "E")
+        
+        printl("", self, "C")
+    
     #===========================================================================
     # 
     #===========================================================================
@@ -747,8 +753,11 @@ class DP_Player(MoviePlayer):
                 tracks = service and self.getServiceInterface("audioTracks")
                 nTracks = tracks and tracks.getNumberOfTracks() or 0
                 
-                if not nTracks: return
+                if not nTracks:
+                    printl("returning", self, "D")
+                    return
                 
+                self.nTracks = True
                 trackList = []
                 
                 for i in xrange(nTracks):
@@ -765,6 +774,10 @@ class DP_Player(MoviePlayer):
         
         printl("", self, "C")   
         
+    
+    #===========================================================================
+    # tryAudioEnable
+    #===========================================================================
     def tryAudioEnable(self, alist, match, tracks):
         '''
         '''
@@ -788,8 +801,9 @@ class DP_Player(MoviePlayer):
         printl("", self, "S")
         return False 
         
+    
     #===========================================================================
-    # 
+    # getServiceInterface
     #===========================================================================
     def getServiceInterface(self, iface):
         '''
