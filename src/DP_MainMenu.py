@@ -838,7 +838,6 @@ class DPS_Settings(Screen, ConfigListScreen):
 				getConfigListEntry(_("Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")),
 				getConfigListEntry(_("Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")),
 				getConfigListEntry(_("Show Filter for Section"), config.plugins.dreamplex.showFilter, _("fill me")),
-				getConfigListEntry(_("Use Autolanguage in Movieplayer"), config.plugins.dreamplex.autoLanguage, _("fill me")),
 				getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")),
 				getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
 				getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")),
@@ -847,6 +846,8 @@ class DPS_Settings(Screen, ConfigListScreen):
 			session = self.session,
 			on_change = self._changed
 		)
+		
+		#getConfigListEntry(_("Use Autolanguage in Movieplayer"), config.plugins.dreamplex.autoLanguage, _("fill me")),
 		
 		self._session = session
 		self._hasChanged = False
