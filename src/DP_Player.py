@@ -65,6 +65,7 @@ class DP_Player(MoviePlayer):
     server = None
     id = None
     url = None
+    transcodingSession = None
     nTracks = False
     switchedLanguage = False
   
@@ -82,6 +83,7 @@ class DP_Player(MoviePlayer):
         self.server = str(playerData['server'])
         self.id = str(playerData['id'])
         self.url = str(playerData['playUrl'])
+        self.transcodingSession = str(playerData['transcodingSession'])
         
         printl("Checking for usable gstreamer service (built-in)... ",self, "I")
   
@@ -613,6 +615,7 @@ class DP_Player(MoviePlayer):
         
         if answer:
             self.handleProgress()
+            self.stopTranscoding()
             self.close()
         
         printl("", self, "C")
@@ -626,6 +629,7 @@ class DP_Player(MoviePlayer):
         printl("", self, "S")
         
         self.handleProgress()
+        self.stopTranscoding()
         self.close()
         
         printl("", self, "C")
@@ -660,9 +664,27 @@ class DP_Player(MoviePlayer):
         else:
             printl( "Movie marked as watched. Over 95% complete", self, "I")
             plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library",suppress=True)
+            
         
         printl("", self, "C")       
         
+    
+    #===========================================================================
+    # stopTranscoding
+    #===========================================================================
+    def stopTranscoding(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        instance = Singleton()
+        plexInstance = instance.getPlexInstance()
+        
+        #sample from log /video/:/transcode/segmented/stop?session=0EBD197D-389A-4784-8CC5-709BAD5E1137&X-Plex-Client-Capabilities=protocols%3Dhttp-live-streaming%2Chttp-mp4-streaming%2Chttp-streaming-video%2Chttp-streaming-video-720p%2Chttp-mp4-video%2Chttp-mp4-video-720p%3BvideoDecoders%3Dh264%7Bprofile%3Ahigh%26resolution%3A1080%26level%3A41%7D%3BaudioDecoders%3Dmp3%2Caac%7Bbitrate%3A160000%7D&X-Plex-Client-Platform=iOS&X-Plex-Product=Plex%2FiOS&X-Plex-Version=3.0.2&X-Plex-Device-Name=DDiPhone [192.168.45.6:62662] (4 live)
+        plexInstance.getURL("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession,suppress=True)
+        
+        printl("", self, "C")
+    
     #===========================================================================
     # 
     #===========================================================================

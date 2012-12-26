@@ -146,7 +146,7 @@ class PlexLibrary(Screen):
     g_myplex_username = "" # "" = do not use
     g_myplex_password = "password"
     g_myplex_token = ""
-    g_transcode = "false"
+    g_transcode = "true"
     g_transcodetype = "0" # 0 = m3u8, 1 = flv
     g_transcodefmt = "m3u8" # m3u8, flv
     g_wolon = "true"
@@ -158,7 +158,7 @@ class PlexLibrary(Screen):
     g_naspass = "naspass"
     g_nasroot = "/"
     g_bonjour = "0" # 0 = OFF, 1= ON
-    g_quality = "4" # +3 laut zeile irgendwo todo checken
+    g_quality = "1" # +3 laut zeile irgendwo todo checken
     g_capability = ""
     g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
     g_session = None
@@ -184,11 +184,14 @@ class PlexLibrary(Screen):
                 
         # global settings
         self.g_secondary = str(config.plugins.dreamplex.showFilter.value).lower()
+        self.g_sessionID = str(uuid.uuid4())
         
         # server settings
         self.g_name = str(serverConfig.name.value)
         self.g_connectionType = str(serverConfig.connectionType.value)
         self.g_port = str(serverConfig.port.value)
+        self.g_transcode = str(serverConfig.transcode.value).lower()
+        self.g_quality = str(serverConfig.quality.value)
 
         if self.g_connectionType == "0":
             self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
@@ -206,6 +209,8 @@ class PlexLibrary(Screen):
         printl("using this serverIp: " +  self.g_host, self, "I")
         printl("using this serverPort: " +  self.g_port, self, "I")
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
+        printl("using transcode: " +  self.g_transcode, self, "I")
+        printl("using this transcoding quality: " +  self.g_quality, self, "I")
         
         #Next lets check if for this server nas override is activated
         self.checkNasOverride()
@@ -1787,6 +1792,7 @@ class PlexLibrary(Screen):
         playerData["resumeStamp"] = resume
         playerData["server"] = server
         playerData["id"] = id
+        playerData["transcodingSession"] = self.g_sessionID
         
         return playerData
     
@@ -2443,7 +2449,8 @@ class PlexLibrary(Screen):
         
         printl("Using preferred transcoding server: " + server, self, "I")
             
-        filename=urllib.quote_plus("/"+"/".join(url.split('/')[3:]))
+        #filename=urllib.quote_plus("/"+"/".join(url.split('/')[3:]))
+        filename= '/'.join(url.split('/')[3:])
       
       #=========================================================================
       #  if identifier is not None:
@@ -2479,14 +2486,15 @@ class PlexLibrary(Screen):
         transcode.append("offset=0")
         transcode.append("quality=%d" % int(self.g_quality ))
         transcode.append("session=%s" % self.g_sessionID)
-        transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
+        #transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
+        transcode.append("url=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
         transcode.append("3g=0")
         transcode.append("httpCookies=")
         transcode.append("userAgent=")
         timestamp = "@%d" % ts
         streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
         pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
-        streamURL += "http://%s/%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, publicKey, ts, pac)
+        streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
         printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
         
         #=======================================================================
@@ -2512,21 +2520,25 @@ class PlexLibrary(Screen):
         # fullURL="http://"+server+myurl+"&X-Plex-Access-Key="+publicKey+"&X-Plex-Access-Time="+str(now)+"&X-Plex-Access-Code="+urllib.quote_plus(token)+"&"+self.g_capability
         #=======================================================================
         
-        req = Request(streamURL)
-        req.add_header('X-Plex-Client-Capabilities', self.g_capability)
-        printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
-        resp = urlopen(req)
-        if resp is None:
-            raise IOError, "No response from Server"
-        urls = []
-        for line in resp:
-            if line[0] != '#':
-                urls.append("http://%s/%s/%s" % (server, streamPath, line[:-1]))
-                printl( "Got: http://%s/%s/%s" % (str(server), str(streamPath), str(line[:-1])),self, "I")
-        resp.close()
+        #=======================================================================
+        # req = Request(streamURL)
+        # #req.add_header('X-Plex-Client-Capabilities', self.g_capability)
+        # #printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
+        # resp = urlopen(req)
+        # if resp is None:
+        #    raise IOError, "No response from Server"
+        # urls = []
+        # for line in resp:
+        #    if line[0] != '#':
+        #        urls.append("http://%s/%s/%s" % (server, streamPath, line[:-1]))
+        #        printl( "Got: http://%s/%s/%s" % (str(server), str(streamPath), str(line[:-1])),self, "I")
+        # resp.close()
+        # 
+        # indexURL = urls.pop()
+        # #fullURL = indexURL 
+        #=======================================================================
         
-        indexURL = urls.pop()
-        fullURL = indexURL 
+        fullURL = streamURL
         
         printl("Transcoded media location URL " + fullURL, self, "I")
         
@@ -3599,25 +3611,22 @@ class PlexLibrary(Screen):
             #    self.g_transcodefmt="flv"
             #===================================================================
             
+            #self.g_quality = str(int(__settings__.getSetting('quality'))+3)
+            #printl( "Transcode format is " + self.g_transcodefmt, self, "I")
+            printl( "Transcode quality is " + self.g_quality, self, "I")
+            
             #===================================================================
-            # global self.g_quality
-            # self.g_quality = str(int(__settings__.getSetting('quality'))+3)
-            #===================================================================
-            #===================================================================
-            # printl( "Transcode format is " + self.g_transcodefmt, self, "I")
-            # printl( "Transcode quality is " + self.g_quality, self, "I")
-            # 
             # baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
             # if int(self.g_quality) >= 3:
-            #    baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
+            #   baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
             # if int(self.g_quality) >= 4:
-            #    baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
+            #   baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
             # if int(self.g_quality) >= 5:
-            #    baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
+            #   baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
             # if int(self.g_quality) >= 6:
-            #    baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
+            #   baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
             # if int(self.g_quality) >= 9:
-            #    baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
+            #   baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
             #===================================================================
                 
             #===================================================================
@@ -3626,26 +3635,29 @@ class PlexLibrary(Screen):
        
             #===================================================================
             # if self.g_audioOutput == "0":
-            #    audio="mp3,aac"
+            #   audio="mp3,aac"
             # elif self.g_audioOutput == "1":
-            #    audio="mp3,aac,ac3"
+            #   audio="mp3,aac,ac3"
             # elif self.g_audioOutput == "2":
-            #    audio="mp3,aac,ac3,dts"
+            #   audio="mp3,aac,ac3,dts"
             #===================================================================
             
             
             #===================================================================
             # from VLC defaults
             #===================================================================
-            protocols = "protocols=http-video"
-            videoDecoders = "videoDecoders=mpeg2video{profile:high&resolution:1080&level:51},mpeg4{profile:high&resolution:1080&level:51},mpeg1video{profile:high&resolution:1080&level:51},mp4{profile:high&resolution:1080&level:51},h264{profile:high&resolution:1080&level:51};"
-            audioDecoders = "audioDecoders=mp3,dts{bitrate:2560000&channels:6},ac3{bitrate:2560000&channels:6}"
+            protocols="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
+            #protocols = "protocols=http-video"
+            videoDecoders = "videoDecoders=mpeg2video{profile:high&resolution:1080&level:51},mpeg4{profile:high&resolution:1080&level:51},mpeg1video{profile:high&resolution:1080&level:51},mp4{profile:high&resolution:1080&level:51},h264{profile:high&resolution:1080&level:51}"
+            #audioDecoders = "audioDecoders=mp3,dts{bitrate:2560000&channels:6},ac3{bitrate:2560000&channels:6}"
+            
+            #dts is not running for some reason
+            audioDecoders = "audioDecoders=mp3,aac"
 
             #self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
-            self.g_capability = protocols + ";" + videoDecoders + ";" + audioDecoders
+            self.g_capability = urllib.quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
+            #self.g_capability = urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)
             printl("Plex Client Capability = " + self.g_capability, self, "I")
-
-            self.g_sessionID = str(uuid.uuid4())
             
             printl("", self, "C")   
             
