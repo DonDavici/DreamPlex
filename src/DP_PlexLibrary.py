@@ -158,7 +158,7 @@ class PlexLibrary(Screen):
     g_naspass = "naspass"
     g_nasroot = "/"
     g_bonjour = "0" # 0 = OFF, 1= ON
-    g_quality = "1" # +3 laut zeile irgendwo todo checken
+    g_quality = "6" #
     g_capability = ""
     g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
     g_session = None

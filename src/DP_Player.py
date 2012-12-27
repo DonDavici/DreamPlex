@@ -216,15 +216,15 @@ class DP_Player(MoviePlayer):
         printl( "start local file caching", self, "I")
         
         if ".m3u8" in self.url:
-            self.session.open( MessageBox, _("This stream can not get saved on HDD\nm3u8 streams are not supported"), MessageBox.TYPE_INFO)    
-            
-            printl("", self, "C")
-            return
+           self.session.open( MessageBox, _("This stream can not get saved on HDD\nm3u8 streams are not supported"), MessageBox.TYPE_INFO)    
+           
+           printl("", self, "C")
+           return
         
         if self.localCache == True:
-            
-            printl("", self, "C")
-            return
+           
+           printl("", self, "C")
+           return
         
         self.container=eConsoleAppContainer()
         self.container.appClosed.append(self.DLfinished)
@@ -555,6 +555,9 @@ class DP_Player(MoviePlayer):
                 printl( "Buffer filled start playing", self, "I")
                 self.setSeekState(self.SEEK_STATE_PLAY)
         
+        #hide infobar to indicate buffer is ready
+        self.hide()
+        
         #printl("", self, "C")
 
     #===========================================================================
@@ -564,6 +567,9 @@ class DP_Player(MoviePlayer):
         '''
         '''
         #printl("", self, "S")
+        
+        #show infobar to indicate buffer is empty 
+        self.show()
         
         if self.useBufferControl:
             if self.seekstate != self.SEEK_STATE_PAUSE :
@@ -630,6 +636,8 @@ class DP_Player(MoviePlayer):
         
         self.handleProgress()
         self.stopTranscoding()
+        #check this
+        #self.stop()
         self.close()
         
         printl("", self, "C")
