@@ -387,3 +387,87 @@ def getServerFromURL(url ): # CHECKED
 		printl2("", "__common__::getServerFromURL", "C")
 		return url.split('/')[0]
 	
+
+#===============================================================================
+# 
+#===============================================================================
+def findMountPoint(pth):
+	'''
+	Example: findMountPoint("/media/hdd/some/file") returns "/media/hdd" 
+	'''
+	printl2("","__common__::findMountPoint", "S")                                    
+	
+	pth = path.abspath(pth)                                                                                        
+	
+	while not path.ismount(pth):                                                                                    
+		pth = path.dirname(pth)                                                                                
+	
+	printl2("","__common__::findMountPoint", "C")
+	return pth                                                                                                         
+
+#===============================================================================
+# 
+#===============================================================================
+def findSafeRecordPath(dirname):
+	'''
+	'''  
+	printl2("","__common__::findSafeRecordPath", "S")					   
+	
+	if not dirname:
+		printl2("","__common__::findSafeRecordPath", "C")								   
+		return None							   
+	
+	dirname = path.realpath(dirname)			   
+	mountpoint = findMountPoint(dirname)	 
+	
+	if mountpoint in ('/', '/media'):			  
+		printl2('media is not mounted:'+ str(dirname), "__common__::findSafeRecordPath", "D")
+		
+		printl2("","__common__::findSafeRecordPath", "C")
+		return None										 
+	
+	if not path.isdir(dirname):							  
+		try:												
+			makedirs(dirname)						
+		except Exception, ex:							   
+			printl2('Failed to create dir "%s":' % str(dirname) + str(ex), "__common__::findSafeRecordPath", "D")
+			
+			printl2("","__common__::findSafeRecordPath", "C")
+			return None												   
+	
+	printl2("","__common__::findSafeRecordPath", "C")
+	return dirname																
+
+#===============================================================================
+# 
+#===============================================================================
+def normpath(path):
+	'''
+	'''
+	printl2("","__common__::normpath", "S")
+	
+	if path is None:
+		printl2("","__common__::normpath", "C")
+		return None
+	
+	path = path.replace("\\","/").replace("//", "/")
+	
+	if path == "/..":
+		printl2("","__common__::normpath", "C")
+		return None
+	
+	if len(path) > 0 and path[0] != '/':
+		path = posixpath.normpath('/' + path)[1:]
+	else:
+		path = posixpath.normpath(path)
+
+	if len(path) == 0 or path == "//":
+		printl2("","__common__::normpath", "C")
+		return "/"
+	
+	elif path == ".":
+		printl2("","__common__::normpath", "C")
+		return None
+	
+	printl2("","__common__::normpath", "C")
+	return path
