@@ -471,3 +471,69 @@ def normpath(path):
 	
 	printl2("","__common__::normpath", "C")
 	return path
+
+
+#===============================================================================
+# pretty_time_format
+#===============================================================================
+def prettyFormatTime(msec):
+	'''
+	'''
+	printl2("","__common__::prettyFormatTime", "S")
+	
+	seconds = msec / 1000
+	hours = seconds // (60*60)
+	seconds %= (60*60)
+	minutes = seconds // 60
+	seconds %= 60
+	hrstr = "hour"
+	minstr = "min"
+	secstr = "sec"
+	
+	if hours != 1:
+		hrstr += "s"
+	
+	if minutes != 1:
+		minstr += "s"
+	
+	if seconds != 1:
+		secstr += "s"
+	
+	if hours > 0:
+		printl2("","__common__::prettyFormatTime", "C")
+		return "%i %s %02i %s %02i %s" % (hours, hrstr, minutes, minstr, seconds, secstr)
+	
+	elif minutes > 0:
+		printl2("","__common__::prettyFormatTime", "C")
+		return "%i %s %02i %s" % (minutes, minstr, seconds, secstr)
+	
+	else:
+		printl2("","__common__::prettyFormatTime", "C")
+		return "%i %s" % (seconds, secstr)
+
+#===============================================================================
+# time_format
+#===============================================================================
+def formatTime(msec):
+	'''
+	'''
+	printl2("","__common__::formatTime", "S")
+	
+	seconds = msec / 1000
+	hours = seconds // (60*60)
+	seconds %= (60*60)
+	minutes = seconds // 60
+	seconds %= 60
+	
+	if hours > 0:
+		printl2("","__common__::formatTime", "C")
+		return "%i:%02i:%02i" % (hours, minutes, seconds)
+	
+	elif minutes > 0:
+		printl2("","__common__::formatTime", "C")
+		return "%i:%02i" % (minutes, seconds)
+	
+	else:
+		printl2("","__common__::formatTime", "C")
+		return "%i" % (seconds)
+	

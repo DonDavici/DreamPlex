@@ -46,6 +46,9 @@ from base64 import b64encode, b64decode
 from Components.config import config
 from hashlib import sha256
 from urllib2 import urlopen, Request
+from random import randint, seed
+from threading import Thread
+from Queue import Queue
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
@@ -79,6 +82,12 @@ except ImportError:
                     printl("running with ElementTree")
                 except ImportError:
                     printl("Failed to import ElementTree from any known place", __name__, "W")
+                    
+#===============================================================================
+# 
+#===============================================================================
+#The method seed() sets the integer starting value used in generating random numbers. Call this function before calling any other random module function.
+seed()
 
 #===============================================================================
 # 
@@ -143,8 +152,8 @@ class PlexLibrary(Screen):
     g_skipmediaflags = "true" # best understanding when looking getMoviesfromsection
     g_skipimages = "false"
     g_loc = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/" # homeverzeichnis
-    g_myplex_username = "" # "" = do not use
-    g_myplex_password = "password"
+    g_myplex_username = ""
+    g_myplex_password = ""
     g_myplex_token = ""
     g_transcode = "true"
     g_transcodetype = "0" # 0 = m3u8, 1 = flv
@@ -201,10 +210,8 @@ class PlexLibrary(Screen):
             except Exception, e:
                 printl("socket error: " + str(e), self, "W")
                 printl("trying fallback to ip", self, "I")
-                self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
+                self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)          
                 
-                
-
         printl("using this serverName: " +  self.g_name, self, "I")
         printl("using this serverIp: " +  self.g_host, self, "I")
         printl("using this serverPort: " +  self.g_port, self, "I")
@@ -212,19 +219,55 @@ class PlexLibrary(Screen):
         printl("using transcode: " +  self.g_transcode, self, "I")
         printl("using this transcoding quality: " +  self.g_quality, self, "I")
         
+        # is this a myplex server
+        if self.g_connectionType == "2": # MYPLEX
+            self.g_myplex_username = serverConfig.myplexUsername.value
+            self.g_myplex_password = serverConfig.myplexPassword.value
+            
+            if self.g_myplex_token == "" or serverConfig.renewMyplexToken.value.lower() == "true":
+                self.g_myplex_token = self.getNewMyPlexToken()
+            else:
+                self.g_myplex_token    = serverConfig.myplexToken.value
+                
+            printl("myplex_username: " +  self.g_myplex_username, self, "I")
+            printl("myplex_password: " +  self.g_myplex_password, self, "I")
+            printl("myplex_token: " +  self.g_myplex_token, self, "I")
+        
         #Next lets check if for this server nas override is activated
         self.checkNasOverride()
         
-        #Fill serverdate to global g_serverDict
+        #Fill serverdata to global g_serverDict
         self.discoverAllServers()
 
-        #_PARAM_TOKEN
-        global _PARAM_TOKEN
-        #_PARAM_TOKEN = self.getNewMyPlexToken()
-        _PARAM_TOKEN = None
+
                                    
         printl("", self, "C")
-
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def onClose(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        if self.urlQueue is not None:
+            # Push in the thread exit commands a few times as we are leaving
+            self.urlQueue.put((None, None))
+            self.urlQueue.put((None, None))
+            self.urlQueue.put((None, None))
+            self.urlQueue.put((None, None))
+            self.urlQueue.put((None, None))
+            self.urlQueue.put(("Thread Exit", None))
+            self.urlQueue.put(("Thread Exit", None))
+            self.urlQueue.put(("Thread Exit", None))
+            self.urlQueue.put(("Thread Exit", None))
+            self.urlQueue.put(("Thread Exit", None))
+            self.streamQueue.put(("Thread Exit", None, None, None))
+            self.urlQueue = None
+            self.streamQueue = None
+            
+            printl("", self, "C")
     #============================================================================
     # 
     #============================================================================
@@ -373,6 +416,117 @@ class PlexLibrary(Screen):
         printl("mainMenuList: " + str(mainMenuList), self, "D")
         printl("", self, "C")
         return mainMenuList  
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def discoverAllServers(self): # CHECKED
+        '''
+            Take the users settings and add the required master servers
+            to the server list.  These are the devices which will be queried
+            for complete library listings.  There are 3 types:
+                local server - from IP configuration
+                bonjour server - from a bonjour lookup
+                myplex server - from myplex configuration
+            Alters the global self.g_serverDict value
+            @input: None
+            @return: None       
+        '''
+        printl("", self, "S")
+
+        #!!!!
+        self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
+        #!!!!
+            
+        if self.g_myplex_username != "": #check if this server has myplex data
+            printl( "DreamPlex -> Adding myplex as a server location", self, "I")
+            self.g_serverDict.append({'serverName': 'MYPLEX' ,
+                                 'address'   : "my.plex.app" ,
+                                 'discovery' : 'myplex' , 
+                                 'token'     : None ,
+                                 'uuid'      : None ,
+                                 'role'      : 'master' })
+        else:
+            
+            if not self.g_host or self.g_host == "<none>":
+                self.g_host = None
+            
+            elif not self.g_port:
+                printl( "No port defined.  Using default of " + DEFAULT_PORT, self, "I")
+                self.g_address = self.g_host + ":" + DEFAULT_PORT
+            
+            else:
+                self.g_address = self.g_host + ":" + self.g_port
+                printl( "Settings hostname and port: " + self.g_address, self, "I")
+        
+            if self.g_address is not None:
+                self.g_serverDict.append({'serverName': self.g_name ,
+                                     'address'   : self.g_address ,
+                                     'discovery' : 'local' , 
+                                     'token'     : None ,
+                                     'uuid'      : None ,
+                                     'role'      : 'master' })   
+     
+     #==========================================================================
+     #   #Set to Bonjour
+     #   if self.g_bonjour == "1":
+     #       printl("DreamPlex -> local Bonjour discovery setting enabled.", self, "I")
+     #       try:
+     #           printl("Attempting bonjour lookup on _plexmediasvr._tcp")
+     #           bonjourServer = bonjourFind("_plexmediasvr._tcp")
+     #                                               
+     #           if bonjourServer.complete:
+     #               printl("Bonjour discovery completed")
+     #               #Add the first found server to the list - we will find rest from here
+     #               
+     #               bj_server_name = bonjourServer.bonjourName[0].encode('utf-8')
+     #               
+     #               self.g_serverDict.append({'name'      : bj_server_name.split('.')[0] ,
+     #                                    'address'   : bonjourServer.bonjourIP[0]+":"+bonjourServer.bonjourPort[0] ,
+     #                                    'discovery' : 'bonjour' , 
+     #                                    'token'     : None ,
+     #                                    'uuid'      : None })
+     #                                    
+     #                                    
+     #           else:
+     #               printl("BonjourFind was not able to discovery any servers")
+     # 
+     #       except:
+     #           print "DreamPlex -> Bonjour Issue.  Possibly not installed on system"
+     #           #TODO add message dialog to ask if it should be installed
+     #           #===============================================================
+     #           # xbmcgui.Dialog().ok("Bonjour Error","Is Bonojur installed on this system?")
+     #           #===============================================================            
+     #==========================================================================
+        
+        
+        printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
+        printl("", self, "C")
+        #        prefix=""
+        #    
+        #    details={'title' : prefix+"Channels" }
+        #    extraData={'type' : "Video",
+        #               'token' : server.get('token',None) }    
+        #        
+        #    u="http://"+server['address']+"/system/plugins/all&mode="+str(_MODE_CHANNELVIEW)
+        #    self.addGUIItem(u,details,extraData)
+        #            
+        #    #Create plexonline link
+        #    details['title']=prefix+"Plex Online"
+        #    extraData['type']="file"
+        #    
+        #    u="http://"+server['address']+"/system/plexonline&mode="+str(_MODE_PLEXONLINE)
+        #    self.addGUIItem(u,details,extraData)
+        #  
+        # #=======================================================================
+        # # #All XML entries have been parsed and we are ready to allow the user to browse around.  So end the screen listing.
+        # # xbmcplugin.endOfDirectory(pluginhandle)  
+        # #=======================================================================
+        #=======================================================================
+        
+        printl("mainMenuList: " + str(mainMenuList), self, "D")
+        printl("", self, "C")
+        return mainMenuList  
 
     #=============================================================================
     # 
@@ -458,16 +612,28 @@ class PlexLibrary(Screen):
         '''
         #printl("", self, "S")
         
-        self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
-                               'address': self.g_host + ":" + self.g_port,
-                               'serverName' : self.g_name.encode('utf-8'),
-                               'uuid' : sections.get('machineIdentifier','Unknown') ,
-                               'path' : '/library/sections/' + sections.get('key') ,
-                               'token' : sections.get('accessToken',None) ,
-                               'location' : server['discovery'] ,
-                               'art' : sections.get('art') ,
-                               #'local' : sections.get('local') ,
-                               'type' : sections.get('type','Unknown') }) 
+        if self.g_connectionType != "2": # is not myPlex        
+            self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
+                                               'address': self.g_host + ":" + self.g_port,
+                                               'serverName' : self.g_name.encode('utf-8'),
+                                               'uuid' : sections.get('machineIdentifier','Unknown') ,
+                                               'path' : '/library/sections/' + sections.get('key') ,
+                                               'token' : sections.get('accessToken',None) ,
+                                               'location' : server['discovery'] ,
+                                               'art' : sections.get('art') ,
+                                               #'local' : sections.get('local') ,
+                                               'type' : sections.get('type','Unknown') }) 
+        else:
+            self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
+                                               'address': sections.get('address') + ":" + sections.get('port'),
+                                               'serverName' : self.g_name.encode('utf-8'),
+                                               'uuid' : sections.get('machineIdentifier','Unknown') ,
+                                               'path' : sections.get('path') ,
+                                               'token' : sections.get('accessToken',None) ,
+                                               'location' : server['discovery'] ,
+                                               'art' : sections.get('art') ,
+                                               #'local' : sections.get('local') ,
+                                               'type' : sections.get('type','Unknown') }) 
    
         #printl("", self, "C")
 
@@ -486,7 +652,11 @@ class PlexLibrary(Screen):
         mainMenuList = []
         #===>
         
-        html = self.getURL(p_url)   
+        if self.g_connectionType != "2": # is not myPlex 
+            html = self.getURL(p_url)  
+        else:
+            html = self.getMyPlexURL(p_url)
+                
         tree = etree.fromstring(html)
         directories = tree.getiterator("Directory")
         viewGroup = str(tree.get("viewGroup"))
@@ -580,32 +750,30 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #==============================================================================
- #       if details.get('title','') == '':
- #           
- #           printl("", self, "C")
- #           return
- #             
- #       if (extraData.get('token',None) is None) and _PARAM_TOKEN:
- #           extraData['token']=_PARAM_TOKEN
- # 
- #       aToken=self.getAuthDetails(extraData)
- #       qToken=self.getAuthDetails(extraData, prefix='?')
-        #==============================================================================
+        if details.get('title','') == '':
+            printl('leaving now because title is empty', self, "I")
+            printl("", self, "C")
+            return
+              
+        if (extraData.get('token',None) is None) and self.g_myplex_token:
+            extraData['token']=self.g_myplex_token
+  
+        aToken=self.getAuthDetails(extraData)
+        qToken=self.getAuthDetails(extraData, prefix='?')
         
-        #==============================================================================
- #       #Create the URL to pass to the item
- #       if ( not folder) and ( extraData['type'] =="Picture" ):
- #           u=url+qToken
- #       else:
- #           u=sys.argv[0]+"?url="+str(url)+aToken
- # 
- #       printl("URL to use for listing: " + u)
-        #==============================================================================
+        #Create the URL to pass to the item
+        if ( not folder) and ( extraData['type'] =="Picture" ):
+            newUrl = str(url) + qToken
+        else:
+            #printl("sys.argv: " + str(sys.argv), self, "D")
+            #u= sys.argv[0] + "?url="+str(url)+aToken
+            newUrl= str(url) + aToken
+  
+        printl("URL to use for listing: " + newUrl)
     
-        content = (url, details, extraData, context)
+        content = (newUrl, details, extraData, context)
         
-        #printl("content = " + str(content), self, "D")
+        printl("content = " + str(content), self, "D")
         printl("", self, "C")
         return content
     
@@ -764,56 +932,71 @@ class PlexLibrary(Screen):
         printl("", self, "S")                
         printl("url = " + MYPLEX_SERVER + url_path, self, "D")
     
-        try:
-            conn = httplib.HTTPSConnection(MYPLEX_SERVER) 
-            conn.request("GET", url_path+"?X-Plex-Token=" + self.getMyPlexToken(renew)) 
-            data = conn.getresponse() 
-            if ( int(data.status) == 401 )  and not ( renew ):
-                return self.getMyPlexURL(url_path,True)
-                
-            if int(data.status) >= 400:
-                error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
-                #===============================================================
-                # if suppress is False:
-                #    xbmcgui.Dialog().ok("Error",error)
-                #===============================================================
-                printl (error, self, "I")
-                printl("", self, "C")
-                return False
-            elif int(data.status) == 301 and type == "HEAD":
-                
-                printl("", self, "C")
-                return str(data.status)+"@"+data.getheader('Location')
-            else:      
-                link=data.read()
-                
-                printl("====== XML returned =======", self, "I")
-                printl("link = " + link, self, "I")
-                printl("====== XML finished ======", self, "I")
-                
-        except socket.gaierror :
-            error = 'Unable to lookup host: ' + MYPLEX_SERVER + "\nCheck host name is correct"
-            #===================================================================
-            # if suppress is False:
-            #    xbmcgui.Dialog().ok("Error",error)
-            #===================================================================
-            printl (error, self, "I")
-            printl("", self, "C")
-            return False
-        except socket.error, msg : 
-            error="Unable to connect to " + MYPLEX_SERVER +"\nReason: " + str(msg)
-            #===================================================================
-            # if suppress is False:
-            #    xbmcgui.Dialog().ok("Error",error)
-            #===================================================================
-            printl (error, self, "I")
-            printl("", self, "C")
-            return False
-        else:
-            
-            printl("", self, "C")
-            return link
-
+        printl( "Starting request", self, "I")
+        curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url_path + "?X-Plex-Token=" + self.g_myplex_token)
+        
+        printl("curl_string: " + str(curl_string), self, "D")
+        response = os.popen(curl_string).read()
+        
+        printl("====== XML returned =======", self, "I")
+        printl("link = " + str(response), self, "I")
+        printl("====== XML finished ======", self, "I")
+        
+        #=======================================================================
+        # try:
+        #    conn = httplib.HTTPSConnection(MYPLEX_SERVER) 
+        #    conn.request("GET", url_path+"?X-Plex-Token=" + self.getMyPlexToken(renew)) 
+        #    data = conn.getresponse() 
+        #    if ( int(data.status) == 401 )  and not ( renew ):
+        #        return self.getMyPlexURL(url_path,True)
+        #        
+        #    if int(data.status) >= 400:
+        #        error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
+        #        #===============================================================
+        #        # if suppress is False:
+        #        #    xbmcgui.Dialog().ok("Error",error)
+        #        #===============================================================
+        #        printl (error, self, "I")
+        #        printl("", self, "C")
+        #        return False
+        #    elif int(data.status) == 301 and type == "HEAD":
+        #        
+        #        printl("", self, "C")
+        #        return str(data.status)+"@"+data.getheader('Location')
+        #    else:      
+        #        link=data.read()
+        #        
+        #        printl("====== XML returned =======", self, "I")
+        #        printl("link = " + link, self, "I")
+        #        printl("====== XML finished ======", self, "I")
+        #        
+        # except socket.gaierror :
+        #    error = 'Unable to lookup host: ' + MYPLEX_SERVER + "\nCheck host name is correct"
+        #    #===================================================================
+        #    # if suppress is False:
+        #    #    xbmcgui.Dialog().ok("Error",error)
+        #    #===================================================================
+        #    printl (error, self, "I")
+        #    printl("", self, "C")
+        #    return False
+        # except socket.error, msg : 
+        #    error="Unable to connect to " + MYPLEX_SERVER +"\nReason: " + str(msg)
+        #    #===================================================================
+        #    # if suppress is False:
+        #    #    xbmcgui.Dialog().ok("Error",error)
+        #    #===================================================================
+        #    printl (error, self, "I")
+        #    printl("", self, "C")
+        #    return False
+        # else:
+        #    
+        #    printl("", self, "C")
+        #    return link
+        #=======================================================================
+        
+        printl("", self, "C")
+        return response
+        
     #=============================================================================
     # 
     #=============================================================================
@@ -829,7 +1012,7 @@ class PlexLibrary(Screen):
         
         try:
             #user,token = (__settings__.getSetting('self.g_myplex_token')).split('|')
-            user,token = self.g_myplex_token
+            user,token = self.g_myplex_token.split('|')
         except:
             token=""
         
@@ -852,44 +1035,42 @@ class PlexLibrary(Screen):
         '''
         printl("", self, "S")
     
-        printl("Getting New token", self, "I")
+        printl("Getting new token", self, "I")
         #=======================================================================
         # self.g_myplex_username = __settings__.getSetting('myplex_user')
         # self.g_myplex_password = __settings__.getSetting('myplex_pass')
         #=======================================================================
             
         if ( self.g_myplex_username or self.g_myplex_password ) == "":
-            printl("No myplex details in config..", self, "I")
+            printl("Missing myplex details in config...", self, "I")
             printl("", self, "")
             return False
         
         base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
         txdata=""
-        token=False
+        token = None
         
-        #=======================================================================
-        # myplex_headers={'X-Plex-Platform': "XBMC",
-        #            'X-Plex-Platform-Version': "11.00",
-        #            'X-Plex-Provides': "player",
-        #            'X-Plex-Product': "PleXBMC",
-        #            'X-Plex-Version': "2.0b",
-        #            'X-Plex-Device': "Not Known",
-        #            'X-Plex-Client-Identifier': "PleXBMC",
-        #            'Authorization': "Basic %s" % base64string }
-        #=======================================================================
+        myplex_header = []
+        # todo add function to return version
+        myplex_header.append('X-Plex-Platform: Enigma2')
+        myplex_header.append('X-Plex-Platform-Version: oe2.0')
+        myplex_header.append('X-Plex-Provides: player')
+        myplex_header.append('X-Plex-Product: DreamPlex')
+        myplex_header.append('X-Plex-Version: 0.9.2beta')  
+        myplex_header.append('X-Plex-Device: DM500HD')
+        myplex_header.append('X-Plex-Client-Identifier: 1234567890')
+        myplex_header.append('Authorization: Basic ' + base64string)
         
-        myplex_headers={'X-Plex-Platform': "XBMC",
-                        'X-Plex-Platform-Version': "11.00",
-                        'X-Plex-Provides': "player",
-                        'X-Plex-Product': "PleXBMC",
-                        'X-Plex-Version': "2.0b",
-                        'X-Plex-Device': "Not Known",
-                        'X-Plex-Client-Identifier': "PleXBMC",
-                        'Authorization': "Basic %s" % base64string }
+        printl( "Starting auth request", self, "I")
+        curl_string = 'curl -s -k -X POST "%s"' % ("https://" + MYPLEX_SERVER + "/users/sign_in.xml")
         
-        printl( "[MyTube] MyTubePlayerService - Starting auth request", self, "I")
-        token = os.popen('curl -s -k -X POST "%s" -d "%s"' % ("https://" + MYPLEX_SERVER + "/users/sign_in.xml", urllib.urlencode(myplex_headers))).read()
+        for child in myplex_header:
+            curl_string += ' -H "' + child + '"'
         
+        printl("curl_string: " + str(curl_string), self, "D")
+        response = os.popen(curl_string).read()
+        token = etree.fromstring(response).findtext('authentication-token')
+        self.g_myplex_token = self.g_myplex_username + "|" + token
     #===========================================================================
     #    try:
     #        conn = httplib.HTTPSConnection(MYPLEX_SERVER)
@@ -942,7 +1123,7 @@ class PlexLibrary(Screen):
     #        print error
     #        return False
     #===========================================================================
-        printl ("token = " + token, self, "D")
+        printl ("token: " + token, self, "D")
         printl("", self, "C")
         return token
  
@@ -968,7 +1149,7 @@ class PlexLibrary(Screen):
             printl("server: " + str(server), self, "D")
             printl("urlPath: " + str(urlPath), self, "D")
                 
-            authHeader = self.getAuthDetails({'token':_PARAM_TOKEN}, False)
+            authHeader = self.getAuthDetails({'token':self.g_myplex_token}, False)
                 
             #===================================================================
             # printl("url = "+url)
@@ -1262,7 +1443,7 @@ class PlexLibrary(Screen):
                        'UnWatchedEpisodes' : details['episode'] - watched ,
                        'thumb'             : self.getThumb(show, server) ,
                        'fanart_image'      : self.getFanart(show, server) ,
-                       'token'             : _PARAM_TOKEN ,
+                       'token'             : self.g_myplex_token ,
                        'key'               : show.get('key','') ,
                        'server'            : str(server) ,
                        'ratingKey'         : str(show.get('ratingKey',0)) }
@@ -1377,7 +1558,7 @@ class PlexLibrary(Screen):
                        'UnWatchedEpisodes' : details['episode'] - watched ,
                        'thumb'             : self.getThumb(season, server) ,
                        'fanart_image'      : self.getFanart(season, server) ,
-                       'token'             : _PARAM_TOKEN ,
+                       'token'             : self.g_myplex_token ,
                        'key'               : season.get('key','') ,
                        'server'            : str(server) ,
                        'ratingKey'         : str(season.get('ratingKey',0)) }
@@ -1506,7 +1687,7 @@ class PlexLibrary(Screen):
             extraData={'type'         : "Video" ,
                        'thumb'        : self.getThumb(episode, server) ,
                        'fanart_image' : self.getFanart(episode, server) ,
-                       'token'        : _PARAM_TOKEN ,
+                       'token'        : self.g_myplex_token ,
                        'key'          : episode.get('key',''),
                        'server'       : str(server) ,
                        'ratingKey'    : str(episode.get('ratingKey',0)) }
@@ -1702,10 +1883,10 @@ class PlexLibrary(Screen):
             printl( "We are playing a stream", self, "I")
             if self.g_transcode == "true":
                 printl( "We will be transcoding the stream", self, "I")
-                playurl = self.transcode(id,url)+self.getAuthDetails({'token':_PARAM_TOKEN})
+                playurl = self.transcode(id,url)+self.getAuthDetails({'token':self.g_myplex_token})
     
             else:
-                playurl=url+self.getAuthDetails({'token':_PARAM_TOKEN},prefix="?")
+                playurl=url+self.getAuthDetails({'token':self.g_myplex_token},prefix="?")
         else:
             playurl=url
     
@@ -2085,9 +2266,9 @@ class PlexLibrary(Screen):
         elif url[0:4] == "http":
             printl( "We are playing a stream", self, "I")
             if '?' in url:
-                playurl=url+self.getAuthDetails({'token':_PARAM_TOKEN})
+                playurl=url+self.getAuthDetails({'token':self.g_myplex_token})
             else:
-                playurl=url+self.getAuthDetails({'token':_PARAM_TOKEN},prefix="?")
+                playurl=url+self.getAuthDetails({'token':self.g_myplex_token},prefix="?")
         else:
             playurl=url
       
@@ -2208,7 +2389,7 @@ class PlexLibrary(Screen):
         if 'trailers.apple.com' in vids:
             url=vids+"|User-Agent=QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
         elif server in vids:
-            url=vids+self.getAuthDetails({'token': _PARAM_TOKEN})
+            url=vids+self.getAuthDetails({'token': self.g_myplex_token})
         else:
             url=vids
        
@@ -2520,25 +2701,23 @@ class PlexLibrary(Screen):
         # fullURL="http://"+server+myurl+"&X-Plex-Access-Key="+publicKey+"&X-Plex-Access-Time="+str(now)+"&X-Plex-Access-Code="+urllib.quote_plus(token)+"&"+self.g_capability
         #=======================================================================
         
-        #=======================================================================
-        # req = Request(streamURL)
-        # #req.add_header('X-Plex-Client-Capabilities', self.g_capability)
-        # #printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
-        # resp = urlopen(req)
-        # if resp is None:
-        #    raise IOError, "No response from Server"
-        # urls = []
-        # for line in resp:
-        #    if line[0] != '#':
-        #        urls.append("http://%s/%s/%s" % (server, streamPath, line[:-1]))
-        #        printl( "Got: http://%s/%s/%s" % (str(server), str(streamPath), str(line[:-1])),self, "I")
-        # resp.close()
-        # 
-        # indexURL = urls.pop()
-        # #fullURL = indexURL 
-        #=======================================================================
+        req = Request(streamURL)
+        #req.add_header('X-Plex-Client-Capabilities', self.g_capability)
+        #printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
+        resp = urlopen(req)
+        if resp is None:
+           raise IOError, "No response from Server"
+        urls = []
+        for line in resp:
+           if line[0] != '#':
+               urls.append("http://%s/%s/%s" % (server, streamPath, line[:-1]))
+               printl( "Got: http://%s/%s/%s" % (str(server), str(streamPath), str(line[:-1])),self, "I")
+        resp.close()
         
-        fullURL = streamURL
+        indexURL = urls.pop()
+        fullURL = indexURL 
+        
+        #fullURL = streamURL
         
         printl("Transcoded media location URL " + fullURL, self, "I")
         
@@ -2836,7 +3015,7 @@ class PlexLibrary(Screen):
         extraData={'type'         : "Video" ,
                    'thumb'        : self.getThumb(movie, server) ,
                    'fanart_image' : self.getFanart(movie, server) ,
-                   'token'        : _PARAM_TOKEN ,
+                   'token'        : self.g_myplex_token ,
                    'key'          : movie.get('key',''),
                    'ratingKey'    : str(movie.get('ratingKey',0)) }
     
@@ -3615,19 +3794,17 @@ class PlexLibrary(Screen):
             #printl( "Transcode format is " + self.g_transcodefmt, self, "I")
             printl( "Transcode quality is " + self.g_quality, self, "I")
             
-            #===================================================================
-            # baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-            # if int(self.g_quality) >= 3:
-            #   baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
-            # if int(self.g_quality) >= 4:
-            #   baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
-            # if int(self.g_quality) >= 5:
-            #   baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
-            # if int(self.g_quality) >= 6:
-            #   baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
-            # if int(self.g_quality) >= 9:
-            #   baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
-            #===================================================================
+            baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
+            if int(self.g_quality) >= 3:
+              baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
+            if int(self.g_quality) >= 4:
+              baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
+            if int(self.g_quality) >= 5:
+              baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
+            if int(self.g_quality) >= 6:
+              baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
+            if int(self.g_quality) >= 9:
+              baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
                 
             #===================================================================
             # self.g_audioOutput=__settings__.getSetting("audiotype")
@@ -3646,16 +3823,18 @@ class PlexLibrary(Screen):
             #===================================================================
             # from VLC defaults
             #===================================================================
-            protocols="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
+            #baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
             #protocols = "protocols=http-video"
             videoDecoders = "videoDecoders=mpeg2video{profile:high&resolution:1080&level:51},mpeg4{profile:high&resolution:1080&level:51},mpeg1video{profile:high&resolution:1080&level:51},mp4{profile:high&resolution:1080&level:51},h264{profile:high&resolution:1080&level:51}"
+            
+            #videoDecoders = "videoDecoders=h264{profile:high&resolution:1080&level:41}"
             #audioDecoders = "audioDecoders=mp3,dts{bitrate:2560000&channels:6},ac3{bitrate:2560000&channels:6}"
             
             #dts is not running for some reason
             audioDecoders = "audioDecoders=mp3,aac"
 
-            #self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
-            self.g_capability = urllib.quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
+            #self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("baseCapability="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
+            self.g_capability = urllib.quote_plus(baseCapability + ";" + videoDecoders + ";" + audioDecoders)
             #self.g_capability = urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)
             printl("Plex Client Capability = " + self.g_capability, self, "I")
             
@@ -3684,106 +3863,7 @@ class PlexLibrary(Screen):
         printl("", self, "C")   
         return True
     
-    #===========================================================================
-    # ##So this is where we really start the plugin.
-    # printl( "DreamPlex -> Script argument is " + str(sys.argv[1]), False)
-    # 
-    # try:
-    #    params=self.get_params(sys.argv[2])
-    # except:
-    #    params={}
-    #        
-    # #Now try and assign some data to them
-    # param_url = params.get('url',None)
-    # param_name = urllib.unquote_plus(params.get('name',""))
-    # mode = int(params.get('mode',-1))
-    # param_id=params.get('id',None)
-    # param_transcodeOverride = int(params.get('self.transcode',0))
-    # param_identifier = params.get('identifier',None)
-    # _PARAM_TOKEN = params.get('X-Plex-Token',None)
-    # 
-    # if str(sys.argv[1]) == "skin":
-    #    self.discoverAllServers()
-    #    self.skin()
-    # elif sys.argv[1] == "update":
-    #    url=sys.argv[2]
-    #    self.libraryRefresh(url)
-    # elif sys.argv[1] == "watch":
-    #    url=sys.argv[2]
-    #    self.watched(url)
-    # elif sys.argv[1] == "setting":
-    #    __settings__.openSettings()
-    # elif sys.argv[1] == "delete":
-    #    url=sys.argv[2]
-    #    self.deleteMedia(url)
-    # elif sys.argv[1] == "refresh":
-    #    xbmc.executebuiltin("Container.Refresh")
-    # else:
-    #   
-    #    pluginhandle = int(sys.argv[1])
-    #                    
-    #    if DEBUG == "true":
-    #        print "DreamPlex -> Mode: "+str(mode)
-    #        print "DreamPlex -> URL: "+str(param_url)
-    #        print "DreamPlex -> Name: "+str(param_name)
-    #        print "DreamPlex -> ID: "+ str(param_id)
-    #        print "DreamPlex -> identifier: " + str(param_identifier)
-    #        print "DreamPlex -> token: " + str(_PARAM_TOKEN)
-    # 
-    #    #Run a function based on the mode variable that was passed in the URL       
-    #    if ( mode == None ) or ( param_url == None ) or ( len(param_url)<1 ):
-    #        self.discoverAllServers()
-    #        self.displaySections()
-    #    elif mode == 0:
-    #        self.getContent(param_url)
-    #    elif mode == 1:
-    #        self.getShowsFromSection(param_url)
-    #    elif mode == 2:
-    #        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-    #        self.getMoviesFromSection(param_url)
-    #    elif mode == 3:
-    #        self.artist(param_url)
-    #    elif mode == 4:
-    #        self.getSeasonsOfShow(param_url)
-    #    elif mode == 5:
-    #        self.playLibraryMedia(param_id,param_url)
-    #    elif mode == 6:
-    #        self.getEpisodesOfSeason(param_url)
-    #    elif mode == 7:
-    #        self.PlexPlugins(param_url)
-    #    elif mode == _MODE_PROCESSXML:
-    #        self.processXML(param_url)
-    #    elif mode == 12:
-    #        self.PLAY(param_url)
-    #    elif mode == 14:
-    #        self.albums(param_url)
-    #    elif mode == 15:
-    #        self.tracks(param_url)
-    #    elif mode == 16:
-    #        self.photo(param_url)
-    #    elif mode == 17:
-    #        self.music(param_url)
-    #    elif mode == 18:
-    #        self.videoPluginPlay(param_url,param_identifier)
-    #    elif mode == 19:
-    #        self.plexOnline(param_url)
-    #    elif mode == 20:
-    #        self.install(param_url,param_name)
-    #    elif mode == 21:
-    #        self.channelView(param_url)
-    #    elif mode == 22:
-    #        self.discoverAllServers()
-    #        self.displayServers(param_url)
-    #    elif mode == 23:
-    #        self.playLibraryMedia(param_id,param_url,override=True)
-    #    elif mode == 24:
-    #        self.myPlexQueue()
-    # 
-    # print "===== DreamPlex STOP ====="
-    #   
-    # #clear done and exit.        
-    # sys.modules.clear()
-    #===========================================================================
+    
 
     #===============================================================================
     # 
@@ -3906,52 +3986,20 @@ class PlexLibrary(Screen):
             @return: None       
         '''
         printl("", self, "S")
-        #=======================================================================
-        # self.g_bonjour = __settings__.getSetting('bonjour')
-        #=======================================================================
-    
-        #Set to Bonjour
-        if self.g_bonjour == "1":
-            printl("DreamPlex -> local Bonjour discovery setting enabled.", self, "I")
-    #===========================================================================
-    #        try:
-    #            printl("Attempting bonjour lookup on _plexmediasvr._tcp")
-    #            bonjourServer = bonjourFind("_plexmediasvr._tcp")
-    #                                                
-    #            if bonjourServer.complete:
-    #                printl("Bonjour discovery completed")
-    #                #Add the first found server to the list - we will find rest from here
-    #                
-    #                bj_server_name = bonjourServer.bonjourName[0].encode('utf-8')
-    #                
-    #                self.g_serverDict.append({'name'      : bj_server_name.split('.')[0] ,
-    #                                     'address'   : bonjourServer.bonjourIP[0]+":"+bonjourServer.bonjourPort[0] ,
-    #                                     'discovery' : 'bonjour' , 
-    #                                     'token'     : None ,
-    #                                     'uuid'      : None })
-    #                                     
-    #                                     
-    #            else:
-    #                printl("BonjourFind was not able to discovery any servers")
-    # 
-    #        except:
-    #            print "DreamPlex -> Bonjour Issue.  Possibly not installed on system"
-    #            #TODO add message dialog to ask if it should be installed
-    #            #===============================================================
-    #            # xbmcgui.Dialog().ok("Bonjour Error","Is Bonojur installed on this system?")
-    #            #===============================================================
-    #===========================================================================
-    
-        #Set to Disabled       
-        else:
-            #===================================================================
-            # self.g_host = __settings__.getSetting('ipaddress')
-            # self.g_port =__settings__.getSetting('port')
-            #===================================================================
+
+        #!!!!
+        self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
+        #!!!!
             
-            #!!!!
-            self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
-            #!!!!
+        if self.g_myplex_username != "": #check if this server has myplex data
+            printl( "DreamPlex -> Adding myplex as a server location", self, "I")
+            self.g_serverDict.append({'serverName': 'MYPLEX' ,
+                                 'address'   : "my.plex.app" ,
+                                 'discovery' : 'myplex' , 
+                                 'token'     : None ,
+                                 'uuid'      : None ,
+                                 'role'      : 'master' })
+        else:
             
             if not self.g_host or self.g_host == "<none>":
                 self.g_host = None
@@ -3970,19 +4018,39 @@ class PlexLibrary(Screen):
                                      'discovery' : 'local' , 
                                      'token'     : None ,
                                      'uuid'      : None ,
-                                     'role'      : 'master' })    
-            
-        #=======================================================================
-        # if __settings__.getSetting('myplex_user') != "":
-        #=======================================================================
-        if self.g_myplex_username != "":
-            printl( "DreamPlex -> Adding myplex as a server location", self, "I")
-            self.g_serverDict.append({'serverName': 'MYPLEX' ,
-                                 'address'   : "my.plex.app" ,
-                                 'discovery' : 'myplex' , 
-                                 'token'     : None ,
-                                 'uuid'      : None ,
-                                 'role'      : 'master' })
+                                     'role'      : 'master' })   
+     
+     #==========================================================================
+     #   #Set to Bonjour
+     #   if self.g_bonjour == "1":
+     #       printl("DreamPlex -> local Bonjour discovery setting enabled.", self, "I")
+     #       try:
+     #           printl("Attempting bonjour lookup on _plexmediasvr._tcp")
+     #           bonjourServer = bonjourFind("_plexmediasvr._tcp")
+     #                                               
+     #           if bonjourServer.complete:
+     #               printl("Bonjour discovery completed")
+     #               #Add the first found server to the list - we will find rest from here
+     #               
+     #               bj_server_name = bonjourServer.bonjourName[0].encode('utf-8')
+     #               
+     #               self.g_serverDict.append({'name'      : bj_server_name.split('.')[0] ,
+     #                                    'address'   : bonjourServer.bonjourIP[0]+":"+bonjourServer.bonjourPort[0] ,
+     #                                    'discovery' : 'bonjour' , 
+     #                                    'token'     : None ,
+     #                                    'uuid'      : None })
+     #                                    
+     #                                    
+     #           else:
+     #               printl("BonjourFind was not able to discovery any servers")
+     # 
+     #       except:
+     #           print "DreamPlex -> Bonjour Issue.  Possibly not installed on system"
+     #           #TODO add message dialog to ask if it should be installed
+     #           #===============================================================
+     #           # xbmcgui.Dialog().ok("Bonjour Error","Is Bonojur installed on this system?")
+     #           #===============================================================            
+     #==========================================================================
         
         
         printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
@@ -4049,3 +4117,286 @@ class PlexLibrary(Screen):
         printl("Unique server List: " + str(localServers), self, "I")
         printl("", self, "C")
         return localServers   
+
+#===============================================================================
+# 
+#===============================================================================
+class QueueSink(Thread):
+    '''
+    Background Queue Clear Mechanism
+    '''
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def __init__(self, queue):
+        printl("", self, "S")
+        
+        printl( "Starting worker to clear the Download Queue", self, "I")
+        self.queue = queue
+        Thread.__init__(self)
+        
+        printl("", self, "C")
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def run(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        file = "" # set it to something empty to we will enter the while loop
+        ofile = ""
+        
+        while not self.queue.empty() or file is not None:
+            try:
+                (file, url) = self.queue.get(True, 5)
+                self.queue.task_done()
+                if file == "Thread Exit" and url is None:
+                    # Put it back as this tells the workers to exit
+                    self.queue.put(("Thread Exit", None))
+                    file = ofile
+                    break
+                ofile = file
+            except Exception, e:
+                printl( "Caught exception when trying to get from the queue.. exiting..", self, "I")
+                break
+        
+        if file is not None and file != "":
+            printl("Cleaning up possibly incomplete file: " + str(file), self, "I")
+            
+            try:
+                remove(file) # Remove any existing file as we want to nuke anything previously downloaded
+            except Exception, e:
+                pass
+            try:
+                remove(file + ".cuts")
+            except Exception, e:
+                pass
+            try:
+                remove(file + ".meta")
+            except Exception, e:
+                pass
+            try:
+                remove(file + ".ready")
+            except Exception, e:
+                pass
+            try:
+                remove(file + ".wait")
+            except Exception, e:
+                pass
+        
+        printl("", self, "C")
+
+#===============================================================================
+# 
+#===============================================================================
+class ThreadStream(Thread):
+    '''
+    Background Stream Decoder and Builder
+    '''
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def __init__(self, streamQueue, urlQueue):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.streamQueue = streamQueue
+        self.urlQueue = urlQueue
+        Thread.__init__(self)
+        
+        printl("", self, "C")
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def run(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        cutsList = []
+        cutsParser = struct.Struct('>QI') # big-endian, 64-bit PTS and 32-bit type
+        self.time = time()
+        printl( "Worker started..", self, "I")
+        while True:
+            while self.streamQueue.empty():
+                sleep(1)
+            try:
+                (indexUrl, cacheFile, mediaDuration, capabilities) = self.streamQueue.get(True, 60)
+                while indexUrl is None:
+                    sleep(0.1)
+                    (indexUrl, cacheFile, mediaDuration, capabilities) = self.streamQueue.get(True, 60)
+                if indexUrl == "Thread Exit" and cacheFile is None:
+                    printl( "Worker exiting..", self, "I")
+                    break
+                
+                req = Request(indexUrl)
+                req.add_header('X-Plex-Client-Capabilities', capabilities)
+                resp = urlopen(req)
+                
+                if resp is None:
+                    raise IOError, "No response from Server"
+                printl( "[Plex Background Stream Builder] Opened: " + str(indexUrl), self, "I")
+                
+                cutsFile = cacheFile + ".cuts"
+                cfp = open(cutsFile + ".tmp", 'wb', 1)
+                cfp.write(cutsParser.pack(0, 0))
+                streamSegPath = indexUrl.replace("/index.m3u8", "")
+                length = 0.0
+                cc = 0
+                
+                for line in resp:
+                    # Don't forget that the line will have a CR/LF on the end..
+                    if line[0] != '#' and line[-4:-1] == ".ts":
+                        cc += 1
+                        self.urlQueue.put((cacheFile, "%s/%s" % (streamSegPath, line[:-1])))
+                    elif line[:7] == "#EXTINF":
+                            # This is kludgy in that it relies on Plex not changing the line from: #EXTINF:1, nodesc
+                            length += float(line[8:-9])
+                            if cc % 10:
+                                cfp.write(cutsParser.pack(length * 90000, 0)) # MPEG-TS has a 90000Hz timebase, so multiply the current length to get the position
+                
+                cfp.write(cutsParser.pack(int(mediaDuration) * 90, 3))
+                cfp.close()
+                rename(cutsFile + ".tmp", cutsFile)
+                resp.close()
+                self.streamQueue.task_done()
+            except Exception, e:
+                printl( "ERROR: setting up stream! [%s]" % (str(e)))
+                pass
+            
+            printl("", self, "C")
+
+#===============================================================================
+# 
+#===============================================================================
+class ThreadUrl(Thread):
+    '''
+    Background Url Downloader
+    '''
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def __init__(self, queue):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.queue = queue
+        Thread.__init__(self)
+        
+        printl("", self, "C")
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def run(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.time = time()
+        printl( "Worker started..", self, "I")
+        while True:
+            c = 0
+            while self.queue.empty():
+                # sleep 2 seconds whilst the queue is still empty
+                # I don't like doing this as it means there is a thread
+                # always active in the Dreambox, but it should not take a
+                # lot of resources
+                sleep(2)
+            (file, url) = self.queue.get(True, 60)
+            # If we have queue padding, just grab the next and sleep a little
+            while file is None:
+                sleep(0.01)
+                (file, url) = self.queue.get(True, 60)
+            if file == "Thread Exit" and url is None:
+                printl( "Worker exiting..", self, "I")
+                break
+            fp = open(file, "wb+")
+            try:
+                remove(file + ".ready")
+            except:
+                pass # we blindly try to remove the read file (this would indicate a previous crash, which shouldn't happen) but still, if it's there it will
+                     # break more stuff if it is still there, if it's not just continue on regardless (the normal behavior)
+            while True:
+#                printl( "Getting %s chunk from: %s" % (file, url))
+                try:
+                    req = urlopen(url)
+                    while True:
+                        chunk = req.read(16384)
+                        if not chunk:
+                            break
+                        fp.write(chunk)
+                    self.queue.task_done()
+                    
+                    if self.queue.empty():
+#                        printl( "Downloaded all chunks of: %s!" % (file), self, "I")
+                        break
+                    else:
+                        (file, url) = self.queue.get(True, 60) # Grab next URL (we do this at the end so that we can keep the file open outside the main loopa)
+                        c += 1
+                        # buffer the first 60 segments as fast as we can, then slow it down to give the CPU back to the media player so the video is smooth
+                        # even when streaming 1080p 6 channel AC3 videos, should probably make this an 'advanced config' option as different CPU speeds may
+                        # require adjustment, but 0.5 - 0.02 works fine on my DM800PVR, values less than 0.1 cause high CPU usage, but heed this warning,
+                        # downloading each segment (and wait times) must not exceed 1 second unless the segment size is more than 1 second of stream (usually not)
+                        if c > 60:
+                            sleep(0.2) 
+                        else:
+                            if c == 60:
+                                # At the 60 segments mark (usually around 60 seconds worth), we tell the main thread we are ready and pause the downloads
+                                # Sleep() calls allow the main thread to use most CPU from now, so we mark a semaphore to tell the main thread we're 'ready'
+                                # The main thread will then, when it finds it, create a 'wait' file and start the media player, we wait when it's being started
+                                # as partial buffer writes cause the media player to EOF error out.  This is stopped by pausing the download and resuming
+                                # when the waitfile is removed by the main thread.  We then clean up the 'ready' file, pause another 5 seconds, and resume
+                                # the download.
+                                printl( "Got the first %s segments, waiting for the player to start..." % (str(c)),self, "I")
+                                fp1 = open(file + ".ready", 'w') # At the 30 second mark, pause for 10 seconds to allow the media player to start
+                                fp1.close()
+                                while path.exists(file + ".ready"):
+                                    try:
+                                        ex = path.exists(file + ".wait")
+                                        while not ex:
+                                            printl( "waitfile was not found.. waiting for it...", self, "I")
+                                            sleep(1)
+                                            ex = path.exists(file + ".wait")
+                                        printl( "Waiting for player to complete startup..", self, "I")
+                                        while ex:
+                                            printl( "waitfile found.. waiting for it to be deleted...", self, "I")
+                                            sleep(1)
+                                            ex = path.exists(file + ".wait")
+                                        printl( "Restarting the segment download...", self, "I")
+                                        break
+                                    except:
+                                        # .wait file does not exist but .ready file does, so we just sleep
+                                        sleep(1)
+                                        pass
+                                # broken out of the loop so we remove the .ready file
+                                printl( "Removing .ready file...", self, "I")
+                                remove(file + ".ready")
+                                printl( "Restarted the segment download!", self, "I")
+                except Exception, e:
+                    printl ("Error downloading %s (%s), will try and continue.." % (str(url), str(e)), self, "I")
+                    try:
+                        if self.queue.empty():
+                            break
+                        else:
+                            (file, url) = self.queue.get(True, 60) # get the next URL or we will keep trying to download the error'd one which isn't going to help!
+                            if file == "Thread Exit" and url is None:
+                                printl( "Worker exiting..", self, "I")
+                                break
+                        pass
+                    except:
+                        printl ("ERROR: continue failed, aborting everything!", self, "I")
+                        break
+                        pass # I know this is not needed, but it helps the unfamiliar with python understand that the exception is caught and the thread doesn't abort.
+            fp.close()
+            printl ("Completed buffering, %s segments downloaded in total.  Sleeping thread..." % (str(c)), self, "I")
+            
+            printl("", self, "C")

@@ -103,16 +103,24 @@ def initServerEntryConfig():
 	i = len(config.plugins.dreamplex.Entries) -1
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS"))])
+	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
 	config.plugins.dreamplex.Entries[i].ip 				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].dns 			= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].transcode       = ConfigYesNo(default = False)
-	#config.plugins.dreamplex.Entries[i].quality			= ConfigInteger(default=4, limits=(1, 12))
 	config.plugins.dreamplex.Entries[i].quality         = ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
 	#config.plugins.dreamplex.Entries[i].audioOutput     = ConfigSelection(default="2", choices = [("0", _("mp3,aac")),("1", _("mp3,aac,ac3")),("2", _("mp3,aac,ac3,dts"))])
 	#config.plugins.dreamplex.Entries[i].streamMode		= ConfigSelection(default="0", choices = [("0", _("HTTP Streaming")),("1", _("Local Buffer Mode")),("2", _("Direct Play"))])
 	#config.plugins.dreamplex.Entries[i].transcodeType   = ConfigSelection(default="0", choices = [("0", _("m3u8")),("1", _("flv"))])
+	
+	# myPlex
+	config.plugins.dreamplex.Entries[i].myplexUsername	= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexPassword	= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexToken   	= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)	
+	
+	# WOL
 	config.plugins.dreamplex.Entries[i].wol			    = ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].wol_mac         = ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))

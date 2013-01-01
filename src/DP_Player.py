@@ -52,14 +52,18 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #===============================================================================    
 class DP_Player(MoviePlayer):
     
-    ENIGMA_SERVICEGS_ID = 0x1001 #4097
-    
     ENIGMA_SERVICE_ID = 0
+    ENIGMA_SERVICEGS_ID = 0x1001 #4097
+    ENIGMA_SERVICETS_ID = 0x1002
     
-    startNewServiceOnPlay = False
+    DEFAULT_VIDEO_PID = 0x44
+    DEFAULT_AUDIO_PID = 0x45
+    DEFAULT_VIDEO_PID = 100
+    DEFAULT_AUDIO_PID = 101
+    
+    STOP_BEFORE_UNPAUSE = False
     
     seek = None
-
     resume = False
     resumeStamp = 0
     server = None
@@ -68,6 +72,7 @@ class DP_Player(MoviePlayer):
     transcodingSession = None
     nTracks = False
     switchedLanguage = False
+    startNewServiceOnPlay = False
   
     def __init__(self, session, playerData, resume=False):
         '''
@@ -78,30 +83,48 @@ class DP_Player(MoviePlayer):
                 
         self.startNewServiceOnPlay = False
         
+        # go through the data out of the function call
         self.resume = resume
-        self.resumeStamp = int(playerData['resumeStamp']) / 1000 #plex stores seconds * 1000
+        self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
         self.server = str(playerData['server'])
         self.id = str(playerData['id'])
         self.url = str(playerData['playUrl'])
         self.transcodingSession = str(playerData['transcodingSession'])
         
-        printl("Checking for usable gstreamer service (built-in)... ",self, "I")
-  
-        if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
-            printl("found usable gstreamer service (builtin) ...", self, "I")
-            self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-            #STOP_BEFORE_UNPAUSE = False
+        # check for playable services
+        printl( "Checking for builtin/pre-registered servicets ... ", self, "I")
+        if self.isValidServiceId(self.ENIGMA_SERVICETS_ID):
+            printl( "yes", self, "I")
+            self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
+            self.STOP_BEFORE_UNPAUSE = False
         else:
-            printl("no usable gstreamer service (built-in) found ...", self, "I")
-            #todo hier eine meldung mit dem hinweis auf systemcheck
-            #session.open(MessageBox, _("Please try Systemcheck to install gstreamer!"), MessageBox.TYPE_INFO) 
+            printl( "no", self, "I")
+            printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
+            
+            if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
+                printl( "yes", self, "I")
+                self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+                self.STOP_BEFORE_UNPAUSE = False
+            else:
+                printl( "no", self, "I")
+                printl( "Checking for existing and usable servicets.so ... ", self, "I")
+                try:
+                    import servicets
+                except Exception, e:
+                    printl("Exception: " + str(e), self, "I")
+                    printl( "no", self, "I")
+                    printl( "No valid Plex-Service found - Plex-streaming not supported", self, "I")
+                else:
+                    printl ("yes", self, "I")
+                    self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
+                    self.STOP_BEFORE_UNPAUSE = True
                 
-                    
-        #MoviePlayer.__init__(self, session, service)
+        # lets built the sref for the movieplayer out of the gathered information            
         printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
         sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
         sref.setName("DreamPlex")
-
+        
+        # lets call the movieplayer
         MoviePlayer.__init__(self, session, sref)
         
         self.skinName = "DPS_PlexPlayer"
