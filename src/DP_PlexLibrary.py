@@ -1748,6 +1748,10 @@ class PlexLibrary(Screen):
     #===========================================================================
     def getAudioSubtitlesMedia(self, server, id ): # CHECKED
         '''
+        Cycle through the Parts sections to find all "selected" audio and subtitle streams
+        If a stream is marked as selected=1 then we will record it in the dict
+        Any that are not, are ignored as we do not need to set them
+        We also record the media locations for playback decision later on
         '''
         printl("", self, "S")
         printl("Gather media stream info", self, "I" ) 
@@ -1854,9 +1858,14 @@ class PlexLibrary(Screen):
       
         server = self.getServerFromURL(vids)
         
-        streams=self.getAudioSubtitlesMedia(server,id)     
-        url = self.selectMedia(streams['partsCount'],streams['parts'], server)
+        streams=self.getAudioSubtitlesMedia(server,id) 
         
+        printl("partsCount: " + str(streams['partsCount']), self, "D")
+        printl("parts: " + str(streams['parts']), self, "D")
+        printl("server: " + str(server), self, "D")    
+        
+        url = self.selectMedia(streams['partsCount'],streams['parts'], server)
+
         #=======================================================================
         # #so läufts aber mal sehen ob wir das hinbekommen ohne das wir etliche zeile code zu überspringen
         # test = url
