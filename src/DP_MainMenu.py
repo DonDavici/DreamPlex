@@ -956,7 +956,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 		self["entrylist"] = DPH_ServerEntryList([])
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
-			 "ok"	:	self.keyOK,
+			 "ok"	:	self.keyYellow,
 			 "back"	:	self.keyClose,
 			 "red"	:	self.keyRed,
 			 "yellow":	self.keyYellow,
@@ -1006,7 +1006,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def keyOK(self):
+	def keyOK(self): #not in use for now
 		'''
 		'''
 		printl("", self, "S")
