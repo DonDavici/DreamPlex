@@ -39,6 +39,8 @@ from DP_View import DP_View
 
 from DPH_Arts import getTranscodeUrl, getPictureData
 
+from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #------------------------------------------------------------------------------------------
 
@@ -409,8 +411,14 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
+		instance = Singleton()
+		plexInstance = instance.getPlexInstance()
+		token = plexInstance.getAccessToken()
+		
 		download_url = getTranscodeUrl("ArtPoster", self.selection, str(182), str(268))
-		#download_url = self.getPosterUrl()
+		if token != None:
+			download_url += token
+
 		printl( "download url " + download_url, self, "D")
 		downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadCallback())
 		
@@ -423,9 +431,16 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
+		instance = Singleton()
+		plexInstance = instance.getPlexInstance()
+		token = plexInstance.getAccessToken()
+		
 		download_url = getTranscodeUrl("ArtBackdrop", self.selection, str(450), str(260))
-		#download_url = self.getBackdropUrl()
+		
+		if token != None:
+			download_url += token
 		printl( "download url " + download_url, self, "D")
+		
 		downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadCallback())
 		
 		printl("", self, "C")

@@ -2002,6 +2002,24 @@ class PlexLibrary(Screen):
     #===========================================================================
     # 
     #===========================================================================
+    def getAccessToken(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        if self.g_connectionType == "2":
+            token = self.getAuthDetails({'token':self.g_myplex_accessToken})
+            printl("accessToken: " +  str(token), self, "D")
+        else:
+            token = None
+        
+        printl("accessToken: " +  str(token), self, "D")
+        printl("", self, "C")
+        return token
+    
+    #===========================================================================
+    # 
+    #===========================================================================
     def setAudioSubtitles(self, stream ): # CHECKED
         '''
         '''

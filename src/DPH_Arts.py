@@ -38,11 +38,14 @@ def getTranscodeUrl(picturePointer, selection, width, height):
     
     picUrl = "unknown"
     
+    serverPicData = selection[1][picturePointer]
+    printl("serverPicData: " + str(serverPicData), __name__, "D")
+    
     try:
         if selection[1][picturePointer].split('/')[0] == "http:":
-            picData =  selection[1][picturePointer]
+            picData =  serverPicData
         else:    
-            picData= str("http://" + selection[1]["server"] + selection[1][picturePointer])
+            picData= str("http://" + selection[1]["server"] + serverPicData)
         
         picUrl = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (selection[1]["server"], urllib.quote_plus(picData), width, height)
     except:
