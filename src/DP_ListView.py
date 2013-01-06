@@ -256,7 +256,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		text = "%s" % (_(self.activeSort[0]))
+		text = "Sorted by: %s" % (_(self.activeSort[0]))
 		self["key_red"].setText(text)
 		super(getViewClass(), self).sort()
 		
