@@ -172,6 +172,7 @@ class PlexLibrary(Screen):
     g_capability = ""
     g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
     g_session = None
+    g_serverConfig = None
     
     #Create the standard header structure and load with a User Agent to ensure we get back a response.
     g_txheaders = {
@@ -190,7 +191,8 @@ class PlexLibrary(Screen):
         self.g_session = session
 
         printl("running on " + str(sys.version_info), self, "I")
-        
+        # global serverConfig
+        self.g_serverConfig = serverConfig
                 
         # global settings
         self.g_secondary = str(config.plugins.dreamplex.showFilter.value).lower()
@@ -202,6 +204,7 @@ class PlexLibrary(Screen):
         self.g_port = str(serverConfig.port.value)
         self.g_transcode = str(serverConfig.transcode.value).lower()
         self.g_quality = str(serverConfig.quality.value)
+        self.g_myplex_token = str(serverConfig.myplexToken.value)
 
         printl("using this serverName: " +  self.g_name, self, "I") 
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
@@ -214,10 +217,15 @@ class PlexLibrary(Screen):
             self.g_myplex_password = serverConfig.myplexPassword.value
             self.g_myplex_url      = serverConfig.myplexUrl.value
             
-            if self.g_myplex_token == "" or serverConfig.renewMyplexToken.value.lower() == "true":
+            if self.g_myplex_token == "" or serverConfig.renewMyplexToken.value == True:
                 self.g_myplex_token = self.getNewMyPlexToken()
+                printl("serverconfig: " + str(serverConfig), self, "D")
+                serverConfig.myplexTokenUsername.value = self.g_myplex_username
+                serverConfig.myplexTokenUsername.save()
+                serverConfig.myplexToken.value = self.g_myplex_token
+                serverConfig.myplexToken.save()
             else:
-                self.g_myplex_token    = serverConfig.myplexToken.value
+                self.g_myplex_token = serverConfig.myplexToken.value
             
             printl("myplexUrl: " +  self.g_myplex_url, self, "I")    
             printl("myplex_username: " +  self.g_myplex_username, self, "I")
@@ -1136,6 +1144,11 @@ class PlexLibrary(Screen):
     #        print error
     #        return False
     #===========================================================================
+        
+        #lets change back renew token to false 
+        self.g_serverConfig.renewMyplexToken.value = False
+        self.g_serverConfig.renewMyplexToken.save()
+        
         printl ("token: " + token, self, "D")
         printl("", self, "C")
         return token

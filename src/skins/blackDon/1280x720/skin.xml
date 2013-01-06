@@ -177,6 +177,7 @@
 		<!-- functions -->
 		<widget source="key_red" render="Label" position="71,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 		<widget source="key_green" render="Label" position="373,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
+		<widget source="key_yellow" render="Label" position="675,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 	</screen>
 
 	<!-- DPS_PlexPlayer -->

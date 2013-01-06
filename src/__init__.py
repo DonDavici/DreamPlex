@@ -115,9 +115,10 @@ def initServerEntryConfig():
 	#config.plugins.dreamplex.Entries[i].transcodeType   = ConfigSelection(default="0", choices = [("0", _("m3u8")),("1", _("flv"))])
 	
 	# myPlex
-	config.plugins.dreamplex.Entries[i].myplexUsername	= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexPassword	= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexToken   	= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexToken   			= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)	
 	
 	# WOL
