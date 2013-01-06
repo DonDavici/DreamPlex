@@ -1223,19 +1223,24 @@ class PlexLibrary(Screen):
         
         #First determine what sort of 'file' file is
         printl("physical file location: " + str(file), self, "I")   
-        if file[0:2] == "\\\\":
-            printl("Looks like a UNC",self, "I")
-            type="UNC"
-        elif file[0:1] == "/" or file[0:1] == "\\":
-            printl("looks like a unix file", self, "I")
-            type="nixfile"
-        elif file[1:3] == ":\\" or file[1:2] == ":/":
-            printl("looks like a windows file", self, "I")
-            type="winfile"
-        else:
-            printl("uknown file type", self, "I")
-            printl("file = " + str(file),self, "I")
-            type="notsure"
+        try:
+            if file[0:2] == "\\\\":
+                printl("Looks like a UNC",self, "I")
+                type="UNC"
+            elif file[0:1] == "/" or file[0:1] == "\\":
+                printl("looks like a unix file", self, "I")
+                type="nixfile"
+            elif file[1:3] == ":\\" or file[1:2] == ":/":
+                printl("looks like a windows file", self, "I")
+                type="winfile"
+            else:
+                printl("uknown file type", self, "I")
+                printl("file = " + str(file),self, "I")
+                type="notsure"
+        except Exception:
+                printl("uknown file type", self, "I")
+                printl("file = " + str(file),self, "I")
+                type="notsure"  
         
         # 0 is auto select.  basically check for local file first, then stream if not found
         if self.g_stream == "0":
@@ -1760,6 +1765,7 @@ class PlexLibrary(Screen):
         suburl="http://"+server+"/library/metadata/"+id
                 
         html=self.getURL(suburl)
+        printl("retrived html: " + str(html), self, "D")
         tree=etree.fromstring(html)
     
         parts=[]
@@ -1865,6 +1871,7 @@ class PlexLibrary(Screen):
         printl("server: " + str(server), self, "D")    
         
         url = self.selectMedia(streams['partsCount'],streams['parts'], server)
+        printl("url: " + str(url), self, "I")
 
         #=======================================================================
         # #so läufts aber mal sehen ob wir das hinbekommen ohne das wir etliche zeile code zu überspringen
@@ -1884,10 +1891,10 @@ class PlexLibrary(Screen):
             printl( "We are playing a stream", self, "I")
             if self.g_transcode == "true":
                 printl( "We will be transcoding the stream", self, "I")
-                playurl = self.transcode(id,url)+self.getAuthDetails({'token':self.g_myplex_accessToken})
+                playurl = self.transcode(id,url) #+self.getAuthDetails({'token':self.g_myplex_accessToken})
     
             else:
-                playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+                playurl=url #+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
         else:
             playurl=url
     
