@@ -712,7 +712,7 @@ class DP_Player(MoviePlayer):
         plexInstance = instance.getPlexInstance()
         
         #sample from log /video/:/transcode/segmented/stop?session=0EBD197D-389A-4784-8CC5-709BAD5E1137&X-Plex-Client-Capabilities=protocols%3Dhttp-live-streaming%2Chttp-mp4-streaming%2Chttp-streaming-video%2Chttp-streaming-video-720p%2Chttp-mp4-video%2Chttp-mp4-video-720p%3BvideoDecoders%3Dh264%7Bprofile%3Ahigh%26resolution%3A1080%26level%3A41%7D%3BaudioDecoders%3Dmp3%2Caac%7Bbitrate%3A160000%7D&X-Plex-Client-Platform=iOS&X-Plex-Product=Plex%2FiOS&X-Plex-Version=3.0.2&X-Plex-Device-Name=DDiPhone [192.168.45.6:62662] (4 live)
-        plexInstance.getURL("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession,suppress=True)
+        plexInstance.getURL("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
         
         printl("", self, "C")
     

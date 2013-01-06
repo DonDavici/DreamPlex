@@ -128,8 +128,15 @@
 		
 		<widget name="mybackdrop" transparent="0" zPosition="5" position="760,100" size="450,260" alphatest="blend" />
 		<eLabel text="loading ..." transparent="1" zPosition="4" halign="left" position="900,200" size="200,40" font="Modern;22" foregroundColor="#00404040"/>		
+		
+		<widget name="number_key_popup" zPosition="10" halign="center" valign="center" position="551,297" size="177,125" font="Modern;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
 		<!-- buttons -->
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/blackDon/1280x720/buttons/red.png" zPosition="8" position="53,695" size="266,2" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/key_0.png" zPosition="8" position="960,695" size="35,25" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/key_9.png" zPosition="8" position="1000,695" size="35,25" alphatest="blend" />
+		
 		<!-- functions -->
+		<widget source="key_red" render="Label" position="71,660" zPosition="8" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 
 	</screen>
 
@@ -177,6 +184,7 @@
 		<!-- functions -->
 		<widget source="key_red" render="Label" position="71,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 		<widget source="key_green" render="Label" position="373,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
+		<widget source="key_yellow" render="Label" position="675,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 	</screen>
 
 	<!-- DPS_PlexPlayer -->

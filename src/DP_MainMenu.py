@@ -257,10 +257,12 @@ class DPS_MainMenu(Screen):
 					t_url = params.get('t_url', "notSet")
 					t_mode = params.get('t_mode', "notSet")
 					t_final = params.get('t_final', "notSet")
+					t_accessToken = params.get('t_accessToken', "notSet")
 
 					self.s_url = t_url
 					self.s_mode = t_mode
 					self.s_final = t_final
+					self.s_accessToken = t_accessToken
 					
 					self.getFilterData()
 			
@@ -569,7 +571,7 @@ class DPS_MainMenu(Screen):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 
-		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
+		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_accessToken)
 
 		
 		self["menu"].setList(menuData)
@@ -954,7 +956,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 		self["entrylist"] = DPH_ServerEntryList([])
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
-			 "ok"	:	self.keyOK,
+			 "ok"	:	self.keyYellow,
 			 "back"	:	self.keyClose,
 			 "red"	:	self.keyRed,
 			 "yellow":	self.keyYellow,
@@ -1004,7 +1006,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def keyOK(self):
+	def keyOK(self): #not in use for now
 		'''
 		'''
 		printl("", self, "S")
@@ -1037,6 +1039,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 		if sel is None:
 			return
 		
+		printl("config selction: " +  str(sel), self, "D")
 		self.session.openWithCallback(self.updateList, DPS_ServerEntryConfigScreen, sel)
 		
 		printl("", self, "C")
@@ -1102,12 +1105,14 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			"green": self.keySave,
 			"red": self.keyCancel,
 			"blue": self.keyDelete,
-			"cancel": self.keyCancel
+			"cancel": self.keyCancel,
+			"yellow": self.keyYellow
 		}, -2)
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("OK"))
 		self["key_blue"] = StaticText(_("Delete"))
+		self["key_yellow"] = StaticText(_("check myPlex token"))
 
 		if entry is None:
 			self.newmode = 1
@@ -1126,7 +1131,9 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			getConfigListEntry(_("myPlex URL"), self.current.myplexUrl),
 			getConfigListEntry(_("myPlex Username"), self.current.myplexUsername),
 			getConfigListEntry(_("myPlex Password"), self.current.myplexPassword),
-			getConfigListEntry(_("myPlex Token (leave blank for autogenerate)"), self.current.myplexToken),
+			getConfigListEntry(_("renew myPlex token"), self.current.renewMyplexToken),
+			#getConfigListEntry(_("myPlex Token (just for information)"), self.current.myplexToken),
+			#getConfigListEntry(_("myPlex Username used for Token generation (just for information)"), self.current.myplexTokenUsername),
 			getConfigListEntry(_("Use transcoding"), self.current.transcode),
 			getConfigListEntry(_("Transcoding quality"), self.current.quality),
 			getConfigListEntry(_("Use Wake on Lan (WoL)"), self.current.wol),
@@ -1175,6 +1182,18 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		if self.newmode == 1:
 			config.plugins.dreamplex.Entries.remove(self.current)
 		ConfigListScreen.cancelConfirm(self, True)
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyYellow(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.session.open(MessageBox,_("myPlex Token:\n%s \nfor the user:\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 

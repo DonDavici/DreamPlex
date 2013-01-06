@@ -54,7 +54,7 @@ def getViews():
 	availableViewList = []
 	viewList = (
 			(_("List"), "DP_ListView", "DPS_ListView"), 
-			(_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
+			#(_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
 		)
 	
 	for view in viewList:
@@ -108,7 +108,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		# Initialise API Level for this screen
 		self.APILevel = 99 
-		printl("APILevel=" + str(self.APILevel))
+		printl("APILevel=" + str(self.APILevel), self, "D")
 
 		# Initialise library list
 		list = []
@@ -136,18 +136,18 @@ class DP_View(Screen, NumericalTextInput):
 			"down":       (self.onKeyDown, ""),
 			"up_quick":   (self.onKeyUpQuick, ""),
 			"down_quick": (self.onKeyDownQuick, ""),
-			"info":       (self.onKeyInfo, ""),
-			"menu":       (self.onKeyMenu, ""),
+			#"info":       (self.onKeyInfo, ""),
+			#"menu":       (self.onKeyMenu, ""),
 
 			"red":        (self.onKeyRed, ""),
-			"green":      (self.onKeyGreen, ""),
-			"yellow":     (self.onKeyYellow, ""),
-			"blue":       (self.onKeyBlue, ""),
+			#"green":      (self.onKeyGreen, ""),
+			#"yellow":     (self.onKeyYellow, ""),
+			#"blue":       (self.onKeyBlue, ""),
 
 			"red_long":        (self.onKeyRedLong, ""),
-			"green_long":      (self.onKeyGreenLong, ""),
-			"yellow_long":     (self.onKeyYellowLong, ""),
-			"blue_long":       (self.onKeyBlueLong, ""),
+			#"green_long":      (self.onKeyGreenLong, ""),
+			#"yellow_long":     (self.onKeyYellowLong, ""),
+			#"blue_long":       (self.onKeyBlueLong, ""),
 			
 			"1":       (self.onKey1, ""),
 			"2":       (self.onKey2, ""),
@@ -244,25 +244,40 @@ class DP_View(Screen, NumericalTextInput):
 
 	onNumerKeyLastChar = "#"
 
+	#===========================================================================
+	# 
+	#===========================================================================
 	def onNumberKey(self, number):
+		'''
+		'''
+		printl("", self, "S")
+		
 		printl(str(number), self, "I")
+		
 		key = self.getKey(number)
 		if key is not None:
 			keyvalue = key.encode("utf-8")
 			if len(keyvalue) == 1:
 				self.onNumerKeyLastChar = keyvalue[0].upper()
 				self.onNumberKeyPopup(self.onNumerKeyLastChar, True)
-		#self.onChooseFilterCallback(("ABC", ("ABC", True), "A.*"))
+				
+		printl("", self, "C")
 
+	#===========================================================================
+	# 
+	#===========================================================================
 	def onNumberKeyPopup(self, value, visible):
-		if self.APILevel < 6:
-			return
+		'''
+		'''
+		printl("", self, "S")
 		
 		if visible:
 			self["number_key_popup"].setText(value)
 			self["number_key_popup"].show()
 		else:
 			self["number_key_popup"].hide()
+		
+		printl("", self, "C")
 
 	#onNumberKeyTimeout
 	def timeout(self):
@@ -295,11 +310,13 @@ class DP_View(Screen, NumericalTextInput):
 
 	def onKeyLeft(self):
 		pass
+	
 	def onKeyRight(self):
 		pass
 
 	def onKeyLeftQuick(self):
 		pass
+	
 	def onKeyRightQuick(self):
 		pass
 
@@ -340,6 +357,10 @@ class DP_View(Screen, NumericalTextInput):
 		self.onChooseView()
 
 	activeSort = ("Default", None, False)
+	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def onToggleSort(self):
 		for i in range(len(self.onSortKeyValuePair)):
 			if self.activeSort[1] == self.onSortKeyValuePair[i][1]:
@@ -354,6 +375,9 @@ class DP_View(Screen, NumericalTextInput):
 		
 		self.refresh()
 
+	#===========================================================================
+	# 
+	#===========================================================================
 	def onChooseSortCallback(self, choice):
 		if choice is not None:
 			self.activeSort = choice[1]
