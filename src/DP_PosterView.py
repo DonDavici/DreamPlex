@@ -109,7 +109,7 @@ class DPS_PosterView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def _refresh(self, selection, changeBackdrop):
+	def _refresh(self, selection):
 		'''
 		'''
 		printl("", self, "S")

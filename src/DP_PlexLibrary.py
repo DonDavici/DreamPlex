@@ -206,6 +206,7 @@ class PlexLibrary(Screen):
         self.g_quality = str(serverConfig.quality.value)
         self.g_myplex_token = str(serverConfig.myplexToken.value)
 
+        printl("using this debugMode: " + str(config.plugins.dreamplex.debugMode.value), self, "D")
         printl("using this serverName: " +  self.g_name, self, "I") 
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
         printl("using transcode: " +  self.g_transcode, self, "I")
@@ -790,7 +791,7 @@ class PlexLibrary(Screen):
             #u= sys.argv[0] + "?url="+str(url)+aToken
             newUrl= str(url) + aToken
   
-        printl("URL to use for listing: " + newUrl)
+        printl("URL to use for listing: " + newUrl, self, "D")
     
         content = (newUrl, details, extraData, context)
         
