@@ -39,7 +39,6 @@ import uuid
 #===============================================================================
 # 
 #===============================================================================
-from Screens.Screen import Screen
 from time import time
 from urllib import urlencode, quote_plus
 from base64 import b64encode, b64decode
@@ -49,6 +48,10 @@ from urllib2 import urlopen, Request
 from random import randint, seed
 from threading import Thread
 from Queue import Queue
+
+from Screens.MessageBox import MessageBox
+from Screens.Screen import Screen
+from Screens.InputBox import InputBox
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
@@ -189,7 +192,7 @@ class PlexLibrary(Screen):
         
         Screen.__init__(self, session)
         self.g_session = session
-
+        error = False
         printl("running on " + str(sys.version_info), self, "I")
         # global serverConfig
         self.g_serverConfig = serverConfig
@@ -219,19 +222,24 @@ class PlexLibrary(Screen):
             self.g_myplex_url      = serverConfig.myplexUrl.value
             
             if self.g_myplex_token == "" or serverConfig.renewMyplexToken.value == True:
-                self.g_myplex_token = self.getNewMyPlexToken()
                 printl("serverconfig: " + str(serverConfig), self, "D")
-                serverConfig.myplexTokenUsername.value = self.g_myplex_username
-                serverConfig.myplexTokenUsername.save()
-                serverConfig.myplexToken.value = self.g_myplex_token
-                serverConfig.myplexToken.save()
+                self.g_myplex_token = self.getNewMyPlexToken()
+                
+                if self.g_myplex_token is False:
+                    error = True
+                    
+                else:
+                    serverConfig.myplexTokenUsername.value = self.g_myplex_username
+                    serverConfig.myplexTokenUsername.save()
+                    serverConfig.myplexToken.value = self.g_myplex_token
+                    serverConfig.myplexToken.save()
             else:
                 self.g_myplex_token = serverConfig.myplexToken.value
             
-            printl("myplexUrl: " +  self.g_myplex_url, self, "I")    
-            printl("myplex_username: " +  self.g_myplex_username, self, "I")
-            printl("myplex_password: " +  self.g_myplex_password, self, "I")
-            printl("myplex_token: " +  self.g_myplex_token, self, "I")
+            printl("myplexUrl: " +  str(self.g_myplex_url), self, "I")    
+            printl("myplex_username: " +  str(self.g_myplex_username), self, "I", True, 10)
+            printl("myplex_password: " +  str(self.g_myplex_password), self, "I", True, 6)
+            printl("myplex_token: " +  str(self.g_myplex_token), self, "I", True, 6)
             
         elif self.g_connectionType == "0":
             self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
@@ -250,15 +258,32 @@ class PlexLibrary(Screen):
                 printl("trying fallback to ip", self, "I")
                 self.g_host = "%d.%d.%d.%d" % tuple(serverConfig.ip.value) 
         
-        #Next lets check if for this server nas override is activated
-        self.checkNasOverride()
         
-        #Fill serverdata to global g_serverDict
-        self.discoverAllServers()
 
-
+        if error is True:
+            self.leaveOnError()
+        else:
+            #Next lets check if for this server nas override is activated
+            self.checkNasOverride()
+        
+            #Fill serverdata to global g_serverDict
+            self.discoverAllServers()
                                    
         printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def leaveOnError(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        mainMenuList = []
+        mainMenuList.append((_("Press exit to return"), ""))
+        
+        printl("", self, "C")
+        return mainMenuList
     
     #===========================================================================
     # 
@@ -568,12 +593,21 @@ class PlexLibrary(Screen):
             if server['discovery'] == "local" or server['discovery'] == "bonjour":                                                
                 html = self.getURL('http://'+server['address']+'/library/sections')
             elif server['discovery'] == "myplex":
-                html = self.getMyPlexURL('/pms/system/library/sections')
                 
-            if html is False:
+                if self.g_myplex_token == "ERROR":
+                    self.session.open(MessageBox,_("MyPlex Token error:\nCheck Username and Password.\n%s") % (self.g_myplex_token), MessageBox.TYPE_INFO)
+                    continue
+                else:
+                    html = self.getMyPlexURL('/pms/system/library/sections')
+                
+            if html is False or html is None:
+                self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % (html), MessageBox.TYPE_INFO)
                 continue
                     
-            tree = etree.fromstring(html).getiterator("Directory")
+            try:
+                tree = etree.fromstring(html).getiterator("Directory")
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
             
             for sections in tree:
                 
@@ -670,7 +704,7 @@ class PlexLibrary(Screen):
         printl("p_url: " + str(p_url), self, "I")
         printl("p_mode: " + str(p_mode), self, "I")
         printl("p_final: " + str(p_final), self, "I")
-        printl("p_accessToken: " + str(p_accessToken), self, "I")
+        printl("p_accessToken: " + str(p_accessToken), self, "I", True, 8)
         
         #===>
         mainMenuList = []
@@ -678,7 +712,11 @@ class PlexLibrary(Screen):
         self.g_myplex_accessToken = p_accessToken
         html = self.getURL(p_url)  
                 
-        tree = etree.fromstring(html)
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
+        
         directories = tree.getiterator("Directory")
         viewGroup = str(tree.get("viewGroup"))
         
@@ -863,9 +901,14 @@ class PlexLibrary(Screen):
         html = self.getMyPlexURL(url_path)
         
         if html is False:
+            printl("", self, "C")
             return
             
-        server=etree.fromstring(html).findall('Server')
+        try:
+            server=etree.fromstring(html).findall('Server')
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
+        
         count=0
         for servers in server:
             data=dict(servers.items())
@@ -887,7 +930,7 @@ class PlexLibrary(Screen):
                                 'owned'     : data.get('owned',0) ,  
                                 'master'    : master })
         
-        printl("tempServers = " + tempServers, self, "C") 
+        #printl("tempServers = " + tempServers, self, "C") 
         printl("", self, "C")                       
         return tempServers                         
         
@@ -914,9 +957,14 @@ class PlexLibrary(Screen):
                 break
             
         if html is False:
+            printl("", self, "C")
             return tempServers
-                 
-        server=etree.fromstring(html).findall('Server')
+        
+        try:
+            server=etree.fromstring(html).findall('Server')
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
+        
         count=0
         for servers in server:
             data=dict(servers.items())
@@ -936,7 +984,7 @@ class PlexLibrary(Screen):
     
             count+=1 
             
-        printl("tempServers = " + str(tempServers), self, "C")
+        #printl("tempServers = " + str(tempServers), self, "C")
         printl("", self, "C")                   
         return tempServers                         
 
@@ -955,9 +1003,9 @@ class PlexLibrary(Screen):
         printl("url = " + MYPLEX_SERVER + url_path, self, "D")
     
         printl( "Starting request", self, "I")
-        curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url_path + "?X-Plex-Token=" + self.g_myplex_token)
+        curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url_path + "?X-Plex-Token=" + str(self.g_myplex_token))
         
-        printl("curl_string: " + str(curl_string), self, "D")
+        printl("curl_string: " + str(curl_string), self, "D", True, 10)
         response = os.popen(curl_string).read()
         
         printl("====== XML returned =======", self, "I")
@@ -1042,7 +1090,7 @@ class PlexLibrary(Screen):
         if ( token == "" ) or (renew) or (user != self.g_myplex_username):
             token = self.getNewMyPlexToken()
         
-        printl("Using token: " + str(token) + "[Renew: " + str(renew) + "]", self, "D")
+        printl("Using token: " + str(token), self, "D", True, 8)
         printl("", self, "C")
         return token
 
@@ -1058,14 +1106,11 @@ class PlexLibrary(Screen):
         printl("", self, "S")
     
         printl("Getting new token", self, "I")
-        #=======================================================================
-        # self.g_myplex_username = __settings__.getSetting('myplex_user')
-        # self.g_myplex_password = __settings__.getSetting('myplex_pass')
-        #=======================================================================
             
         if ( self.g_myplex_username or self.g_myplex_password ) == "":
             printl("Missing myplex details in config...", self, "I")
-            printl("", self, "")
+            
+            printl("", self, "C")
             return False
         
         base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
@@ -1091,7 +1136,18 @@ class PlexLibrary(Screen):
         
         printl("curl_string: " + str(curl_string), self, "D")
         response = os.popen(curl_string).read()
-        token = etree.fromstring(response).findtext('authentication-token')
+        
+        try:
+            token = etree.fromstring(response).findtext('authentication-token')
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", response)
+             
+        if token == None:
+            self._showErrorOnTv("", response)
+            
+            printl("", self, "C")
+            return False
+        
         self.g_myplex_token = self.g_myplex_username + "|" + token
     #===========================================================================
     #    try:
@@ -1150,10 +1206,10 @@ class PlexLibrary(Screen):
         self.g_serverConfig.renewMyplexToken.value = False
         self.g_serverConfig.renewMyplexToken.save()
         
-        printl ("token: " + token, self, "D")
+        printl ("token: " + token, self, "D", True, 8)
         printl("", self, "C")
         return token
- 
+
     #============================================================================
     # 
     #============================================================================
@@ -1365,9 +1421,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
             
             if html is False:
+                printl("", self, "C")
                 return
-                
-            tree = etree.fromstring(html)
+    
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
     
         server=self.getServerFromURL(url)
                         
@@ -1415,9 +1475,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
         
             if html is False:
+                printl("", self, "C")
                 return
-    
-            tree=etree.fromstring(html)
+            
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
     
         server=self.getServerFromURL(url)
     
@@ -1524,9 +1588,13 @@ class PlexLibrary(Screen):
         html=self.getURL(url)
         
         if html is False:
+            printl("", self, "C")
             return
-       
-        tree=etree.fromstring(html)
+
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
         
         willFlatten=False
         if self.g_flatten == "1":
@@ -1634,9 +1702,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
             
             if html is False:
+                printl("", self, "C")
                 return
             
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         ShowTags=tree.findall('Video')
         server=self.getServerFromURL(url)
@@ -1780,7 +1852,11 @@ class PlexLibrary(Screen):
                 
         html=self.getURL(suburl)
         printl("retrived html: " + str(html), self, "D")
-        tree=etree.fromstring(html)
+        
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
     
         parts=[]
         partsCount=0
@@ -2340,7 +2416,11 @@ class PlexLibrary(Screen):
             if not html:
                 printl("", self, "C")   
                 return
-            tree=etree.fromstring(html)
+            
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
             
             mediaCount=0
             mediaDetails=[]
@@ -2384,7 +2464,11 @@ class PlexLibrary(Screen):
             if not html:
                 printl("", self, "C")   
                 return
-            tree=etree.fromstring(html)
+            
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
             
             for bits in tree.getiterator('Part'):
                 self.videoPluginPlay(self.getLinkURL(vids,bits,server))
@@ -2557,7 +2641,10 @@ class PlexLibrary(Screen):
             printl("", self, "C")   
             return
             
-        tree=etree.fromstring(html)
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
      
         if lastbit == "folder":
             self.processXML(url,tree)
@@ -2782,9 +2869,13 @@ class PlexLibrary(Screen):
         if tree is None:      
             html=self.getURL(url)
             if html is False:
+                printl("", self, "C")
                 return
        
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         server=self.getServerFromURL(url)
         
@@ -2825,9 +2916,13 @@ class PlexLibrary(Screen):
         if tree is None:
             html=self.getURL(url)
             if html is False:
+                printl("", self, "C")
                 return
        
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         server=self.getServerFromURL(url)        
         sectionart=self.getFanart(tree, server)
@@ -2872,9 +2967,13 @@ class PlexLibrary(Screen):
         if tree is None:       
             html=self.getURL(url)          
             if html is False:
+                printl("", self, "C")
                 return
       
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         server = self.getServerFromURL(url)                               
         sectionart = self.getFanart(tree,server) 
@@ -2908,9 +3007,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
         
             if html is False:
+                printl("", self, "C")
                 return
     
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         for plugin in tree:
     
@@ -2965,7 +3068,10 @@ class PlexLibrary(Screen):
                 printl("", self, "C")   
                 return
     
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         for plugin in tree:
     
@@ -3159,9 +3265,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
             
             if html is False:
+                printl("", self, "C")
                 return
             
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
         
         sectionArt=self.getFanart(tree,server)
      
@@ -3218,9 +3328,13 @@ class PlexLibrary(Screen):
             html=self.getURL(url)
         
             if html is False:
+                printl("", self, "C")
                 return
        
-            tree=etree.fromstring(html)
+            try:
+                tree = etree.fromstring(html)
+            except Exception, e:
+                self._showErrorOnTv("no xml as response", html)
       
         for grapes in tree:
            
@@ -3440,9 +3554,13 @@ class PlexLibrary(Screen):
         html=self.getURL(url)
         
         if html is False:
+            printl("", self, "C")
             return
         
-        tree=etree.fromstring(html)
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)
             
         for plugin in tree:
            
@@ -3537,8 +3655,15 @@ class PlexLibrary(Screen):
 
         html=self.getURL(url)
         if html is False:
+            printl("", self, "C")
             return
-        tree = etree.fromstring(html)    
+        
+        try:
+            tree = etree.fromstring(html)
+        except Exception, e:
+            self._showErrorOnTv("no xml as response", html)    
+        
+        
         server=self.getServerFromURL(url)   
         for channels in tree.getiterator('Directory'):
         
@@ -3953,6 +4078,12 @@ class PlexLibrary(Screen):
 #===============================================================================
 # HELPER FUNCTIONS
 #===============================================================================
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def _showErrorOnTv(self, text, content):
+       self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
   
     #===============================================================================
     # 
@@ -4106,7 +4237,7 @@ class PlexLibrary(Screen):
           @input: None
           @Return: unique list of media sections
         '''
-        printl("", self, "C")
+        printl("", self, "S")
 
         localServers=[]
           
@@ -4157,6 +4288,24 @@ class PlexLibrary(Screen):
         printl("Unique server List: " + str(localServers), self, "I")
         printl("", self, "C")
         return localServers   
+
+
+    def __xmlRequest(self, uri, params):
+        '''
+        '''
+        printl("", self, "S")
+        
+        if params is not None: uri = uri + "?" + urlencode(params).replace('+', '%20')
+        location = "%s:%d" % (self.getHost(), self.getHttpPort())
+        resp = urlopen("http://" + location + uri)
+        if resp is None:
+            raise IOError, "No response from Server"
+        xml = parse(resp)
+        resp.close()
+        
+        printl("", self, "C")
+        return xml
+
 
 #===============================================================================
 # 

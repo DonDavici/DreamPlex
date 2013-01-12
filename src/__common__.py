@@ -57,7 +57,7 @@ CLOSING_MESSAGE = "LEAVING"
 #===============================================================================
 # 
 #===============================================================================
-def printl2 (string, parent=None, dmode= "U"):
+def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 	'''
 	ConfigSelection(default="0", choices = [("0", _("Silent")),("1", _("Normal")),("2", _("High")),("3", _("All"))])
 	
@@ -80,7 +80,11 @@ def printl2 (string, parent=None, dmode= "U"):
 	#debugMode = 2 
 	
 	out = ""
-	
+	if obfuscate is True:
+		string = string[:-steps]
+		for i in range(steps):
+			string += "*"
+		
 	if parent is None:
 		out = str(string)
 	else:
