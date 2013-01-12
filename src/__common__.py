@@ -391,6 +391,112 @@ def getServerFromURL(url ): # CHECKED
 		printl2("", "__common__::getServerFromURL", "C")
 		return url.split('/')[0]
 	
+#===============================================================================
+# 
+#===============================================================================
+def getBoxtype():
+	'''
+	'''
+	printl2("", "__common__::getBoxtype", "C")
+	global gBoxType
+
+	if gBoxType is not None:
+		
+		printl2("", "__common__::getBoxtype", "C")
+		return gBoxType
+	else:
+		_setBoxtype()
+		
+		printl2("", "__common__::getBoxtype", "C")
+		return gBoxType
+
+#===============================================================================
+# 
+#===============================================================================
+def _setBoxtype():
+	'''
+	'''
+	printl2("", "__common__::_setBoxtype", "C")
+	global gBoxType
+	
+	try:
+		file = open("/proc/stb/info/model", "r")
+	except:
+		file = open("/hdd/model", "r")
+	box = file.readline().strip()
+	file.close()
+	manu = "Unknown"
+	model = box #"UNKNOWN" # Fallback to internal string
+	arch = "sh4" # "unk" # Its better so set the arch by default to unkown so no wrong update information will be displayed
+	version = ""
+	if box == "ufs910":
+		manu = "Kathrein"
+		model = "UFS-910"
+		arch = "sh4"
+	elif box == "ufs912":
+		manu = "Kathrein"
+		model = "UFS-912"
+		arch = "sh4"
+	elif box == "ufs922":
+		manu = "Kathrein"
+		model = "UFS-922"
+		arch = "sh4"
+	elif box == "tf7700hdpvr":
+		manu = "Topfield"
+		model = "HDPVR-7700"
+		arch = "sh4"
+	elif box == "dm800":
+		manu = "Dreambox"
+		model = "800"
+		arch = "mipsel"
+	elif box == "dm800se":
+		manu = "Dreambox"
+		model = "800se"
+		arch = "mipsel"
+	elif box == "dm8000":
+		manu = "Dreambox"
+		model = "8000"
+		arch = "mipsel"
+	elif box == "dm500hd":
+		manu = "Dreambox"
+		model = "500hd"
+		arch = "mipsel" 
+	elif box == "dm7025":
+		manu = "Dreambox" 
+		model = "7025"
+		arch = "mipsel"  
+	elif box == "dm7020hd":
+		manu = "Dreambox"
+		model = "7020hd"
+		arch = "mipsel"
+	elif box == "elite":
+		manu = "Azbox"
+		model = "Elite"
+		arch = "mipsel"
+	elif box == "premium":
+		manu = "Azbox"
+		model = "Premium"
+		arch = "mipsel"
+	elif box == "premium+":
+		manu = "Azbox"
+		model = "Premium+"
+		arch = "mipsel"
+	elif box == "cuberevo-mini":
+		manu = "Cubarevo"
+		model = "Mini"
+		arch = "sh4"
+	elif box == "hdbox":
+		manu = "Fortis"
+		model = "HdBox"
+		arch = "sh4"
+	
+	if arch == "mipsel":
+		version = getBoxArch()
+	else:
+		version = "duckbox"
+	
+	gBoxType = (manu, model, arch, version)
+	printl2("", "__common__::_setBoxtype", "C")
 
 #===============================================================================
 # 
@@ -475,7 +581,6 @@ def normpath(path):
 	
 	printl2("","__common__::normpath", "C")
 	return path
-
 
 #===============================================================================
 # pretty_time_format

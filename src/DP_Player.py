@@ -689,12 +689,12 @@ class DP_Player(MoviePlayer):
         #If we are less than 95% complete, store resume time
         elif progress < 95:
             printl("Less than 95% progress, will store resume time", self, "I" )
-            plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
+            plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
  
         #Otherwise, mark as watched
         else:
             printl( "Movie marked as watched. Over 95% complete", self, "I")
-            plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library",suppress=True)
+            plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
             
         
         printl("", self, "C")       
