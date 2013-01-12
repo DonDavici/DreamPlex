@@ -176,6 +176,7 @@ class PlexLibrary(Screen):
     g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
     g_session = None
     g_serverConfig = None
+    g_error = False
     
     #Create the standard header structure and load with a User Agent to ensure we get back a response.
     g_txheaders = {
@@ -192,7 +193,7 @@ class PlexLibrary(Screen):
         
         Screen.__init__(self, session)
         self.g_session = session
-        error = False
+        self.g_error = False
         printl("running on " + str(sys.version_info), self, "I")
         # global serverConfig
         self.g_serverConfig = serverConfig
@@ -226,7 +227,7 @@ class PlexLibrary(Screen):
                 self.g_myplex_token = self.getNewMyPlexToken()
                 
                 if self.g_myplex_token is False:
-                    error = True
+                    self.g_error = True
                     
                 else:
                     serverConfig.myplexTokenUsername.value = self.g_myplex_username
@@ -260,7 +261,7 @@ class PlexLibrary(Screen):
         
         
 
-        if error is True:
+        if self.g_error is True:
             self.leaveOnError()
         else:
             #Next lets check if for this server nas override is activated
@@ -317,6 +318,11 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
+        
+        if self.g_error is True:
+            mainMenuList = self.leaveOnError()
+            return mainMenuList
+        
         #===>
         mainMenuList = []
         self.g_sections = []
