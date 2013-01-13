@@ -285,6 +285,9 @@ class PlexLibrary(Screen):
         
         mainMenuList = []
         mainMenuList.append((_("Press exit to return"), ""))
+        mainMenuList.append((_("If you are using myPlex"), ""))
+        mainMenuList.append((_("please check if curl is installed."), ""))
+        mainMenuList.append((_("You can use Systemcheck in the menu."), ""))
         
         printl("", self, "C")
         return mainMenuList
@@ -2094,11 +2097,11 @@ class PlexLibrary(Screen):
         
         if self.g_connectionType == "2":
             token = self.getAuthDetails({'token':self.g_myplex_accessToken})
-            printl("accessToken: " +  str(token), self, "D")
+            printl("accessToken: " +  str(token), self, "D", True, 6)
         else:
             token = None
         
-        printl("accessToken: " +  str(token), self, "D")
+        printl("accessToken: " +  str(token), self, "D", True, 6)
         printl("", self, "C")
         return token
     

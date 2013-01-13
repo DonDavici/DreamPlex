@@ -629,6 +629,7 @@ class DPS_MainMenu(Screen):
 #===============================================================================
 class DPS_SystemCheck(Screen):
 	oeVersion = None
+	check = None
 	
 	def __init__(self, session):
 		'''
@@ -659,6 +660,7 @@ class DPS_SystemCheck(Screen):
 			vlist.append((_("Check for 'gst-plugin-fragmented if you are using OE16."), "oe16"))
 			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 		
+		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
 		
 		self["content"] = MenuList(vlist)
@@ -683,9 +685,27 @@ class DPS_SystemCheck(Screen):
 		
 		if selection[1] == "check_DP":
 			self.checkDreamPlexInstallation()
+			
+		if selection[1] == "check_Curl":
+			self.checkCurlInstallation()	
 		
 		printl("", self, "C")
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def checkCurlInstallation(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		command = "opkg status curl"
+		
+		self.check = "curl"
+		self.executeCommand(command)
+		
+		printl("", self, "C")
+		
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -696,6 +716,7 @@ class DPS_SystemCheck(Screen):
 		
 		command = "opkg status DreamPlex"
 		
+		self.check = "dreamplex"
 		self.executeCommand(command)
 		
 		printl("", self, "C")
@@ -721,6 +742,7 @@ class DPS_SystemCheck(Screen):
 		else:
 			printl("someting went wrong with arch type", self, "W")
 		
+		self.check = "gst"
 		self.executeCommand(command)
 		
 		printl("", self, "C")
@@ -740,14 +762,67 @@ class DPS_SystemCheck(Screen):
 			data = pipe.read(8192)
 			pipe.close()
 			if data is not None and data != "":
-				# gst-plugins-bad is installed
+				# plugin is installed
 				self.session.open(MessageBox, _("Information:\n") + data, MessageBox.TYPE_INFO)
 			else:
-				# gst-plugins-bad is not install
-				self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+				# plugin is not install
+				if self.check == "gst":
+					self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+				
+				elif self.check == "curl":
+					self.session.openWithCallback(self.installCurlLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+				
+				elif self.check == "dreamplex":
+					# for now we do nothing at this point
+					pass
+				
+				else:
+					printl("no proper value i self.check", self, "W")
 		
+		printl("", self, "C")
+		
+	#===============================================================================
+	# 
+	#===============================================================================
+	def installCurlLibs(self, confirm):
+		'''
+		'''
 		printl("", self, "S")
 		
+		if confirm:
+			# User said 'Yes'
+			
+			if self.oeVersion == "mipsel":
+				command = "opkg update; opkg install curl"
+		
+			elif self.oeVersion == "mips32el":
+				command = "opkg update; opkg install curl"
+		
+			else:
+				printl("something went wrong finding out the oe-version", self, "W")
+			
+			if not system(command):
+				# Successfully installed
+				#defaultServer = plexServerConfig.getDefaultServer()
+				#self.openSectionlist(defaultServer)
+				pass
+			else:
+				# Fail, try again and report the output...
+				pipe = popen(command, "r")
+				if pipe is not None:
+					data = pipe.read(8192)
+					if data is None:
+						data = "Unknown Error"
+					pipe.close()
+					self.session.open(MessageBox, _("Could not install "+ command + ":\n") + data, MessageBox.TYPE_ERROR)
+				# Failed to install
+				self.cancel()
+		else:
+			# User said 'no' 
+			self.cancel()
+		
+		printl("", self, "C")
+	
 	#===============================================================================
 	# 
 	#===============================================================================
