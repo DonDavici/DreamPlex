@@ -126,13 +126,13 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 		verbLevel = VERB_STARTING
 		if verbLevel <= debugMode:
 			print "[DreamPlex] " + "S" + "  " + str(out) + STARTING_MESSAGE
-			writeToLog(dmode, out)
+			writeToLog(dmode, out + STARTING_MESSAGE)
 	
 	elif dmode == "C":
 		verbLevel = VERB_CLOSING
 		if verbLevel <= debugMode:
 			print "[DreamPlex] " + "C" + "  " + str(out) +  CLOSING_MESSAGE
-			writeToLog(dmode, out)
+			writeToLog(dmode, out +  CLOSING_MESSAGE)
 	
 	elif dmode == "U":
 		print "[DreamPlex] " + "U  specify me!!!!!" + "  " + str(out)
