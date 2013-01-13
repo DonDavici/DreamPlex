@@ -479,7 +479,7 @@ class DPS_PosterView(DP_View):
 		'''
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
 		self["poster3__"].instance.setPixmapFromFile(ptr)
 		self["poster2__"].instance.setPixmapFromFile(ptr)
 		self["poster1__"].instance.setPixmapFromFile(ptr)

@@ -96,7 +96,7 @@ class DP_View(Screen, NumericalTextInput):
 	onLeaveSelectKeyValuePair 		= None
 	currentKeyValuePair 			= None
 	
-	itemsPerPage = int(18)  # @TODO should be set according the desktop size
+	itemsPerPage = int(20)  # @TODO should be set according the desktop size
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
 		'''

@@ -290,10 +290,10 @@ def registerPlexFonts():
 	
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
 
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/mayatypeuitvg.ttf", "Modern", 100, False)
+	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/mayatypeuitvg.ttf", "Modern", 100, False)
 	printl2("added => mayatypeuitvg.ttf", "__common__::registerPlexFonts", "I")
 	
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/goodtime.ttf", "Named", 100, False)
+	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf", "Named", 100, False)
 	printl2("added => goodtime.ttf", "__common__::registerPlexFonts", "I")
 	
 	printl2("", "__common__::registerPlexFonts", "C")
@@ -313,11 +313,11 @@ def loadPlexSkin():
 	skin = None
 	desktop = getDesktop(0).size().width()
 	if desktop == 720:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/blackDon/720x576/skin.xml"
+		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/skin.xml"
 	elif desktop == 1024:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/blackDon/1024x576/skin.xml"
+		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1024x576/skin.xml"
 	elif desktop == 1280:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/blackDon/1280x720/skin.xml"
+		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/skin.xml"
 	
 	if skin:
 		loadSkin(skin)

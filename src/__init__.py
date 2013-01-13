@@ -61,8 +61,7 @@ defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/"
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
-defaultSkinFolderPath   = defaultPluginFolderPath + "skins/"
-defaultSkin             = "blackDon"
+defaultSkinFolderPath   = defaultPluginFolderPath + "skin/"
 
 config.plugins.dreamplex = ConfigSubsection()
 
@@ -71,7 +70,6 @@ config.plugins.dreamplex.pluginfolderpath  = ConfigText(default = defaultPluginF
 config.plugins.dreamplex.skinfolderpath    = ConfigText(default = defaultSkinFolderPath)
 config.plugins.dreamplex.logfolderpath     = ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.mediafolderpath   = ConfigText(default = defaultMediaFolderPath, fixed_size=False)
-config.plugins.dreamplex.skin              = ConfigText(default = defaultSkin)
 config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)

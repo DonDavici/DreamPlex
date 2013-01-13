@@ -73,7 +73,7 @@ def getPictureData(selection, postfix):
             name = selection[1]["Id"]
             target = mediaPath + name + postfix
         except:
-            target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/picreset.png"
+            target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
             printl( "something went wrong", __name__, "D")
     
     printl("", __name__, "C")

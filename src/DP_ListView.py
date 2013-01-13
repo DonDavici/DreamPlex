@@ -63,7 +63,7 @@ class DPS_ListView(DP_View):
 	backdrop_postfix = "_backdrop.jpg"
 	poster_postfix = "_poster.jpg"
 	
-	itemsPerPage = int(18)  # @TODO should be set according the desktop size
+	itemsPerPage = int(20)  # @TODO should be set according the desktop size
 
 	#===========================================================================
 	# 
@@ -402,7 +402,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
 		self["poster"].instance.setPixmapFromFile(ptr)
 		self["mybackdrop"].instance.setPixmapFromFile(ptr)
 		
