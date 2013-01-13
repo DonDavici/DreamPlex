@@ -288,13 +288,13 @@ def registerPlexFonts():
 	'''
 	printl2("", "__common__::registerPlexFonts", "S")
 	
-	printl2("adding fonts", "registerPlexFonts", "I")
+	printl2("adding fonts", "__common__::registerPlexFonts", "I")
 
 	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/mayatypeuitvg.ttf", "Modern", 100, False)
-	printl2("added => mayatypeuitvg.ttf", "registerPlexFonts", "I")
+	printl2("added => mayatypeuitvg.ttf", "__common__::registerPlexFonts", "I")
 	
 	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/goodtime.ttf", "Named", 100, False)
-	printl2("added => goodtime.ttf", "registerPlexFonts", "I")
+	printl2("added => goodtime.ttf", "__common__::registerPlexFonts", "I")
 	
 	printl2("", "__common__::registerPlexFonts", "C")
 
