@@ -54,7 +54,7 @@ def getViews():
 	availableViewList = []
 	viewList = (
 			(_("List"), "DP_ListView", "DPS_ListView"), 
-			#(_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
+			(_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
 		)
 	
 	for view in viewList:
@@ -96,6 +96,8 @@ class DP_View(Screen, NumericalTextInput):
 	onLeaveSelectKeyValuePair 		= None
 	currentKeyValuePair 			= None
 	
+	itemsPerPage = int(18)  # @TODO should be set according the desktop size
+	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
 		'''
 		'''
@@ -120,20 +122,12 @@ class DP_View(Screen, NumericalTextInput):
 		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 		self.session.nav.stopService()
 		
-		# Initialise API Level for this screen
-		self.APILevel = 99 
-		printl("APILevel=" + str(self.APILevel), self, "D")
-
 		# Initialise library list
 		list = []
-		if self.APILevel == 1:
-			self["listview"] = MenuList(list)
-		elif self.APILevel >= 2:
-			self["listview"] = List(list, True)
+		self["listview"] = List(list, True)
 		
-		if self.APILevel >= 6:
-			self["number_key_popup"] = Label("")
-			self["number_key_popup"].hide()
+		self["number_key_popup"] = Label("")
+		self["number_key_popup"].hide()
 
 		self.seenPng = None
 		self.unseenPng = None
@@ -156,7 +150,7 @@ class DP_View(Screen, NumericalTextInput):
 			"red":        (self.onKeyRed, ""),
 			#"green":      (self.onKeyGreen, ""),
 			#"yellow":     (self.onKeyYellow, ""),
-			#"blue":       (self.onKeyBlue, ""),
+			"blue":       (self.onKeyBlue, ""),
 
 			"red_long":        (self.onKeyRedLong, ""),
 			#"green_long":      (self.onKeyGreenLong, ""),
@@ -879,10 +873,8 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		if self.APILevel == 1:
-			self["listview"].down()
-		elif self.APILevel >= 2:
-			self["listview"].selectNext()
+		self["listview"].selectNext()
+		
 		if self.FAST_STILLPIC is False:
 			self.refresh(False)
 		else:
@@ -911,10 +903,8 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		if self.APILevel == 1:
-			self["listview"].up()
-		elif self.APILevel >= 2:
-			self["listview"].selectPrevious()
+		self["listview"].selectPrevious()
+		
 		if self.FAST_STILLPIC is False:
 			self.refresh(False)
 		else:
@@ -930,15 +920,12 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		if self.APILevel == 1:
-			self["listview"].pageDown()
-		elif self.APILevel >= 2:
-			itemsPerPage = int(12)
-			itemsTotal = self["listview"].count()
-			index = self["listview"].getIndex() + itemsPerPage
-			if index >= itemsTotal:
-				index = itemsTotal - 1
-			self["listview"].setIndex(index)
+		itemsPerPage = self.itemsPerPage
+		itemsTotal = self["listview"].count()
+		index = self["listview"].getIndex() + itemsPerPage
+		if index >= itemsTotal:
+			index = itemsTotal - 1
+		self["listview"].setIndex(index)
 		self.refresh()
 	
 		printl("", self, "C")
@@ -950,16 +937,14 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		'''
 		printl("", self, "S")
+
+		itemsPerPage = self.itemsPerPage
+		#itemsTotal = self["listview"].count()
+		index = self["listview"].getIndex() - itemsPerPage
+		if index < 0:
+			index = 0
+		self["listview"].setIndex(index)
 		
-		if self.APILevel == 1:
-			self["listview"].pageUp()
-		elif self.APILevel >= 2:
-			itemsPerPage = int(12)
-			#itemsTotal = self["listview"].count()
-			index = self["listview"].getIndex() - itemsPerPage
-			if index < 0:
-				index = 0
-			self["listview"].setIndex(index)
 		self.refresh()
 	
 		printl("", self, "C")

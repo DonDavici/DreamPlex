@@ -62,6 +62,8 @@ class DPS_ListView(DP_View):
 	'''
 	backdrop_postfix = "_backdrop.jpg"
 	poster_postfix = "_poster.jpg"
+	
+	itemsPerPage = int(18)  # @TODO should be set according the desktop size
 
 	#===========================================================================
 	# 
@@ -159,7 +161,6 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		printl("selection: " + str(selection), self, "S")
 		
-		
 		self.resetCurrentImages()
 		if selection != None:
 			self.selection = selection
@@ -245,7 +246,7 @@ class DPS_ListView(DP_View):
 				if self["star" + str(9 - i)].instance is not None:
 					self["star" + str(9 - i)].instance.hide()
 			
-			itemsPerPage = int(12)
+			itemsPerPage = self.itemsPerPage
 			itemsTotal = self["listview"].count()
 			correctionVal = 0.5
 			if (itemsTotal%itemsPerPage) == 0:

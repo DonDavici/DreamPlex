@@ -130,6 +130,7 @@ class DP_LibShows(DP_LibMain):
 				tmpAbc.sort()
 				filter.append(("Abc", ("Title", False, 1), tmpAbc))
 			
+			printl ("", self, "C")
 			return (parsedLibrary, ("ViewMode", "Id", ), None, None, sort, filter)	
 
 		
@@ -154,10 +155,10 @@ class DP_LibShows(DP_LibMain):
 				# printl ("-> context = " + str(season[3]), self, "D")
 				#===============================================================
 				
-				url = season[0]
-				properties = season[1]
-				arguments = season[2]
-				context = season[3]
+				url 		= season[0]
+				properties 	= season[1]
+				arguments 	= season[2]
+				context 	= season[3]
 				
 				d = {}
 				d["Title"]          = properties.get('title', "")
@@ -189,13 +190,14 @@ class DP_LibShows(DP_LibMain):
 				else:
 					image = None
 
-				print "appending title " + d["Title"]
+				printl( "appending title: " + str(d["Title"]), self, "I")
 				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
 			
 			sort = (("Title", None, False), )
 			
 			filter = [("All", (None, False), ("", )), ]
 			
+			printl ("", self, "C")
 			return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, None, sort, filter)
 
 	
@@ -260,6 +262,7 @@ class DP_LibShows(DP_LibMain):
 			filter = [("All", (None, False), ("", )), ]
 			filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
+			printl ("", self, "C")
 			return (parsedLibrary, ("ViewMode", "Id", "Episodes", ), None, None, sort, filter)
 
 		printl ("", self, "C")

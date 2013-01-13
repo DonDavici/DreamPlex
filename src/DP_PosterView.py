@@ -22,9 +22,9 @@ from Tools.Directories import fileExists
 def getViewClass():
 	'''
 	'''
-	printl("", self, "S")
+	printl("", __name__, "S")
 	
-	printl("", self, "C")
+	printl("", __name__, "C")
 	return DPS_PosterView
 
 #===============================================================================
@@ -124,6 +124,7 @@ class DPS_PosterView(DP_View):
 		'''
 		'''
 		printl("", self, "S")
+		printl("selection: " + str(selection), self, "S")
 		
 		element = selection[1]
 		self.resetCurrentImages()
@@ -142,6 +143,9 @@ class DPS_PosterView(DP_View):
 		printl("", self, "C")
 		
 	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def showImages(self, selection):
 		'''
 		'''
@@ -181,6 +185,7 @@ class DPS_PosterView(DP_View):
 				self["poster__" + str(i)].hide()
 		
 		printl("", self, "C")
+	
 	#===========================================================================
 	# 
 	#===========================================================================
