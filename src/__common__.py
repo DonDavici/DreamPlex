@@ -37,6 +37,7 @@ from DPH_Singleton import Singleton
 #===============================================================================
 gConnectivity = None
 gLogFile = None
+gBoxType = None
 
 # ****************************** VERBOSITY Level *******************************
 VERB_ERROR       = 0  # "E" shows error
@@ -394,7 +395,7 @@ def getServerFromURL(url ): # CHECKED
 #===============================================================================
 # 
 #===============================================================================
-def getBoxtype():
+def getBoxInformation():
 	'''
 	'''
 	printl2("", "__common__::getBoxtype", "C")
@@ -405,7 +406,7 @@ def getBoxtype():
 		printl2("", "__common__::getBoxtype", "C")
 		return gBoxType
 	else:
-		_setBoxtype()
+		setBoxInformation()
 		
 		printl2("", "__common__::getBoxtype", "C")
 		return gBoxType
@@ -413,7 +414,7 @@ def getBoxtype():
 #===============================================================================
 # 
 #===============================================================================
-def _setBoxtype():
+def setBoxInformation():
 	'''
 	'''
 	printl2("", "__common__::_setBoxtype", "C")
@@ -497,6 +498,25 @@ def _setBoxtype():
 	
 	gBoxType = (manu, model, arch, version)
 	printl2("", "__common__::_setBoxtype", "C")
+
+#===============================================================================
+# 
+#===============================================================================
+def getBoxArch():
+	'''
+	'''
+	printl2("", "__common__::getBoxArch", "S")
+	
+	ARCH = "unknown"
+   
+	if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
+		ARCH = "oe16"
+                   
+	if (sys.version_info < (2, 7, 4) and sys.version_info > (2, 7, 0)):
+		ARCH = "oe20"
+			
+	printl2("", "__common__::getBoxArch", "C")
+	return ARCH
 
 #===============================================================================
 # 

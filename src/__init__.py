@@ -52,7 +52,7 @@ from Plugins.Extensions.DreamPlex.__plugin__ import registerPlugin, Plugin
 from Plugins.Extensions.DreamPlex.DP_LibMovies import DP_LibMovies
 from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
 
-from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, printl2 as printl
+from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
 #===============================================================================
 # CONFIG
@@ -61,13 +61,11 @@ defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/"
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
-defaultSkinFolderPath   = defaultPluginFolderPath + "skin/"
 
 config.plugins.dreamplex = ConfigSubsection()
 
 config.plugins.dreamplex.debugMode         = ConfigSelection(default="0", choices = [("0", _("Silent")),("1", _("Normal")),("2", _("High")),("3", _("All"))])
 config.plugins.dreamplex.pluginfolderpath  = ConfigText(default = defaultPluginFolderPath)
-config.plugins.dreamplex.skinfolderpath    = ConfigText(default = defaultSkinFolderPath)
 config.plugins.dreamplex.logfolderpath     = ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.mediafolderpath   = ConfigText(default = defaultMediaFolderPath, fixed_size=False)
 config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
@@ -106,9 +104,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].transcode       = ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].quality         = ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
-	#config.plugins.dreamplex.Entries[i].audioOutput     = ConfigSelection(default="2", choices = [("0", _("mp3,aac")),("1", _("mp3,aac,ac3")),("2", _("mp3,aac,ac3,dts"))])
 	#config.plugins.dreamplex.Entries[i].streamMode		= ConfigSelection(default="0", choices = [("0", _("HTTP Streaming")),("1", _("Local Buffer Mode")),("2", _("Direct Play"))])
-	#config.plugins.dreamplex.Entries[i].transcodeType   = ConfigSelection(default="0", choices = [("0", _("m3u8")),("1", _("flv"))])
 	
 	# myPlex
 	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
@@ -122,10 +118,27 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].wol_mac         = ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
 	
-	
-	return config.plugins.dreamplex.Entries[i]
+	printl("Server Settings: ","__init__::initServerEntryConfig", "I" )
+	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "I")
+	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "I")
+	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "I")
+	printl("ip: " + str(config.plugins.dreamplex.Entries[i].ip.value), "__init__::initServerEntryConfig", "I")
+	printl("dns: " + str(config.plugins.dreamplex.Entries[i].dns.value), "__init__::initServerEntryConfig", "I")
+	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "I")
+	printl("port: " + str(config.plugins.dreamplex.Entries[i].port.value), "__init__::initServerEntryConfig", "I")
+	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "I")
+	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "I")
+	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
+	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "I", True, 4)
+	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "I", True, 8)
+	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
+	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "I")
+	printl("wol: " + str(config.plugins.dreamplex.Entries[i].wol.value), "__init__::initServerEntryConfig", "I")
+	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "I")
+	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "I")
 	
 	printl("", "__init__::initServerEntryConfig", "C")
+	return config.plugins.dreamplex.Entries[i]
 
 #===============================================================================
 # 
@@ -196,12 +209,47 @@ def _(txt):
 	return text
 
 #===============================================================================
+# 
+#===============================================================================
+def printEnvData():
+	'''
+	'''
+	printl("", "__init__::printEnvData", "S")
+	
+	boxInfo = getBoxInformation()
+	
+	printl("Environment Data: ","__init__::printEnvData", "I" )
+	printl("Boxinformation: " + str(boxInfo), "__init__::printEnvData", "I")
+	
+	printl("Global Settings: ","__init__::printEnvData", "I" )
+	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::printEnvData", "I")
+	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::printEnvData", "I")
+	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::printEnvData", "I")
+	printl("mediafolderpath: " + str(config.plugins.dreamplex.mediafolderpath.value), "__init__::printEnvData", "I")
+	printl("playerTempPath: " + str(config.plugins.dreamplex.playerTempPath.value), "__init__::printEnvData", "I")
+	printl("showInMainMenu: " + str(config.plugins.dreamplex.showInMainMenu.value), "__init__::printEnvData", "I")
+	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::printEnvData", "I")
+	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::printEnvData", "I")
+	printl("stopTVOnPicture: " + str(config.plugins.dreamplex.stopTVOnPicture.value), "__init__::printEnvData", "I")
+	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::printEnvData", "I")
+	printl("useQuicktimeUserAgent: " + str(config.plugins.dreamplex.useQuicktimeUserAgent.value), "__init__::printEnvData", "I")
+	printl("setBufferSize: " + str(config.plugins.dreamplex.setBufferSize.value), "__init__::printEnvData", "I")
+	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::printEnvData", "I")
+	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::printEnvData", "I")
+
+	
+	printl("", "__init__::printEnvData", "C")
+	
+
+#===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
 localeInit()
+printEnvData()
 initPlexServerConfig()
 checkPlexEnvironment()
 registerPlexFonts()
 loadPlexSkin()
 loadPlexPlugins()
+
 
