@@ -3965,17 +3965,8 @@ class PlexLibrary(Screen):
             #printl( "Transcode format is " + self.g_transcodefmt, self, "I")
             printl( "Transcode quality is " + self.g_quality, self, "I")
             
-            baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-            if int(self.g_quality) >= 3:
-              baseCapability+=",http-streaming-video-240p,http-mp4-video-240p"
-            if int(self.g_quality) >= 4:
-              baseCapability+=",http-streaming-video-320p,http-mp4-video-320p"
-            if int(self.g_quality) >= 5:
-              baseCapability+=",http-streaming-video-480p,http-mp4-video-480p"
-            if int(self.g_quality) >= 6:
-              baseCapability+=",http-streaming-video-720p,http-mp4-video-720p"
-            if int(self.g_quality) >= 9:
-              baseCapability+=",http-streaming-video-1080p,http-mp4-video-1080p"
+            #baseCapability = "http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
+            protocols = "protocols=http-video;"
                 
             #===================================================================
             # self.g_audioOutput=__settings__.getSetting("audiotype")
@@ -4005,7 +3996,7 @@ class PlexLibrary(Screen):
             audioDecoders = "audioDecoders=mp3,aac"
 
             #self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("baseCapability="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)              
-            self.g_capability = urllib.quote_plus(baseCapability + ";" + videoDecoders + ";" + audioDecoders)
+            self.g_capability = urllib.quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
             #self.g_capability = urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)
             printl("Plex Client Capability = " + self.g_capability, self, "I")
             
@@ -4018,7 +4009,7 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        printl ("deleteing media at: " + url, self, "I")
+        printl ("deleting media at: " + url, self, "I")
         
         #=======================================================================
         # return_value = xbmcgui.Dialog().yesno("Confirm file delete?","Delete this item? This action will delete media and associated data files.")
