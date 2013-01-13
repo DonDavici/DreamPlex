@@ -51,6 +51,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # class
 #===============================================================================    
 class DP_Player(MoviePlayer):
+    '''
+    '''
     
     ENIGMA_SERVICE_ID = 0
     ENIGMA_SERVICEGS_ID = 0x1001 #4097

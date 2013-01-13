@@ -32,6 +32,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 class DP_LibShows(DP_LibMain):
+	'''
+	'''
 	
 	g_url = None
 	
@@ -296,6 +298,7 @@ class DP_LibShows(DP_LibMain):
 					break
 		
 		printl ("playbacklist = " + str(playbackList), self, "D")
+		
 		printl ("", self, "C")
 		return playbackList
 
@@ -317,5 +320,6 @@ class DP_LibShows(DP_LibMain):
 		args["type"]    = "tvshow"
 		
 		printl ("args = " + str(args), self, "D")
+		
 		printl ("", self, "C")
 		return args

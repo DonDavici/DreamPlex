@@ -33,14 +33,23 @@ from DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
-#------------------------------------------------------------------------------------------
-
+#===============================================================================
+# 
+#===============================================================================
 class DP_LibMain(Screen):
+    '''
+    '''
 
     checkFileCreationDate = True
 
+    #===========================================================================
+    # 
+    #===========================================================================
     def __init__(self, session, libraryName):
+        '''
+        '''
         printl("", self, "S")
+        
         Screen.__init__(self, session)
         self._session = session
         self._libraryName = libraryName
@@ -50,8 +59,17 @@ class DP_LibMain(Screen):
         
         self.defaultPickle = ""
         self.onFirstExecBegin.append(self.showDefaultView)
+        
+        printl("", self, "C")
 
+    #===========================================================================
+    # 
+    #===========================================================================
     def getDefault(self):
+        '''
+        '''
+        printl("", self, "S")
+        
         try:
             fd = open(self.defaultPickle, "rb")
             default = pickle.load(fd)
@@ -63,15 +81,27 @@ class DP_LibMain(Screen):
             "sort": None, 
             "filter": None, 
         }
+        
+        printl("", self, "C")
         return default
 
+    #===========================================================================
+    # 
+    #===========================================================================
     def setDefault(self, selection, sort, filter):
+        '''
+        '''
+        printl("", self, "S")
+        
         if selection is None and sort is None and filter is None:
             try:
                 os.remove(self.defaultPickle)
             except:
                 printl("Could not remove " + str(self.defaultPickle), self, "E")
+            
+            printl("", self, "C")
             return
+        
         default = {
             "view": self.currentViewIndex, 
             "selection": selection, 
@@ -82,20 +112,45 @@ class DP_LibMain(Screen):
         fd = open(self.defaultPickle, "wb")
         pickle.dump(default, fd, 2) #pickle.HIGHEST_PROTOCOL)
         fd.close()
+        
+        printl("", self, "C")
 
+    #===========================================================================
+    # 
+    #===========================================================================
     def showDefaultView(self):
+        '''
+        '''
+        printl("", self, "S")
+        
         default = self.getDefault()
         self.currentViewIndex = default["view"]
         self.showView(default["selection"], default["sort"], default["filter"])
+        
+        printl("", self, "C")
 
-    # Displays the selected View
+    #===========================================================================
+    # 
+    #===========================================================================
     def showView(self, selection=None, sort=None, filter=None):
-        printl("", self, "D")
+        '''
+        Displays the selected View
+        '''
+        printl("", self, "S")
+        
         m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [], -1)
         self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=filter)
+        
+        printl("", self, "C")
 
-    # Called if View has closed, react on cause for example change to different view
+    #===========================================================================
+    # 
+    #===========================================================================
     def onViewClosed(self, cause=None):
+        '''
+        Called if View has closed, react on cause for example change to different view
+        '''
+        printl("", self, "S")
         printl("cause: %s" % str(cause), self, "D")
         if cause is not None:
             if cause[0] == DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT:
@@ -136,31 +191,58 @@ class DP_LibMain(Screen):
                 self.close()
         else:
             self.close()
+        
+        printl("", self, "C")
 
-    # prototype for library loading, is called by the view
+    #===========================================================================
+    # 
+    #===========================================================================
     def loadLibrary(self, params=None):
-        #dict({'root': None})
+        '''
+        prototype for library loading, is called by the view
+        '''
+        printl("", self, "S")
+        
+        printl("", self, "C")
         return []
 
-    # starts playback, is called by the view
+    #===========================================================================
+    # 
+    #===========================================================================
     def playEntry(self, entry, flags={}):
-        printl("", self, "D")
+        '''
+        tarts playback, is called by the view
+        '''
+        printl("", self, "S")
+
         playbackPath = entry["Path"]
+        
         if playbackPath[0] == "/" and os.path.isfile(playbackPath) is False:
+            
+            printl("", self, "C")
             return False
         else:
             self.notifyEntryPlaying(entry, flags)
             
             isDVD, dvdFilelist, dvdDevice = self.checkIfDVD(playbackPath)
+            
             if isDVD:
                 self.playDVD(dvdDevice, dvdFilelist)
             else:
                 self.playFile(entry, flags)
+            
+            printl("", self, "C")
             return True
 
-    # tries to determin if media entry is a dvd
+    #===========================================================================
+    # 
+    #===========================================================================
     def checkIfDVD(self, playbackPath):
-        printl("", self, "D")
+        '''
+        tries to determin if media entry is a dvd
+        '''
+        printl("", self, "S")
+
         isDVD = False
         dvdFilelist = [ ]
         dvdDevice = None
@@ -168,14 +250,23 @@ class DP_LibMain(Screen):
         if playbackPath.lower().endswith(u"ifo"): # DVD
             isDVD = True
             dvdFilelist.append(str(playbackPath.replace(u"/VIDEO_TS.IFO", "").strip()))
+        
         elif playbackPath.lower().endswith(u"iso"): # DVD
             isDVD = True
             dvdFilelist.append(str(playbackPath))
+        
+        printl("", self, "C")
         return (isDVD, dvdFilelist, dvdDevice, )
 
-    # playbacks a dvd by callinf dvdplayer plugin
+    #===========================================================================
+    # 
+    #===========================================================================
     def playDVD(self, dvdDevice, dvdFilelist):
-        printl("", self, "D")
+        '''
+        playbacks a dvd by callinf dvdplayer plugin
+        '''
+        printl("", self, "S")
+        
         try:
             from Plugins.Extensions.DVDPlayer.plugin import DVDPlayer
             # when iso -> filelist, when folder -> device
@@ -183,57 +274,124 @@ class DP_LibMain(Screen):
                 dvd_device = dvdDevice, dvd_filelist = dvdFilelist)
         except Exception, ex:
             printl("Exception: " + str(ex), self, "E")
+        
+        printl("", self, "C")
 
-    # playbacks a file by calling DP_player
+    #===========================================================================
+    # 
+    #===========================================================================
     def playFile(self, entry, flags):
-        printl("", self, "D")
+        '''
+        playbacks a file by calling DP_player
+        '''
+        printl("", self, "S")
+        
         playbackList = self.getPlaybackList(entry)
         printl("playbackList: " + str(playbackList), self, "D")
         
         if len(playbackList) == 1:
             self.session.openWithCallback(self.leaveMoviePlayer, DP_Player, playbackList, flags=flags)
+        
         elif len(playbackList) >= 2:
             self.session.openWithCallback(self.leaveMoviePlayer, DP_Player, playbackList, self.notifyNextEntry, flags=flags)
 
-    # After calling this the view should auto reappear
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
     def leaveMoviePlayer(self, flags={}): 
+        '''
+        After calling this the view should auto reappear
+        '''
+        printl("", self, "S")
+        
         self.notifyEntryStopped(flags)
         
         self.session.nav.playService(None) 
+        
+        printl("", self, "C")
 
-    # prototype fore playbacklist creation
+    #===========================================================================
+    # 
+    #===========================================================================
     def getPlaybackList(self, entry):
+        '''
+        prototype fore playbacklist creation
+        '''
+        printl("", self, "S")
+        
         printl("", self, "D")
         playbackList = []
         playbackList.append( (entry["Path"], entry["Title"], entry, ))
+        
+        printl("", self, "C")
         return playbackList
 
+    #===========================================================================
+    # 
+    #===========================================================================
     def buildInfoPlaybackArgs(self, entry):
+        '''
+        '''
+        printl("", self, "S")
+        
+        
+        printl("", self, "C")
         return {}
 
-    # called on start of playback
+    #===========================================================================
+    # 
+    #===========================================================================
     def notifyEntryPlaying(self, entry, flags):
+        '''
+        called on start of playback
+        '''
+        printl("", self, "S")
+        
         printl("", self, "D")
         args = self.buildInfoPlaybackArgs(entry)
         args["status"]  = "playing"
         plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
+        
         for plugin in plugins:
             printl("plugin.name=" + str(plugin.name), self, "D")
             plugin.fnc(args, flags)
+            
+        printl("", self, "C")
 
-    # called on end of playback
+    #===========================================================================
+    # 
+    #===========================================================================
     def notifyEntryStopped(self, flags):
+        '''
+        called on end of playback
+        '''
+        printl("", self, "S")
+        
         printl("", self, "D")
         args = {}
         args["status"] = "stopped"
         plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
+        
         for plugin in plugins:
             printl("plugin.name=" + str(plugin.name), self, "D")
             plugin.fnc(args, flags)
+            
+        printl("", self, "C")
 
-    # called if the next entry in the playbacklist is being playbacked
+    #===========================================================================
+    # 
+    #===========================================================================
     def notifyNextEntry(self, entry, flags):
+        '''
+        called if the next entry in the playbacklist is being playbacked
+        '''
+        printl("", self, "S")
+        
         printl("", self, "D")
         self.notifyEntryStopped(flags)
         self.notifyEntryPlaying(entry, flags)
+        
+        printl("", self, "C")
 

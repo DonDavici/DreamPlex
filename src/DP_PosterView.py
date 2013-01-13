@@ -16,12 +16,23 @@ from twisted.web.client import downloadPage
 from DPH_Arts import getTranscodeUrl, getPictureData
 from Tools.Directories import fileExists
 
-#------------------------------------------------------------------------------------------
-
+#===============================================================================
+# 
+#===============================================================================
 def getViewClass():
+	'''
+	'''
+	printl("", self, "S")
+	
+	printl("", self, "C")
 	return DPS_PosterView
 
+#===============================================================================
+# 
+#===============================================================================
 class DPS_PosterView(DP_View):
+	'''
+	'''
 	
 	poster_postfix = "_poster.png"
 	

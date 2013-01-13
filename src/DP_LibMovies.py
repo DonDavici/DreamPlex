@@ -32,6 +32,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 class DP_LibMovies(DP_LibMain):
+	'''
+	'''
 	
 	g_url = None
 	
@@ -39,6 +41,8 @@ class DP_LibMovies(DP_LibMain):
 	# 
 	#===========================================================================
 	def __init__(self, session, url=None):
+		'''
+		'''
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "movies")
@@ -51,6 +55,8 @@ class DP_LibMovies(DP_LibMain):
 	# 
 	#===========================================================================
 	def loadLibrary(self, params):
+		'''
+		'''
 		printl ("", self, "S")
 		printl("params =" + str(params), self, "D")
 		
@@ -154,6 +160,7 @@ class DP_LibMovies(DP_LibMain):
 		args["type"]    = "movie"
 		
 		printl ("args = " + args, self, "D")
+		
 		printl ("", self, "C")
 		return args
 

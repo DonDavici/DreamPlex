@@ -55,6 +55,8 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 # DPS_MainMenu
 #===============================================================================	
 class DPS_MainMenu(Screen):
+	'''
+	'''
 	
 	g_wolon = False
 	g_wakeserver = "00-11-32-12-C5-F9"

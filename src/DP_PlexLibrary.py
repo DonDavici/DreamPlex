@@ -134,6 +134,9 @@ _OVERLAY_PLEX_PARTIAL=5    #half - Reusing XBMC overlaytrained
 # PlexLibrary
 #===============================================================================
 class PlexLibrary(Screen):
+    '''
+    '''
+    
     g_sessionID=None
     g_serverDict=[]
     g_sections=[]
