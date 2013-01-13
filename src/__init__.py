@@ -89,8 +89,6 @@ config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerT
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
 
-config.plugins.dreamplex.plugins 	= ConfigSubsection()
-
 #===============================================================================
 # 
 #===============================================================================
