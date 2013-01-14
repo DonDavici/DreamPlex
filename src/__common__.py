@@ -29,6 +29,7 @@ import datetime
 from enigma import getDesktop, addFont
 from skin import loadSkin
 from Components.config import config
+from Components.AVSwitch import AVSwitch
 
 from DPH_Singleton import Singleton
 
@@ -666,3 +667,15 @@ def formatTime(msec):
 		printl2("","__common__::formatTime", "C")
 		return "%i" % (seconds)
 	
+#===============================================================================
+# 
+#===============================================================================
+def getScale():
+	'''
+	'''
+	
+	printl2("","__common__::getScale", "S")
+	
+	return AVSwitch().getFramebufferScale()
+	
+	printl2("","__common__::getScale", "C")

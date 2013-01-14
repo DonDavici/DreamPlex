@@ -77,9 +77,6 @@ class DPS_ListView(DP_View):
 		
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		
-		self.EXpicloadPoster = ePicLoad()
-		self.EXpicloadBackdrop = ePicLoad()
-		
 		self.EXscale = (AVSwitch().getFramebufferScale())
 		
 		self.whatPoster = None
@@ -107,6 +104,9 @@ class DPS_ListView(DP_View):
 		self["key_yellow"] = StaticText("")
 		self["key_blue"] = StaticText(self.viewName[0])
 		
+		self.EXpicloadPoster = ePicLoad()
+		self.EXpicloadBackdrop = ePicLoad()
+		
 		for i in range(10):
 			stars = "star" + str(i)
 			self[stars] = Pixmap()
@@ -121,9 +121,24 @@ class DPS_ListView(DP_View):
 
 		self.EXpicloadPoster.PictureData.get().append(self.DecodeActionPoster)
 		self.EXpicloadBackdrop.PictureData.get().append(self.DecodeActionBackdrop)
+		
+		self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
+	
+	#==============================================================================
+	# 
+	#==============================================================================
+	def setPara(self):
+		'''
+		'''
+		printl("", self, "S")
 		
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		
+		printl("", self, "C")
+	
 	#==============================================================================
 	# 
 	#==============================================================================
@@ -198,12 +213,14 @@ class DPS_ListView(DP_View):
 	
 			self.whatPoster = self.mediaPath + pname + psuffix
 			self.whatBackdrop = self.mediaPath + bname + bsuffix
+			
+			self.showPoster() # start decoding image
+			self.showBackdrop() # start decoding image
 					
 			self.setText("title", element["ScreenTitle"])
 			self.setText("tag", element["Tag"], True)
 			self.setText("shortDescription", element["Plot"].encode('utf8'), what=_("Overview"))
 			
-	
 			res = "576i"
 			if element.has_key("Resolution"):
 				res = element["Resolution"]
@@ -228,16 +245,13 @@ class DPS_ListView(DP_View):
 			self.setText("genre", genres, what=_("Genre"))
 			
 			self.setText("runtime", str(element["Runtime"]))
-			
-
+		
 			try:
 				popularity = int(round(float(element["Popularity"])))
 			except Exception, e: 
 				popularity = 0
 				printl( "error in popularity " + str(e),self, "D")
 				
-
-					
 			for i in range(popularity):
 				if self["star" + str(i)].instance is not None:
 					self["star" + str(i)].instance.show()
@@ -249,19 +263,20 @@ class DPS_ListView(DP_View):
 			itemsPerPage = self.itemsPerPage
 			itemsTotal = self["listview"].count()
 			correctionVal = 0.5
+			
 			if (itemsTotal%itemsPerPage) == 0:
 				correctionVal = 0
+			
 			pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
 			pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
+			
 			self.setText("total", _("Total:") + ' ' + str(itemsTotal))
 			self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
 			
-			self.showImages()
 		else:
 			self.setText("title", "no data retrieved")
 			self.setText("shortDescription", "no data retrieved")
 			
-	
 		printl("", self, "C")
 
 	#===========================================================================
@@ -411,38 +426,45 @@ class DPS_ListView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showImages(self):
+	def showPoster(self):
 		'''
 		'''
 		printl("", self, "S")
 		
 		dwl_poster = False
-		dwl_backdrop = False
 		
 		if fileExists(getPictureData(self.selection, self.poster_postfix)):
 			self.showRealPoster()
 		else:
 			dwl_poster = True
 			
-		
-		if fileExists(getPictureData(self.selection, self.backdrop_postfix)):
-			self.showRealBackdrop()
-		else:
-			dwl_backdrop = True
-
-	
 		if dwl_poster == True:
 			self.downloadPoster()
 			
 			printl("", self, "C")
 			return
+			
+	#===========================================================================
+	# 
+	#===========================================================================
+	def showBackdrop(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		dwl_backdrop = False
+				
+		if fileExists(getPictureData(self.selection, self.backdrop_postfix)):
+			self.showRealBackdrop()
+		else:
+			dwl_backdrop = True
 		
 		if dwl_backdrop == True:
 			self.downloadBackdrop()
 			
 			printl("", self, "C")
 			return
-		
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -453,7 +475,6 @@ class DPS_ListView(DP_View):
 		printl("show_poster " + self.whatPoster, self, "I")
 
 		if self.whatPoster is not None:
-			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 			self.EXpicloadPoster.startDecode(self.whatPoster)
 			
 		printl("", self, "C")
@@ -468,7 +489,6 @@ class DPS_ListView(DP_View):
 		printl( "show_backdrop " + self.whatBackdrop, self, "I")
 
 		if self.whatBackdrop is not None:
-			self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 			self.EXpicloadBackdrop.startDecode(self.whatBackdrop)
 		
 		printl("", self, "C")
@@ -490,7 +510,7 @@ class DPS_ListView(DP_View):
 			download_url += token
 
 		printl( "download url " + download_url, self, "D")
-		downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadCallback())
+		downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadPosterCallback())
 		
 		printl("", self, "C")
 
@@ -513,18 +533,30 @@ class DPS_ListView(DP_View):
 			download_url += token
 		printl( "download url " + download_url, self, "D")
 		
-		downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadCallback())
+		downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadBackdropCallback())
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def downloadCallback(self):
+	def downloadPosterCallback(self):
 		'''
 		'''
 		printl("", self, "S")
 		
-		self.showImages() 
+		self.showPoster() 
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadBackdropCallback(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.showBackdrop() 
 		
 		printl("", self, "C")
