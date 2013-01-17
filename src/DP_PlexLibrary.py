@@ -35,6 +35,7 @@ import hashlib
 import random
 import hmac
 import uuid
+import string
 
 #===============================================================================
 # 
@@ -1650,9 +1651,9 @@ class PlexLibrary(Screen):
                        'thumb'             : self.getThumb(season, server) ,
                        'fanart_image'      : self.getFanart(season, server) ,
                        'token'             : self.g_myplex_accessToken ,
-                       'key'               : season.get('key','') ,
+                       'key'               : season.get('key',''),
                        'server'            : str(server) ,
-                       'ratingKey'         : str(season.get('ratingKey',0)) }
+                       'ratingKey'         : self.getUniqueId(season.get('key','')) , }
                          
             if extraData['fanart_image'] == "":
                 extraData['fanart_image']=sectionart
@@ -1697,6 +1698,20 @@ class PlexLibrary(Screen):
         #printl ("fullList = " + fullList, self, "D")
         printl("", self, "C")
         return fullList
+    
+    #===============================================================================
+    # 
+    #===============================================================================
+    def getUniqueId (self, path):
+        '''
+        '''
+        printl("", self, "S")
+        
+        parts = string.split(path, "/")
+        id = parts[3]
+        
+        printl("", self, "C")
+        return id
     
     #===============================================================================
     # 

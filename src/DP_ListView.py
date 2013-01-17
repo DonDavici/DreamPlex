@@ -98,7 +98,9 @@ class DPS_ListView(DP_View):
 		self["current"] = Label()
 		self["quality"] = Label()
 		self["sound"] = Label()
-
+		self["backdroptext"]= Label()
+		self["postertext"]= Label()
+		
 		self["key_red"] = StaticText(_("Sort: ") + _("Default"))
 		self["key_green"] = StaticText(_("Filter: ") + _("None"))
 		self["key_yellow"] = StaticText("")
@@ -183,6 +185,9 @@ class DPS_ListView(DP_View):
 		
 			psuffix = "_poster.jpg"	
 			bsuffix = "_backdrop.jpg"
+			
+			self.setText("backdroptext", "searching ...")
+			self.setText("postertext", "searching ...")
 			
 			if element ["ViewMode"] == "ShowSeasons":
 				#print "is ShowSeasons"
@@ -434,11 +439,10 @@ class DPS_ListView(DP_View):
 		dwl_poster = False
 		
 		if fileExists(getPictureData(self.selection, self.poster_postfix)):
+			self.setText("postertext", "rendering ...")
 			self.showRealPoster()
 		else:
-			dwl_poster = True
-			
-		if dwl_poster == True:
+			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
 			
 			printl("", self, "C")
@@ -455,11 +459,10 @@ class DPS_ListView(DP_View):
 		dwl_backdrop = False
 				
 		if fileExists(getPictureData(self.selection, self.backdrop_postfix)):
+			self.setText("backdroptext", "rendering ...")
 			self.showRealBackdrop()
 		else:
-			dwl_backdrop = True
-		
-		if dwl_backdrop == True:
+			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
 			
 			printl("", self, "C")
@@ -508,9 +511,13 @@ class DPS_ListView(DP_View):
 		download_url = getTranscodeUrl("ArtPoster", self.selection, str(182), str(268))
 		if token != None:
 			download_url += token
-
-		printl( "download url " + download_url, self, "D")
-		downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadPosterCallback())
+		
+		if download_url != False:
+			printl( "download url " + download_url, self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadPosterCallback())
+		else:
+			self.setText("postertext", "not existing ...")
+			printl( "no media for this item", self, "D")
 		
 		printl("", self, "C")
 
@@ -531,10 +538,14 @@ class DPS_ListView(DP_View):
 		
 		if token != None:
 			download_url += token
-		printl( "download url " + download_url, self, "D")
-		
-		downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadBackdropCallback())
-		
+			
+		if download_url != False:
+			printl( "download url " + download_url, self, "D")	
+			downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadBackdropCallback())
+		else:	
+			self.setText("backdroptext", "not existing ...")
+			printl( "no media for this item", self, "D")
+				
 		printl("", self, "C")
 	
 	#===========================================================================
