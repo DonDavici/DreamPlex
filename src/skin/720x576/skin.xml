@@ -124,10 +124,10 @@
 		<widget name="shortDescription" text="" transparent="1" zPosition="5" halign="block" position="275,315" size="416,208" font="Modern;14" foregroundColor="#00ffffff" />
 		
 		<widget name="poster" transparent="0" zPosition="5" position="277,80" size="102,214" alphatest="blend" />
-		<eLabel text="loading ..." transparent="1" zPosition="4" halign="left" position="309,160" size="112,32" font="Modern;17" foregroundColor="#00404040"/>
+		<widget name="postertext" transparent="1" zPosition="4" halign="left" position="309,160" size="112,32" font="Modern;17" foregroundColor="#00404040"/>
 		
 		<widget name="mybackdrop" transparent="0" zPosition="5" position="427,80" size="253,208" alphatest="blend" />
-		<eLabel text="loading ..." transparent="1" zPosition="4" halign="left" position="506,160" size="112,32" font="Modern;17" foregroundColor="#00404040"/>		
+		<widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="506,160" size="112,32" font="Modern;17" foregroundColor="#00404040"/>		
 		<!-- buttons -->
 		<!-- functions -->
 
