@@ -41,7 +41,7 @@ def getTranscodeUrl(picturePointer, selection, width, height):
     serverPicData = selection[1][picturePointer]
     printl("serverPicData: " + str(serverPicData), __name__, "D")
     
-    if serverPicData == "" or serverPicData == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex//resources/plex.png":
+    if serverPicData == "" or serverPicData == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
         printl("no pic data found ... leaving", __name__, "D")
         
         printl("", __name__, "C")

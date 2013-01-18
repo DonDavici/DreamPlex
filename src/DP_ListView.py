@@ -37,7 +37,7 @@ from twisted.web.client import downloadPage
 
 from DP_View import DP_View
 
-from DPH_Arts import getTranscodeUrl, getPictureData
+from DPH_Arts import getPictureData
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
@@ -440,7 +440,9 @@ class DPS_ListView(DP_View):
 		
 		if fileExists(getPictureData(self.selection, self.poster_postfix)):
 			self.setText("postertext", "rendering ...")
-			self.showRealPoster()
+			
+			if self.whatPoster is not None:
+				self.EXpicloadPoster.startDecode(self.whatPoster)
 		else:
 			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
@@ -460,41 +462,15 @@ class DPS_ListView(DP_View):
 				
 		if fileExists(getPictureData(self.selection, self.backdrop_postfix)):
 			self.setText("backdroptext", "rendering ...")
-			self.showRealBackdrop()
+			
+			if self.whatBackdrop is not None:
+				self.EXpicloadBackdrop.startDecode(self.whatBackdrop)
 		else:
 			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
 			
 			printl("", self, "C")
 			return
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showRealPoster(self):
-		'''
-		'''
-		printl("", self, "S")
-		printl("show_poster " + self.whatPoster, self, "I")
-
-		if self.whatPoster is not None:
-			self.EXpicloadPoster.startDecode(self.whatPoster)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showRealBackdrop(self):
-		'''
-		'''
-		printl("", self, "S")
-		printl( "show_backdrop " + self.whatBackdrop, self, "I")
-
-		if self.whatBackdrop is not None:
-			self.EXpicloadBackdrop.startDecode(self.whatBackdrop)
-		
-		printl("", self, "C")
 			
 	#===========================================================================
 	# 
@@ -504,23 +480,18 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		token = plexInstance.getAccessToken()
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
 		
-		download_url = getTranscodeUrl("ArtPoster", self.selection, str(182), str(268))
-		if token != None:
-			download_url += token
-		
-		if download_url != False:
-			printl( "download url " + download_url, self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.downloadPosterCallback())
-		else:
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
 			self.setText("postertext", "not existing ...")
-			printl( "no media for this item", self, "D")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.showPoster())
 		
 		printl("", self, "C")
-
 
 	#===========================================================================
 	# 
@@ -530,44 +501,16 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		token = plexInstance.getAccessToken()
+		download_url = self.selection[1]["ArtBackdrop"]
+		printl( "download url " + download_url, self, "D")	
 		
-		download_url = getTranscodeUrl("ArtBackdrop", self.selection, str(450), str(260))
-		
-		if token != None:
-			download_url += token
-			
-		if download_url != False:
-			printl( "download url " + download_url, self, "D")	
-			downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.downloadBackdropCallback())
-		else:	
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
 			self.setText("backdroptext", "not existing ...")
-			printl( "no media for this item", self, "D")
+			
+		else:
+			printl("starting download", self, "D")	
+			downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
 				
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def downloadPosterCallback(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.showPoster() 
-		
-		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def downloadBackdropCallback(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.showBackdrop() 
-		
-		printl("", self, "C")

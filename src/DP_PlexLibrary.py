@@ -163,6 +163,7 @@ class PlexLibrary(Screen):
     g_myplex_password = ""
     g_myplex_token = ""
     g_myplex_accessToken = ""
+    g_accessTokenHeader = None
     g_transcode = "true"
     g_transcodetype = "0" # 0 = m3u8, 1 = flv
     g_transcodefmt = "m3u8" # m3u8, flv
@@ -238,6 +239,7 @@ class PlexLibrary(Screen):
                     serverConfig.myplexTokenUsername.save()
                     serverConfig.myplexToken.value = self.g_myplex_token
                     serverConfig.myplexToken.save()
+                    
             else:
                 self.g_myplex_token = serverConfig.myplexToken.value
             
@@ -2111,14 +2113,14 @@ class PlexLibrary(Screen):
         printl("", self, "S")
         
         if self.g_connectionType == "2":
-            token = self.getAuthDetails({'token':self.g_myplex_accessToken})
-            printl("accessToken: " +  str(token), self, "D", True, 6)
+            self.g_accessTokenHeader = self.getAuthDetails({'token':self.g_myplex_accessToken})
+            printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
         else:
-            token = None
+            self.g_accessTokenHeader = None
         
-        printl("accessToken: " +  str(token), self, "D", True, 6)
+        printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
         printl("", self, "C")
-        return token
+        return self.g_accessTokenHeader
     
     #===========================================================================
     # 
@@ -3742,6 +3744,15 @@ class PlexLibrary(Screen):
         printl("", self, "S")
         
         new_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, urllib.quote_plus(url), width, height)
+        
+        if self.g_connectionType == "2": # MYPLEX
+            
+            if self.g_accessTokenHeader == None:
+                token = self.getAccessToken()
+            else:
+                token = self.g_accessTokenHeader
+            
+            new_url += token
         
         printl("", self, "C")   
         return new_url
