@@ -13,7 +13,7 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
 from DP_View import DP_View
 from twisted.web.client import downloadPage
-from DPH_Arts import getTranscodeUrl, getPictureData
+from DPH_Arts import getPictureData
 from Tools.Directories import fileExists
 
 #===============================================================================
@@ -35,6 +35,7 @@ class DPS_PosterView(DP_View):
 	'''
 	
 	poster_postfix = "_poster.png"
+	image_prefix = ""
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
 		'''
@@ -42,6 +43,10 @@ class DPS_PosterView(DP_View):
 		printl("", self, "S")
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
+		
+		instance = Singleton()
+		plexInstance = instance.getPlexInstance()
+		self.image_prefix = plexInstance.getServerName().lower()
 		
 		self.EXpicloadPoster3__ = ePicLoad()
 		self.EXpicloadPoster2__ = ePicLoad()
@@ -159,7 +164,7 @@ class DPS_PosterView(DP_View):
 		dwl_poster__2 = False
 		dwl_poster__3 = False
 		
-		if fileExists(getPictureData(self.selection, self.poster_postfix)):
+		if fileExists(getPictureData(self.selection, self.image_prefix, self.poster_postfix)):
 			self.showRealPoster()
 		else:
 			dwl_poster_0_ = True

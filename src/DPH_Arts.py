@@ -27,44 +27,10 @@ from Components.config import config
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
-    
-#===========================================================================
-# 
-#===========================================================================
-def getTranscodeUrl(picturePointer, selection, width, height):
-    '''
-    '''
-    printl("",__name__ , "S")
-    
-    picUrl = "unknown"
-    
-    serverPicData = selection[1][picturePointer]
-    printl("serverPicData: " + str(serverPicData), __name__, "D")
-    
-    if serverPicData == "" or serverPicData == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
-        printl("no pic data found ... leaving", __name__, "D")
-        
-        printl("", __name__, "C")
-        return False
-    
-    try:
-        if selection[1][picturePointer].split('/')[0] == "http:":
-            picData =  serverPicData
-        else:    
-            picData= str("http://" + selection[1]["server"] + serverPicData)
-        
-        picUrl = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (selection[1]["server"], urllib.quote_plus(picData), width, height)
-        picUrl = 'http://%s/%s' % (selection[1]["server"], urllib.quote_plus(picData))
-    except:
-        printl( "something is wrong with the picture", __name__, "W")
-
-    printl("", __name__, "C")
-    return serverPicData
-
 #===============================================================================
 # 
 #===============================================================================
-def getPictureData(selection, postfix):
+def getPictureData(selection, prefix, postfix):
     '''
     '''
     printl("", __name__, "S")
@@ -76,7 +42,8 @@ def getPictureData(selection, postfix):
     else:
         try:
             name = selection[1]["Id"]
-            target = mediaPath + name + postfix
+            target = mediaPath + prefix + "_" + name + postfix
+            printl( "target: " + str(target), __name__, "D")
         except:
             target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
             printl( "something went wrong", __name__, "D")

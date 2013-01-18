@@ -62,6 +62,7 @@ class DPS_ListView(DP_View):
 	'''
 	backdrop_postfix = "_backdrop.jpg"
 	poster_postfix = "_poster.jpg"
+	image_prefix = ""
 	
 	itemsPerPage = int(20)  # @TODO should be set according the desktop size
 
@@ -81,6 +82,10 @@ class DPS_ListView(DP_View):
 		
 		self.whatPoster = None
 		self.whatBackdrop = None
+		
+		instance = Singleton()
+		plexInstance = instance.getPlexInstance()
+		self.image_prefix = plexInstance.getServerName().lower()
 
 		self.parentSeasonId = None
 		self.parentSeasonNr = None
@@ -182,10 +187,7 @@ class DPS_ListView(DP_View):
 		if selection != None:
 			self.selection = selection
 			element = selection[1]
-		
-			psuffix = "_poster.jpg"	
-			bsuffix = "_backdrop.jpg"
-			
+					
 			self.setText("backdroptext", "searching ...")
 			self.setText("postertext", "searching ...")
 			
@@ -195,7 +197,6 @@ class DPS_ListView(DP_View):
 				self.isTvShow = True
 				bname = element["Id"]
 				pname = element["Id"]
-	
 		
 			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
 				#print "is ShowEpisodes all entry"
@@ -216,8 +217,8 @@ class DPS_ListView(DP_View):
 				else:
 					pname = element["Id"]
 	
-			self.whatPoster = self.mediaPath + pname + psuffix
-			self.whatBackdrop = self.mediaPath + bname + bsuffix
+			self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 			
 			self.showPoster() # start decoding image
 			self.showBackdrop() # start decoding image
@@ -438,7 +439,7 @@ class DPS_ListView(DP_View):
 		
 		dwl_poster = False
 		
-		if fileExists(getPictureData(self.selection, self.poster_postfix)):
+		if fileExists(getPictureData(self.selection, self.image_prefix, self.poster_postfix)):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
@@ -460,7 +461,7 @@ class DPS_ListView(DP_View):
 		
 		dwl_backdrop = False
 				
-		if fileExists(getPictureData(self.selection, self.backdrop_postfix)):
+		if fileExists(getPictureData(self.selection, self.image_prefix, self.backdrop_postfix)):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
@@ -489,7 +490,7 @@ class DPS_ListView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.poster_postfix)).addCallback(lambda _: self.showPoster())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showPoster())
 		
 		printl("", self, "C")
 
@@ -510,7 +511,7 @@ class DPS_ListView(DP_View):
 			
 		else:
 			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.selection, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
+			downloadPage(download_url, getPictureData(self.selection, self.image_prefix, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
 				
 		printl("", self, "C")
 	
