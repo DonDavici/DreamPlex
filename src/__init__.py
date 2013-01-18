@@ -240,7 +240,6 @@ def printEnvData():
 	
 	printl("", "__init__::printEnvData", "C")
 	
-
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
@@ -251,5 +250,4 @@ checkPlexEnvironment()
 registerPlexFonts()
 loadPlexSkin()
 loadPlexPlugins()
-
 

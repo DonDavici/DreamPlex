@@ -54,11 +54,12 @@ def getTranscodeUrl(picturePointer, selection, width, height):
             picData= str("http://" + selection[1]["server"] + serverPicData)
         
         picUrl = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (selection[1]["server"], urllib.quote_plus(picData), width, height)
+        picUrl = 'http://%s/%s' % (selection[1]["server"], urllib.quote_plus(picData))
     except:
         printl( "something is wrong with the picture", __name__, "W")
 
     printl("", __name__, "C")
-    return picUrl
+    return serverPicData
 
 #===============================================================================
 # 

@@ -158,7 +158,7 @@ class PlexLibrary(Screen):
     g_skipmetadata = "true" # best understanding when looking getMoviesfromsection
     g_skipmediaflags = "true" # best understanding when looking getMoviesfromsection
     g_skipimages = "false"
-    g_loc = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/" # homeverzeichnis
+    g_loc = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex" # homeverzeichnis
     g_myplex_username = ""
     g_myplex_password = ""
     g_myplex_token = ""
@@ -3431,11 +3431,12 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getThumb(self,  data, server ): # CHECKED
+    def getThumb(self,  data, server, transcode = True ): # CHECKED
         '''
             Simply take a URL or path and determine how to format for images
             @ input: elementTree element, server name
             @ return formatted URL
+            str(182), str(268)
         '''
         printl("", self, "S")
         
@@ -3450,8 +3451,12 @@ class PlexLibrary(Screen):
             return thumbnail
         
         elif thumbnail[0] == '/':
-            printl("", self, "C")   
-            return 'http://'+server+thumbnail
+            if transcode:
+                printl("", self, "C")   
+                return self.photoTranscode(server,'http://localhost:32400'+thumbnail, str(182), str(268))
+            else:
+                printl("", self, "C")   
+                return 'http://'+server+thumbnail
         
         else: 
             printl("", self, "C")   
@@ -3465,6 +3470,7 @@ class PlexLibrary(Screen):
             Simply take a URL or path and determine how to format for fanart
             @ input: elementTree element, server name
             @ return formatted URL for photo resizing
+            str(450), str(260)
         '''
         printl("", self, "S")
         
@@ -3481,7 +3487,7 @@ class PlexLibrary(Screen):
         elif fanart[0] == '/':
             if transcode:
                 printl("", self, "C")   
-                return self.photoTranscode(server,'http://localhost:32400'+fanart)
+                return self.photoTranscode(server,'http://localhost:32400'+fanart, str(450), str(260))
             else:
                 printl("", self, "C")   
                 return 'http://%s%s' % (server, fanart)
@@ -3730,12 +3736,12 @@ class PlexLibrary(Screen):
     #===========================================================================
     # 
     #===========================================================================
-    def photoTranscode(self, server, url ): # CHECKED
+    def photoTranscode(self, server, url, width, height ): # CHECKED
         '''
         '''
         printl("", self, "S")
         
-        new_url = 'http://%s/photo/:/transcode?url=%s&width=1280&height=720' % (server, urllib.quote_plus(url))
+        new_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, urllib.quote_plus(url), width, height)
         
         printl("", self, "C")   
         return new_url
