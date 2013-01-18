@@ -140,6 +140,57 @@
 
 	</screen>
 
+	<!-- DPS_PosterView -->
+  <screen name="DPS_PosterView" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#20404040">
+    <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Named; 18" backgroundColor="#20404040" foregroundColor="#00ffffff" halign="right" />
+    <!-- visu -->
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/top.png" zPosition="2" position="0,0" size="1280,65" alphatest="blend" />
+	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/bottom.png" zPosition="2" position="0,655" size="1280,65" alphatest="blend" />
+    <!--widget name="backdrop" position="0,0" zPosition="2" size="1280,720" text="/hdd/valerie/media/defaultbackdrop.m1v" /-->
+    <!-- content -->
+    <!--widget name="listview_itemsperpage" text="3" position="0,0" zPosition="0" size="1,1" /-->
+    <widget source="listview" render="Listbox" zPosition="3" position="-17,0" size="1,1" scrollbarMode="showNever" transparent="0" backgroundColor="#20404040" backgroundColorSelected="#00000000">
+      <convert type="TemplatedMultiContent">
+            {"template": [ MultiContentEntryText(pos = (0,0), size = (1,1), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0) ],
+            "fonts": [gFont("Modern", 20)],
+            "itemHeight": 32,
+            "scrollbarMode": "showNever"
+            }
+        </convert>
+    </widget>
+    <widget name="title" transparent="1" zPosition="5" halign="left" position="71,25" size="746,35" font="Modern;25" backgroundColor="#20404040" foregroundColor="#00ffffff" />
+    <widget name="poster_m3" transparent="0" zPosition="5" position="-94,337" size="195,267" alphatest="blend" />
+    <widget name="poster_m2" transparent="0" zPosition="5" position="112,337" size="195,267" alphatest="blend" />
+    <widget name="poster_m1" transparent="0" zPosition="5" position="318,337" size="195,267" alphatest="blend" />
+    <widget name="poster_0_" transparent="0" zPosition="5" position="542,337" size="195,267" alphatest="blend" />
+    <widget name="poster_p1" transparent="0" zPosition="5" position="766,337" size="195,267" alphatest="blend" />
+    <widget name="poster_p2" transparent="0" zPosition="5" position="972,337" size="195,267" alphatest="blend" />
+    <widget name="poster_p3" transparent="0" zPosition="5" position="1178,337" size="195,267" alphatest="blend" />
+    
+	<!--widget name="seenPng" zPosition="6" position="0,0" size="56,40" text="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/seen_poster.png" /-->
+    <widget name="seen_m3" transparent="0" zPosition="6" position="-94,337" size="195,267" alphatest="blend" />
+    <widget name="seen_m2" transparent="0" zPosition="6" position="112,337"  size="195,267" alphatest="blend" />
+    <widget name="seen_m1" transparent="0" zPosition="6" position="318,337" size="195,267" alphatest="blend" />
+    <widget name="seen_0_"  transparent="0" zPosition="6" position="542,337" size="195,267" alphatest="blend" />
+    <widget name="seen_p1" transparent="0" zPosition="6" position="766,337" size="195,267" alphatest="blend" />
+    <widget name="seen_p2" transparent="0" zPosition="6" position="972,337" size="195,267" alphatest="blend" />
+    <widget name="seen_p3" transparent="0" zPosition="6" position="1178,337" size="195,267" alphatest="blend" />
+	
+	<widget name="shortDescriptionContainer" transparent="0" zPosition="8" position="112,325" size="1056,292" backgroundColor="#20404040" />
+    <widget name="shortDescription" text="" transparent="1" zPosition="9" halign="block" position="490,394" size="740,260" font="Modern;18" foregroundColor="#00ffffff" />
+    
+    <!-- buttons -->
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="53,695" size="266,2" alphatest="blend" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="3" position="355,695" size="266,2" alphatest="blend" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="657,695" size="266,2" alphatest="blend" />
+    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="960,695" size="266,2" alphatest="blend" />
+    <!-- functions -->
+	<widget source="key_red" render="Label" position="71,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040"  />
+    <widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget source="key_yellow" render="Label" position="675,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget source="key_blue" render="Label" position="977,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget name="number_key_popup" zPosition="4" halign="center" valign="center" position="556,188" size="177,125" font="Modern;75" foregroundColor="#00ffffff" backgroundColor="#20404040" />
+  </screen>
 	
 	<!-- DPS_ServerEntriesListConfigScreen -->
 	<screen name="DPS_ServerEntriesListConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="#00000000" flags="wfNoBorder">

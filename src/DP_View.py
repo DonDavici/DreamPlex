@@ -26,6 +26,7 @@ from Components.ActionMap import HelpableActionMap
 from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Label import Label
+from Components.config import config
 from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
@@ -122,6 +123,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
 		self.session.nav.stopService()
 		
+		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
+		
 		# Initialise library list
 		list = []
 		self["listview"] = List(list, True)
@@ -144,7 +147,7 @@ class DP_View(Screen, NumericalTextInput):
 			"down":       (self.onKeyDown, ""),
 			"up_quick":   (self.onKeyUpQuick, ""),
 			"down_quick": (self.onKeyDownQuick, ""),
-			#"info":       (self.onKeyInfo, ""),
+			"info":       (self.onKeyInfo, ""),
 			#"menu":       (self.onKeyMenu, ""),
 
 			"red":        (self.onKeyRed, ""),
@@ -860,8 +863,8 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		if self.FAST_STILLPIC is False:
-			self.refresh()
+		#if self.FAST_STILLPIC is False:
+		self.refresh()
 		
 		printl("", self, "C")
 
@@ -890,8 +893,8 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		if self.FAST_STILLPIC is False:
-			self.refresh()
+		#if self.FAST_STILLPIC is False:
+		self.refresh()
 		
 		printl("", self, "C")
 

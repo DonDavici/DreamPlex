@@ -10,10 +10,13 @@ from Components.Sources.StaticText import StaticText
 from Components.AVSwitch import AVSwitch
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
 from DP_View import DP_View
 from twisted.web.client import downloadPage
 from DPH_Arts import getPictureData
+
 from Tools.Directories import fileExists
 
 #===============================================================================
@@ -48,24 +51,40 @@ class DPS_PosterView(DP_View):
 		plexInstance = instance.getPlexInstance()
 		self.image_prefix = plexInstance.getServerName().lower()
 		
-		self.EXpicloadPoster3__ = ePicLoad()
-		self.EXpicloadPoster2__ = ePicLoad()
-		self.EXpicloadPoster1__ = ePicLoad()
+		self.postersLeft = {}
+		self.whatPoster_0_ = None
+		self.postersRight = {}
+		
+		self.parentSeasonId = None
+		self.parentSeasonNr = None
+		self.isTvShow = False
+		
+		self.EXpicloadPoster_m3 = ePicLoad()
+		self.EXpicloadPoster_m2 = ePicLoad()
+		self.EXpicloadPoster_m1 = ePicLoad()
 		self.EXpicloadPoster_0_ = ePicLoad()
-		self.EXpicloadPoster__1 = ePicLoad()
-		self.EXpicloadPoster__2 = ePicLoad()
-		self.EXpicloadPoster__3 = ePicLoad()
+		self.EXpicloadPoster_p1 = ePicLoad()
+		self.EXpicloadPoster_p2 = ePicLoad()
+		self.EXpicloadPoster_p3 = ePicLoad()
 		
 		
 		self.EXscale = (AVSwitch().getFramebufferScale())
 		
-		self["poster3__"] = Pixmap()
-		self["poster2__"] = Pixmap()
-		self["poster1__"] = Pixmap()
+		self["poster_m3"] = Pixmap()
+		self["poster_m2"] = Pixmap()
+		self["poster_m1"] = Pixmap()
 		self["poster_0_"] = Pixmap()
-		self["poster__1"] = Pixmap()
-		self["poster__2"] = Pixmap()
-		self["poster__3"] = Pixmap()
+		self["poster_p1"] = Pixmap()
+		self["poster_p2"] = Pixmap()
+		self["poster_p3"] = Pixmap()
+		
+		self["seen_m3"] = Pixmap()
+		self["seen_m2"] = Pixmap()
+		self["seen_m1"] = Pixmap()
+		self["seen_0_"] = Pixmap()
+		self["seen_p1"] = Pixmap()
+		self["seen_p2"] = Pixmap()
+		self["seen_p3"] = Pixmap()
 		
 		self["title"] = Label()
 		
@@ -80,13 +99,33 @@ class DPS_PosterView(DP_View):
 		
 		self.skinName = self.viewName[2]
 		
-		self.EXpicloadPoster3__.PictureData.get().append(self.DecodeActionPoster3__)
-		self.EXpicloadPoster2__.PictureData.get().append(self.DecodeActionPoster2__)
-		self.EXpicloadPoster1__.PictureData.get().append(self.DecodeActionPoster1__)
+		self.EXpicloadPoster_m3.PictureData.get().append(self.DecodeActionPoster_m3)
+		self.EXpicloadPoster_m2.PictureData.get().append(self.DecodeActionPoster_m2)
+		self.EXpicloadPoster_m1.PictureData.get().append(self.DecodeActionPoster_m1)
 		self.EXpicloadPoster_0_.PictureData.get().append(self.DecodeActionPoster_0_)
-		self.EXpicloadPoster__1.PictureData.get().append(self.DecodeActionPoster__1)
-		self.EXpicloadPoster__2.PictureData.get().append(self.DecodeActionPoster__2)
-		self.EXpicloadPoster__3.PictureData.get().append(self.DecodeActionPoster__3)
+		self.EXpicloadPoster_p1.PictureData.get().append(self.DecodeActionPoster_p1)
+		self.EXpicloadPoster_p2.PictureData.get().append(self.DecodeActionPoster_p2)
+		self.EXpicloadPoster_p3.PictureData.get().append(self.DecodeActionPoster_p3)
+		
+		self.onLayoutFinish.append(self.setPara)
+		
+		printl("", self, "C")
+		
+	#==============================================================================
+	# 
+	#==============================================================================
+	def setPara(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.EXpicloadPoster_m3.setPara([self["poster_m3"].instance.size().width(), self["poster_m3"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_m2.setPara([self["poster_m2"].instance.size().width(), self["poster_m2"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_m1.setPara([self["poster_m1"].instance.size().width(), self["poster_m1"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_0_.setPara([self["poster_0_"].instance.size().width(), self["poster_0_"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_p1.setPara([self["poster_p1"].instance.size().width(), self["poster_p1"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_p2.setPara([self["poster_p2"].instance.size().width(), self["poster_p2"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster_p3.setPara([self["poster_p2"].instance.size().width(), self["poster_p2"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
 		printl("", self, "C")
 
@@ -131,13 +170,53 @@ class DPS_PosterView(DP_View):
 		printl("", self, "S")
 		printl("selection: " + str(selection), self, "S")
 		
-		element = selection[1]
-		self.resetCurrentImages()
-		
 		if selection != None:
+			self.postersLeft  = {}
+			self.postersRight = {}
+			self.selection = selection
+			element = selection[1]
+			pname = self.getFileNameFormSection(selection)
+			self.whatPoster_0_ = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 			
+			currentIndex = self["listview"].getIndex()
+			printl("currentIndex: " + str(currentIndex), self, "D")
+			listViewList = self["listview"].list
+			count = int(len(listViewList))
+			printl("count:" + str(count), self, "D")
+			
+			for i in range(1,4): # 1, 2, 3
+				
+				if currentIndex >= i:
+					tmpSelectionMinus = listViewList[currentIndex - i]
+					pname = self.getFileNameFormSection(tmpSelectionMinus)
+					self.postersLeft[i] = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+					#self.whatPoster_m.i = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+					#self.setPoster("poster_m" + str(i), listViewList[currentIndex - i][1]["ArtPosterId"])
+					
+					#self.setPosterFromPixmap("seen_-" + str(i), listViewList[currentIndex - i][4])
+				
+				else:
+					pass
+					#self["poster_m" + str(i)].hide()
+					#self["seen_-" + str(i)].hide()
+				
+				if (currentIndex + i) < count:
+					printl("drinnen", self, "D")
+					tmpSelectionPlus = listViewList[currentIndex + i]
+					pname = self.getFileNameFormSection(tmpSelectionPlus)
+					#self.whatPoster_p + i = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+					self.postersRight[i] = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+					printl("posterRIght an i " + str(self.postersRight[i]), self, "D")
+					#self.setPoster("poster_p" + str(i), listViewList[currentIndex + i][1]["ArtPosterId"])
+					#self.setPosterFromPixmap("seen_+" + str(i), listViewList[currentIndex + i][4])
+				
+				else:
+					pass
+					#self["poster_p" + str(i)].hide()
+					#self["seen_+" + str(i)].hide()
+
 			self.setText("title", selection[0])
-			self.setText("shortDescription", element["Plot"], what=_("Overview"))	
+			self.setText("shortDescription", element["Plot"].encode('utf8'), what=_("Overview"))
 			
 			self.showImages(element)
 			
@@ -148,6 +227,38 @@ class DPS_PosterView(DP_View):
 		printl("", self, "C")
 		
 	
+	def getFileNameFormSection(self, selection):
+		element = selection[1]
+		#self.resetCurrentImages()
+		
+		if element ["ViewMode"] == "ShowSeasons":
+			#print "is ShowSeasons"
+			self.parentSeasonId = element ["Id"]
+			self.isTvShow = True
+			bname = element["Id"]
+			pname = element["Id"]
+	
+		elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
+			#print "is ShowEpisodes all entry"
+			bname = self.parentSeasonId
+			pname = self.parentSeasonId
+			
+		elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] != "":
+			#print "is ShowEpisodes special season"
+			self.parentSeasonNr = element["Id"]			
+			bname = self.parentSeasonId
+			pname = element["Id"]
+		
+		else:
+			#print "is ELSE"
+			bname = element["Id"]
+			if self.isTvShow is True:
+				pname = self.parentSeasonNr
+			else:
+				pname = element["Id"]
+				
+		return pname
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -156,62 +267,321 @@ class DPS_PosterView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		dwl_poster3__ = False
-		dwl_poster2__ = False
-		dwl_poster1__ = False
-		dwl_poster_0_ = False
-		dwl_poster__1 = False
-		dwl_poster__2 = False
-		dwl_poster__3 = False
-		
-		if fileExists(getPictureData(self.selection, self.image_prefix, self.poster_postfix)):
-			self.showRealPoster()
-		else:
-			dwl_poster_0_ = True
-		
-		self.setPoster("poster_0_", selection[1]["ArtPosterId"])
-
-		currentIndex = self["listview"].getIndex()
 		listViewList = self["listview"].list
-		count = len(listViewList)
+		currentIndex = self["listview"].getIndex()
+				
+		self.checkL3(listViewList, currentIndex)
+		self.checkL2(listViewList, currentIndex)
+		self.checkL1(listViewList, currentIndex)
+		self.checkP0(listViewList, currentIndex)
+		self.checkR1(listViewList, currentIndex)
+		self.checkR2(listViewList, currentIndex)
+		self.checkR3(listViewList, currentIndex)
 		
-		for i in range(1,4): # 1, 2, 3
+#===============================================================================
+#		#self.setPoster("poster_0_", selection["ArtPoster"])
+# 
+#		currentIndex = self["listview"].getIndex()
+#		listViewList = self["listview"].list
+#		count = len(listViewList)
+#		
+#		for i in range(1,4): # 1, 2, 3
+#			
+#			if currentIndex >= i:
+#				self.showPoster("poster" + str(i) + "__", listViewList[currentIndex - i][1]["ArtPosterId"])
+#			
+#			else:
+#				self["poster" + str(i) + "__"].hide()
+#			
+#			if currentIndex + i < count:
+#				self.showPoster("poster__" + str(i), listViewList[currentIndex + i][1]["ArtPosterId"])
+#			
+#			else:
+#				self["poster__" + str(i)].hide()
+#===============================================================================
+		
+		printl("", self, "C")
+	
+	
+	
+	def checkP0(self, listViewList, currentIndex):
+		if fileExists(getPictureData(self.selection, self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showP0()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadP0(self.selection)
+			pass
+		
+		
+		
+	def checkL1(self, listViewList, currentIndex):
 			
-			if currentIndex >= i:
-				self.setPoster("poster" + str(i) + "__", listViewList[currentIndex - i][1]["ArtPosterId"])
+		if fileExists(getPictureData(listViewList[currentIndex - 1], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showL1()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadL1(listViewList[currentIndex - 1])
+			pass
+		
+	def checkL2(self, listViewList, currentIndex):
+		if fileExists(getPictureData(listViewList[currentIndex - 2], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showL2()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadL2(listViewList[currentIndex - 2])
+			pass
+	
+	def checkL3(self, listViewList, currentIndex):	
+		if fileExists(getPictureData(listViewList[currentIndex - 3], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showL3()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadL3(listViewList[currentIndex - 3])
+			pass
+		
+	def checkR1(self, listViewList, currentIndex):
+		if fileExists(getPictureData(listViewList[currentIndex + 1], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showR1()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadR1(listViewList[currentIndex + 1])
+			pass
+		
+	def checkR2(self, listViewList, currentIndex):
+		if fileExists(getPictureData(listViewList[currentIndex + 2], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showR2()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadR2(listViewList[currentIndex + 2])
+			pass
+		
+		
+	def checkR3(self, listViewList, currentIndex):
+		if fileExists(getPictureData(listViewList[currentIndex + 3], self.image_prefix, self.poster_postfix)):
+			#self.setText("postertext", "rendering ...")
+			self.showR3()
+		else:
+			#self.setText("postertext", "downloading ...")
+			self.downloadR3(listViewList[currentIndex + 3])
+			pass
+		
+	
+	def showP0(self):
+		#self.setText("postertext", "rendering ...")
+		
+		if self.whatPoster_0_ is not None:
+			self.EXpicloadPoster_0_.startDecode(self.whatPoster_0_)
+		
+		
+		
+	def showL1(self):
 			
-			else:
-				self["poster" + str(i) + "__"].hide()
-			
-			if currentIndex + i < count:
-				self.setPoster("poster__" + str(i), listViewList[currentIndex + i][1]["ArtPosterId"])
-			
-			else:
-				self["poster__" + str(i)].hide()
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersLeft[1] is not None:
+			printl("show me: " + str(self.postersLeft[1]), self, "D")
+			test = self.EXpicloadPoster_m1.startDecode(self.postersLeft[1])
+
+		
+	def showL2(self):
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersLeft[2] is not None:
+			printl("show me: " + str(self.postersLeft[2]), self, "D")
+			test = self.EXpicloadPoster_m2.startDecode(self.postersLeft[2])
+
+	
+	def showL3(self):	
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersLeft[3] is not None:
+			printl("show me: " + str(self.postersLeft[3]), self, "D")
+			test = self.EXpicloadPoster_m3.startDecode(self.postersLeft[3])
+		
+	def showR1(self):
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersRight[1] is not None:
+			printl("show me: " + str(self.postersRight[1]), self, "D")
+			test = self.EXpicloadPoster_p1.startDecode(self.postersRight[1])
+		
+	def showR2(self):
+
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersRight[2] is not None:
+			printl("show me: " + str(self.postersRight[2]), self, "D")
+			test = self.EXpicloadPoster_p2.startDecode(self.postersRight[2])
+
+		
+		
+	def showR3(self):
+
+		#self.setText("postertext", "rendering ...")
+		
+		if self.postersRight[3] is not None:
+			printl("show me: " + str(self.postersRight[3]), self, "D")
+			test = self.EXpicloadPoster_p3.startDecode(self.postersRight[3])
+
+	
+	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadL3(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL3())
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setPoster(self, posterName, artId):
+	def downloadL2(self, selection):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self[posterName].instance is not None:
-			self[posterName].show()
-			poster = config.plugins.pvmc.mediafolderpath.value + artId + "_poster"
-			
-			if os.access(poster + self.postersize + ".png", os.F_OK):
-				self[posterName].instance.setPixmapFromFile(poster + self.postersize + ".png")
-			
-			else:
-				self[posterName].instance.setPixmapFromFile(config.plugins.pvmc.mediafolderpath.value + \
-					"defaultposter" + self.postersize + ".png")
-				
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL2())
+		
 		printl("", self, "C")
-				
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadL1(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL1())
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadP0(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showP0())
+		
+		printl("", self, "C")
+	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadR1(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showR1())
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadR2(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showR2())
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadR3(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		download_url = self.selection[1]["ArtPoster"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			self.setText("postertext", "not existing ...")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showR3())
+		
+		printl("", self, "C")
+	
+	
+			
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -381,42 +751,42 @@ class DPS_PosterView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster3__(self, pictureInfo=""):
+	def DecodeActionPoster_m3(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster3__.getData()
-			self["poster3__"].instance.setPixmap(ptr)
+		if self.postersLeft[3] is not None:
+			ptr = self.EXpicloadPoster_m3.getData()
+			self["poster_m3"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster2__(self, pictureInfo=""):
+	def DecodeActionPoster_m2(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster2__.getData()
-			self["poster2__"].instance.setPixmap(ptr)
+		if self.postersLeft[2] is not None:
+			ptr = self.EXpicloadPoster_m2.getData()
+			self["poster_m2"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster1__(self, pictureInfo=""):
+	def DecodeActionPoster_m1(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster1__.getData()
-			self["poster1__"].instance.setPixmap(ptr)
+		if self.postersLeft[1] is not None:
+			ptr = self.EXpicloadPoster_m1.getData()
+			self["poster_m1"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
@@ -428,7 +798,7 @@ class DPS_PosterView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
+		if self.whatPoster_0_ is not None:
 			ptr = self.EXpicloadPoster_0_.getData()
 			self["poster_0_"].instance.setPixmap(ptr)
 			
@@ -437,42 +807,42 @@ class DPS_PosterView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster__1(self, pictureInfo=""):
+	def DecodeActionPoster_p1(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster__1.getData()
-			self["poster__1"].instance.setPixmap(ptr)
+		if self.postersRight[1] is not None:
+			ptr = self.EXpicloadPoster_p1.getData()
+			self["poster_p1"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster__2(self, pictureInfo=""):
+	def DecodeActionPoster_p2(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster__2.getData()
-			self["poster__2"].instance.setPixmap(ptr)
+		if self.postersRight[2] is not None:
+			ptr = self.EXpicloadPoster_p2.getData()
+			self["poster_p2"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def DecodeActionPoster__3(self, pictureInfo=""):
+	def DecodeActionPoster_p3(self, pictureInfo=""):
 		'''
 		'''
 		printl("", self, "S")
 		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster__3.getData()
-			self["poster__3"].instance.setPixmap(ptr)
+		if self.postersRight[3] is not None:
+			ptr = self.EXpicloadPoster_p3.getData()
+			self["poster_p3"].instance.setPixmap(ptr)
 			
 		printl("", self, "C")
 	
@@ -485,12 +855,12 @@ class DPS_PosterView(DP_View):
 		printl("", self, "S")
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		self["poster3__"].instance.setPixmapFromFile(ptr)
-		self["poster2__"].instance.setPixmapFromFile(ptr)
-		self["poster1__"].instance.setPixmapFromFile(ptr)
+		self["poster_m3"].instance.setPixmapFromFile(ptr)
+		self["poster_m2"].instance.setPixmapFromFile(ptr)
+		self["poster_m1"].instance.setPixmapFromFile(ptr)
 		self["poster_0_"].instance.setPixmapFromFile(ptr)
-		self["poster__1"].instance.setPixmapFromFile(ptr)
-		self["poster__2"].instance.setPixmapFromFile(ptr)
-		self["poster__3"].instance.setPixmapFromFile(ptr)
+		self["poster_p1"].instance.setPixmapFromFile(ptr)
+		self["poster_p2"].instance.setPixmapFromFile(ptr)
+		self["poster_p3"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
