@@ -27,25 +27,25 @@ You should have received a copy of the GNU General Public License
 # 
 #===============================================================================
 class Singleton:
-    """
-    singlton config object
-    """
-    __we_are_one = {}
-    __plexInstance = ""
-    __logFileInstance = ""
+	"""
+	singlton config object
+	"""
+	__we_are_one = {}
+	__plexInstance = ""
+	__logFileInstance = ""
 
-    def __init__(self):
-        #implement the borg patter (we are one)
-        self.__dict__ = self.__we_are_one
+	def __init__(self):
+		#implement the borg patter (we are one)
+		self.__dict__ = self.__we_are_one
 
-    def getPlexInstance(self, value=None):
-        '''with value you can set the singleton content'''
-        if value:
-            self.__plexInstance = value
-        return self.__plexInstance
-    
-    def getLogFileInstance(self, value=None):
-        '''with value you can set the singleton content'''
-        if value:
-            self.__logFileInstance = value
-        return self.__logFileInstance
+	def getPlexInstance(self, value=None):
+		'''with value you can set the singleton content'''
+		if value:
+			self.__plexInstance = value
+		return self.__plexInstance
+	
+	def getLogFileInstance(self, value=None):
+		'''with value you can set the singleton content'''
+		if value:
+			self.__logFileInstance = value
+		return self.__logFileInstance

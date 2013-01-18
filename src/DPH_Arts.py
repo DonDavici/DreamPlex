@@ -31,23 +31,23 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 def getPictureData(selection, prefix, postfix):
-    '''
-    '''
-    printl("", __name__, "S")
-    
-    mediaPath = config.plugins.dreamplex.mediafolderpath.value
-    
-    if selection[1]["Id"] is None or selection[1]["Id"] == "None" or selection[1]["Id"] == "":
-        target = "None"
-    else:
-        try:
-            name = selection[1]["Id"]
-            target = mediaPath + prefix + "_" + name + postfix
-            printl( "target: " + str(target), __name__, "D")
-        except:
-            target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-            printl( "something went wrong", __name__, "D")
-    
-    printl("", __name__, "C")
-    return target    
-    
+	'''
+	'''
+	printl("", __name__, "S")
+	
+	mediaPath = config.plugins.dreamplex.mediafolderpath.value
+	
+	if selection[1]["Id"] is None or selection[1]["Id"] == "None" or selection[1]["Id"] == "":
+		target = "None"
+	else:
+		try:
+			name = selection[1]["Id"]
+			target = mediaPath + prefix + "_" + name + postfix
+			printl( "target: " + str(target), __name__, "D")
+		except:
+			target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+			printl( "something went wrong", __name__, "D")
+	
+	printl("", __name__, "C")
+	return target	
+	
