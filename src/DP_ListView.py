@@ -38,6 +38,8 @@ from twisted.web.client import downloadPage
 from DP_View import DP_View
 
 from DPH_Arts import getPictureData
+from enigma import eServiceReference
+from urllib import urlencode, quote_plus
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
@@ -63,6 +65,8 @@ class DPS_ListView(DP_View):
 	backdrop_postfix = "_backdrop.jpg"
 	poster_postfix = "_poster.jpg"
 	image_prefix = ""
+	playTheme = False
+	plexInstance = None
 	
 	itemsPerPage = int(20)  # @TODO should be set according the desktop size
 
@@ -73,10 +77,12 @@ class DPS_ListView(DP_View):
 		'''
 		'''
 		printl("", self , "S")
+		self.session = session
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
 		
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
+		self.playTheme = config.plugins.dreamplex.playTheme.value
 		
 		self.EXscale = (AVSwitch().getFramebufferScale())
 		
@@ -84,8 +90,8 @@ class DPS_ListView(DP_View):
 		self.whatBackdrop = None
 		
 		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		self.image_prefix = plexInstance.getServerName().lower()
+		self.plexInstance = instance.getPlexInstance()
+		self.image_prefix = self.plexInstance.getServerName().lower()
 
 		self.parentSeasonId = None
 		self.parentSeasonNr = None
@@ -197,6 +203,18 @@ class DPS_ListView(DP_View):
 				self.isTvShow = True
 				bname = element["Id"]
 				pname = element["Id"]
+				
+				if self.playTheme == True:
+					printl("start pĺaying theme", self, "I")
+					accessToken = self.plexInstance.g_myplex_accessToken
+					theme = element["theme"]
+					server = element["server"]
+					printl("theme: " + str(theme), self, "D")
+					url = "http://" + str(server) + str(theme) + "?X-Plex-Token=" + str(accessToken)
+					sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
+					printl("sref: " + str(sref), self, "D")
+					self.session.nav.stopService()
+	 				self.session.nav.playService(eServiceReference(sref))
 		
 			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
 				#print "is ShowEpisodes all entry"
@@ -293,6 +311,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
+		self.session.nav.stopService()
 		super(getViewClass(), self).close(arg)
 		
 		printl("", self, "C")

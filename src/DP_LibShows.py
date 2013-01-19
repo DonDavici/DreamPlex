@@ -108,6 +108,7 @@ class DP_LibShows(DP_LibMain):
 				d["Creation"]		= arguments.get('addedAt', 0)
 				d["Banner"]			= arguments.get('banner', "")
 				d["server"]			= arguments.get('server', "")
+				d["theme"]			= arguments.get('theme', "")
 				
 				d["ViewMode"] = "ShowSeasons"
 				d["ScreenTitle"] = d["Title"]

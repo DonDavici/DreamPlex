@@ -71,6 +71,7 @@ config.plugins.dreamplex.mediafolderpath   = ConfigText(default = defaultMediaFo
 config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)
+config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
 
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
@@ -236,6 +237,7 @@ def printEnvData():
 	printl("setBufferSize: " + str(config.plugins.dreamplex.setBufferSize.value), "__init__::printEnvData", "I")
 	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::printEnvData", "I")
 	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::printEnvData", "I")
+	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::printEnvData", "I")
 
 	
 	printl("", "__init__::printEnvData", "C")

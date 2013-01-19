@@ -295,31 +295,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return mainMenuList
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onClose(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		if self.urlQueue is not None:
-			# Push in the thread exit commands a few times as we are leaving
-			self.urlQueue.put((None, None))
-			self.urlQueue.put((None, None))
-			self.urlQueue.put((None, None))
-			self.urlQueue.put((None, None))
-			self.urlQueue.put((None, None))
-			self.urlQueue.put(("Thread Exit", None))
-			self.urlQueue.put(("Thread Exit", None))
-			self.urlQueue.put(("Thread Exit", None))
-			self.urlQueue.put(("Thread Exit", None))
-			self.urlQueue.put(("Thread Exit", None))
-			self.streamQueue.put(("Thread Exit", None, None, None))
-			self.urlQueue = None
-			self.streamQueue = None
-			
-			printl("", self, "C")
 	#============================================================================
 	# 
 	#============================================================================
@@ -1506,6 +1481,7 @@ class PlexLibrary(Screen):
 		fullList=[]
 		
 		for show in ShowTags:
+			#printl("show: " + str(show), self, "D")
 	
 			tempgenre=[]
 			
@@ -1536,6 +1512,7 @@ class PlexLibrary(Screen):
 					   'token'			 : self.g_myplex_accessToken ,
 					   'key'			   : show.get('key','') ,
 					   'server'			: str(server) ,
+					   'theme'			: show.get('theme', ''),
 					   'ratingKey'		 : str(show.get('ratingKey',0)) }
 	
 			#banner art
@@ -1626,6 +1603,7 @@ class PlexLibrary(Screen):
 		fullList=[]
 		
 		for season in SeasonTags:
+			#printl("season: " + str(season),self, "D")
 	
 			if willFlatten:
 				url='http://'+server+season.get('key')
