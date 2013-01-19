@@ -1006,15 +1006,19 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
-		print selectKeyValuePair
+		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
+		
 		if selectKeyValuePair is None:
+			
 			self.close()
+			printl("", self, "C")
 			return
 		
 		self._load(self.onLeavePrimaryKeyValuePair)
+		
 		for i in range(len(self.listViewList)):
 			entry = self.listViewList[i][1]
-			print i, entry
+			printl("iterator: " + str(i) + " entry: " + str(entry), self, "I")
 			isIndex = True
 			
 			for key in selectKeyValuePair.keys():
@@ -1037,6 +1041,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 	
 		library = self.loadLibrary(primaryKeys)
+		printl("library: " + str(library), self, "D")
 		
 		self.listViewList = library[0]
 		self.onEnterPrimaryKeys = library[1]
@@ -1044,6 +1049,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.onLeaveSelectKeyValuePair = library[3]
 		self.onSortKeyValuePair = library[4]
 		self.onFilterKeyValuePair = library[5]
+		
 		if len(library) >= 7:
 			self.libraryFlags = library[6]
 		else:
