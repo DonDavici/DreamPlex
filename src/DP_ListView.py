@@ -204,6 +204,7 @@ class DPS_ListView(DP_View):
 				bname = element["Id"]
 				pname = element["Id"]
 				
+				# @TODO lets put this in a seperate play class
 				if self.playTheme == True:
 					printl("start pĺaying theme", self, "I")
 					accessToken = self.plexInstance.g_myplex_accessToken

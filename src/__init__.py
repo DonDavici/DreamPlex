@@ -69,7 +69,7 @@ config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
-config.plugins.dreamplex.airplayerPremiumKey		   = ConfigText(default = "", visible_width = 50, fixed_size = False)
+#config.plugins.dreamplex.airplayerPremiumKey		   = ConfigText(default = "", visible_width = 50, fixed_size = False)
 
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
@@ -122,7 +122,7 @@ def printGlobalSettings():
 	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
 	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
-	printl("airplayerPremiumKey: " + str(config.plugins.dreamplex.airplayerPremiumKey.value), "__init__::initGlobalSettings", "I")
+	#printl("airplayerPremiumKey: " + str(config.plugins.dreamplex.airplayerPremiumKey.value), "__init__::initGlobalSettings", "I")
 
 	printl("", "__init__::initPlexSettings", "C")
 
@@ -144,7 +144,8 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
-	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
+	#config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
+	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "I")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "I" )
