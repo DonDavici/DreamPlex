@@ -54,9 +54,6 @@ from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
 
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
-#===============================================================================
-# CONFIG
-#===============================================================================
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
@@ -89,6 +86,47 @@ config.plugins.dreamplex.Entries                   = ConfigSubList()
 #===============================================================================
 # 
 #===============================================================================
+def initBoxInformation():
+	'''
+	'''
+	printl("", "__init__::getBoxInformation", "S")
+	
+	boxInfo = getBoxInformation()
+	printl("=== BOX INFORMATION ===", "__init__::getBoxInformation", "I")
+	printl("Box: " + str(boxInfo), "__init__::getBoxInformation", "I")
+	
+	printl("", "__init__::getBoxInformation", "C")
+	
+#===============================================================================
+# 
+#===============================================================================
+def printGlobalSettings():
+	'''
+	'''
+	printl("", "__init__::initGlobalSettings", "S")
+	
+	printl("=== GLOBAL SETTINGS ===", "__init__::getBoxInformation", "I")
+	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::initGlobalSettings", "I")
+	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::initGlobalSettings", "I")
+	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::initGlobalSettings", "I")
+	printl("mediafolderpath: " + str(config.plugins.dreamplex.mediafolderpath.value), "__init__::initGlobalSettings", "I")
+	printl("playerTempPath: " + str(config.plugins.dreamplex.playerTempPath.value), "__init__::initGlobalSettings", "I")
+	printl("showInMainMenu: " + str(config.plugins.dreamplex.showInMainMenu.value), "__init__::initGlobalSettings", "I")
+	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::initGlobalSettings", "I")
+	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::initGlobalSettings", "I")
+	printl("stopTVOnPicture: " + str(config.plugins.dreamplex.stopTVOnPicture.value), "__init__::initGlobalSettings", "I")
+	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::initGlobalSettings", "I")
+	printl("useQuicktimeUserAgent: " + str(config.plugins.dreamplex.useQuicktimeUserAgent.value), "__init__::initGlobalSettings", "I")
+	printl("setBufferSize: " + str(config.plugins.dreamplex.setBufferSize.value), "__init__::initGlobalSettings", "I")
+	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
+	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::initGlobalSettings", "I")
+	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
+
+	printl("", "__init__::initPlexSettings", "C")
+
+#===============================================================================
+# 
+#===============================================================================
 def initServerEntryConfig():
 	'''
 	'''
@@ -96,44 +134,80 @@ def initServerEntryConfig():
 	
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
 	i = len(config.plugins.dreamplex.Entries) -1
+	
+	# SERVER SETTINGS
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
-	config.plugins.dreamplex.Entries[i].ip 				= ConfigIP(default = [192,168,0,1])
-	config.plugins.dreamplex.Entries[i].dns 			= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = [192,168,0,1])
+	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
-	config.plugins.dreamplex.Entries[i].transcode       = ConfigYesNo(default = False)
-	config.plugins.dreamplex.Entries[i].quality         = ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
-	#config.plugins.dreamplex.Entries[i].streamMode		= ConfigSelection(default="0", choices = [("0", _("HTTP Streaming")),("1", _("Local Buffer Mode")),("2", _("Direct Play"))])
+	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
 	
-	# myPlex
-	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexToken   			= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)	
-	
-	# WOL
-	config.plugins.dreamplex.Entries[i].wol			    = ConfigYesNo(default = False)
-	config.plugins.dreamplex.Entries[i].wol_mac         = ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
-	
+	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "I")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "I" )
 	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "I")
 	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "I")
 	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "I")
 	printl("ip: " + str(config.plugins.dreamplex.Entries[i].ip.value), "__init__::initServerEntryConfig", "I")
 	printl("dns: " + str(config.plugins.dreamplex.Entries[i].dns.value), "__init__::initServerEntryConfig", "I")
-	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "I")
 	printl("port: " + str(config.plugins.dreamplex.Entries[i].port.value), "__init__::initServerEntryConfig", "I")
-	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "I")
-	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "I")
+	printl("playbackType: " + str(config.plugins.dreamplex.Entries[i].playbackType.value), "__init__::initServerEntryConfig", "I")
+	
+	# myPlex
+	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)
+	
+	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "I")
+	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "I")
 	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
 	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "I", True, 4)
 	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "I", True, 8)
 	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
 	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "I")
+	
+	# STREAMED
+	# no options at the moment
+	
+	# TRANSCODED
+	config.plugins.dreamplex.Entries[i].transcode				= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].quality					= ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
+	
+	printl("=== TRANSCODED ===", "__init__::initServerEntryConfig", "I")
+	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "I")
+	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "I")
+	
+	# TRANSCODED VIA PROXY
+	config.plugins.dreamplex.Entries[i].useAirplayerProxy		= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].premiumKey				= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	
+	printl("=== TRANSCODED VIA PROXY ===", "__init__::initServerEntryConfig", "I")
+	printl("useAirplayerProxy: " + str(config.plugins.dreamplex.Entries[i].useAirplayerProxy.value), "__init__::initServerEntryConfig", "I")
+	printl("premiumKey: " + str(config.plugins.dreamplex.Entries[i].premiumKey.value), "__init__::initServerEntryConfig", "I")
+	
+	# DIRECT LOCAL
+	config.plugins.dreamplex.Entries[i].remoteServerType					= ConfigSelection(default="0", choices = [("0", _("Linux")),("1", _("Windows"))])
+	config.plugins.dreamplex.Entries[i].remotePathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].localPathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
+	
+	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "I")
+	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "I")
+	printl("remotePathPart: " + str(config.plugins.dreamplex.Entries[i].remotePathPart.value), "__init__::initServerEntryConfig", "I")
+	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "I")
+	
+	# DIRECT REMOTE
+	# no options at the moment
+	
+	# WOL
+	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].wol_mac			= ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
+	
+	printl ("=== WOL ===", "__init__::initServerEntryConfig", "I")
 	printl("wol: " + str(config.plugins.dreamplex.Entries[i].wol.value), "__init__::initServerEntryConfig", "I")
 	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "I")
 	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "I")
@@ -169,7 +243,7 @@ def loadPlexPlugins():
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_VIDEOS))
 	
-	printl("registering ... tvhshows", "__init__::loadPlexPlugins", "D")
+	printl("registering ... tvhshows", "__inigetBoxInformationt__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_VIDEOS))
 	
 	printl("", "__init__::loadPlexPlugins", "C")
@@ -206,47 +280,15 @@ def _(txt):
 		text = gettext.gettext(txt)
 	
 	printl("text = " + str(text), "__init__::_(txt)", "X")	
-	#printl("", "__init__::_(txt)", "C")
+	#printl("", "__init__::_(txt)", "C")initGlobalSettings
 	return text
-
-#===============================================================================
-# 
-#===============================================================================
-def printEnvData():
-	'''
-	'''
-	printl("", "__init__::printEnvData", "S")
-	
-	boxInfo = getBoxInformation()
-	
-	printl("Environment Data: ","__init__::printEnvData", "I" )
-	printl("Boxinformation: " + str(boxInfo), "__init__::printEnvData", "I")
-	
-	printl("Global Settings: ","__init__::printEnvData", "I" )
-	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::printEnvData", "I")
-	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::printEnvData", "I")
-	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::printEnvData", "I")
-	printl("mediafolderpath: " + str(config.plugins.dreamplex.mediafolderpath.value), "__init__::printEnvData", "I")
-	printl("playerTempPath: " + str(config.plugins.dreamplex.playerTempPath.value), "__init__::printEnvData", "I")
-	printl("showInMainMenu: " + str(config.plugins.dreamplex.showInMainMenu.value), "__init__::printEnvData", "I")
-	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::printEnvData", "I")
-	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::printEnvData", "I")
-	printl("stopTVOnPicture: " + str(config.plugins.dreamplex.stopTVOnPicture.value), "__init__::printEnvData", "I")
-	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::printEnvData", "I")
-	printl("useQuicktimeUserAgent: " + str(config.plugins.dreamplex.useQuicktimeUserAgent.value), "__init__::printEnvData", "I")
-	printl("setBufferSize: " + str(config.plugins.dreamplex.setBufferSize.value), "__init__::printEnvData", "I")
-	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::printEnvData", "I")
-	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::printEnvData", "I")
-	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::printEnvData", "I")
-
-	
-	printl("", "__init__::printEnvData", "C")
 	
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
 localeInit()
-printEnvData()
+initBoxInformation()
+printGlobalSettings()
 initPlexServerConfig()
 checkPlexEnvironment()
 registerPlexFonts()
