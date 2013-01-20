@@ -170,9 +170,9 @@ class PlexLibrary(Screen):
     g_woldelay = 10
     g_nasoverride = "false"
     g_nasoverrideip = "192.168.45.190"
-    g_nasuserid = "userid"
-    g_naspass = "naspass"
-    g_nasroot = "/"
+    g_nasuserid = "username"
+    g_naspass = "password"
+    g_nasroot = "Video"
     g_bonjour = "0" # 0 = OFF, 1= ON
     g_quality = None #
     g_capability = ""
@@ -234,6 +234,10 @@ class PlexLibrary(Screen):
             self.g_stream = "2"
             self.g_transcode = "false"
             self.g_nasoverride = "false"
+            self.g_nasoverrideip = "%d.%d.%d.%d" % tuple(serverConfig.nasOverrideIp.value)
+            self.g_nasuserid = str(serverConfig.smbUser.value)
+            self.g_naspass = str(serverConfig.smbPassword.value)
+            self.g_nasroot = str(serverConfig.nasRoot.value)
 
             if self.g_nasoverrideip == "":
                 printl("DreamPlex -> No NAS IP Specified.  Ignoring setting", self, "I")

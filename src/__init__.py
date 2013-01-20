@@ -197,7 +197,16 @@ def initServerEntryConfig():
 	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "I")
 	
 	# DIRECT REMOTE
-	# no options at the moment
+	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].smbPassword					= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].nasOverrideIp				= ConfigIP(default = [192,168,0,1])
+	config.plugins.dreamplex.Entries[i].nasRoot						= ConfigText(default = "/", visible_width = 50, fixed_size = False)
+	
+	printl("=== DIRECT REMOTE ===", "__init__::initServerEntryConfig", "I")
+	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "I", True, 4)
+	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "I", True, 4)
+	printl("nasOverrideIp: " + str(config.plugins.dreamplex.Entries[i].nasOverrideIp.value), "__init__::initServerEntryConfig", "I")
+	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "I")
 	
 	# WOL
 	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo(default = False)
