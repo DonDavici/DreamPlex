@@ -69,6 +69,7 @@ config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
+config.plugins.dreamplex.airplayerPremiumKey		   = ConfigText(default = "", visible_width = 50, fixed_size = False)
 
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
@@ -121,6 +122,7 @@ def printGlobalSettings():
 	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
 	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
+	printl("airplayerPremiumKey: " + str(config.plugins.dreamplex.airplayerPremiumKey.value), "__init__::initGlobalSettings", "I")
 
 	printl("", "__init__::initPlexSettings", "C")
 
@@ -182,12 +184,6 @@ def initServerEntryConfig():
 	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "I")
 	
 	# TRANSCODED VIA PROXY
-	config.plugins.dreamplex.Entries[i].useAirplayerProxy		= ConfigYesNo(default = False)
-	config.plugins.dreamplex.Entries[i].premiumKey				= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	
-	printl("=== TRANSCODED VIA PROXY ===", "__init__::initServerEntryConfig", "I")
-	printl("useAirplayerProxy: " + str(config.plugins.dreamplex.Entries[i].useAirplayerProxy.value), "__init__::initServerEntryConfig", "I")
-	printl("premiumKey: " + str(config.plugins.dreamplex.Entries[i].premiumKey.value), "__init__::initServerEntryConfig", "I")
 	
 	# DIRECT LOCAL
 	config.plugins.dreamplex.Entries[i].remoteServerType					= ConfigSelection(default="0", choices = [("0", _("Linux")),("1", _("Windows"))])
