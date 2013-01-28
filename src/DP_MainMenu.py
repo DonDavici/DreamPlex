@@ -104,6 +104,7 @@ class DPS_MainMenu(Screen):
 			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
 	
 		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
+		self.mainMenuList.append((_("Exit"), "DPS_Exit"))
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -116,9 +117,8 @@ class DPS_MainMenu(Screen):
 				"right": (self.right, ""),
 				"up":    (self.up, ""),
 				"down":  (self.down, ""),
-				"blue": (self.blue, ""),
-				"red":   (self.red, ""),
 				"cancel":   (self.cancel, ""),
+				"info":   (self.info, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -292,6 +292,9 @@ class DPS_MainMenu(Screen):
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
 					
+				elif selection[1] == "DPS_Exit":
+					self.exit()
+					
 			else:
 				printl("selected entry is executable", self, "D")
 				params = selection[2]
@@ -406,7 +409,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def blue(self):
+	def info(self):
 		'''
 		'''
 		printl("", self, "S")
@@ -418,7 +421,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def red(self):
+	def exit(self):
 		'''
 		'''
 		printl("", self, "S")
