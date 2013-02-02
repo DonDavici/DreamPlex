@@ -65,6 +65,22 @@ class DP_Player(MoviePlayer):
     id = None
     url = None
     transcodingSession = None
+    videoData = None
+    mediaData = None
+    
+    title = ""
+    tagline = ""
+    summary = ""
+    year = ""
+    studio = ""
+    duration = ""
+    contentRating = ""
+    
+    audioCodec = ""
+    videoCodec = ""
+    videoResolution = ""
+    videoFrameRate = ""
+    
     nTracks = False
     switchedLanguage = False
     startNewServiceOnPlay = False
@@ -77,6 +93,8 @@ class DP_Player(MoviePlayer):
         self.session = session
                 
         self.startNewServiceOnPlay = False
+        self.videoData = playerData['videoData']
+        self.mediaData = playerData['mediaData']
         
         # go through the data out of the function call
         self.resume = resume
@@ -85,7 +103,20 @@ class DP_Player(MoviePlayer):
         self.id = str(playerData['id'])
         self.url = str(playerData['playUrl'])
         self.transcodingSession = str(playerData['transcodingSession'])
-
+        
+        # lets prepare all additional data for a better experience :-)
+        self.title = str(self.videoData['title'])
+        self.tagline = str(self.videoData['tagline'])
+        self.summary = str(self.videoData['summary'])
+        self.year = str(self.videoData['year'])
+        self.studio = str(self.videoData['studio'])
+        self.duration = str(self.videoData['duration'])
+        self.contentRating = str(self.videoData['contentRating'])
+        
+        self.audioCodec = str(self.mediaData['audioCodec'])
+        self.videoCodec = str(self.mediaData['videoCodec'])
+        self.videoResolution = str(self.mediaData['videoResolution'])
+        self.videoFrameRate = str(self.mediaData['videoFrameRate'])
 
         # check for playable services
         printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
@@ -120,7 +151,7 @@ class DP_Player(MoviePlayer):
         self.bufferslider = Slider(0, 100)
         self["bufferslider"] = self.bufferslider
         self["bufferslider"].setValue(0)
-        self["label_buffer"] = StaticText("Buffer")
+        self["label_buffer"] = StaticText(self.title)
         self["label_update"] = StaticText("")
         self.bufferSeconds = 0
         self.bufferPercent = 0

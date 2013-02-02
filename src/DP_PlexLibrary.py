@@ -1910,24 +1910,40 @@ class PlexLibrary(Screen):
         audioCount=0
         external={}
         media={}
+        videoData={}
+        mediaData={}
         subOffset=-1
         audioOffset=-1
         selectedSubOffset=-1
         selectedAudioOffset=-1
         
-        timings = tree.find('Video')
+        fromVideo = tree.find('Video')
     
-        media['viewOffset']=timings.get('viewOffset',0)       
-        media['duration']=timings.get('duration',0)
+        videoData['title'] = fromVideo.get('title', "")
+        videoData['tagline'] = fromVideo.get('tagline', "")
+        videoData['summary'] = fromVideo.get('summary', "")
+        videoData['year'] = fromVideo.get('year', "")
+        videoData['studio'] = fromVideo.get('studio', "")
+        videoData['viewOffset']=fromVideo.get('viewOffset',0)
+        videoData['duration']=fromVideo.get('duration',0)
+        videoData['contentRating'] = fromVideo.get('contentRating', "")
         
-        options = tree.getiterator('Part')    
+        
+        fromMedia = tree.find('Media')
+        
+        mediaData['audioCodec'] = fromVideo.get('audioCodec', "")
+        mediaData['videoCodec'] = fromVideo.get('videoCodec', "")
+        mediaData['videoResolution'] = fromVideo.get('videoResolution', "")
+        mediaData['videoFrameRate'] = fromVideo.get('videoFrameRate', "")
+        
+        fromParts = tree.getiterator('Part')    
         
         contents="type"
         
         #Get the Parts info for media type and source selection 
-        for stuff in options:
+        for part in fromParts:
             try:
-                bits=stuff.get('key'), stuff.get('file')
+                bits=part.get('key'), part.get('file')
                 parts.append(bits)
                 partsCount += 1
             except: pass
@@ -1970,15 +1986,16 @@ class PlexLibrary(Screen):
                 printl( "Stream selection is set OFF", self, "I")
                   
         
-        streamData={'contents'   : contents ,
-                    'audio'      : audio , 
-                    'audioCount' : audioCount , 
-                    'subtitle'   : subtitle , 
-                    'subCount'   : subCount ,
-                    'external'   : external , 
-                    'parts'      : parts , 
-                    'partsCount' : partsCount , 
-                    'media'      : media , 
+        streamData={'contents'   : contents,
+                    'audio'      : audio, 
+                    'audioCount' : audioCount, 
+                    'subtitle'   : subtitle, 
+                    'subCount'   : subCount,
+                    'external'   : external, 
+                    'parts'      : parts, 
+                    'partsCount' : partsCount, 
+                    'videoData'  : videoData,
+                    'mediaData'  : mediaData, 
                     'subOffset'  : selectedSubOffset , 
                     'audioOffset': selectedAudioOffset }
         
@@ -2033,7 +2050,7 @@ class PlexLibrary(Screen):
             playurl=url
     
         try:
-            resume=int(int(streams['media']['viewOffset']))
+            resume=int(int(streams['videoData']['viewOffset']))
         except:
             resume=0
         
@@ -2116,6 +2133,8 @@ class PlexLibrary(Screen):
         playerData["server"] = server
         playerData["id"] = id
         playerData["transcodingSession"] = self.g_sessionID
+        playerData["videoData"] = streams['videoData']
+        playerData["mediaData"] = streams['mediaData']
         
         return playerData
     
