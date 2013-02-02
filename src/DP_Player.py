@@ -120,8 +120,6 @@ class DP_Player(MoviePlayer):
         self.bufferslider = Slider(0, 100)
         self["bufferslider"] = self.bufferslider
         self["bufferslider"].setValue(0)
-        self["label_bitrate"] = StaticText("Bitrate: N/A")
-        self["label_speed"] = StaticText("DL-Speed: N/A")
         self["label_buffer"] = StaticText("Buffer")
         self["label_update"] = StaticText("")
         self.bufferSeconds = 0

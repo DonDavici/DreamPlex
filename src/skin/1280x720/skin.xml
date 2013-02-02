@@ -264,8 +264,6 @@
 		</widget>
 		<ePixmap zPosition="-1" position="625,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
 		<widget name="bufferslider" position="625,40" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
-		<widget source="label_bitrate" transparent="1" render="Label" zPosition="2" position="625,50" size="250,18" font="Regular;17" backgroundColor="#00000000" foregroundColor="#00404040" />
-		<widget source="label_speed" transparent="1" render="Label" zPosition="2" position="875,50" size="250,18" font="Regular;17" backgroundColor="#00000000" foregroundColor="#00404040" halign="right" />
 		<widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="625,5"  size="250,28" font="Regular;23" backgroundColor="#00000000" foregroundColor="#00404040" />
 		<widget source="label_update"  transparent="1" render="Label" zPosition="4" position="880,5"  size="250,28" font="Regular;24" backgroundColor="#00000000" foregroundColor="#00404040" halign="right"/>
 	</screen>
