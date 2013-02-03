@@ -298,6 +298,9 @@ def registerPlexFonts():
 	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf", "Named", 100, False)
 	printl2("added => goodtime.ttf", "__common__::registerPlexFonts", "I")
 	
+	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/saint.ttf", "Saint", 100, False)
+	printl2("added => saint.ttf", "__common__::registerPlexFonts", "I")
+	
 	printl2("", "__common__::registerPlexFonts", "C")
 
 #===============================================================================

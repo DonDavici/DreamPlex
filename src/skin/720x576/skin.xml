@@ -22,6 +22,11 @@
 				"itemHeight": 40 }</convert>
 		</widget>
 		<!-- buttons -->
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/buttons/red.png" zPosition="8" position="29,556" size="149,1" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/buttons/blue.png" zPosition="8" position="540,556" size="149,1" alphatest="blend" />
+		
+		<widget source="key_red" render="Label" position="39,528" zPosition="9" size="129,29" font="Modern;16" halign="center" valign="center" transparent="1" />
+		<widget source="key_blue" render="Label" position="549,528" zPosition="9" size="129,29" font="Modern;16" halign="center" valign="center" transparent="1" />
 	</screen>
 
 	<!-- DPS_Settings -->
@@ -124,12 +129,7 @@
 		<widget name="mybackdrop" transparent="0" zPosition="5" position="427,80" size="253,208" alphatest="blend" />
 		<widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="506,160" size="112,32" font="Modern;17" foregroundColor="#00404040"/>		
 		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/buttons/red.png" zPosition="3" position="29,556" size="149,1" alphatest="blend" />
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png" zPosition="8" position="650,556" size="35,25" alphatest="blend" />
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_9.png" zPosition="8" position="700,556" size="35,25" alphatest="blend" />
-        
 		<!-- functions -->
-        <widget source="key_red" render="Label" position="71,660" zPosition="8" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
 
 	</screen>
 
@@ -210,6 +210,8 @@
 		</widget>
 		<ePixmap zPosition="-1" position="351,32" size="281,6" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
 		<widget name="bufferslider" position="351,32" size="281,6" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
+		<widget source="label_bitrate" transparent="1" render="Label" zPosition="2" position="351,40" size="140,14" font="Regular;13" backgroundColor="#00000000" foregroundColor="#00404040" />
+		<widget source="label_speed" transparent="1" render="Label" zPosition="2" position="492,40" size="140,14" font="Regular;13" backgroundColor="#00000000" foregroundColor="#00404040" halign="right" />
 		<widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="351,4"  size="140,22" font="Regular;18" backgroundColor="#00000000" foregroundColor="#00404040" />
 		<widget source="label_update"  transparent="1" render="Label" zPosition="4" position="495,4"  size="140,22" font="Regular;19" backgroundColor="#00000000" foregroundColor="#00404040" halign="right"/>
 	</screen>

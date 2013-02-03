@@ -93,6 +93,7 @@ class DP_LibMovies(DP_LibMain):
 			d["Seen"]        	= properties.get('playcount', "")#
 			d["Popularity"]     = properties.get('rating', 0)#
 			d["Studio"]     	= properties.get('studio', 0)#
+			d["Director"]     	= properties.get('director', 0)#
 			d["MPAA"]     		= properties.get('mpaa', 0)#
 			d["Tag"]            = properties.get('tagline', "")#
 			d["server"]			= properties.get('server', "")
@@ -102,6 +103,7 @@ class DP_LibMovies(DP_LibMain):
 			d["Resolution"]    	= arguments.get('VideoResolution', "")
 			d["Video"]    	   	= arguments.get('VideoCodec', "")
 			d["Sound"]         	= arguments.get('AudioCodec', "")
+			d["Aspect"]			= arguments.get('VideoAspect', "")
 			d["ArtBackdrop"] 	= arguments.get('fanart_image', "")
 			d["ArtPoster"]   	= arguments.get('thumb', "")
 			d["Creation"]		= arguments.get('addedAt', 0)

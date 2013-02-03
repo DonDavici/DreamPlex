@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 import math
 
-from enigma import ePicLoad
+from enigma import ePicLoad, getDesktop
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.Sources.StaticText import StaticText
@@ -68,7 +68,7 @@ class DPS_ListView(DP_View):
 	playTheme = False
 	plexInstance = None
 	
-	itemsPerPage = int(20)  # @TODO should be set according the desktop size
+	itemsPerPage = 0
 
 	#===========================================================================
 	# 
@@ -80,6 +80,8 @@ class DPS_ListView(DP_View):
 		self.session = session
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
+		
+		self.setListViewElementsCount()
 		
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.playTheme = config.plugins.dreamplex.playTheme.value
@@ -99,12 +101,34 @@ class DPS_ListView(DP_View):
 
 		self["poster"] = Pixmap()
 		self["mybackdrop"] = Pixmap()
+
+		self["audio_unknown"] = Pixmap()
+		self["audio_dts"] = Pixmap()
+		self["audio_ac3"] = Pixmap()
+		self["audio_stereo"] = Pixmap()
+		
+		self["resolution_unknown"] = Pixmap()
+		self["resolution_1080"] = Pixmap()
+		self["resolution_720"] = Pixmap()
+		self["resolution_sd"] = Pixmap()
+		
+		self["aspect_unknown"] = Pixmap()
+		self["aspect_wide"] = Pixmap()
+		self["aspect_43"] = Pixmap()
+		
+		self["codec_unknown"] = Pixmap()
+		self["codec_h264"] = Pixmap()
+		self["codec_ts"] = Pixmap()
+		
 		self["title"] = Label()
 		self["tag"] = Label()
 		self["shortDescription"] = Label()
 		self["genre"] = Label()
 		self["year"] = Label()
 		self["runtime"] = Label()
+		self["studio"] = Label()
+		self["director"] = Label()
+		self["mpaa"] = Label()
 		self["total"] = Label()
 		self["current"] = Label()
 		self["quality"] = Label()
@@ -239,38 +263,122 @@ class DPS_ListView(DP_View):
 			self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 			
-			self.showPoster() # start decoding image
-			self.showBackdrop() # start decoding image
+			
 					
 			self.setText("title", element["ScreenTitle"])
-			self.setText("tag", element["Tag"], True)
+			self.setText("tag", element["Tag"].encode('utf8'), True)
 			self.setText("shortDescription", element["Plot"].encode('utf8'), what=_("Overview"))
+			self.setText("studio", element["Studio"])
+			self.setText("year", str(element["Year"]))
+			self.setText("mpaa", str(element["MPAA"]))
+			self.setText("director", str(element["Director"].encode('utf8')))
+			self.setText("genre", str(element["Genres"].encode('utf8')))
+			self.setText("runtime", str(element["Runtime"]))
 			
-			res = "576i"
+			codec = "unknown"
+			if element.has_key("Video"):
+				codec = element["Video"]
+				printl("Video: " + str(codec), self, "D")
+				
+				if codec == "h264":
+					self["codec_unknown"].instance.hide()
+					self["codec_h264"].instance.show()
+					self["codec_ts"].instance.hide()
+				
+				elif codec == "ts":
+					self["codec_unknown"].instance.hide()
+					self["codec_h264"].instance.hide()
+					self["codec_ts"].instance.show()
+				else:
+					self["codec_unknown"].instance.show()
+					self["codec_h264"].instance.hide()
+					self["codec_ts"].instance.hide()
+			else:
+				self["codec_unknown"].instance.show()
+				self["codec_h264"].instance.hide()
+				self["codec_ts"].instance.hide()
+				
+				
+			aspect = "unknown"
+			if element.has_key("Aspect"):
+				aspect = element["Aspect"]
+				printl("Aspect: " + str(aspect), self, "D")
+				
+				if aspect == "1.78":
+					self["aspect_unknown"].instance.hide()
+					self["aspect_wide"].instance.hide()
+					self["aspect_43"].instance.show()
+				elif aspect == "2.35":
+					self["aspect_unknown"].instance.hide()
+					self["aspect_wide"].instance.show()
+					self["aspect_43"].instance.hide()
+				else:
+					self["aspect_unknown"].instance.show()
+					self["aspect_wide"].instance.hide()
+					self["aspect_43"].instance.hide()
+			
+			else:
+				self["aspect_unknown"].instance.show()
+				self["aspect_wide"].instance.hide()
+				self["aspect_43"].instance.hide()
+			
+			
+			
+			res = "unknown"
 			if element.has_key("Resolution"):
 				res = element["Resolution"]
-			if res != "576" and res != "576i":
-				self["quality"].setText(res)
+				printl("Resolution: " + str(res), self, "D")
+				
+				if res == "1080":
+					self["resolution_unknown"].instance.hide()
+					self["resolution_1080"].instance.show()
+					self["resolution_720"].instance.hide()
+					self["resolution_sd"].instance.hide()
+				elif res == "720":
+					self["resolution_unknown"].instance.hide()
+					self["resolution_1080"].instance.hide()
+					self["resolution_720"].instance.show()
+					self["resolution_sd"].instance.hide()
+				else:
+					self["resolution_unknown"].instance.hide()
+					self["resolution_1080"].instance.hide()
+					self["resolution_720"].instance.hide()
+					self["resolution_sd"].instance.show()
 			else:
-				self["quality"].setText(" ")
+				self["resolution_unknown"].instance.show()
+				self["resolution_1080"].instance.hide()
+				self["resolution_720"].instance.hide()
+				self["resolution_sd"].instance.hide()
 			
-			snd = "STEREO"
+			snd = "unknown"
 			if element.has_key("Sound"):
 				snd = element["Sound"].upper()
-			if snd != "STEREO":
-				self["sound"].setText(snd)
+				printl("sound: " + str(snd), self, "D")
+			
+				if snd == "DCA" or snd == "DTS":
+					self["audio_unknown"].instance.hide()
+					self["audio_dts"].instance.show()
+					self["audio_ac3"].instance.hide()
+					self["audio_stereo"].instance.hide()
+					
+				elif snd == "AC3":
+					self["audio_unknown"].instance.hide()
+					self["audio_dts"].instance.hide()
+					self["audio_ac3"].instance.show()
+					self["audio_stereo"].instance.hide()
+					
+				elif snd == "STEREO":
+					self["audio_unknown"].instance.hide()
+					self["audio_dts"].instance.hide()
+					self["audio_ac3"].instance.hide()
+					self["audio_stereo"].instance.show()
+				
 			else:
-				self["sound"].setText(" ")
+				self["audio_unknown"].instance.show()
+				self["audio_dts"].instance.hide()
+				self["audio_ac3"].instance.hide()
+				self["audio_stereo"].instance.hide()
 			
-			genres = ""
-			for genre in element["Genres"]:
-				genres += genre + " "
-			genres = genres.strip()
-	
-			self.setText("genre", genres, what=_("Genre"))
-			
-			self.setText("runtime", str(element["Runtime"]))
-		
 			try:
 				popularity = int(round(float(element["Popularity"])))
 			except Exception, e: 
@@ -297,6 +405,9 @@ class DPS_ListView(DP_View):
 			
 			self.setText("total", _("Total:") + ' ' + str(itemsTotal))
 			self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
+			
+			self.showPoster() # start decoding image
+			self.showBackdrop() # start decoding image
 			
 		else:
 			self.setText("title", "no data retrieved")
@@ -535,3 +646,20 @@ class DPS_ListView(DP_View):
 				
 		printl("", self, "C")
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setListViewElementsCount(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		desktop = getDesktop(0).size().width()
+		if desktop == 720:
+			self.itemsPerPage = int(15)
+		elif desktop == 1024:
+			self.itemsPerPage = int(15)
+		elif desktop == 1280:
+			self.itemsPerPage = int(8)
+			
+		printl("", self, "C")

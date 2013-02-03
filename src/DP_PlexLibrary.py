@@ -155,8 +155,8 @@ class PlexLibrary(Screen):
     g_playtheme = "false"
     g_forcedvd = "false"
     g_skipcontext = "true" # best understanding when looking getMoviesfromsection
-    g_skipmetadata = "true" # best understanding when looking getMoviesfromsection
-    g_skipmediaflags = "true" # best understanding when looking getMoviesfromsection
+    g_skipmetadata = "false" # best understanding when looking getMoviesfromsection
+    g_skipmediaflags = "false" # best understanding when looking getMoviesfromsection
     g_skipimages = "false"
     g_loc = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex" # homeverzeichnis
     g_myplex_username = ""
