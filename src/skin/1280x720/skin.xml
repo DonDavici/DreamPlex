@@ -108,6 +108,13 @@
         <convert type="ClockToText">Date</convert>
         </widget>
         
+        <widget name="rated_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated_nc17" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NC-17.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated_g" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png" position="6750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated_pg" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated_pg13" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated_r" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        
         <widget name="audio_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
         <widget name="audio_dts" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
         <widget name="audio_ac3" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
@@ -211,23 +218,21 @@
         </convert>
     </widget>
     <widget name="title" transparent="1" zPosition="5" halign="left" position="71,25" size="746,35" font="Modern;25" backgroundColor="#20404040" foregroundColor="#00ffffff" />
-    <widget name="poster_m3" transparent="0" zPosition="5" position="-94,337" size="195,267" alphatest="blend" />
-    <widget name="poster_m2" transparent="0" zPosition="5" position="112,337" size="195,267" alphatest="blend" />
-    <widget name="poster_m1" transparent="0" zPosition="5" position="318,337" size="195,267" alphatest="blend" />
-    <widget name="poster_0_" transparent="0" zPosition="5" position="542,337" size="195,267" alphatest="blend" />
-    <widget name="poster_p1" transparent="0" zPosition="5" position="766,337" size="195,267" alphatest="blend" />
-    <widget name="poster_p2" transparent="0" zPosition="5" position="972,337" size="195,267" alphatest="blend" />
-    <widget name="poster_p3" transparent="0" zPosition="5" position="1178,337" size="195,267" alphatest="blend" />
+    <widget name="poster_0" transparent="0" zPosition="5" position="-94,337" size="195,267" alphatest="blend" />
+    <widget name="poster_1" transparent="0" zPosition="5" position="112,337" size="195,267" alphatest="blend" />
+    <widget name="poster_2" transparent="0" zPosition="5" position="318,337" size="195,267" alphatest="blend" />
+    <widget name="poster_3" transparent="0" zPosition="5" position="542,337" size="195,267" alphatest="blend" />
+    <widget name="poster_4" transparent="0" zPosition="5" position="766,337" size="195,267" alphatest="blend" />
+    <widget name="poster_5" transparent="0" zPosition="5" position="972,337" size="195,267" alphatest="blend" />
     
 	<!--widget name="seenPng" zPosition="6" position="0,0" size="56,40" text="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/seen_poster.png" /-->
-    <widget name="seen_m3" transparent="0" zPosition="6" position="-94,337" size="195,267" alphatest="blend" />
-    <widget name="seen_m2" transparent="0" zPosition="6" position="112,337"  size="195,267" alphatest="blend" />
-    <widget name="seen_m1" transparent="0" zPosition="6" position="318,337" size="195,267" alphatest="blend" />
-    <widget name="seen_0_"  transparent="0" zPosition="6" position="542,337" size="195,267" alphatest="blend" />
-    <widget name="seen_p1" transparent="0" zPosition="6" position="766,337" size="195,267" alphatest="blend" />
-    <widget name="seen_p2" transparent="0" zPosition="6" position="972,337" size="195,267" alphatest="blend" />
-    <widget name="seen_p3" transparent="0" zPosition="6" position="1178,337" size="195,267" alphatest="blend" />
-	
+    <widget name="seen_0" transparent="0" zPosition="6" position="-94,337" size="195,267" alphatest="blend" />
+    <widget name="seen_1" transparent="0" zPosition="6" position="112,337"  size="195,267" alphatest="blend" />
+    <widget name="seen_2" transparent="0" zPosition="6" position="318,337" size="195,267" alphatest="blend" />
+    <widget name="seen_3"  transparent="0" zPosition="6" position="542,337" size="195,267" alphatest="blend" />
+    <widget name="seen_4" transparent="0" zPosition="6" position="766,337" size="195,267" alphatest="blend" />
+    <widget name="seen_5" transparent="0" zPosition="6" position="972,337" size="195,267" alphatest="blend" />
+    	
 	<widget name="shortDescriptionContainer" transparent="0" zPosition="8" position="112,325" size="1056,292" backgroundColor="#20404040" />
     <widget name="shortDescription" text="" transparent="1" zPosition="9" halign="block" position="490,394" size="740,260" font="Modern;18" foregroundColor="#00ffffff" />
     
