@@ -131,7 +131,7 @@ class DP_Player(MoviePlayer):
         if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
             self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
         
-        elif self.url[-3:] == ".ts": # seems like we have a real ts file so we will use sref 1
+        elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
             self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
         
         else: # if we have a real file but no ts but for eg mkv we will also use sref 4097
