@@ -3455,7 +3455,7 @@ class PlexLibrary(Screen):
         elif fanart[0] == '/':
             if transcode:
                 printl("", self, "C")   
-                return self.photoTranscode(server,'http://localhost:32400'+fanart, str(450), str(260))
+                return self.photoTranscode(server,'http://localhost:32400'+fanart, str(560), str(315))
             else:
                 printl("", self, "C")   
                 return 'http://%s%s' % (server, fanart)
