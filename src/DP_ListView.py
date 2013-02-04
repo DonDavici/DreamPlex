@@ -120,6 +120,13 @@ class DPS_ListView(DP_View):
 		self["codec_h264"] = Pixmap()
 		self["codec_ts"] = Pixmap()
 		
+		self["rated_unknown"] = Pixmap()
+		self["rated_nc17"] = Pixmap()
+		self["rated_g"] = Pixmap()
+		self["rated_pg"] = Pixmap()
+		self["rated_pg13"] = Pixmap()
+		self["rated_r"] = Pixmap()
+		
 		self["title"] = Label()
 		self["tag"] = Label()
 		self["shortDescription"] = Label()
@@ -379,6 +386,58 @@ class DPS_ListView(DP_View):
 				self["audio_ac3"].instance.hide()
 				self["audio_stereo"].instance.hide()
 			
+			mpaa = "unknown"
+			if element.has_key("MPAA"):
+				mpaa = element["MPAA"].upper()
+				printl("MPAA: " + str(mpaa), self, "D")
+				
+				if mpaa == "RATED PG-13":
+					self["rated_unknown"].instance.hide()
+					self["rated_nc17"].instance.hide()
+					self["rated_g"].instance.hide()
+					self["rated_pg"].instance.hide()
+					self["rated_pg13"].instance.show()
+					self["rated_r"].instance.hide()
+					
+				elif mpaa == "RATED PG":
+					self["rated_unknown"].instance.hide()
+					self["rated_nc17"].instance.hide()
+					self["rated_g"].instance.hide()
+					self["rated_pg"].instance.show()
+					self["rated_pg13"].instance.hide()
+					self["rated_r"].instance.hide()
+				
+				elif mpaa == "RATED R":
+					self["rated_unknown"].instance.hide()
+					self["rated_nc17"].instance.hide()
+					self["rated_g"].instance.hide()
+					self["rated_pg"].instance.hide()
+					self["rated_pg13"].instance.hide()
+					self["rated_r"].instance.show()
+				
+				elif mpaa == "NC-17":
+					self["rated_unknown"].instance.hide()
+					self["rated_nc17"].instance.show()
+					self["rated_g"].instance.hide()
+					self["rated_pg"].instance.hide()
+					self["rated_pg13"].instance.hide()
+					self["rated_r"].instance.hide()
+				
+				else:
+					self["rated_unknown"].instance.show()
+					self["rated_nc17"].instance.hide()
+					self["rated_g"].instance.hide()
+					self["rated_pg"].instance.hide()
+					self["rated_pg13"].instance.hide()
+					self["rated_r"].instance.hide()
+			
+			else:
+				self["rated_unknown"].instance.show()
+				self["rated_nc17"].instance.hide()
+				self["rated_g"].instance.hide()
+				self["rated_pg"].instance.hide()
+				self["rated_pg13"].instance.hide()
+				self["rated_r"].instance.hide()
 			try:
 				popularity = int(round(float(element["Popularity"])))
 			except Exception, e: 
