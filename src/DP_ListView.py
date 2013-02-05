@@ -272,15 +272,15 @@ class DPS_ListView(DP_View):
 			
 			
 					
-			self.setText("title", element["ScreenTitle"])
-			self.setText("tag", element["Tag"].encode('utf8'), True)
-			self.setText("shortDescription", element["Plot"].encode('utf8'), what=_("Overview"))
-			self.setText("studio", element["Studio"])
-			self.setText("year", str(element["Year"]))
-			self.setText("mpaa", str(element["MPAA"]))
-			self.setText("director", str(element["Director"].encode('utf8')))
-			self.setText("genre", str(element["Genres"].encode('utf8')))
-			self.setText("runtime", str(element["Runtime"]))
+			self.setText("title", element.get("ScreenTitle", ""))
+			self.setText("tag", element.get("Tag", "").encode('utf8'), True)
+			self.setText("shortDescription", element.get("Plot", "").encode('utf8'), what=_("Overview"))
+			self.setText("studio", element.get("Studio", ""))
+			self.setText("year", str(element.get("Year", "")))
+			self.setText("mpaa", str(element.get("MPAA", "")))
+			self.setText("director", str(element.get("Director", "").encode('utf8')))
+			self.setText("genre", str(element.get("Genres", "").encode('utf8')))
+			self.setText("runtime", str(element.get("Runtime", "")))
 			
 			codec = "unknown"
 			if element.has_key("Video"):

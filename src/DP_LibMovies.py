@@ -92,9 +92,9 @@ class DP_LibMovies(DP_LibMain):
 			d["Genres"]         = properties.get('genre', "")
 			d["Seen"]        	= properties.get('playcount', "")#
 			d["Popularity"]     = properties.get('rating', 0)#
-			d["Studio"]     	= properties.get('studio', 0)#
-			d["Director"]     	= properties.get('director', 0)#
-			d["MPAA"]     		= properties.get('mpaa', 0)#
+			d["Studio"]     	= properties.get('studio', "")#
+			d["Director"]     	= properties.get('director', "")#
+			d["MPAA"]     		= properties.get('mpaa', "")#
 			d["Tag"]            = properties.get('tagline', "")#
 			d["server"]			= properties.get('server', "")
 			

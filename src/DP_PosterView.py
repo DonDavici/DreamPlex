@@ -284,19 +284,18 @@ class DPS_PosterView(DP_View):
 			self.show_P0(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P0(listViewList[currentIndex])
+			self.download_P0(listViewList[currentIndex], currentIndex)
 			pass
 		
 		
 		
 	def check_P1(self, listViewList, currentIndex):
-			
 		if fileExists(getPictureData(listViewList[currentIndex], self.image_prefix, self.poster_postfix)):
 			#self.setText("postertext", "rendering ...")
 			self.show_P1(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P1(listViewList[currentIndex])
+			self.download_P1(listViewList[currentIndex], currentIndex)
 			pass
 		
 	def check_P2(self, listViewList, currentIndex):
@@ -305,7 +304,7 @@ class DPS_PosterView(DP_View):
 			self.show_P2(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P2(listViewList[currentIndex])
+			self.download_P2(listViewList[currentIndex], currentIndex)
 			pass
 	
 	def check_P3(self, listViewList, currentIndex):	
@@ -314,7 +313,7 @@ class DPS_PosterView(DP_View):
 			self.show_P3(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P3(listViewList[currentIndex])
+			self.download_P3(listViewList[currentIndex], currentIndex)
 			pass
 		
 	def check_P4(self, listViewList, currentIndex):
@@ -323,7 +322,7 @@ class DPS_PosterView(DP_View):
 			self.show_P4(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P4(listViewList[currentIndex])
+			self.download_P4(listViewList[currentIndex], currentIndex)
 			pass
 		
 	def check_P5(self, listViewList, currentIndex):
@@ -332,7 +331,7 @@ class DPS_PosterView(DP_View):
 			self.show_P5(currentIndex)
 		else:
 			#self.setText("postertext", "downloading ...")
-			self.download_P5(listViewList[currentIndex])
+			self.download_P5(listViewList[currentIndex], currentIndex)
 			pass
 		
 		
@@ -340,6 +339,7 @@ class DPS_PosterView(DP_View):
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
 			self.EXpicloadPoster_P0.startDecode(self.posters[currentIndex])
 		
@@ -350,43 +350,48 @@ class DPS_PosterView(DP_View):
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
-			test = self.EXpicloadPoster_P1.startDecode(self.posters[currentIndex])
+			self.EXpicloadPoster_P1.startDecode(self.posters[currentIndex])
 
 		
 	def show_P2(self, currentIndex):
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
-			test = self.EXpicloadPoster_P2.startDecode(self.posters[currentIndex])
+			self.EXpicloadPoster_P2.startDecode(self.posters[currentIndex])
 
 	
 	def show_P3(self, currentIndex):	
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
-			test = self.EXpicloadPoster_P3.startDecode(self.posters[currentIndex])
+			self.EXpicloadPoster_P3.startDecode(self.posters[currentIndex])
 		
 	def show_P4(self, currentIndex):
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
-			test = self.EXpicloadPoster_P4.startDecode(self.posters[currentIndex])
+			self.EXpicloadPoster_P4.startDecode(self.posters[currentIndex])
 		
 	def show_P5(self, currentIndex):
 		#self.setText("postertext", "rendering ...")
 		
 		if currentIndex in self.posters:
+			printl("show_P0: " + str(currentIndex), self, "D")	
 			printl("show me: " + str(self.posters[currentIndex]), self, "D")
-			test = self.EXpicloadPoster_P5.startDecode(self.posters[currentIndex])
+			self.EXpicloadPoster_P5.startDecode(self.posters[currentIndex])
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P0(self, selection):
+	def download_P0(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -400,14 +405,14 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL3())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P0(currentIndex))
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P1(self, selection):
+	def download_P1(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -421,14 +426,14 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL2())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P1(currentIndex))
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P2(self, selection):
+	def download_P2(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -442,14 +447,14 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showL1())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P2(currentIndex))
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P3(self, selection):
+	def download_P3(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -463,7 +468,7 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showP0())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P3(currentIndex))
 		
 		printl("", self, "C")
 	
@@ -471,7 +476,7 @@ class DPS_PosterView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P4(self, selection):
+	def download_P4(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -485,14 +490,14 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showR1())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P4(currentIndex))
 		
 		printl("", self, "C")
 	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def download_P5(self, selection):
+	def download_P5(self, selection, currentIndex):
 		'''
 		'''
 		printl("", self, "S")
@@ -506,7 +511,7 @@ class DPS_PosterView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showR2())
+			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.show_P5(currentIndex))
 		
 		printl("", self, "C")
 	
