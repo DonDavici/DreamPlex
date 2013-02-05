@@ -31,6 +31,7 @@ from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.AVSwitch import AVSwitch
+from Components.ProgressBar import ProgressBar
 
 from Tools.Directories import fileExists
 
@@ -133,15 +134,7 @@ class DPS_ListView(DP_View):
 		self["key_yellow"] 			= StaticText("")
 		self["key_blue"] 			= StaticText(self.viewName[0])
 		
-		for i in range(10):
-			stars = "star" + str(i)
-			self[stars] = Pixmap()
-			if self[stars].instance is not None:
-				self[stars].instance.hide()
-		
-		for i in range(10):
-			stars = "nostar" + str(i)
-			self[stars] = Pixmap()
+		self["rating_stars"] = ProgressBar()
 		
 		self.skinName = self.viewName[2]
 
@@ -232,18 +225,13 @@ class DPS_ListView(DP_View):
 			self.setText("runtime", str(element.get("Runtime", " ")))
 			
 			try:
-				popularity = int(round(float(element["Popularity"])))
+				popularity = float(element["Popularity"])
 			except Exception, e: 
 				popularity = 0
 				printl( "error in popularity " + str(e),self, "D")
 				
-			for i in range(popularity):
-				if self["star" + str(i)].instance is not None:
-					self["star" + str(i)].instance.show()
-			
-			for i in range(10 - popularity):
-				if self["star" + str(9 - i)].instance is not None:
-					self["star" + str(9 - i)].instance.hide()
+			self["rating_stars"].setValue(int(popularity) * 10)
+			self["rating_stars"].show()
 			
 			itemsPerPage = self.itemsPerPage
 			itemsTotal = self["listview"].count()

@@ -118,30 +118,9 @@
         
         <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-    	<widget name="star0" transparent="1" zPosition="14" position="800,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star1" transparent="1" zPosition="14" position="830,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star2" transparent="1" zPosition="14" position="860,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star3" transparent="1" zPosition="14" position="890,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star4" transparent="1" zPosition="14" position="920,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star5" transparent="1" zPosition="14" position="950,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star6" transparent="1" zPosition="14" position="980,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star7" transparent="1" zPosition="14" position="1010,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star8" transparent="1" zPosition="14" position="1040,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    	<widget name="star9" transparent="1" zPosition="14" position="1070,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
-    
-    
-    	<widget name="nostar0" transparent="1" zPosition="14" position="800,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar1" transparent="1" zPosition="14" position="830,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar2" transparent="1" zPosition="14" position="860,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar3" transparent="1" zPosition="14" position="890,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar4" transparent="1" zPosition="14" position="920,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar5" transparent="1" zPosition="14" position="950,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar6" transparent="1" zPosition="14" position="980,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar7" transparent="1" zPosition="14" position="1010,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar8" transparent="1" zPosition="14" position="1040,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-    	<widget name="nostar9" transparent="1" zPosition="14" position="1070,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/NoStar.png" alphatest="on" />
-		
-		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="515,491" size="727,175" font="Modern; 18" foregroundColor="#FFFFFF" />
+        <widget name="rating_stars" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_full_middle_size-fs8.png" zPosition="14" position="800,452" size="114,22" transparent="1" borderWidth="0" orientation="orHorizontal"/>
+    	
+    	<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="515,491" size="727,175" font="Modern; 18" foregroundColor="#FFFFFF" />
 		
 		<eLabel text="" zPosition="14" halign="left" position="30,455" size="250,1" backgroundColor="#696969"/>
 		<widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="170,420" size="190,25" font="Modern;20" foregroundColor="#696969"  backgroundColor="#000000" />
