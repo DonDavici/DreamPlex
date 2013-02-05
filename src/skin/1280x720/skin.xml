@@ -108,30 +108,15 @@
         <convert type="ClockToText">Date</convert>
         </widget>
         
-        <widget name="rated_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="rated_nc17" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NC-17.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="rated_g" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png" position="6750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="rated_pg" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="rated_pg13" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="rated_r" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="rated" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="audio_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="audio_dts" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="audio_ac3" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="audio_stereo" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="audio" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="resolution_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="resolution_1080" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="resolution_720" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="resolution_sd" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="resolution" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="aspect_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="aspect_wide" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="aspect_43" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="aspect" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="codec_unknown" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="codec_h264" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
-        <widget name="codec_ts" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
     	<widget name="star0" transparent="1" zPosition="14" position="800,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
     	<widget name="star1" transparent="1" zPosition="14" position="830,452" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/Star.png" alphatest="on" />
