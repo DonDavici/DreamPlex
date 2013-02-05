@@ -94,6 +94,9 @@ class DP_LibShows(DP_LibMain):
 				d["Runtime"]        = properties.get('duration', "")
 				d["Genres"]         = properties.get('genre', "")
 				d["Seen"]        	= properties.get('playcount', "")
+				d["Studio"]     	= properties.get('studio', "")#
+				d["Director"]     	= properties.get('director', "")#
+				d["MPAA"]     		= properties.get('mpaa', "")#
 				
 				d["Id"]				= arguments.get('ratingKey') #we use this because there is the id as value without any need of manipulating
 				d["Tag"]            = arguments.get('tagline', "")
