@@ -1758,7 +1758,7 @@ class PlexLibrary(Screen):
         server=self.getServerFromURL(url)
         
         if self.g_skipimages == "false":        
-            sectionart=self.getFanart(tree, server)
+            sectionart=self.getThumb(tree, server)
          
         randomNumber=str(random.randint(1000000000,9999999999))   
         
@@ -1812,16 +1812,13 @@ class PlexLibrary(Screen):
             
             #Extra data required to manage other properties
             extraData={'type'         : "Video" ,
-                       'thumb'        : self.getThumb(episode, server) ,
-                       'fanart_image' : self.getFanart(episode, server) ,
+                       'thumb'        : self.getThumb(episode, server, x = 560, y = 315) ,
+                       'fanart_image' : sectionart ,
                        'token'        : self.g_myplex_accessToken ,
                        'key'          : episode.get('key',''),
                        'server'       : str(server) ,
                        'ratingKey'    : str(episode.get('ratingKey',0)) }
     
-            if extraData['fanart_image'] == "":
-                extraData['fanart_image']=sectionart
-                              
             #===================================================================
             # #Determine what tupe of watched flag [overlay] to use
             # if details['playcount'] > 0:
@@ -3399,7 +3396,7 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getThumb(self,  data, server, transcode = True ): # CHECKED
+    def getThumb(self,  data, server, transcode = True, x = 182, y = 268): # CHECKED
         '''
             Simply take a URL or path and determine how to format for images
             @ input: elementTree element, server name
@@ -3409,7 +3406,7 @@ class PlexLibrary(Screen):
         printl("", self, "S")
         
         thumbnail=data.get('thumb','').split('?t')[0]
-        
+
         if thumbnail == '':
             printl("", self, "C")   
             return self.g_loc+'/resources/plex.png'
@@ -3421,7 +3418,7 @@ class PlexLibrary(Screen):
         elif thumbnail[0] == '/':
             if transcode:
                 printl("", self, "C")   
-                return self.photoTranscode(server,'http://localhost:32400'+thumbnail, str(182), str(268))
+                return self.photoTranscode(server,'http://localhost:32400'+thumbnail, str(x), str(y))
             else:
                 printl("", self, "C")   
                 return 'http://'+server+thumbnail
@@ -3441,6 +3438,7 @@ class PlexLibrary(Screen):
             str(450), str(260)
         '''
         printl("", self, "S")
+        printl("art: "  + str(data.get('art','')), self, "D")
         
         fanart=data.get('art','')
         
