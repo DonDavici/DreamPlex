@@ -270,17 +270,15 @@ class DPS_ListView(DP_View):
 			self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 			
-			
-					
-			self.setText("title", element.get("ScreenTitle", ""))
-			self.setText("tag", element.get("Tag", "").encode('utf8'), True)
-			self.setText("shortDescription", element.get("Plot", "").encode('utf8'), what=_("Overview"))
-			self.setText("studio", element.get("Studio", ""))
-			self.setText("year", str(element.get("Year", "")))
-			self.setText("mpaa", str(element.get("MPAA", "")))
-			self.setText("director", str(element.get("Director", "").encode('utf8')))
-			self.setText("genre", str(element.get("Genres", "").encode('utf8')))
-			self.setText("runtime", str(element.get("Runtime", "")))
+			self.setText("title", element.get("ScreenTitle", " "))
+			self.setText("tag", element.get("Tag", " ").encode('utf8'), True)
+			self.setText("shortDescription", element.get("Plot", " ").encode('utf8'), what=_("Overview"))
+			self.setText("studio", element.get("Studio", " "))
+			self.setText("year", str(element.get("Year", " ")))
+			self.setText("mpaa", str(element.get("MPAA", " ")))
+			self.setText("director", str(element.get("Director", " ").encode('utf8')))
+			self.setText("genre", str(element.get("Genres", " t").encode('utf8')))
+			self.setText("runtime", str(element.get("Runtime", " ")))
 			
 			codec = "unknown"
 			if element.has_key("Video"):
