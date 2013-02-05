@@ -25,6 +25,7 @@ You should have received a copy of the GNU General Public License
 import math
 
 from enigma import ePicLoad, getDesktop
+from enigma import loadPNG, loadJPG
 from Components.Label import Label
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Sources.StaticText import StaticText
@@ -425,8 +426,9 @@ class DPS_ListView(DP_View):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
-				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-				ptr = self.EXpicloadPoster.getData()
+				#self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				#ptr = self.EXpicloadPoster.getData()
+				ptr = loadJPG(self.whatPoster)
 				self["poster"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("postertext", "downloading ...")
@@ -450,8 +452,9 @@ class DPS_ListView(DP_View):
 			
 			if self.whatBackdrop is not None:
 				printl("drinnen", self, "D")
-				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
-				ptr = self.EXpicloadBackdrop.getData()
+				#self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				#ptr = self.EXpicloadBackdrop.getData()
+				ptr = loadJPG(self.whatBackdrop)
 				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("backdroptext", "downloading ...")
