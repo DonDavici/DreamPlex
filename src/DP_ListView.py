@@ -26,7 +26,7 @@ import math
 
 from enigma import ePicLoad, getDesktop
 from Components.Label import Label
-from Components.Pixmap import Pixmap
+from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.AVSwitch import AVSwitch
@@ -99,57 +99,38 @@ class DPS_ListView(DP_View):
 		self.parentSeasonNr = None
 		self.isTvShow = False
 
-		self["poster"] = Pixmap()
-		self["mybackdrop"] = Pixmap()
+		self["poster"] 				= Pixmap()
+		self["mybackdrop"] 			= Pixmap()
 
-		self["audio_unknown"] = Pixmap()
-		self["audio_dts"] = Pixmap()
-		self["audio_ac3"] = Pixmap()
-		self["audio_stereo"] = Pixmap()
+		self["audio"] 				= MultiPixmap()
+		self["resolution"] 			= MultiPixmap()
+		self["aspect"] 				= MultiPixmap()
+		self["codec"] 				= MultiPixmap()
+		self["rated"] 				= MultiPixmap()
+	
+		self["title"] 				= Label()
+		self["tag"] 				= Label()
+		self["shortDescription"] 	= Label()
+		self["genre"] 				= Label()
+		self["year"] 				= Label()
+		self["runtime"] 			= Label()
+		self["studio"] 				= Label()
+		self["director"] 			= Label()
+		self["mpaa"] 				= Label()
+		self["total"] 				= Label()
+		self["current"] 			= Label()
+		self["quality"] 			= Label()
+		self["sound"] 				= Label()
+		self["backdroptext"]		= Label()
+		self["postertext"]			= Label()
 		
-		self["resolution_unknown"] = Pixmap()
-		self["resolution_1080"] = Pixmap()
-		self["resolution_720"] = Pixmap()
-		self["resolution_sd"] = Pixmap()
+		self["key_red"] 			= StaticText(_("Sort: ") + _("Default"))
+		self["key_green"] 			= StaticText(_("Filter: ") + _("None"))
+		self["key_yellow"] 			= StaticText("")
+		self["key_blue"] 			= StaticText(self.viewName[0])
 		
-		self["aspect_unknown"] = Pixmap()
-		self["aspect_wide"] = Pixmap()
-		self["aspect_43"] = Pixmap()
-		
-		self["codec_unknown"] = Pixmap()
-		self["codec_h264"] = Pixmap()
-		self["codec_ts"] = Pixmap()
-		
-		self["rated_unknown"] = Pixmap()
-		self["rated_nc17"] = Pixmap()
-		self["rated_g"] = Pixmap()
-		self["rated_pg"] = Pixmap()
-		self["rated_pg13"] = Pixmap()
-		self["rated_r"] = Pixmap()
-		
-		self["title"] = Label()
-		self["tag"] = Label()
-		self["shortDescription"] = Label()
-		self["genre"] = Label()
-		self["year"] = Label()
-		self["runtime"] = Label()
-		self["studio"] = Label()
-		self["director"] = Label()
-		self["mpaa"] = Label()
-		self["total"] = Label()
-		self["current"] = Label()
-		self["quality"] = Label()
-		self["sound"] = Label()
-		self["backdroptext"]= Label()
-		self["postertext"]= Label()
-		
-		self["key_red"] = StaticText(_("Sort: ") + _("Default"))
-		self["key_green"] = StaticText(_("Filter: ") + _("None"))
-		self["key_yellow"] = StaticText("")
-		self["key_blue"] = StaticText(self.viewName[0])
-		
-		self.EXpicloadPoster = ePicLoad()
-		self.EXpicloadBackdrop = ePicLoad()
+		self.EXpicloadPoster 		= ePicLoad()
+		self.EXpicloadBackdrop 		= ePicLoad()
 		
 		for i in range(10):
 			stars = "star" + str(i)
@@ -163,9 +144,6 @@ class DPS_ListView(DP_View):
 		
 		self.skinName = self.viewName[2]
 
-		self.EXpicloadPoster.PictureData.get().append(self.DecodeActionPoster)
-		self.EXpicloadBackdrop.PictureData.get().append(self.DecodeActionBackdrop)
-		
 		self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
@@ -181,34 +159,6 @@ class DPS_ListView(DP_View):
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
-		printl("", self, "C")
-	
-	#==============================================================================
-	# 
-	#==============================================================================
-	def DecodeActionPoster(self, pictureInfo=""):
-		'''
-		'''
-		printl("", self, "S")
-		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadPoster.getData()
-			self["poster"].instance.setPixmap(ptr)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def DecodeActionBackdrop(self, pictureInfo=""):
-		'''
-		'''
-		printl("", self, "S")
-		
-		if self.whatPoster is not None:
-			ptr = self.EXpicloadBackdrop.getData()
-			self["mybackdrop"].instance.setPixmap(ptr)
-
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -280,162 +230,6 @@ class DPS_ListView(DP_View):
 			self.setText("genre", str(element.get("Genres", " t").encode('utf8')))
 			self.setText("runtime", str(element.get("Runtime", " ")))
 			
-			codec = "unknown"
-			if element.has_key("Video"):
-				codec = element["Video"]
-				printl("Video: " + str(codec), self, "D")
-				
-				if codec == "h264":
-					self["codec_unknown"].instance.hide()
-					self["codec_h264"].instance.show()
-					self["codec_ts"].instance.hide()
-				
-				elif codec == "ts":
-					self["codec_unknown"].instance.hide()
-					self["codec_h264"].instance.hide()
-					self["codec_ts"].instance.show()
-				else:
-					self["codec_unknown"].instance.show()
-					self["codec_h264"].instance.hide()
-					self["codec_ts"].instance.hide()
-			else:
-				self["codec_unknown"].instance.show()
-				self["codec_h264"].instance.hide()
-				self["codec_ts"].instance.hide()
-				
-				
-			aspect = "unknown"
-			if element.has_key("Aspect"):
-				aspect = element["Aspect"]
-				printl("Aspect: " + str(aspect), self, "D")
-				
-				if aspect == "1.78":
-					self["aspect_unknown"].instance.hide()
-					self["aspect_wide"].instance.hide()
-					self["aspect_43"].instance.show()
-				elif aspect == "2.35":
-					self["aspect_unknown"].instance.hide()
-					self["aspect_wide"].instance.show()
-					self["aspect_43"].instance.hide()
-				else:
-					self["aspect_unknown"].instance.show()
-					self["aspect_wide"].instance.hide()
-					self["aspect_43"].instance.hide()
-			
-			else:
-				self["aspect_unknown"].instance.show()
-				self["aspect_wide"].instance.hide()
-				self["aspect_43"].instance.hide()
-			
-			
-			
-			res = "unknown"
-			if element.has_key("Resolution"):
-				res = element["Resolution"]
-				printl("Resolution: " + str(res), self, "D")
-				
-				if res == "1080":
-					self["resolution_unknown"].instance.hide()
-					self["resolution_1080"].instance.show()
-					self["resolution_720"].instance.hide()
-					self["resolution_sd"].instance.hide()
-				elif res == "720":
-					self["resolution_unknown"].instance.hide()
-					self["resolution_1080"].instance.hide()
-					self["resolution_720"].instance.show()
-					self["resolution_sd"].instance.hide()
-				else:
-					self["resolution_unknown"].instance.hide()
-					self["resolution_1080"].instance.hide()
-					self["resolution_720"].instance.hide()
-					self["resolution_sd"].instance.show()
-			else:
-				self["resolution_unknown"].instance.show()
-				self["resolution_1080"].instance.hide()
-				self["resolution_720"].instance.hide()
-				self["resolution_sd"].instance.hide()
-			
-			snd = "unknown"
-			if element.has_key("Sound"):
-				snd = element["Sound"].upper()
-				printl("sound: " + str(snd), self, "D")
-			
-				if snd == "DCA" or snd == "DTS":
-					self["audio_unknown"].instance.hide()
-					self["audio_dts"].instance.show()
-					self["audio_ac3"].instance.hide()
-					self["audio_stereo"].instance.hide()
-					
-				elif snd == "AC3":
-					self["audio_unknown"].instance.hide()
-					self["audio_dts"].instance.hide()
-					self["audio_ac3"].instance.show()
-					self["audio_stereo"].instance.hide()
-					
-				elif snd == "STEREO":
-					self["audio_unknown"].instance.hide()
-					self["audio_dts"].instance.hide()
-					self["audio_ac3"].instance.hide()
-					self["audio_stereo"].instance.show()
-				
-			else:
-				self["audio_unknown"].instance.show()
-				self["audio_dts"].instance.hide()
-				self["audio_ac3"].instance.hide()
-				self["audio_stereo"].instance.hide()
-			
-			mpaa = "unknown"
-			if element.has_key("MPAA"):
-				mpaa = element["MPAA"].upper()
-				printl("MPAA: " + str(mpaa), self, "D")
-				
-				if mpaa == "RATED PG-13":
-					self["rated_unknown"].instance.hide()
-					self["rated_nc17"].instance.hide()
-					self["rated_g"].instance.hide()
-					self["rated_pg"].instance.hide()
-					self["rated_pg13"].instance.show()
-					self["rated_r"].instance.hide()
-					
-				elif mpaa == "RATED PG":
-					self["rated_unknown"].instance.hide()
-					self["rated_nc17"].instance.hide()
-					self["rated_g"].instance.hide()
-					self["rated_pg"].instance.show()
-					self["rated_pg13"].instance.hide()
-					self["rated_r"].instance.hide()
-				
-				elif mpaa == "RATED R":
-					self["rated_unknown"].instance.hide()
-					self["rated_nc17"].instance.hide()
-					self["rated_g"].instance.hide()
-					self["rated_pg"].instance.hide()
-					self["rated_pg13"].instance.hide()
-					self["rated_r"].instance.show()
-				
-				elif mpaa == "NC-17":
-					self["rated_unknown"].instance.hide()
-					self["rated_nc17"].instance.show()
-					self["rated_g"].instance.hide()
-					self["rated_pg"].instance.hide()
-					self["rated_pg13"].instance.hide()
-					self["rated_r"].instance.hide()
-				
-				else:
-					self["rated_unknown"].instance.show()
-					self["rated_nc17"].instance.hide()
-					self["rated_g"].instance.hide()
-					self["rated_pg"].instance.hide()
-					self["rated_pg13"].instance.hide()
-					self["rated_r"].instance.hide()
-			
-			else:
-				self["rated_unknown"].instance.show()
-				self["rated_nc17"].instance.hide()
-				self["rated_g"].instance.hide()
-				self["rated_pg"].instance.hide()
-				self["rated_pg13"].instance.hide()
-				self["rated_r"].instance.hide()
 			try:
 				popularity = int(round(float(element["Popularity"])))
 			except Exception, e: 
@@ -631,13 +425,15 @@ class DPS_ListView(DP_View):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
-				self.EXpicloadPoster.startDecode(self.whatPoster)
+				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				ptr = self.EXpicloadPoster.getData()
+				self["poster"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
 			
-			printl("", self, "C")
-			return
+		printl("", self, "C")
+		return
 			
 	#===========================================================================
 	# 
@@ -653,13 +449,15 @@ class DPS_ListView(DP_View):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
-				self.EXpicloadBackdrop.startDecode(self.whatBackdrop)
+				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				ptr = self.EXpicloadBackdrop.getData()
+				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
 			
-			printl("", self, "C")
-			return
+		printl("", self, "C")
+		return
 			
 	#===========================================================================
 	# 
