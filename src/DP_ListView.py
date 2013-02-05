@@ -99,6 +99,9 @@ class DPS_ListView(DP_View):
 		self.parentSeasonNr = None
 		self.isTvShow = False
 
+		self.EXpicloadPoster 		= ePicLoad()
+		self.EXpicloadBackdrop 		= ePicLoad()
+		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
 
@@ -128,9 +131,6 @@ class DPS_ListView(DP_View):
 		self["key_green"] 			= StaticText(_("Filter: ") + _("None"))
 		self["key_yellow"] 			= StaticText("")
 		self["key_blue"] 			= StaticText(self.viewName[0])
-		
-		self.EXpicloadPoster 		= ePicLoad()
-		self.EXpicloadBackdrop 		= ePicLoad()
 		
 		for i in range(10):
 			stars = "star" + str(i)
@@ -449,6 +449,7 @@ class DPS_ListView(DP_View):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
+				printl("drinnen", self, "D")
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
 				ptr = self.EXpicloadBackdrop.getData()
 				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
