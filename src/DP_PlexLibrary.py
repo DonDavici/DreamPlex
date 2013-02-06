@@ -3396,12 +3396,12 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getThumb(self,  data, server, transcode = True, x = 182, y = 268): # CHECKED
+    def getThumb(self,  data, server, transcode = True, x = 195, y = 268): # CHECKED
         '''
             Simply take a URL or path and determine how to format for images
             @ input: elementTree element, server name
             @ return formatted URL
-            str(182), str(268)
+            str(195), str(268)
         '''
         printl("", self, "S")
         
@@ -3430,7 +3430,7 @@ class PlexLibrary(Screen):
     #============================================================================
     # 
     #============================================================================
-    def getFanart(self, data, server, transcode=True ): # CHECKED
+    def getFanart(self, data, server, transcode=True, x= 560, y= 315 ): # CHECKED
         '''
             Simply take a URL or path and determine how to format for fanart
             @ input: elementTree element, server name
@@ -3453,7 +3453,7 @@ class PlexLibrary(Screen):
         elif fanart[0] == '/':
             if transcode:
                 printl("", self, "C")   
-                return self.photoTranscode(server,'http://localhost:32400'+fanart, str(560), str(315))
+                return self.photoTranscode(server,'http://localhost:32400'+fanart, str(x), str(y))
             else:
                 printl("", self, "C")   
                 return 'http://%s%s' % (server, fanart)
