@@ -162,6 +162,9 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		printl("selection: " + str(selection), self, "S")
 		
+		changePoster = True
+		changeBackdrop = True
+		
 		self.resetCurrentImages()
 		if selection != None:
 			self.selection = selection
@@ -191,12 +194,12 @@ class DPS_ListView(DP_View):
 	 				self.session.nav.playService(eServiceReference(sref))
 		
 			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
-				#print "is ShowEpisodes all entry"
+				print "is ShowEpisodes all entry"
 				bname = self.parentSeasonId
 				pname = self.parentSeasonId
 				
 			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] != "":
-				#print "is ShowEpisodes special season"
+				print "is ShowEpisodes special season"
 				self.parentSeasonNr = element["Id"]			
 				bname = self.parentSeasonId
 				pname = element["Id"]
@@ -206,9 +209,11 @@ class DPS_ListView(DP_View):
 				bname = element["Id"]
 				if self.isTvShow is True:
 					pname = self.parentSeasonNr
+					# we dont want to have the same poster downloaded and used for each episode
+					changePoster = False
 				else:
 					pname = element["Id"]
-	
+				
 			self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 			
@@ -354,8 +359,11 @@ class DPS_ListView(DP_View):
 			self.setText("total", _("Total:") + ' ' + str(itemsTotal))
 			self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
 			
-			self.showPoster() # start decoding image
-			self.showBackdrop() # start decoding image
+			if changePoster == True:
+				self.showPoster()
+			
+			if changeBackdrop == True:
+				self.showBackdrop()
 			
 		else:
 			self.setText("title", "no data retrieved")
@@ -479,7 +487,7 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		self["poster"].instance.setPixmapFromFile(ptr)
+		#self["poster"].instance.setPixmapFromFile(ptr)
 		self["mybackdrop"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
@@ -523,7 +531,6 @@ class DPS_ListView(DP_View):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
-				printl("drinnen", self, "D")
 				#self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
 				#ptr = self.EXpicloadBackdrop.getData()
 				ptr = loadJPG(self.whatBackdrop)
