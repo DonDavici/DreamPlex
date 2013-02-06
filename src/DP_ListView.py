@@ -233,6 +233,116 @@ class DPS_ListView(DP_View):
 			self["rating_stars"].setValue(int(popularity) * 10)
 			self["rating_stars"].show()
 			
+			
+			#CODEC
+			codec = element.get("Video", "unknown").upper()
+			if codec == "1.78":
+				found = True
+				self["codec"].setPixmapNum(0)
+			elif codec == "2.35":
+				found = True
+				self["codec"].setPixmapNum(1)
+			elif codec == "unknown":
+				found = False;
+			else:
+				printl("we have a value but no match!!", self, "D")
+				found = False
+			
+			if found == True:
+				self["codec"].show()
+			else:
+				self["codec"].hide()
+			
+			#ASPECT
+			aspect = element.get("Aspect", "unknown").upper()
+			if aspect == "1.78":
+				found = True
+				self["aspect"].setPixmapNum(0)
+			elif aspect == "2.35":
+				found = True
+				self["aspect"].setPixmapNum(1)
+			elif aspect == "unknown":
+				found = False;
+			else:
+				printl("we have a value but no match!!", self, "D")
+				found = False
+			
+			if found == True:
+				self["aspect"].show()
+			else:
+				self["aspect"].hide()
+			
+			# RESOLUTION
+			resolution = element.get("Resolution", "unknown").upper()
+			if resolution == "1080":
+				found = True
+				self["resolution"].setPixmapNum(0)
+			elif resolution == "720":
+				found = True
+				self["resolution"].setPixmapNum(1)
+			elif resolution == "unknown":
+				found = False;
+			else:
+				printl("we have a value but no match!!", self, "D")
+				found = False
+			
+			if found == True:
+				self["resolution"].show()
+			else:
+				self["resolution"].hide()
+			
+			
+			# SOUND
+			audio = element.get("Sound", "unknown").upper()
+			if audio == "DTS":
+				found = True
+				self["audio"].setPixmapNum(0)
+			elif audio == "AC3":
+				found = True
+				self["audio"].setPixmapNum(1)
+			elif audio == "STEREO":
+				found = True
+				self["audio_"].setPixmapNum(2)
+			elif audio == "unknown":
+				found = False;
+			else:
+				printl("we have a value but no match!!", self, "D")
+				found = False
+			
+			if found == True:
+				self["audio"].show()
+			else:
+				self["audio"].hide()
+
+				
+			# MPAA
+			mpaa = element.get("MPAA", "unknown").upper()
+			printl("MPAA: " + str(mpaa), self, "D")
+			
+			if mpaa == "RATED PG-13":
+				found = True
+				self["rated"].setPixmapNum(0)
+			elif mpaa == "RATED PG":
+				found = True
+				self["rated"].setPixmapNum(1)
+			elif mpaa == "RATED R":
+				found = True
+				self["rated"].setPixmapNum(2)
+			elif mpaa == "NC-17":
+				found = True
+				self["rated"].setPixmapNum(3)
+			elif mpaa == "unknown":
+				found = False
+			else:
+				printl("we have a value but no match!!", self, "D")
+				found = False
+			
+			if found == True:
+				self["rated"].show()
+			else:
+				self["rated"].hide()
+
+				
 			itemsPerPage = self.itemsPerPage
 			itemsTotal = self["listview"].count()
 			correctionVal = 0.5
