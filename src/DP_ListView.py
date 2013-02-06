@@ -101,8 +101,8 @@ class DPS_ListView(DP_View):
 		self.parentSeasonNr = None
 		self.isTvShow = False
 
-		self.EXpicloadPoster 		= ePicLoad()
-		self.EXpicloadBackdrop 		= ePicLoad()
+		#self.EXpicloadPoster 		= ePicLoad()
+		#self.EXpicloadBackdrop 	= ePicLoad()
 		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
@@ -124,8 +124,6 @@ class DPS_ListView(DP_View):
 		self["mpaa"] 				= Label()
 		self["total"] 				= Label()
 		self["current"] 			= Label()
-		self["quality"] 			= Label()
-		self["sound"] 				= Label()
 		self["backdroptext"]		= Label()
 		self["postertext"]			= Label()
 		
@@ -138,7 +136,7 @@ class DPS_ListView(DP_View):
 		
 		self.skinName = self.viewName[2]
 
-		self.onLayoutFinish.append(self.setPara)
+		#self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
 	
@@ -439,36 +437,12 @@ class DPS_ListView(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def onKeyUpQuick(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.onPreviousEntryQuick()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
 	def onKeyDown(self):
 		'''
 		'''
 		printl("", self, "S")
 		
 		self.onNextEntry()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onKeyDownQuick(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.onNextEntryQuick()
 		
 		printl("", self, "C")
 
