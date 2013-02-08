@@ -144,12 +144,8 @@ class DP_View(Screen, NumericalTextInput):
             "cancel":     (self.onKeyCancel, ""),
             "left":       (self.onKeyLeft, ""),
             "right":      (self.onKeyRight, ""),
-            #"left_quick": (self.onKeyLeftQuick, ""),
-            #"right_quick": (self.onKeyRightQuick, ""),
             "up":         (self.onKeyUp, ""),
             "down":       (self.onKeyDown, ""),
-            #"up_quick":   (self.onKeyUpQuick, ""),
-            #"down_quick": (self.onKeyDownQuick, ""),
             "info":       (self.onKeyInfo, ""),
             #"menu":       (self.onKeyMenu, ""),
 
@@ -217,7 +213,7 @@ class DP_View(Screen, NumericalTextInput):
             self._load(ignoreSort=sort, ignoreFilter=filter)
             self.refresh()
         else: # changed views, reselect selected entry
-            print self.select #(None, {'ImdbId': 'tt1190080'})
+            printl("self.select: " +  str(self.select), self, "D")
             sort = False
             if self.onFirstExecSort is not None:
                 self.activeSort = self.onFirstExecSort
@@ -724,7 +720,6 @@ class DP_View(Screen, NumericalTextInput):
                 found = False
                 subelements = self.onFilterKeyValuePair[i][2]
                 for j in range(len(subelements)):
-                    #print "if self.activeFilter[2] == subelements[j]:", self.activeFilter[2], subelements[j]
                     if self.activeFilter[2] == subelements[j]:
                         # Action == Action
                         if (j+1) < len(subelements):
@@ -808,7 +803,7 @@ class DP_View(Screen, NumericalTextInput):
         selection = self["listview"].getCurrent()
         if selection is not None:
             params = {}
-            print self.onEnterPrimaryKeys
+            printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
             for key in self.onEnterPrimaryKeys:
                 if key != "play":
                     params[key] = selection[1][key]
@@ -831,7 +826,7 @@ class DP_View(Screen, NumericalTextInput):
             selection = self["listview"].getCurrent()
             if selection is not None:
                 params = {}
-                print self.onEnterPrimaryKeys
+                printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
                 for key in self.onEnterPrimaryKeys:
                     if key != "play":
                         params[key] = selection[1][key]
@@ -1145,7 +1140,8 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        print self.activeFilter
+        printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
+        
         listViewList = []
         if self.activeFilter[1][0] is None:
             listViewList = self.listViewList
@@ -1274,7 +1270,7 @@ class DP_View(Screen, NumericalTextInput):
         selection = self["listview"].getCurrent()
         if selection is not None:
             primaryKeyValuePair = {}
-            print self.onEnterPrimaryKeys
+            printl( "self.onEnterPrimaryKeys: " + str(self.onEnterPrimaryKeys), self, "D")
             for key in self.onEnterPrimaryKeys:
                 if key != "play":
                     primaryKeyValuePair[key] = selection[1][key]

@@ -513,7 +513,7 @@ class DPS_ListView(DP_View):
 		else:
 			#text = "%s: %s" % (_("Filter"), _(self.activeFilter[0])) #To little space
 			text = "%s" % (_(self.activeFilter[0]))
-		#print text
+
 		self["key_green"].setText(text)
 		super(getViewClass(), self).filter()
 		

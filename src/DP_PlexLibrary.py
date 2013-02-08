@@ -2716,11 +2716,11 @@ class PlexLibrary(Screen):
         self.discoverAllServers()
         possibleServers=[]
         for serverData in self.resolveAllServers():
-            print str(serverData)
+            printl("serverData: " + str(serverData), self, "D")
             if serverData['master'] == 1:
                 possibleServers.append({'address' : serverData['address'] ,
                                         'discovery' : serverData['discovery'] })
-        print str(possibleServers)
+        printl("possibleServers:"  + str(possibleServers),self, "D")
         if len(possibleServers) > 1:
             preferred="local"
             for serverData in possibleServers:
@@ -3291,7 +3291,7 @@ class PlexLibrary(Screen):
                         if photo.tag == "Media":
                             for images in photo:
                                 if images.tag == "Part":
-                                    print "found part tag"
+                                    printl("found part tag", self, "D")
                                     extraData['key']="http://"+server+images.get('key','')
                                     u=extraData['key']
                 
