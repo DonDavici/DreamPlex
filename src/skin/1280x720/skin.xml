@@ -110,13 +110,13 @@
         
         <widget name="rated" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="audio" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="audio" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
         
         <widget name="resolution" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
         <widget name="aspect" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png, /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2video.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2video.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
         <widget name="rating_stars" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" zPosition="14" position="800,452" size="114,22" transparent="1" borderWidth="0" orientation="orHorizontal"/>
     	

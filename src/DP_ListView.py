@@ -283,7 +283,7 @@ class DPS_ListView(DP_View):
 		
 		audio = self.element.get("Sound", "unknown").upper()
 		
-		if audio == "DTS":
+		if audio == "DCA":
 			found = True
 			self["audio"].setPixmapNum(0)
 		
@@ -293,7 +293,11 @@ class DPS_ListView(DP_View):
 		
 		elif audio == "STEREO":
 			found = True
-			self["audio_"].setPixmapNum(2)
+			self["audio"].setPixmapNum(2)
+			
+		elif audio == "MP3":
+			found = True
+			self["audio"].setPixmapNum(3)
 		
 		elif audio == "UNKNOWN":
 			found = False;
