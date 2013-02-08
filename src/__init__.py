@@ -54,6 +54,8 @@ from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
 
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
+version = "changeMe"
+
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
@@ -105,6 +107,9 @@ def printGlobalSettings():
 	'''
 	'''
 	printl("", "__init__::initGlobalSettings", "S")
+	
+	printl("=== VERSION ===", "__init__::getBoxInformation", "I")
+	printl("current Version : " + str(version), "__init__::initGlobalSettings", "I")
 	
 	printl("=== GLOBAL SETTINGS ===", "__init__::getBoxInformation", "I")
 	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::initGlobalSettings", "I")
