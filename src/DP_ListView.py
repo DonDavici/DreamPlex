@@ -316,7 +316,7 @@ class DPS_ListView(DP_View):
 		elif resolution == "720":
 			found = True
 			self["resolution"].setPixmapNum(1)
-		elif resolution == "480":
+		elif resolution == "480" or resolution == "576":
 			found = True
 			self["resolution"].setPixmapNum(2)
 		elif resolution == "unknown":
