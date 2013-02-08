@@ -252,7 +252,7 @@ class DPS_ListView(DP_View):
 		elif mpaa == "unknown":
 			found = False
 		else:
-			printl("we have a value but no match!!", self, "D")
+			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
 			found = False
 		
 		if found == True:
@@ -283,7 +283,7 @@ class DPS_ListView(DP_View):
 		elif audio == "unknown":
 			found = False;
 		else:
-			printl("we have a value but no match!!", self, "D")
+			printl("we have a value but no match!! audio: " + str(audio), self, "I")
 			found = False
 		
 		if found == True:
@@ -311,7 +311,7 @@ class DPS_ListView(DP_View):
 		elif resolution == "unknown":
 			found = False;
 		else:
-			printl("we have a value but no match!!", self, "D")
+			printl("we have a value but no match!! resolution: " + str(resolution), self, "I")
 			found = False
 		
 		if found == True:
@@ -346,7 +346,7 @@ class DPS_ListView(DP_View):
 			found = False
 			
 		else:
-			printl("we have a value but no match!! aspect: " + str(aspect), self, "D")
+			printl("we have a value but no match!! aspect: " + str(aspect), self, "I")
 			found = False
 		
 		if found == True:
@@ -374,7 +374,7 @@ class DPS_ListView(DP_View):
 		elif codec == "unknown":
 			found = False;
 		else:
-			printl("we have a value but no match!!", self, "D")
+			printl("we have a value but no match!! codec: " + str(codec), self, "I")
 			found = False
 		
 		if found == True:
