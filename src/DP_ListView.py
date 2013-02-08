@@ -67,10 +67,16 @@ class DPS_ListView(DP_View):
 	backdrop_postfix = "_backdrop.jpg"
 	poster_postfix = "_poster.jpg"
 	image_prefix = ""
-	playTheme = False
 	plexInstance = None
-	
+	element = None
+	parentSeasonId = None
+	parentSeasonNr = None
+	isTvShow = False
+	playTheme = False
+	startPlaybackNow = False
 	itemsPerPage = 0
+	whatPoster = None
+	whatBackdrop = None
 
 	#===========================================================================
 	# 
@@ -85,25 +91,14 @@ class DPS_ListView(DP_View):
 		
 		self.setListViewElementsCount()
 		
+		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.playTheme = config.plugins.dreamplex.playTheme.value
 		
-		self.EXscale = (AVSwitch().getFramebufferScale())
+		# get data from plex library
+		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
 		
-		self.whatPoster = None
-		self.whatBackdrop = None
-		
-		instance = Singleton()
-		self.plexInstance = instance.getPlexInstance()
-		self.image_prefix = self.plexInstance.getServerName().lower()
-
-		self.parentSeasonId = None
-		self.parentSeasonNr = None
-		self.isTvShow = False
-
-		#self.EXpicloadPoster 		= ePicLoad()
-		#self.EXpicloadBackdrop 	= ePicLoad()
-		
+		# init skin elements
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
 
@@ -136,21 +131,12 @@ class DPS_ListView(DP_View):
 		
 		self.skinName = self.viewName[2]
 
+		# we do not use this anymore because we get always jpg from transcoder of plex
+		#self.EXscale = (AVSwitch().getFramebufferScale())
+		#self.EXpicloadPoster 		= ePicLoad()
+		#self.EXpicloadBackdrop 	= ePicLoad()
 		#self.onLayoutFinish.append(self.setPara)
 	
-		printl("", self, "C")
-	
-	#==============================================================================
-	# 
-	#==============================================================================
-	def setPara(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -160,205 +146,51 @@ class DPS_ListView(DP_View):
 		'''
 		'''
 		printl("", self, "S")
-		printl("selection: " + str(selection), self, "S")
+		printl("selection: " + str(selection), self, "D")
 		
+		# starting values
 		changePoster = True
 		changeBackdrop = True
 		
 		self.resetCurrentImages()
+		
 		if selection != None:
 			self.selection = selection
-			element = selection[1]
-					
+			self.element = selection[1]
+			
+			# lets get all data we need to show the needed pictures
+			# we also check if we want to play
+			self.getPictureInformationToLoad()
+			
+			# if we are a show an if playtheme is enabled we start playback here
+			if self.playTheme: 
+				if self.startPlaybackNow:
+					self.startThemePlayback()
+			
+			# lets set the new text information
 			self.setText("backdroptext", "searching ...")
 			self.setText("postertext", "searching ...")
+			self.setText("title", self.element.get("ScreenTitle", " "))
+			self.setText("tag", self.element.get("Tag", " ").encode('utf8'), True)
+			self.setText("shortDescription", self.element.get("Plot", " ").encode('utf8'), what=_("Overview"))
+			self.setText("studio", self.element.get("Studio", " "))
+			self.setText("year", str(self.element.get("Year", " ")))
+			self.setText("mpaa", str(self.element.get("MPAA", " ")))
+			self.setText("director", str(self.element.get("Director", " ").encode('utf8')))
+			self.setText("genre", str(self.element.get("Genres", " t").encode('utf8')))
+			self.setText("runtime", str(self.element.get("Runtime", " ")))
 			
-			if element ["ViewMode"] == "ShowSeasons":
-				#print "is ShowSeasons"
-				self.parentSeasonId = element ["Id"]
-				self.isTvShow = True
-				bname = element["Id"]
-				pname = element["Id"]
-				
-				# @TODO lets put this in a seperate play class
-				if self.playTheme == True:
-					printl("start pĺaying theme", self, "I")
-					accessToken = self.plexInstance.g_myplex_accessToken
-					theme = element["theme"]
-					server = element["server"]
-					printl("theme: " + str(theme), self, "D")
-					url = "http://" + str(server) + str(theme) + "?X-Plex-Token=" + str(accessToken)
-					sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
-					printl("sref: " + str(sref), self, "D")
-					self.session.nav.stopService()
-	 				self.session.nav.playService(eServiceReference(sref))
-		
-			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
-				print "is ShowEpisodes all entry"
-				bname = self.parentSeasonId
-				pname = self.parentSeasonId
-				
-			elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] != "":
-				print "is ShowEpisodes special season"
-				self.parentSeasonNr = element["Id"]			
-				bname = self.parentSeasonId
-				pname = element["Id"]
+			# handle all pixmaps
+			self.handlePopularityPixmaps()
+			self.handleCodecPixmaps()
+			self.handleAspectPixmaps()
+			self.handleResolutionPixmaps()
+			self.handleRatedPixmaps()
 			
-			else:
-				#print "is ELSE"
-				bname = element["Id"]
-				if self.isTvShow is True:
-					pname = self.parentSeasonNr
-					# we dont want to have the same poster downloaded and used for each episode
-					changePoster = False
-				else:
-					pname = element["Id"]
-				
-			self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
-			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
+			# navigation
+			self.handleNavigationData()
 			
-			self.setText("title", element.get("ScreenTitle", " "))
-			self.setText("tag", element.get("Tag", " ").encode('utf8'), True)
-			self.setText("shortDescription", element.get("Plot", " ").encode('utf8'), what=_("Overview"))
-			self.setText("studio", element.get("Studio", " "))
-			self.setText("year", str(element.get("Year", " ")))
-			self.setText("mpaa", str(element.get("MPAA", " ")))
-			self.setText("director", str(element.get("Director", " ").encode('utf8')))
-			self.setText("genre", str(element.get("Genres", " t").encode('utf8')))
-			self.setText("runtime", str(element.get("Runtime", " ")))
-			
-			try:
-				popularity = float(element["Popularity"])
-			except Exception, e: 
-				popularity = 0
-				printl( "error in popularity " + str(e),self, "D")
-				
-			self["rating_stars"].setValue(int(popularity) * 10)
-			self["rating_stars"].show()
-			
-			
-			#CODEC
-			codec = element.get("Video", "unknown").upper()
-			if codec == "1.78":
-				found = True
-				self["codec"].setPixmapNum(0)
-			elif codec == "2.35":
-				found = True
-				self["codec"].setPixmapNum(1)
-			elif codec == "unknown":
-				found = False;
-			else:
-				printl("we have a value but no match!!", self, "D")
-				found = False
-			
-			if found == True:
-				self["codec"].show()
-			else:
-				self["codec"].hide()
-			
-			#ASPECT
-			aspect = element.get("Aspect", "unknown").upper()
-			if aspect == "1.78":
-				found = True
-				self["aspect"].setPixmapNum(0)
-			elif aspect == "2.35":
-				found = True
-				self["aspect"].setPixmapNum(1)
-			elif aspect == "unknown":
-				found = False;
-			else:
-				printl("we have a value but no match!!", self, "D")
-				found = False
-			
-			if found == True:
-				self["aspect"].show()
-			else:
-				self["aspect"].hide()
-			
-			# RESOLUTION
-			resolution = element.get("Resolution", "unknown").upper()
-			if resolution == "1080":
-				found = True
-				self["resolution"].setPixmapNum(0)
-			elif resolution == "720":
-				found = True
-				self["resolution"].setPixmapNum(1)
-			elif resolution == "unknown":
-				found = False;
-			else:
-				printl("we have a value but no match!!", self, "D")
-				found = False
-			
-			if found == True:
-				self["resolution"].show()
-			else:
-				self["resolution"].hide()
-			
-			
-			# SOUND
-			audio = element.get("Sound", "unknown").upper()
-			if audio == "DTS":
-				found = True
-				self["audio"].setPixmapNum(0)
-			elif audio == "AC3":
-				found = True
-				self["audio"].setPixmapNum(1)
-			elif audio == "STEREO":
-				found = True
-				self["audio_"].setPixmapNum(2)
-			elif audio == "unknown":
-				found = False;
-			else:
-				printl("we have a value but no match!!", self, "D")
-				found = False
-			
-			if found == True:
-				self["audio"].show()
-			else:
-				self["audio"].hide()
-
-				
-			# MPAA
-			mpaa = element.get("MPAA", "unknown").upper()
-			printl("MPAA: " + str(mpaa), self, "D")
-			
-			if mpaa == "RATED PG-13":
-				found = True
-				self["rated"].setPixmapNum(0)
-			elif mpaa == "RATED PG":
-				found = True
-				self["rated"].setPixmapNum(1)
-			elif mpaa == "RATED R":
-				found = True
-				self["rated"].setPixmapNum(2)
-			elif mpaa == "NC-17":
-				found = True
-				self["rated"].setPixmapNum(3)
-			elif mpaa == "unknown":
-				found = False
-			else:
-				printl("we have a value but no match!!", self, "D")
-				found = False
-			
-			if found == True:
-				self["rated"].show()
-			else:
-				self["rated"].hide()
-
-				
-			itemsPerPage = self.itemsPerPage
-			itemsTotal = self["listview"].count()
-			correctionVal = 0.5
-			
-			if (itemsTotal%itemsPerPage) == 0:
-				correctionVal = 0
-			
-			pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
-			pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
-			
-			self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-			self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
-			
+			# now lets switch images
 			if changePoster == True:
 				self.showPoster()
 			
@@ -371,6 +203,249 @@ class DPS_ListView(DP_View):
 			
 		printl("", self, "C")
 
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleNavigationData(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		itemsPerPage = self.itemsPerPage
+		itemsTotal = self["listview"].count()
+		correctionVal = 0.5
+		
+		if (itemsTotal%itemsPerPage) == 0:
+			correctionVal = 0
+		
+		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
+		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
+		
+		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
+		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleRatedPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+
+		mpaa = self.element.get("MPAA", "unknown").upper()
+		printl("MPAA: " + str(mpaa), self, "D")
+		
+		if mpaa == "RATED PG-13":
+			found = True
+			self["rated"].setPixmapNum(0)
+		elif mpaa == "RATED PG":
+			found = True
+			self["rated"].setPixmapNum(1)
+		elif mpaa == "RATED R":
+			found = True
+			self["rated"].setPixmapNum(2)
+		elif mpaa == "NC-17":
+			found = True
+			self["rated"].setPixmapNum(3)
+		elif mpaa == "unknown":
+			found = False
+		else:
+			printl("we have a value but no match!!", self, "D")
+			found = False
+		
+		if found == True:
+			self["rated"].show()
+		else:
+			self["rated"].hide()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleSoundPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		audio = self.element.get("Sound", "unknown").upper()
+		if audio == "DTS":
+			found = True
+			self["audio"].setPixmapNum(0)
+		elif audio == "AC3":
+			found = True
+			self["audio"].setPixmapNum(1)
+		elif audio == "STEREO":
+			found = True
+			self["audio_"].setPixmapNum(2)
+		elif audio == "unknown":
+			found = False;
+		else:
+			printl("we have a value but no match!!", self, "D")
+			found = False
+		
+		if found == True:
+			self["audio"].show()
+		else:
+			self["audio"].hide()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleResolutionPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+
+		resolution = self.element.get("Resolution", "unknown").upper()
+		if resolution == "1080":
+			found = True
+			self["resolution"].setPixmapNum(0)
+		elif resolution == "720":
+			found = True
+			self["resolution"].setPixmapNum(1)
+		elif resolution == "unknown":
+			found = False;
+		else:
+			printl("we have a value but no match!!", self, "D")
+			found = False
+		
+		if found == True:
+			self["resolution"].show()
+		else:
+			self["resolution"].hide()
+			
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleAspectPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+
+		aspect = self.element.get("Aspect", "unknown").upper()
+		if aspect == "1.33":
+			found = True
+			self["aspect"].setPixmapNum(0)
+		
+		elif aspect == "1.66" or aspect == "1.78" or aspect == "1.85":
+			found = True
+			self["aspect"].setPixmapNum(1)
+		
+		elif aspect == "2.35": # 21:9
+			found = True
+			self["aspect"].setPixmapNum(1)
+		
+		elif aspect == "unknown":
+			found = False
+			
+		else:
+			printl("we have a value but no match!! aspect: " + str(aspect), self, "D")
+			found = False
+		
+		if found == True:
+			self["aspect"].show()
+		else:
+			self["aspect"].hide()
+			
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleCodecPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		codec = self.element.get("Video", "unknown").upper()
+		if codec == "1.78":
+			found = True
+			self["codec"].setPixmapNum(0)
+		elif codec == "2.35":
+			found = True
+			self["codec"].setPixmapNum(1)
+		elif codec == "unknown":
+			found = False;
+		else:
+			printl("we have a value but no match!!", self, "D")
+			found = False
+		
+		if found == True:
+			self["codec"].show()
+		else:
+			self["codec"].hide()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handlePopularityPixmaps(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		try:
+			popularity = float(self.element["Popularity"])
+		except Exception, e: 
+			popularity = 0
+			printl( "error in popularity " + str(e),self, "D")
+			
+		self["rating_stars"].setValue(int(popularity) * 10)
+		self["rating_stars"].show()
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getPictureInformationToLoad(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if self.element ["ViewMode"] == "ShowSeasons":
+			printl( "s ShowSeasons", self, "D")
+			self.parentSeasonId = self.element ["Id"]
+			self.isTvShow = True
+			self.startPlaybackNow = True
+			bname = self.element["Id"]
+			pname = self.element["Id"]
+	
+		elif self.element ["ViewMode"] == "ShowEpisodes" and self.element["Id"] is None:
+			printl( "is ShowEpisodes all entry", self, "D")
+			bname = self.parentSeasonId
+			pname = self.parentSeasonId
+			self.startPlaybackNow = False
+			
+		elif self.element ["ViewMode"] == "ShowEpisodes" and self.element["Id"] != "":
+			printl( "is ShowEpisodes special season",self, "D")
+			self.parentSeasonNr = self.element["Id"]			
+			bname = self.parentSeasonId
+			pname = self.element["Id"]
+			self.startPlaybackNow = False
+		
+		else:
+			bname = self.element["Id"]
+			self.startPlaybackNow = False
+			if self.isTvShow is True:
+				pname = self.parentSeasonNr
+				# we dont want to have the same poster downloaded and used for each episode
+				changePoster = False
+			else:
+				pname = self.element["Id"]
+			
+		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
+		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
+		
+		printl("", self, "C")
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -594,10 +669,45 @@ class DPS_ListView(DP_View):
 		
 		desktop = getDesktop(0).size().width()
 		if desktop == 720:
-			self.itemsPerPage = int(15)
+			self.itemsPerPage = int(12)
 		elif desktop == 1024:
-			self.itemsPerPage = int(15)
+			self.itemsPerPage = int(12)
 		elif desktop == 1280:
-			self.itemsPerPage = int(8)
+			self.itemsPerPage = int(6)
 			
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def startThemePlayback(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		printl("start pĺaying theme", self, "I")
+		accessToken = Singleton().getPlexInstance().g_myplex_accessToken
+		theme = self.element["theme"]
+		server = self.element["server"]
+		printl("theme: " + str(theme), self, "D")
+		url = "http://" + str(server) + str(theme) + "?X-Plex-Token=" + str(accessToken)
+		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
+		printl("sref: " + str(sref), self, "D")
+		self.session.nav.stopService()
+		self.session.nav.playService(eServiceReference(sref))
+		
+		printl("", self, "C")
+		
+	#==============================================================================
+	# 
+	#==============================================================================
+	def setPara(self):
+		'''
+		deprecaded for now because we have only jpg
+		'''
+		printl("", self, "S")
+		
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		
 		printl("", self, "C")
