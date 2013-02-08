@@ -41,7 +41,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig
 
@@ -489,12 +489,23 @@ class DPS_MainMenu(Screen):
 		self.g_wolon = self.g_serverConfig.wol.value
 		self.g_wakeserver = str(self.g_serverConfig.wol_mac.value)
 		self.g_woldelay = int(self.g_serverConfig.wol_delay.value)
-
-		ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
-		port =  int(self.g_serverConfig.port.value)
-		state = testPlexConnectivity(ip, port)
-		printl("state: " + str(state), self, "D")
+		connectionType = str(self.g_serverConfig.connectionType.value)
+		if connectionType == "0":
+			ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
+			port =  int(self.g_serverConfig.port.value)
+			state = testPlexConnectivity(ip, port)
+			
+		elif connectionType == "2":
+			state = testInetConnectivity("http://my.plexapp.com")
+		else:
+			state = testInetConnectivity()
 		
+		if state == True:
+			stateText = "Online"
+		else:
+			stateText = "Offline"
+		
+		printl("Plexserver State: " + str(stateText), self, "I")
 		if state == False:
 			if self.g_wolon == True:
 				self.session.openWithCallback(self.executeWakeOnLan, MessageBox, _("Plexserver seems to be offline. Start with Wake on Lan settings? \n\nPlease note: \nIf you press yes the spinner will run for " + str(self.g_woldelay) + " seconds. \nAccording to your settings."), MessageBox.TYPE_YESNO)
@@ -502,7 +513,6 @@ class DPS_MainMenu(Screen):
 				self.session.open(MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!"), MessageBox.TYPE_INFO)
 		else:
 			self.getServerData()
-
 		
 		printl("", self, "C")
 		
