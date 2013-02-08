@@ -131,11 +131,11 @@ class DPS_ListView(DP_View):
 		
 		self.skinName = self.viewName[2]
 
-		# we do not use this anymore because we get always jpg from transcoder of plex
-		#self.EXscale = (AVSwitch().getFramebufferScale())
-		#self.EXpicloadPoster 		= ePicLoad()
-		#self.EXpicloadBackdrop 	= ePicLoad()
-		#self.onLayoutFinish.append(self.setPara)
+		# we use this as fallback if we get something different as jpg
+		self.EXscale = (AVSwitch().getFramebufferScale())
+		self.EXpicloadPoster 		= ePicLoad()
+		self.EXpicloadBackdrop 		= ePicLoad()
+		self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
 	
@@ -253,7 +253,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(3)
 		
-		elif mpaa == "NOT RATED":
+		elif mpaa == "NOT RATED" or mpaa == "RATED DE/0":
 			found = True
 			self["rated"].setPixmapNum(4)
 		
@@ -316,6 +316,9 @@ class DPS_ListView(DP_View):
 		elif resolution == "720":
 			found = True
 			self["resolution"].setPixmapNum(1)
+		elif resolution == "480":
+			found = True
+			self["resolution"].setPixmapNum(2)
 		elif resolution == "unknown":
 			found = False;
 		else:
@@ -373,12 +376,15 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		codec = self.element.get("Video", "unknown").upper()
-		if codec == "1.78":
+		if codec == "VC1":
 			found = True
 			self["codec"].setPixmapNum(0)
-		elif codec == "2.35":
+		elif codec == "H264":
 			found = True
 			self["codec"].setPixmapNum(1)
+		elif codec == "MPEG4":
+			found = True
+			self["codec"].setPixmapNum(2)
 		elif codec == "unknown":
 			found = False;
 		else:
@@ -589,10 +595,14 @@ class DPS_ListView(DP_View):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
-				#self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-				#ptr = self.EXpicloadPoster.getData()
-				ptr = loadJPG(self.whatPoster)
-				self["poster"].instance.setPixmap(ptr.__deref__())
+				
+				try:
+					ptr = loadJPG(self.whatPoster)
+					self["poster"].instance.setPixmap(ptr.__deref__())
+				except:
+					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+					ptr = self.EXpicloadPoster.getData()
+					self["poster"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
@@ -614,10 +624,14 @@ class DPS_ListView(DP_View):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
-				#self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
-				#ptr = self.EXpicloadBackdrop.getData()
-				ptr = loadJPG(self.whatBackdrop)
-				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+				
+				try:
+					ptr = loadJPG(self.whatBackdrop)
+					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+				except:
+					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+					ptr = self.EXpicloadBackdrop.getData()
+					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
