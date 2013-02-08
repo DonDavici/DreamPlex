@@ -385,6 +385,9 @@ class DPS_ListView(DP_View):
 		elif codec == "MPEG4":
 			found = True
 			self["codec"].setPixmapNum(2)
+		elif codec == "MPEG2VIDEO":
+			found = True
+			self["codec"].setPixmapNum(3)
 		elif codec == "unknown":
 			found = False;
 		else:

@@ -116,7 +116,7 @@
         
         <widget name="aspect" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
-        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png, /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2video.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
         
         <widget name="rating_stars" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" zPosition="14" position="800,452" size="114,22" transparent="1" borderWidth="0" orientation="orHorizontal"/>
     	
