@@ -238,11 +238,11 @@ class DPS_ListView(DP_View):
 		mpaa = self.element.get("MPAA", "unknown").upper()
 		printl("MPAA: " + str(mpaa), self, "D")
 		
-		if mpaa == "RATED PG-13":
+		if mpaa == "RATED PG-13" or "TV-14":
 			found = True
 			self["rated"].setPixmapNum(0)
 		
-		elif mpaa == "RATED PG":
+		elif mpaa == "RATED PG" or "TV-PG":
 			found = True
 			self["rated"].setPixmapNum(1)
 		
@@ -250,7 +250,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(2)
 		
-		elif mpaa == "NC-17":
+		elif mpaa == "NC-17" or "TV-MA":
 			found = True
 			self["rated"].setPixmapNum(3)
 		
@@ -258,7 +258,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(4)
 		
-		elif mpaa == "UNKNOWN" or mpaa == "RATED UNKNOWN":
+		elif mpaa == "UNKNOWN" or mpaa == "RATED UNKNOWN" or mpaa == "":
 			found = False
 		
 		else:
@@ -269,7 +269,7 @@ class DPS_ListView(DP_View):
 			self["rated"].show()
 		else:
 			self["rated"].hide()
-		#TV-14, TV-MA, TV-PG
+		#, TV-MA, 
 		
 		printl("", self, "C")
 	
@@ -299,7 +299,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["audio"].setPixmapNum(3)
 		
-		elif audio == "UNKNOWN":
+		elif audio == "UNKNOWN" or audio == "":
 			found = False;
 		
 		else:
@@ -335,7 +335,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["resolution"].setPixmapNum(2)
 		
-		elif resolution == "UNKNOWN":
+		elif resolution == "UNKNOWN" or resolution == "":
 			found = False;
 		
 		else:
@@ -371,7 +371,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["aspect"].setPixmapNum(1)
 		
-		elif aspect == "UNKNOWN":
+		elif aspect == "UNKNOWN" or aspect == "":
 			found = False
 			
 		else:
