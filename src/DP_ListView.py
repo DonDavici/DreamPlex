@@ -257,7 +257,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(4)
 		
-		elif mpaa == "unknown":
+		elif mpaa == "unknown" or mpaa == "RATED UNKNOWN":
 			found = False
 		else:
 			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
