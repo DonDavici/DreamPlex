@@ -186,6 +186,7 @@ class DPS_ListView(DP_View):
 			self.handleAspectPixmaps()
 			self.handleResolutionPixmaps()
 			self.handleRatedPixmaps()
+			self.handleSoundPixmaps()
 			
 			# navigation
 			self.handleNavigationData()
@@ -257,8 +258,9 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(4)
 		
-		elif mpaa == "unknown" or mpaa == "RATED UNKNOWN":
+		elif mpaa == "UNKNOWN" or mpaa == "RATED UNKNOWN":
 			found = False
+		
 		else:
 			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
 			found = False
@@ -267,6 +269,7 @@ class DPS_ListView(DP_View):
 			self["rated"].show()
 		else:
 			self["rated"].hide()
+		#TV-14, TV-MA, TV-PG
 		
 		printl("", self, "C")
 	
@@ -279,17 +282,22 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		audio = self.element.get("Sound", "unknown").upper()
+		
 		if audio == "DTS":
 			found = True
 			self["audio"].setPixmapNum(0)
+		
 		elif audio == "AC3":
 			found = True
 			self["audio"].setPixmapNum(1)
+		
 		elif audio == "STEREO":
 			found = True
 			self["audio_"].setPixmapNum(2)
-		elif audio == "unknown":
+		
+		elif audio == "UNKNOWN":
 			found = False;
+		
 		else:
 			printl("we have a value but no match!! audio: " + str(audio), self, "I")
 			found = False
@@ -310,17 +318,22 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 
 		resolution = self.element.get("Resolution", "unknown").upper()
+		
 		if resolution == "1080":
 			found = True
 			self["resolution"].setPixmapNum(0)
+		
 		elif resolution == "720":
 			found = True
 			self["resolution"].setPixmapNum(1)
+		
 		elif resolution == "480" or resolution == "576":
 			found = True
 			self["resolution"].setPixmapNum(2)
-		elif resolution == "unknown":
+		
+		elif resolution == "UNKNOWN":
 			found = False;
+		
 		else:
 			printl("we have a value but no match!! resolution: " + str(resolution), self, "I")
 			found = False
@@ -341,6 +354,7 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 
 		aspect = self.element.get("Aspect", "unknown").upper()
+		
 		if aspect == "1.33":
 			found = True
 			self["aspect"].setPixmapNum(0)
@@ -353,7 +367,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["aspect"].setPixmapNum(1)
 		
-		elif aspect == "unknown":
+		elif aspect == "UNKNOWN":
 			found = False
 			
 		else:
@@ -376,20 +390,26 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		codec = self.element.get("Video", "unknown").upper()
+		
 		if codec == "VC1":
 			found = True
 			self["codec"].setPixmapNum(0)
+		
 		elif codec == "H264":
 			found = True
 			self["codec"].setPixmapNum(1)
+		
 		elif codec == "MPEG4":
 			found = True
 			self["codec"].setPixmapNum(2)
+		
 		elif codec == "MPEG2VIDEO":
 			found = True
 			self["codec"].setPixmapNum(3)
-		elif codec == "unknown":
+		
+		elif codec == "UNKNOWN" or codec == "":
 			found = False;
+		
 		else:
 			printl("we have a value but no match!! codec: " + str(codec), self, "I")
 			found = False
