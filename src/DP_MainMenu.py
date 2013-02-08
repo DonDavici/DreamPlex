@@ -507,7 +507,7 @@ class DPS_MainMenu(Screen):
 		
 		printl("Plexserver State: " + str(stateText), self, "I")
 		if state == False:
-			if self.g_wolon == True:
+			if self.g_wolon == True and connectionType == "0":
 				self.session.openWithCallback(self.executeWakeOnLan, MessageBox, _("Plexserver seems to be offline. Start with Wake on Lan settings? \n\nPlease note: \nIf you press yes the spinner will run for " + str(self.g_woldelay) + " seconds. \nAccording to your settings."), MessageBox.TYPE_YESNO)
 			else:
 				self.session.open(MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!"), MessageBox.TYPE_INFO)
