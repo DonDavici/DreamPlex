@@ -20,13 +20,9 @@
 		<key id="KEY_EXIT" mapto="cancel" flags="m" />
 		<key id="KEY_ESC" mapto="cancel" flags="m" />
 		<key id="KEY_HOME" mapto="cancel" flags="m" />
-		<key id="KEY_UP" mapto="up_quick" flags="mr" />
 		<key id="KEY_UP" mapto="up" flags="b" />
-		<key id="KEY_DOWN" mapto="down_quick" flags="mr" />
 		<key id="KEY_DOWN" mapto="down" flags="b" />
-		<key id="KEY_LEFT" mapto="left_quick" flags="mr" />
 		<key id="KEY_LEFT" mapto="left" flags="b" />
-		<key id="KEY_RIGHT" mapto="right_quick" flags="mr" />
 		<key id="KEY_RIGHT" mapto="right" flags="b" />
 		<key id="KEY_INFO" mapto="info" flags="m" />
 		<key id="KEY_RED" mapto="red" flags="b" />
