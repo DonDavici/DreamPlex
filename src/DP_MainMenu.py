@@ -255,7 +255,7 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_SERVER:
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
-					self.checkWakeOnLan()
+					self.checkServerState()
 				
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
@@ -481,7 +481,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def checkWakeOnLan(self):
+	def checkServerState(self):
 		'''
 		'''
 		printl("", self, "S")
@@ -490,19 +490,19 @@ class DPS_MainMenu(Screen):
 		self.g_wakeserver = str(self.g_serverConfig.wol_mac.value)
 		self.g_woldelay = int(self.g_serverConfig.wol_delay.value)
 
-		if self.g_wolon == True:
-			ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
-			port =  int(self.g_serverConfig.port.value)
-			state = testPlexConnectivity(ip, port)
-
-			if state == False:
-
+		ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
+		port =  int(self.g_serverConfig.port.value)
+		state = testPlexConnectivity(ip, port)
+		printl("state: " + str(state), self, "D")
+		
+		if state == False:
+			if self.g_wolon == True:
 				self.session.openWithCallback(self.executeWakeOnLan, MessageBox, _("Plexserver seems to be offline. Start with Wake on Lan settings? \n\nPlease note: \nIf you press yes the spinner will run for " + str(self.g_woldelay) + " seconds. \nAccording to your settings."), MessageBox.TYPE_YESNO)
 			else:
-
-				self.getServerData()
+				self.session.open(MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!"), MessageBox.TYPE_INFO)
 		else:
 			self.getServerData()
+
 		
 		printl("", self, "C")
 		
