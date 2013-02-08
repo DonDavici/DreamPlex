@@ -135,7 +135,8 @@ class DP_LibShows(DP_LibMain):
 				filter.append(("Abc", ("Title", False, 1), tmpAbc))
 			
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "Id", ), None, None, sort, filter)	
+			return (parsedLibrary, ("ViewMode", "Id", ), None, None, sort, filter) # checked
+			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		
 		# Display the Seasons Menu
@@ -201,8 +202,12 @@ class DP_LibShows(DP_LibMain):
 			
 			filter = [("All", (None, False), ("", )), ]
 			
+			printl("params: " + str(params), self, "D")
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, None, sort, filter)
+			#return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, None, sort, filter)
+			#return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, params, sort, filter)
+			return (parsedLibrary, ("ViewMode", "url", ), None, "backToShows", sort, filter)
+			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 	
 		# Display the Episodes Menu
@@ -211,6 +216,7 @@ class DP_LibShows(DP_LibMain):
 			parsedLibrary = []
 			
 			url = params["url"]
+			
 			instance = Singleton()
 			plexInstance = instance.getPlexInstance()
 			library = plexInstance.getEpisodesOfSeason(url)
@@ -267,7 +273,11 @@ class DP_LibShows(DP_LibMain):
 			filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "Id", "Episodes", ), None, None, sort, filter)
+			#return (parsedLibrary, ("ViewMode", "Id", "Episodes", ), None, None, sort, filter)
+		
+			#return (parsedLibrary, ("ViewMode", "Id", "TVShowId", "Season", "Episode", ), dict({'ViewMode': "ShowSeasons", 'Id': params["Id"],}), params, sort, filter)
+			return (parsedLibrary, ("ViewMode", "url", ), None, "backToSeasons", sort, filter)
+			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		printl ("", self, "C")
 

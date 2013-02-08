@@ -97,6 +97,9 @@ class DP_View(Screen, NumericalTextInput):
     onLeaveSelectKeyValuePair         = None
     currentKeyValuePair             = None
     
+    ShowSeasonsParams = None
+    ShowEpisodesParams = None
+    
     itemsPerPage = int(20)  # @TODO should be set according the desktop size
     
     def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
@@ -973,6 +976,8 @@ class DP_View(Screen, NumericalTextInput):
                 params = {}
                 params["ViewMode"] = viewMode
                 params["url"] = "http://" + server + url_path
+                
+                self.ShowSeasonsParams = params
 
                 self._load(params)
 
@@ -982,6 +987,8 @@ class DP_View(Screen, NumericalTextInput):
                 params = {}
                 params["ViewMode"] = viewMode
                 params["url"] = "http://" + server + url_path
+                
+                self.ShowEpisodesParams = params
                 
                 self._load(params)
             
@@ -1008,27 +1015,35 @@ class DP_View(Screen, NumericalTextInput):
         selectKeyValuePair = self.onLeaveSelectKeyValuePair
         printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
         
-        if selectKeyValuePair is None:
+        if selectKeyValuePair == "backToSeasons":
+            self._load(self.ShowSeasonsParams)
+        
+        elif selectKeyValuePair == "backToShows":
+            self._load()
             
+        else:
             self.close()
             printl("", self, "C")
             return
         
-        self._load(self.onLeavePrimaryKeyValuePair)
-        
-        for i in range(len(self.listViewList)):
-            entry = self.listViewList[i][1]
-            printl("iterator: " + str(i) + " entry: " + str(entry), self, "I")
-            isIndex = True
-            
-            for key in selectKeyValuePair.keys():
-                if entry[key] != selectKeyValuePair[key]:
-                    isIndex = False
-                    break
-            if isIndex:
-                self["listview"].setIndex(i)
-                break
         self.refresh()
+        
+        # TODO REACTIVATE
+        #=======================================================================
+        # for i in range(len(self.listViewList)):
+        #    entry = self.listViewList[i][1]
+        #    printl("iterator: " + str(i) + " entry: " + str(entry), self, "I")
+        #    isIndex = True
+        #    
+        #    for key in selectKeyValuePair.keys():
+        #        if entry[key] != selectKeyValuePair[key]:
+        #            isIndex = False
+        #            break
+        #    if isIndex:
+        #        self["listview"].setIndex(i)
+        #        break
+        #=======================================================================
+        
         
         printl("", self, "C")
 
@@ -1039,16 +1054,26 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-    
+
         library = self.loadLibrary(primaryKeys)
         #printl("library: " + str(library), self, "D")
-        
         self.listViewList = library[0]
+        printl("listViewList: " + str(library[0]), self, "D")
+        
         self.onEnterPrimaryKeys = library[1]
+        printl("onEnterPrimaryKeys: " + str(library[1]), self, "D")
+        
         self.onLeavePrimaryKeyValuePair = library[2]
+        printl("onLeavePrimaryKeyValuePair: " + str(library[2]), self, "D")
+        
         self.onLeaveSelectKeyValuePair = library[3]
+        printl("onLeaveSelectKeyValuePair: " + str(library[3]), self, "D")
+        
         self.onSortKeyValuePair = library[4]
+        printl("onSortKeyValuePair: " + str(library[4]), self, "D")
+        
         self.onFilterKeyValuePair = library[5]
+        printl("onFilterKeyValuePair: " + str(library[5]), self, "D")
         
         if len(library) >= 7:
             self.libraryFlags = library[6]
