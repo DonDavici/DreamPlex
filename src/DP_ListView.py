@@ -240,15 +240,23 @@ class DPS_ListView(DP_View):
 		if mpaa == "RATED PG-13":
 			found = True
 			self["rated"].setPixmapNum(0)
+		
 		elif mpaa == "RATED PG":
 			found = True
 			self["rated"].setPixmapNum(1)
+		
 		elif mpaa == "RATED R":
 			found = True
 			self["rated"].setPixmapNum(2)
+		
 		elif mpaa == "NC-17":
 			found = True
 			self["rated"].setPixmapNum(3)
+		
+		elif mpaa == "NOT RATED":
+			found = True
+			self["rated"].setPixmapNum(4)
+		
 		elif mpaa == "unknown":
 			found = False
 		else:
