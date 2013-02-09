@@ -68,7 +68,7 @@ class DP_LibMovies(DP_LibMain):
 		# sort
 		sort = [("by title", "title", False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
-		filter = [("All", (None, False), ("", )), ]
+		#filter = [("All", (None, False), ("", )), ]
 		
 		# filter seen unseen
 		#filter.append(("Seen", ("viewState", "seen", ), ("", )))
@@ -77,7 +77,6 @@ class DP_LibMovies(DP_LibMain):
 		#if len(tmpGenres) > 0:
 			#tmpGenres.sort()
 			#filter.append(("Genre", ("genre", True), tmpGenres))
-		
 		
 		printl ("", self, "C")
 		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
