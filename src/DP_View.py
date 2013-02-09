@@ -100,7 +100,7 @@ class DP_View(Screen, NumericalTextInput):
     ShowSeasonsParams = None
     ShowEpisodesParams = None
     
-    itemsPerPage = int(20)  # @TODO should be set according the desktop size
+    itemsPerPage = int(8)  # @TODO should be set according the desktop size
     
     def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
         '''
@@ -915,36 +915,43 @@ class DP_View(Screen, NumericalTextInput):
         printl("", self, "S")
         
         selection = self["listview"].getCurrent()
-        printl("SELECTION " + str(selection[1]), self, "D")
-
-        url_path     = selection[1]['Path']
-        viewMode     = selection[1]['ViewMode']
-        server = selection[1]['server']
+        
+        details         = selection[1]
+        extraData       = selection[2]
+        image           = selection[3]
+        
+        #details
+        viewMode        = details['viewMode']
+        server          = details['server']
+        
+        #extraData
+        url_path        = extraData['key']
+        
         if selection is not None:
             if (viewMode == "ShowSeasons"):
-                printl("ViewMode -> ShowSeasons", self, "I")
+                printl("viewMode -> ShowSeasons", self, "I")
 
                 params = {}
-                params["ViewMode"] = viewMode
+                params["viewMode"] = viewMode
                 params["url"] = "http://" + server + url_path
                 
-                self.ShowSeasonsParams = params
+                self.currentSeasonsParams = params
 
                 self._load(params)
 
             elif (viewMode == "ShowEpisodes"):
-                printl("ViewMode -> ShowEpisodes", self, "I")
+                printl("viewMode -> ShowEpisodes", self, "I")
 
                 params = {}
-                params["ViewMode"] = viewMode
+                params["viewMode"] = viewMode
                 params["url"] = "http://" + server + url_path
                 
-                self.ShowEpisodesParams = params
+                self.currentEpisodesParams = params
                 
                 self._load(params)
             
             elif (viewMode == "play"):
-                printl("ViewMode -> play", self, "I")
+                printl("viewMode -> play", self, "I")
                 self.playEntry(selection)
                 
 
@@ -1175,9 +1182,9 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-        media_id = selection[1]['Id']
+        media_id = selection[1]['ratingKey']
 
-        server = selection[1]['ArtPoster']
+        server = selection[2]['thumb']
         instance = Singleton()
         plexInstance = instance.getPlexInstance()
         
