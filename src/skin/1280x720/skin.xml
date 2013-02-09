@@ -93,8 +93,7 @@
     		
     	<widget source="listview" render="Listbox" zPosition="3" position="35,60" size="465,359" scrollbarMode="showNever" foregroundColor="#696969" foregroundColorSelected="#FFFFFF" backgroundColor="#000000" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus21.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"> 
           <convert type="TemplatedMultiContent">
-                {"template": [ MultiContentEntryText(pos = (25,0), size = (465,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
-                MultiContentEntryPixmapAlphaTest(pos = (6,4), size = (32,32), png = 4) ],
+                {"template": [ MultiContentEntryText(pos = (25,0), size = (465,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0)],
                 "fonts": [gFont("Modern", 25)],
                 "itemHeight": 44,
                 "scrollbarMode": "showNever"

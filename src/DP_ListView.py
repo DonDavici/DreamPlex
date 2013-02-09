@@ -677,7 +677,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[1]["thumb"]
+		download_url = self.selection[2]["thumb"]
 		printl( "download url " + download_url, self, "D")
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
@@ -698,7 +698,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[1]["fanart_image"]
+		download_url = self.selection[2]["fanart_image"]
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
