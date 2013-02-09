@@ -63,25 +63,21 @@ class DP_LibMovies(DP_LibMain):
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
 		
-		library, tmpAbc , tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+		library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 		# sort
-		sort = [("title", "title", False), ("year", "year", True), ("rating", "rating", True), ]
+		sort = [("by title", "title", False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
 		filter = [("All", (None, False), ("", )), ]
 		
 		# filter seen unseen
-		#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
+		#filter.append(("Seen", ("viewState", "seen", ), ("", )))
 		
 		# filter genres
-		if len(tmpGenres) > 0:
-			tmpGenres.sort()
-			filter.append(("Genre", ("genre", True), tmpGenres))
+		#if len(tmpGenres) > 0:
+			#tmpGenres.sort()
+			#filter.append(("Genre", ("genre", True), tmpGenres))
 		
-		# filter letters	
-		if len(tmpAbc) > 0:
-			tmpAbc.sort()
-			filter.append(("Abc", ("title", False, 1), tmpAbc))
 		
 		printl ("", self, "C")
 		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)

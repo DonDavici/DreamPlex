@@ -3106,7 +3106,11 @@ class PlexLibrary(Screen):
             if child.tag == "Media":
                 mediaarguments = dict(child.items())
             elif child.tag == "Genre" and self.g_skipmetadata == "false":
-                tempgenre.append(child.get('tag'))
+                genreTag = child.get('tag')
+                tempgenre.append(genreTag)
+                # fill genre filter
+                if genreTag not in self.tmpGenres:
+                    self.tmpGenres.append(genreTag)
             elif child.tag == "Writer"  and self.g_skipmetadata == "false":
                 tempwriter.append(child.get('tag'))
             elif child.tag == "Director"  and self.g_skipmetadata == "false":
@@ -3166,10 +3170,6 @@ class PlexLibrary(Screen):
             context=self.buildContextMenu(url, extraData)
         else:
             context=None
-        
-        # fill genre filter
-        if details['genre'] not in self.tmpGenres:
-            self.tmpGenres.append(details['genre'])
         
         # fill title filter
         if details["title"].upper() not in self.tmpAbc:
