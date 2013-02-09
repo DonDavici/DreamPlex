@@ -30,18 +30,18 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #===============================================================================
 # 
 #===============================================================================
-def getPictureData(selection, prefix, postfix):
+def getPictureData(details, prefix, postfix):
 	'''
 	'''
 	printl("", __name__, "S")
 	
 	mediaPath = config.plugins.dreamplex.mediafolderpath.value
 	
-	if selection[1]["ratingKey"] is None or selection[1]["ratingKey"] == "None" or selection[1]["ratingKey"] == "":
+	if details["ratingKey"] is None or details["ratingKey"] == "None" or details["ratingKey"] == "":
 		target = "None"
 	else:
 		try:
-			name = selection[1]["ratingKey"]
+			name = details["ratingKey"]
 			target = mediaPath + prefix + "_" + name + postfix
 			printl( "target: " + str(target), __name__, "D")
 		except:

@@ -158,7 +158,6 @@ class DPS_ListView(DP_View):
 		
 		if selection != None:
 			self.selection = selection
-			self.element = selection[1]
 			
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
@@ -631,7 +630,7 @@ class DPS_ListView(DP_View):
 		
 		dwl_poster = False
 		
-		if fileExists(getPictureData(self.selection, self.image_prefix, self.poster_postfix)):
+		if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix)):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
@@ -655,7 +654,7 @@ class DPS_ListView(DP_View):
 		
 		dwl_backdrop = False
 				
-		if fileExists(getPictureData(self.selection, self.image_prefix, self.backdrop_postfix)):
+		if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix)):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
@@ -739,8 +738,8 @@ class DPS_ListView(DP_View):
 		
 		printl("start pĺaying theme", self, "I")
 		accessToken = Singleton().getPlexInstance().g_myplex_accessToken
-		theme = self.element["theme"]
-		server = self.element["server"]
+		theme = self.extraData["theme"]
+		server = self.details["server"]
 		printl("theme: " + str(theme), self, "D")
 		url = "http://" + str(server) + str(theme) + "?X-Plex-Token=" + str(accessToken)
 		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
@@ -755,7 +754,6 @@ class DPS_ListView(DP_View):
 	#==============================================================================
 	def setPara(self):
 		'''
-		deprecaded for now because we have only jpg
 		'''
 		printl("", self, "S")
 		
