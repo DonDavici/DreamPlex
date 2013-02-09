@@ -451,36 +451,36 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		if self.element ["ViewMode"] == "ShowSeasons":
-			printl( "s ShowSeasons", self, "D")
-			self.parentSeasonId = self.element ["Id"]
+		if self.element ["viewMode"] == "ShowSeasons":
+			printl( "is ShowSeasons", self, "D")
+			self.parentSeasonId = self.element ["ratingKey"]
 			self.isTvShow = True
 			self.startPlaybackNow = True
-			bname = self.element["Id"]
-			pname = self.element["Id"]
+			bname = self.element["ratingKey"]
+			pname = self.element["ratingKey"]
 	
-		elif self.element ["ViewMode"] == "ShowEpisodes" and self.element["Id"] is None:
+		elif self.element ["viewMode"] == "ShowEpisodes" and self.element["Id"] is None:
 			printl( "is ShowEpisodes all entry", self, "D")
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			self.startPlaybackNow = False
 			
-		elif self.element ["ViewMode"] == "ShowEpisodes" and self.element["Id"] != "":
+		elif self.element ["viewMode"] == "ShowEpisodes" and self.element["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
-			self.parentSeasonNr = self.element["Id"]			
+			self.parentSeasonNr = self.element["ratingKey"]			
 			bname = self.parentSeasonId
-			pname = self.element["Id"]
+			pname = self.element["ratingKey"]
 			self.startPlaybackNow = False
 		
 		else:
-			bname = self.element["Id"]
+			bname = self.element["ratingKey"]
 			self.startPlaybackNow = False
 			if self.isTvShow is True:
 				pname = self.parentSeasonNr
 				# we dont want to have the same poster downloaded and used for each episode
 				changePoster = False
 			else:
-				pname = self.element["Id"]
+				pname = self.element["ratingKey"]
 			
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix

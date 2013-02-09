@@ -63,88 +63,29 @@ class DP_LibMovies(DP_LibMain):
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		library = plexInstance.getMoviesFromSection(url)
+		library, tmpAbc , tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 
-		parsedLibrary = []
-		tmpAbc = []
-		tmpGenres = []
-		for movie in library:
-			
-			#===============================================================
-			# printl ("-> url = " + str(movie[0]), self, "D")
-			# printl ("-> properties = " + str(movie[1]), self, "D")
-			# printl ("-> arguments = " + str(movie[2]), self, "D")
-			# printl ("-> context = " + str(movie[3]), self, "D")
-			#===============================================================
-			
-			url = movie[0]
-			properties = movie[1]
-			arguments = movie[2]
-			context = movie[3]
-			
-			d = {}
-			d["Title"]          = properties.get('title', "")#
-			d["Year"]           = properties.get('year', "")#
-			d["Plot"]           = properties.get('plot', "") #
-			d["Runtime"]        = properties.get('duration', "")#
-			d["Genres"]         = properties.get('genre', "")
-			d["Seen"]        	= properties.get('playcount', "")#
-			d["Popularity"]     = properties.get('rating', 0)#
-			d["Studio"]     	= properties.get('studio', "")#
-			d["Director"]     	= properties.get('director', "")#
-			d["MPAA"]     		= properties.get('mpaa', "")#
-			d["Tag"]            = properties.get('tagline', "")#
-			d["server"]			= properties.get('server', "")
-			
-			d["Id"]				= arguments.get('ratingKey') #we use this because there is the id as value without any need of manipulating
-			d["Path"]          	= arguments.get('key', "")
-			d["Resolution"]    	= arguments.get('VideoResolution', "")
-			d["Video"]    	   	= arguments.get('VideoCodec', "")
-			d["Sound"]         	= arguments.get('AudioCodec', "")
-			d["Aspect"]			= arguments.get('VideoAspect', "")
-			d["ArtBackdrop"] 	= arguments.get('fanart_image', "")
-			d["ArtPoster"]   	= arguments.get('thumb', "")
-			d["Creation"]		= arguments.get('addedAt', 0)
-			d["Key"]			= arguments.get('key', "")
-
-			
-			d["ViewMode"]      = "play"
-			d["ScreenTitle"]   = d["Title"]
-			
-			if d["Title"].upper() not in tmpAbc:
-				tmpAbc.append(d["Title"].upper())
-			
-			for genre in d["Genres"]:
-				if genre not in tmpGenres:
-					tmpGenres.append(genre)
-			
-			if (d["Seen"] == 0):
-				image = None
-			else:
-				image = None
-
-			parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
-		
 		# sort
-		sort = [("Title", None, False), ("Year", "Year", True), ("Popularity", "Popularity", True), ]
+		sort = [("title", None, False), ("year", "year", True), ("rating", "rating", True), ]
 		
-		# filter
+		
 		filter = [("All", (None, False), ("", )), ]
+		
+		# filter seen unseen
 		filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 		
-		# genres
+		# filter genres
 		if len(tmpGenres) > 0:
 			tmpGenres.sort()
-			filter.append(("Genre", ("Genres", True), tmpGenres))
-			
+			filter.append(("Genre", ("genres", True), tmpGenres))
+		
+		# filter letters	
 		if len(tmpAbc) > 0:
 			tmpAbc.sort()
-			filter.append(("Abc", ("Title", False, 1), tmpAbc))
+			filter.append(("Abc", ("title", False, 1), tmpAbc))
 		
 		printl ("", self, "C")
-		return (parsedLibrary, ("ViewMode", "Id", ), None, None, sort, filter)
+		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
 
 	#===========================================================================
 	# 

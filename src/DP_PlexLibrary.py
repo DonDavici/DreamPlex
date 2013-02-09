@@ -846,7 +846,8 @@ class PlexLibrary(Screen):
   
         printl("URL to use for listing: " + newUrl, self, "D")
     
-        content = (newUrl, details, extraData, context)
+        #xcontent = (newUrl, details, extraData, context)
+        content = (details.get('title',''), details, extraData, context, newUrl)
         
         printl("content = " + str(content), self, "D")
         printl("", self, "C")
@@ -1438,9 +1439,10 @@ class PlexLibrary(Screen):
         '''
         printl("", self, "S")
         printl("url: " + str(url), self, "D")
-        #=======================================================================
-        # xbmcplugin.setContent(pluginhandle, 'movies')
-        #=======================================================================
+        
+        fullList=[]
+        self.tmpAbc = []
+        self.tmpGenres = []
                 
         #get the server name from the URL, which was passed via the on screen listing..
         if tree is None:
@@ -1458,33 +1460,16 @@ class PlexLibrary(Screen):
     
         server=self.getServerFromURL(url)
                         
-        randomNumber=str(random.randint(1000000000,9999999999))   
         #Find all the video tags, as they contain the data we need to link to a file.
-        MovieTags=tree.findall('Video')
+        movies=tree.findall('Video')
         
-        
-        fullList=[]
-        
-        for movie in MovieTags:
-            
-            #===================================================================
-            # self.movieTag(url, server, tree, movie, randomNumber)
-            #===================================================================
-            
-        #=======================================================================
-        # xbmcplugin.endOfDirectory(pluginhandle)
-        #=======================================================================
-            #===>
+        for movie in movies:
             #Right, add that link...and loop around for another entry
-            content = self.movieTag(url, server, tree, movie, randomNumber)
-            #printl ("-> " + str(content), self)
+            content = self.movieTag(url, server, tree, movie)
             fullList.append(content)
-            #printl ("-> " + str(result), self)
-            #===>
-        
-        #printl ("fullList = " + str(fullList), self, "D")
+
         printl("", self, "C")
-        return fullList
+        return fullList, self.tmpAbc , self.tmpGenres
      
     #=======================================================================
     # 
@@ -3102,10 +3087,10 @@ class PlexLibrary(Screen):
         # xbmcplugin.endOfDirectory(pluginhandle) 
         #=======================================================================
     
-    #===============================================================================
+#===============================================================================
     # 
     #===============================================================================
-    def movieTag(self, url, server, tree, movie, randomNumber):
+    def movieTag(self, url, server, tree, movie):
         '''
         '''
         printl("", self, "S")
@@ -3129,74 +3114,71 @@ class PlexLibrary(Screen):
             elif child.tag == "Role"  and self.g_skipmetadata == "false":
                 tempcast.append(child.get('tag'))
 
-        printl("Media attributes are " + str(mediaarguments), self, "D")
-
-                                    
         #Gather some data 
-        view_offset=movie.get('viewOffset',0)
-        duration=int(mediaarguments.get('duration',movie.get('duration',0)))/1000
+        duration = int(mediaarguments.get('duration',movie.get('duration',0)))/1000
                  
         #Required listItem entries for XBMC
-        details={'plot'      : movie.get('summary','') ,
-                 'title'     : movie.get('title','Unknown').encode('utf-8') ,
-                 'playcount' : int(movie.get('viewCount',0)) ,
-                 'rating'    : movie.get('rating',0) ,
-                 'studio'    : movie.get('studio','') ,
-                 'mpaa'      : "Rated " + movie.get('contentRating', 'unknown') ,
-                 'year'      : int(movie.get('year',0)) ,
-                 'tagline'   : movie.get('tagline','') ,
-                 'duration'  : str(datetime.timedelta(seconds=duration)) ,
-                 'server'    : str(server) ,
-                 'overlay'   : _OVERLAY_XBMC_UNWATCHED }
+        details = {}
+        details["viewMode"]             = "play"
+        details['ratingKey']            = str(movie.get('ratingKey', 0)) # primary key in plex
+        details['summary']              = movie.get('summary','')
+        details['title']                = movie.get('title','').encode('utf-8')
+        details['viewCount']            = movie.get('viewCount', 0)
+        details['rating']               = movie.get('rating', 0)
+        details['studio']               = movie.get('studio','')
+        details['year']                 = movie.get('year', 0)
+        details['tagline']              = movie.get('tagline','')
+        details['runtime']              = str(datetime.timedelta(seconds=duration))
+        details['server']               = str(server)
+        details['genre']                = " / ".join(tempgenre)
+        details['viewOffset']           = movie.get('viewOffset',0)
+        details['director']             = " / ".join(tempdir)
         
-        #Extra data required to manage other properties
-        extraData={'type'         : "Video" ,
-                   'thumb'        : self.getThumb(movie, server) ,
-                   'fanart_image' : self.getFanart(movie, server) ,
-                   'token'        : self.g_myplex_accessToken ,
-                   'key'          : movie.get('key',''),
-                   'ratingKey'    : str(movie.get('ratingKey',0)) }
-    
-        #=======================================================================
-        # #Determine what tupe of watched flag [overlay] to use
-        # if details['playcount'] > 0:
-        #    if g_skinwatched == "xbmc":
-        #        details['overlay']=_OVERLAY_XBMC_WATCHED
-        #    elif g_skinwatched == "DreamPlex":
-        #        details['overlay']=_OVERLAY_PLEX_WATCHED
-        # elif details['playcount'] == 0: 
-        #    if g_skinwatched == "DreamPlex":
-        #        details['overlay']=_OVERLAY_PLEX_UNWATCHED
-        # 
-        # if g_skinwatched == "DreamPlex" and int(view_offset) > 0:
-        #    details['overlay'] = _OVERLAY_PLEX_PARTIAL
-        #=======================================================================
+        # lets add this for another filter
+        if int(details['viewCount']) > 0:
+            details['viewState']        = "seen"
+        else:
+            details['viewState']        = "unseen"
         
         #Extended Metadata
         if self.g_skipmetadata == "false":
             details['cast']     = tempcast
-            details['director'] = " / ".join(tempdir)
             details['writer']   = " / ".join(tempwriter)
-            details['genre']    = " / ".join(tempgenre)
-             
+        
+        extraData = {}
+        extraData['type']               = "Video"
+        extraData['thumb']              = self.getThumb(movie, server)
+        extraData['fanart_image']       = self.getFanart(movie, server)
+        extraData['token']              = self.g_myplex_accessToken
+        extraData['key']                = movie.get('key','')
+
         #Add extra media flag data
         if self.g_skipmediaflags == "false":
-            extraData['VideoResolution'] = mediaarguments.get('videoResolution','')
-            extraData['VideoCodec']      = mediaarguments.get('videoCodec','')
-            extraData['AudioCodec']      = mediaarguments.get('audioCodec','')
-            extraData['AudioChannels']   = mediaarguments.get('audioChannels','')
-            extraData['VideoAspect']     = mediaarguments.get('aspectRatio','')
+            extraData['contentRating']        = movie.get('contentRating', '')
+            extraData['videoResolution'] = mediaarguments.get('videoResolution', '')
+            extraData['videoCodec']      = mediaarguments.get('videoCodec', '')
+            extraData['audioCodec']      = mediaarguments.get('audioCodec', '')
+            extraData['aspectRatio']     = mediaarguments.get('aspectRatio', '')
+            extraData['audioCodec']      = mediaarguments.get('audioCodec', '')
     
         #Build any specific context menu entries
         if self.g_skipcontext == "false":
-            context=self.buildContextMenu(url, extraData)    
+            context=self.buildContextMenu(url, extraData)
         else:
             context=None
-        # http:// <server> <path> &mode=<mode> &id=<media_id> &t=<rnd>
-        u="http://%s%s&mode=%s&id=%s&t=%s" % (server, extraData['key'], _MODE_PLAYLIBRARY, extraData['ratingKey'], randomNumber)
+        
+        # fill genre filter
+        if details['genre'] not in self.tmpGenres:
+            self.tmpGenres.append(details['genre'])
+        
+        # fill title filter
+        if details["title"].upper() not in self.tmpAbc:
+            self.tmpAbc.append(details["title"].upper())
+        
+        guiItem = self.addGUIItem(url, details, extraData, context, folder=False)
         
         printl("", self, "C")   
-        return self.addGUIItem(url,details,extraData,context,folder=False)        
+        return guiItem        
         
     #===============================================================================
     # 

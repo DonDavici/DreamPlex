@@ -37,11 +37,11 @@ def getPictureData(selection, prefix, postfix):
 	
 	mediaPath = config.plugins.dreamplex.mediafolderpath.value
 	
-	if selection[1]["Id"] is None or selection[1]["Id"] == "None" or selection[1]["Id"] == "":
+	if selection[1]["ratingKey"] is None or selection[1]["ratingKey"] == "None" or selection[1]["ratingKey"] == "":
 		target = "None"
 	else:
 		try:
-			name = selection[1]["Id"]
+			name = selection[1]["ratingKey"]
 			target = mediaPath + prefix + "_" + name + postfix
 			printl( "target: " + str(target), __name__, "D")
 		except:
