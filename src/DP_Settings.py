@@ -249,7 +249,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
         try:
             sel = self["entrylist"].l.getCurrentSelection()[0]
         except Exception, ex:
-            printl("Exception: " + ex, self, "W")
+            printl("Exception: " + str(ex), self, "W")
             sel = None
         
         self.close(self.session, self.what, sel)
@@ -268,7 +268,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
             sel = self["entrylist"].l.getCurrentSelection()[0]
         
         except Exception, ex:
-            printl("Exception: " + ex, self, "W")
+            printl("Exception: " + str(ex), self, "W")
             sel = None
         
         if sel is None:
@@ -291,7 +291,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
             sel = self["entrylist"].l.getCurrentSelection()[0]
         
         except Exception, ex:
-            printl("Exception: " + ex, self, "W")
+            printl("Exception: " + str(ex), self, "W")
             sel = None
         
         if sel is None:
