@@ -68,7 +68,6 @@ class DPS_ListView(DP_View):
 	poster_postfix 			= "_poster.jpg"
 	image_prefix 			= ""
 	plexInstance 			= None
-	element 				= None
 	details 				= None
 	extraData 				= None
 	context					= None
@@ -157,8 +156,6 @@ class DPS_ListView(DP_View):
 		self.resetCurrentImages()
 		
 		if selection != None:
-			self.selection = selection
-			
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
 			self.context		= selection[3]
@@ -676,7 +673,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[2]["thumb"]
+		download_url = self.extraData["thumb"]
 		printl( "download url " + download_url, self, "D")
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
@@ -685,7 +682,7 @@ class DPS_ListView(DP_View):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.selection, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showPoster())
+			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showPoster())
 		
 		printl("", self, "C")
 
@@ -697,7 +694,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[2]["fanart_image"]
+		download_url = self.extraData["fanart_image"]
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
@@ -706,7 +703,7 @@ class DPS_ListView(DP_View):
 			
 		else:
 			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.selection, self.image_prefix, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
+			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
 				
 		printl("", self, "C")
 	
