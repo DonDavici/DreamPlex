@@ -131,7 +131,6 @@ class DPS_ListView(DP_View):
 		
 		self.skinName = self.viewName[2]
 
-		# we use this as fallback if we get something different as jpg
 		self.EXscale = (AVSwitch().getFramebufferScale())
 		self.EXpicloadPoster 		= ePicLoad()
 		self.EXpicloadBackdrop 		= ePicLoad()
@@ -622,14 +621,9 @@ class DPS_ListView(DP_View):
 			self.setText("postertext", "rendering ...")
 			
 			if self.whatPoster is not None:
-				
-				try:
-					ptr = loadJPG(self.whatPoster)
-					self["poster"].instance.setPixmap(ptr.__deref__())
-				except:
-					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-					ptr = self.EXpicloadPoster.getData()
-					self["poster"].instance.setPixmap(ptr.__deref__())
+				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				ptr = self.EXpicloadPoster.getData()
+				self["poster"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
@@ -651,14 +645,9 @@ class DPS_ListView(DP_View):
 			self.setText("backdroptext", "rendering ...")
 			
 			if self.whatBackdrop is not None:
-				
-				try:
-					ptr = loadJPG(self.whatBackdrop)
-					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
-				except:
-					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
-					ptr = self.EXpicloadBackdrop.getData()
-					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				ptr = self.EXpicloadBackdrop.getData()
+				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
 		else:
 			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
