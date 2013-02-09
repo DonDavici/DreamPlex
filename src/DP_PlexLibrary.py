@@ -3154,7 +3154,7 @@ class PlexLibrary(Screen):
 
         #Add extra media flag data
         if self.g_skipmediaflags == "false":
-            extraData['contentRating']        = movie.get('contentRating', '')
+            extraData['contentRating']   = movie.get('contentRating', '')
             extraData['videoResolution'] = mediaarguments.get('videoResolution', '')
             extraData['videoCodec']      = mediaarguments.get('videoCodec', '')
             extraData['audioCodec']      = mediaarguments.get('audioCodec', '')

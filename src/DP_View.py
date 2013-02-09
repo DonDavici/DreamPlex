@@ -150,7 +150,7 @@ class DP_View(Screen, NumericalTextInput):
             #"menu":       (self.onKeyMenu, ""),
 
             "red":        (self.onKeyRed, ""),
-            #"green":      (self.onKeyGreen, ""),
+            "green":      (self.onKeyGreen, ""),
             #"yellow":     (self.onKeyYellow, ""),
             "blue":       (self.onKeyBlue, ""),
 
