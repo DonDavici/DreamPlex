@@ -157,6 +157,10 @@ class DPS_ListView(DP_View):
 			self.selection = selection
 			self.element = selection[1]
 			
+			self.details 		= selection[1]
+			self.extraData 		= selection[2]
+			self.context		= selection[3]
+			
 			# lets get all data we need to show the needed pictures
 			# we also check if we want to play
 			self.getPictureInformationToLoad()
@@ -169,15 +173,16 @@ class DPS_ListView(DP_View):
 			# lets set the new text information
 			self.setText("backdroptext", "searching ...")
 			self.setText("postertext", "searching ...")
-			self.setText("title", self.element.get("ScreenTitle", " "))
-			self.setText("tag", self.element.get("Tag", " ").encode('utf8'), True)
-			self.setText("shortDescription", self.element.get("Plot", " ").encode('utf8'), what=_("Overview"))
-			self.setText("studio", self.element.get("Studio", " "))
-			self.setText("year", str(self.element.get("Year", " ")))
-			self.setText("mpaa", str(self.element.get("MPAA", " ")))
-			self.setText("director", str(self.element.get("Director", " ").encode('utf8')))
-			self.setText("genre", str(self.element.get("Genres", " t").encode('utf8')))
-			self.setText("runtime", str(self.element.get("Runtime", " ")))
+
+			self.setText("title", 				self.details.get("title", " "))
+			self.setText("tag", 				self.details.get("tagline", " ").encode('utf8'), True)
+			self.setText("shortDescription", 	self.details.get("summary", " ").encode('utf8'), what=_("Overview"))
+			self.setText("studio", 				self.details.get("studio", " - "))
+			self.setText("year", 				str(self.details.get("year", " - ")))
+			self.setText("mpaa", 				str(self.extraData.get("contentRating", " - ")))
+			self.setText("director", 			str(self.details.get("director", " - ").encode('utf8')))
+			self.setText("genre", 				str(self.details.get("genre", " - ").encode('utf8')))
+			self.setText("runtime", 			str(self.details.get("runtime", " - ")))
 			
 			# handle all pixmaps
 			self.handlePopularityPixmaps()
@@ -663,7 +668,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[1]["ArtPoster"]
+		download_url = self.selection[1]["thumb"]
 		printl( "download url " + download_url, self, "D")
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
@@ -684,7 +689,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		download_url = self.selection[1]["ArtBackdrop"]
+		download_url = self.selection[1]["fanart_image"]
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
