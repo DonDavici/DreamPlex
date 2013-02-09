@@ -64,19 +64,22 @@ def getViewClass():
 class DPS_ListView(DP_View):
 	'''
 	'''
-	backdrop_postfix = "_backdrop.jpg"
-	poster_postfix = "_poster.jpg"
-	image_prefix = ""
-	plexInstance = None
-	element = None
-	parentSeasonId = None
-	parentSeasonNr = None
-	isTvShow = False
-	playTheme = False
-	startPlaybackNow = False
-	itemsPerPage = 0
-	whatPoster = None
-	whatBackdrop = None
+	backdrop_postfix 		= "_backdrop.jpg"
+	poster_postfix 			= "_poster.jpg"
+	image_prefix 			= ""
+	plexInstance 			= None
+	element 				= None
+	details 				= None
+	extraData 				= None
+	context					= None
+	parentSeasonId 			= None
+	parentSeasonNr 			= None
+	isTvShow 				= False
+	playTheme 				= False
+	startPlaybackNow 		= False
+	itemsPerPage 			= 0
+	whatPoster 				= None
+	whatBackdrop 			= None
 
 	#===========================================================================
 	# 
@@ -208,6 +211,7 @@ class DPS_ListView(DP_View):
 			
 		printl("", self, "C")
 
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -239,18 +243,18 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 
-		mpaa = self.element.get("MPAA", "unknown").upper()
-		printl("MPAA: " + str(mpaa), self, "D")
+		mpaa = self.extraData.get("contentRating", "unknown").upper()
+		printl("contentRating: " + str(mpaa), self, "D")
 		
-		if mpaa == "RATED PG-13" or "TV-14":
+		if mpaa == "PG-13" or "TV-14":
 			found = True
 			self["rated"].setPixmapNum(0)
 		
-		elif mpaa == "RATED PG" or "TV-PG":
+		elif mpaa == "PG" or "TV-PG":
 			found = True
 			self["rated"].setPixmapNum(1)
 		
-		elif mpaa == "RATED R":
+		elif mpaa == "R":
 			found = True
 			self["rated"].setPixmapNum(2)
 		
@@ -258,11 +262,11 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(3)
 		
-		elif mpaa == "NOT RATED" or mpaa == "RATED DE/0":
+		elif mpaa == "NOT RATED" or mpaa == "DE/0":
 			found = True
 			self["rated"].setPixmapNum(4)
 		
-		elif mpaa == "UNKNOWN" or mpaa == "RATED UNKNOWN" or mpaa == "":
+		elif mpaa == "UNKNOWN" or mpaa == "UNKNOWN" or mpaa == "":
 			found = False
 		
 		else:
@@ -285,7 +289,8 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		audio = self.element.get("Sound", "unknown").upper()
+		audio = self.extraData.get("audioCodec", "unknown").upper()
+		printl("audioCodec: " + str(audio), self, "D")
 		
 		if audio == "DCA":
 			found = True
@@ -325,7 +330,8 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 
-		resolution = self.element.get("Resolution", "unknown").upper()
+		resolution = self.extraData.get("videoResolution", "unknown").upper()
+		printl("videoResolution: " + str(resolution), self, "D")
 		
 		if resolution == "1080":
 			found = True
@@ -361,7 +367,8 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 
-		aspect = self.element.get("Aspect", "unknown").upper()
+		aspect = self.extraData.get("aspectRatio", "unknown").upper()
+		printl("aspectRatio: " + str(aspect), self, "D")
 		
 		if aspect == "1.33":
 			found = True
@@ -397,7 +404,8 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		codec = self.element.get("Video", "unknown").upper()
+		codec = self.extraData.get("videoCodec", "unknown").upper()
+		printl("videoCodec: " + str(codec), self, "D")
 		
 		if codec == "VC1":
 			found = True
@@ -438,7 +446,7 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		try:
-			popularity = float(self.element["Popularity"])
+			popularity = float(self.details ["rating"])
 		except Exception, e: 
 			popularity = 0
 			printl( "error in popularity " + str(e),self, "D")
@@ -456,41 +464,42 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		if self.element ["viewMode"] == "ShowSeasons":
+		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")
-			self.parentSeasonId = self.element ["ratingKey"]
+			self.parentSeasonId = self.details ["ratingKey"]
 			self.isTvShow = True
 			self.startPlaybackNow = True
-			bname = self.element["ratingKey"]
-			pname = self.element["ratingKey"]
+			bname = self.details["ratingKey"]
+			pname = self.details["ratingKey"]
 	
-		elif self.element ["viewMode"] == "ShowEpisodes" and self.element["Id"] is None:
+		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] is None:
 			printl( "is ShowEpisodes all entry", self, "D")
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			self.startPlaybackNow = False
 			
-		elif self.element ["viewMode"] == "ShowEpisodes" and self.element["ratingKey"] != "":
+		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
-			self.parentSeasonNr = self.element["ratingKey"]			
+			self.parentSeasonNr = self.details["ratingKey"]			
 			bname = self.parentSeasonId
-			pname = self.element["ratingKey"]
+			pname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 		
 		else:
-			bname = self.element["ratingKey"]
+			bname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 			if self.isTvShow is True:
 				pname = self.parentSeasonNr
 				# we dont want to have the same poster downloaded and used for each episode
 				changePoster = False
 			else:
-				pname = self.element["ratingKey"]
+				pname = self.details["ratingKey"]
 			
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		
 		printl("", self, "C")
+		
 	#===========================================================================
 	# 
 	#===========================================================================
