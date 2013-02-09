@@ -27,6 +27,8 @@ import cPickle as pickle
 
 from Screens.Screen import Screen
 
+from Components.config import config
+
 from DP_View import DP_View, getViews
 from DP_Player import DP_Player
 
@@ -39,8 +41,6 @@ from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 class DP_LibMain(Screen):
 	'''
 	'''
-
-	checkFileCreationDate = True
 
 	#===========================================================================
 	# 
@@ -57,7 +57,7 @@ class DP_LibMain(Screen):
 		self._views = getViews()
 		self.currentViewIndex = 0
 		
-		self.defaultPickle = ""
+		self.defaultPickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, libraryName, )
 		self.onFirstExecBegin.append(self.showDefaultView)
 		
 		printl("", self, "C")

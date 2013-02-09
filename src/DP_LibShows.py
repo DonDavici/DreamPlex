@@ -123,7 +123,7 @@ class DP_LibShows(DP_LibMain):
 				
 				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
 				
-			sort = (("Title", None, False), ("Popularity", "Popularity", True), )
+			sort = (("Title", None, False), ("Year", "Year", True), ("Popularity", "Popularity", True), )
 			
 			filter = [("All", (None, False), ("", )), ]
 			if len(tmpGenres) > 0:
@@ -202,10 +202,7 @@ class DP_LibShows(DP_LibMain):
 			
 			filter = [("All", (None, False), ("", )), ]
 			
-			printl("params: " + str(params), self, "D")
 			printl ("", self, "C")
-			#return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, None, sort, filter)
-			#return (parsedLibrary, ("ViewMode", "Id", "Season", ), None, params, sort, filter)
 			return (parsedLibrary, ("ViewMode", "url", ), None, "backToShows", sort, filter)
 			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
@@ -267,15 +264,12 @@ class DP_LibShows(DP_LibMain):
 					
 				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))	
 			
-			sort = [("Title", None, False), ("Popularity", "Popularity", True), ]
+			sort = [("Title", None, False), ]
 			
 			filter = [("All", (None, False), ("", )), ]
 			filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			#return (parsedLibrary, ("ViewMode", "Id", "Episodes", ), None, None, sort, filter)
-		
-			#return (parsedLibrary, ("ViewMode", "Id", "TVShowId", "Season", "Episode", ), dict({'ViewMode': "ShowSeasons", 'Id': params["Id"],}), params, sort, filter)
 			return (parsedLibrary, ("ViewMode", "url", ), None, "backToSeasons", sort, filter)
 			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 

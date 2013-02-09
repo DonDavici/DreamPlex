@@ -1532,7 +1532,7 @@ class PlexLibrary(Screen):
                      'tvshowname' : show.get('title','Unknown').encode('utf-8') ,
                      'studio'     : show.get('studio','') ,
                      'plot'       : show.get('summary','') ,
-                     'overlay'    : _OVERLAY_XBMC_UNWATCHED ,
+                     'year'       : show.get('year','') ,
                      'playcount'  : 0 , 
                      'season'     : 0 ,
                      'episode'    : int(show.get('leafCount',0)) ,

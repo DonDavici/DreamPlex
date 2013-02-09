@@ -126,15 +126,15 @@ class DP_LibMovies(DP_LibMain):
 				image = None
 
 			parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
-		sort = [("Title", None, False), ("Popularity", "Popularity", True), ]
-		if self.checkFileCreationDate:
-			sort.append(("File Creation", "Creation", True))
 		
-		sort.append(("Filename", "Filename", False))
+		# sort
+		sort = [("Title", None, False), ("Year", "Year", True), ("Popularity", "Popularity", True), ]
 		
+		# filter
 		filter = [("All", (None, False), ("", )), ]
 		filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 		
+		# genres
 		if len(tmpGenres) > 0:
 			tmpGenres.sort()
 			filter.append(("Genre", ("Genres", True), tmpGenres))
