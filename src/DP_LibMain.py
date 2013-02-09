@@ -323,7 +323,7 @@ class DP_LibMain(Screen):
 		
 		printl("", self, "D")
 		playbackList = []
-		playbackList.append( (entry["Path"], entry["Title"], entry, ))
+		playbackList.append( (entry["Path"], entry["title"], entry, ))
 		
 		printl("", self, "C")
 		return playbackList

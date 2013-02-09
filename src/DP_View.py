@@ -407,7 +407,7 @@ class DP_View(Screen, NumericalTextInput):
         
         printl(self.onNumerKeyLastChar, self, "I")
         if self.onNumerKeyLastChar != ' ':
-            self.activeFilter = ('Abc', ('Title', False, 1), self.onNumerKeyLastChar)
+            self.activeFilter = ('Abc', ('title', False, 1), self.onNumerKeyLastChar)
         else:
             self.activeFilter = ("All", (None, False), ("All", ))
         self.sort()

@@ -68,16 +68,15 @@ class DP_LibMovies(DP_LibMain):
 		# sort
 		sort = [("title", "title", False), ("year", "year", True), ("rating", "rating", True), ]
 		
-		
 		filter = [("All", (None, False), ("", )), ]
 		
 		# filter seen unseen
-		filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
+		#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 		
 		# filter genres
 		if len(tmpGenres) > 0:
 			tmpGenres.sort()
-			filter.append(("Genre", ("genres", True), tmpGenres))
+			filter.append(("Genre", ("genre", True), tmpGenres))
 		
 		# filter letters	
 		if len(tmpAbc) > 0:
@@ -96,10 +95,9 @@ class DP_LibMovies(DP_LibMain):
 		printl ("", self, "S")
 		
 		args = {}
-		args["id"] 	= entry["Id"]
-		args["title"]   = entry["Title"]
-		args["year"]    = entry["Year"]
-		args["imdbid"]  = entry["ImdbId"]
+		args["id"] 	= entry["ratingKey"]
+		args["title"]   = entry["title"]
+		args["year"]    = entry["year"]
 		args["type"]    = "movie"
 		
 		printl ("args = " + args, self, "D")
