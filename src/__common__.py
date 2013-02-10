@@ -53,8 +53,8 @@ VERB_CLOSING     = 3  # "C" shows closing functions/classes etc.
 
 VERB_EXTENDED	 = 4  # "X" shows information that are not really needed at all can only be activated by hand
 
-STARTING_MESSAGE = "ENTERING"
-CLOSING_MESSAGE = "LEAVING"
+STARTING_MESSAGE = ">>>>>>>>>>"
+CLOSING_MESSAGE =  "<<<<<<<<<<"
 
 #===============================================================================
 # 

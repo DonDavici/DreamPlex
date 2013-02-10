@@ -848,6 +848,7 @@ class PlexLibrary(Screen):
     
         #xcontent = (newUrl, details, extraData, context)
         content = (details.get('title',''), details, extraData, context, newUrl)
+        # todo hier sollte weider image rein
         
         printl("content = " + str(content), self, "D")
         printl("", self, "C")
@@ -1478,10 +1479,11 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #=======================================================================
-        # xbmcplugin.setContent(pluginhandle, 'getShowsFromSection')
-        #=======================================================================
-                
+        
+        fullList=[]
+        self.tmpAbc = []
+        self.tmpGenres = []
+        
         #Get the URL and server name.  Get the XML and parse
         if tree is None:
             html=self.getURL(url)
@@ -1500,62 +1502,95 @@ class PlexLibrary(Screen):
         #For each directory tag we find
         ShowTags=tree.findall('Directory') 
         
-        fullList=[]
-        
         for show in ShowTags:
-            #printl("show: " + str(show), self, "D")
-    
             tempgenre=[]
+            tempcast=[]
+            tempdir=[]
+            tempwriter=[]
             
+            #Lets grab all the info we can quickly through either a dictionary, or assignment to a list
+            #We'll process it later
             for child in show:
-                tempgenre.append(child.get('tag',''))
+                if child.tag == "Media":
+                    mediaarguments = dict(child.items())
                 
-            watched=int(show.get('viewedLeafCount',0))
+                elif child.tag == "Genre" and self.g_skipmetadata == "false":
+                    genreTag = child.get('tag')
+                    tempgenre.append(genreTag)
+                    
+                    # fill genre filter
+                    if genreTag not in self.tmpGenres:
+                        self.tmpGenres.append(genreTag)
+                
+                elif child.tag == "Writer"  and self.g_skipmetadata == "false":
+                    tempwriter.append(child.get('tag'))
+                
+                elif child.tag == "Director"  and self.g_skipmetadata == "false":
+                    tempdir.append(child.get('tag'))
+                
+                elif child.tag == "Role"  and self.g_skipmetadata == "false":
+                    tempcast.append(child.get('tag'))
+
+            details = {}
+            details["viewMode"]                 = "ShowSeasons"
+            details['ratingKey']                = str(show.get('ratingKey', 0)) # primary key in plex
+            details['summary']                  = show.get('summary','')
+            details['title']                    = show.get('title','').encode('utf-8')
+            details['episode']                  = int(show.get('leafCount',0))
+            details['rating']                   = show.get('rating', 0)
+            details['studio']                   = show.get('studio','')
+            details['year']                     = show.get('year', 0)
+            details['tagline']                  = show.get('tagline','')
+            details['server']                   = str(server)
+            details['genre']                    = " / ".join(tempgenre)
+            details['viewOffset']               = show.get('viewOffset',0)
+            details['director']                 = " / ".join(tempdir)
+            details['originallyAvailableAt']    = show.get('originallyAvailableAt','')
             
-            #Create the basic data structures to pass up
-            details={'title'      : show.get('title','Unknown').encode('utf-8') ,
-                     'tvshowname' : show.get('title','Unknown').encode('utf-8') ,
-                     'studio'     : show.get('studio','') ,
-                     'plot'       : show.get('summary','') ,
-                     'year'       : show.get('year','') ,
-                     'playcount'  : 0 , 
-                     'season'     : 0 ,
-                     'episode'    : int(show.get('leafCount',0)) ,
-                     'mpaa'       : show.get('contentRating','') ,
-                     'aired'      : show.get('originallyAvailableAt','') ,
-                     'server'    : str(server) ,
-                     'genre'      : " / ".join(tempgenre) }
-                     
-            extraData={'type'              : 'video' ,
-                       'WatchedEpisodes'   : watched ,
-                       'UnWatchedEpisodes' : details['episode'] - watched ,
-                       'thumb'             : self.getThumb(show, server) ,
-                       'fanart_image'      : self.getFanart(show, server) ,
-                       'token'             : self.g_myplex_accessToken ,
-                       'key'               : show.get('key','') ,
-                       'server'            : str(server) ,
-                       'theme'            : show.get('theme', ''),
-                       'ratingKey'         : str(show.get('ratingKey',0)) }
-    
-            #banner art
+            #Extended Metadata
+            if self.g_skipmetadata == "false":
+                details['cast']     = tempcast
+                details['writer']   = " / ".join(tempwriter)
+            
+            watched = int(show.get('viewedLeafCount',0))
+            
+            extraData = {}
+            extraData['type']               = "video"
+            extraData['seenEpisodes']       = watched
+            extraData['unseenEpisodes']     = details['episode'] - watched
+            extraData['thumb']              = self.getThumb(show, server)
+            extraData['fanart_image']       = self.getFanart(show, server)
+            extraData['token']              = self.g_myplex_accessToken
+            extraData['theme']              = show.get('theme', '')
+            extraData['key']                = show.get('key','')
+            
             if show.get('banner',None) is not None:
                 extraData['banner']='http://'+server+show.get('banner').split('?')[0]+"/banner.jpg"
-             
-            #===================================================================
-            # #Set up overlays for watched and unwatched episodes
-            # if extraData['WatchedEpisodes'] == 0:
-            #    if g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_UNWATCHED   
-            # elif extraData['UnWatchedEpisodes'] == 0: 
-            #    if g_skinwatched == "xbmc":
-            #        details['overlay']=_OVERLAY_XBMC_WATCHED   
-            #    elif g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_WATCHED   
-            # else:
-            #    if g_skinwatched == "DreamPlex":
-            #        details['overlay'] = _OVERLAY_PLEX_PARTIAL
-            #===================================================================
+    
+            #Add extra media flag data
+            if self.g_skipmediaflags == "false":
+                extraData['contentRating']      = show.get('contentRating', '')
+                
+            # lets add this for another filter
+            if int(extraData['unseenEpisodes']) == 0:
+                details['viewState']        = "seen"
+            else:
+                details['viewState']        = "unseen"
+        
+            #Build any specific context menu entries
+            if self.g_skipcontext == "false":
+                context=self.buildContextMenu(url, extraData)
+            else:
+                context=None
             
+            # fill genre filter
+            if details['genre'] not in self.tmpGenres:
+                self.tmpGenres.append(details['genre'])
+            
+            # fill title filter
+            if details["title"].upper() not in self.tmpAbc:
+                self.tmpAbc.append(details["title"].upper())
+                
             #Create URL based on whether we are going to flatten the season view
             if self.g_flatten == "2":
                 printl("Flattening all shows", self, "I")
@@ -1563,28 +1598,13 @@ class PlexLibrary(Screen):
             else:
                 u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_getSeasonsOfShow))
                 
-            if self.g_skipcontext == "false":
-                context=self.buildContextMenu(url, extraData)
-            else:
-                context=None
-                
-        #=======================================================================
-        #    self.addGUIItem(u,details,extraData, context) 
-        #    
-        # #End the listing    
-        # xbmcplugin.endOfDirectory(pluginhandle)
-        #=======================================================================
-            #===>
             #Right, add that link...and loop around for another entry
             content = self.addGUIItem(u,details,extraData, context)
-            printl ("-> " + str(content), self, "D")
+
             fullList.append(content)
-            #printl ("-> " + str(result), self)
-            #===>
-    
-        #printl ("fullList = " + fullList, self, "D")
+
         printl("", self, "C")
-        return fullList
+        return fullList, self.tmpAbc , self.tmpGenres
  
     #===========================================================================
     # 
@@ -1634,47 +1654,35 @@ class PlexLibrary(Screen):
             
             watched=int(season.get('viewedLeafCount',0))
         
-            #Create the basic data structures to pass up
-            details={'title'      : season.get('title','Unknown').encode('utf-8') ,
-                     'tvshowname' : season.get('title','Unknown').encode('utf-8') ,
-                     'studio'     : season.get('studio','') ,
-                     'plot'       : season.get('summary','') ,
-                     'overlay'    : _OVERLAY_XBMC_UNWATCHED ,
-                     'playcount'  : 0 , 
-                     'season'     : 0 ,
-                     'episode'    : int(season.get('leafCount',0)) ,
-                     'mpaa'       : season.get('contentRating','') ,
-                     'server'     : str(server) ,
-                     'aired'      : season.get('originallyAvailableAt','') }
-                     
-            extraData={'type'              : 'video' ,
-                       'WatchedEpisodes'   : watched ,
-                       'UnWatchedEpisodes' : details['episode'] - watched ,
-                       'thumb'             : self.getThumb(season, server) ,
-                       'fanart_image'      : self.getFanart(season, server) ,
-                       'token'             : self.g_myplex_accessToken ,
-                       'key'               : season.get('key',''),
-                       'server'            : str(server) ,
-                       'ratingKey'         : self.getUniqueId(season.get('key','')) , }
+            details = {}
+            details["viewMode"]                 = "ShowEpisodes"
+            details['ratingKey']                = str(season.get('ratingKey', 0)) # primary key in plex
+            details['summary']                  = season.get('summary','')
+            details['title']                    = season.get('title','').encode('utf-8')
+            details['episode']                  = int(season.get('leafCount',0))
+            details['rating']                   = season.get('rating', 0)
+            details['studio']                   = season.get('studio','')
+            details['year']                     = season.get('year', 0)
+            details['tagline']                  = season.get('tagline','')
+            details['server']                   = str(server)
+            details['viewOffset']               = season.get('viewOffset',0)
+            details['originallyAvailableAt']    = season.get('originallyAvailableAt','')
+            
+            watched = int(season.get('viewedLeafCount',0))
+            
+            extraData = {}
+            extraData['type']               = "video"
+            extraData['seenEpisodes']       = watched
+            extraData['unseenEpisodes']     = details['episode'] - watched
+            extraData['thumb']              = self.getThumb(season, server)
+            extraData['fanart_image']       = self.getFanart(season, server)
+            extraData['token']              = self.g_myplex_accessToken
+            extraData['theme']              = season.get('theme', '')
+            extraData['key']                = season.get('key','')
                          
             if extraData['fanart_image'] == "":
                 extraData['fanart_image']=sectionart
     
-            #===================================================================
-            # #Set up overlays for watched and unwatched episodes
-            # if extraData['WatchedEpisodes'] == 0:
-            #    if g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_UNWATCHED   
-            # elif extraData['UnWatchedEpisodes'] == 0: 
-            #    if g_skinwatched == "xbmc":
-            #        details['overlay']=_OVERLAY_XBMC_WATCHED   
-            #    elif g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_WATCHED   
-            # else:
-            #    if g_skinwatched == "DreamPlex":
-            #        details['overlay'] = _OVERLAY_PLEX_PARTIAL
-            #===================================================================
-                
             url='http://%s%s&mode=%s' % ( server , extraData['key'], str(_MODE_TVEPISODES) )
     
             if self.g_skipcontext == "false":
@@ -1682,22 +1690,10 @@ class PlexLibrary(Screen):
             else:
                 context=None
                 
-        #=======================================================================
-        #    #Build the screen directory listing
-        #    self.addGUIItem(url,details,extraData, context) 
-        #    
-        # #All done, so end the listing
-        # xbmcplugin.endOfDirectory(pluginhandle)
-        #=======================================================================
-            #===>
-            #Right, add that link...and loop around for another entry
             content = self.addGUIItem(url, details, extraData, context)
-            #printl ("-> " + str(content), self)
+
             fullList.append(content)
-            #printl ("-> " + str(result), self)
-            #===>
-    
-        #printl ("fullList = " + fullList, self, "D")
+
         printl("", self, "C")
         return fullList
     
@@ -1744,8 +1740,6 @@ class PlexLibrary(Screen):
         
         if self.g_skipimages == "false":        
             sectionart=self.getThumb(tree, server)
-         
-        randomNumber=str(random.randint(1000000000,9999999999))   
         
         fullList=[]
          
@@ -1755,107 +1749,85 @@ class PlexLibrary(Screen):
             tempdir=[]
             tempwriter=[]
             
+            #Lets grab all the info we can quickly through either a dictionary, or assignment to a list
+            #We'll process it later
             for child in episode:
                 if child.tag == "Media":
                     mediaarguments = dict(child.items())
                 elif child.tag == "Genre" and self.g_skipmetadata == "false":
-                    tempgenre.append(child.get('tag'))
+                    genreTag = child.get('tag')
+                    tempgenre.append(genreTag)
                 elif child.tag == "Writer"  and self.g_skipmetadata == "false":
                     tempwriter.append(child.get('tag'))
                 elif child.tag == "Director"  and self.g_skipmetadata == "false":
                     tempdir.append(child.get('tag'))
                 elif child.tag == "Role"  and self.g_skipmetadata == "false":
                     tempcast.append(child.get('tag'))
-            
-            printl("Media attributes are " + str(mediaarguments), self, "I")
-                                        
-            #Gather some data 
-            view_offset = episode.get('viewOffset',0)
-            duration=int(mediaarguments.get('duration',episode.get('duration',0)))/1000
-                                   
-            #Required listItem entries for XBMC
-            details={'plot'        : episode.get('summary','') ,
-                     'title'       : episode.get('title','Unknown').encode('utf-8') ,
-                     'playcount'   : int(episode.get('viewCount',0)) ,
-                     'rating'      : float(episode.get('rating',0)) ,
-                     'studio'      : episode.get('studio',tree.get('studio','')) ,
-                     'mpaa'        : episode.get('contentRating', tree.get('grandparentContentRating','')) ,
-                     'year'        : int(episode.get('year',0)) ,
-                     'tagline'     : episode.get('tagline','') ,
-                     'duration'    : str(datetime.timedelta(seconds=duration)) ,
-                     'overlay'     : _OVERLAY_XBMC_UNWATCHED ,
-                     'episode'     : int(episode.get('index',0)) ,
-                     'aired'       : episode.get('originallyAvailableAt','') ,
-                     'tvshowtitle' : episode.get('grandparentTitle',tree.get('grandparentTitle','')) ,
-                     'server'      : str(server) ,
-                     'season'      : episode.get('parentIndex',tree.get('parentIndex',0)) }
     
-            details['title'] = str(details['episode']).zfill(2) + ". " + details['title']
+            #Gather some data
+            duration = int(mediaarguments.get('duration',episode.get('duration',0)))/1000
                      
+            #Required listItem entries for XBMC
+            details = {}
+            details["viewMode"]             = "play"
+            details['ratingKey']            = str(episode.get('ratingKey', 0)) # primary key in plex
+            details['title']                = episode.get('title','Unknown').encode('utf-8')
+            details['summary']              = episode.get('summary','')
+            details['episode']              = int(episode.get('index',0))
+            details['title']                = str(details['episode']).zfill(2) + ". " + details['title']
+            details['tvshowtitle']          = episode.get('grandparentTitle',tree.get('grandparentTitle','')).encode('utf-8')
+            details['season']               = episode.get('parentIndex',tree.get('parentIndex',0))
+            details['viewCount']            = episode.get('viewCount', 0)
+            details['rating']               = episode.get('rating', 0)
+            details['studio']               = episode.get('studio','')
+            details['year']                 = episode.get('year', 0)
+            details['tagline']              = episode.get('tagline','')
+            details['runtime']              = str(datetime.timedelta(seconds=duration))
+            details['server']               = str(server)
+            details['genre']                = " / ".join(tempgenre)
+            details['viewOffset']           = episode.get('viewOffset',0)
+            details['director']             = " / ".join(tempdir)
+            
             if tree.get('mixedParents',0) == 1:
                 details['title'] = details['tvshowtitle'] + ": " + details['title']
             
-            #Extra data required to manage other properties
-            extraData={'type'         : "Video" ,
-                       'thumb'        : self.getThumb(episode, server, x = 560, y = 315) ,
-                       'fanart_image' : sectionart ,
-                       'token'        : self.g_myplex_accessToken ,
-                       'key'          : episode.get('key',''),
-                       'server'       : str(server) ,
-                       'ratingKey'    : str(episode.get('ratingKey',0)) }
-    
-            #===================================================================
-            # #Determine what tupe of watched flag [overlay] to use
-            # if details['playcount'] > 0:
-            #    if g_skinwatched == "xbmc":
-            #        details['overlay']=_OVERLAY_XBMC_WATCHED
-            #    elif g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_WATCHED
-            # else: #if details['playcount'] == 0: 
-            #    if g_skinwatched == "DreamPlex":
-            #        details['overlay']=_OVERLAY_PLEX_UNWATCHED
-            # 
-            # if g_skinwatched == "DreamPlex" and int(view_offset) > 0:
-            #    details['overlay'] = _OVERLAY_PLEX_PARTIAL
-            #===================================================================
+            # lets add this for another filter
+            if int(details['viewCount']) > 0:
+                details['viewState']        = "seen"
+            else:
+                details['viewState']        = "unseen"
             
             #Extended Metadata
             if self.g_skipmetadata == "false":
                 details['cast']     = tempcast
-                details['director'] = " / ".join(tempdir)
                 details['writer']   = " / ".join(tempwriter)
-                details['genre']    = " / ".join(tempgenre)
-                 
+            
+            extraData = {}
+            extraData['type']               = "Video"
+            extraData['thumb']              = self.getThumb(episode, server)
+            extraData['fanart_image']       = self.getFanart(episode, server)
+            extraData['token']              = self.g_myplex_accessToken
+            extraData['key']                = episode.get('key','')
+    
             #Add extra media flag data
             if self.g_skipmediaflags == "false":
-                extraData['VideoResolution'] = mediaarguments.get('videoResolution','')
-                extraData['VideoCodec']      = mediaarguments.get('videoCodec','')
-                extraData['AudioCodec']      = mediaarguments.get('audioCodec','')
-                extraData['AudioChannels']   = mediaarguments.get('audioChannels','')
-                extraData['VideoAspect']     = mediaarguments.get('aspectRatio','')
-    
+                extraData['contentRating']   = episode.get('contentRating', '')
+                extraData['videoResolution'] = mediaarguments.get('videoResolution', '')
+                extraData['videoCodec']      = mediaarguments.get('videoCodec', '')
+                extraData['audioCodec']      = mediaarguments.get('audioCodec', '')
+                extraData['aspectRatio']     = mediaarguments.get('aspectRatio', '')
+                extraData['audioCodec']      = mediaarguments.get('audioCodec', '')
+        
             #Build any specific context menu entries
             if self.g_skipcontext == "false":
-                context=self.buildContextMenu(url, extraData)    
+                context=self.buildContextMenu(url, extraData)
             else:
                 context=None
             
-            # http:// <server> <path> &mode=<mode> &id=<media_id> &t=<rnd>
-            u="http://%s%s&mode=%s&id=%s&t=%s" % (server, extraData['key'], _MODE_PLAYLIBRARY, extraData['ratingKey'], randomNumber)
-    
-        #=======================================================================
-        #    self.addGUIItem(u,details,extraData, context, folder=False)        
-        # 
-        # xbmcplugin.endOfDirectory(pluginhandle)
-        #=======================================================================
-            #===>
-            #Right, add that link...and loop around for another entry
             content = self.addGUIItem(url, details, extraData, context)
-            #printl ("-> " + str(content), self)
+       
             fullList.append(content)
-            #printl ("-> " + str(result), self)
-            #===>
-    
+        
         #printl ("fullList = " + fullList, self, "D")
         printl("", self, "C")
         return fullList

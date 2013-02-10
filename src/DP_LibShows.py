@@ -62,215 +62,58 @@ class DP_LibShows(DP_LibMain):
 		# Diplay all TVShows
 		if params is None:
 			printl("show TV shows ...", self, "I")
-			parsedLibrary = []
-			
+
 			url = self.g_url
 			
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
-			library = plexInstance.getShowsFromSection(url)
-				
-			tmpAbc = []
-			tmpGenres = []
-			for tvshow in library:
+			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
 
-				#===============================================================
-				# printl ("-> url = " + str(tvshow[0]), self, "D")
-				# printl ("-> properties = " + str(tvshow[1]), self, "D")
-				# printl ("-> arguments = " + str(tvshow[2]), self, "D")
-				# printl ("-> context = " + str(tvshow[3]), self, "D")
-				#===============================================================
-				
-				url = tvshow[0]
-				properties = tvshow[1]
-				arguments = tvshow[2]
-				context = tvshow[3]
-	
-			
-				d = {}
-				d["Title"]          = properties.get('title', "")
-				d["Year"]           = properties.get('year', "")
-				d["Plot"]           = properties.get('plot', "")
-				d["Runtime"]        = properties.get('duration', "")
-				d["Genres"]         = properties.get('genre', "")
-				d["Seen"]        	= properties.get('playcount', "")
-				d["Studio"]     	= properties.get('studio', "")#
-				d["Director"]     	= properties.get('director', "")#
-				d["MPAA"]     		= properties.get('mpaa', "")#
-				
-				d["Id"]				= arguments.get('ratingKey') #we use this because there is the id as value without any need of manipulating
-				d["Tag"]            = arguments.get('tagline', "")
-				d["Path"]          	= arguments.get('key', "")
-				d["Popularity"]     = arguments.get('rating', 0)
-				d["Resolution"]    	= arguments.get('VideoResolution', "")
-				d["Video"]    	   	= arguments.get('VideoCodec', "")
-				d["Sound"]         	= arguments.get('AudioCodec', "")
-				d["ArtBackdrop"] 	= arguments.get('fanart_image', "")
-				d["ArtPoster"]   	= arguments.get('thumb', "")
-				d["Seen"]        	= arguments.get('playcount', 0)
-				d["Creation"]		= arguments.get('addedAt', 0)
-				d["Banner"]			= arguments.get('banner', "")
-				d["server"]			= arguments.get('server', "")
-				d["theme"]			= arguments.get('theme', "")
-				
-				d["ViewMode"] = "ShowSeasons"
-				d["ScreenTitle"] = d["Title"]
-
-				if (d["Seen"] == 0):
-					image = None
-				else:
-					image = None
-				
-				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
-				
-			sort = (("Title", None, False), ("Year", "Year", True), ("Popularity", "Popularity", True), )
+			# sort
+			sort = [("by title", "title", False), ("by year", "year", True), ("by rating", "rating", True), ]
 			
 			filter = [("All", (None, False), ("", )), ]
-			if len(tmpGenres) > 0:
-				tmpGenres.sort()
-				filter.append(("Genre", ("Genres", True), tmpGenres))
-				
-			if len(tmpAbc) > 0:
-				tmpAbc.sort()
-				filter.append(("Abc", ("Title", False, 1), tmpAbc))
+			
+			#if len(tmpGenres) > 0:
+				#tmpGenres.sort()
+				#filter.append(("Genre", ("Genres", True), tmpGenres))
 			
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "Id", ), None, None, sort, filter) # checked
+			return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
 			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		
 		# Display the Seasons Menu
-		elif params["ViewMode"]=="ShowSeasons":
+		elif params["viewMode"] == "ShowSeasons":
 			printl("show seasons of TV show ...", self, "I")
-			parsedLibrary = []
 			
 			url = params["url"]
-			
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
-			library = plexInstance.getSeasonsOfShow(url)
 
-			seasons = []
-			for season in library:
-
-				#===============================================================
-				# printl ("-> url = " + str(season[0]), self, "D")
-				# printl ("-> properties = " + str(season[1]), self, "D")
-				# printl ("-> arguments = " + str(season[2]), self, "D")
-				# printl ("-> context = " + str(season[3]), self, "D")
-				#===============================================================
-				
-				url 		= season[0]
-				properties 	= season[1]
-				arguments 	= season[2]
-				context 	= season[3]
-				
-				d = {}
-				d["Title"]          = properties.get('title', "")
-				d["Year"]           = properties.get('year', "")
-				d["Plot"]           = properties.get('plot', "")
-				d["Runtime"]        = properties.get('duration', "")
-				d["Genres"]         = properties.get('genre', "")
-				d["Seen"]        	= properties.get('playcount', "")
-				
-				d["Id"]				= arguments.get('ratingKey') #we use this because there is the id as value without any need of manipulating
-				d["Tag"]            = arguments.get('tagline', "")
-				d["Path"]          	= arguments.get('key', "")
-				d["Popularity"]     = arguments.get('rating', 0)
-				d["Resolution"]    	= arguments.get('VideoResolution', "")
-				d["Video"]    	   	= arguments.get('VideoCodec', "")
-				d["Sound"]         	= arguments.get('AudioCodec', "")
-				d["ArtBackdrop"] 	= arguments.get('fanart_image', "")
-				d["ArtPoster"]   	= arguments.get('thumb', "")
-				d["Seen"]        	= arguments.get('playcount', 0)
-				d["Creation"]		= arguments.get('addedAt', 0)
-				d["Banner"]			= arguments.get('banner', "")
-				d["server"]			= arguments.get('server', "")
-				
-				d["ViewMode"] = "ShowEpisodes"
-				d["ScreenTitle"] = d["Title"]
-
-				if (d["Seen"] == 0):
-					image = None
-				else:
-					image = None
-
-				printl( "appending title: " + str(d["Title"]), self, "I")
-				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))
+			library = Singleton().getPlexInstance().getSeasonsOfShow(url)
 			
 			sort = (("Title", None, False), )
 			
 			filter = [("All", (None, False), ("", )), ]
 			
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "url", ), None, "backToShows", sort, filter)
+			return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
 			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 	
 		# Display the Episodes Menu
-		elif params["ViewMode"]=="ShowEpisodes":
+		elif params["viewMode"] == "ShowEpisodes":
 			printl("show episodes of season ...", self, "I")
-			parsedLibrary = []
 			
 			url = params["url"]
 			
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
-			library = plexInstance.getEpisodesOfSeason(url)
+			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 
-			for episode in library:
-
-				#===============================================================
-				# printl ("-> url = " + str(episode[0]), self, "D")
-				# printl ("-> properties = " + str(episode[1]), self, "D")
-				# printl ("-> arguments = " + str(episode[2]), self, "D")
-				# printl ("-> context = " + str(episode[3]), self, "D")
-				#===============================================================
-				
-				url = episode[0]
-				properties = episode[1]
-				arguments = episode[2]
-				context = episode[3]
-				
-				d = {}
-				d["Title"]          = properties.get('title', "")
-				d["Year"]           = properties.get('year', "")
-				d["Plot"]           = properties.get('plot', "")
-				d["Runtime"]        = properties.get('duration', "")
-				d["Genres"]         = properties.get('genre', "")
-				d["Seen"]        	= properties.get('playcount', "")
-				
-				d["Id"]				= arguments.get('ratingKey') #we use this because there is the id as value without any need of manipulating
-				d["Tag"]            = arguments.get('tagline', "")
-				d["Path"]          	= arguments.get('key', "")
-				d["Popularity"]     = arguments.get('rating', 0)
-				d["Resolution"]    	= arguments.get('VideoResolution', "")
-				d["Video"]    	   	= arguments.get('VideoCodec', "")
-				d["Sound"]         	= arguments.get('AudioCodec', "")
-				d["ArtBackdrop"] 	= arguments.get('thumb', "")
-				d["ArtPoster"]   	= arguments.get('fanart_image', "")
-				d["Seen"]        	= arguments.get('playcount', 0)
-				d["Creation"]		= arguments.get('addedAt', 0)
-				d["Banner"]			= arguments.get('banner', "")
-				d["server"]			= arguments.get('server', "")
-				
-				d["ViewMode"] = "play"
-				d["ScreenTitle"] = d["Title"]
-
-				if (d["Seen"] == 0):
-					image = None
-				else:
-					image = None	
-					
-				parsedLibrary.append((d["Title"], d, d["Title"].lower(), "50", image))	
-			
 			sort = [("Title", None, False), ]
 			
 			filter = [("All", (None, False), ("", )), ]
-			filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
+			
+			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			return (parsedLibrary, ("ViewMode", "url", ), None, "backToSeasons", sort, filter)
+			return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
 			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		printl ("", self, "C")
