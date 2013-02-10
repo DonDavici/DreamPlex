@@ -1,157 +1,197 @@
 <skins>
 	<!--DPS_MainMenu -->
-	     <screen name="DPS_MainMenu" position="0,0" size="1280,720" title=" " backgroundColor="transparent" flags="wfNoBorder">
-		 <widget source="Title" render="Label" position="110,0" zPosition="-6" size="390,40" font="Modern; 25" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top" />
-					
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/db.png" position="0,0" zPosition="1" size="1280,720" transparent="1" />
-	    <ePixmap position="40,30" size="420,660" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/FrameMain.png" zPosition="5" alphatest="blend" transparent="1" />
-	    <ePixmap position="37,30" size="425,660" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/FrameMainBack.png" zPosition="3" alphatest="blend" transparent="1" />
-	    <ePixmap position="60,164" size="380,4" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/separator.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap position="60,608" size="380,4" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/separator.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap position="107,532" size="90,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/icons/PV.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap position="301,532" size="90,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/icons/media.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap position="210,550" size="72,72" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/icons/Trafic.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap position="104,120" size="285,45" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/icons/PlatinumHD.png" zPosition="4" alphatest="blend" transparent="1" />
-	    <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Main/RahmenBackMain.png" position="770,55" zPosition="12" size="400,225" alphatest="blend" transparent="0" />
-				
-		 <widget position="50, 199" size="397, 330" render="Listbox" scrollbarMode="showNever" zPosition="4" source="menu" transparent="1" foregroundColor="#696969"  selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus2.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png" >
-	<convert type="TemplatedMultiContent">
-            {"template": [ MultiContentEntryText(pos = (0,2), size = (397, 35), flags = RT_HALIGN_CENTER, text = 0) ],
-            "fonts": [gFont("Regular", 25)],
-            "itemHeight": 65 
-            }
-    </convert>
-    </widget>
-	<widget source="global.CurrentTime" render="Label" position="298, 70" zPosition="5" size="90, 28" font="Saint; 20" halign="center" valign="center" foregroundColor="#696969" backgroundColor="#000000" transparent="1">
-    <convert type="ClockToText">WithSeconds</convert>
-    </widget>
-    <widget source="global.CurrentTime" render="Label" position="82, 70" size="160, 20" zPosition="4" font="Saint; 20" halign="center" valign="center" foregroundColor="#696969" backgroundColor="#000000" transparent="1">
-    <convert type="ClockToText">Format:%d.%m.%Y</convert>
-    </widget>
-   						
-		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="8" position="53,670" size="32,32" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="8" position="960,670" size="32,32" alphatest="blend" />
-		
-		<widget source="key_red" render="Label" position="71,660" zPosition="9" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_blue" render="Label" position="977,660" zPosition="9" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-	</screen>
+	   <screen name="DPS_MainMenu" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+		 					
+		 <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back_main.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
+	     <ePixmap position="0,0" zPosition="5" size="1280,720" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/frame.png" alphatest="blend" transparent="0" />
+	    	    			
+		 <widget source="menu" render="Listbox" position="57,232" size="430,400" scrollbarMode="showNever" zPosition="4" foregroundColor="#454545" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/ContentPanel.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png">
+           <convert type="TemplatedMultiContent">
+           {"template": [ MultiContentEntryText(pos = (10, 14), size = (430, 50), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 31)], "itemHeight": 64 }
+           </convert>
+         </widget>
+	     
+		 <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
+        </widget>
+   		
+	   </screen>
 
 	<!-- DPS_Settings -->
-	<screen name="DPS_Settings" position="0,0" size="1280,720" title=" " backgroundColor="transparent" flags="wfNoBorder">
-		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Saint; 18" foregroundColor="#00404040" halign="right" />
+	   <screen name="DPS_Settings" position="0,0" size="1280,720" title=" " backgroundColor="#70000000" flags="wfNoBorder">
+		 <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="110,22" size="190,30" font="Saint; 24" foregroundColor="#454545" backgroundColor="#000000" halign="left" />
 
 		<!-- visu -->
-		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="transparent" transparent="0" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/top.png" zPosition="2" position="0,0" size="1280,65" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/bottom.png" zPosition="2" position="0,655" size="1280,65" alphatest="blend" />
-		<!-- content -->
-		<widget name="config" zPosition="2" position="71,73" size="1155,568" scrollbarMode="showOnDemand" backgroundColor="transparent" backgroundColorSelected="transparent" foregroundColor="#00404040" foregroundColorSelected="#00ffffff"/>
+		 <eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#70000000" transparent="1" />
+		 <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
+	     	
+		
+		 <widget name="config" zPosition="3" position="125,205" size="1025,450" transparent="1" itemHeight="35" font="Saint; 24" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
+		
+		 <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
+        </widget>
+		
 		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="4" position="53,670" size="32,32" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="4" position="355,670" size="32,32" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="4" position="657,670" size="32,32" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="4" position="960,670" size="32,32" alphatest="blend" />
-		<!-- functions -->
-		<widget source="key_red" render="Label" position="71,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="6" position="845,640" size="32,32" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="6" position="420,640" size="32,32" alphatest="blend" />
+		
+		<widget source="key_red" render="Label" position="885,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+        <widget source="key_green" render="Label" position="310,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
 	</screen>
 	
 	
 	<!-- DPS_SystemCheck -->
-	<screen name="DPS_SystemCheck" position="0,0" size="1280,720" title=" " backgroundColor="transparent" flags="wfNoBorder">
-		<!--widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Saint; 18" foregroundColor="#00404040" halign="right" /-->
+	<screen name="DPS_SystemCheck" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+		<eLabel text="SystemCheck" transparent="1" zPosition="4" valign="center" position="104,22" size="190,30" font="Saint; 24" foregroundColor="#454545" backgroundColor="#000000" halign="left" />
 		<!-- visu -->
 		
-		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="transparent" transparent="0" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/top.png" zPosition="2" position="0,0" size="1280,65" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/bottom.png" zPosition="2" position="0,655" size="1280,65" alphatest="blend" />
+		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#ffffffff" transparent="0" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
 		<!-- content -->
-		<widget name="content" zPosition="2" position="71,73" size="1155,568" scrollbarMode="showOnDemand" backgroundColor="transparent" backgroundColorSelected="transparent" foregroundColor="#00404040" foregroundColorSelected="#00ffffff"/>
+		<widget name="content" zPosition="3" position="125,255" size="1025,450" transparent="1" itemHeight="35" font="Saint; 24" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
+		
+		<widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
+        </widget>
 		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="53,670" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="3" position="355,670" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="657,670" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="960,670" size="266,2" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="580,640" size="32,32" alphatest="blend" />
+		
 		<!-- functions -->
-		<widget source="key_red" render="Label" position="71,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<!--widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" /-->
+		<widget source="key_red" render="Label" position="623,635" zPosition="4" size="231,37" font="Saint;22" foregroundColor="#454545" backgroundColor="#000000" halign="left" valign="center" transparent="1" />
+		<!--widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" /-->
+	</screen>
+	
+	<!-- DPS_ServerEntriesListConfigScreen -->
+	<screen name="DPS_ServerEntriesListConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+		<eLabel text="Plex-Server" transparent="1" zPosition="4" valign="center" position="116,22" size="190,30" font="Saint; 24" foregroundColor="#454545" backgroundColor="#000000" halign="left" />
+		<!--  visu -->
+		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#ffffffff" transparent="0" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
+		<!-- content -->
+		<widget name="state" position="255,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
+		<widget name="name" position="255,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
+		<widget name="ip" position="465,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
+		<widget name="port" position="650,410" zPosition="2" size="80,50" font="Regular; 28" halign="left"/>
+		<widget name="entrylist" zPosition="4" position="125,275" size="1025,450" transparent="1" itemHeight="35" font="Saint; 24" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
+		
+	    <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
+        </widget>
+		
+		<!-- buttons -->
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="218,640" size="32,32" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="527,640" size="32,32" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="892,640" size="32,32" alphatest="blend" />
+		<!-- functions -->
+		<widget source="key_red" render="Label" position="261,635" zPosition="4" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+        <widget source="key_yellow" render="Label" position="570,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+        <widget source="key_blue" render="Label" position="935,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
 	</screen>
 
-	
-	<!-- DPS_ListView -->
-	<screen name="DPS_ListView" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="transparent">
-		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Saint; 18" foregroundColor="#00404040" halign="right" />
-
+	<!-- DPS_ServerEntryConfigScreen -->
+	<screen name="DPS_ServerEntryConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+		<eLabel text="Plex-Server" transparent="1" zPosition="4" valign="center" position="116,22" size="190,30" font="Saint; 24" foregroundColor="#454545" backgroundColor="#000000" halign="left" />
+		<!-- visu -->
+		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#ffffffff" transparent="1" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings.png" position="0,0" zPosition="2" size="1280,720" transparent="0" />
+		<!-- content -->
+		<widget name="config" zPosition="3" position="125,205" size="1025,270" transparent="1" itemHeight="30" font="Saint; 24" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
 		
-    	<eLabel position="0,0" size="1280,720" zPosition="-1" backgroundColor="#90000000" transparent="1" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/ListV/List.png" position="0,0" zPosition="-1" size="1280,720" alphatest="blend" transparent="1" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/ListV/RahmenBack.png" position="452,20" zPosition="12" size="836,478" alphatest="blend" transparent="1" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/ListV/infobar.png" position="0,0" zPosition="-1" size="1280,720" alphatest="blend" transparent="0" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/ListV/Cover.png" zPosition="15" position="280,408" size="240,292" alphatest="blend" transparent="0" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/icons/clock.png" position="50, 34" zPosition="8" size="14,14" alphatest="on" />
-    		
-    	<widget source="listview" render="Listbox" zPosition="3" position="35,60" size="465,359" scrollbarMode="showNever" foregroundColor="#696969" foregroundColorSelected="#FFFFFF" backgroundColor="#000000" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus21.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"> 
+		<widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
+        </widget>
+		<!-- buttons -->
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="218,640" size="32,32" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="3" position="527,640" size="32,32" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="892,640" size="32,32" alphatest="blend" />
+		<!-- functions -->
+		<widget source="key_red" render="Label" position="261,635" zPosition="4" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+        <widget source="key_green" render="Label" position="570,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+        <widget source="key_yellow" render="Label" position="935,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#454545" backgroundColor="#000000" transparent="1" />
+	</screen>
+    
+		
+	<!-- DPS_ListView -->
+	<screen name="DPS_ListView" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
+		<eLabel text="Movies" transparent="1" zPosition="4" valign="center" position="212,24" size="190,30" font="Saint; 23" foregroundColor="#454545" backgroundColor="#000000" halign="left" />
+        <widget name="total" transparent="1" zPosition="4" valign="center" halign="left" position="84,24" size="190,30" font="Saint;23" foregroundColor="#454545"  backgroundColor="#000000" />
+		
+    	<eLabel position="0,0" size="1280,720" zPosition="-1" backgroundColor="#90000000" transparent="0" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/DreamPlex_uni.png" position="0,0" zPosition="-1" size="1280,720" alphatest="blend" transparent="0" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/frame_backdrop.png" position="0,0" zPosition="48" size="1280,720" transparent="1" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Cover.png" zPosition="50" position="90,380" size="240,292" alphatest="blend" transparent="0" />
+    	
+		    	
+		<widget source="listview" render="Listbox" zPosition="8" position="35,75" size="500,249" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" backgroundColor="#000000" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus2.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"> 
           <convert type="TemplatedMultiContent">
-                {"template": [ MultiContentEntryText(pos = (25,0), size = (465,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0)],
-                "fonts": [gFont("Modern", 25)],
-                "itemHeight": 44,
+                {"template": [ MultiContentEntryText(pos = (25,1), size = (500,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
+                MultiContentEntryPixmapAlphaTest(pos = (6,4), size = (32,32), png = 4) ],
+                "fonts": [gFont("Saint", 25)],
+                "itemHeight": 40,
                 "scrollbarMode": "showNever"
                 }
         </convert>
         </widget>
-    	<widget source="global.CurrentTime" render="Label" position="75, 34" size="80, 20" font="Saint; 16" halign="left" foregroundColor="#FFFFFF" backgroundColor="#000000" zPosition="8" transparent="1">
-        <convert type="ClockToText">Default</convert>
+    	<widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
+           <convert type="ClockToText">Default</convert>
         </widget>
-        <widget source="global.CurrentTime" render="Label" position="155, 34" size="500, 20" font="Saint; 16" halign="left" foregroundColor="#FFFFFF" backgroundColor="#000000" zPosition="8" transparent="1">
-        <convert type="ClockToText">Date</convert>
+        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
+           <convert type="ClockToText">Date</convert>
         </widget>
         
-        <widget name="rated" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" position="750,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+		<widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" />
         
-        <widget name="audio" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" position="725,451" size="85,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="audio" position="646,630" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" />
         
-        <widget name="resolution" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" position="650,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="resolution" position="532,630" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" />
         
-        <widget name="aspect" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png" position="600,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="aspect" position="905,626" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/2.35.png" />
         
-        <widget name="codec" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2video.png" position="550,451" size="51,30" transparent="0" alphatest="blend" zPosition="14"/>
+        <widget name="codec"  position="978,626" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2.png" />
         
-        <widget name="rating_stars" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" zPosition="14" position="800,452" size="114,22" transparent="1" borderWidth="0" orientation="orHorizontal"/>
-    	
-    	<widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="515,491" size="727,175" font="Modern; 18" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_dark.png" zPosition="83"  position="748,633" size="141,29" transparent="1" alphatest="blend" />
+        <widget name="rating_stars" zPosition="84" position="748,633" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" />
 		
-		<eLabel text="" zPosition="14" halign="left" position="30,455" size="250,1" backgroundColor="#696969"/>
-		<widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="170,420" size="190,25" font="Modern;20" foregroundColor="#696969"  backgroundColor="#000000" />
-		<widget name="total" transparent="1" zPosition="5" halign="left" position="40,420" size="228,25" font="Modern;20" foregroundColor="#696969"  backgroundColor="#000000" />
-		<widget name="tag" transparent="1" zPosition="5" halign="left" position="-17,-125" size="444,32" font="Modern;20" foregroundColor="#00404040" />
+		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="545,94" size="657,170" font="Saint; 21" foregroundColor="#ffffff" backgroundColor="#000000" />
 		
-		<widget name="title" transparent="1" zPosition="51" halign="center" valign="center" position="495,32" size="747,28" font="Saint; 20" foregroundColor="#FFFFFF"  backgroundColor="#4D5053"/>
-		<widget source="Title" render="Label" transparent="1" zPosition="9" halign="left" position="1000,670" size="200,30" font="Saint; 24" foregroundColor="#696969" backgroundColor="#000000" />
+		<eLabel text="" zPosition="14" halign="left" position="30,360" size="380,1" backgroundColor="#454545"/>
+		<widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="61,329" size="190,30" font="Saint;22" foregroundColor="#454545"  backgroundColor="#000000" />
+				
+		<widget name="title" transparent="1" zPosition="5" halign="left" position="545,57" size="680,36" font="Saint;25" foregroundColor="#FF8C00"  backgroundColor="#000000" />
 		
-		<eLabel text="" zPosition="14" halign="left" position="148,475" size="1,185" backgroundColor="#FFFFFF"/>        
+		<widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#454545"  backgroundColor="#000000"/>
 			
-		<eLabel text="STUDIO:" transparent="1" zPosition="4" halign="left" position="47,470" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<eLabel text="DIRECTOR:" transparent="1" zPosition="4" halign="left" position="47,510" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<eLabel text="MPAA:" transparent="1" zPosition="4" halign="left" position="47,550" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="47,590" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="47,630" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="47,670" size="110,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
+		
+		<eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="885,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+		<eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+		<eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
 						
-		<widget name="studio" transparent="1" zPosition="4" halign="left" position="162,470" size="350,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<widget name="director" transparent="1" zPosition="4" halign="left" position="162,510" size="350,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<widget name="mpaa" transparent="1" zPosition="4" halign="left" position="162,550" size="120,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<widget name="genre" transparent="1" zPosition="4" halign="left" position="162,590" size="350,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<widget name="runtime" transparent="1" zPosition="4" halign="left" position="162,630" size="350,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
-		<widget name="year" transparent="1" zPosition="4" halign="left" position="162,670" size="350,30" font="Modern; 21" foregroundColor="#FFFFFF"  backgroundColor="#000000"/>
 		
-		<widget name="poster" transparent="1" zPosition="15" position="313,417" size="195,268" alphatest="blend" />
-		<widget name="postertext" transparent="1" zPosition="14" halign="left" position="369,517" size="200,40" font="Modern;22" foregroundColor="#00404040"/>
+		<widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="966,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff"  backgroundColor="#000000"/>
+		<widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff"  backgroundColor="#000000"/>
+		<widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff"  backgroundColor="#000000"/>
 		
-		<widget name="mybackdrop" transparent="0" zPosition="5" position="760,100" size="450,260" alphatest="blend" />
-		<widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="900,200" size="200,40" font="Modern;22" foregroundColor="#00404040"/>		
+		<widget name="poster" transparent="1" zPosition="49" position="121,389" size="195,268" alphatest="blend" />
 		
-		<widget name="number_key_popup" zPosition="10" halign="center" valign="center" position="551,297" size="177,125" font="Modern;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
+		<widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
+				
+		<widget name="number_key_popup" zPosition="10" halign="center" valign="center" position="551,297" size="177,125" font="Saint;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
 		<!-- buttons -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="20" position="770,670" size="32,32" alphatest="blend" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png" zPosition="8" position="1110,670" size="35,25" alphatest="blend" />
@@ -174,13 +214,13 @@
     <widget source="listview" render="Listbox" zPosition="3" position="-17,0" size="1,1" scrollbarMode="showNever" transparent="0" backgroundColor="#20404040" backgroundColorSelected="transparent">
       <convert type="TemplatedMultiContent">
             {"template": [ MultiContentEntryText(pos = (0,0), size = (1,1), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0) ],
-            "fonts": [gFont("Modern", 20)],
+            "fonts": [gFont("Saint", 20)],
             "itemHeight": 32,
             "scrollbarMode": "showNever"
             }
         </convert>
     </widget>
-    <widget name="title" transparent="1" zPosition="5" halign="left" position="71,25" size="746,35" font="Modern;25" backgroundColor="#20404040" foregroundColor="#00ffffff" />
+    <widget name="title" transparent="1" zPosition="5" halign="left" position="71,25" size="746,35" font="Saint;25" backgroundColor="#20404040" foregroundColor="#00ffffff" />
     <widget name="poster_0" transparent="0" zPosition="5" position="-94,337" size="195,267" alphatest="blend" />
     <widget name="poster_1" transparent="0" zPosition="5" position="112,337" size="195,267" alphatest="blend" />
     <widget name="poster_2" transparent="0" zPosition="5" position="318,337" size="195,267" alphatest="blend" />
@@ -197,7 +237,7 @@
     <widget name="seen_5" transparent="0" zPosition="6" position="972,337" size="195,267" alphatest="blend" />
     	
 	<widget name="shortDescriptionContainer" transparent="0" zPosition="8" position="112,325" size="1056,292" backgroundColor="#20404040" />
-    <widget name="shortDescription" text="" transparent="1" zPosition="9" halign="block" position="490,394" size="740,260" font="Modern;18" foregroundColor="#00ffffff" />
+    <widget name="shortDescription" text="" transparent="1" zPosition="9" halign="block" position="490,394" size="740,260" font="Saint;18" foregroundColor="#00ffffff" />
     
     <!-- buttons -->
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="53,695" size="266,2" alphatest="blend" />
@@ -205,108 +245,67 @@
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="657,695" size="266,2" alphatest="blend" />
     <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="960,695" size="266,2" alphatest="blend" />
     <!-- functions -->
-	<widget source="key_red" render="Label" position="71,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040"  />
-    <widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
-    <widget source="key_yellow" render="Label" position="675,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
-    <widget source="key_blue" render="Label" position="977,656" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
-    <widget name="number_key_popup" zPosition="4" halign="center" valign="center" position="556,188" size="177,125" font="Modern;75" foregroundColor="#00ffffff" backgroundColor="#20404040" />
+	<widget source="key_red" render="Label" position="71,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040"  />
+    <widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget source="key_yellow" render="Label" position="675,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget source="key_blue" render="Label" position="977,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" backgroundColor="#20404040" />
+    <widget name="number_key_popup" zPosition="4" halign="center" valign="center" position="556,188" size="177,125" font="Saint;75" foregroundColor="#00ffffff" backgroundColor="#20404040" />
   </screen>
 	
-	<!-- DPS_ServerEntriesListConfigScreen -->
-	<screen name="DPS_ServerEntriesListConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="transparent" flags="wfNoBorder">
-		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Saint; 18" foregroundColor="#00404040" halign="right" />
-		<!--  visu -->
-		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="transparent" transparent="0" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/top.png" zPosition="2" position="0,0" size="1280,65" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/bottom.png" zPosition="2" position="0,655" size="1280,65" alphatest="blend" />
-		<!-- content -->
-		<widget name="state" position="5,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
-		<widget name="name" position="5,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
-		<widget name="ip" position="215,0" zPosition="2" size="200,50" font="Regular;20" halign="left"/>
-		<widget name="port" position="400,0" zPosition="2" size="80,50" font="Regular;20" halign="left"/>
-		<widget name="entrylist" zPosition="2" position="71,73" size="1155,568" scrollbarMode="showOnDemand" backgroundColor="transparent" backgroundColorSelected="transparent" foregroundColor="#00404040" foregroundColorSelected="#00ffffff"/>
-		
-		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="53,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="3" position="355,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="657,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="960,695" size="266,2" alphatest="blend" />
-		<!-- functions -->
-		<widget source="key_red" render="Label" position="71,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_yellow" render="Label" position="675,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_blue" render="Label" position="977,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-	</screen>
-
-	<!-- DPS_ServerEntryConfigScreen -->
-	<screen name="DPS_ServerEntryConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="transparent" flags="wfNoBorder">
-		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="373,25" size="853,35" font="Saint; 18" foregroundColor="#00404040" halign="right" />
-		<!-- visu -->
-		<eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="transparent" transparent="0" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/top.png" zPosition="2" position="0,0" size="1280,65" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/bottom.png" zPosition="2" position="0,655" size="1280,65" alphatest="blend" />
-		<!-- content -->
-		<widget name="config" zPosition="2" position="71,73" size="1155,568" scrollbarMode="showOnDemand" backgroundColor="transparent" backgroundColorSelected="transparent" foregroundColor="#00404040" foregroundColorSelected="#00ffffff"/>
-		
-		<!-- buttons -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="3" position="53,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" zPosition="3" position="355,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png" zPosition="3" position="657,695" size="266,2" alphatest="blend" />
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" zPosition="3" position="960,695" size="266,2" alphatest="blend" />
-		<!-- functions -->
-		<widget source="key_red" render="Label" position="71,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_green" render="Label" position="373,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-		<widget source="key_yellow" render="Label" position="675,660" zPosition="4" size="231,37" font="Modern;20" halign="center" valign="center" transparent="1" />
-	</screen>
-
+	<screen name="PVRState" position="180,100" size="850,325" zPosition="10" backgroundColor="#ffffffff" flags="wfNoBorder" >
+        <widget name="state" position="85,135" size="750,250" font="Saint;175" halign="center" valign="center" transparent="1" backgroundColor="#dfffffff" foregroundColor="#dfffffff" /> 
+    </screen>
+	
+	
 	<!-- DPS_PlexPlayer -->
 	<screen name="DPS_PlexPlayer" position="0,0" size="1283,723" title="InfoBar" flags="wfNoBorder">
-		<!--ePixmap position="0,570" zPosition="-2" size="1281,150" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" /-->
-		<!--ePixmap position="0,0" zPosition="-2" size="1281,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" /-->
+		<ePixmap position="0,570" zPosition="-2" size="1281,150" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" />
+		<ePixmap position="0,0" zPosition="-2" size="1281,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" />
 		
-        <widget source="session.CurrentService" render="Label" position="30,438" size="1250,256" font="Saint; 140" valign="top" noWrap="1" backgroundColor="#000000" transparent="1" foregroundColor="#00404040" zPosition="-99">
+        <widget source="session.CurrentService" render="Label" position="30,438" size="1250,256" font="Saint; 140" valign="top" noWrap="1" backgroundColor="#dfffffff" transparent="1" foregroundColor="#dfffffff" zPosition="-99">
           <convert type="ServiceName">Name</convert>
         </widget>
 		
-		<widget source="global.CurrentTime" render="Label" position="1086,24" size="169,80" font="Saint; 60" halign="left" backgroundColor="#000000" transparent="1" valign="top">
+		<widget source="global.CurrentTime" render="Label" position="1086,24" size="169,80" font="Saint; 60" halign="left" backgroundColor="#00040404" transparent="1" valign="top">
           <convert type="ClockToText">Default</convert>
         </widget>
         
-		<widget source="global.CurrentTime" render="Label" position="926,60" size="148,29" font="Saint; 20" halign="right" backgroundColor="#000000" foregroundColor="#00404040" transparent="1">
+		<widget source="global.CurrentTime" render="Label" position="926,60" size="148,29" font="Saint; 20" halign="right" backgroundColor="#00040404" foregroundColor="#454545" transparent="1">
           <convert type="ClockToText">Format:%e. %B</convert>
         </widget>
         
-		<widget source="global.CurrentTime" render="Label" position="949,32" size="125,30" font="Saint; 20" halign="right" backgroundColor="#000000" foregroundColor="#00404040" transparent="1">
+		<widget source="global.CurrentTime" render="Label" position="949,32" size="125,30" font="Saint; 20" halign="right" backgroundColor="#00040404" foregroundColor="#454545" transparent="1">
           <convert type="ClockToText">Format:%A</convert>
         </widget>
 			
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_dolby_off.png" position="1051,656" size="64,23" zPosition="1" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_dolby_off.png" position="1051,656" size="64,23" zPosition="1" alphatest="blend" />
         <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_dolby_on.png" position="1051,656" size="64,23" zPosition="2" alphatest="blend">
           <convert type="ServiceInfo">IsMultichannel</convert>
           <convert type="ConditionalShowHide" />
-        </widget-->
+        </widget>
         
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_format_off.png" position="1127,655" size="41,26" zPosition="1" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_format_off.png" position="1127,655" size="41,26" zPosition="1" alphatest="blend" />
         <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_format_on.png" position="1127,655" size="41,26" zPosition="2" alphatest="blend">
           <convert type="ServiceInfo">IsWidescreen</convert>
           <convert type="ConditionalShowHide" />
-        </widget-->
+        </widget>
         
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_hd_off.png" position="1188,657" size="49,24" zPosition="1" alphatest="blend" />
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_hd_off.png" position="1188,657" size="49,24" zPosition="1" alphatest="blend" />
         <widget source="session.CurrentService"  render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_hd_on.png" position="1188,657" size="49,24" zPosition="2" alphatest="blend">
           <convert type="ServiceInfo">VideoWidth</convert>
           <convert type="ValueRange">721,1980</convert>
           <convert type="ConditionalShowHide" />
-        </widget-->
-        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1070,616" size="55,25" halign="right" foregroundColor="#00404040" backgroundColor="#000000" transparent="1">
+        </widget>
+        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1070,616" size="55,25" halign="right" foregroundColor="#454545" backgroundColor="#000000" transparent="1">
           <convert type="ServiceInfo">VideoWidth</convert>
         </widget>
         
-		<eLabel text="x" font="Saint; 20" position="1129,616" size="15,25" halign="center" foregroundColor="#00404040" backgroundColor="#000000" transparent="1" />
-        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1146,616" size="55,25" halign="left" foregroundColor="#00404040" backgroundColor="#000000" transparent="1">
+		<eLabel text="x" font="Saint; 20" position="1129,616" size="15,25" halign="center" foregroundColor="#4545452" backgroundColor="#000000" transparent="1" />
+        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1146,616" size="55,25" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1">
           <convert type="ServiceInfo">VideoHeight</convert>
         </widget>
         		       
-		<widget source="session.CurrentService" render="Label" position="40,696" size="100,28" font="Saint;24" halign="right" valign="center" backgroundColor="#000000" shadowColor="#000000" shadowOffset="-1,-1" transparent="1">
+		<widget source="session.CurrentService" render="Label" position="40,696" size="100,28" font="Saint;24" halign="right" valign="center" backgroundColor="#40000000" shadowColor="#000000" shadowOffset="-1,-1" transparent="1">
           <convert type="ServicePosition">Position</convert>
         </widget>
         
@@ -314,22 +313,22 @@
           <convert type="ServicePosition">Gauge</convert>
         </widget>
         
-		<widget source="session.CurrentService" render="Progress" position="150,709" size="980,3" backgroundColor="#000000" borderWidth="0" transparent="1">
+		<widget source="session.CurrentService" render="Progress" position="150,709" size="980,3" backgroundColor="#ffffff" borderWidth="0" transparent="1">
           <convert type="ServicePosition">Position</convert>
         </widget>
         
-		<widget source="session.CurrentService" render="Label" position="1138,697" size="100,28" font="Saint;24" halign="left" valign="center" backgroundColor="#000000" transparent="1">
+		<widget source="session.CurrentService" render="Label" position="1138,697" size="100,28" font="Saint;24" halign="left" valign="center" backgroundColor="#40000000" transparent="1">
           <convert type="ServicePosition">Remaining</convert>
         </widget>
         
-		<widget source="session.CurrentService" render="Label" position="3,621" size="137,56" font="Saint; 40" halign="right" valign="top" backgroundColor="#000000" transparent="1" foregroundColor="#00404040">
+		<widget source="session.CurrentService" render="Label" position="3,621" size="137,56" font="Saint; 40" halign="right" valign="top" backgroundColor="#40000000" transparent="1" foregroundColor="#454545">
           <convert type="ServicePosition">Length</convert>
         </widget>
 		
-		<eLabel name="new eLabel" position="center,710" size="980,1" backgroundColor="#000000" foregroundColor="#00404040" zPosition="-1" />
+		<eLabel name="new eLabel" position="center,710" size="980,1" backgroundColor="#454545" foregroundColor="#454545" zPosition="-1" />
 		
 		<widget name="bufferslider" position="55,69" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
-		<widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="55,32"  size="250,28" font="Saint;25" backgroundColor="#000000" foregroundColor="#00404040" />
+		<widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="55,32"  size="250,28" font="Saint;25" backgroundColor="#00040404" foregroundColor="#454545" />
 		
-	</screen>	
+	</screen>
 </skins>
