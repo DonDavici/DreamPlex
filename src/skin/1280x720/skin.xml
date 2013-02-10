@@ -82,7 +82,7 @@
 		<widget name="name" position="255,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
 		<widget name="ip" position="465,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
 		<widget name="port" position="650,410" zPosition="2" size="80,50" font="Regular; 28" halign="left"/>
-		<widget name="entrylist" zPosition="4" position="125,275" size="1025,450" transparent="1" itemHeight="35" font="Saint; 24" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
+		<widget name="entrylist" zPosition="4" position="125,275" size="1025,450" transparent="1" itemHeight="35" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"/>
 		
 	    <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
            <convert type="ClockToText">Default</convert>
