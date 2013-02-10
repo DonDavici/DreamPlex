@@ -496,7 +496,8 @@ class DPS_MainMenu(Screen):
 			state = testPlexConnectivity(ip, port)
 			
 		elif connectionType == "2":
-			state = testInetConnectivity("http://my.plexapp.com")
+			#state = testInetConnectivity("http://my.plexapp.com")
+			state = True
 		else:
 			state = testInetConnectivity()
 		
