@@ -1676,6 +1676,8 @@ class PlexLibrary(Screen):
             extraData['unseenEpisodes']     = details['episode'] - watched
             extraData['thumb']              = self.getThumb(season, server)
             extraData['fanart_image']       = self.getFanart(season, server)
+            #extraData['thumb']              = self.getImage(season, server, x = 195, y = 268, type = "thumb")
+            #extraData['fanart_image']       = self.getImage(season, server, x = 560, y = 315, type = "art")
             extraData['token']              = self.g_myplex_accessToken
             extraData['theme']              = season.get('theme', '')
             extraData['key']                = season.get('key','')
