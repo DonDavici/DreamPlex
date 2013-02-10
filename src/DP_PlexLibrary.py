@@ -1804,8 +1804,8 @@ class PlexLibrary(Screen):
             
             extraData = {}
             extraData['type']               = "Video"
-            extraData['thumb']              = self.getThumb(episode, server)
-            extraData['fanart_image']       = self.getFanart(episode, server)
+            extraData['thumb']              = self.getFanart(episode, server)
+            extraData['fanart_image']       = self.getThumb(episode, server, x = 560, y = 315)
             extraData['token']              = self.g_myplex_accessToken
             extraData['key']                = episode.get('key','')
     

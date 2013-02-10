@@ -27,6 +27,7 @@ import math
 from enigma import ePicLoad, getDesktop
 from enigma import loadPNG, loadJPG
 from Components.Label import Label
+from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.Sources.StaticText import StaticText
 from Components.config import config
@@ -112,7 +113,7 @@ class DPS_ListView(DP_View):
 	
 		self["title"] 				= Label()
 		self["tag"] 				= Label()
-		self["shortDescription"] 	= Label()
+		self["shortDescription"] 	= ScrollLabel()
 		self["genre"] 				= Label()
 		self["year"] 				= Label()
 		self["runtime"] 			= Label()
@@ -175,7 +176,7 @@ class DPS_ListView(DP_View):
 
 			self.setText("title", 				self.details.get("title", " "))
 			self.setText("tag", 				self.details.get("tagline", " ").encode('utf8'), True)
-			self.setText("shortDescription", 	self.details.get("summary", " ").encode('utf8'), what=_("Overview"))
+			self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 			self.setText("studio", 				self.details.get("studio", " - "))
 			self.setText("year", 				str(self.details.get("year", " - ")))
 			self.setText("mpaa", 				str(self.extraData.get("contentRating", " - ")))
@@ -468,7 +469,7 @@ class DPS_ListView(DP_View):
 			bname = self.details["ratingKey"]
 			pname = self.details["ratingKey"]
 	
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] is None:
+		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
