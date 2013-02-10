@@ -1558,8 +1558,8 @@ class PlexLibrary(Screen):
             extraData['type']               = "video"
             extraData['seenEpisodes']       = watched
             extraData['unseenEpisodes']     = details['episode'] - watched
-            extraData['thumb']              = self.getThumb(show, server)
-            extraData['fanart_image']       = self.getFanart(show, server)
+            extraData['thumb']              = self.getImage(show, server, x = 195, y = 268, type = "thumb")
+            extraData['fanart_image']       = self.getImage(show, server, x = 560, y = 315, type = "art")
             extraData['token']              = self.g_myplex_accessToken
             extraData['theme']              = show.get('theme', '')
             extraData['key']                = show.get('key','')
@@ -1805,7 +1805,7 @@ class PlexLibrary(Screen):
             extraData = {}
             extraData['type']               = "Video"
             extraData['thumb']              = self.getImage(episode, server, x = 195, y = 268, type = "fanart_image")
-            extraData['fanart_image']       = self.getImage(episode, server, x = 560, y = 315, type = "thumb", ) #because this is a episode we have to use thumb
+            extraData['fanart_image']       = self.getImage(episode, server, x = 560, y = 315, type = "thumb") #because this is a episode we have to use thumb
             extraData['token']              = self.g_myplex_accessToken
             extraData['key']                = episode.get('key','')
     
@@ -3123,8 +3123,8 @@ class PlexLibrary(Screen):
         
         extraData = {}
         extraData['type']               = "Video"
-        extraData['thumb']              = self.getThumb(movie, server)
-        extraData['fanart_image']       = self.getFanart(movie, server)
+        extraData['thumb']              = self.getImage(movie, server, x = 195, y = 268, type = "thumb")
+        extraData['fanart_image']       = self.getImage(movie, server, x = 560, y = 315, type = "art")
         extraData['token']              = self.g_myplex_accessToken
         extraData['key']                = movie.get('key','')
 
@@ -3355,7 +3355,6 @@ class PlexLibrary(Screen):
             Simply take a URL or path and determine how to format for images
             @ input: elementTree element, server name
             @ return formatted URL
-            str(195), str(268)
         '''
         printl("", self, "S")
         
