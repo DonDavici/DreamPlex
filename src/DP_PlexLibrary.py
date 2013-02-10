@@ -1804,8 +1804,8 @@ class PlexLibrary(Screen):
             
             extraData = {}
             extraData['type']               = "Video"
-            extraData['thumb']              = self.getFanart(episode, server)
-            extraData['fanart_image']       = self.getThumb(episode, server, x = 560, y = 315)
+            extraData['thumb']              = self.getImage(episode, server, x = 195, y = 268, type = "fanart_image")
+            extraData['fanart_image']       = self.getImage(episode, server, x = 560, y = 315, type = "thumb", ) #because this is a episode we have to use thumb
             extraData['token']              = self.g_myplex_accessToken
             extraData['key']                = episode.get('key','')
     
@@ -3350,6 +3350,40 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
+    def getImage(self,  data, server, x, y, type, transcode = True): # CHECKED
+        '''
+            Simply take a URL or path and determine how to format for images
+            @ input: elementTree element, server name
+            @ return formatted URL
+            str(195), str(268)
+        '''
+        printl("", self, "S")
+        
+        image = data.get(type,'').split('?t')[0]
+
+        if image == '':
+            printl("", self, "C")   
+            return self.g_loc+'/resources/plex.png'
+            
+        elif image[0:4] == "http" :
+            printl("", self, "C")   
+            return image
+        
+        elif image[0] == '/':
+            if transcode:
+                printl("", self, "C")   
+                return self.photoTranscode(server,'http://localhost:32400'+image, str(x), str(y))
+            else:
+                printl("", self, "C")   
+                return 'http://'+server+image
+        
+        else: 
+            printl("", self, "C")   
+            return self.g_loc+'/resources/plex.png'
+    
+    #=============================================================================
+    # 
+    #=============================================================================
     def getThumb(self,  data, server, transcode = True, x = 195, y = 268): # CHECKED
         '''
             Simply take a URL or path and determine how to format for images
@@ -3380,7 +3414,7 @@ class PlexLibrary(Screen):
         else: 
             printl("", self, "C")   
             return self.g_loc+'/resources/plex.png'
- 
+    
     #============================================================================
     # 
     #============================================================================
