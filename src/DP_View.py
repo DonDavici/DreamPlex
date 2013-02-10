@@ -151,13 +151,16 @@ class DP_View(Screen, NumericalTextInput):
 
             "red":        (self.onKeyRed, ""),
             #"green":      (self.onKeyGreen, ""),
-            #"yellow":     (self.onKeyYellow, ""),
+            "yellow":     (self.onKeyYellow, ""),
             "blue":       (self.onKeyBlue, ""),
 
             "red_long":        (self.onKeyRedLong, ""),
             #"green_long":      (self.onKeyGreenLong, ""),
             #"yellow_long":     (self.onKeyYellowLong, ""),
             #"blue_long":       (self.onKeyBlueLong, ""),
+            
+            "bouquet_up":       (self.bouquetUp, ""),
+            "bouquet_down":     (self.bouquetDown, ""),
             
             "1":       (self.onKey1, ""),
             "2":       (self.onKey2, ""),
@@ -237,6 +240,30 @@ class DP_View(Screen, NumericalTextInput):
                     self["listview"].setIndex(i)
                     break
             self.refresh()
+        
+        printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def bouquetUp(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self["shortDescription"].pageUp()
+        
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def bouquetDown(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self["shortDescription"].pageDown()
         
         printl("", self, "C")
     
@@ -565,6 +592,7 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
+        
         
         printl("", self, "C")
 

@@ -33,6 +33,8 @@
 		<key id="KEY_GREEN" mapto="green_long" flags="l" />
 		<key id="KEY_BLUE" mapto="blue" flags="b" />
 		<key id="KEY_BLUE" mapto="blue_long" flags="l" />
+		<key id="KEY_CHANNELUP" mapto="bouquet_up" flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="bouquet_down" flags="m" />
 		
 		<key id="KEY_1" mapto="1" flags="m"/>
 		<key id="KEY_2" mapto="2" flags="m"/>

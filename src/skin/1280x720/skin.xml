@@ -119,7 +119,7 @@
         
         <widget name="rating_stars" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" zPosition="14" position="800,452" size="114,22" transparent="1" borderWidth="0" orientation="orHorizontal"/>
     	
-    	<widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="515,491" size="727,175" scrollbarMode="showOnDemand" font="Modern; 18" />
+    	<widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="515,491" size="727,175" font="Modern; 18" />
 		
 		<eLabel text="" zPosition="14" halign="left" position="30,455" size="250,1" backgroundColor="#696969"/>
 		<widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="170,420" size="190,25" font="Modern;20" foregroundColor="#696969"  backgroundColor="#000000" />
