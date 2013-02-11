@@ -243,23 +243,23 @@ class DPS_ListView(DP_View):
 		mpaa = self.extraData.get("contentRating", "unknown").upper()
 		printl("contentRating: " + str(mpaa), self, "D")
 		
-		if mpaa == "PG-13" or "TV-14":
+		if mpaa == "PG-13" or mpaa == "TV-14":
 			found = True
 			self["rated"].setPixmapNum(0)
 		
-		elif mpaa == "PG" or "TV-PG":
+		elif mpaa == "PG" or mpaa == "TV-PG":
 			found = True
 			self["rated"].setPixmapNum(1)
 		
-		elif mpaa == "R":
+		elif mpaa == "R" or mpaa == "14A":
 			found = True
 			self["rated"].setPixmapNum(2)
 		
-		elif mpaa == "NC-17" or "TV-MA":
+		elif mpaa == "NC-17" or mpaa == "TV-MA":
 			found = True
 			self["rated"].setPixmapNum(3)
 		
-		elif mpaa == "NOT RATED" or mpaa == "DE/0":
+		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
 			found = True
 			self["rated"].setPixmapNum(4)
 		
