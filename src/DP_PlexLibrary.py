@@ -301,6 +301,10 @@ class PlexLibrary(Screen):
         else:
             #Fill serverdata to global g_serverDict
             self.discoverAllServers()
+            
+        self.seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+        self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+        self.unseenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
                                    
         printl("", self, "C")
     
@@ -821,7 +825,7 @@ class PlexLibrary(Screen):
     #===============================================================================
     # 
     #===============================================================================
-    def addGUIItem(self, url, details, extraData, context, seenPic, folder=True ):
+    def addGUIItem(self, url, details, extraData, context, seenVisu, folder=True ):
         '''
         '''
         printl("", self, "S")
@@ -849,7 +853,7 @@ class PlexLibrary(Screen):
     
         #xcontent = (newUrl, details, extraData, context)
         
-        content = (details.get('title',''), details, extraData, context, seenPic, newUrl)
+        content = (details.get('title',''), details, extraData, context, seenVisu, newUrl)
         # todo hier sollte weider image rein
         
         printl("content = " + str(content), self, "D")
@@ -1569,15 +1573,15 @@ class PlexLibrary(Screen):
             # lets add this for another filter
             if int(extraData['seenEpisodes']) == int(details['episode']):
                 details['viewState'] = "seen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+                seenVisu = self.seenPic
             
             elif int(extraData['seenEpisodes']) > 0:
                 details['viewState']        = "started"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+                seenVisu = self.startedPic
             
             else:
                 details['viewState'] = "unseen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+                seenVisu = self.unseenPic
             
             if show.get('banner',None) is not None:
                 extraData['banner']='http://'+server+show.get('banner').split('?')[0]+"/banner.jpg"
@@ -1614,7 +1618,7 @@ class PlexLibrary(Screen):
                 u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_getSeasonsOfShow))
                 
             #Right, add that link...and loop around for another entry
-            content = self.addGUIItem(u,details,extraData, context, seenPic)
+            content = self.addGUIItem(u,details,extraData, context, seenVisu)
 
             fullList.append(content)
 
@@ -1700,15 +1704,15 @@ class PlexLibrary(Screen):
             # lets add this for another filter
             if int(extraData['seenEpisodes']) == int(details['episode']):
                 details['viewState'] = "seen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+                seenVisu = self.seenPic
             
             elif int(extraData['seenEpisodes']) > 0:
                 details['viewState']        = "started"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+                seenVisu = self.startedPic
             
             else:
                 details['viewState'] = "unseen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+                seenVisu = self.unseenPic
                          
             if extraData['fanart_image'] == "":
                 extraData['fanart_image'] = sectionart
@@ -1720,7 +1724,7 @@ class PlexLibrary(Screen):
             else:
                 context=None
                 
-            content = self.addGUIItem(url, details, extraData, context, seenPic)
+            content = self.addGUIItem(url, details, extraData, context, seenVisu)
 
             fullList.append(content)
 
@@ -1824,15 +1828,15 @@ class PlexLibrary(Screen):
             # lets add this for another filter
             if details['viewCount'] > 0:
                 details['viewState'] = "seen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+                seenVisu = self.seenPic
             
             elif details['viewCount'] > 0 and details['viewOffset'] > 0:
                 details['viewState']        = "started"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+                seenVisu = self.startedPic
             
             else:
                 details['viewState'] = "unseen"
-                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+                seenVisu = self.unseenPic
             
             #Extended Metadata
             if self.g_skipmetadata == "false":
@@ -1861,7 +1865,7 @@ class PlexLibrary(Screen):
             else:
                 context=None
             
-            content = self.addGUIItem(url, details, extraData, context, seenPic)
+            content = self.addGUIItem(url, details, extraData, context, seenVisu)
        
             fullList.append(content)
         
@@ -3150,15 +3154,15 @@ class PlexLibrary(Screen):
         # lets add this for another filter
         if details['viewCount'] > 0:
             details['viewState'] = "seen"
-            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+            seenVisu = self.seenPic
         
         elif details['viewCount'] > 0 and details['viewOffset'] > 0:
             details['viewState']        = "started"
-            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+            seenVisu = self.startedPic
         
         else:
             details['viewState'] = "unseen"
-            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+            seenVisu = self.unseenPic
         
         #Extended Metadata
         if self.g_skipmetadata == "false":
@@ -3191,7 +3195,7 @@ class PlexLibrary(Screen):
         if details["title"].upper() not in self.tmpAbc:
             self.tmpAbc.append(details["title"].upper())
             
-        guiItem = self.addGUIItem(url, details, extraData, context, seenPic, folder=False)
+        guiItem = self.addGUIItem(url, details, extraData, context, seenVisu, folder=False)
         
         printl("", self, "C")   
         return guiItem        

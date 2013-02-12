@@ -43,7 +43,7 @@ from Screens.InputBox import InputBox
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import getVersion
+from Plugins.Extensions.DreamPlex.__init__ import getVersion, localeInit, initBoxInformation, printGlobalSettings, initPlexServerConfig, checkPlexEnvironment, registerPlexFonts, loadPlexSkin, loadPlexPlugins
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 
@@ -83,6 +83,14 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
+		localeInit()
+		initBoxInformation()
+		printGlobalSettings()
+		initPlexServerConfig()
+		checkPlexEnvironment()
+		registerPlexFonts()
+		loadPlexSkin()
+		loadPlexPlugins()
 		Screen.__init__(self, session)
 		
 		self["infoContainer"] = Label()
