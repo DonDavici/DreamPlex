@@ -140,8 +140,8 @@
 		    	
 		<widget source="listview" render="Listbox" zPosition="8" position="35,75" size="500,249" scrollbarMode="showNever" foregroundColor="#454545" foregroundColorSelected="#ffffff" backgroundColor="#000000" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/button-focus2.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg.png"> 
           <convert type="TemplatedMultiContent">
-                {"template": [ MultiContentEntryText(pos = (25,1), size = (500,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
-                MultiContentEntryPixmapAlphaTest(pos = (6,4), size = (32,32), png = 4) ],
+                {"template": [ MultiContentEntryText(pos = (30,1), size = (500,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
+                MultiContentEntryPixmapAlphaTest(pos = (0,6), size = (24,24), png = 4) ],
                 "fonts": [gFont("Saint", 25)],
                 "itemHeight": 40,
                 "scrollbarMode": "showNever"

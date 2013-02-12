@@ -49,6 +49,7 @@ from urllib2 import urlopen, Request
 from random import randint, seed
 from threading import Thread
 from Queue import Queue
+from enigma import loadPNG
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -820,7 +821,7 @@ class PlexLibrary(Screen):
     #===============================================================================
     # 
     #===============================================================================
-    def addGUIItem(self, url, details, extraData, context=None, folder=True ):
+    def addGUIItem(self, url, details, extraData, context, seenPic, folder=True ):
         '''
         '''
         printl("", self, "S")
@@ -847,7 +848,8 @@ class PlexLibrary(Screen):
         printl("URL to use for listing: " + newUrl, self, "D")
     
         #xcontent = (newUrl, details, extraData, context)
-        content = (details.get('title',''), details, extraData, context, newUrl)
+        
+        content = (details.get('title',''), details, extraData, context, seenPic, newUrl)
         # todo hier sollte weider image rein
         
         printl("content = " + str(content), self, "D")
@@ -1564,6 +1566,19 @@ class PlexLibrary(Screen):
             extraData['theme']              = show.get('theme', '')
             extraData['key']                = show.get('key','')
             
+            # lets add this for another filter
+            if int(extraData['seenEpisodes']) == int(details['episode']):
+                details['viewState'] = "seen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+            
+            elif int(extraData['seenEpisodes']) > 0:
+                details['viewState']        = "started"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+            
+            else:
+                details['viewState'] = "unseen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+            
             if show.get('banner',None) is not None:
                 extraData['banner']='http://'+server+show.get('banner').split('?')[0]+"/banner.jpg"
     
@@ -1599,7 +1614,7 @@ class PlexLibrary(Screen):
                 u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_getSeasonsOfShow))
                 
             #Right, add that link...and loop around for another entry
-            content = self.addGUIItem(u,details,extraData, context)
+            content = self.addGUIItem(u,details,extraData, context, seenPic)
 
             fullList.append(content)
 
@@ -1681,9 +1696,22 @@ class PlexLibrary(Screen):
             extraData['token']              = self.g_myplex_accessToken
             extraData['theme']              = season.get('theme', '')
             extraData['key']                = season.get('key','')
+             
+            # lets add this for another filter
+            if int(extraData['seenEpisodes']) == int(details['episode']):
+                details['viewState'] = "seen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+            
+            elif int(extraData['seenEpisodes']) > 0:
+                details['viewState']        = "started"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+            
+            else:
+                details['viewState'] = "unseen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
                          
             if extraData['fanart_image'] == "":
-                extraData['fanart_image']=sectionart
+                extraData['fanart_image'] = sectionart
     
             url='http://%s%s&mode=%s' % ( server , extraData['key'], str(_MODE_TVEPISODES) )
     
@@ -1692,7 +1720,7 @@ class PlexLibrary(Screen):
             else:
                 context=None
                 
-            content = self.addGUIItem(url, details, extraData, context)
+            content = self.addGUIItem(url, details, extraData, context, seenPic)
 
             fullList.append(content)
 
@@ -1794,10 +1822,17 @@ class PlexLibrary(Screen):
                 details['title'] = details['tvshowtitle'] + ": " + details['title']
             
             # lets add this for another filter
-            if int(details['viewCount']) > 0:
-                details['viewState']        = "seen"
+            if details['viewCount'] > 0:
+                details['viewState'] = "seen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+            
+            elif details['viewCount'] > 0 and details['viewOffset'] > 0:
+                details['viewState']        = "started"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+            
             else:
-                details['viewState']        = "unseen"
+                details['viewState'] = "unseen"
+                seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
             
             #Extended Metadata
             if self.g_skipmetadata == "false":
@@ -1826,7 +1861,7 @@ class PlexLibrary(Screen):
             else:
                 context=None
             
-            content = self.addGUIItem(url, details, extraData, context)
+            content = self.addGUIItem(url, details, extraData, context, seenPic)
        
             fullList.append(content)
         
@@ -3101,7 +3136,7 @@ class PlexLibrary(Screen):
         details['ratingKey']            = str(movie.get('ratingKey', 0)) # primary key in plex
         details['summary']              = movie.get('summary','')
         details['title']                = movie.get('title','').encode('utf-8')
-        details['viewCount']            = movie.get('viewCount', 0)
+        details['viewCount']            = int(movie.get('viewCount', 0))
         details['rating']               = movie.get('rating', 0)
         details['studio']               = movie.get('studio','')
         details['year']                 = movie.get('year', 0)
@@ -3109,14 +3144,21 @@ class PlexLibrary(Screen):
         details['runtime']              = str(datetime.timedelta(seconds=duration))
         details['server']               = str(server)
         details['genre']                = " / ".join(tempgenre)
-        details['viewOffset']           = movie.get('viewOffset',0)
+        details['viewOffset']           = int(movie.get('viewOffset',0))
         details['director']             = " / ".join(tempdir)
         
         # lets add this for another filter
-        if int(details['viewCount']) > 0:
-            details['viewState']        = "seen"
+        if details['viewCount'] > 0:
+            details['viewState'] = "seen"
+            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+        
+        elif details['viewCount'] > 0 and details['viewOffset'] > 0:
+            details['viewState']        = "started"
+            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+        
         else:
-            details['viewState']        = "unseen"
+            details['viewState'] = "unseen"
+            seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
         
         #Extended Metadata
         if self.g_skipmetadata == "false":
@@ -3148,8 +3190,8 @@ class PlexLibrary(Screen):
         # fill title filter
         if details["title"].upper() not in self.tmpAbc:
             self.tmpAbc.append(details["title"].upper())
-        
-        guiItem = self.addGUIItem(url, details, extraData, context, folder=False)
+            
+        guiItem = self.addGUIItem(url, details, extraData, context, seenPic, folder=False)
         
         printl("", self, "C")   
         return guiItem        
