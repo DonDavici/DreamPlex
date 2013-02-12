@@ -180,7 +180,7 @@ class DPS_MainMenu(Screen):
 		content += "DreamPlex - a plex client for Enigma2 \n" 
 		content += "Version: \t" + getVersion() + "\n\n"
 		content += "Autor: \t DonDavici\n"
-		content += "Contributors: \t IPMAN\n"
+		content += "Skinner: \t IPMAN\n"
 
 		
 		printl("", self, "C")
