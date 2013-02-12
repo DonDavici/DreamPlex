@@ -102,6 +102,12 @@ class DPS_ListView(DP_View):
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
 		
 		# init skin elements
+		self["functionsContainer"]  = Label()
+		self["key_red"] 			= Label()
+		self["key_green"] 			= Label()
+		self["key_yellow"] 			= Label()
+		self["key_blue"] 			= Label()
+		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
 
@@ -124,11 +130,6 @@ class DPS_ListView(DP_View):
 		self["current"] 			= Label()
 		self["backdroptext"]		= Label()
 		self["postertext"]			= Label()
-		
-		self["key_red"] 			= StaticText(_("Sort: ") + _("Default"))
-		self["key_green"] 			= StaticText(_("Filter: ") + _("None"))
-		self["key_yellow"] 			= StaticText("")
-		self["key_blue"] 			= StaticText(self.viewName[0])
 		
 		self["rating_stars"] = ProgressBar()
 		
@@ -153,6 +154,11 @@ class DPS_ListView(DP_View):
 		# starting values
 		changePoster = True
 		changeBackdrop = True
+		
+		#self["key_red"].setText(_("Sort: ") + _("Default"))
+		#self["key_green"].setText(_("Filter: ") + _("None"))
+		#self["key_yellow"].setText("")
+		#self["key_blue"].setText(self.viewName[0])
 		
 		self.resetCurrentImages()
 		
@@ -202,12 +208,53 @@ class DPS_ListView(DP_View):
 			if changeBackdrop == True:
 				self.showBackdrop()
 			
+			self.showFunctions(False)
+			
 		else:
 			self.setText("title", "no data retrieved")
 			self.setText("shortDescription", "no data retrieved")
 			
 		printl("", self, "C")
 
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def showFunctions(self, visible):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.areFunctionsHidden = visible
+
+		if visible:
+			self["functionsContainer"].show()
+			#self["txt_red"].show()
+			#self["btn_red"].show()
+			#self["key_green"].show
+			#self["key_yellow"].show
+			#self["key_blue"].show
+		else:
+			self["functionsContainer"].hide()
+			#self["txt_red"].hide()
+			#self["btn_red"].show()
+			#self["key_green"].hide()
+			#self["key_yellow"].hide()
+			#self["key_blue"].hide()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def onKeyInfo(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.showFunctions(not self.areFunctionsHidden)
+		
+		printl("", self, "C")
 	
 	#===========================================================================
 	# 
