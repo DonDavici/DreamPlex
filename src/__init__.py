@@ -164,15 +164,15 @@ def initServerEntryConfig():
 	#config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	
-	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "I")
-	printl("Server Settings: ","__init__::initServerEntryConfig", "I" )
-	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "I")
-	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "I")
-	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "I")
-	printl("ip: " + str(config.plugins.dreamplex.Entries[i].ip.value), "__init__::initServerEntryConfig", "I")
-	printl("dns: " + str(config.plugins.dreamplex.Entries[i].dns.value), "__init__::initServerEntryConfig", "I")
-	printl("port: " + str(config.plugins.dreamplex.Entries[i].port.value), "__init__::initServerEntryConfig", "I")
-	printl("playbackType: " + str(config.plugins.dreamplex.Entries[i].playbackType.value), "__init__::initServerEntryConfig", "I")
+	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
+	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
+	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "D")
+	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "D")
+	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "D")
+	printl("ip: " + str(config.plugins.dreamplex.Entries[i].ip.value), "__init__::initServerEntryConfig", "D")
+	printl("dns: " + str(config.plugins.dreamplex.Entries[i].dns.value), "__init__::initServerEntryConfig", "D")
+	printl("port: " + str(config.plugins.dreamplex.Entries[i].port.value), "__init__::initServerEntryConfig", "D")
+	printl("playbackType: " + str(config.plugins.dreamplex.Entries[i].playbackType.value), "__init__::initServerEntryConfig", "D")
 	
 	# myPlex
 	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
@@ -182,13 +182,13 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)
 	
-	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "I")
-	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "I")
-	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
-	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "I", True, 4)
-	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "I", True, 8)
-	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "I", True, 8)
-	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "I")
+	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
+	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
+	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
+	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "D", True, 4)
+	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "D", True, 8)
+	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
+	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "D")
 	
 	# STREAMED
 	# no options at the moment
@@ -197,9 +197,9 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].transcode				= ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].quality					= ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
 	
-	printl("=== TRANSCODED ===", "__init__::initServerEntryConfig", "I")
-	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "I")
-	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "I")
+	printl("=== TRANSCODED ===", "__init__::initServerEntryConfig", "D")
+	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "D")
+	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "D")
 	
 	# TRANSCODED VIA PROXY
 	
@@ -208,10 +208,10 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].remotePathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].localPathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
 	
-	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "I")
-	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "I")
-	printl("remotePathPart: " + str(config.plugins.dreamplex.Entries[i].remotePathPart.value), "__init__::initServerEntryConfig", "I")
-	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "I")
+	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
+	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "D")
+	printl("remotePathPart: " + str(config.plugins.dreamplex.Entries[i].remotePathPart.value), "__init__::initServerEntryConfig", "D")
+	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "D")
 	
 	# DIRECT REMOTE
 	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
@@ -219,21 +219,21 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].nasOverrideIp				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].nasRoot						= ConfigText(default = "/", visible_width = 50, fixed_size = False)
 	
-	printl("=== DIRECT REMOTE ===", "__init__::initServerEntryConfig", "I")
-	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "I", True, 4)
-	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "I", True, 4)
-	printl("nasOverrideIp: " + str(config.plugins.dreamplex.Entries[i].nasOverrideIp.value), "__init__::initServerEntryConfig", "I")
-	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "I")
+	printl("=== DIRECT REMOTE ===", "__init__::initServerEntryConfig", "D")
+	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "D", True, 4)
+	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "D", True, 4)
+	printl("nasOverrideIp: " + str(config.plugins.dreamplex.Entries[i].nasOverrideIp.value), "__init__::initServerEntryConfig", "D")
+	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "D")
 	
 	# WOL
 	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].wol_mac			= ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
 	
-	printl ("=== WOL ===", "__init__::initServerEntryConfig", "I")
-	printl("wol: " + str(config.plugins.dreamplex.Entries[i].wol.value), "__init__::initServerEntryConfig", "I")
-	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "I")
-	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "I")
+	printl ("=== WOL ===", "__init__::initServerEntryConfig", "D")
+	printl("wol: " + str(config.plugins.dreamplex.Entries[i].wol.value), "__init__::initServerEntryConfig", "D")
+	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "D")
+	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "D")
 	
 	printl("", "__init__::initServerEntryConfig", "C")
 	return config.plugins.dreamplex.Entries[i]
