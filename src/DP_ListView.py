@@ -103,10 +103,19 @@ class DPS_ListView(DP_View):
 		
 		# init skin elements
 		self["functionsContainer"]  = Label()
-		self["key_red"] = StaticText(_("Sort: ") + _("Default"))
-		self["key_green"] = StaticText(_("Filter: ") + _("None"))
-		self["key_yellow"] = StaticText("")
-		self["key_blue"] = StaticText(self.viewName[0])
+		
+		self["btn_red"] = Pixmap()
+		self["btn_blue"] = Pixmap()
+		self["btn_green"] = Pixmap()
+		
+		self["txt_red"] = Label()
+		self["txt_red"].setText(_("Sort: ") + _("Default"))
+		
+		self["txt_green"] = Label()
+		self["txt_green"].setText(_("Filter: ") + _("None"))
+		
+		self["txt_blue"] = Label()
+		self["txt_blue"].setText(_("View: ") + _("Default"))
 		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
@@ -229,6 +238,12 @@ class DPS_ListView(DP_View):
 
 		if visible:
 			self["functionsContainer"].show()
+			self["btn_red"].show()
+			self["btn_green"].show()
+			self["btn_blue"].show()
+			self["txt_red"].show()
+			self["txt_green"].show()
+			self["txt_blue"].show()
 			#self["txt_red"].show()
 			#self["btn_red"].show()
 			#self["key_green"].show
@@ -236,6 +251,12 @@ class DPS_ListView(DP_View):
 			#self["key_blue"].show
 		else:
 			self["functionsContainer"].hide()
+			self["btn_red"].hide()
+			self["btn_green"].hide()
+			self["btn_blue"].hide()
+			self["txt_red"].hide()
+			self["txt_green"].hide()
+			self["txt_blue"].hide()
 			#self["txt_red"].hide()
 			#self["btn_red"].show()
 			#self["key_green"].hide()
@@ -578,7 +599,7 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		text = "Sorted by: %s" % (_(self.activeSort[0]))
-		self["key_red"].setText(text)
+		self["txt_red"].setText(text)
 		super(getViewClass(), self).sort()
 		
 		printl("", self, "C")
@@ -598,7 +619,7 @@ class DPS_ListView(DP_View):
 			#text = "%s: %s" % (_("Filter"), _(self.activeFilter[0])) #To little space
 			text = "%s" % (_(self.activeFilter[0]))
 
-		self["key_green"].setText(text)
+		self["txt_green"].setText(text)
 		super(getViewClass(), self).filter()
 		
 		printl("", self, "C")
@@ -804,5 +825,14 @@ class DPS_ListView(DP_View):
 		
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		
+		ptr_red = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png"
+		self["btn_red"].instance.setPixmapFromFile(ptr_red)
+		
+		ptr_green = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png"
+		self["btn_green"].instance.setPixmapFromFile(ptr_green)
+		
+		ptr_blue = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png"
+		self["btn_blue"].instance.setPixmapFromFile(ptr_blue)
 		
 		printl("", self, "C")
