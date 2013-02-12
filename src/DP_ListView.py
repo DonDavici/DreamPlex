@@ -103,10 +103,10 @@ class DPS_ListView(DP_View):
 		
 		# init skin elements
 		self["functionsContainer"]  = Label()
-		self["key_red"] 			= Label()
-		self["key_green"] 			= Label()
-		self["key_yellow"] 			= Label()
-		self["key_blue"] 			= Label()
+		self["key_red"] = StaticText(_("Sort: ") + _("Default"))
+		self["key_green"] = StaticText(_("Filter: ") + _("None"))
+		self["key_yellow"] = StaticText("")
+		self["key_blue"] = StaticText(self.viewName[0])
 		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
