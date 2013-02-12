@@ -43,7 +43,7 @@ from Screens.InputBox import InputBox
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig
+from Plugins.Extensions.DreamPlex.__init__ import getVersion
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 
@@ -177,8 +177,11 @@ class DPS_MainMenu(Screen):
 		
 		content = ""
 		content += "Information\n\n"
-		content += "Autors: \t DonDavici\n"
-		content += "DreamPlex - a plex client for Enigma2" 
+		content += "DreamPlex - a plex client for Enigma2 \n" 
+		content += "Version: \t" + getVersion() + "\n\n"
+		content += "Autor: \t DonDavici\n"
+		content += "Contributors: \t IPMAN\n"
+
 		
 		printl("", self, "C")
 		return content

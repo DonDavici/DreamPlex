@@ -17,6 +17,9 @@
         <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
            <convert type="ClockToText">Date</convert>
         </widget>
+        
+        <widget name="infoContainer" transparent="0" zPosition="8" position="112,420" size="380,200" backgroundColor="#00000000" />
+        <widget name="infoText" transparent="1" zPosition="9" halign="left" position="129,450" size="380,200" font="Modern;18" backgroundColor="#00000000" foregroundColor="#00404040" />
    		
 	   </screen>
 
