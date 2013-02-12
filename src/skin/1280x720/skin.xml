@@ -194,7 +194,7 @@
 		
 		<widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
 		<widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#00000000" />
-		<widget name="number_key_popup" zPosition="46" halign="center" valign="center" position="710,440" size="177,125" font="Saint;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
+		<widget name="number_key_popup" transparent="0" zPosition="46" halign="center" valign="center" position="525,355" size="560,315" font="Saint;75" foregroundColor="#ffffff" backgroundColor="#00000000" />
 		<!-- buttons -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="20" position="770,670" size="32,32" alphatest="blend" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png" zPosition="8" position="1110,670" size="35,25" alphatest="blend" />
