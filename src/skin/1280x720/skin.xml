@@ -134,7 +134,7 @@
 		
     	<eLabel position="0,0" size="1280,720" zPosition="-1" backgroundColor="#90000000" transparent="0" />
     	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/DreamPlex_uni.png" position="0,0" zPosition="-1" size="1280,720" alphatest="blend" transparent="0" />
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/frame_backdrop.png" position="0,0" zPosition="48" size="1280,720" transparent="1" alphatest="blend" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/backdropFrame-fs8.png" position="542,345" zPosition="48" size="583,338" transparent="1" alphatest="blend" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/Cover.png" zPosition="50" position="90,380" size="240,292" alphatest="blend" transparent="0" />
     	
 		    	
@@ -150,23 +150,23 @@
         </widget>
     	<widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#454545" backgroundColor="#000000" transparent="1" valign="top">
            <convert type="ClockToText">Default</convert>
-        </widget>
+        </widget>x
         <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#454545" transparent="1">
            <convert type="ClockToText">Date</convert>
         </widget>
         
-		<widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" />
+		<widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png" />
         
-        <widget name="audio" position="646,630" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" />
+        <widget name="audio" position="676,630" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" />
         
-        <widget name="resolution" position="532,630" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" />
+        <widget name="resolution" position="562,630" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_1080.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/hd_720.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/sd.png" />
         
-        <widget name="aspect" position="905,626" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/2.35.png" />
+        <widget name="aspect" position="935,626" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/4_3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/wide.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/2.35.png" />
         
-        <widget name="codec"  position="978,626" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2.png" />
+        <widget name="codec"  position="1008,626" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2.png" />
         
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_dark.png" zPosition="83"  position="748,633" size="141,29" transparent="1" alphatest="blend" />
-        <widget name="rating_stars" zPosition="84" position="748,633" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" />
+        <widget name="rating_stars" zPosition="84" position="778,633" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" />
 		
 		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="545,94" size="657,170" font="Saint; 21" foregroundColor="#ffffff" backgroundColor="#000000" />
 		
@@ -189,7 +189,7 @@
 		
 		<widget name="poster" transparent="1" zPosition="49" position="121,389" size="195,268" alphatest="blend" />
 		
-		<widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
+		<widget name="mybackdrop" transparent="0" zPosition="45" position="555,355" size="560,315" alphatest="blend" />
 				
 		<widget name="number_key_popup" zPosition="10" halign="center" valign="center" position="551,297" size="177,125" font="Saint;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
 		<!-- buttons -->
