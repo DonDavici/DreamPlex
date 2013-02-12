@@ -169,7 +169,7 @@
         
         <widget name="codec"  position="978,626" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/vc1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/h.264.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg4.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mpeg2.png" />
         		
-        <widget name="rating_stars" zPosition="84" position="748,633" size="141,29" transparent="1" alphatest="on" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" />
+        <widget name="rating_stars" zPosition="84" position="748,633" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/five_stars_bright.png" />
 		
 		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="545,110" size="657,165" font="Saint; 21" foregroundColor="#ffffff" backgroundColor="#000000" />
 		
@@ -193,7 +193,7 @@
 		<widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend" />
 		
 		<widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
-				
+		<widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#00000000" />
 		<widget name="number_key_popup" zPosition="10" halign="center" valign="center" position="551,297" size="177,125" font="Saint;75" foregroundColor="#ffffff" backgroundColor="#20404040" />
 		<!-- buttons -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="20" position="770,670" size="32,32" alphatest="blend" />
