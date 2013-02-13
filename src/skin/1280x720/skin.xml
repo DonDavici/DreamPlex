@@ -159,7 +159,7 @@
            <convert type="ClockToText">Date</convert>
         </widget>
         
-		<widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" />
+		<widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG13.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_PG.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_R.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_NC-17.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/RATED_G.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/NOT_RATED.png" />
         
         <widget name="audio" position="646,630" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/dts1.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/ac3.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/stereo.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/mp3.png" />
         

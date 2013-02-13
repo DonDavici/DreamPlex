@@ -327,9 +327,13 @@ class DPS_ListView(DP_View):
 			found = True
 			self["rated"].setPixmapNum(3)
 		
-		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
+		elif mpaa == "DE/0" or mpaa == "G":
 			found = True
 			self["rated"].setPixmapNum(4)
+		
+		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
+			found = True
+			self["rated"].setPixmapNum(5)
 		
 		elif mpaa == "UNKNOWN" or mpaa == "UNKNOWN" or mpaa == "":
 			found = False
