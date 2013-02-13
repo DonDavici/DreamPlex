@@ -309,12 +309,12 @@ def _(txt):
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
-#localeInit()
-#initBoxInformation()
-#printGlobalSettings()
-#initPlexServerConfig()
-#checkPlexEnvironment()
-#registerPlexFonts()
-#loadPlexSkin()
-#loadPlexPlugins()
+localeInit()
+initBoxInformation()
+printGlobalSettings()
+initPlexServerConfig()
+checkPlexEnvironment()
+registerPlexFonts()
+loadPlexSkin()
+loadPlexPlugins()
 
