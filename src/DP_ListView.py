@@ -80,6 +80,10 @@ class DPS_ListView(DP_View):
 	itemsPerPage 			= 0
 	whatPoster 				= None
 	whatBackdrop 			= None
+	changePoster 			= True
+	changeBackdrop 			= True
+	resetPoster				= True
+	resetBackdrop			= True
 
 	#===========================================================================
 	# 
@@ -132,9 +136,6 @@ class DPS_ListView(DP_View):
 		self["genre"] 				= Label()
 		self["year"] 				= Label()
 		self["runtime"] 			= Label()
-		#self["studio"] 				= Label()
-		#self["director"] 			= Label()
-		#self["mpaa"] 				= Label()
 		self["total"] 				= Label()
 		self["current"] 			= Label()
 		self["backdroptext"]		= Label()
@@ -159,16 +160,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		printl("selection: " + str(selection), self, "D")
-		
-		# starting values
-		changePoster = True
-		changeBackdrop = True
-		
-		#self["key_red"].setText(_("Sort: ") + _("Default"))
-		#self["key_green"].setText(_("Filter: ") + _("None"))
-		#self["key_yellow"].setText("")
-		#self["key_blue"].setText(self.viewName[0])
-		
+
 		self.resetCurrentImages()
 		
 		if selection != None:
@@ -211,10 +203,10 @@ class DPS_ListView(DP_View):
 			self.handleNavigationData()
 			
 			# now lets switch images
-			if changePoster == True:
+			if self.changePoster == True:
 				self.showPoster()
 			
-			if changeBackdrop == True:
+			if self.changeBackdrop == True:
 				self.showBackdrop()
 			
 			self.showFunctions(False)
@@ -244,11 +236,6 @@ class DPS_ListView(DP_View):
 			self["txt_red"].show()
 			self["txt_green"].show()
 			self["txt_blue"].show()
-			#self["txt_red"].show()
-			#self["btn_red"].show()
-			#self["key_green"].show
-			#self["key_yellow"].show
-			#self["key_blue"].show
 		else:
 			self["functionsContainer"].hide()
 			self["btn_red"].hide()
@@ -257,11 +244,6 @@ class DPS_ListView(DP_View):
 			self["txt_red"].hide()
 			self["txt_green"].hide()
 			self["txt_blue"].hide()
-			#self["txt_red"].hide()
-			#self["btn_red"].show()
-			#self["key_green"].hide()
-			#self["key_yellow"].hide()
-			#self["key_blue"].hide()
 		
 		printl("", self, "C")
 	
@@ -346,7 +328,6 @@ class DPS_ListView(DP_View):
 			self["rated"].show()
 		else:
 			self["rated"].hide()
-		#, TV-MA, 
 		
 		printl("", self, "C")
 	
@@ -540,12 +521,20 @@ class DPS_ListView(DP_View):
 			self.startPlaybackNow = True
 			bname = self.details["ratingKey"]
 			pname = self.details["ratingKey"]
+			self.changeBackdrop = True
+			self.changePoster = True
+			self.resetPoster = True
+			self.resetBackdrop = True
 	
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			self.startPlaybackNow = False
+			self.changeBackdrop = True
+			self.changePoster = True
+			self.resetPoster = True
+			self.resetBackdrop = False
 			
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
@@ -553,6 +542,10 @@ class DPS_ListView(DP_View):
 			bname = self.parentSeasonId
 			pname = self.details["ratingKey"]
 			self.startPlaybackNow = False
+			self.changeBackdrop = False
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
 		
 		else:
 			bname = self.details["ratingKey"]
@@ -560,8 +553,11 @@ class DPS_ListView(DP_View):
 			if self.isTvShow is True:
 				pname = self.parentSeasonNr
 				# we dont want to have the same poster downloaded and used for each episode
-				changePoster = False
+				self.changePoster = False
+				self.changeBackdrop = True
 			else:
+				self.changeBackdrop = True
+				self.changePoster = True
 				pname = self.details["ratingKey"]
 			
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
@@ -685,8 +681,12 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		#self["poster"].instance.setPixmapFromFile(ptr)
-		self["mybackdrop"].instance.setPixmapFromFile(ptr)
+		
+		if self.resetPoster == True:
+			self["poster"].instance.setPixmapFromFile(ptr)
+		
+		if self.resetBackdrop == True:
+			self["mybackdrop"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
 		
