@@ -1025,15 +1025,15 @@ class PlexLibrary(Screen):
         printl("", self, "S")                
         printl("url = " + MYPLEX_SERVER + url_path, self, "D")
     
-        printl( "Starting request", self, "I")
+        printl( "Starting request", self, "D")
         curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url_path + "?X-Plex-Token=" + str(self.g_myplex_token))
         
         printl("curl_string: " + str(curl_string), self, "D", True, 10)
         response = os.popen(curl_string).read()
         
-        printl("====== XML returned =======", self, "I")
-        printl("link = " + str(response), self, "I")
-        printl("====== XML finished ======", self, "I")
+        printl("====== XML returned =======", self, "D")
+        printl("link = " + str(response), self, "D")
+        printl("====== XML finished ======", self, "D")
         
         #=======================================================================
         # try:
