@@ -369,7 +369,7 @@ class DPS_ListView(DP_View):
 			found = True
 			self["audio"].setPixmapNum(1)
 		
-		elif audio == "STEREO":
+		elif audio == "MP2":
 			found = True
 			self["audio"].setPixmapNum(2)
 			
