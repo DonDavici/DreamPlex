@@ -100,7 +100,7 @@ class DP_View(Screen, NumericalTextInput):
     ShowSeasonsParams = None
     ShowEpisodesParams = None
     
-    itemsPerPage = int(8)  # @TODO should be set according the desktop size
+    #itemsPerPage = int(8)  # @TODO should be set according the desktop size
     
     def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
         '''
@@ -845,25 +845,7 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        #if self.FAST_STILLPIC is False:
         self.refresh()
-        
-        printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
-    def onNextEntryQuick(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self["listview"].selectNext()
-        
-        if self.FAST_STILLPIC is False:
-            self.refresh(False)
-        else:
-            self.refresh()
         
         printl("", self, "C")
 
@@ -875,25 +857,7 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        #if self.FAST_STILLPIC is False:
         self.refresh()
-        
-        printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
-    def onPreviousEntryQuick(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self["listview"].selectPrevious()
-        
-        if self.FAST_STILLPIC is False:
-            self.refresh(False)
-        else:
-            self.refresh()
         
         printl("", self, "C")
 
@@ -904,10 +868,9 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-        
-        itemsPerPage = self.itemsPerPage
         itemsTotal = self["listview"].count()
-        index = self["listview"].getIndex() + itemsPerPage
+        index = self["listview"].getIndex()
+        
         if index >= itemsTotal:
             index = itemsTotal - 1
         self["listview"].setIndex(index)
@@ -922,10 +885,8 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-
-        itemsPerPage = self.itemsPerPage
-        #itemsTotal = self["listview"].count()
-        index = self["listview"].getIndex() - itemsPerPage
+        index = self["listview"].getIndex()
+        
         if index < 0:
             index = 0
         self["listview"].setIndex(index)
