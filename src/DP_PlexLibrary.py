@@ -1885,7 +1885,7 @@ class PlexLibrary(Screen):
         '''
         printl("", self, "S")
         printl("Gather media stream info", self, "I" ) 
-                
+        printl("server: " + str(server), self, "I" )    
         #get metadata for audio and subtitle
         suburl="http://"+server+"/library/metadata/"+id
                 
@@ -1896,7 +1896,7 @@ class PlexLibrary(Screen):
             tree = etree.fromstring(html)
         except Exception, e:
             self._showErrorOnTv("no xml as response", html)
-    
+            
         parts=[]
         partsCount=0
         subtitle={}

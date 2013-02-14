@@ -1172,12 +1172,9 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         media_id = selection[1]['ratingKey']
-
-        server = selection[2]['thumb']
-        instance = Singleton()
-        plexInstance = instance.getPlexInstance()
+        server = selection[1]['server']
         
-        self.playerData = plexInstance.playLibraryMedia(media_id, server, False)
+        self.playerData = Singleton().getPlexInstance().playLibraryMedia(media_id, server, False)
         
         resumeStamp = self.playerData['resumeStamp']
         printl("resumeStamp: " + str(resumeStamp), self, "I")
