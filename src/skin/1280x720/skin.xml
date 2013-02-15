@@ -267,83 +267,46 @@
     <widget name="number_key_popup" zPosition="4" halign="center" valign="center" position="556,188" size="177,125" font="Saint;75" foregroundColor="#00ffffff" backgroundColor="#20404040" />
   </screen>
 	
-	<screen name="PVRState" position="180,100" size="850,325" zPosition="10" backgroundColor="#ffffffff" flags="wfNoBorder" >
-        <widget name="state" position="85,135" size="750,250" font="Saint;175" halign="center" valign="center" transparent="1" backgroundColor="#dfffffff" foregroundColor="#dfffffff" /> 
+    <!-- DPS_PlexPlayer -->
+    <screen name="DPS_PlexPlayer" position="70,600" size="1140,80" title="InfoBar" flags="wfNoBorder">
+        <ePixmap position="0,0" zPosition="-1" size="1140,80" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/infobarmovie.png" />
+        <ePixmap zPosition="-1" position="625,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
+        <ePixmap zPosition="-1" position="15,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
+        
+        <widget source="session.CurrentService" render="Label" position="15, 5" size="260,28" font="Regular;26" valign="top" noWrap="1" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+            <convert type="ServiceName">Name</convert>
+        </widget>
+       
+        <widget source="global.CurrentTime" render="Label" position="280,12" size=" 80,25" font="Regular;23" halign="right" backgroundColor="#00000000" foregroundColor="#00404040" transparent="1">
+            <convert type="ClockToText">Default</convert>
+        </widget>
+       
+        <widget source="global.CurrentTime" render="Label" position="375,12" size="140,25" font="Regular;23" halign="right" backgroundColor="#00000000" foregroundColor="#00404040" transparent="1">
+            <convert type="ClockToText">Format:%d.%m.%Y</convert>
+        </widget>
+        
+        
+        <widget source="session.CurrentService" render="Progress" position="15,40" size="500,8" zPosition="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" transparent="1">
+            <convert type="ServicePosition">Position</convert>
+        </widget>
+        
+        <widget source="session.CurrentService" render="PositionGauge" position="15,40" size="500,10" zPosition="2" transparent="1">
+            <convert type="ServicePosition">Gauge</convert>
+        </widget>
+        
+        <widget source="session.CurrentService" render="Label" position=" 15,48" size="120,28" font="Regular;24" halign="left" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+            <convert type="ServicePosition">Position</convert>
+        </widget>
+        
+        <widget source="session.CurrentService" render="Label" position="395,48" size="120,28" font="Regular;24" halign="right" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+            <convert type="ServicePosition">Remaining</convert>
+        </widget>
+        
+        <widget source="session.CurrentService" render="Label" position=" 200,48" size="135,24" font="Regular;22" halign="center" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+            <convert type="ServicePosition">Length</convert>
+        </widget>
+        
+        <widget name="bufferslider" position="625,40" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
+        <widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="625,5"  size="250,28" font="Regular;23" backgroundColor="#00000000" foregroundColor="#00404040" />
     </screen>
-	
-	
-	<!-- DPS_PlexPlayer -->
-	<screen name="DPS_PlexPlayer" position="0,0" size="1283,723" title="InfoBar" flags="wfNoBorder">
-		<ePixmap position="0,570" zPosition="-2" size="1281,150" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" />
-		<ePixmap position="0,0" zPosition="-2" size="1281,90" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back.png" />
-		
-        <widget source="session.CurrentService" render="Label" position="30,438" size="1250,256" font="Saint; 140" valign="top" noWrap="1" backgroundColor="#dfffffff" transparent="1" foregroundColor="#dfffffff" zPosition="-99">
-          <convert type="ServiceName">Name</convert>
-        </widget>
-		
-		<widget source="global.CurrentTime" render="Label" position="1086,24" size="169,80" font="Saint; 60" halign="left" backgroundColor="#00040404" transparent="1" valign="top">
-          <convert type="ClockToText">Default</convert>
-        </widget>
-        
-		<widget source="global.CurrentTime" render="Label" position="926,60" size="148,29" font="Saint; 20" halign="right" backgroundColor="#00040404" foregroundColor="#5C5C5C" transparent="1">
-          <convert type="ClockToText">Format:%e. %B</convert>
-        </widget>
-        
-		<widget source="global.CurrentTime" render="Label" position="949,32" size="125,30" font="Saint; 20" halign="right" backgroundColor="#00040404" foregroundColor="#5C5C5C" transparent="1">
-          <convert type="ClockToText">Format:%A</convert>
-        </widget>
-			
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_dolby_off.png" position="1051,656" size="64,23" zPosition="1" alphatest="blend" />
-        <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_dolby_on.png" position="1051,656" size="64,23" zPosition="2" alphatest="blend">
-          <convert type="ServiceInfo">IsMultichannel</convert>
-          <convert type="ConditionalShowHide" />
-        </widget>
-        
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_format_off.png" position="1127,655" size="41,26" zPosition="1" alphatest="blend" />
-        <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_format_on.png" position="1127,655" size="41,26" zPosition="2" alphatest="blend">
-          <convert type="ServiceInfo">IsWidescreen</convert>
-          <convert type="ConditionalShowHide" />
-        </widget>
-        
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_hd_off.png" position="1188,657" size="49,24" zPosition="1" alphatest="blend" />
-        <widget source="session.CurrentService"  render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/ico_hd_on.png" position="1188,657" size="49,24" zPosition="2" alphatest="blend">
-          <convert type="ServiceInfo">VideoWidth</convert>
-          <convert type="ValueRange">721,1980</convert>
-          <convert type="ConditionalShowHide" />
-        </widget>
-        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1070,616" size="55,25" halign="right" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1">
-          <convert type="ServiceInfo">VideoWidth</convert>
-        </widget>
-        
-		<eLabel text="x" font="Saint; 20" position="1129,616" size="15,25" halign="center" foregroundColor="#5C5C5C2" backgroundColor="#000000" transparent="1" />
-        <widget source="session.CurrentService" render="Label" font="Saint; 20" position="1146,616" size="55,25" halign="left" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1">
-          <convert type="ServiceInfo">VideoHeight</convert>
-        </widget>
-        		       
-		<widget source="session.CurrentService" render="Label" position="40,696" size="100,28" font="Saint;24" halign="right" valign="center" backgroundColor="#40000000" shadowColor="#000000" shadowOffset="-1,-1" transparent="1">
-          <convert type="ServicePosition">Position</convert>
-        </widget>
-        
-		<widget source="session.CurrentService" render="PositionGauge" position="153,676" size="980,25" transparent="1">
-          <convert type="ServicePosition">Gauge</convert>
-        </widget>
-        
-		<widget source="session.CurrentService" render="Progress" position="150,709" size="980,3" backgroundColor="#ffffff" borderWidth="0" transparent="1">
-          <convert type="ServicePosition">Position</convert>
-        </widget>
-        
-		<widget source="session.CurrentService" render="Label" position="1138,697" size="100,28" font="Saint;24" halign="left" valign="center" backgroundColor="#40000000" transparent="1">
-          <convert type="ServicePosition">Remaining</convert>
-        </widget>
-        
-		<widget source="session.CurrentService" render="Label" position="3,621" size="137,56" font="Saint; 40" halign="right" valign="top" backgroundColor="#40000000" transparent="1" foregroundColor="#5C5C5C">
-          <convert type="ServicePosition">Length</convert>
-        </widget>
-		
-		<eLabel name="new eLabel" position="center,710" size="980,1" backgroundColor="#5C5C5C" foregroundColor="#5C5C5C" zPosition="-1" />
-		
-		<widget name="bufferslider" position="55,69" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
-		<widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="55,32"  size="250,28" font="Saint;25" backgroundColor="#00040404" foregroundColor="#5C5C5C" />
-		
-	</screen>
 </skins>
