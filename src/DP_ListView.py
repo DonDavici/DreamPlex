@@ -788,13 +788,15 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		desktop = getDesktop(0).size().width()
-		if desktop == 720:
-			self.itemsPerPage = int(12)
-		elif desktop == 1024:
-			self.itemsPerPage = int(12)
-		elif desktop == 1280:
-			self.itemsPerPage = int(6)
+		#=======================================================================
+		# desktop = getDesktop(0).size().width()
+		# if desktop == 720:
+		#	self.itemsPerPage = int(12)
+		# elif desktop == 1024:
+		#	self.itemsPerPage = int(12)
+		# elif desktop == 1280:
+		#=======================================================================
+		self.itemsPerPage = int(6)
 			
 		printl("", self, "C")
 		

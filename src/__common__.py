@@ -317,12 +317,14 @@ def loadPlexSkin():
 	
 	skin = None
 	desktop = getDesktop(0).size().width()
-	if desktop == 720:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/skin.xml"
-	elif desktop == 1024:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1024x576/skin.xml"
-	elif desktop == 1280:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/skin.xml"
+	#===========================================================================
+	# if desktop == 720:
+	#	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/720x576/skin.xml"
+	# elif desktop == 1024:
+	#	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1024x576/skin.xml"
+	# elif desktop == 1280:
+	#===========================================================================
+	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/skin.xml"
 	
 	if skin:
 		loadSkin(skin)
