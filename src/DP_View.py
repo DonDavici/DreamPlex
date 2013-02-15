@@ -55,7 +55,7 @@ def getViews():
     availableViewList = []
     viewList = (
             (_("List"), "DP_ListView", "DPS_ListView"), 
-            (_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
+            #(_("Poster-Flow"), "DP_PosterView", "DPS_PosterView"), 
         )
     
     for view in viewList:
