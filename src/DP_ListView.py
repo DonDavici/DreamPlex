@@ -108,18 +108,15 @@ class DPS_ListView(DP_View):
 		# init skin elements
 		self["functionsContainer"]  = Label()
 		
-		self["btn_red"] = Pixmap()
+		self["btn_red"]  = Pixmap()
 		self["btn_blue"] = Pixmap()
-		self["btn_green"] = Pixmap()
+		self["btn_zero"] = Pixmap()
+		self["btn_nine"] = Pixmap()
 		
-		self["txt_red"] = Label()
-		self["txt_red"].setText(_("Sort: ") + _("Default"))
-		
-		self["txt_green"] = Label()
-		self["txt_green"].setText(_("Filter: ") + _("None"))
-		
-		self["txt_blue"] = Label()
-		self["txt_blue"].setText(_("View: ") + _("Default"))
+		self["txt_red"]     = Label()
+		self["txt_filter"]  = Label()
+		self["txt_blue"]    = Label()
+		self["txt_blue"].setText(_("toogle View ") + _("(current 'Default')"))
 		
 		self["poster"] 				= Pixmap()
 		self["mybackdrop"] 			= Pixmap()
@@ -231,19 +228,21 @@ class DPS_ListView(DP_View):
 		if visible:
 			self["functionsContainer"].show()
 			self["btn_red"].show()
-			self["btn_green"].show()
 			self["btn_blue"].show()
 			self["txt_red"].show()
-			self["txt_green"].show()
+			self["txt_filter"].show()
 			self["txt_blue"].show()
+			self["btn_zero"].show()
+			self["btn_nine"].show()
 		else:
 			self["functionsContainer"].hide()
 			self["btn_red"].hide()
-			self["btn_green"].hide()
 			self["btn_blue"].hide()
 			self["txt_red"].hide()
-			self["txt_green"].hide()
+			self["txt_filter"].hide()
 			self["txt_blue"].hide()
+			self["btn_zero"].hide()
+			self["btn_nine"].hide()
 		
 		printl("", self, "C")
 	
@@ -598,7 +597,7 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		text = "Sorted by: %s" % (_(self.activeSort[0]))
+		text = "toogle Sorting (sorted %s)" % (_(self.activeSort[0]))
 		self["txt_red"].setText(text)
 		super(getViewClass(), self).sort()
 		
@@ -614,12 +613,12 @@ class DPS_ListView(DP_View):
 		
 		if len(self.activeFilter[2]) > 0:
 			#text = "%s: %s" % (_("Filter"), _(self.activeFilter[2])) #To little space
-			text = "%s" % (_(self.activeFilter[2]))
+			text = "set Filter (set to '%s')" % (_(self.activeFilter[2]))
 		else:
 			#text = "%s: %s" % (_("Filter"), _(self.activeFilter[0])) #To little space
-			text = "%s" % (_(self.activeFilter[0]))
+			text = "set Filter (set to '%s')" % (_(self.activeFilter[0]))
 
-		self["txt_green"].setText(text)
+		self["txt_filter"].setText(text)
 		super(getViewClass(), self).filter()
 		
 		printl("", self, "C")
@@ -833,10 +832,13 @@ class DPS_ListView(DP_View):
 		ptr_red = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png"
 		self["btn_red"].instance.setPixmapFromFile(ptr_red)
 		
-		ptr_green = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png"
-		self["btn_green"].instance.setPixmapFromFile(ptr_green)
-		
 		ptr_blue = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png"
 		self["btn_blue"].instance.setPixmapFromFile(ptr_blue)
+		
+		ptr_zero = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png"
+		self["btn_zero"].instance.setPixmapFromFile(ptr_zero)
+		
+		ptr_nine = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_9.png"
+		self["btn_nine"].instance.setPixmapFromFile(ptr_nine)
 		
 		printl("", self, "C")
