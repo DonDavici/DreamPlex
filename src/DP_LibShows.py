@@ -89,7 +89,7 @@ class DP_LibShows(DP_LibMain):
 
 			library = Singleton().getPlexInstance().getSeasonsOfShow(url)
 			
-			sort = (("by title", None, False), )
+			sort = (("by season", "season", False), )
 			
 			filter = [("All", (None, False), ("", )), ]
 			

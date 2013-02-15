@@ -1053,9 +1053,11 @@ class DP_View(Screen, NumericalTextInput):
         
         try:
             if self.activeSort[1] is None:
+                printl("sorting by default", self, "D")
                 self.listViewList.sort(key=lambda x: x[0], reverse=self.activeSort[2])
             else:
-                self.listViewList.sort(key=lambda x: x[1][self.activeSort[1]], reverse=self.activeSort[2])
+                printl("sorting by value in selection", self, "D")
+                self.listViewList.sort(key=int(lambda x: x[1][self.activeSort[1]], reverse=self.activeSort[2]))
         except Exception, ex:
             printl("Exception(" + str(ex) + ")", self, "E")
             

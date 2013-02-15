@@ -1632,10 +1632,7 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        #=======================================================================
-        # xbmcplugin.setContent(pluginhandle, 'seasons')
-        #=======================================================================
-    
+        printl("hab dich: " + str(url), self, "S")
         #Get URL, XML and parse
         server=self.getServerFromURL(url)
         html=self.getURL(url)
@@ -1677,6 +1674,7 @@ class PlexLibrary(Screen):
             details["viewMode"]                 = "ShowEpisodes"
             details['ratingKey']                = str(season.get('ratingKey', 0)) # primary key in plex
             details['summary']                  = season.get('summary','')
+            details['season']                   = season.get('index','0')
             details['title']                    = season.get('title','').encode('utf-8')
             details['episode']                  = int(season.get('leafCount',0))
             details['rating']                   = season.get('rating', 0)
