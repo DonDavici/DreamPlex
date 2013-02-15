@@ -600,6 +600,7 @@ class DPS_ListView(DP_View):
 		text = "toogle Sorting (sorted %s)" % (_(self.activeSort[0]))
 		self["txt_red"].setText(text)
 		super(getViewClass(), self).sort()
+		self.areFunctionsHidden = True
 		
 		printl("", self, "C")
 
