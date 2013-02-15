@@ -1049,22 +1049,11 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-        
-        self._sort()
-        
-        printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
-    def _sort(self):
-        '''
-        '''
-        printl("", self, "S")
+        printl("listViewList: " + str(self.listViewList), self, "D")
         
         try:
             if self.activeSort[1] is None:
-                self.listViewList.sort(key=lambda x: x[2], reverse=self.activeSort[2])
+                self.listViewList.sort(key=lambda x: x[0], reverse=self.activeSort[2])
             else:
                 self.listViewList.sort(key=lambda x: x[1][self.activeSort[1]], reverse=self.activeSort[2])
         except Exception, ex:
@@ -1076,18 +1065,6 @@ class DP_View(Screen, NumericalTextInput):
     # 
     #===========================================================================
     def filter(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self._filter()
-        
-        printl("", self, "C")
-
-    #===========================================================================
-    # 
-    #===========================================================================
-    def _filter(self):
         '''
         '''
         printl("", self, "S")
@@ -1121,6 +1098,9 @@ class DP_View(Screen, NumericalTextInput):
     #===========================================================================
     def setText(self, name, value, ignore=False, what=None):
         '''
+        
+        @todo: lets check this. seems to be some kind of too much
+        
         '''
         printl("", self, "S")
         

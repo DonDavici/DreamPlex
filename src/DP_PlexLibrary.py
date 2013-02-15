@@ -1621,7 +1621,7 @@ class PlexLibrary(Screen):
             content = self.addGUIItem(u,details,extraData, context, seenVisu)
 
             fullList.append(content)
-
+            
         printl("", self, "C")
         return fullList, self.tmpAbc , self.tmpGenres
  

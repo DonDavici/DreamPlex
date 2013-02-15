@@ -66,7 +66,7 @@ class DP_LibMovies(DP_LibMain):
 		library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 		# sort
-		sort = [("by title", "title", False), ("by year", "year", True), ("by rating", "rating", True), ]
+		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
 		filter = [("All", (None, False), ("", )), ]
 		

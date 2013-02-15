@@ -68,7 +68,7 @@ class DP_LibShows(DP_LibMain):
 			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
 
 			# sort
-			sort = [("by title", "title", False), ("by year", "year", True), ("by rating", "rating", True), ]
+			sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 			
 			filter = [("All", (None, False), ("", )), ]
 			
@@ -89,7 +89,7 @@ class DP_LibShows(DP_LibMain):
 
 			library = Singleton().getPlexInstance().getSeasonsOfShow(url)
 			
-			sort = (("Title", None, False), )
+			sort = (("by title", None, False), )
 			
 			filter = [("All", (None, False), ("", )), ]
 			
@@ -106,7 +106,7 @@ class DP_LibShows(DP_LibMain):
 			
 			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 
-			sort = [("Title", None, False), ]
+			sort = [("by title", None, False), ]
 			
 			filter = [("All", (None, False), ("", )), ]
 			
