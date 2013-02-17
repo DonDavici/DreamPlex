@@ -163,10 +163,6 @@ def writeToLog(dmode, out):
 	@return: none
 	'''
 	try:
-		#=======================================================================
-		# if gLogFile is None:
-		#	openLogFile()
-		#=======================================================================
 		instance = Singleton()
 		if instance.getLogFileInstance() is "":
 			openLogFile()
