@@ -71,16 +71,12 @@ config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
-#config.plugins.dreamplex.airplayerPremiumKey		   = ConfigText(default = "", visible_width = 50, fixed_size = False)
-
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useQuicktimeUserAgent		= ConfigYesNo(default = True)
-config.plugins.dreamplex.setBufferSize 				= ConfigYesNo(default = True)
 config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
 
-config.plugins.dreamplex.bufferSize 				= ConfigNumber(default = 8)
 config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
