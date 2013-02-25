@@ -706,7 +706,11 @@ class DPS_ListView(DP_View):
 			if self.whatPoster is not None:
 				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
 				ptr = self.EXpicloadPoster.getData()
-				self["poster"].instance.setPixmap(ptr.__deref__())
+				
+				if ptr is not None:
+					self["poster"].instance.setPixmap(ptr.__deref__())
+				else:
+					self.setText("postertext", "")
 		else:
 			self.setText("postertext", "downloading ...")
 			self.downloadPoster()
@@ -730,7 +734,11 @@ class DPS_ListView(DP_View):
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
 				ptr = self.EXpicloadBackdrop.getData()
-				self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+				
+				if ptr is not None:
+					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+				else:
+					self.setText("postertext", "")
 		else:
 			self.setText("backdroptext", "downloading ...")
 			self.downloadBackdrop()
