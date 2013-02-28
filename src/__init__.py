@@ -71,6 +71,7 @@ config.plugins.dreamplex.showInMainMenu	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   = ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      = ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
+config.plugins.dreamplex.fastScroll		   = ConfigYesNo(default = False)
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
@@ -131,7 +132,7 @@ def printGlobalSettings():
 	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::initGlobalSettings", "I")
 	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
-	#printl("airplayerPremiumKey: " + str(config.plugins.dreamplex.airplayerPremiumKey.value), "__init__::initGlobalSettings", "I")
+	printl("fastScroll: " + str(config.plugins.dreamplex.fastScroll.value), "__init__::initGlobalSettings", "I")
 
 	printl("", "__init__::initPlexSettings", "C")
 

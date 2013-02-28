@@ -148,6 +148,7 @@ class PlexLibrary(Screen):
     g_connectionType = None
     g_showForeign = True
     g_address = None # is later the combination of g_host : g_port
+    g_playbackType = None
     g_stream = "0" # 0 = linux local mount override, 1 = Selecting stream, 2 = smb/unc override 3 = transcode!?!?!
     g_secondary = "true" # show filter for media
     g_streamControl = "3" # 1 unknown, 2 = unknown, 3 = All subs disabled
@@ -155,7 +156,7 @@ class PlexLibrary(Screen):
     g_flatten = "0" # 0 = show seasons, 1 = show all
     g_playtheme = "false"
     g_forcedvd = "false"
-    g_skipcontext = "true" # best understanding when looking getMoviesfromsection
+    g_skipcontext = "false" # best understanding when looking getMoviesfromsection
     g_skipmetadata = "false" # best understanding when looking getMoviesfromsection
     g_skipmediaflags = "false" # best understanding when looking getMoviesfromsection
     g_skipimages = "false"
@@ -213,25 +214,27 @@ class PlexLibrary(Screen):
         self.g_port = str(serverConfig.port.value)
         self.g_quality = str(serverConfig.quality.value)
         self.g_myplex_token = str(serverConfig.myplexToken.value)
+        self.g_playbackType = serverConfig.playbackType.value
         
         # PLAYBACK TYPES
-        if serverConfig.playbackType.value == "0": # STREAMED
+        if self.g_playbackType == "0": # STREAMED
             self.g_stream = "1"
             self.g_transcode = "false"
         
-        elif serverConfig.playbackType.value == "1": # TRANSCODED
+        elif self.g_playbackType == "1": # TRANSCODED
             self.g_stream = "1"
             self.g_transcode = "true"
-
+            
+            printl("using transcode: " +  self.g_transcode, self, "I")
             printl("using this transcoding quality: " +  self.g_quality, self, "I")
         
-        elif serverConfig.playbackType.value == "2": # DIRECT LOCAL
+        elif self.g_playbackType == "2": # DIRECT LOCAL
             self.g_stream = "0"
             self.g_transcode = "true"
             self.g_remotePathPart = serverConfig.remotePathPart.value
             self.g_localPathPath = serverConfig.localPathPart.value
         
-        elif serverConfig.playbackType.value == "3": # DIRECT REMOTE
+        elif self.g_playbackType == "3": # DIRECT REMOTE
             self.g_stream = "2"
             self.g_transcode = "false"
             self.g_nasoverride = "false"
@@ -247,7 +250,6 @@ class PlexLibrary(Screen):
                 printl("DreamPlex -> NAS IP: " + self.g_nasoverrideip, self, "I")
                 self.g_nasoverride = "true"
         
-        printl("using transcode: " +  self.g_transcode, self, "I")
         printl("using this debugMode: " + str(config.plugins.dreamplex.debugMode.value), self, "D")
         printl("using this serverName: " +  self.g_name, self, "I") 
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
@@ -2125,6 +2127,7 @@ class PlexLibrary(Screen):
         playerData["resumeStamp"] = resume
         playerData["server"] = server
         playerData["id"] = id
+        playerData["playbackType"] =self.g_playbackType
         playerData["transcodingSession"] = self.g_sessionID
         playerData["videoData"] = streams['videoData']
         playerData["mediaData"] = streams['mediaData']
@@ -4069,38 +4072,34 @@ class PlexLibrary(Screen):
         '''
         '''
         printl("", self, "S")
-        context=[]
+        context={}
         server=self.getServerFromURL(url)
-        refreshURL=url.replace("/all", "/refresh")
-        plugin_url="XBMC.RunScript("+self.g_loc+"/default.py, "
         ID=itemData.get('ratingKey','0')
     
         #Initiate Library refresh 
-        libraryRefresh = plugin_url+"update, " + refreshURL.split('?')[0]+self.getAuthDetails(itemData,prefix="?") + ")"
-        context.append(('Rescan library section', libraryRefresh , ))
+        refreshURL=url.replace("/all", "/refresh")
+        libraryRefreshURL = refreshURL.split('?')[0]+self.getAuthDetails(itemData,prefix="?")
+        context['libraryRefreshURL'] = libraryRefreshURL
         
         #Mark media unwatched
-        unwatchURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
-        unwatched=plugin_url+"watch, " + unwatchURL + ")"
-        context.append(('Mark as Unwatched', unwatched , ))
+        unwatchedURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+        context['unwatchURL'] = unwatchedURL
                 
         #Mark media watched        
-        watchURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
-        watched=plugin_url+"watch, " + watchURL + ")"
-        context.append(('Mark as Watched', watched , ))
+        watchedURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+        context['watchedURL'] = watchedURL
     
         #Delete media from Library
         deleteURL="http://"+server+"/library/metadata/"+ID+self.getAuthDetails(itemData)
-        removed=plugin_url+"delete, " + deleteURL + ")"
-        context.append(('Delete media', removed , ))
+        context['deleteURL'] = deleteURL
     
         #Display plugin setting menu
-        settingDisplay=plugin_url+"setting)"
-        context.append(('DreamPlex settings', settingDisplay , ))
+        #settingDisplay=plugin_url+"setting)"
+        #context.append(('DreamPlex settings', settingDisplay , ))
     
         #Reload media section
-        listingRefresh=plugin_url+"refresh)"
-        context.append(('Reload Section', listingRefresh , ))
+        #listingRefresh=plugin_url+"refresh)"
+        #context.append(('Reload Section', listingRefresh , ))
     
         printl("Using context menus " + str(context), self, "I")
         

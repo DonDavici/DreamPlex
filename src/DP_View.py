@@ -99,6 +99,7 @@ class DP_View(Screen, NumericalTextInput):
     
     ShowSeasonsParams = None
     ShowEpisodesParams = None
+    showMedia = False
     
     #itemsPerPage = int(8)  # @TODO should be set according the desktop size
     
@@ -147,8 +148,8 @@ class DP_View(Screen, NumericalTextInput):
             "up":         (self.onKeyUp, ""),
             "down":       (self.onKeyDown, ""),
             "info":       (self.onKeyInfo, ""),
-            #"menu":       (self.onKeyMenu, ""),
-
+            "menu":       (self.onKeyMenu, ""),
+            "video":      (self.onKeyVideo, ""),
             "red":        (self.onKeyRed, ""),
             #"green":      (self.onKeyGreen, ""),
             "yellow":     (self.onKeyYellow, ""),
@@ -490,6 +491,16 @@ class DP_View(Screen, NumericalTextInput):
         printl("", self, "S")
         
         self.displayOptionsMenu()
+        
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def onKeyVideo(self):
+        '''
+        '''
+        printl("", self, "S")
         
         printl("", self, "C")
 
@@ -1125,7 +1136,7 @@ class DP_View(Screen, NumericalTextInput):
     #===========================================================================
     # 
     #===========================================================================
-    def refresh(self, changeBackdrop=True):
+    def refresh(self):
         '''
         '''
         printl("", self, "S")
@@ -1222,10 +1233,60 @@ class DP_View(Screen, NumericalTextInput):
         
         printl("", self, "C")
 
+    
     #===========================================================================
     # 
     #===========================================================================
     def displayOptionsMenu(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        functionList = []
+        
+        functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
+        functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
+        functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
+        functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
+        
+        self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
+            title=_("Media Functions"), list=functionList)
+        
+        printl("", self, "C")
+    
+    
+    def markUnwatched(self, unused=None, unused2=None):
+        '''
+        '''
+        printl("", self, "S")
+        
+        printl("", self, "C")
+    
+    def markWatched(self, unused=None, unused2=None):
+        '''
+        '''
+        printl("", self, "S")
+        
+        printl("", self, "C")
+    
+    def initiateRefresh(self, unused=None, unused2=None):
+        '''
+        '''
+        printl("", self, "S")
+        
+        printl("", self, "C")
+    
+    def deleteFromLibrary(self, unused=None, unused2=None):
+        '''
+        '''
+        printl("", self, "S")
+        
+        printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def displayViewMenu(self):
         '''
         '''
         printl("", self, "S")

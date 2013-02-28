@@ -198,26 +198,25 @@
 		<widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#000000" />
 		<widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000" />
 		
-		<widget name="txt_red" transparent="1" zPosition="50" halign="left" valign="top" position="700,454" size="400,32" font="Saint; 24" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-		<widget name="btn_red" transparent="0" zPosition="50" position="645,450" size="32,32"/>
+		<widget name="txt_red" transparent="1" zPosition="50" halign="left" valign="top" position="700,384" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
+		<widget name="btn_red" transparent="0" zPosition="50" position="645,380" size="32,32"/>
 		
-		<widget name="txt_blue" transparent="1" zPosition="50" halign="left" valign="top" position="700,494" size="400,32" font="Saint; 24" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-		<widget name="btn_blue" transparent="0" zPosition="50" position="645,490" size="32,32"/>
+		<widget name="txt_blue" transparent="1" zPosition="50" halign="left" valign="top" position="700,424" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
+		<widget name="btn_blue" transparent="0" zPosition="50" position="645,420" size="32,32"/>
 		
-		<widget name="txt_filter" transparent="1" zPosition="50" halign="left" valign="top" position="700,534" size="400,32" font="Saint; 24" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-		<widget name="btn_zero" alphatest="blend" zPosition="50" position="622,537" size="35,25" backgroundColor="#000000"/>
-		<widget name="btn_nine" alphatest="blend" zPosition="50" position="655,537" size="35,25" backgroundColor="#000000"/>
+		<widget name="txt_yellow" transparent="1" zPosition="50" halign="left" valign="top" position="700,464" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
+		<widget name="btn_yellow" transparent="0" zPosition="50" position="645,460" size="32,32"/>
 		
-		<!--widget name="txt_menu" transparent="1" zPosition="50" halign="left" valign="top" position="700,510" size="300,25" font="Saint; 20" foregroundColor="#ffffff"  backgroundColor="#000000"/-->
-        <!--widget name="btn_menu" transparent="0" zPosition="50" position="650,510" size="32,32"/-->
+		<widget name="txt_filter" transparent="1" zPosition="50" halign="left" valign="top" position="700,504" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
 		
-		<!-- buttons -->
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" zPosition="20" position="770,670" size="32,32" alphatest="blend" /-->
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png" zPosition="8" position="1110,670" size="35,25" alphatest="blend" /-->
-		<!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_9.png" zPosition="8" position="1150,670" size="35,25" alphatest="blend" /-->
+		<widget name="btn_zero" alphatest="blend" zPosition="50" position="622,507" size="35,25" backgroundColor="#000000"/>
+		<widget name="btn_nine" alphatest="blend" zPosition="50" position="655,507" size="35,25" backgroundColor="#000000"/>
 		
-		<!-- functions -->
-		<!--widget source="key_red" render="Label" position="780,665" zPosition="8" size="231,37" font="Saint;24" halign="center" valign="center" transparent="1" /-->
+		<widget name="txt_menu" transparent="1" zPosition="50" halign="left" valign="top" position="700,544" size="300,25" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
+        <widget name="btn_menu" transparent="0" zPosition="50" position="625,540" size="70,30"/>
+		
+		<widget name="txt_pvr" transparent="1" zPosition="50" halign="left" valign="top" position="700,584" size="300,25" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
+        <widget name="btn_pvr" transparent="0" zPosition="50" position="625,580" size="70,30"/>
 
 	</screen>
 

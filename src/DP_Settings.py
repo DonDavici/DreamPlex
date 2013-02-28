@@ -75,9 +75,8 @@ class DPS_Settings(Screen, ConfigListScreen):
                 getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")),
                 getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
                 getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")),
-                getConfigListEntry(_("Plex Player Buffer Size (in MB)"), config.plugins.dreamplex.bufferSize, _("fill me")),
                 getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")),
-                #getConfigListEntry(_("Airplayer Premium Key (for Proxy)"), config.plugins.dreamplex.airplayerPremiumKey, _("fill me")),
+                getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")),
                 
             ],
             session = self.session,
