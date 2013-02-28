@@ -74,7 +74,6 @@ config.plugins.dreamplex.playTheme         = ConfigYesNo(default = False)
 
 config.plugins.dreamplex.stopTVOnPicture			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
-config.plugins.dreamplex.useQuicktimeUserAgent		= ConfigYesNo(default = True)
 config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
 
 config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
@@ -130,10 +129,7 @@ def printGlobalSettings():
 	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::initGlobalSettings", "I")
 	printl("stopTVOnPicture: " + str(config.plugins.dreamplex.stopTVOnPicture.value), "__init__::initGlobalSettings", "I")
 	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::initGlobalSettings", "I")
-	printl("useQuicktimeUserAgent: " + str(config.plugins.dreamplex.useQuicktimeUserAgent.value), "__init__::initGlobalSettings", "I")
-	printl("setBufferSize: " + str(config.plugins.dreamplex.setBufferSize.value), "__init__::initGlobalSettings", "I")
 	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
-	printl("bufferSize: " + str(config.plugins.dreamplex.bufferSize.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
 	#printl("airplayerPremiumKey: " + str(config.plugins.dreamplex.airplayerPremiumKey.value), "__init__::initGlobalSettings", "I")
 
