@@ -7,7 +7,7 @@
 	    	    			
 		 <widget source="menu" render="Listbox" position="57,232" size="430,400" scrollbarMode="showNever" zPosition="4" foregroundColor="#5C5C5C" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/content_panel-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png">
            <convert type="TemplatedMultiContent">
-           {"template": [ MultiContentEntryText(pos = (10, 14), size = (430, 50), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 31)], "itemHeight": 64 }
+           {"template": [ MultiContentEntryText(pos = (10, 14), size = (430, 50), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 28)], "itemHeight": 50 }
            </convert>
          </widget>
 	     
@@ -213,10 +213,10 @@
 		<widget name="btn_nine" alphatest="blend" zPosition="50" position="655,507" size="35,25" backgroundColor="#000000"/>
 		
 		<widget name="txt_menu" transparent="1" zPosition="50" halign="left" valign="top" position="700,544" size="300,25" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-        <widget name="btn_menu" transparent="0" zPosition="50" position="625,540" size="70,30"/>
+        <widget name="btn_menu" alphatest="blend" zPosition="50" position="625,540" size="70,30" backgroundColor="#000000"/>
 		
 		<widget name="txt_pvr" transparent="1" zPosition="50" halign="left" valign="top" position="700,584" size="300,25" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-        <widget name="btn_pvr" transparent="0" zPosition="50" position="625,580" size="70,30"/>
+        <widget name="btn_pvr" alphatest="blend" zPosition="50" position="625,580" size="70,30" backgroundColor="#000000"/>
 
 	</screen>
 
