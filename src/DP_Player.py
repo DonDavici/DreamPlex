@@ -465,44 +465,6 @@ class DP_Player(MoviePlayer):
     #===========================================================================
     # 
     #===========================================================================
-    def formatKBits(self, value, ending="Bit/s", roundNumbers=2):
-        '''
-        '''
-        #printl("", self, "S")
-        
-        bits = value * 8
-        
-        if bits > (1024*1024):
-            return str(    round(float(bits)/float(1024*1024),roundNumbers)  )+" M"+ending
-        if bits > 1024:
-            return str(    round(float(bits)/float(1024),roundNumbers)       )+" K"+ending
-        else:
-            return str(bits)+" "+ending
-        
-        #printl("", self, "C")
-    
-    #===========================================================================
-    # 
-    #===========================================================================
-    def formatKB(self, value, ending="B", roundNumbers=2):
-        '''
-        '''
-        #printl("", self, "S")
-        
-        byte = value
-
-        if byte > (1024*1024):
-            return str(    round(float(byte)/float(1024*1024),roundNumbers) ) +" M"+ending
-        if byte > 1024:
-            return str(    round(float(byte)/float(1024),roundNumbers)      ) +" K"+ending
-        else:
-            return str(byte)+" "+ending
-        
-        #printl("", self, "C")
-                         
-    #===========================================================================
-    # 
-    #===========================================================================
     def bufferFull(self):
         '''
         '''
