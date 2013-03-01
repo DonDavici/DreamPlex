@@ -196,21 +196,21 @@ class DPS_ListView(DP_View):
 			# we also check if we want to play
 			self.getPictureInformationToLoad()
 			
+			# lets set the urls for context functions of the selected entry
+			self.seenUrl = self.context.get("watchedURL", None)
+			self.unseenUrl = self.context.get("unwatchURL", None)
+			self.deleteUrl = self.context.get("deleteURL", None)
+			self.refreshUrl = self.context.get("libraryRefreshURL", None)
+			printl("seenUrl: " + str(self.seenUrl),self, "D")
+			printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+			
 			if self.fastScroll == False or self.showMedia == True:
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme: 
 					if self.startPlaybackNow:
 						self.startThemePlayback()
-				
-				# lets set the urls for context functions of the selected entry
-				self.seenUrl = self.context.get("watchedURL", None)
-				self.unseenUrl = self.context.get("unwatchURL", None)
-				self.deleteUrl = self.context.get("deleteURL", None)
-				self.refreshUrl = self.context.get("libraryRefreshURL", None)
-				printl("seenUrl: " + str(self.seenUrl),self, "D")
-				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
