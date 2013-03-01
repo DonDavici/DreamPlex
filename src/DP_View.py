@@ -1247,39 +1247,89 @@ class DP_View(Screen, NumericalTextInput):
         functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
         functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
         functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
-        functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
+        #functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
         
         self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
             title=_("Media Functions"), list=functionList)
         
         printl("", self, "C")
     
-    
+    #===========================================================================
+    # 
+    #===========================================================================
     def markUnwatched(self, unused=None, unused2=None):
         '''
         '''
         printl("", self, "S")
+
+        Singleton().getPlexInstance().getURL(self.unseenUrl)
+        self.showMessage()
         
         printl("", self, "C")
     
+    #===========================================================================
+    # 
+    #===========================================================================
     def markWatched(self, unused=None, unused2=None):
         '''
         '''
         printl("", self, "S")
         
+        Singleton().getPlexInstance().getURL(self.seenUrl)
+        self.showMessage()
+        
         printl("", self, "C")
     
+    #===========================================================================
+    # 
+    #===========================================================================
     def initiateRefresh(self, unused=None, unused2=None):
         '''
         '''
         printl("", self, "S")
         
+        Singleton().getPlexInstance().getURL(self.refreshUrl)
+        self.showMessage()
+        
         printl("", self, "C")
     
+    #===========================================================================
+    # 
+    #===========================================================================
     def deleteFromLibrary(self, unused=None, unused2=None):
         '''
         '''
         printl("", self, "S")
+        
+        self.session.openWithCallback(self.executeLibraryDelete, MessageBox, _("Are you sure?"), MessageBox.TYPE_YESNO)
+        
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def executeLibraryDelete(self, confirm):
+        '''
+        '''
+        printl("", self, "S")
+        
+        if confirm:
+            Singleton().getPlexInstance().getURL(self.deleteUrl)
+            self.showMessage()
+        else:
+            self.session.open(MessageBox,_("Deleting aborted!"), MessageBox.TYPE_INFO)
+        
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def showMessage(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO)
         
         printl("", self, "C")
     
