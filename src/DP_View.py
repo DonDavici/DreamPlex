@@ -916,18 +916,19 @@ class DP_View(Screen, NumericalTextInput):
         
         selection = self["listview"].getCurrent()
         
-        details         = selection[1]
-        extraData       = selection[2]
-        image           = selection[3]
-        
-        #details
-        viewMode        = details['viewMode']
-        server          = details['server']
-        
-        #extraData
-        url_path        = extraData['key']
-        
         if selection is not None:
+            details         = selection[1]
+            extraData       = selection[2]
+            image           = selection[3]
+            
+            #details
+            viewMode        = details['viewMode']
+            server          = details['server']
+            
+            #extraData
+            url_path        = extraData['key']
+        
+        
             if (viewMode == "ShowSeasons"):
                 printl("viewMode -> ShowSeasons", self, "I")
 
