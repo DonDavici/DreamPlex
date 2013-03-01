@@ -40,8 +40,6 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
-ENIGMA_SERVICE_ID = 0
-
 #===============================================================================
 # 
 #===============================================================================
@@ -89,17 +87,17 @@ class DP_View(Screen, NumericalTextInput):
 
     FAST_STILLPIC = False
 
-    onNumerKeyLastChar                 = "#"
-    activeSort                         = ("Default", None, False)
-    activeFilter                     = ("All", (None, False), "")
-    onEnterPrimaryKeys                 = None
-    onLeavePrimaryKeyValuePair         = None
-    onLeaveSelectKeyValuePair         = None
-    currentKeyValuePair             = None
+    onNumberKeyLastChar                  = "#"
+    activeSort                          = ("Default", None, False)
+    activeFilter                        = ("All", (None, False), "")
+    onEnterPrimaryKeys                  = None
+    onLeavePrimaryKeyValuePair          = None
+    onLeaveSelectKeyValuePair           = None
+    currentKeyValuePair                 = None
     
-    ShowSeasonsParams = None
-    ShowEpisodesParams = None
-    showMedia = False
+    ShowSeasonsParams                   = None
+    ShowEpisodesParams                  = None
+    showMedia                           = False
     
     #itemsPerPage = int(8)  # @TODO should be set according the desktop size
     
@@ -403,8 +401,8 @@ class DP_View(Screen, NumericalTextInput):
         if key is not None:
             keyvalue = key.encode("utf-8")
             if len(keyvalue) == 1:
-                self.onNumerKeyLastChar = keyvalue[0].upper()
-                self.onNumberKeyPopup(self.onNumerKeyLastChar, True)
+                self.onNumberKeyLastChar = keyvalue[0].upper()
+                self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
                 
         printl("", self, "C")
 
@@ -433,9 +431,9 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        printl(self.onNumerKeyLastChar, self, "I")
-        if self.onNumerKeyLastChar != ' ':
-            self.activeFilter = ('Abc', ('title', False, 1), self.onNumerKeyLastChar)
+        printl(self.onNumberKeyLastChar, self, "I")
+        if self.onNumberKeyLastChar != ' ':
+            self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
         else:
             self.activeFilter = ("All", (None, False), ("All", ))
         self.sort()
@@ -443,7 +441,7 @@ class DP_View(Screen, NumericalTextInput):
         
         self.refresh()
         
-        self.onNumberKeyPopup(self.onNumerKeyLastChar, False)
+        self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
         NumericalTextInput.timeout(self)
         
         printl("", self, "C")
