@@ -171,10 +171,6 @@ class DP_Player(MoviePlayer):
  
         self.useBufferControl = config.plugins.dreamplex.useBufferControl.value
  
-        if config.plugins.dreamplex.setBufferSize.value:
-            bufferSize = int(config.plugins.dreamplex.bufferSize.value) * 1024 * 1024
-            session.nav.getCurrentService().streamed().setBufferSize(bufferSize)
-            
         service1 = self.session.nav.getCurrentService()
         self.seek = service1 and service1.seek()
         
