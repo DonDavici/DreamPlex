@@ -301,8 +301,10 @@ class DPS_MainMenu(Screen):
 			else:
 				printl("selected entry is executable", self, "D")
 				params = selection[2]
-				t_url = params.get('t_url', "notSet")
-				self.s_url = t_url
+				
+				self.s_url = params.get('t_url', "notSet")
+				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
+				
 				isSearchFilter = params.get('isSearchFilter', "notSet")
 				
 				if isSearchFilter == "True" or isSearchFilter == True:
@@ -343,7 +345,10 @@ class DPS_MainMenu(Screen):
 		printl("self.s_url: " + str(self.s_url), self, "D")
 		
 		if self.selectedEntry.start is not None:
-			kwargs = {"url": self.s_url}
+			if self.showEpisodesDirectly == True:
+				kwargs = {"url": self.s_url, "showEpisodesDirectly": self.showEpisodesDirectly}
+			else:
+				kwargs = {"url": self.s_url}
 			self.session.open(self.selectedEntry.start, **kwargs)
 					
 		elif self.selectedEntry.fnc is not None:

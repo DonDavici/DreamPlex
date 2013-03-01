@@ -40,13 +40,15 @@ class DP_LibShows(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None):
+	def __init__(self, session, url=None, showEpisodesDirectly=False):
 		'''
+		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		'''
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "tv shows")
 		self.g_url = url
+		self.showEpisodesDirectly = showEpisodesDirectly
 		
 		printl ("", self, "C")
 
@@ -57,52 +59,12 @@ class DP_LibShows(DP_LibMain):
 		'''
 		'''
 		printl ("", self, "S")
-		printl("params =" + str(params), self, "D")
-
-		# Diplay all TVShows
-		if params is None:
-			printl("show TV shows ...", self, "I")
-
-			url = self.g_url
-			
-			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
-
-			# sort
-			sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
-			
-			filter = [("All", (None, False), ("", )), ]
-			
-			#if len(tmpGenres) > 0:
-				#tmpGenres.sort()
-				#filter.append(("Genre", ("Genres", True), tmpGenres))
-			
-			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
-			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-
+		printl("params: " + str(params), self, "D")
 		
-		# Display the Seasons Menu
-		elif params["viewMode"] == "ShowSeasons":
-			printl("show seasons of TV show ...", self, "I")
-			
-			url = params["url"]
-
-			library = Singleton().getPlexInstance().getSeasonsOfShow(url)
-			
-			sort = (("by season", "season", False), )
-			
-			filter = [("All", (None, False), ("", )), ]
-			
-			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
-			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-
-	
-		# Display the Episodes Menu
-		elif params["viewMode"] == "ShowEpisodes":
+		if self.showEpisodesDirectly == True:
 			printl("show episodes of season ...", self, "I")
 			
-			url = params["url"]
+			url = self.g_url
 			
 			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 
@@ -113,8 +75,64 @@ class DP_LibShows(DP_LibMain):
 			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
-			# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+			return (library, ("viewMode", "ratingKey", ), None, "None", sort, filter)
+		else:
+			# Diplay all TVShows
+			if params is None:
+				printl("show TV shows ...", self, "I")
+	
+				url = self.g_url
+				
+				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+	
+				# sort
+				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
+				
+				filter = [("All", (None, False), ("", )), ]
+				
+				#if len(tmpGenres) > 0:
+					#tmpGenres.sort()
+					#filter.append(("Genre", ("Genres", True), tmpGenres))
+				
+				printl ("", self, "C")
+				return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
+				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+	
+			
+			# Display the Seasons Menu
+			elif params["viewMode"] == "ShowSeasons":
+				printl("show seasons of TV show ...", self, "I")
+				
+				url = params["url"]
+	
+				library = Singleton().getPlexInstance().getSeasonsOfShow(url)
+				
+				sort = (("by season", "season", False), )
+				
+				filter = [("All", (None, False), ("", )), ]
+				
+				printl ("", self, "C")
+				return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
+				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+	
+		
+			# Display the Episodes Menu
+			elif params["viewMode"] == "ShowEpisodes":
+				printl("show episodes of season ...", self, "I")
+				
+				url = params["url"]
+				
+				library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+	
+				sort = [("by title", None, False), ]
+				
+				filter = [("All", (None, False), ("", )), ]
+				
+				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
+				
+				printl ("", self, "C")
+				return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
+				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		printl ("", self, "C")
 

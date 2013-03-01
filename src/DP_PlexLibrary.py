@@ -304,9 +304,9 @@ class PlexLibrary(Screen):
             #Fill serverdata to global g_serverDict
             self.discoverAllServers()
             
-        self.seenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+        self.seenPic    = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
         self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
-        self.unseenPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+        self.unseenPic  = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
                                    
         printl("", self, "C")
     
@@ -799,6 +799,8 @@ class PlexLibrary(Screen):
                 
                 if t_mode == 'show' or t_mode == 'episode':
                     printl( "_MODE_TVSHOWS detected", self, "X")
+                    if str(sections.get('key')) == "onDeck" or str(sections.get('key')) == "recentlyViewed":
+                        params["t_showEpisodesDirectly"] = True
                     mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
                         
                 elif t_mode == 'movie':
