@@ -1692,7 +1692,7 @@ class PlexLibrary(Screen):
             
             extraData = {}
             extraData['type']               = "video"
-            extraData['ratingKey']          = str(show.get('ratingKey', 0)) # primary key in plex
+            extraData['ratingKey']          = str(season.get('ratingKey', 0)) # primary key in plex
             extraData['seenEpisodes']       = watched
             extraData['unseenEpisodes']     = details['episode'] - watched
             extraData['thumb']              = self.getThumb(season, server)
@@ -1847,7 +1847,7 @@ class PlexLibrary(Screen):
             
             extraData = {}
             extraData['type']               = "Video"
-            extraData['ratingKey']          = str(show.get('ratingKey', 0)) # primary key in plex
+            extraData['ratingKey']          = str(episode.get('ratingKey', 0)) # primary key in plex
             extraData['thumb']              = self.getImage(episode, server, x = 195, y = 268, type = "fanart_image")
             extraData['fanart_image']       = self.getImage(episode, server, x = 560, y = 315, type = "thumb") #because this is a episode we have to use thumb
             extraData['token']              = self.g_myplex_accessToken
