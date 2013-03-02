@@ -91,7 +91,7 @@ class DPS_MainMenu(Screen):
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
 		self["txt_blue"] = StaticText(_("Info"))
-		self["txt_red"] = StaticText(_("Exit"))
+		#self["txt_red"] = StaticText(_("Exit"))
 		self["txt_green"] = StaticText(_("Settings"))
 		
 		self.setText("infoText", self.getInfoText())
@@ -337,6 +337,7 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
+		self.nextExitIsQuit = False
 		self["menu"].setList(self.getSettingsMenu())
 		self.refreshMenu(0)
 		
