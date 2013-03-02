@@ -327,13 +327,31 @@ class PlexLibrary(Screen):
         printl("", self, "C")
         return mainMenuList
     
-    #============================================================================
+    #===========================================================================
     # 
-    #============================================================================
-    def displaySections(self, filter=None ): # CHECKED unused!?!?
+    #===========================================================================
+    def getSectionTypes(self):
         '''
         '''
         printl("", self, "S")
+        
+        mainMenuList = []
+        params = {} 
+        mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, params))
+        mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, params))
+        
+        printl("mainMenuList: " + str(mainMenuList), self, "D")
+        printl("", self, "C")
+        return mainMenuList  
+        
+    #============================================================================
+    # 
+    #============================================================================
+    def displaySections(self, filter=None ): # CHECKED
+        '''
+        '''
+        printl("", self, "S")
+        printl("filter: " + str(filter), self, "D")
         
         if self.g_error is True:
             mainMenuList = self.leaveOnError()
@@ -382,19 +400,27 @@ class PlexLibrary(Screen):
             if self.g_secondary == "true":      
                 if section.get('type') == 'show':
                     printl( "_MODE_TVSHOWS detected", self, "D")
+                    if (filter is not None) and (filter != "tvshow"):
+                        continue
                     mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
                         
                 elif section.get('type') == 'movie':
                     
                     printl( "_MODE_MOVIES detected", self, "D")
+                    if (filter is not None) and (filter != "movies"):
+                        continue
                     mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
     
                 elif section.get('type') == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "D")
+                    if (filter is not None) and (filter != "music"):
+                        continue
 
                         
                 elif section.get('type') == 'photo':
                     printl( "_MODE_PHOTOS detected", self, "D")
+                    if (filter is not None) and (filter != "photos"):
+                        continue
 
                 else:
                     printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
@@ -403,27 +429,23 @@ class PlexLibrary(Screen):
             else: # lets start here we configured no filters          
                 if section.get('type') == 'show':
                     printl( "_MODE_TVSHOWS detected", self, "D")
-                    mode= _MODE_TVSHOWS
-                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
                     if (filter is not None) and (filter != "tvshow"):
                         continue
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_VIDEOS), params))
                         
                 elif section.get('type') == 'movie':
                     printl( "_MODE_MOVIES detected", self, "D")
-                    mode= _MODE_MOVIES
-                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), params))
                     if (filter is not None) and (filter != "movies"):
                         continue
+                    mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_VIDEOS), params))
     
                 elif section.get('type') == 'artist':
                     printl( "_MODE_ARTISTS detected", self, "D")
-                    mode= _MODE_ARTISTS
                     if (filter is not None) and (filter != "music"):
                         continue
                         
                 elif section.get('type') == 'photo':
                     printl( "_MODE_PHOTOS detected", self, "D")
-                    mode= int(_MODE_PHOTOS)
                     if (filter is not None) and (filter != "photos"):
                         continue
                 else:

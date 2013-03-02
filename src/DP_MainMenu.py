@@ -260,6 +260,14 @@ class DPS_MainMenu(Screen):
 					self.g_serverConfig = selection[2]
 					self.checkServerState()
 				
+				elif self.selectedEntry == Plugin.MENU_MOVIES:
+					printl("found Plugin.MENU_MOVIES", self, "D")
+					self.getServerData("movies")
+					
+				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
+					printl("found Plugin.MENU_TVSHOWS", self, "D")
+					self.getServerData("tvshow")
+					
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
 					params = selection[2]
@@ -572,7 +580,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getServerData(self):
+	def getServerData(self, filter=None):
 		'''
 		'''
 		printl("", self, "S")
@@ -581,8 +589,13 @@ class DPS_MainMenu(Screen):
 		instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 		
 		plexInstance = instance.getPlexInstance()
-		#serverData = plexInstance.getAllSections()
-		serverData = plexInstance.displaySections()
+		
+		summerize = config.plugins.dreamplex.summerizeSections.value
+		
+		if summerize == True and filter == None:
+			serverData = plexInstance.getSectionTypes()
+		else:
+			serverData = plexInstance.displaySections(filter)
 		
 		self["menu"].setList(serverData)
 		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
