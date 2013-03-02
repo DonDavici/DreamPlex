@@ -5,7 +5,7 @@
 		 <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
 	     <ePixmap position="0,0" zPosition="5" size="1280,720" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/frame-fs8.png" alphatest="blend" transparent="0" />
 	    	    			
-		 <widget source="menu" render="Listbox" position="57,232" size="430,400" scrollbarMode="showNever" zPosition="4" foregroundColor="#5C5C5C" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/content_panel-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png">
+		 <widget source="menu" render="Listbox" position="57,232" size="430,400" scrollbarMode="showOnDemand" zPosition="4" foregroundColor="#5C5C5C" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/content_panel-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png">
            <convert type="TemplatedMultiContent">
            {"template": [ MultiContentEntryText(pos = (10, 14), size = (430, 50), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 28)], "itemHeight": 50 }
            </convert>
