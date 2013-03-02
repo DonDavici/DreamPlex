@@ -128,8 +128,9 @@ class DPS_MainMenu(Screen):
 		self.onFirstExecBegin.append(self.onExec)
 		self.onFirstExecBegin.append(self.onExecRunDev)
 		
-		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
-		self.session.nav.stopService()
+		if config.plugins.dreamplex.useBufferControl.value == True:
+			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+			self.session.nav.stopService()
 	
 		self.onLayoutFinish.append(self.setCustomTitle)
 		printl("", self, "C")

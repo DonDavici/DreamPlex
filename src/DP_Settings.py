@@ -78,6 +78,7 @@ class DPS_Settings(Screen, ConfigListScreen):
                 getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")),
                 getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")),
                 getConfigListEntry(_("Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("fill me")),
+                getConfigListEntry(_("Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")),
                 
             ],
             session = self.session,
