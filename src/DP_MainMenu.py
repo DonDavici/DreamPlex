@@ -75,6 +75,7 @@ class DPS_MainMenu(Screen):
 	
 	g_serverDataMenu = None
 	g_filterDataMenu = None
+	nextExitIsQuit = True
 	
 	#===========================================================================
 	# 
@@ -228,6 +229,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
+		nextExitIsQuit = False
 		
 		printl("", self, "C")
 		return mainMenuList
@@ -247,7 +249,7 @@ class DPS_MainMenu(Screen):
 		selection = self["menu"].getCurrent()
 		
 		printl("selection = " + str(selection), self, "D")
-		
+		self.nextExitIsQuit = False
 		if selection is not None:
 			
 			self.selectedEntry = selection[1]
@@ -264,7 +266,7 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
 					self.checkServerState()
-				
+					
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
@@ -476,16 +478,22 @@ class DPS_MainMenu(Screen):
 			printl("coming from MENU_FILTER", self, "D")
 			self["menu"].setList(self.g_serverDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
+			self.nextExitIsQuit = False
 			
 		elif self.selectedEntry == Plugin.MENU_TVSHOWS or self.selectedEntry == Plugin.MENU_MOVIES:
 			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
 			self["menu"].setList(self.g_sectionDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
+			self.nextExitIsQuit = False
+		
+		elif self.nextExitIsQuit == True:
+			self.exit()
 		
 		else:
 			printl("coming from ELSEWHERE", self, "D")
 			printl("selectedEntry " +  str(self.selectedEntry), self, "D")
 			self["menu"].setList(self.menu_main_list)
+			self.nextExitIsQuit = True
 
 		printl("", self, "C")
 	
