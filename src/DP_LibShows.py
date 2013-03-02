@@ -62,7 +62,7 @@ class DP_LibShows(DP_LibMain):
 		printl("params: " + str(params), self, "D")
 		
 		if self.showEpisodesDirectly == True:
-			printl("show episodes of season ...", self, "I")
+			printl("show episodes in OnDeck ...", self, "I")
 			
 			url = self.g_url
 			

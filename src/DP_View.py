@@ -1015,7 +1015,7 @@ class DP_View(Screen, NumericalTextInput):
         library = self.loadLibrary(primaryKeys)
         #printl("library: " + str(library), self, "D")
         self.listViewList = library[0]
-        printl("listViewList: " + str(library[0]), self, "D")
+        #printl("listViewList: " + str(library[0]), self, "D")
         
         self.onEnterPrimaryKeys = library[1]
         printl("onEnterPrimaryKeys: " + str(library[1]), self, "D")
@@ -1059,7 +1059,7 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
-        printl("listViewList: " + str(self.listViewList), self, "D")
+        #printl("listViewList: " + str(self.listViewList), self, "D")
         
         try:
             if self.activeSort[1] is None:

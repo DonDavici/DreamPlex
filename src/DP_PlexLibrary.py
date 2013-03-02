@@ -4107,7 +4107,7 @@ class PlexLibrary(Screen):
         #listingRefresh=plugin_url+"refresh)"
         #context.append(('Reload Section', listingRefresh , ))
     
-        printl("Using context menus " + str(context), self, "I")
+        #printl("Using context menus " + str(context), self, "I")
         
         printl("", self, "C")   
         return context
