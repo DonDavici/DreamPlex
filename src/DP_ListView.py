@@ -833,7 +833,6 @@ class DPS_ListView(DP_View):
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
 			printl("no pic data available", self, "D")
-			self.setText("postertext", "not existing ...")
 		
 		else:
 			printl("starting download", self, "D")
@@ -854,7 +853,6 @@ class DPS_ListView(DP_View):
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
 			printl("no pic data available", self, "D")
-			self.setText("backdroptext", "not existing ...")
 			
 		else:
 			printl("starting download", self, "D")	
