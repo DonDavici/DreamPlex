@@ -21,7 +21,14 @@
         <widget name="infoContainer" transparent="0" zPosition="8" position="112,420" size="380,200" backgroundColor="#00000000" />
         <widget name="infoText" transparent="1" zPosition="9" halign="left" position="129,450" size="380,200" font="Modern;18" backgroundColor="#00000000" foregroundColor="#00404040" />
 
-   		
+        <!-- buttons -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red-fs8.png" zPosition="6" position="340,640" size="32,32" alphatest="blend" />
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green-fs8.png" zPosition="6" position="200,640" size="32,32" alphatest="blend" />
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue-fs8.png" zPosition="6" position="100,640" size="32,32" alphatest="blend" />
+        
+        <widget source="txt_red" render="Label" position="380,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
+        <widget source="txt_green" render="Label" position="240,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
+   		<widget source="txt_blue" render="Label" position="140,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
 	   </screen>
 
 	<!-- DPS_Settings -->
