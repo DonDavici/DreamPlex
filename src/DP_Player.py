@@ -55,8 +55,9 @@ class DP_Player(MoviePlayer):
     '''
     
     ENIGMA_SERVICE_ID = None
-    ENIGMA_SERVICETS_ID = 0x1         #1
-    ENIGMA_SERVICEGS_ID = 0x1001     #4097
+    ENIGMA_SERVICETS_ID = 0x1       #1
+    ENIGMA_SERVIDEM2_ID = 0x3       #3
+    ENIGMA_SERVICEGS_ID = 0x1001    #4097
     
     seek = None
     resume = False
@@ -122,7 +123,7 @@ class DP_Player(MoviePlayer):
         printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
         
         gstreamer = False
-        
+ 
         if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
             printl("we are able to stream over 4097", self, "I")
             gstreamer = True
@@ -133,6 +134,9 @@ class DP_Player(MoviePlayer):
         
         elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
             self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
+            
+        elif self.url[-5:] == ".m2ts":
+            self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
         
         else: # if we have a real file but no ts but for eg mkv we will also use sref 4097
             self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
