@@ -458,6 +458,11 @@ class DPS_MainMenu(Screen):
 			printl("coming from MENU_FILTER", self, "D")
 			self["menu"].setList(self.g_serverDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
+			
+		elif self.selectedEntry == Plugin.MENU_TVSHOWS or self.selectedEntry == Plugin.MENU_MOVIES:
+			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
+			self["menu"].setList(self.g_sectionDataMenu)
+			self.selectedEntry = Plugin.MENU_SERVER
 		
 		else:
 			printl("coming from ELSEWHERE", self, "D")
@@ -594,11 +599,12 @@ class DPS_MainMenu(Screen):
 		
 		if summerize == True and filter == None:
 			serverData = plexInstance.getSectionTypes()
+			self.g_sectionDataMenu = serverData
 		else:
 			serverData = plexInstance.displaySections(filter)
+			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 		
 		self["menu"].setList(serverData)
-		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 		self.refreshMenu(0)
 		
 		printl("", self, "C")
