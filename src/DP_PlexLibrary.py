@@ -224,9 +224,11 @@ class PlexLibrary(Screen):
         elif self.g_playbackType == "1": # TRANSCODED
             self.g_stream = "1"
             self.g_transcode = "true"
+            self.g_segments = serverConfig.segments.value
             
             printl("using transcode: " +  self.g_transcode, self, "I")
             printl("using this transcoding quality: " +  self.g_quality, self, "I")
+            printl("using this segments size: " +  self.g_segments, self, "I")
         
         elif self.g_playbackType == "2": # DIRECT LOCAL
             self.g_stream = "0"
@@ -2812,7 +2814,7 @@ class PlexLibrary(Screen):
         transcode.append("offset=0")
         transcode.append("quality=%d" % int(self.g_quality ))
         transcode.append("session=%s" % self.g_sessionID)
-        transcode.append("secondsPerSegment=3")
+        transcode.append("secondsPerSegment=%d" % int(self.g_quality ))
         #transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
         transcode.append("url=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
         transcode.append("3g=0")

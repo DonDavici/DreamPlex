@@ -370,6 +370,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             getConfigListEntry(_("[Connection Type > myPLEX] renew myPlex token"), self.current.renewMyplexToken),
             getConfigListEntry(_("[Playback Type] Selection"), self.current.playbackType),
             getConfigListEntry(_("[Playback Type > TRANSCODED] Transcoding quality"), self.current.quality),
+            getConfigListEntry(_("[Playback Type > TRANSCODED] Segmentsize in seconds"), self.current.segments),
             getConfigListEntry(_("[Playback Type > DIRECT LOCAL] Overwrite within remote path part"), self.current.remotePathPart),
             getConfigListEntry(_("[Playback Type > DIRECT LOCAL] Override with local path part"), self.current.localPathPart),
             #getConfigListEntry(_("[Playback Type > DIRECT REMOTE] Username"), self.current.smbUser),
