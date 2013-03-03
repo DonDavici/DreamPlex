@@ -1,0 +1,135 @@
+Mostly taken from 
+https://github.com/jfremy/plexjs/blob/master/doc/pms.txt
+and
+https://github.com/hitolaus/nettv-plex-client/blob/master/doc/pms-api.txt
+and
+http://wiki.plexapp.com/index.php/PlexNine_AdvancedInfo
+
+URLs
+[authent] /
+[authent] /library/
+[authent] /library/sections/
+[authent] /library/sections/[sectionKey]/
+[authent] /library/sections/[sectionKey]/arts
+[authent] /library/sections/[sectionKey]/[directoryKey1]
+[authent] /library/sections/[sectionKey]/[directoryKey1]/[directoryKey2]
+[authent] /library/metadata/[mediaKey]
+[authent] /library/metadata/[mediaKey]/art?t=[cacheKiller]
+[authent] /library/arts
+[authent] /library/parts/[mediaKey]/[filename]
+[authent] PUT /library/parts/[mediaKey]?audioStreamID=[id]
+[authent] PUT /library/parts/[mediaKey]?subtitleStreamID=[id]
+[authent] /library/streams/[streamKey]
+[authent] /system/bundle/media/flags/studio/[studioName]?t=[cacheKiller]
+[authent] /system/bundle/media/flags/videoFrameRate/[frName]?t=[cacheKiller]
+[authent] /system/bundle/media/flags/videoResolution/[resName]?t=[cacheKiller]
+[authent] /system/bundle/media/flags/videoCodec/[codecName]?t=[cacheKiller]
+[authent] /system/bundle/media/flags/aspectRatio/[arName]?t=[cacheKiller]
+[authent] /system/bundle/media/flags/audioCodec/[audioName]?t=[cacheKiller]
+[authent] /photo/:/transcode?width=[width]&height=[height]&url=[urlSrc]
+[authent] /video/:/transcode/segmented/start.m3u8?url=[partUrl]&quality=[quality]&session=[sessionCookieGUID]&X-Plex-Token=[token]&X-Plex-AccessKey=[pubKey]&X-Plex-Access-Time=[time]&X-Plex-Access-Code=[hmac]
+/video/:/transcode/segmented/session/[sessionCookieGUID]/[idx]/index.m3u8
+/video/:/transcode/segmented/session/[sessionCookieGUID]/[idx]/[currentSegment]
+/video/:/transcode/segmented/stop?session=[sessionCookieGUID]
+/video/:/transcode/segmented/ping
+/music/:/transcode/generic.mp3?offset=[offset]&format=mp3&audioCodec=libmp3lame&audioBitrate=320&audioSamples=44100&url=[url]&X-Plex-Client-Capabilities
+
+ping and progress every 60s
+
+
+/video -> video plugins
+/music -> music plugins
+/photos -> photos plugins
+/applications -> applications plugins
+
+Cookie: SESSION-GUID
+
+Samples:
+http://192.168.0.49:32400/system/bundle/media/flags/aspectRatio/1.66?t=1336406161
+http://192.168.0.49:32400/system/bundle/media/flags/videoResolution/480?t=1336406161
+http://192.168.0.49:32400/system/bundle/media/flags/studio/Focus%20Features?t=1336406161
+http://192.168.0.49:32400/system/bundle/media/flags/videoFrameRate/PAL?t=1336406161
+http://192.168.0.49:32400/system/bundle/media/flags/audioCodec/mp3?t=1336406161
+http://192.168.0.49:32400/photo/:/transcode?width=1280&height=720&url=http%3a%2f%2f127%2e0%2e0%2e1%3a32400%2flibrary%2fmetadata%2f267%2fart%3ft%3d1334557392
+http://88.190.36.70:32400/library/parts/779/file.mkv -> uses Range: byte=xxxxxxx-\r\n in query
+http://88.190.36.70:32400/video/:/transcode/segmented/start.m3u8?url=http%3a%2f%2f127%2e0%2e0%2e1%3a32400%2flibrary%2fparts%2f779%2ffile%2emkv&quality=7&session=c09a976a-ee48-4e12-9d7b-a720f26939a7&X-Plex-Token=vfz5vr3S7BsxK6qpybyW&X-Plex-Access-Key=KQMIY6GATPC63AIMC4R2&X-Plex-Access-Time=1337499321&X-Plex-Access-Code=u5te5vEcklSw4s8aVsdUYNZ0cC4dKS9zFayRiBC0ptQ%3D
+http://88.190.36.70:32400/video/:/transcode/segmented/session/c09a976a-ee48-4e12-9d7b-a720f26939a7/7/index.m3u8
+http://88.190.36.70:32400/video/:/transcode/segmented/session/c09a976a-ee48-4e12-9d7b-a720f26939a7/7/00000.ts
+
+Transcoding options:
+Used for hmac
+- url: url of the media being transcoded (/library/parts/...)
+- subtitleSize (100)
+- audioBoost (100)
+- ratingKey
+- identifier (com.plexapp.plugins.library)
+- key (/library/metadata/xxx url)
+- offset
+- session
+- quality
+- minQuality
+- maxQuality
+- secondsPerSegment
+- webkit=1
+- 3g (0/1)
+Not used for hmac
+- X-Plex-Access-Key
+- X-Plex-Access-Code
+- X-Plex-Access-Time
+- X-Plex-Display-Size
+- X-Plex-Client-Capabilities
+    protocols=[list protocols];videoDecoders=[list video];audioDecoders=[list audio]
+    lists are comma separated
+    list protocols:
+         "http-live-streaming",
+         "http-mp4-streaming",
+         "http-streaming-video",
+         "http-streaming-video-240p",
+         "http-streaming-video-320p",
+         "http-streaming-video-480p",
+         "http-streaming-video-720p",
+         "http-streaming-video-1080p",
+         "http-mp4-video",
+         "http-mp4-video-240p",
+         "http-mp4-video-320p",
+         "http-mp4-video-480p",
+         "http-mp4-video-720p",
+         "http-mp4-video-1080p",
+         "webkit"
+    list video
+         "h264{profile:high&resolution:1080&level:51}",
+         "h264{profile:high&resolution:720&level:51}",
+         "h264{profile:baseline&resolution:480&level:30}"
+    list audio
+             "mp3",
+             "aac{bitrate=160000}"
+             "ac3{channels:6}"
+
+
+## Progress reporting
+
+/:/progress?key=[mediaKey]&identifier=com.plexapp.plugins.library&time=[time]&state=[state]
+
+[mediaKey] = key
+[time] = time in milliseconds
+[state] = playing/stopped/paused
+
+## Set watched/unwatched
+
+/:/scrobble?key=[mediaKey]&identifier=com.plexapp.plugins.library
+/:/unscrobble?key=[mediaKey]&identifier=com.plexapp.plugins.library
+
+[mediaKey] = key
+
+## Set Rating
+
+/:/rate?key=[mediaKey]&identifier=com.plexapp.plugins.library&rating=[rating]
+
+[mediaKey] = key
+[rating] = ?
+
+## Generic Transcoder
+
+/video/:/transcode/generic.mpegts?audioCodec=libmp3lame&fakeContentLength=259780400&format=mpegts&height=720&identifier=com%2Eplexapp%2Eplugins%2Elibrary&key=http:%2F%2F127%2E0%2E0%2E1:32400%2Flibrary%2Fmetadata%2F7&quality=5&session=fca8e3ee6cef9bab54cb22ed84c72e0cdd5e4a39&url=http:%2F%2F127%2E0%2E0%2E1:32400%2Flibrary%2Fparts%2F5%2Ffile%2Emkv&videoBitrate=1500&videoCodec=libx264&width=1280
+
+
