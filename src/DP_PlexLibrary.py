@@ -226,9 +226,9 @@ class PlexLibrary(Screen):
             self.g_transcode = "true"
             self.g_segments = serverConfig.segments.value
             
-            printl("using transcode: " +  self.g_transcode, self, "I")
-            printl("using this transcoding quality: " +  self.g_quality, self, "I")
-            printl("using this segments size: " +  self.g_segments, self, "I")
+            printl("using transcode: " + str(self.g_transcode), self, "I")
+            printl("using this transcoding quality: " +  str(self.g_quality), self, "I")
+            printl("using this segments size: " +  str(self.g_segments), self, "I")
         
         elif self.g_playbackType == "2": # DIRECT LOCAL
             self.g_stream = "0"
