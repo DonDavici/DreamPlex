@@ -129,7 +129,7 @@ class DPS_MainMenu(Screen):
 		self.onFirstExecBegin.append(self.onExec)
 		self.onFirstExecBegin.append(self.onExecRunDev)
 		
-		if config.plugins.dreamplex.useBufferControl.value == True:
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
 			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 			self.session.nav.stopService()
 	
