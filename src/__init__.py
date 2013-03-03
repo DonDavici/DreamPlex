@@ -73,7 +73,7 @@ config.plugins.dreamplex.autoLanguage      		= ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         		= ConfigYesNo(default = False)
 config.plugins.dreamplex.fastScroll		   		= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 		= ConfigYesNo(default = False)
-config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = False)
+config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = True)
 
 config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
 config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
