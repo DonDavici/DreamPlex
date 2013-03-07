@@ -2814,7 +2814,7 @@ class PlexLibrary(Screen):
         transcode.append("offset=0")
         transcode.append("quality=%d" % int(self.g_quality ))
         transcode.append("session=%s" % self.g_sessionID)
-        transcode.append("secondsPerSegment=%d" % int(self.g_quality ))
+        transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
         #transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
         transcode.append("url=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
         transcode.append("3g=0")
