@@ -381,7 +381,7 @@ class PlexLibrary(Screen):
                         'token'        : str(section['token']) }
                                                
             #very dirty because in the for but no better way for now
-            #self.g_myplex_accessToken = str(section['token'])
+            self.g_myplex_accessToken = str(section['token'])
             
             #Determine what we are going to do process after a link is selected by the user, based on the content we find
             
@@ -397,7 +397,6 @@ class PlexLibrary(Screen):
             params = {} 
             params['t_url'] = self.getSectionUrl(address, path)
             params['t_mode'] = str(section.get('type'))
-            params['t_accessToken'] = str(section['token'])
             
             if self.g_secondary == "true":      
                 if section.get('type') == 'show':
@@ -750,12 +749,10 @@ class PlexLibrary(Screen):
         printl("p_url: " + str(p_url), self, "I")
         printl("p_mode: " + str(p_mode), self, "I")
         printl("p_final: " + str(p_final), self, "I")
-        printl("p_accessToken: " + str(p_accessToken), self, "I", True, 8)
         
         #===>
         mainMenuList = []
         #===>
-        self.g_myplex_accessToken = p_accessToken
         html = self.getURL(p_url)  
                 
         try:
@@ -916,7 +913,7 @@ class PlexLibrary(Screen):
         printl("", self, "S")
         
         token = details.get('token', None)
-            
+        printl("token: " + str(token), self, "D")
         if url_format:
             if token:
                 printl("", self, "C")
@@ -1279,17 +1276,14 @@ class PlexLibrary(Screen):
                 
             server=url.split('/')[serversplit]
             urlPath="/"+"/".join(url.split('/')[urlsplit:])
-            
-            printl("server: " + str(server), self, "D")
-            printl("urlPath: " + str(urlPath), self, "D")
-            
+            printl("g_myplex_accessToken: " + str(self.g_myplex_accessToken), self, "D")
+
             authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
             
-                
-            #===================================================================
-            # printl("url = "+url)
-            # printl("header = "+str(authHeader))
-            #===================================================================
+            printl("server: " + str(server), self, "D")
+            printl("urlPath: " + str(urlPath), self, "D")                
+            printl("header: " + str(authHeader), self, "D")
+            
             conn = httplib.HTTPConnection(server) 
             conn.request(type, urlPath, headers=authHeader) 
             data = conn.getresponse() 

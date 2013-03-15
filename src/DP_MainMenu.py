@@ -283,12 +283,10 @@ class DPS_MainMenu(Screen):
 					t_url = params.get('t_url', "notSet")
 					t_mode = params.get('t_mode', "notSet")
 					t_final = params.get('t_final', "notSet")
-					t_accessToken = params.get('t_accessToken', "notSet")
 
 					self.s_url = t_url
 					self.s_mode = t_mode
 					self.s_final = t_final
-					self.s_accessToken = t_accessToken
 					
 					self.getFilterData()
 			#===================================================================
@@ -647,7 +645,7 @@ class DPS_MainMenu(Screen):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 
-		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_accessToken)
+		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
 
 		
 		self["menu"].setList(menuData)
