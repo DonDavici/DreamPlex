@@ -155,7 +155,7 @@ class DP_Player(MoviePlayer):
         self.bufferslider = Slider(0, 100)
         self["bufferslider"] = self.bufferslider
         self["bufferslider"].setValue(0)
-        self["label_buffer"] = StaticText(self.title)
+        self["mediaTitle"] = StaticText(self.title)
         self["label_update"] = StaticText("")
         self.bufferSeconds = 0
         self.bufferPercent = 0

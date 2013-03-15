@@ -312,6 +312,6 @@
         </widget>
         
         <widget name="bufferslider" position="625,40" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress.png" />
-        <widget source="label_buffer"  transparent="1" render="Label" zPosition="3" position="625,5"  size="250,28" font="Regular;23" backgroundColor="#00000000" foregroundColor="#00404040" />
+        <widget source="mediaTitle"  transparent="1" render="Label" zPosition="3" position="625,5"  size="350,28" font="Regular;23" backgroundColor="#00000000" foregroundColor="#00404040" />
     </screen>
 </skins>
