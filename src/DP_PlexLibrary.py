@@ -1360,7 +1360,7 @@ class PlexLibrary(Screen):
         # 0 is linux local mount override
         if self.g_stream == "0":
             #check if the file can be found locally
-            if type == "unixfile":
+            if type == "unixfile" or type == "winfile":
                 remotePathPart = str(self.g_serverConfig.remotePathPart.value)
                 localPathPart = str(self.g_serverConfig.localPathPart.value)
                 try:
@@ -1368,6 +1368,10 @@ class PlexLibrary(Screen):
                     
                     file = file.replace(remotePathPart, localPathPart)
                     #sample "/volume1/Video/","/media/net/DAVICISTORE/"
+                    
+                                        
+                    if type == "winfile":
+                        file = file.replace("\\", "/")
                     
                     printl("alterd file string: " + str(file), self, "I")
                     exists = open(file, 'r')
