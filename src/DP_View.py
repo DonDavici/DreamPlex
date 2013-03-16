@@ -973,7 +973,8 @@ class DP_View(Screen, NumericalTextInput):
         printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
         
         if selectKeyValuePair == "backToSeasons":
-            self._load(self.ShowSeasonsParams)
+            printl("currentSeasonsParams: " + str(self.currentSeasonsParams), self, "D")
+            self._load(self.currentSeasonsParams)
         
         elif selectKeyValuePair == "backToShows":
             self._load()
@@ -1007,13 +1008,19 @@ class DP_View(Screen, NumericalTextInput):
     #===========================================================================
     # 
     #===========================================================================
-    def _load(self, primaryKeys=None, ignoreSort=False, ignoreFilter=False):
+    def _load(self, params=None, ignoreSort=False, ignoreFilter=False):
         '''
+            e.g.
+            params = {}
+            params["viewMode"] = viewMode
+            params["url"] = "http://" + server + url_path
         '''
         printl("", self, "S")
 
-        library = self.loadLibrary(primaryKeys)
-        #printl("library: " + str(library), self, "D")
+        library = self.loadLibrary(params)
+        #library for e.g. = return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
+        # (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+
         self.listViewList = library[0]
         #printl("listViewList: " + str(library[0]), self, "D")
         

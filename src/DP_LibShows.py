@@ -127,7 +127,7 @@ class DP_LibShows(DP_LibMain):
 				sort = [("by title", None, False), ]
 				
 				filter = [("All", (None, False), ("", )), ]
-				
+
 				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 				
 				printl ("", self, "C")
