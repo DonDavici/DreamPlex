@@ -40,6 +40,7 @@ from Components.config import config, getConfigListEntry, configfile
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
+from Screens.HelpMenu import HelpableScreen
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
@@ -55,7 +56,7 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 # class
 # DPS_Settings
 #===============================================================================        
-class DPS_Settings(Screen, ConfigListScreen):
+class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
     _hasChanged = False
     _session = None
     
@@ -65,6 +66,7 @@ class DPS_Settings(Screen, ConfigListScreen):
         printl("", self, "S")
         
         Screen.__init__(self, session)
+        HelpableScreen.__init__(self)
         
         ConfigListScreen.__init__(
             self,
@@ -357,42 +359,116 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             self.newmode = 0
             self.current = entry
 
-        cfglist = [
-            getConfigListEntry(_("State"), self.current.state),
-            getConfigListEntry(_("Name"), self.current.name),
-            getConfigListEntry(_("[Connection Type] Selection"), self.current.connectionType),
-            getConfigListEntry(_("[Connection Type] IP"), self.current.ip),
-            getConfigListEntry(_("[Connection Type] DNS"), self.current.dns),
-            getConfigListEntry(_("[Connection Type] Port"), self.current.port),
-            getConfigListEntry(_("[Connection Type > myPLEX] URL"), self.current.myplexUrl),
-            getConfigListEntry(_("[Connection Type > myPLEX] Username"), self.current.myplexUsername),
-            getConfigListEntry(_("[Connection Type > myPLEX] Password"), self.current.myplexPassword),
-            getConfigListEntry(_("[Connection Type > myPLEX] renew myPlex token"), self.current.renewMyplexToken),
-            getConfigListEntry(_("[Playback Type] Selection"), self.current.playbackType),
-            getConfigListEntry(_("[Playback Type > TRANSCODED] Transcoding quality"), self.current.quality),
-            getConfigListEntry(_("[Playback Type > TRANSCODED] Segmentsize in seconds"), self.current.segments),
-            getConfigListEntry(_("[Playback Type > DIRECT LOCAL] Overwrite within remote path part"), self.current.remotePathPart),
-            getConfigListEntry(_("[Playback Type > DIRECT LOCAL] Override with local path part"), self.current.localPathPart),
-            #getConfigListEntry(_("[Playback Type > DIRECT REMOTE] Username"), self.current.smbUser),
-            #getConfigListEntry(_("[Playback Type > DIRECT REMOTE] Password"), self.current.smbPassword),
-            #getConfigListEntry(_("[Playback Type > DIRECT REMOTE] Server override IP"), self.current.nasOverrideIp),
-            #getConfigListEntry(_("[Playback Type > DIRECT REMOTE] Servers root"), self.current.nasRoot),
-            getConfigListEntry(_("[WOL] Use Wake on Lan (WoL)"), self.current.wol),
-            getConfigListEntry(_("[WOL] Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac),
-            getConfigListEntry(_("[WOL] Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay),
-        ]
-            #===================================================================
-            # 
-            # getConfigListEntry(_("Transcode Type (no function yet but soon ;-)"), self.current.transcodeType),
-            # getConfigListEntry(_("Quality (no function yet but soon ;-)"), self.current.quality),
-            # getConfigListEntry(_("Audio Output (no function yet but soon ;-)"), self.current.audioOutput),
-            # getConfigListEntry(_("Stream Mode (no function yet but soon ;-)"), self.current.streamMode),
-            #===================================================================
-
-        ConfigListScreen.__init__(self, cfglist, session)
+        self.cfglist = []
+        ConfigListScreen.__init__(self, self.cfglist, session)
+        self.createSetup()
 
         printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def createSetup(self):
+        '''
+        '''
+        printl("", self, "S")
         
+        separator = "".ljust(60," ")
+        
+        self.cfglist = []
+        ##
+        self.cfglist.append(getConfigListEntry("[General Settings] " + separator, config.plugins.dreamplex.about))
+        ##
+        self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state))
+        self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name))
+        
+        ##
+        self.cfglist.append(getConfigListEntry("[Connection Settings] " + separator, config.plugins.dreamplex.about))
+        ##
+        self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType))
+        
+        if self.current.connectionType.value == "0": # IP
+            self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip))
+            self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port))
+        elif self.current.connectionType.value == "1": # DNS
+            self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns))
+            self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port))
+        elif self.current.connectionType.value == "2": # MYPLEX
+            self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl))
+            self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername))
+            self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword))
+            self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken))
+        
+        ##
+        self.cfglist.append(getConfigListEntry("[Playback Settings] " + separator, config.plugins.dreamplex.about))
+        ##
+        
+        self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType))
+        if self.current.playbackType.value == "0":
+            pass
+        elif self.current.playbackType.value == "1":
+            self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality))
+            self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
+            
+        elif self.current.playbackType.value == "2":
+            self.cfglist.append(getConfigListEntry(_(" >> Overwrite within remote path part"), self.current.remotePathPart))
+            self.cfglist.append(getConfigListEntry(_(" >> Override with local path part"), self.current.localPathPart))
+        
+        elif self.current.playbackType.value == "3":
+            pass
+            #self.cfglist.append(getConfigListEntry(_(">> Username"), self.current.smbUser))
+            #self.cfglist.append(getConfigListEntry(_(">> Password"), self.current.smbPassword))
+            #self.cfglist.append(getConfigListEntry(_(">> Server override IP"), self.current.nasOverrideIp))
+            #self.cfglist.append(getConfigListEntry(_(">> Servers root"), self.current.nasRoot))
+        
+        ##
+        self.cfglist.append(getConfigListEntry("[Wake On Lan Settings] " + separator, config.plugins.dreamplex.about))
+        ##
+        self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol))
+
+        if self.current.wol.value == True:
+            self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac))
+            self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay))
+        
+        #===================================================================
+        # 
+        # getConfigListEntry(_("Transcode Type (no function yet but soon ;-)"), self.current.transcodeType),
+        # getConfigListEntry(_("Quality (no function yet but soon ;-)"), self.current.quality),
+        # getConfigListEntry(_("Audio Output (no function yet but soon ;-)"), self.current.audioOutput),
+        # getConfigListEntry(_("Stream Mode (no function yet but soon ;-)"), self.current.streamMode),
+        #===================================================================
+
+        self["config"].list = self.cfglist
+        self["config"].l.setList(self.cfglist)
+        
+        printl("", self, "C")
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def keyLeft(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        ConfigListScreen.keyLeft(self)
+        self.createSetup()
+        
+        printl("", self, "C")
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def keyRight(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        ConfigListScreen.keyRight(self)
+        self.createSetup()
+        
+        printl("", self, "C")
+    
     #===========================================================================
     # 
     #===========================================================================

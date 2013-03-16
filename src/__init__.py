@@ -62,7 +62,7 @@ defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
 
 config.plugins.dreamplex = ConfigSubsection()
-
+config.plugins.dreamplex.about                  = ConfigSelection(default = "1", choices = [("1", " ")])
 config.plugins.dreamplex.debugMode         		= ConfigSelection(default="0", choices = [("0", _("Silent")),("1", _("Normal")),("2", _("High")),("3", _("All"))])
 config.plugins.dreamplex.pluginfolderpath  		= ConfigText(default = defaultPluginFolderPath)
 config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
