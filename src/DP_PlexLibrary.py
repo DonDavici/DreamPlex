@@ -742,7 +742,7 @@ class PlexLibrary(Screen):
     #=============================================================================
     # 
     #=============================================================================
-    def getSectionFilter(self, p_url, p_mode, p_final, p_accessToken): # CHECKED
+    def getSectionFilter(self, p_url, p_mode, p_final): # CHECKED
         '''
         '''
         printl("", self, "S")
