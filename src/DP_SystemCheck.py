@@ -40,15 +40,17 @@ from Components.config import config, getConfigListEntry, configfile
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
+from Screens.Console import Console as SConsole
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig
+from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from twisted.python.versions import getVersionString
 
 #===============================================================================
 # class
@@ -57,6 +59,7 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 class DPS_SystemCheck(Screen):
 	oeVersion = None
 	check = None
+	latestVersion = None
 	
 	def __init__(self, session):
 		'''
@@ -89,6 +92,7 @@ class DPS_SystemCheck(Screen):
 		
 		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
+		vlist.append((_("Check for update."), "check_Update"))
 		
 		self["content"] = MenuList(vlist)
 		
@@ -114,7 +118,132 @@ class DPS_SystemCheck(Screen):
 			self.checkDreamPlexInstallation()
 			
 		if selection[1] == "check_Curl":
-			self.checkCurlInstallation()	
+			self.checkCurlInstallation()
+		
+		if selection[1] == "check_Update":
+			self.checkForUpdate()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def checkForUpdate(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if testInetConnectivity():
+			printl( "Starting request", self, "D")
+			curl_string = 'curl -s -k "%s"' % ("https://api.github.com/repos/DonDavici/DreamPlex/tags")
+			
+			printl("curl_string: " + str(curl_string), self, "D")
+			response = popen(curl_string).read()
+			printl("response: " + str(response), self, "D")
+			
+			latestVersion = response[19:23] # is a bit dirty but better than forcing users to install simplejson
+			printl("latestVersion: " + str(latestVersion), self, "D")
+			
+			installedVersion = getVersion()
+			printl("InstalledVersion: " + str(installedVersion), self, "D")
+			
+			if latestVersion != installedVersion:
+				self.latestVersion = latestVersion
+				self.session.openWithCallback(self.startUpdate, MessageBox,_("Update to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
+			else:
+				self.session.openWithCallback(self.callback, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
+		
+		else:
+			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_OK)
+		
+		printl("", self, "C")
+	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def startUpdate(self, answer):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if answer is True:
+			self.updateToLatestVersion()
+		else:
+			self.close()
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def updateToLatestVersion(self):
+		'''
+		# RTV = 0 opkg install successfull
+		# RTV = 1 bianry found but no cmdline given
+		# RTV = 127 Binary not found
+		# RTV = 255 ERROR
+		'''
+		printl("", self, "S")
+		
+		remoteUrl = "http://dreamplex.googlecode.com/files/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk"
+		cmd = """
+BIN=""
+opkg > /dev/null 2>/dev/null
+if [ $? == "1" ]; then
+ BIN="opkg"
+else
+ ipkg > /dev/null 2>/dev/null
+ if [ $? == "1" ]; then
+  BIN="ipkg"
+ fi
+fi
+echo "Binary: $BIN"
+
+if [ $BIN != "" ]; then
+ $BIN remove project-valerie
+ echo "Cleaning up"
+ rm -rf /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/*
+ if [ $BIN == "opkg" ]; then
+   OPARAM="--force-overwrite"
+ else
+   OPARAM="-force-overwrite"
+ fi
+ ( export OPKG_CONF_DIR=/tmp; $BIN install %s $OPARAM; )
+fi""" % str(remoteUrl)
+		
+		printl("remoteUrl: " + str(remoteUrl), self, "D")		
+		printl("cmd: " + str(cmd), self, "D")
+
+		self.session.open(SConsole,"Excecuting command:", [cmd] , self.finishupdate)
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def finishupdate(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		time.sleep(2)
+		self.session.openWithCallback(self.e2restart, MessageBox,_("Enigma2 must be restarted!\nShould Enigma2 now restart?"), MessageBox.TYPE_YESNO)
+	
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def e2restart(self, answer):
+		'''
+		'''
+		printl("", self, "S")
+
+		if answer is True:
+			quitMainloop(3)
+		else:
+			self.close()
 		
 		printl("", self, "C")
 	
@@ -171,7 +300,7 @@ class DPS_SystemCheck(Screen):
 		
 		self.check = "gst"
 		self.executeCommand(command)
-		
+				
 		printl("", self, "C")
 		
 
