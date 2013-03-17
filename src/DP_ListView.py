@@ -206,11 +206,10 @@ class DPS_ListView(DP_View):
 			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
 			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 			
-			if self.fastScroll == False or self.showMedia == True:
-				# if we are a show an if playtheme is enabled we start playback here
-				if self.playTheme: 
-					if self.startPlaybackNow:
-						self.startThemePlayback()
+			# if we are a show an if playtheme is enabled we start playback here
+			if self.playTheme: 
+				if self.startPlaybackNow:
+					self.startThemePlayback()
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
