@@ -95,8 +95,8 @@ class DP_View(Screen, NumericalTextInput):
     onLeaveSelectKeyValuePair           = None
     currentKeyValuePair                 = None
     
-    ShowSeasonsParams                   = None
-    ShowEpisodesParams                  = None
+    currentShowIndex                    = None
+    currentSeasonIndex                  = None
     showMedia                           = False
     
     #itemsPerPage = int(8)  # @TODO should be set according the desktop size
@@ -913,7 +913,7 @@ class DP_View(Screen, NumericalTextInput):
         printl("", self, "S")
         
         selection = self["listview"].getCurrent()
-        
+                
         if selection is not None:
             details         = selection[1]
             extraData       = selection[2]
@@ -935,6 +935,7 @@ class DP_View(Screen, NumericalTextInput):
                 params["url"] = "http://" + server + url_path
                 
                 self.currentSeasonsParams = params
+                self.currentShowIndex = self["listview"].getIndex()
 
                 self._load(params)
 
@@ -946,6 +947,7 @@ class DP_View(Screen, NumericalTextInput):
                 params["url"] = "http://" + server + url_path
                 
                 self.currentEpisodesParams = params
+                self.currentSeasonIndex = self["listview"].getIndex()
                 
                 self._load(params)
             
@@ -973,11 +975,12 @@ class DP_View(Screen, NumericalTextInput):
         printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
         
         if selectKeyValuePair == "backToSeasons":
-            printl("currentSeasonsParams: " + str(self.currentSeasonsParams), self, "D")
             self._load(self.currentSeasonsParams)
+            self["listview"].setIndex(self.currentSeasonIndex)
         
         elif selectKeyValuePair == "backToShows":
             self._load()
+            self["listview"].setIndex(self.currentShowIndex)
             
         else:
             self.close()
@@ -1014,6 +1017,7 @@ class DP_View(Screen, NumericalTextInput):
             params = {}
             params["viewMode"] = viewMode
             params["url"] = "http://" + server + url_path
+            params["index"] = int
         '''
         printl("", self, "S")
 
@@ -1148,7 +1152,7 @@ class DP_View(Screen, NumericalTextInput):
         printl("", self, "S")
         
         selection = self["listview"].getCurrent()
-                
+        
         self._refresh(selection)
         
         printl("", self, "C")
