@@ -591,7 +591,7 @@ class DPS_ListView(DP_View):
 		'''
 		'''
 		printl("", self, "S")
-		
+
 		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
@@ -606,6 +606,7 @@ class DPS_ListView(DP_View):
 	
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
+			self.isTvShow = True
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			self.startPlaybackNow = False
@@ -616,6 +617,7 @@ class DPS_ListView(DP_View):
 			
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
+			self.isTvShow = True
 			self.parentSeasonNr = self.details["ratingKey"]			
 			bname = self.parentSeasonId
 			pname = self.details["ratingKey"]
@@ -626,18 +628,23 @@ class DPS_ListView(DP_View):
 			self.resetBackdrop = False
 		
 		else:
+			printl( "is playable content",self, "D")
 			bname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 			if self.isTvShow is True:
-				pname = self.parentSeasonNr
+				printl( "is episode",self, "D")
+				pname = self.parentSeasonId
 				# we dont want to have the same poster downloaded and used for each episode
 				self.changePoster = False
 				self.changeBackdrop = True
 			else:
+				printl( "is movie",self, "D")
 				self.changeBackdrop = True
 				self.changePoster = True
 				pname = self.details["ratingKey"]
-			
+		
+		printl("ajahahaj: " + str(pname), self, "D")
+		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		
