@@ -198,8 +198,9 @@ def openLogFile():
 	try:
 		if os.path.exists(logDir + "dreamplex_former.log"):
 			os.remove(logDir + "dreamplex_former.log")
-		
-		shutil.copy2(logDir + "dreamplex.log", logDir + "dreamplex_former.log")
+			
+		if os.path.exists(logDir + "dreamplex.log"):
+			shutil.copy2(logDir + "dreamplex.log", logDir + "dreamplex_former.log")
 		
 		instance = Singleton()
 		instance.getLogFileInstance(open(logDir + "dreamplex.log", "w"))
