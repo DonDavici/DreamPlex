@@ -989,23 +989,6 @@ class DP_View(Screen, NumericalTextInput):
         
         self.refresh()
         
-        # TODO REACTIVATE
-        #=======================================================================
-        # for i in range(len(self.listViewList)):
-        #    entry = self.listViewList[i][1]
-        #    printl("iterator: " + str(i) + " entry: " + str(entry), self, "I")
-        #    isIndex = True
-        #    
-        #    for key in selectKeyValuePair.keys():
-        #        if entry[key] != selectKeyValuePair[key]:
-        #            isIndex = False
-        #            break
-        #    if isIndex:
-        #        self["listview"].setIndex(i)
-        #        break
-        #=======================================================================
-        
-        
         printl("", self, "C")
 
     #===========================================================================

@@ -217,6 +217,8 @@ class PlexLibrary(Screen):
         self.g_playbackType = serverConfig.playbackType.value
         
         # PLAYBACK TYPES
+        self.g_segments = serverConfig.segments.value # is needed here because of fallback
+        
         if self.g_playbackType == "0": # STREAMED
             self.g_stream = "1"
             self.g_transcode = "false"
