@@ -25,6 +25,7 @@ You should have received a copy of the GNU General Public License
 import sys
 import os
 import datetime
+import shutil
 
 from enigma import getDesktop, addFont
 from skin import loadSkin
@@ -195,6 +196,11 @@ def openLogFile():
 	
 	now = datetime.datetime.now()
 	try:
+		if os.path.exists(logDir + "dreamplex_former.log"):
+			os.remove(logDir + "dreamplex_former.log")
+		
+		shutil.copy2(logDir + "dreamplex.log", logDir + "dreamplex_former.log")
+		
 		instance = Singleton()
 		instance.getLogFileInstance(open(logDir + "dreamplex.log", "w"))
 		
