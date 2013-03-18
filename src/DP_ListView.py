@@ -612,7 +612,7 @@ class DPS_ListView(DP_View):
 			self.startPlaybackNow = False
 			self.changeBackdrop = True
 			self.changePoster = True
-			self.resetPoster = True
+			self.resetPoster = False
 			self.resetBackdrop = False
 			
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
@@ -958,6 +958,9 @@ class DPS_ListView(DP_View):
 		self["resolution"].hide()
 		self["rated"].hide()
 		self["audio"].hide()
+		
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+		self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")
 		
