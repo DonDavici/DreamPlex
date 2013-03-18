@@ -234,26 +234,19 @@ class PlexLibrary(Screen):
         
         elif self.g_playbackType == "2": # DIRECT LOCAL
             self.g_stream = "0"
-            self.g_transcode = "true"
+            self.g_transcode = "false"
             self.g_remotePathPart = serverConfig.remotePathPart.value
             self.g_localPathPath = serverConfig.localPathPart.value
         
         elif self.g_playbackType == "3": # DIRECT REMOTE
             self.g_stream = "2"
             self.g_transcode = "false"
-            self.g_nasoverride = "false"
+            self.g_nasoverride = "true"
             self.g_nasoverrideip = "%d.%d.%d.%d" % tuple(serverConfig.nasOverrideIp.value)
             self.g_nasuserid = str(serverConfig.smbUser.value)
             self.g_naspass = str(serverConfig.smbPassword.value)
             self.g_nasroot = str(serverConfig.nasRoot.value)
 
-            if self.g_nasoverrideip == "":
-                printl("DreamPlex -> No NAS IP Specified.  Ignoring setting", self, "I")
-                
-            else:
-                printl("DreamPlex -> NAS IP: " + self.g_nasoverrideip, self, "I")
-                self.g_nasoverride = "true"
-        
         printl("using this debugMode: " + str(config.plugins.dreamplex.debugMode.value), self, "D")
         printl("using this serverName: " +  self.g_name, self, "I") 
         printl("using this connectionType: " +  self.g_connectionType, self, "I")
