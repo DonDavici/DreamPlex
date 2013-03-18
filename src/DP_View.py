@@ -1157,6 +1157,7 @@ class DP_View(Screen, NumericalTextInput):
         '''
         '''
         printl("", self, "S")
+        
         media_id = selection[1]['ratingKey']
         server = selection[1]['server']
         
@@ -1165,15 +1166,33 @@ class DP_View(Screen, NumericalTextInput):
         resumeStamp = self.playerData['resumeStamp']
         printl("resumeStamp: " + str(resumeStamp), self, "I")
         
+        if self.playerData['fallback'] != "":
+            message = "Sorry I didn't find the file on the provided location"
+            location = "Location:\n " + self.playerData['fallback']
+            suggestion = "Please verify you direct local settings"
+            fallback = "I will now try to play the file via transcode."
+            self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, location, suggestion, fallback), MessageBox.TYPE_ERROR)
+        else:
+            self.checkResume(resumeStamp)
+            
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def checkResume(self, resumeStamp):
+        '''
+        '''
+        printl("", self, "S")
+        
         if resumeStamp > 0:
             self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
         
         else:
             self.session.open(DP_Player, self.playerData)
-            #self.session.open(DP_Proxy, self.playerData)
         
         printl("", self, "C")
-        
+    
     #===========================================================================
     # 
     #===========================================================================

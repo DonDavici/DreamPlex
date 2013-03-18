@@ -1337,6 +1337,7 @@ class PlexLibrary(Screen):
         printl("", self, "S")   
         stream = partData['key']
         file = partData['file']
+        self.fallback = ""
         
         #First determine what sort of 'file' file is
         printl("physical file location: " + str(file), self, "I")   
@@ -1375,6 +1376,8 @@ class PlexLibrary(Screen):
                     if type == "winfile":
                         file = file.replace("\\", "/")
                     
+                    file = urllib.unquote(file)
+                    
                     printl("alterd file string: " + str(file), self, "I")
                     exists = open(file, 'r')
                     printl("Local file found, will use this", self, "I")
@@ -1387,9 +1390,7 @@ class PlexLibrary(Screen):
                     printl("remotePathPart: " + str(remotePathPart), self, "D")
                     printl("localPathPart: " + str(localPathPart), self, "D") 
                     printl("alterd file string: " + str(file), self, "I")
-
-                    pass
-                    
+                    self.fallback = str(file)
             printl("No local mount override possible ... switching to transcoded mode", self, "I")
             #===================================================================
             # global self.g_stream
@@ -2048,12 +2049,6 @@ class PlexLibrary(Screen):
         url = self.selectMedia(streams['partsCount'],streams['parts'], server)
         printl("url: " + str(url), self, "I")
 
-        #=======================================================================
-        # #so läufts aber mal sehen ob wir das hinbekommen ohne das wir etliche zeile code zu überspringen
-        # test = url
-        # printl("TEST URL: " + test, False)
-        #=======================================================================
-    
         if url is None:
             return
             
@@ -2160,6 +2155,7 @@ class PlexLibrary(Screen):
         playerData["transcodingSession"] = self.g_sessionID
         playerData["videoData"] = streams['videoData']
         playerData["mediaData"] = streams['mediaData']
+        playerData["fallback"] = self.fallback
         
         return playerData
     
