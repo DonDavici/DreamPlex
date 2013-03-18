@@ -373,17 +373,17 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
         '''
         printl("", self, "S")
         
-        separator = "".ljust(60," ")
+        separator = "".ljust(90,"_")
         
         self.cfglist = []
         ##
-        self.cfglist.append(getConfigListEntry("[General Settings] " + separator, config.plugins.dreamplex.about))
+        self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about))
         ##
         self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state))
         self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name))
         
         ##
-        self.cfglist.append(getConfigListEntry("[Connection Settings] " + separator, config.plugins.dreamplex.about))
+        self.cfglist.append(getConfigListEntry("Connection Settings" + separator, config.plugins.dreamplex.about))
         ##
         self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType))
         
@@ -400,7 +400,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken))
         
         ##
-        self.cfglist.append(getConfigListEntry("[Playback Settings] " + separator, config.plugins.dreamplex.about))
+        self.cfglist.append(getConfigListEntry("Playback Settings" + separator, config.plugins.dreamplex.about))
         ##
         
         self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType))
@@ -422,7 +422,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             #self.cfglist.append(getConfigListEntry(_(">> Servers root"), self.current.nasRoot))
         
         ##
-        self.cfglist.append(getConfigListEntry("[Wake On Lan Settings] " + separator, config.plugins.dreamplex.about))
+        self.cfglist.append(getConfigListEntry("Wake On Lan Settings" + separator, config.plugins.dreamplex.about))
         ##
         self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol))
 
