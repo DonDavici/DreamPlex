@@ -53,6 +53,9 @@ from Plugins.Extensions.DreamPlex.DP_Settings import DPS_Settings
 from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntriesListConfigScreen
 from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntryConfigScreen
 
+from Plugins.Extensions.DreamPlex.DP_Help import DPS_Help
+from Plugins.Extensions.DreamPlex.DP_About import DPS_About
+
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
@@ -229,7 +232,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
-		mainMenuList.append((_("Help"), "DPS_Exit"))
+		mainMenuList.append((_("Help"), "DPS_Help"))
 		nextExitIsQuit = False
 		
 		printl("", self, "C")
@@ -295,7 +298,6 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
 					self.refreshMenu(0)
-
 				
 			elif type(self.selectedEntry) is str:
 				printl("selected entry is string", self, "D")
@@ -310,7 +312,11 @@ class DPS_MainMenu(Screen):
 					self.session.open(DPS_SystemCheck)
 				
 				elif selection[1] == "DPS_About":
-					self.info()
+					self.session.open(DPS_About)
+					#self.info()
+				
+				elif selection[1] == "DPS_Help":
+					self.session.open(DPS_Help)
 				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
