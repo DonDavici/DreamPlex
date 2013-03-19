@@ -41,6 +41,8 @@ from Components.config import ConfigYesNo
 from Components.config import ConfigPassword
 from Components.config import ConfigIP
 from Components.config import ConfigMAC
+from Components.config import ConfigDirectory
+
 from Components.Language import language
 
 import Plugins.Plugin
@@ -204,6 +206,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].remoteServerType					= ConfigSelection(default="0", choices = [("0", _("Linux")),("1", _("Windows"))])
 	config.plugins.dreamplex.Entries[i].remotePathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].localPathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
+	#config.plugins.dreamplex.Entries[i].localPathPart						= ConfigDirectory()
 	
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
 	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "D")
