@@ -90,9 +90,9 @@ class DPS_MainMenu(Screen):
 		self["infoText"] = Label()
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
-		self["txt_blue"] = StaticText(_("Info"))
+		#self["txt_blue"] = StaticText(_("Info"))
 		#self["txt_red"] = StaticText(_("Exit"))
-		self["txt_green"] = StaticText(_("Settings"))
+		#self["txt_green"] = StaticText(_("Settings"))
 		
 		self.setText("infoText", self.getInfoText())
 		
@@ -105,8 +105,8 @@ class DPS_MainMenu(Screen):
 		
 			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
 	
-		#self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
-		#self.mainMenuList.append((_("Exit"), "DPS_Exit"))
+		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
+		self.mainMenuList.append((_("About"), "DPS_About"))
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -120,10 +120,10 @@ class DPS_MainMenu(Screen):
 				"up":    	(self.up, ""),
 				"down":  	(self.down, ""),
 				"cancel":   (self.cancel, ""),
-				"info":   	(self.info, ""),
-				"blue": 	(self.info, ""),
-				"red": 		(self.exit, ""),
-				"green": 	(self.getSettingsMenuList, ""),
+				#"info":   	(self.info, ""),
+				#"blue": 	(self.info, ""),
+				#"red": 		(self.exit, ""),
+				#"green": 	(self.getSettingsMenuList, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -229,6 +229,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
+		mainMenuList.append((_("Help"), "DPS_Exit"))
 		nextExitIsQuit = False
 		
 		printl("", self, "C")
@@ -289,13 +290,11 @@ class DPS_MainMenu(Screen):
 					self.s_final = t_final
 					
 					self.getFilterData()
-			#===================================================================
-			# 
-			#	elif self.selectedEntry == Plugin.MENU_SYSTEM:
-			#		printl("found Plugin.MENU_SYSTEM", self, "D")
-			#		self["menu"].setList(self.getSettingsMenu())
-			#		self.refreshMenu(0)
-			#===================================================================
+			 
+				elif self.selectedEntry == Plugin.MENU_SYSTEM:
+					printl("found Plugin.MENU_SYSTEM", self, "D")
+					self["menu"].setList(self.getSettingsMenu())
+					self.refreshMenu(0)
 
 				
 			elif type(self.selectedEntry) is str:
@@ -309,7 +308,10 @@ class DPS_MainMenu(Screen):
 					
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
-					
+				
+				elif selection[1] == "DPS_About":
+					self.info()
+				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
 					
@@ -330,6 +332,9 @@ class DPS_MainMenu(Screen):
 			printl("", self, "C")
 					
 	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def getSettingsMenuList(self):
 		'''
 		'''
