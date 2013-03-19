@@ -22,8 +22,9 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
-from Components.ActionMap import ActionMap
+from Components.ActionMap import HelpableActionMap
 from Components.Label import Label
+from Components.ScrollLabel import ScrollLabel
 from Components.Input import Input
 from Components.MenuList import MenuList
 from Components.Sources.List import List
@@ -53,15 +54,17 @@ class DPS_Help(Screen):
         
         self._session = session
         
-        self["help"] = Label()
+        self["help"] = ScrollLabel()
         
             
         self["key_red"] = StaticText(_("Close"))
         
-        self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
+        self["setupActions"] = HelpableActionMap(self, "DP_View", 
         {
             "red": self.keyCancel,
             "cancel": self.keyCancel,
+            "bouquet_up":       (self.bouquetUp, ""),
+            "bouquet_down":     (self.bouquetDown, ""),
         }, -2)
         
         self.onLayoutFinish.append(self.setContent)
@@ -115,13 +118,40 @@ class DPS_Help(Screen):
         content += "\n\tRemote Path Part >>> C:\path\of\library\root\ or /path/of/library/root/"
         content += "\n\tLocal Path Part >>> /media/net/mountpoint/"
         content += "\n\n Transcoded"
-        content += "\n   Advantages:\tThe medias are played directly from E2."
-        content += "\n   Prequesits:\tThis mode works if your plex library is mounted on your Dreambox and accessable."
+        content += "\n   Advantages:\tThe medias go through the plex transcoder. So it is possible to set the quality."
+        content += "\n   Prequesits:\tYou have to install gst-fragemented"
         content += "\n   Functions:\tSeeking is working"
         content += "\n\n Streamed"
-        content += "\n   Advantages:\tThe medias are played directly from E2."
-        content += "\n   Prequesits:\tThis mode works if your plex library is mounted on your Dreambox and accessable."
-        content += "\n   Functions:\tSeeking is working"
-                
+        content += "\n   Advantages:\tIf you cant setup direct local and you dont have gst-fragmented"
+        content += "\n   Prequesits:\tNothing"
+        content += "\n   Functions:\tSeeking is not working"
+        content += "\n\n myPlex"
+        content += "\n   Advantages:\tYou can access shared libraries of friends."
+        content += "\n   Prequesits:\tYou need a myPlex account."
+        content += "\n   Note:\tThis is only neccessary to connect to shared libs. No need to use this in you local network"  
         printl("", self, "C")
         return content
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def bouquetUp(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self["help"].pageUp()
+        
+        printl("", self, "C")
+        
+    #===========================================================================
+    # 
+    #===========================================================================
+    def bouquetDown(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self["help"].pageDown()
+        
+        printl("", self, "C")
