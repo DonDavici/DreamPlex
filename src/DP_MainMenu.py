@@ -509,7 +509,8 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		self.session.nav.playService(self.currentService)
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
+			self.session.nav.playService(self.currentService)
 		self.close((True,) )
 		
 		printl("", self, "C")
