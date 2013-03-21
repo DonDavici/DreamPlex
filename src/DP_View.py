@@ -1166,12 +1166,12 @@ class DP_View(Screen, NumericalTextInput):
         resumeStamp = self.playerData['resumeStamp']
         printl("resumeStamp: " + str(resumeStamp), self, "I")
         
-        if self.playerData['fallback'] != "":
-            message = "Sorry I didn't find the file on the provided location"
-            location = "Location:\n " + self.playerData['fallback']
+        if self.playerData['fallback'] == True:
+            message = "Sorry I didn't find the file on the provided locations"
+            locations = "Location:\n " + self.playerData['locations']
             suggestion = "Please verify you direct local settings"
             fallback = "I will now try to play the file via transcode."
-            self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, location, suggestion, fallback), MessageBox.TYPE_ERROR)
+            self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
         else:
             self.checkResume(resumeStamp)
             

@@ -1330,7 +1330,8 @@ class PlexLibrary(Screen):
         printl("", self, "S")   
         stream = partData['key']
         file = partData['file']
-        self.fallback = ""
+        self.fallback = False
+        self.locations = ""
         
         #First determine what sort of 'file' file is
         printl("physical file location: " + str(file), self, "I")   
@@ -1357,33 +1358,62 @@ class PlexLibrary(Screen):
         if self.g_stream == "0":
             #check if the file can be found locally
             if type == "unixfile" or type == "winfile":
+                self.currentFile = file
+                self.fallback = ""
+                
                 remotePathPart = str(self.g_serverConfig.remotePathPart.value)
                 localPathPart = str(self.g_serverConfig.localPathPart.value)
-                try:
-                    printl("Checking for local file", self, "I")
+                printl("remotePathPart: " + str(remotePathPart), self, "D")
+                printl("localPathPart: " + str(localPathPart), self, "D") 
+                locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                
+                if locationCheck != False:
+                    return locationCheck
+                ####
+                remotePathPart = str(self.g_serverConfig.remotePathPart1.value)
+                localPathPart = str(self.g_serverConfig.localPathPart1.value)
+                if remotePathPart != "/my/path/":
+                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                    printl("localPathPart1: " + str(localPathPart), self, "D") 
+                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
                     
-                    file = file.replace(remotePathPart, localPathPart)
-                    #sample "/volume1/Video/","/media/net/DAVICISTORE/"
+                    if locationCheck != False:
+                        return locationCheck
+                ####
+                remotePathPart = str(self.g_serverConfig.remotePathPart2.value)
+                localPathPart = str(self.g_serverConfig.localPathPart2.value)
+                if remotePathPart != "/my/path/":
+                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                    printl("localPathPart1: " + str(localPathPart), self, "D") 
+                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
                     
-                                        
-                    if type == "winfile":
-                        file = file.replace("\\", "/")
+                    if locationCheck != False:
+                        return locationCheck
+                ####
+                remotePathPart = str(self.g_serverConfig.remotePathPart3.value)
+                localPathPart = str(self.g_serverConfig.localPathPart3.value)
+                if remotePathPart != "/my/path/":
+                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                    printl("localPathPart1: " + str(localPathPart), self, "D") 
+                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
                     
-                    file = urllib.unquote(file)
+                    if locationCheck != False:
+                        return locationCheck
+                ####
+                remotePathPart = str(self.g_serverConfig.remotePathPart4.value)
+                localPathPart = str(self.g_serverConfig.localPathPart4.value)
+                if remotePathPart != "/my/path/":
+                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                    printl("localPathPart1: " + str(localPathPart), self, "D") 
+                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
                     
-                    printl("alterd file string: " + str(file), self, "I")
-                    exists = open(file, 'r')
-                    printl("Local file found, will use this", self, "I")
-                    exists.close()
-                    
-                    printl("", self, "C")
-                    return "file:"+file
-                except:
-                    printl("Sorry I didn't find the file on the provided location", self, "I")
-                    printl("remotePathPart: " + str(remotePathPart), self, "D")
-                    printl("localPathPart: " + str(localPathPart), self, "D") 
-                    printl("alterd file string: " + str(file), self, "I")
-                    self.fallback = str(file)
+                    if locationCheck != False:
+                        return locationCheck
+                ####
+
+                printl("Sorry I didn't find the file on the provided locations", self, "I")
+            
+            self.fallback = True
             printl("No local mount override possible ... switching to transcoded mode", self, "I")
             #===================================================================
             # global self.g_stream
@@ -1459,6 +1489,35 @@ class PlexLibrary(Screen):
         return filelocation
     
     
+    #===========================================================================
+    # 
+    #===========================================================================
+    def checkFileLocation(self, remotePathPart, localPathPart):
+        '''
+        '''
+        printl("", self, "S")
+        
+        printl("Checking for local file", self, "I")
+        file = self.currentFile
+        file = file.replace(remotePathPart, localPathPart)
+                            
+        if type == "winfile":
+            file = file.replace("\\", "/")
+        
+        file = urllib.unquote(file)
+        
+        printl("alterd file string: " + str(file), self, "I")
+        try:
+            exists = open(file, 'r')
+            printl("Local file found, will use this", self, "I")
+            exists.close()
+            
+            printl("", self, "C")
+            return "file:"+file
+        except:
+            self.locations += str(file) + "\n"
+            printl("", self, "C")
+            return False
             
     #===========================================================================
     # 
@@ -2149,6 +2208,7 @@ class PlexLibrary(Screen):
         playerData["videoData"] = streams['videoData']
         playerData["mediaData"] = streams['mediaData']
         playerData["fallback"] = self.fallback
+        playerData["locations"] = self.locations
         
         return playerData
     

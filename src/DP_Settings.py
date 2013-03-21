@@ -411,8 +411,16 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
             
         elif self.current.playbackType.value == "2":
-            self.cfglist.append(getConfigListEntry(_(" >> Overwrite within remote path part"), self.current.remotePathPart))
-            self.cfglist.append(getConfigListEntry(_(" >> Override with local path part"), self.current.localPathPart))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 1: remote path part"), self.current.remotePathPart))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 1: local path part"), self.current.localPathPart))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 2: remote path part"), self.current.remotePathPart1))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 2: local path part"), self.current.localPathPart1))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 3: remote path part"), self.current.remotePathPart2))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 3: local path part"), self.current.localPathPart2))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 4: remote path part"), self.current.remotePathPart3))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 4: local path part"), self.current.localPathPart3))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 5: remote path part"), self.current.remotePathPart4))
+            self.cfglist.append(getConfigListEntry(_(" >> Mapping 5: local path part"), self.current.localPathPart4))
         
         elif self.current.playbackType.value == "3":
             pass
