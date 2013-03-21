@@ -672,8 +672,6 @@ class DPS_ListView(DP_View):
 				self.changePoster = True
 				pname = self.details["ratingKey"]
 		
-		printl("ajahahaj: " + str(pname), self, "D")
-		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		

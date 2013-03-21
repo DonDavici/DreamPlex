@@ -122,8 +122,8 @@ class DP_View(Screen, NumericalTextInput):
         
         self.playerData = None
         
-        self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
-        self.session.nav.stopService()
+        #self.oldService = self.session.nav.getCurrentlyPlayingServiceReference()
+        #self.session.nav.stopService()
         
         self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
         
