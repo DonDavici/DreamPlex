@@ -49,6 +49,35 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
 #===============================================================================
+# import cProfile
+#===============================================================================
+try:
+    from lxml import etree
+    printl("running with lxml.etree", __name__, "D")
+except ImportError:
+    try:
+    # Python 2.5
+        import xml.etree.cElementTree as etree
+        printl("running with cElementTree on Python 2.5+", __name__, "D")
+    except ImportError:
+        try:
+            # Python 2.5
+            import xml.etree.ElementTree as etree
+            printl("running with ElementTree on Python 2.5+", __name__, "D")
+        except ImportError:
+            try:
+                # normal cElementTree install
+                import cElementTree as etree
+                printl("running with cElementTree", __name__, "D")
+            except ImportError:
+                try:
+                    # normal ElementTree install
+                    import elementtree.ElementTree as etree
+                    printl("running with ElementTree")
+                except ImportError:
+                    printl("Failed to import ElementTree from any known place", __name__, "W")
+
+#===============================================================================
 # 
 #===============================================================================
 def getViewClass():
@@ -873,16 +902,16 @@ class DPS_ListView(DP_View):
 		'''
 		'''
 		printl("", self, "S")
+		xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params").read()
+		printl("xml: " + str(xml), self, "D")
 		
-		#=======================================================================
-		# desktop = getDesktop(0).size().width()
-		# if desktop == 720:
-		#	self.itemsPerPage = int(12)
-		# elif desktop == 1024:
-		#	self.itemsPerPage = int(12)
-		# elif desktop == 1280:
-		#=======================================================================
-		self.itemsPerPage = int(6)
+		try:
+			tree = etree.fromstring(xml)
+		except Exception, e:
+			self._showErrorOnTv("no xml as response", xml)
+		
+		self.itemsPerPage = int(tree.get("DP_ListView_itemsPerPage"))
+		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 			
 		printl("", self, "C")
 		
