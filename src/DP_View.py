@@ -1181,7 +1181,7 @@ class DP_View(Screen, NumericalTextInput):
         self.server = server
         self.dvdplayback=False
         
-        if count == 1:
+        if count > 1:
             printl("count higher than 1 SOLVE THIS", self, "I") 
     #==========================================================================
     #       dialogOptions=[]
