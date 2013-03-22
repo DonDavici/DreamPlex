@@ -1158,10 +1158,103 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        media_id = selection[1]['ratingKey']
+        self.media_id = selection[1]['ratingKey']
         server = selection[1]['server']
         
-        self.playerData = Singleton().getPlexInstance().playLibraryMedia(media_id, server, False)
+        self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
+        
+        self.selectMedia(self.count, self.options, self.server)
+        
+        printl("", self, "C")
+        
+    #===========================================================
+    # 
+    #===========================================================
+    def selectMedia(self, count, options, server ):   # CHECKED
+        '''
+        '''
+        printl("", self, "S")
+        
+        #if we have two or more files for the same movie, then present a screen
+        result=0
+        self.options = options
+        self.server = server
+        self.dvdplayback=False
+        
+        if count == 1:
+            printl("count higher than 1 SOLVE THIS", self, "I") 
+    #==========================================================================
+    #       dialogOptions=[]
+    #       dvdIndex=[]
+    #       indexCount=0
+    #       for items in options:
+    # 
+    #           name=items[1].split('/')[-1]
+    #       
+    #           if self.g_forcedvd == "true":
+    #               if '.ifo' in name.lower():
+    #                   printl( "Found IFO DVD file in " + name )
+    #                   name="DVD Image"
+    #                   dvdIndex.append(indexCount)
+    #                   
+    #           dialogOptions.append(name)
+    #           indexCount+=1
+    #   
+    #       printl("Create selection dialog box - we have a decision to make!") 
+    #       startTime = xbmcgui.Dialog()
+    #       result = startTime.select('Select media to play',dialogOptions)
+    #       if result == -1:
+    #           return None
+    #       
+    #       if result in dvdIndex:
+    #           printl( "DVD Media selected")
+    #           self.dvdplayback=True
+    #==========================================================================
+            indexCount=0
+            functionList = []
+            
+            for items in self.options:
+                name=items[1].split('/')[-1]
+                functionList.append((name ,indexCount, ))
+                indexCount+=1
+            
+            self.session.openWithCallback(self.setSelectedMedia(), ChoiceBox, title=_("Select media to play"), list=functionList)
+            
+        else:
+            if self.g_forcedvd == "true":
+                if '.ifo' in self.options[result]:
+                    self.dvdplayback=True
+            
+            self.setSelectedMedia()
+
+        printl("", self, "C")
+
+    #===========================================================================
+    # 
+    #===========================================================================
+    def setSelectedMedia(self, choice=None):
+        '''
+        '''
+        printl("", self, "S")
+        result = 0
+        if choice != None:
+            result = choice[1]
+        
+        self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
+        
+        self.playSelectedMedia()
+       
+        printl("We have selected media at " + self.mediaFileUrl, self, "I")
+        printl("", self, "C")
+    #===============================================================================
+    # 
+    #===============================================================================
+    def playSelectedMedia(self):
+        '''
+        '''
+        printl("", self, "S")
+        
+        self.playerData = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
         
         resumeStamp = self.playerData['resumeStamp']
         printl("resumeStamp: " + str(resumeStamp), self, "I")

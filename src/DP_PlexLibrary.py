@@ -54,6 +54,7 @@ from enigma import loadPNG
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
+from Screens.ChoiceBox import ChoiceBox
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
@@ -2085,22 +2086,34 @@ class PlexLibrary(Screen):
     #========================================================================
     # 
     #========================================================================
-    def playLibraryMedia(self, id, vids, override=False ): # CHECKED
+    def getMediaOptionsToPlay(self, id, vids, override=False ): # CHECKED
         '''
         '''
         printl("", self, "S")
         
         self.getTranscodeSettings(override)
       
-        server = self.getServerFromURL(vids)
+        self.server = self.getServerFromURL(vids)
         
-        streams=self.getAudioSubtitlesMedia(server,id) 
+        self.streams=self.getAudioSubtitlesMedia(self.server,id) 
         
-        printl("partsCount: " + str(streams['partsCount']), self, "D")
-        printl("parts: " + str(streams['parts']), self, "D")
-        printl("server: " + str(server), self, "D")    
+        printl("partsCount: " + str(self.streams['partsCount']), self, "D")
+        printl("parts: " + str(self.streams['parts']), self, "D")
+        printl("server: " + str(self.streams), self, "D")    
         
-        url = self.selectMedia(streams['partsCount'],streams['parts'], server)
+        #url = self.selectMedia(self.streams['partsCount'],self.streams['parts'], self.server)
+        
+        printl("", self, "C")
+        return self.streams['partsCount'], self.streams['parts'], self.server
+    
+    #========================================================================
+    # 
+    #========================================================================
+    def playLibraryMedia(self, id, url): # CHECKED
+        '''
+        '''
+        printl("", self, "S")
+         
         printl("url: " + str(url), self, "I")
 
         if url is None:
@@ -2123,7 +2136,7 @@ class PlexLibrary(Screen):
             playurl=url
     
         try:
-            resume=int(int(streams['videoData']['viewOffset']))
+            resume=int(int(self.streams['videoData']['viewOffset']))
         except:
             resume=0
         
@@ -2188,9 +2201,9 @@ class PlexLibrary(Screen):
     #===========================================================================
     
         if not (self.g_transcode == "true" ): 
-            self.setAudioSubtitles(streams)
+            self.setAudioSubtitles(self.streams)
      
-        self.monitorPlayback(id,server)
+        self.monitorPlayback(id,self.server)
         
         #TODO return playurl
         #=======================================================================
@@ -2203,12 +2216,12 @@ class PlexLibrary(Screen):
         playerData = {}
         playerData["playUrl"] = playurl
         playerData["resumeStamp"] = resume
-        playerData["server"] = server
+        playerData["server"] = self.server
         playerData["id"] = id
         playerData["playbackType"] =self.g_playbackType
         playerData["transcodingSession"] = self.g_sessionID
-        playerData["videoData"] = streams['videoData']
-        playerData["mediaData"] = streams['mediaData']
+        playerData["videoData"] = self.streams['videoData']
+        playerData["mediaData"] = self.streams['mediaData']
         playerData["fallback"] = self.fallback
         playerData["locations"] = self.locations
         
@@ -2326,9 +2339,11 @@ class PlexLibrary(Screen):
         
         #if we have two or more files for the same movie, then present a screen
         result=0
-        dvdplayback=False
+        self.options = options
+        self.server = server
+        self.dvdplayback=False
         
-        if count > 1:
+        if count == 1:
             printl("count higher than 1 SOLVE THIS", self, "I") 
     #==========================================================================
     #       dialogOptions=[]
@@ -2355,20 +2370,46 @@ class PlexLibrary(Screen):
     #       
     #       if result in dvdIndex:
     #           printl( "DVD Media selected")
-    #           dvdplayback=True
+    #           self.dvdplayback=True
     #==========================================================================
-         
+            indexCount=0
+            functionList = []
+            
+            for items in self.options:
+                name=items[1].split('/')[-1]
+                functionList.append((name ,indexCount, ))
+                indexCount+=1
+            
+            choice = self.session.open(ChoiceBox, title=_("Select media to play"), list=functionList)
+            printl("choice:" + str(choice), self, "D")
+            self.setSelectedMedia(choice)
+            
         else:
             if self.g_forcedvd == "true":
-                if '.ifo' in options[result]:
-                    dvdplayback=True
-       
-        newurl=self.mediaType({'key': options[result][0] , 'file' : options[result][1]},server,dvdplayback)
-       
-        printl("We have selected media at " + newurl, self, "I")
-        printl("", self, "C")   
-        return newurl
+                if '.ifo' in self.options[result]:
+                    self.dvdplayback=True
+            
+            self.setSelectedMedia()
 
+        printl("", self, "C")
+        return self.newUrl
+    #===========================================================================
+    # 
+    #===========================================================================
+    def setSelectedMedia(self, choice=None):
+        '''
+        '''
+        printl("", self, "S")
+        result = 0
+        #if choice != None:
+            #if choice[1]:
+                #pass
+        
+        self.newUrl=self.mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
+       
+        printl("We have selected media at " + self.newUrl, self, "I")
+        printl("", self, "C")
+    
     #=================================================================
     # 
     #=================================================================
