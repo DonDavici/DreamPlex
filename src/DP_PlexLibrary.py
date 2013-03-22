@@ -1359,6 +1359,7 @@ class PlexLibrary(Screen):
             #check if the file can be found locally
             if type == "unixfile" or type == "winfile":
                 self.currentFile = file
+                self.currentType = type
                 self.fallback = ""
                 
                 remotePathPart = str(self.g_serverConfig.remotePathPart.value)
@@ -1499,10 +1500,11 @@ class PlexLibrary(Screen):
         
         printl("Checking for local file", self, "I")
         file = self.currentFile
-        file = file.replace(remotePathPart, localPathPart)
-                            
-        if type == "winfile":
+        
+        if self.currentType == "winfile":
             file = file.replace("\\", "/")
+            
+        file = file.replace(remotePathPart, localPathPart)
         
         file = urllib.unquote(file)
         
