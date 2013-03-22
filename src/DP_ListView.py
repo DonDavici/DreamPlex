@@ -685,7 +685,6 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		self.session.nav.stopService()
 		super(getViewClass(), self).close(arg)
 		
 		printl("", self, "C")
