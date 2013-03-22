@@ -1507,9 +1507,12 @@ class PlexLibrary(Screen):
             
         file = file.replace(remotePathPart, localPathPart)
         
+        printl("remotePathPart: " + str(remotePathPart), self, "D")
+        printl("localPathPart: " + str(localPathPart), self, "D")
+        
         file = urllib.unquote(file)
         
-        printl("alterd file string: " + str(file), self, "I")
+        printl("altered file string: " + str(file), self, "I")
         try:
             exists = open(file, 'r')
             printl("Local file found, will use this", self, "I")
