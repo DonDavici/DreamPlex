@@ -1500,16 +1500,16 @@ class PlexLibrary(Screen):
         printl("", self, "S")
         
         printl("Checking for local file", self, "I")
-        file = self.currentFile
-        
-        if self.currentType == "winfile":
-            file = file.replace("\\", "/")
-            
-        file = file.replace(remotePathPart, localPathPart)
         
         printl("remotePathPart: " + str(remotePathPart), self, "D")
         printl("localPathPart: " + str(localPathPart), self, "D")
+        file = self.currentFile
         
+        file = file.replace(remotePathPart, localPathPart)
+        
+        if self.currentType == "winfile":
+            file = file.replace("\\", "/")
+
         file = urllib.unquote(file)
         
         printl("altered file string: " + str(file), self, "I")
