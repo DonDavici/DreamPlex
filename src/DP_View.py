@@ -98,6 +98,7 @@ class DP_View(Screen, NumericalTextInput):
     currentShowIndex                    = None
     currentSeasonIndex                  = None
     showMedia                           = False
+    g_forcedvd                          = "false"
     
     #itemsPerPage = int(8)  # @TODO should be set according the desktop size
     
