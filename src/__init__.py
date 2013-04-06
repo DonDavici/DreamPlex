@@ -152,6 +152,7 @@ def initServerEntryConfig():
 	i = len(config.plugins.dreamplex.Entries) -1
 	
 	# SERVER SETTINGS
+	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
@@ -163,6 +164,7 @@ def initServerEntryConfig():
 	
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
+	printl("id: " + str(config.plugins.dreamplex.Entries[i].id.value), "__init__::initServerEntryConfig", "D")
 	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "D")
 	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "D")
 	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "D")

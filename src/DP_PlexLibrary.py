@@ -1325,7 +1325,7 @@ class PlexLibrary(Screen):
     #===========================================================================
     # 
     #===========================================================================
-    def getMountPointsFromXmlForServer(self):
+    def getXmlContent(self):
         '''
         '''
         printl("", self, "S")
@@ -1385,17 +1385,15 @@ class PlexLibrary(Screen):
                 newWay = True
                 
                 if newWay == True:
-                    tree = self.getMountPointsFromXmlForServer()
-                    #Find all the video tags, as they contain the data we need to link to a file.
-                    mappings = tree.findall('mapping')
+                    tree = self.getXmlContent()
+                  
+                    # 'mapping' nodes that are children of nodes with entry='0'
+                    serverID = str(self.g_serverConfig.id.value)
+                    mappings = tree.findall(".//*[@id='" + str(serverID) + "']/mapping")
                     
                     for mapping in mappings:
-                        for child in mapping.getchildren():
-                            if child.tag == "remotePathPart":
-                                remotePathPart = child.text
-                            elif child.tag == "localPathPart":
-                                localPathPart = child.text
-                        
+                        remotePathPart = mapping.findtext("remotePathPart")
+                        localPathPart = mapping.findtext("localPathPart")
                 
                         printl("remotePathPart: " + str(remotePathPart), self, "D")
                         printl("localPathPart: " + str(localPathPart), self, "D") 
