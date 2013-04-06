@@ -1321,7 +1321,26 @@ class PlexLibrary(Screen):
             printl( error, self, "I")
             printl("", self, "C")
             return False
-   
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def getMountPointsFromXmlForServer(self):
+        '''
+        '''
+        printl("", self, "S")
+        xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings").read()
+        printl("xml: " + str(xml), self, "D")
+        
+        #try:
+        tree = etree.fromstring(xml)
+            #root = tree.getroot()
+        #except Exception, e:
+            #self._showErrorOnTv("no xml as response", xml)
+        
+        printl("", self, "C")
+        return tree
+    
     #========================================================================
     # 
     #========================================================================
@@ -1363,55 +1382,78 @@ class PlexLibrary(Screen):
                 self.currentType = type
                 self.fallback = ""
                 
-                remotePathPart = str(self.g_serverConfig.remotePathPart.value)
-                localPathPart = str(self.g_serverConfig.localPathPart.value)
-                printl("remotePathPart: " + str(remotePathPart), self, "D")
-                printl("localPathPart: " + str(localPathPart), self, "D") 
-                locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                newWay = True
                 
-                if locationCheck != False:
-                    return locationCheck
-                ####
-                remotePathPart = str(self.g_serverConfig.remotePathPart1.value)
-                localPathPart = str(self.g_serverConfig.localPathPart1.value)
-                if remotePathPart != "/my/path/":
-                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
-                    printl("localPathPart1: " + str(localPathPart), self, "D") 
-                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                if newWay == True:
+                    tree = self.getMountPointsFromXmlForServer()
+                    #Find all the video tags, as they contain the data we need to link to a file.
+                    mappings = tree.findall('mapping')
                     
+                    for mapping in mappings:
+                        for child in mapping.getchildren():
+                            if child.tag == "remotePathPart":
+                                remotePathPart = child.text
+                            elif child.tag == "localPathPart":
+                                localPathPart = child.text
+                        
+                
+                        printl("remotePathPart: " + str(remotePathPart), self, "D")
+                        printl("localPathPart: " + str(localPathPart), self, "D") 
+                        locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                        if locationCheck != False:
+                            return locationCheck
+                        
+                else:
+                    
+                    remotePathPart = str(self.g_serverConfig.remotePathPart.value)
+                    localPathPart = str(self.g_serverConfig.localPathPart.value)
+                    printl("remotePathPart: " + str(remotePathPart), self, "D")
+                    printl("localPathPart: " + str(localPathPart), self, "D") 
+                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                
                     if locationCheck != False:
                         return locationCheck
-                ####
-                remotePathPart = str(self.g_serverConfig.remotePathPart2.value)
-                localPathPart = str(self.g_serverConfig.localPathPart2.value)
-                if remotePathPart != "/my/path/":
-                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
-                    printl("localPathPart1: " + str(localPathPart), self, "D") 
-                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
-                    
-                    if locationCheck != False:
-                        return locationCheck
-                ####
-                remotePathPart = str(self.g_serverConfig.remotePathPart3.value)
-                localPathPart = str(self.g_serverConfig.localPathPart3.value)
-                if remotePathPart != "/my/path/":
-                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
-                    printl("localPathPart1: " + str(localPathPart), self, "D") 
-                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
-                    
-                    if locationCheck != False:
-                        return locationCheck
-                ####
-                remotePathPart = str(self.g_serverConfig.remotePathPart4.value)
-                localPathPart = str(self.g_serverConfig.localPathPart4.value)
-                if remotePathPart != "/my/path/":
-                    printl("remotePathPart1: " + str(remotePathPart), self, "D")
-                    printl("localPathPart1: " + str(localPathPart), self, "D") 
-                    locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
-                    
-                    if locationCheck != False:
-                        return locationCheck
-                ####
+                    ####
+                    remotePathPart = str(self.g_serverConfig.remotePathPart1.value)
+                    localPathPart = str(self.g_serverConfig.localPathPart1.value)
+                    if remotePathPart != "/my/path/":
+                        printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                        printl("localPathPart1: " + str(localPathPart), self, "D") 
+                        locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                        
+                        if locationCheck != False:
+                            return locationCheck
+                    ####
+                    remotePathPart = str(self.g_serverConfig.remotePathPart2.value)
+                    localPathPart = str(self.g_serverConfig.localPathPart2.value)
+                    if remotePathPart != "/my/path/":
+                        printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                        printl("localPathPart1: " + str(localPathPart), self, "D") 
+                        locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                        
+                        if locationCheck != False:
+                            return locationCheck
+                    ####
+                    remotePathPart = str(self.g_serverConfig.remotePathPart3.value)
+                    localPathPart = str(self.g_serverConfig.localPathPart3.value)
+                    if remotePathPart != "/my/path/":
+                        printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                        printl("localPathPart1: " + str(localPathPart), self, "D") 
+                        locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                        
+                        if locationCheck != False:
+                            return locationCheck
+                    ####
+                    remotePathPart = str(self.g_serverConfig.remotePathPart4.value)
+                    localPathPart = str(self.g_serverConfig.localPathPart4.value)
+                    if remotePathPart != "/my/path/":
+                        printl("remotePathPart1: " + str(remotePathPart), self, "D")
+                        printl("localPathPart1: " + str(localPathPart), self, "D") 
+                        locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
+                        
+                        if locationCheck != False:
+                            return locationCheck
+                    ####
 
                 printl("Sorry I didn't find the file on the provided locations", self, "I")
             
