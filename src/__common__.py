@@ -687,3 +687,50 @@ def getScale():
 	return AVSwitch().getFramebufferScale()
 	
 	printl2("","__common__::getScale", "C")
+	
+#===========================================================================
+# 
+#===========================================================================
+def getXmlContent():
+    '''
+    '''
+    #===============================================================================
+    # import cProfile
+    #===============================================================================
+    try:
+        from lxml import etree
+        printl2("running with lxml.etree", __name__, "D")
+    except ImportError:
+	    try:
+	    # Python 2.5
+	        import xml.etree.cElementTree as etree
+	        printl2("running with cElementTree on Python 2.5+", __name__, "D")
+	    except ImportError:
+	        try:
+	            # Python 2.5
+	            import xml.etree.ElementTree as etree
+	            printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	        except ImportError:
+	            try:
+	                # normal cElementTree install
+	                import cElementTree as etree
+	                printl2("running with cElementTree", __name__, "D")
+	            except ImportError:
+	                try:
+	                    # normal ElementTree install
+	                    import elementtree.ElementTree as etree
+	                    printl2("running with ElementTree")
+	                except ImportError:
+	                    printl2("Failed to import ElementTree from any known place", __name__, "W")
+    printl2("", "__common__::getXmlContent", "S")
+    xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings").read()
+    printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
+    
+    #try:
+    tree = etree.fromstring(xml)
+        #root = tree.getroot()
+    #except Exception, e:
+        #self._showErrorOnTv("no xml as response", xml)
+    
+    printl2("", "__common__::getXmlContent", "C")
+    return tree

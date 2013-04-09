@@ -57,7 +57,7 @@ from Screens.InputBox import InputBox
 from Screens.ChoiceBox import ChoiceBox
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
 #from DPH_bonjourFind import *
 
 #===============================================================================
@@ -1322,25 +1322,6 @@ class PlexLibrary(Screen):
             printl("", self, "C")
             return False
     
-    #===========================================================================
-    # 
-    #===========================================================================
-    def getXmlContent(self):
-        '''
-        '''
-        printl("", self, "S")
-        xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings").read()
-        printl("xml: " + str(xml), self, "D")
-        
-        #try:
-        tree = etree.fromstring(xml)
-            #root = tree.getroot()
-        #except Exception, e:
-            #self._showErrorOnTv("no xml as response", xml)
-        
-        printl("", self, "C")
-        return tree
-    
     #========================================================================
     # 
     #========================================================================
@@ -1382,10 +1363,10 @@ class PlexLibrary(Screen):
                 self.currentType = type
                 self.fallback = ""
                 
-                newWay = True
+                newWay = False
                 
                 if newWay == True:
-                    tree = self.getXmlContent()
+                    tree = getXmlContent()
                   
                     # 'mapping' nodes that are children of nodes with entry='0'
                     serverID = str(self.g_serverConfig.id.value)

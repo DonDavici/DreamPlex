@@ -48,6 +48,7 @@ from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 from Plugins.Extensions.DreamPlex.DP_SystemCheck import DPS_SystemCheck
+from Plugins.Extensions.DreamPlex.DP_Mappings import DPS_Mappings
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
@@ -344,13 +345,14 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
             "red": self.keyCancel,
             "blue": self.keyDelete,
             "cancel": self.keyCancel,
-            "yellow": self.keyYellow
+            "yellow": self.keyYellow,
         }, -2)
 
         self["key_red"] = StaticText(_("Cancel"))
         self["key_green"] = StaticText(_("OK"))
         self["key_blue"] = StaticText(_("Delete"))
         self["key_yellow"] = StaticText(_("check myPlex token"))
+        
 
         if entry is None:
             self.newmode = 1
@@ -361,6 +363,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 
         self.cfglist = []
         ConfigListScreen.__init__(self, self.cfglist, session)
+            
         self.createSetup()
 
         printl("", self, "C")
@@ -517,7 +520,9 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
         '''
         printl("", self, "S")
         
-        self.session.open(MessageBox,_("myPlex Token:\n%s \nfor the user:\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+        #self.session.open(MessageBox,_("myPlex Token:\n%s \nfor the user:\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+        serverID = "2"
+        self.session.open(DPS_Mappings, serverID)
         
         printl("", self, "C")
 
