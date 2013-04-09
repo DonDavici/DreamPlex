@@ -227,13 +227,13 @@
                 }
         </convert>
         </widget>
-    	<widget source="global.CurrentTime" render="Label" position="1095,16" size="169,80" font="SetrixHD; 60" halign="left" backgroundColor="metrixBackground2" transparent="1" valign="top">
+    	<widget source="global.CurrentTime" render="Label" position="1095,16" size="169,80" font="SetrixHD; 60" halign="left" backgroundColor="#40000000" transparent="1" valign="top">
           <convert type="ClockToText">Default</convert>
         </widget>
-        <widget source="global.CurrentTime" render="Label" position="935,58" size="148,29" font="SetrixHD; 20" halign="right" backgroundColor="metrixBackground2" foregroundColor="metrixAccent1" transparent="1">
+        <widget source="global.CurrentTime" render="Label" position="935,58" size="148,29" font="SetrixHD; 20" halign="right" backgroundColor="#40000000" foregroundColor="#00bbbbbb" transparent="1">
           <convert type="ClockToText">Format:%e. %B</convert>
         </widget>
-        <widget source="global.CurrentTime" render="Label" position="957,30" size="125,30" font="SetrixHD; 20" halign="right" backgroundColor="metrixBackground2" foregroundColor="metrixAccent1" transparent="1">
+        <widget source="global.CurrentTime" render="Label" position="957,30" size="125,30" font="SetrixHD; 20" halign="right" backgroundColor="#40000000" foregroundColor="#00bbbbbb" transparent="1">
           <convert type="ClockToText">Format:%A</convert>
         </widget>
         
@@ -276,7 +276,7 @@
 		<widget name="btn_red" transparent="0" zPosition="50" position="645,340" size="32,32"/>
 		
 		<widget name="txt_blue" transparent="1" zPosition="50" halign="left" valign="top" position="700,384" size="400,32" font="Saint; 20" foregroundColor="#00bbbbbb"  backgroundColor="#40000000"/>
-		<widget name="btn_blue" transparent="0" zPosition="50" position="645,3800" size="32,32"/>
+		<widget name="btn_blue" transparent="0" zPosition="50" position="645,380" size="32,32"/>
 		
 		<widget name="txt_yellow" transparent="1" zPosition="50" halign="left" valign="top" position="700,424" size="400,32" font="Saint; 20" foregroundColor="#00bbbbbb"  backgroundColor="#40000000"/>
 		<widget name="btn_yellow" transparent="0" zPosition="50" position="645,420" size="32,32"/>
