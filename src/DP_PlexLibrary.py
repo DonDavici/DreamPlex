@@ -2920,28 +2920,87 @@ class PlexLibrary(Screen):
             
         streamURL = ""
         transcode = []
-
-        ts = int(time())
-        printl("Setting up HTTP Stream", self, "I")
-        streamPath = "video/:/transcode/segmented"
-        streamFile = 'start.m3u8'
-        transcode.append("identifier=com.plexapp.plugins.library")
-        transcode.append("ratingKey=%s" % id)
-        transcode.append("offset=0")
-        transcode.append("quality=%d" % int(self.g_quality ))
-        transcode.append("session=%s" % self.g_sessionID)
-        transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
-        #transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
-        transcode.append("url=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
-        transcode.append("3g=0")
-        transcode.append("httpCookies=")
-        transcode.append("userAgent=")
-        timestamp = "@%d" % ts
-        streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
-        pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
-        streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
-        printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
-        
+        universalTranscoder = True
+        if universalTranscoder == False:
+            ts = int(time())
+            printl("Setting up HTTP Stream", self, "I")
+            streamPath = "video/:/transcode/segmented"
+            streamFile = 'start.m3u8'
+            transcode.append("identifier=com.plexapp.plugins.library")
+            transcode.append("ratingKey=%s" % id)
+            transcode.append("offset=0")
+            transcode.append("quality=%d" % int(self.g_quality ))
+            transcode.append("session=%s" % self.g_sessionID)
+            transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
+            #transcode.append("url=%s%s" % (quote_plus('http://localhost:32400').replace('+', '%20'), quote_plus(filename).replace('+', '%20')))
+            transcode.append("url=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
+            transcode.append("3g=0")
+            transcode.append("httpCookies=")
+            transcode.append("userAgent=")
+            timestamp = "@%d" % ts
+            streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
+            pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
+            streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
+            printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
+        else:
+            ts = int(time())
+            printl("Setting up HTTP Stream with universal transcoder", self, "I")
+            streamPath = "video/:/transcode/universal"
+            streamFile = 'start.m3u8'
+            #transcode.append("path=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
+            transcode.append("path=http%3A%2F%2F127.0.0.1%3A32400%2Flibrary%2Fmetadata%2F10635")
+            transcode.append("session=%s" % self.g_sessionID)
+            transcode.append("protocol=hls")
+            transcode.append("offset=0")
+            transcode.append("3g=0")
+            transcode.append("directPlay=0")
+            transcode.append("directStream=1")
+            transcode.append("videoQuality=75")
+            transcode.append("videoResolution=1280x720")
+            transcode.append("maxVideoBitrate=3000")
+            transcode.append("subtitleSize=100")
+            transcode.append("audioBoost=100")
+            transcode.append("secondsPerSegment=7")
+            transcode.append("X-Plex-Device=iPhone")
+            transcode.append("X-Plex-Token=ztTLp3RYymrsCH7XP6Zp")
+            transcode.append("X-Plex-Client-Platform=iOS")
+            transcode.append("X-Plex-Device-Name=DDiPhone")
+            transcode.append("X-Plex-Model=4%2C1")
+            transcode.append("X-Plex-Platform=iOS")
+            transcode.append("X-Plex-Client-Identifier=%s" % self.g_sessionID)
+            transcode.append("X-Plex-Product=Plex%2FiOS")
+            transcode.append("X-Plex-Platform-Version=6.1.3")
+            transcode.append("X-Plex-Version=3.1.3")
+            timestamp = "@%d" % ts
+            streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
+            pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
+            streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
+            printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
+            
+        #===================================================================
+        ## /video/:/transcode/universal/start.m3u8?
+        ## subtitleSize=100
+        ## path=http%3A%2F%2F127.0.0.1%3A32400%2Flibrary%2Fmetadata%2F14434
+        ## session=***************
+        ## audioBoost=100
+        ## protocol=hls
+        ## directStream=1
+        ## directPlay=0
+        ## 3g=0
+        ## videoResolution=1920x1080
+        ## maxVideoBitrate=20000
+        ## videoQuality=100
+        # X-Plex-Device=*********
+        # X-Plex-Token=*********
+        # X-Plex-Client-Platform=********
+        # X-Plex-Device-Name=**********
+        # X-Plex-Model=*********
+        # X-Plex-Platform=*******
+        # X-Plex-Client-Identifier=*************
+        # X-Plex-Product=*********
+        # X-Plex-Platform-Version=6.1.3
+        # X-Plex-Version=3.1.3
+        #===================================================================
         #=======================================================================
         # now=str(int(round(time.time(),0)))
         # 
