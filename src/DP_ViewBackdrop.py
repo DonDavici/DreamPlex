@@ -907,7 +907,9 @@ class DPS_ViewBackdrop(DP_View):
 		except Exception, e:
 			self._showErrorOnTv("no xml as response", xml)
 		
-		self.itemsPerPage = int(tree.get("DP_ViewBackdrop_itemsPerPage"))
+		params = tree.findall(".//*[@name='DP_ViewBackdrop']/param")
+		for param in params:
+			self.itemsPerPage = int(param.findtext("itemsPerPage"))
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 			
 		printl("", self, "C")
