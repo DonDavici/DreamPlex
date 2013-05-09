@@ -133,3 +133,56 @@ Not used for hmac
 /video/:/transcode/generic.mpegts?audioCodec=libmp3lame&fakeContentLength=259780400&format=mpegts&height=720&identifier=com%2Eplexapp%2Eplugins%2Elibrary&key=http:%2F%2F127%2E0%2E0%2E1:32400%2Flibrary%2Fmetadata%2F7&quality=5&session=fca8e3ee6cef9bab54cb22ed84c72e0cdd5e4a39&url=http:%2F%2F127%2E0%2E0%2E1:32400%2Flibrary%2Fparts%2F5%2Ffile%2Emkv&videoBitrate=1500&videoCodec=libx264&width=1280
 
 
+
+/video/:/transcode/universal/start.m3u8?
+subtitleSize=100
+path=http%3A%2F%2F127.0.0.1%3A32400%2Flibrary%2Fmetadata%2F14434
+session=***************
+audioBoost=100
+protocol=hls
+directStream=1
+directPlay=0
+3g=0
+videoResolution=1920x1080
+maxVideoBitrate=20000
+videoQuality=100
+X-Plex-Device=*********
+X-Plex-Token=*********
+X-Plex-Client-Platform=********
+X-Plex-Device-Name=**********
+X-Plex-Model=*********
+X-Plex-Platform=*******
+X-Plex-Client-Identifier=*************
+X-Plex-Product=*********
+X-Plex-Platform-Version=6.1.3
+X-Plex-Version=3.1.3
+
+420x240, 320kbps
+videoResolution=420x240&maxVideoBitrate=320&videoQuality=30
+
+576x320, 720 kbps
+videoResolution=576x320&maxVideoBitrate=720&videoQuality=40
+
+720x480, 1,5mbps
+videoResolution=720x480&maxVideoBitrate=1500&videoQuality=60
+
+1024x768, 2mbps
+videoResolution=1024x768&maxVideoBitrate=2000&videoQuality=60
+
+1280x720, 3mbps
+videoResolution=1280x720&maxVideoBitrate=3000&videoQuality=75
+
+1280x720, 4mbps
+videoResolution=1280x720&maxVideoBitrate=4000&videoQuality=100
+
+1920x1080, 8mbps
+videoResolution=1920x1080&maxVideoBitrate=8000&videoQuality=60
+
+1920x1080, 10mbps
+videoResolution=1920x1080&maxVideoBitrate=10000&videoQuality=75
+
+1920x1080, 12mbps
+videoResolution=1920x1080&maxVideoBitrate=12000&videoQuality=90
+
+1920x1080, 20mbps
+videoResolution=1920x1080&maxVideoBitrate=20000&videoQuality=100
