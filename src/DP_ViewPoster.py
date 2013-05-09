@@ -28,12 +28,12 @@ def getViewClass():
 	printl("", __name__, "S")
 	
 	printl("", __name__, "C")
-	return DPS_PosterView
+	return DPS_ViewPoster
 
 #===============================================================================
 # 
 #===============================================================================
-class DPS_PosterView(DP_View):
+class DPS_ViewPoster(DP_View):
 	'''
 	'''
 	
@@ -227,21 +227,22 @@ class DPS_PosterView(DP_View):
 	#===========================================================================
 	def getFileNameFormSection(self, selection):
 		element = selection[1]
+		printl("element: " + str(element), self, "D")
 		#self.resetCurrentImages()
 		
-		if element ["ViewMode"] == "ShowSeasons":
+		if element ["viewMode"] == "ShowSeasons":
 			#print "is ShowSeasons"
 			self.parentSeasonId = element ["Id"]
 			self.isTvShow = True
 			bname = element["Id"]
 			pname = element["Id"]
 	
-		elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] is None:
+		elif element ["viewMode"] == "ShowEpisodes" and element["Id"] is None:
 			#print "is ShowEpisodes all entry"
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			
-		elif element ["ViewMode"] == "ShowEpisodes" and element["Id"] != "":
+		elif element ["viewMode"] == "ShowEpisodes" and element["Id"] != "":
 			#print "is ShowEpisodes special season"
 			self.parentSeasonNr = element["Id"]			
 			bname = self.parentSeasonId
