@@ -1,1 +1,2 @@
-<params DP_ListView_itemsPerPage="6"/>
+<params DP_ViewList_itemsPerPage="6"/>
+<params DP_ViewBackdrop_itemsPerPage="6"/>
