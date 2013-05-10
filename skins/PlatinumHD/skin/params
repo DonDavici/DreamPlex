@@ -10,4 +10,10 @@
             <itemsPerPage>6</itemsPerPage>
         </param>
     </view>
+    
+    <view name="DP_ViewListLong">
+        <param>
+            <itemsPerPage>14</itemsPerPage>
+        </param>
+    </view>
 </params>
