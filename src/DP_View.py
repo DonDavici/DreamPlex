@@ -54,7 +54,8 @@ def getViews():
     
     availableViewList = []
     viewList = (
-            (_("List"), "DP_ViewList", "DPS_ViewList"), 
+            (_("Short List"), "DP_ViewList", "DPS_ViewList"),
+            (_("Long List"), "DP_ViewListLong", "DPS_ViewListLong"), 
             (_("Backdrop"), "DP_ViewBackdrop", "DPS_ViewBackdrop"), 
         )
     
@@ -159,7 +160,7 @@ class DP_View(Screen, NumericalTextInput):
             "red_long":        (self.onKeyRedLong, ""),
             #"green_long":      (self.onKeyGreenLong, ""),
             #"yellow_long":     (self.onKeyYellowLong, ""),
-            #"blue_long":       (self.onKeyBlueLong, ""),
+            "blue_long":       (self.onKeyBlueLong, ""),
             
             "bouquet_up":       (self.bouquetUp, ""),
             "bouquet_down":     (self.bouquetDown, ""),
@@ -638,7 +639,8 @@ class DP_View(Screen, NumericalTextInput):
         '''
         printl("", self, "S")
         
-        self.onChooseView()
+        #self.onChooseView()
+        self.displayViewMenu()
         
         printl("", self, "C")
     
