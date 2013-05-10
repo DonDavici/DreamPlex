@@ -366,28 +366,7 @@ class DPS_ViewBackdrop(DP_View):
 		
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleNavigationData(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		itemsPerPage = self.itemsPerPage
-		itemsTotal = self["listview"].count()
-		correctionVal = 0.5
-		
-		if (itemsTotal%itemsPerPage) == 0:
-			correctionVal = 0
-		
-		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
-		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
-		
-		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
-		
-		printl("", self, "C")
+
 		
 	#===========================================================================
 	# 
