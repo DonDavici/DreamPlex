@@ -183,6 +183,7 @@ class PlexLibrary(Screen):
     g_session = None
     g_serverConfig = None
     g_error = False
+    g_showUnSeenCounts = False
     
     #Create the standard header structure and load with a User Agent to ensure we get back a response.
     g_txheaders = {
@@ -207,6 +208,7 @@ class PlexLibrary(Screen):
                 
         # global settings
         self.g_secondary = str(config.plugins.dreamplex.showFilter.value).lower()
+        self.g_showUnSeenCounts = config.plugins.dreamplex.showUnSeenCounts.value
         self.g_sessionID = str(uuid.uuid4())
         
         # server settings
@@ -1691,6 +1693,9 @@ class PlexLibrary(Screen):
             else:
                 details['viewState'] = "unseen"
                 seenVisu = self.unseenPic
+            
+            if self.g_showUnSeenCounts == True:
+                details['title'] = details['title'] + " ("+ str(details['episode']) + "/" + str(watched) + ")"
             
             if show.get('banner',None) is not None:
                 extraData['banner']='http://'+server+show.get('banner').split('?')[0]+"/banner.jpg"
