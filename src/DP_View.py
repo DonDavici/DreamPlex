@@ -54,7 +54,6 @@ def getViews():
     viewList = (
             (_("List"), "DP_ViewList", "DPS_ViewList"), 
             (_("Backdrop"), "DP_ViewBackdrop", "DPS_ViewBackdrop"), 
-            (_("Poster"), "DP_ViewPoster", "DPS_ViewPoster"), 
         )
     
     for view in viewList:
