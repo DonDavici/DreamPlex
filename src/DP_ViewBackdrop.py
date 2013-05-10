@@ -94,7 +94,7 @@ def getViewClass():
 class DPS_ViewBackdrop(DP_View):
 	'''
 	'''
-	backdrop_postfix 		= "_backdrop.jpg"
+	backdrop_postfix 		= "_backdrop_1280x720.jpg"
 	poster_postfix 			= "_poster.jpg"
 	image_prefix 			= ""
 	plexInstance 			= None
@@ -860,6 +860,8 @@ class DPS_ViewBackdrop(DP_View):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
+		download_url = download_url.replace('&width=560&height=315', '&width=1280&height=720')
+		#http://192.168.45.190:32400/photo/:/transcode?url=http%3A%2F%2Flocalhost%3A32400%2Flibrary%2Fmetadata%2F6209%2Fart%2F1354571799&width=560&height=315'
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
