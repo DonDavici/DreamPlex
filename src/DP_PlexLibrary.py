@@ -4,8 +4,8 @@ DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
 
-Some of the code is from other plugins:
-all credits to the coders :-)
+special thx to hippojay for his great work in plexbmc
+which was the the base for this lib :-)
 
 DreamPlex Plugin is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
