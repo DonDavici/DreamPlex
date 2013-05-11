@@ -49,35 +49,6 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
 #===============================================================================
-# import cProfile
-#===============================================================================
-try:
-    from lxml import etree
-    printl("running with lxml.etree", __name__, "D")
-except ImportError:
-    try:
-    # Python 2.5
-        import xml.etree.cElementTree as etree
-        printl("running with cElementTree on Python 2.5+", __name__, "D")
-    except ImportError:
-        try:
-            # Python 2.5
-            import xml.etree.ElementTree as etree
-            printl("running with ElementTree on Python 2.5+", __name__, "D")
-        except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-                printl("running with cElementTree", __name__, "D")
-            except ImportError:
-                try:
-                    # normal ElementTree install
-                    import elementtree.ElementTree as etree
-                    printl("running with ElementTree")
-                except ImportError:
-                    printl("Failed to import ElementTree from any known place", __name__, "W")
-
-#===============================================================================
 # 
 #===============================================================================
 def getViewClass():
@@ -132,7 +103,7 @@ class DPS_ViewList(DP_View):
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
 		
 		# set navigation values
-		self.setListViewElementsCount()
+		#DP_View.setListViewElementsCount("DPS_ViewList")
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -870,27 +841,7 @@ class DPS_ViewList(DP_View):
 				
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setListViewElementsCount(self):
-		'''
-		'''
-		printl("", self, "S")
-		xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params").read()
-		printl("xml: " + str(xml), self, "D")
-		
-		try:
-			tree = etree.fromstring(xml)
-		except Exception, e:
-			self._showErrorOnTv("no xml as response", xml)
-		
-		params = tree.findall(".//*[@name='DP_ViewList']/param")
-		for param in params:
-			self.itemsPerPage = int(param.findtext("itemsPerPage"))
-		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
-			
-		printl("", self, "C")
+
 		
 	#===========================================================================
 	# 
