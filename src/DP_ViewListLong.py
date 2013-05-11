@@ -132,8 +132,9 @@ class DPS_ViewListLong(DP_View):
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
 		
+		# set navigation values
 		self.setListViewElementsCount()
-		
+
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.playTheme = config.plugins.dreamplex.playTheme.value
@@ -885,7 +886,7 @@ class DPS_ViewListLong(DP_View):
 		except Exception, e:
 			self._showErrorOnTv("no xml as response", xml)
 		
-		params = tree.findall(".//*[@name='DP_ViewList']/param")
+		params = tree.findall(".//*[@name='DP_ViewListLong']/param")
 		for param in params:
 			self.itemsPerPage = int(param.findtext("itemsPerPage"))
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")

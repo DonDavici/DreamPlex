@@ -131,7 +131,9 @@ class DPS_ViewBackdrop(DP_View):
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
 		
+		# set navigation values
 		self.setListViewElementsCount()
+		printl("HAHAHAH" , self, "D")
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value

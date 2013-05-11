@@ -131,6 +131,7 @@ class DPS_ViewList(DP_View):
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
 		
+		# set navigation values
 		self.setListViewElementsCount()
 		
 		# get needed config parameters
