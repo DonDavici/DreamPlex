@@ -79,6 +79,7 @@ class DPS_MainMenu(Screen):
 	g_serverDataMenu = None
 	g_filterDataMenu = None
 	nextExitIsQuit = True
+	currentService = None
 	
 	#===========================================================================
 	# 
@@ -516,7 +517,8 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
-			self.session.nav.playService(self.currentService)
+			if self.currentService != None:
+				self.session.nav.playService(self.currentService)
 		self.close((True,) )
 		
 		printl("", self, "C")
