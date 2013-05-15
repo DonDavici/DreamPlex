@@ -145,11 +145,13 @@
            <convert type="ClockToText">Date</convert>
         </widget>
         <!-- buttons -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red-fs8.png" zPosition="3" position="580,640" size="32,32" alphatest="blend" />
-        
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red-fs8.png" zPosition="3" position="218,640" size="32,32" alphatest="blend" />
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green-fs8.png" zPosition="3" position="527,640" size="32,32" alphatest="blend" />
+        <!--ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue-fs8.png" zPosition="3" position="892,640" size="32,32" alphatest="blend" /-->
         <!-- functions -->
-        <widget source="key_red" render="Label" position="623,635" zPosition="4" size="231,37" font="Saint;22" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left" valign="center" transparent="1" />
-        <!--widget source="key_green" render="Label" position="373,656" zPosition="4" size="231,37" font="Saint;20" halign="center" valign="center" transparent="1" /-->
+        <widget source="key_red" render="Label" position="261,635" zPosition="4" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
+        <widget source="key_green" render="Label" position="570,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
+        <!--widget source="key_blue" render="Label" position="935,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" /-->
     </screen>
     
     <!-- DPS_ServerEntriesListConfigScreen -->

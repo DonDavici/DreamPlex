@@ -35,6 +35,21 @@ from Components.AVSwitch import AVSwitch
 from DPH_Singleton import Singleton
 
 #===============================================================================
+# import cProfile
+#===============================================================================
+try:
+# Python 2.5
+	import xml.etree.cElementTree as etree
+	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
+except ImportError:
+	try:
+		# Python 2.5
+		import xml.etree.ElementTree as etree
+		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	except ImportError:
+		printl2("something weng wrong during xml parsing" + str(e), self, "E")
+
+#===============================================================================
 # GLOBAL
 #===============================================================================
 gConnectivity = None
@@ -42,15 +57,15 @@ gLogFile = None
 gBoxType = None
 
 # ****************************** VERBOSITY Level *******************************
-VERB_ERROR       = 0  # "E" shows error
+VERB_ERROR	   = 0  # "E" shows error
 VERB_INFORMATION = 0  # "I" shows important highlights to have better overview if something really happening or not
 
-VERB_WARNING     = 1  # "W" shows warning
+VERB_WARNING	 = 1  # "W" shows warning
 
 VERB_DEBUG 		 = 2  # "D" shows additional debug information
 
-VERB_STARTING    = 3  # "S" shows started functions/classes etc.
-VERB_CLOSING     = 3  # "C" shows closing functions/classes etc.
+VERB_STARTING	= 3  # "S" shows started functions/classes etc.
+VERB_CLOSING	 = 3  # "C" shows closing functions/classes etc.
 
 VERB_EXTENDED	 = 4  # "X" shows information that are not really needed at all can only be activated by hand
 
@@ -520,7 +535,7 @@ def getBoxArch():
    
 	if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
 		ARCH = "oe16"
-                   
+				   
 	if (sys.version_info < (2, 7, 4) and sys.version_info > (2, 7, 0)):
 		ARCH = "oe20"
 			
@@ -534,15 +549,15 @@ def findMountPoint(pth):
 	'''
 	Example: findMountPoint("/media/hdd/some/file") returns "/media/hdd" 
 	'''
-	printl2("","__common__::findMountPoint", "S")                                    
+	printl2("","__common__::findMountPoint", "S")									
 	
-	pth = path.abspath(pth)                                                                                        
+	pth = path.abspath(pth)																						
 	
-	while not path.ismount(pth):                                                                                    
-		pth = path.dirname(pth)                                                                                
+	while not path.ismount(pth):																					
+		pth = path.dirname(pth)																				
 	
 	printl2("","__common__::findMountPoint", "C")
-	return pth                                                                                                         
+	return pth																										 
 
 #===============================================================================
 # 
@@ -691,46 +706,36 @@ def getScale():
 #===========================================================================
 # 
 #===========================================================================
-def getXmlContent():
-    '''
-    '''
-    #===============================================================================
-    # import cProfile
-    #===============================================================================
-    try:
-        from lxml import etree
-        printl2("running with lxml.etree", __name__, "D")
-    except ImportError:
-	    try:
-	    # Python 2.5
-	        import xml.etree.cElementTree as etree
-	        printl2("running with cElementTree on Python 2.5+", __name__, "D")
-	    except ImportError:
-	        try:
-	            # Python 2.5
-	            import xml.etree.ElementTree as etree
-	            printl2("running with ElementTree on Python 2.5+", __name__, "D")
-	        except ImportError:
-	            try:
-	                # normal cElementTree install
-	                import cElementTree as etree
-	                printl2("running with cElementTree", __name__, "D")
-	            except ImportError:
-	                try:
-	                    # normal ElementTree install
-	                    import elementtree.ElementTree as etree
-	                    printl2("running with ElementTree")
-	                except ImportError:
-	                    printl2("Failed to import ElementTree from any known place", __name__, "W")
-    printl2("", "__common__::getXmlContent", "S")
-    xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings").read()
-    printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
-    
-    #try:
-    tree = etree.fromstring(xml)
-        #root = tree.getroot()
-    #except Exception, e:
-        #self._showErrorOnTv("no xml as response", xml)
-    
-    printl2("", "__common__::getXmlContent", "C")
-    return tree
+def getXmlContent(location):
+	'''
+	'''
+	
+	printl2("", "__common__::getXmlContent", "S")
+	
+	xml = open(location).read()
+	printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
+	
+	try:
+		tree = etree.fromstring(xml)
+	except Exception, e:
+		printl2("something weng wrong during xml parsing" + str(e), __name__, "E")
+	
+	printl2("", "__common__::getXmlContent", "C")
+	return tree
+
+#===========================================================================
+# 
+#===========================================================================
+def writeXmlContent(content, location):
+	'''
+	'''
+	printl2("", "__common__::writeXmlContent", "S")
+	
+	xmlString = etree.tostring(content)
+	fobj = open(location, "w")
+	fobj.write(xmlString)
+	fobj.close
+	printl2("xmlString: " + str(xmlString), "__common__::getXmlContent", "C")
+	
+	printl2("", "__common__::getXmlContent", "C")
+	

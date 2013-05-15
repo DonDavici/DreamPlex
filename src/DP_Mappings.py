@@ -42,7 +42,7 @@ from Screens.Screen import Screen
 from Screens.InputBox import InputBox
 from Screens.Console import Console as SConsole
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, getXmlContent
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, getXmlContent, writeXmlContent
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
 
@@ -69,14 +69,16 @@ class DPS_Mappings(Screen):
 		{
 		#"ok": self.startSelection,
 		"cancel": self.cancel,
-		"red": self.cancel,
+		"red": self.redKey,
+		"green": self.greenKey,
 		}, -1)
 		
 		
 		self["content"] = DPS_MappingsEntryList([], serverID)
 		self.updateList()
 		
-		self["key_red"] = StaticText(_("Exit"))
+		self["key_red"] = StaticText(_("Delete Entry"))
+		self["key_green"] = StaticText(_("Add Entry"))
 		
 		printl("", self, "C")
 		
@@ -105,65 +107,126 @@ class DPS_Mappings(Screen):
 		
 		printl("", self, "C")
 		
+	#===================================================================
+	# 
+	#===================================================================
+	def greenKey(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		
+		
+		printl("", self, "C")
 
+	#===================================================================
+	# 
+	#===================================================================
+	def redKey(self):
+		'''
+		'''
+		printl("", self, "S")
+
+		index = self["content"].l.getIndex()
+		printl("index: " + str(index), self, "D")
+		
+		printl("", self, "C")
 
 #===============================================================================
 # class
 # DPS_ServerEntryList
 #===============================================================================
 class DPS_MappingsEntryList(MenuList):
-    
-    def __init__(self, menuList, serverID, enableWrapAround = True):
-        '''
-        '''
-        printl("", self, "S")
-        self.serverID = serverID
-        MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
-        self.l.setFont(0, gFont("Regular", 20))
-        self.l.setFont(1, gFont("Regular", 18))
-        
-        printl("", self, "C")
-        
-    #===========================================================================
-    # 
-    #===========================================================================
-    def postWidgetCreate(self, instance):
-        '''
-        '''
-        printl("", self, "S")
-        
-        MenuList.postWidgetCreate(self, instance)
-        instance.setItemHeight(20)
+	
+	def __init__(self, menuList, serverID, enableWrapAround = True):
+		'''
+		'''
+		printl("", self, "S")
+		self.serverID = serverID
+		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
+		self.l.setFont(0, gFont("Regular", 20))
+		self.l.setFont(1, gFont("Regular", 18))
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def postWidgetCreate(self, instance):
+		'''
+		'''
+		printl("", self, "S")
+		
+		MenuList.postWidgetCreate(self, instance)
+		instance.setItemHeight(20)
 
-        printl("", self, "C")
-        
-    #===========================================================================
-    # 
-    #===========================================================================
-    def buildList(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self.list=[]
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def buildList(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.list=[]
+		
+		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings")
+		
+		printl("serverID: " + str(self.serverID), self, "D")
+		for server in tree.findall("server"):
+			printl("servername: " + str(server.get('id')), self, "D")
+			if str(server.get('id')) == str(self.serverID):
+				
+				for mapping in server.findall('mapping'):
+					remotePathPart = mapping.findtext("remotePathPart")
+					localPathPart = mapping.findtext("localPathPart")
+					printl("remotePathPart: " + str(remotePathPart), self, "D")
+					printl("localPathPart: " + str(localPathPart), self, "D")
+					
+					res = [mapping]
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
+	
+					self.list.append(res)
+		
+		self.l.setList(self.list)
+		self.moveToIndex(0)
+		
+		#self.deleteSelectedMapping(1)
+				
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def deleteSelectedMapping(self, mappingId):
+		'''
+		'''
+		printl("", self, "S")
+		location = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings"
+		tree = getXmlContent(location)
+		printl("serverID: " + str(self.serverID), self, "D")
+		for server in tree.findall("server"):
+			printl("servername: " + str(server.get('id')), self, "D")
+			if str(server.get('id')) == str(self.serverID):
+				
+				for mapping in server.findall('mapping'):
+					printl("mapping: " + str(mapping.get('id')), self, "D")
+					if str(mapping.get('id')) == str(mappingId):
+						server.remove(mapping)
+						writeXmlContent(tree, location)
+		printl("", self, "C")
 
-        
-        tree = getXmlContent()
-        
-        # 'mapping' nodes that are children of nodes with entry='0'
-        mappings = tree.findall(".//*[@id='" + str(self.serverID) + "']/mapping")
-        
-        for mapping in mappings:
-            remotePathPart = mapping.findtext("remotePathPart")
-            localPathPart = mapping.findtext("localPathPart")
-        
-            res = [mapping]
-            res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
-            res.append((eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
-    
-            self.list.append(res)
-        
-        self.l.setList(self.list)
-        self.moveToIndex(0)
-                
-        printl("", self, "C")
+	#===========================================================================
+	# 
+	#===========================================================================	
+	def addNewMapping(self, id):
+		'''
+		'''
+		printl("", self, "S")
+		
+		
+		
+		printl("", self, "C")

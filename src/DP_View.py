@@ -39,23 +39,9 @@ from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
-#===============================================================================
-# import cProfile
-#===============================================================================
-try:
-	# Python 2.5
-	import xml.etree.cElementTree as etree
-	#printl("running with cElementTree on Python 2.5+", __name__, "D")
-except ImportError:
-	try:
-		# Python 2.5
-		import xml.etree.ElementTree as etree
-		#printl("running with ElementTree on Python 2.5+", __name__, "D")
-	except ImportError:
-		printl("no etree possible", __name__, "E")
 #===============================================================================
 # 
 #===============================================================================
@@ -217,14 +203,8 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		'''
 		printl("", self, "S")
-		xml = open("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params").read()
-		printl("xml: " + str(xml), self, "D")
 		
-		try:
-			tree = etree.fromstring(xml)
-		except Exception, e:
-			printl("something weng wrong during xml parsing" + str(e), self, "E")
-
+		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
 		for view in tree.findall('view'):
 			if view.get('name') == viewName:
 				self.itemsPerPage = int(view.find('itemsPerPage').text)

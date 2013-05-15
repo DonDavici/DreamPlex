@@ -1,32 +1,33 @@
-<servers>
+<?xml version="1.0"?>
+<xml>
     <server id="0">
-        <mapping>
+        <mapping id="0">
             <remotePathPart>/path/to/01</remotePathPart>
             <localPathPart>/path/from/01</localPathPart>
         </mapping>
-        <mapping>
+        <mapping id="1">
             <remotePathPart>/path/to/02</remotePathPart>
             <localPathPart>/path/from/02</localPathPart>
         </mapping>
     </server>
     <server id="1">
-        <mapping>
+        <mapping id="0">
             <remotePathPart>/path/to/11</remotePathPart>
             <localPathPart>/path/from/11</localPathPart>
         </mapping>
-        <mapping>
+        <mapping id="1">
             <remotePathPart>/path/to/12</remotePathPart>
             <localPathPart>/path/from/12</localPathPart>
         </mapping>
     </server>
     <server id="2">
-        <mapping>
+        <mapping id="0">
             <remotePathPart>/path/to/21</remotePathPart>
             <localPathPart>/path/from/21</localPathPart>
         </mapping>
-        <mapping>
+        <mapping id="1">
             <remotePathPart>/path/to/22</remotePathPart>
             <localPathPart>/path/from/22</localPathPart>
         </mapping>
     </server>
-</servers>
+</xml>
