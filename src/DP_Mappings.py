@@ -25,7 +25,7 @@ You should have received a copy of the GNU General Public License
 import sys
 import time
 
-from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
+from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER, getDesktop
 from os import system, popen
 
 from Components.ActionMap import ActionMap, HelpableActionMap
@@ -39,8 +39,10 @@ from Components.config import config, getConfigListEntry, configfile
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
+from Screens.LocationBox import MovieLocationBox
 from Screens.InputBox import InputBox
 from Screens.Console import Console as SConsole
+from Screens.VirtualKeyBoard import VirtualKeyBoard
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, getXmlContent, writeXmlContent
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
@@ -66,12 +68,16 @@ except ImportError:
 		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
 	except ImportError:
 		printl2("something weng wrong during xml parsing" + str(e), self, "E")
-		
+
+
 #===============================================================================
 # class
 # DPS_SystemCheck
 #===============================================================================
 class DPS_Mappings(Screen):
+	
+	remotePath = None
+	localPath = None
 	
 	def __init__(self, session, serverID):
 		'''
@@ -130,10 +136,31 @@ class DPS_Mappings(Screen):
 		'''
 		printl("", self, "S")
 		
-		self["content"].addNewMapping()
-		self.close()
-		
+		self.session.openWithCallback(self.setLocalPathCallback, MovieLocationBox,_("Enter your local path segment here:"), "/mnt/x")
 		printl("", self, "C")
+		
+	
+	def setLocalPathCallback(self, callback = None):
+		if callback is not None and len(callback):
+			printl("localPath: " + str(callback), self, "D")
+			self.localPath = str(callback)
+			self.session.openWithCallback(self.setRemotePathCallback, VirtualKeyBoard, title = (_("Enter your remote path segment here:")), text = "C:\Vidoes or /volume1/vidoes or \\\\SERVER\\Videos\\")
+		else:
+			self.session.open(MessageBox,_("Adding new mapping was not completed"), MessageBox.TYPE_INFO)
+			self.close()
+	
+	def setRemotePathCallback(self, callback = None):
+		if callback is not None and len(callback):
+			printl("remotePath: " + str(callback), self, "D")
+			self.remotePath = str(callback)
+			
+			self["content"].addNewMapping(self.remotePath, self.localPath)
+		else:
+			self.session.open(MessageBox,_("Adding new mapping was not completed"), MessageBox.TYPE_INFO)
+			
+		self.close()
+	
+		
 
 	#===================================================================
 	# 
@@ -151,6 +178,9 @@ class DPS_Mappings(Screen):
 		self.close()
 		
 		printl("", self, "C")
+		
+	def VirtualKeyBoardTextEntry(self):
+		pass
 
 #===============================================================================
 # class
@@ -248,7 +278,7 @@ class DPS_MappingsEntryList(MenuList):
 	#===========================================================================
 	# 
 	#===========================================================================	
-	def addNewMapping(self):
+	def addNewMapping(self, remotePath, localPath):
 		'''
 		'''
 		printl("", self, "S")
@@ -256,8 +286,6 @@ class DPS_MappingsEntryList(MenuList):
 		tree = getXmlContent(self.location)
 		
 		newId = int(self.lastMappingId) + 1
-		remotePath = "/path/to/01"
-		localPath = "/path/from/01"
 		
 		printl("newId: " + str(newId), self, "D")
 		printl("remotePath: " + str(remotePath), self, "D")

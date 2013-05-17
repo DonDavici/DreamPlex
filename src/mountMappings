@@ -1,5 +1,5 @@
 <xml>
   <server id="2">
-    <mapping id="1" remotePathPart="/path/to/01" localPathPart="/path/from/01" />
+    <mapping id="1" remotePathPart="C:\Vidoes or /volume1/vidoes or \\SERVER\Videos\" localPathPart="/shares/" />
   </server>
 </xml>
