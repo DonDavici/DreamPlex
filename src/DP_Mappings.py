@@ -53,6 +53,21 @@ from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from twisted.python.versions import getVersionString
 
 #===============================================================================
+# import cProfile
+#===============================================================================
+try:
+# Python 2.5
+	import xml.etree.cElementTree as etree
+	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
+except ImportError:
+	try:
+		# Python 2.5
+		import xml.etree.ElementTree as etree
+		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	except ImportError:
+		printl2("something weng wrong during xml parsing" + str(e), self, "E")
+		
+#===============================================================================
 # class
 # DPS_SystemCheck
 #===============================================================================
@@ -115,7 +130,8 @@ class DPS_Mappings(Screen):
 		'''
 		printl("", self, "S")
 		
-		
+		self["content"].addNewMapping()
+		self.close()
 		
 		printl("", self, "C")
 
@@ -127,8 +143,12 @@ class DPS_Mappings(Screen):
 		'''
 		printl("", self, "S")
 
-		index = self["content"].l.getIndex()
-		printl("index: " + str(index), self, "D")
+		content = self["content"].getCurrent()
+		currentId = content[1][7]
+		printl("currentId: " + str(currentId), self, "D")
+		
+		self["content"].deleteSelectedMapping(currentId)
+		self.close()
 		
 		printl("", self, "C")
 
@@ -138,6 +158,9 @@ class DPS_Mappings(Screen):
 #===============================================================================
 class DPS_MappingsEntryList(MenuList):
 	
+	lastMappingId = 0 # we use this to find the next id if we add a new element
+	location = None
+	
 	def __init__(self, menuList, serverID, enableWrapAround = True):
 		'''
 		'''
@@ -146,6 +169,7 @@ class DPS_MappingsEntryList(MenuList):
 		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
+		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
 		
 		printl("", self, "C")
 		
@@ -180,13 +204,16 @@ class DPS_MappingsEntryList(MenuList):
 			if str(server.get('id')) == str(self.serverID):
 				
 				for mapping in server.findall('mapping'):
-					remotePathPart = mapping.findtext("remotePathPart")
-					localPathPart = mapping.findtext("localPathPart")
+					self.lastMappingId = mapping.attrib.get("id")
+					remotePathPart = mapping.attrib.get("remotePathPart")
+					localPathPart = mapping.attrib.get("localPathPart")
+					printl("self.lastMappingId: " + str(self.lastMappingId), self, "D")
 					printl("remotePathPart: " + str(remotePathPart), self, "D")
 					printl("localPathPart: " + str(localPathPart), self, "D")
 					
 					res = [mapping]
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastMappingId)))
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
 					res.append((eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
 	
 					self.list.append(res)
@@ -205,8 +232,7 @@ class DPS_MappingsEntryList(MenuList):
 		'''
 		'''
 		printl("", self, "S")
-		location = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings"
-		tree = getXmlContent(location)
+		tree = getXmlContent(self.location)
 		printl("serverID: " + str(self.serverID), self, "D")
 		for server in tree.findall("server"):
 			printl("servername: " + str(server.get('id')), self, "D")
@@ -216,17 +242,43 @@ class DPS_MappingsEntryList(MenuList):
 					printl("mapping: " + str(mapping.get('id')), self, "D")
 					if str(mapping.get('id')) == str(mappingId):
 						server.remove(mapping)
-						writeXmlContent(tree, location)
+						writeXmlContent(tree, self.location)
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================	
-	def addNewMapping(self, id):
+	def addNewMapping(self):
 		'''
 		'''
 		printl("", self, "S")
+
+		tree = getXmlContent(self.location)
 		
+		newId = int(self.lastMappingId) + 1
+		remotePath = "/path/to/01"
+		localPath = "/path/from/01"
 		
+		printl("newId: " + str(newId), self, "D")
+		printl("remotePath: " + str(remotePath), self, "D")
+		printl("localPath: " + str(localPath), self, "D")
+		
+		existingServer = False
+		
+		for server in tree.findall("server"):
+			printl("servername: " + str(server.get('id')), self, "D")
+			if str(server.get('id')) == str(self.serverID):
+				existingServer = True
+				
+				server.append(etree.Element('mapping id="' + str(newId) + '" remotePathPart="' + remotePath + '" localPathPart="' + localPath + '"'))
+				writeXmlContent(tree, self.location)
+		
+		if existingServer == False: # this server has no node in the xml
+			printl("expanding server list", self, "D")
+			tree.append(etree.Element('server id="' + str(self.serverID) + '"'))
+			writeXmlContent(tree, self.location)
+			
+			# now lets go through the xml again to add the mapping to the server
+			self.addNewMapping()
 		
 		printl("", self, "C")

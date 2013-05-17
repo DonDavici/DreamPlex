@@ -78,6 +78,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
                 getConfigListEntry(_("Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("fill me")),
                 getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")),
                 getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
+                getConfigListEntry(_("Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")),
                 getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")),
                 getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")),
                 getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")),

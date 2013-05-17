@@ -731,11 +731,47 @@ def writeXmlContent(content, location):
 	'''
 	printl2("", "__common__::writeXmlContent", "S")
 	
-	xmlString = etree.tostring(content)
+	indented = indentXml(content)
+	xmlString = etree.tostring(indented)
 	fobj = open(location, "w")
 	fobj.write(xmlString)
 	fobj.close
 	printl2("xmlString: " + str(xmlString), "__common__::getXmlContent", "C")
 	
 	printl2("", "__common__::getXmlContent", "C")
+
+
+#===========================================================================
+# 
+#===========================================================================
+def indentXml(elem, level=0, more_sibs=False):
+	'''
+	'''
+	printl2("", "__common__::indentXml", "S")
+
+	i = "\n"
+	if level:
+		i += (level-1) * '  '
+	num_kids = len(elem)
+	if num_kids:
+		if not elem.text or not elem.text.strip():
+			elem.text = i + "  "
+			if level:
+				elem.text += '  '
+		count = 0
+		for kid in elem:
+			indentXml(kid, level+1, count < num_kids - 1)
+			count += 1
+		if not elem.tail or not elem.tail.strip():
+			elem.tail = i
+			if more_sibs:
+				elem.tail += '  '
+	else:
+		if level and (not elem.tail or not elem.tail.strip()):
+			elem.tail = i
+			if more_sibs:
+				elem.tail += '  '
 	
+	return elem
+	
+	printl2("", "__common__::indentXml", "C")

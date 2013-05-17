@@ -62,6 +62,7 @@ defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/"
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
+defaultConfigFolderPath	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/"
 
 config.plugins.dreamplex = ConfigSubsection()
 config.plugins.dreamplex.about                  = ConfigSelection(default = "1", choices = [("1", " ")])
@@ -69,6 +70,7 @@ config.plugins.dreamplex.debugMode         		= ConfigSelection(default="0", choi
 config.plugins.dreamplex.pluginfolderpath  		= ConfigText(default = defaultPluginFolderPath)
 config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.mediafolderpath   		= ConfigText(default = defaultMediaFolderPath, fixed_size=False)
+config.plugins.dreamplex.configfolderpath   	= ConfigText(default = defaultConfigFolderPath, fixed_size=False)
 config.plugins.dreamplex.showInMainMenu	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      		= ConfigYesNo(default = False)
