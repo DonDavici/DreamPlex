@@ -1360,7 +1360,7 @@ class PlexLibrary(Screen):
         # 0 is linux local mount override
         if self.g_stream == "0":
             #check if the file can be found locally
-            if type == "unixfile" or type == "winfile":
+            if type == "unixfile" or type == "winfile" or type == "UNC":
                 self.currentFile = file
                 self.currentType = type
                 self.fallback = ""
