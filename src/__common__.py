@@ -363,10 +363,12 @@ def checkPlexEnvironment():
 	playerTempFolder = config.plugins.dreamplex.playerTempPath.value
 	logFolder = config.plugins.dreamplex.logfolderpath.value
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
+	configFolder = config.plugins.dreamplex.configfolderpath.value
 	
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
 	checkDirectory(mediaFolder)
+	checkDirectory(configFolder)
 	
 	printl2("","__common__::checkPlexEnvironment", "C")
 	

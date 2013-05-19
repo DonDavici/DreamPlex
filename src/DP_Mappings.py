@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #=================================
 import sys
 import time
+import os.path
 
 from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER, getDesktop
 from os import system, popen
@@ -200,9 +201,25 @@ class DPS_MappingsEntryList(MenuList):
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
 		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
+		self.checkMountMappingFile()
 		
 		printl("", self, "C")
 		
+	
+	def checkMountMappingFile(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if os.path.isfile(self.location) == False:
+			with open(self.location, "a") as writefile:
+				writefile.write("<xml></xml>") 
+			
+		else:
+			printl("found mountMappings file", self, "D")
+		
+		printl("", self, "C")
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -226,7 +243,7 @@ class DPS_MappingsEntryList(MenuList):
 		
 		self.list=[]
 		
-		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/mountMappings")
+		tree = getXmlContent(self.location)
 		
 		printl("serverID: " + str(self.serverID), self, "D")
 		for server in tree.findall("server"):
@@ -307,6 +324,6 @@ class DPS_MappingsEntryList(MenuList):
 			writeXmlContent(tree, self.location)
 			
 			# now lets go through the xml again to add the mapping to the server
-			self.addNewMapping()
+			self.addNewMapping(remotePath, localPath)
 		
 		printl("", self, "C")
