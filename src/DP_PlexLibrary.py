@@ -63,31 +63,20 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlCon
 #===============================================================================
 # import cProfile
 #===============================================================================
+#===============================================================================
+# import cProfile
+#===============================================================================
 try:
-    from lxml import etree
-    printl("running with lxml.etree", __name__, "D")
+# Python 2.5
+	import xml.etree.cElementTree as etree
+	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
 except ImportError:
-    try:
-    # Python 2.5
-        import xml.etree.cElementTree as etree
-        printl("running with cElementTree on Python 2.5+", __name__, "D")
-    except ImportError:
-        try:
-            # Python 2.5
-            import xml.etree.ElementTree as etree
-            printl("running with ElementTree on Python 2.5+", __name__, "D")
-        except ImportError:
-            try:
-                # normal cElementTree install
-                import cElementTree as etree
-                printl("running with cElementTree", __name__, "D")
-            except ImportError:
-                try:
-                    # normal ElementTree install
-                    import elementtree.ElementTree as etree
-                    printl("running with ElementTree")
-                except ImportError:
-                    printl("Failed to import ElementTree from any known place", __name__, "W")
+	try:
+		# Python 2.5
+		import xml.etree.ElementTree as etree
+		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	except ImportError:
+		printl2("something went wrong during etree import" + str(e), self, "E")
                     
 #===============================================================================
 # 

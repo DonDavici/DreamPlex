@@ -47,7 +47,7 @@ except ImportError:
 		import xml.etree.ElementTree as etree
 		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
 	except ImportError:
-		printl2("something weng wrong during xml parsing" + str(e), self, "E")
+		printl2("something went wrong during etree import" + str(e), self, "E")
 
 #===============================================================================
 # GLOBAL
