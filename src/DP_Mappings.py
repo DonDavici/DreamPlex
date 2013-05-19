@@ -260,8 +260,8 @@ class DPS_MappingsEntryList(MenuList):
 					
 					res = [mapping]
 					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastMappingId)))
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 200, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
+					res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
 	
 					self.list.append(res)
 		
