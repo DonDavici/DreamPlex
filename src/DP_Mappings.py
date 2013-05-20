@@ -45,7 +45,7 @@ from Screens.InputBox import InputBox
 from Screens.Console import Console as SConsole
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, getXmlContent, writeXmlContent
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, checkXmlFile, getXmlContent, writeXmlContent
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
 
@@ -138,10 +138,18 @@ class DPS_Mappings(Screen):
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.setLocalPathCallback, MovieLocationBox,_("Enter your local path segment here:"), "/mnt/x")
+		
 		printl("", self, "C")
 		
 	
+	#===================================================================
+	# 
+	#===================================================================
 	def setLocalPathCallback(self, callback = None):
+		'''
+		'''
+		printl("", self, "S")
+		
 		if callback is not None and len(callback):
 			printl("localPath: " + str(callback), self, "D")
 			self.localPath = str(callback)
@@ -150,7 +158,14 @@ class DPS_Mappings(Screen):
 			self.session.open(MessageBox,_("Adding new mapping was not completed"), MessageBox.TYPE_INFO)
 			self.close()
 	
+	#===================================================================
+	# 
+	#===================================================================
 	def setRemotePathCallback(self, callback = None):
+		'''
+		'''
+		printl("", self, "S")
+		
 		if callback is not None and len(callback):
 			printl("remotePath: " + str(callback), self, "D")
 			self.remotePath = str(callback)
@@ -158,11 +173,11 @@ class DPS_Mappings(Screen):
 			self["content"].addNewMapping(self.remotePath, self.localPath)
 		else:
 			self.session.open(MessageBox,_("Adding new mapping was not completed"), MessageBox.TYPE_INFO)
-			
-		self.close()
-	
 		
-
+		
+		self.close()
+		printl("", self, "C")	
+		
 	#===================================================================
 	# 
 	#===================================================================
@@ -180,9 +195,6 @@ class DPS_Mappings(Screen):
 		
 		printl("", self, "C")
 		
-	def VirtualKeyBoardTextEntry(self):
-		pass
-
 #===============================================================================
 # class
 # DPS_ServerEntryList
@@ -201,25 +213,11 @@ class DPS_MappingsEntryList(MenuList):
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
 		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
-		self.checkMountMappingFile()
+
+		checkXmlFile(location)
 		
 		printl("", self, "C")
 		
-	
-	def checkMountMappingFile(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		if os.path.isfile(self.location) == False:
-			with open(self.location, "a") as writefile:
-				writefile.write("<xml></xml>") 
-			
-		else:
-			printl("found mountMappings file", self, "D")
-		
-		printl("", self, "C")
-	
 	#===========================================================================
 	# 
 	#===========================================================================

@@ -704,7 +704,26 @@ def getScale():
 	return AVSwitch().getFramebufferScale()
 	
 	printl2("","__common__::getScale", "C")
+
+#===========================================================================
+# 
+#===========================================================================
+def checkXmlFile(location):
+	'''
+	'''
+	printl2("", "__common__::checkXmlFile", "S")
 	
+	if os.path.isfile(location) == False:
+		printl2("xml file not found, generating ...", "__common__::checkXmlFile", "D")
+		with open(location, "a") as writefile:
+			writefile.write("<xml></xml>")
+			printl2("writing xml file done", "__common__::checkXmlFile", "D")
+		
+	else:
+		printl2("found xml file, nothing to do", "__common__::checkXmlFile", "D")
+	
+	printl2("", "__common__::checkXmlFile", "C")
+
 #===========================================================================
 # 
 #===========================================================================
@@ -713,6 +732,8 @@ def getXmlContent(location):
 	'''
 	
 	printl2("", "__common__::getXmlContent", "S")
+	
+	checkXmlFile(location)
 	
 	xml = open(location).read()
 	printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
