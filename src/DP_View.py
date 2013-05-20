@@ -101,8 +101,8 @@ class DP_View(Screen, NumericalTextInput):
 	currentShowIndex				= None
 	currentSeasonIndex				= None
 	showMedia						= False
+	showDetail						= False
 	g_forcedvd						= "false"
-	
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
 		'''
@@ -151,7 +151,7 @@ class DP_View(Screen, NumericalTextInput):
 			"menu":			(self.onKeyMenu, ""),
 			"video":		(self.onKeyVideo, ""),
 			"red":			(self.onKeyRed, ""),
-			#"green":	  	(self.onKeyGreen, ""),
+			"green":	  	(self.onKeyGreen, ""),
 			"yellow":		(self.onKeyYellow, ""),
 			"blue":			(self.onKeyBlue, ""),
 
@@ -981,6 +981,34 @@ class DP_View(Screen, NumericalTextInput):
 		self.refresh()
 		
 		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def showMediaDetail(self, unused=None, unused2=None):
+		'''
+		'''
+		printl("", self, "S")
+		self.showDetail = True
+		selection = self["listview"].getCurrent()
+		
+		if selection is not None:
+			details			= selection[1]
+			extraData		= selection[2]
+			image			= selection[3]
+			
+			#details
+			viewMode		= details['viewMode']
+			server			= details['server']
+			
+			#extraData
+			url_path		= extraData['key']
+			
+			if (viewMode == "play"):
+				printl("viewMode -> play", self, "I")
+				self.playEntry(selection)
+		
+		printl("", self, "C")
 
 	#===========================================================================
 	# 
@@ -1285,7 +1313,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
 		
 		self.playSelectedMedia()
-	   
+
 		printl("We have selected media at " + self.mediaFileUrl, self, "I")
 		printl("", self, "C")
 	#===============================================================================
@@ -1300,15 +1328,20 @@ class DP_View(Screen, NumericalTextInput):
 		
 		resumeStamp = self.playerData['resumeStamp']
 		printl("resumeStamp: " + str(resumeStamp), self, "I")
-		
-		if self.playerData['fallback'] == True:
-			message = "Sorry I didn't find the file on the provided locations"
-			locations = "Location:\n " + self.playerData['locations']
-			suggestion = "Please verify you direct local settings"
-			fallback = "I will now try to play the file via transcode."
-			self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+
+		if self.showDetail == True:
+			currentFile = "Location:\n " + self.playerData['currentFile']
+			self.session.open(MessageBox,_("%s") % (currentFile), MessageBox.TYPE_INFO)
+			self.showDetail = False
 		else:
-			self.checkResume(resumeStamp)
+			if self.playerData['fallback'] == True:
+				message = "Sorry I didn't find the file on the provided locations"
+				locations = "Location:\n " + self.playerData['locations']
+				suggestion = "Please verify you direct local settings"
+				fallback = "I will now try to play the file via transcode."
+				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+			else:
+				self.checkResume(resumeStamp)
 			
 		printl("", self, "C")
 		
@@ -1394,6 +1427,7 @@ class DP_View(Screen, NumericalTextInput):
 		functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
 		functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
 		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
+		functionList.append((_("Show media details"), Plugin("View", fnc=self.showMediaDetail), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 		
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
