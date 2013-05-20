@@ -1330,7 +1330,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("resumeStamp: " + str(resumeStamp), self, "I")
 
 		if self.showDetail == True:
-			currentFile = "Location:\n " + self.playerData['currentFile']
+			currentFile = "Location:\n " + str(self.playerData['currentFile'])
 			self.session.open(MessageBox,_("%s") % (currentFile), MessageBox.TYPE_INFO)
 			self.showDetail = False
 		else:

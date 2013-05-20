@@ -1346,13 +1346,15 @@ class PlexLibrary(Screen):
 				printl("file = " + str(file),self, "I")
 				type="notsure"  
 		
+		self.currentFile = file
+		self.currentType = type
+		self.fallback = ""
+		
 		# 0 is linux local mount override
 		if self.g_stream == "0":
 			#check if the file can be found locally
 			if type == "unixfile" or type == "winfile" or type == "UNC":
-				self.currentFile = file
-				self.currentType = type
-				self.fallback = ""
+
 
 				tree = getXmlContent(config.plugins.dreamplex.configfolderpath.value + "mountMappings")
 				
@@ -2867,7 +2869,7 @@ class PlexLibrary(Screen):
 			
 		streamURL = ""
 		transcode = []
-		universalTranscoder = True
+		universalTranscoder = False
 		if universalTranscoder == False:
 			ts = int(time())
 			printl("Setting up HTTP Stream", self, "I")
@@ -2903,11 +2905,11 @@ class PlexLibrary(Screen):
 			transcode.append("directPlay=0")
 			transcode.append("directStream=1")
 			transcode.append("videoQuality=75")
-			transcode.append("videoResolution=1280x720")
-			transcode.append("maxVideoBitrate=3000")
+			transcode.append("videoResolution=1920x1080")
+			transcode.append("maxVideoBitrate=10000")
 			transcode.append("subtitleSize=100")
 			transcode.append("audioBoost=100")
-			transcode.append("secondsPerSegment=7")
+			transcode.append("waitForSegments=1")
 			transcode.append("X-Plex-Device=iPhone")
 			transcode.append("X-Plex-Token=ztTLp3RYymrsCH7XP6Zp")
 			transcode.append("X-Plex-Client-Platform=iOS")
@@ -2923,7 +2925,6 @@ class PlexLibrary(Screen):
 			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
 			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
 			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
-			
 		#===================================================================
 		## /video/:/transcode/universal/start.m3u8?
 		## subtitleSize=100
