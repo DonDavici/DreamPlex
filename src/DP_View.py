@@ -90,18 +90,18 @@ class DP_View(Screen, NumericalTextInput):
 
 	FAST_STILLPIC = False
 
-	onNumberKeyLastChar				  = "#"
-	activeSort						  = ("Default", None, False)
-	activeFilter						= ("All", (None, False), "")
-	onEnterPrimaryKeys				  = None
-	onLeavePrimaryKeyValuePair		  = None
-	onLeaveSelectKeyValuePair		   = None
-	currentKeyValuePair				 = None
+	onNumberKeyLastChar				= "#"
+	activeSort						= ("Default", None, False)
+	activeFilter					= ("All", (None, False), "")
+	onEnterPrimaryKeys				= None
+	onLeavePrimaryKeyValuePair		= None
+	onLeaveSelectKeyValuePair		= None
+	currentKeyValuePair				= None
 	
-	currentShowIndex					= None
-	currentSeasonIndex				  = None
-	showMedia						   = False
-	g_forcedvd						  = "false"
+	currentShowIndex				= None
+	currentSeasonIndex				= None
+	showMedia						= False
+	g_forcedvd						= "false"
 	
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
@@ -141,38 +141,38 @@ class DP_View(Screen, NumericalTextInput):
 			
 		self["actions"] = HelpableActionMap(self, "DP_View", 
 		{
-			"ok":		 (self.onKeyOk, ""),
-			"cancel":	 (self.onKeyCancel, ""),
-			"left":	   (self.onKeyLeft, ""),
-			"right":	  (self.onKeyRight, ""),
-			"up":		 (self.onKeyUp, ""),
-			"down":	   (self.onKeyDown, ""),
-			"info":	   (self.onKeyInfo, ""),
-			"menu":	   (self.onKeyMenu, ""),
-			"video":	  (self.onKeyVideo, ""),
-			"red":		(self.onKeyRed, ""),
-			#"green":	  (self.onKeyGreen, ""),
-			"yellow":	 (self.onKeyYellow, ""),
-			"blue":	   (self.onKeyBlue, ""),
+			"ok":			(self.onKeyOk, ""),
+			"cancel":		(self.onKeyCancel, ""),
+			"left":			(self.onKeyLeft, ""),
+			"right":		(self.onKeyRight, ""),
+			"up":			(self.onKeyUp, ""),
+			"down":			(self.onKeyDown, ""),
+			"info":			(self.onKeyInfo, ""),
+			"menu":			(self.onKeyMenu, ""),
+			"video":		(self.onKeyVideo, ""),
+			"red":			(self.onKeyRed, ""),
+			#"green":	  	(self.onKeyGreen, ""),
+			"yellow":		(self.onKeyYellow, ""),
+			"blue":			(self.onKeyBlue, ""),
 
 			"red_long":		(self.onKeyRedLong, ""),
-			#"green_long":	  (self.onKeyGreenLong, ""),
-			#"yellow_long":	 (self.onKeyYellowLong, ""),
-			"blue_long":	   (self.onKeyBlueLong, ""),
+			#"green_long":	(self.onKeyGreenLong, ""),
+			#"yellow_long":	(self.onKeyYellowLong, ""),
+			"blue_long":	(self.onKeyBlueLong, ""),
 			
-			"bouquet_up":	   (self.bouquetUp, ""),
-			"bouquet_down":	 (self.bouquetDown, ""),
+			"bouquet_up":	(self.bouquetUp, ""),
+			"bouquet_down":	(self.bouquetDown, ""),
 			
-			"1":	   (self.onKey1, ""),
-			"2":	   (self.onKey2, ""),
-			"3":	   (self.onKey3, ""),
-			"4":	   (self.onKey4, ""),
-			"5":	   (self.onKey5, ""),
-			"6":	   (self.onKey6, ""),
-			"7":	   (self.onKey7, ""),
-			"8":	   (self.onKey8, ""),
-			"9":	   (self.onKey9, ""),
-			"0":	   (self.onKey0, ""),
+			"1":			(self.onKey1, ""),
+			"2":			(self.onKey2, ""),
+			"3":			(self.onKey3, ""),
+			"4":			(self.onKey4, ""),
+			"5":			(self.onKey5, ""),
+			"6":			(self.onKey6, ""),
+			"7":			(self.onKey7, ""),
+			"8":			(self.onKey8, ""),
+			"9":			(self.onKey9, ""),
+			"0":			(self.onKey0, ""),
 
 		}, -2)
 		
