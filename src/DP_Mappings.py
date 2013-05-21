@@ -214,7 +214,7 @@ class DPS_MappingsEntryList(MenuList):
 		self.l.setFont(1, gFont("Regular", 18))
 		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
 
-		checkXmlFile(location)
+		checkXmlFile(self.location)
 		
 		printl("", self, "C")
 		
