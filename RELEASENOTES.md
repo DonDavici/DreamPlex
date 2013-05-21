@@ -1,3 +1,14 @@
+=== 1.04 ===
+- fixed direct local with UNC path
+- fixed direct local for plex on windows
+- new choicebox if there is more than one version of the media in plex
+- new function show location of file => menu key
+- new views (long list and backdroplist) thx to tobi79ac for skinning :-) => blue key
+- complete new mapping handler for direct local
+- new show seen/unseen count for tvshows
+- several bugfixes
+- new update location => bintray
+
 === 1.03 ===
 - UI tweaks
 - added Help
