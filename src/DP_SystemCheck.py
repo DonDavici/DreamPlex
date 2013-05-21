@@ -185,8 +185,7 @@ class DPS_SystemCheck(Screen):
 		# RTV = 255 ERROR
 		'''
 		printl("", self, "S")
-		
-		remoteUrl = "http://dreamplex.googlecode.com/files/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk"
+		remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
 		cmd = """
 BIN=""
 opkg > /dev/null 2>/dev/null
