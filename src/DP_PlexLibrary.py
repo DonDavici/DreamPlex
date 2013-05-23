@@ -1742,8 +1742,6 @@ class PlexLibrary(Screen):
 			details['viewOffset']			   = season.get('viewOffset',0)
 			details['originallyAvailableAt']	= season.get('originallyAvailableAt','')
 			
-			watched = int(season.goptionset('viewedLeafCount',0))
-			
 			extraData = {}
 			extraData['type']			   = "video"
 			extraData['ratingKey']		  = str(season.get('ratingKey', 0)) # primary key in plex
@@ -2005,9 +2003,11 @@ class PlexLibrary(Screen):
 			contents="all"
 			tags=tree.getiterator('Stream')
 			
+			#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle) 
+			
 			for bits in tags:
 				stream=dict(bits.items())
-				if stream['streamType'] == '2':
+				if stream['streamType'] == '2': #audio
 					audioCount += 1
 					audioOffset += 1
 					try:
@@ -2017,7 +2017,7 @@ class PlexLibrary(Screen):
 							selectedAudioOffset=audioOffset
 					except: pass
 						 
-				elif stream['streamType'] == '3':
+				elif stream['streamType'] == '3': #subtitle
 					subOffset += 1
 					try:
 						if stream['key']:
