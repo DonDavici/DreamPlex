@@ -53,6 +53,7 @@ from Plugins.Extensions.DreamPlex.__plugin__ import registerPlugin, Plugin
 
 from Plugins.Extensions.DreamPlex.DP_LibMovies import DP_LibMovies
 from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
+from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
 
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
@@ -277,10 +278,19 @@ def loadPlexPlugins():
 	printl("", "__init__::loadPlexPlugins", "S")
 	
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
-	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_VIDEOS))
+	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
 	
-	printl("registering ... tvhshows", "__inigetBoxInformationt__::loadPlexPlugins", "D")
-	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_VIDEOS))
+	printl("registering ... tvhshows", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
+	
+	printl("registering ... music", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
+	
+	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibPictures, where=Plugin.MENU_PICTURES))
+	
+	#printl("registering ... channels", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibChannels, where=Plugin.MENU_CHANNELS))
 	
 	printl("", "__init__::loadPlexPlugins", "C")
 

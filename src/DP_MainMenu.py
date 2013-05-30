@@ -279,6 +279,10 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
+				
+				elif self.selectedEntry == Plugin.MENU_MUSIC:
+					printl("found Plugin.MENU_MUSIC", self, "D")
+					self.getServerData("music")
 					
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
