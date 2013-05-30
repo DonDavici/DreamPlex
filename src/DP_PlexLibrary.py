@@ -1270,6 +1270,7 @@ class PlexLibrary(Screen):
 			printl("server: " + str(server), self, "D")
 			printl("urlPath: " + str(urlPath), self, "D")				
 			printl("header: " + str(authHeader), self, "D")
+			self.urlPath = urlPath
 			
 			conn = httplib.HTTPConnection(server) 
 			conn.request(type, urlPath, headers=authHeader) 
@@ -2897,16 +2898,17 @@ class PlexLibrary(Screen):
 			streamPath = "video/:/transcode/universal"
 			streamFile = 'start.m3u8'
 			#transcode.append("path=%s%s" % (quote_plus('http://localhost:32400/'), quote_plus(filename)))
-			transcode.append("path=http%3A%2F%2F127.0.0.1%3A32400%2Flibrary%2Fmetadata%2F10635")
+			#transcode.append("path=http%3A%2F%2F127.0.0.1%3A32400%2Flibrary%2Fmetadata%2F10635")
+			transcode.append("path=%s%s" % (quote_plus('http://127.0.0.1:32400'), quote_plus(self.urlPath)))
 			transcode.append("session=%s" % self.g_sessionID)
 			transcode.append("protocol=hls")
 			transcode.append("offset=0")
 			transcode.append("3g=0")
 			transcode.append("directPlay=0")
-			transcode.append("directStream=1")
-			transcode.append("videoQuality=75")
+			transcode.append("directStream=0")
+			transcode.append("videoQuality=60")
 			transcode.append("videoResolution=1920x1080")
-			transcode.append("maxVideoBitrate=10000")
+			transcode.append("maxVideoBitrate=8000")
 			transcode.append("subtitleSize=100")
 			transcode.append("audioBoost=100")
 			transcode.append("waitForSegments=1")
@@ -2914,11 +2916,11 @@ class PlexLibrary(Screen):
 			transcode.append("X-Plex-Token=ztTLp3RYymrsCH7XP6Zp")
 			transcode.append("X-Plex-Client-Platform=iOS")
 			transcode.append("X-Plex-Device-Name=DDiPhone")
-			transcode.append("X-Plex-Model=4%2C1")
+			transcode.append("X-Plex-Model=5%2C2")
 			transcode.append("X-Plex-Platform=iOS")
 			transcode.append("X-Plex-Client-Identifier=%s" % self.g_sessionID)
 			transcode.append("X-Plex-Product=Plex%2FiOS")
-			transcode.append("X-Plex-Platform-Version=6.1.3")
+			transcode.append("X-Plex-Platform-Version=6.1.2")
 			transcode.append("X-Plex-Version=3.1.3")
 			timestamp = "@%d" % ts
 			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
