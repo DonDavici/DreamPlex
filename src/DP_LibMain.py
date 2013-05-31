@@ -49,12 +49,13 @@ class DP_LibMain(Screen):
 		'''
 		'''
 		printl("", self, "S")
+		printl("libraryName: " + str(libraryName), self, "D")
 		
 		Screen.__init__(self, session)
 		self._session = session
 		self._libraryName = libraryName
 		
-		self._views = getViews()
+		self._views = getViews(libraryName)
 		self.currentViewIndex = 0
 		
 		self.defaultPickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, libraryName, )

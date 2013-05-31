@@ -46,7 +46,7 @@ class DP_LibShows(DP_LibMain):
 		'''
 		printl ("", self, "S")
 		
-		DP_LibMain.__init__(self, session, "tv shows")
+		DP_LibMain.__init__(self, session, "tvshows")
 		self.g_url = url
 		self.showEpisodesDirectly = showEpisodesDirectly
 		

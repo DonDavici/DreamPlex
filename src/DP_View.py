@@ -45,7 +45,7 @@ from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 #===============================================================================
 # 
 #===============================================================================
-def getViews():
+def getViews(libraryName):
 	'''
 	@param: none 
 	@return: availableViewList
@@ -53,11 +53,19 @@ def getViews():
 	printl("", "DP_View::getViews", "S")
 	
 	availableViewList = []
-	viewList = (
+	
+	if libraryName == "movies" or libraryName == "tvshows":
+		viewList = (
 			(_("Short List"), "DP_ViewList", "DPS_ViewList"),
 			(_("Long List"), "DP_ViewListLong", "DPS_ViewListLong"), 
 			(_("Backdrop"), "DP_ViewBackdrop", "DPS_ViewBackdrop"), 
 		)
+	elif libraryName == "music":
+		viewList = (
+					(_("Music"), "DP_ViewMusic", "DPS_ViewMusic"), 
+				)
+	else:
+		viewList = ()
 	
 	for view in viewList:
 		try:

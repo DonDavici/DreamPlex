@@ -1682,7 +1682,7 @@ class PlexLibrary(Screen):
 				printl("Flattening all shows", self, "I")
 				u='http://%s%s&mode=%s'  % ( server, extraData['key'].replace("children","allLeaves"), str(_MODE_TVEPISODES))
 			else:
-				u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_getSeasonsOfShow))
+				u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_TVEPISODES))
 				
 			#Right, add that link...and loop around for another entry
 			content = self.addGUIItem(u,details,extraData, context, seenVisu)
@@ -3066,7 +3066,7 @@ class PlexLibrary(Screen):
 		#=======================================================================
 		# xbmcplugin.setContent(pluginhandle, 'albums')
 		#=======================================================================
-	   
+	   	fullList = []
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
 			html=self.getURL(url)
@@ -3089,7 +3089,11 @@ class PlexLibrary(Screen):
 					 'year'	: int(album.get('year',0)) ,
 					 'artist'  : tree.get('parentTitle', album.get('parentTitle','')) ,
 					 'plot'	: album.get('summary','') }
-	
+			
+			details["viewMode"]				 = "ShowSeasons"
+			details["ratingKey"]				 = "1"
+			details['server']				   = str(server)
+			
 			details['title']=details['album']
 	
 			extraData={'type'		 : "Music" ,
@@ -3099,14 +3103,22 @@ class PlexLibrary(Screen):
 	
 			if extraData['fanart_image'] == "":
 				extraData['fanart_image']=sectionart
+			
+			extraData['theme']="1"
+			context = {}
+			context["watchedURL"]				 = "1"
 										
 			url='http://%s%s&mode=%s' % (server, extraData['key'], str(_MODE_TRACKS) )
 	
-			self.addGUIItem(url,details,extraData) 
-			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)
-		#=======================================================================
+			#context = None
+			seenVisu = None
+
+			content = self.addGUIItem(url, details, extraData, context, seenVisu)
+		   	fullList.append(content)
+		
+		#printl ("fullList = " + fullList, self, "D")
+		printl("", self, "C")
+		return fullList
 	
 	#===========================================================================
 	# 

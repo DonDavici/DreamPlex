@@ -11,4 +11,8 @@
     <view name="DP_ViewListLong">
             <itemsPerPage>14</itemsPerPage>
     </view>
+    
+    <view name="DP_ViewMusic">
+            <itemsPerPage>6</itemsPerPage>
+    </view>
 </xml>
