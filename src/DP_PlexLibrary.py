@@ -339,7 +339,7 @@ class PlexLibrary(Screen):
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return mainMenuList  
-		
+	
 	#============================================================================
 	# 
 	#============================================================================
@@ -438,7 +438,8 @@ class PlexLibrary(Screen):
 					printl( "_MODE_ARTISTS detected", self, "D")
 					if (filter is not None) and (filter != "music"):
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), params))
+					#mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')), "getMusicSections", getPlugin("music", Plugin.MENU_MUSIC), params))
 						
 				elif section.get('type') == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "D")
@@ -3006,6 +3007,159 @@ class PlexLibrary(Screen):
 		printl("", self, "C")   
 		return fullURL
 
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getMusicTypes(self, url):
+		'''
+		'''
+		printl("", self, "S")
+		mainMenuList = []
+		server=self.getServerFromURL(url)
+		details = {'title'	   : "by Album" }
+		details["viewMode"]				 = "ShowSeasons"
+		details["ratingKey"]				 = "1"
+		details['server']				   = str(server)
+		extraData = {}
+		extraData['theme']="1"
+		extraData['key'] = "1"
+		context = {}
+		context["watchedURL"]				 = "1"
+		seenVisu = None
+		content = self.addGUIItem(url, details, extraData, context, seenVisu)
+		mainMenuList.append(content)
+		
+		details = {'title'	   : "by Artists" }
+		details["viewMode"]				 = "ShowSeasons"
+		details["ratingKey"]				 = "1"
+		details['server']				   = str(server)
+
+
+		content = self.addGUIItem(url, details, extraData, context, seenVisu)
+		mainMenuList.append(content)
+		
+		
+		printl("mainMenuList: " + str(mainMenuList), self, "D")
+				
+		printl("", self, "C")
+		return mainMenuList  
+
+	#============================================================================
+	# 
+	#============================================================================
+	def music(self, url, tree=None ): # CHECKED
+		'''
+		'''
+		printl("", self, "S")
+		
+		#=======================================================================
+		# xbmcplugin.setContent(pluginhandle, 'artists')
+		#=======================================================================
+		
+		fullList = []
+		
+		server=self.getServerFromURL(url)
+		
+		if tree is None:
+			html=self.getURL(url)
+		
+			if html is False:
+				printl("", self, "C")
+				return
+	   
+			try:
+				tree = etree.fromstring(html)
+			except Exception, e:
+				self._showErrorOnTv("no xml as response", html)
+	  
+		for grapes in tree:
+		   
+			if grapes.get('key',None) is None:
+				continue
+	
+			details={'genre'	   : grapes.get('genre','') ,
+					 'artist'	  : grapes.get('artist','') ,
+					 'year'		: int(grapes.get('year',0)) ,
+					 'album'	   : grapes.get('album','') ,
+					 'tracknumber' : int(grapes.get('index',0)) ,
+					 'title'	   : "Unknown" }
+	
+			
+			extraData={'type'		: "Music" ,						  
+					   'thumb'	   : self.getThumb(grapes, server) ,
+					   'fanart_image': self.getFanart(grapes, server) }
+	
+			if extraData['fanart_image'] == "":
+				extraData['fanart_image']=self.getFanart(tree, server)
+				
+			
+			details["viewMode"]				 = "ShowSeasons"
+			details["ratingKey"]				 = "1"
+			details['server']				   = str(server)
+
+			extraData['theme']="1"
+			extraData['key'] = "1"
+			context = {}
+			context["watchedURL"]				 = "1"
+	
+			u=self.getLinkURL(url, grapes, server)
+			
+			if grapes.tag == "Track":
+				printl("Track Tag", self, "I")
+				#===============================================================
+				# xbmcplugin.setContent(pluginhandle, 'songs')
+				#===============================================================
+				
+				details['title']=grapes.get('track','Unknown').encode('utf-8')
+				details['duration']=int(grapes.get('totalTime',0)/1000)
+		
+				#context = None
+				seenVisu = None
+	
+				content = self.addGUIItem(u, details, extraData, context, seenVisu)
+				fullList.append(content)
+	
+			else: 
+			
+				if grapes.tag == "Artist":
+					printl("Artist Tag", self, "I")
+					#===========================================================
+					# xbmcplugin.setContent(pluginhandle, 'artists')
+					#===========================================================
+					details['title']=grapes.get('artist','Unknown')
+				 
+				elif grapes.tag == "Album":
+					printl("Album Tag", self, "I")
+					#===========================================================
+					# xbmcplugin.setContent(pluginhandle, 'albums')
+					#===========================================================
+					details['title']=grapes.get('album','Unknown')
+	
+				elif grapes.tag == "Genre":
+					details['title']=grapes.get('genre','Unknown')
+				
+				else:
+					printl("Generic Tag: " + grapes.tag, self, "I")
+					details['title']=grapes.get('title','Unknown')
+					
+				details["viewMode"]				 = "ShowSeasons"
+				details["ratingKey"]				 = "1"
+				details['server']				   = str(server)
+	
+				extraData['theme']="1"
+				extraData['key'] = "1"
+				context = {}
+				context["watchedURL"]				 = "1"
+				#context = None
+				seenVisu = None
+	
+				content = self.addGUIItem(u, details, extraData, context, seenVisu)
+				fullList.append(content)
+		
+		#printl ("fullList = " + fullList, self, "D")
+		printl("", self, "C")
+		return fullList
+	
 	#===============================================================================
 	# 
 	#===============================================================================
@@ -3130,6 +3284,7 @@ class PlexLibrary(Screen):
 		#=======================================================================
 		# xbmcplugin.setContent(pluginhandle, 'songs')
 		#=======================================================================
+		fullList = []
 					
 		if tree is None:	   
 			html=self.getURL(url)		  
@@ -3146,12 +3301,62 @@ class PlexLibrary(Screen):
 		sectionart = self.getFanart(tree,server) 
 		TrackTags = tree.findall('Track')	  
 		for track in TrackTags:		
-			self.trackTag(server, tree, track)
-		
+			content = self.trackTag(server, tree, track)
+			fullList.append(content)
+			
+		printl("fullList: " + str(fullList), self, "D")
+		return fullList
 		printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)
-		#=======================================================================
+
+	#===============================================================================
+	# 
+	#===============================================================================
+	def trackTag(self, server, tree, track ): # CHECKED
+		'''
+		'''
+		printl("", self, "S")
+		
+		for child in track:
+			for babies in child:
+				if babies.tag == "Part":
+					partDetails=(dict(babies.items()))
+		
+		printl( "Part is " + str(partDetails), self, "I")
+	
+		details={'TrackNumber' : int(track.get('index',0)) ,
+				 'title'	   : str(track.get('index',0)).zfill(2)+". "+track.get('title','Unknown').encode('utf-8') ,
+				 'rating'	  : float(track.get('rating',0)) ,
+				 'album'	   : track.get('parentTitle', tree.get('parentTitle','')) ,
+				 'artist'	  : track.get('grandparentTitle', tree.get('grandparentTitle','')) ,
+				 'duration'	: int(track.get('duration',0))/1000 }
+								   
+		extraData={'type'		 : "Music" ,
+				   'fanart_image' : self.getFanart(track, server) ,
+				   'thumb'		: self.getThumb(track, server) ,
+				   'ratingKey'	: track.get('key','') }
+	
+		if '/resources/plex.png' in extraData['thumb']:
+			printl("thumb is default", self, "I")
+			extraData['thumb']=self.getThumb(tree, server)
+			
+		if extraData['fanart_image'] == "":
+			extraData['fanart_image']=self.getFanart(tree, server)
+		
+		#If we are streaming, then get the virtual location
+		url=self.mediaType(partDetails,server)
+	
+		u="%s&mode=%s&id=%s" % (url, str(_MODE_BASICPLAY), str(extraData['ratingKey']))
+			
+		self.addGUIItem(u,details,extraData,folder=False)	
+		
+		context = None
+		seenVisu = None
+
+		guiItem = self.addGUIItem(url, details, extraData, context, seenVisu)
+		
+		#printl ("fullList = " + fullList, self, "D")
+		printl("", self, "C")
+		return guiItem	
 
 	#===========================================================================
 	# 
@@ -3378,50 +3583,7 @@ class PlexLibrary(Screen):
 		printl("", self, "C")   
 		return guiItem		
 		
-	#===============================================================================
-	# 
-	#===============================================================================
-	def trackTag(self, server, tree, track ): # CHECKED
-		'''
-		'''
-		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'songs')
-		#=======================================================================
-								  
-		for child in track:
-			for babies in child:
-				if babies.tag == "Part":
-					partDetails=(dict(babies.items()))
-		
-		printl( "Part is " + str(partDetails), self, "I")
 	
-		details={'TrackNumber' : int(track.get('index',0)) ,
-				 'title'	   : str(track.get('index',0)).zfill(2)+". "+track.get('title','Unknown').encode('utf-8') ,
-				 'rating'	  : float(track.get('rating',0)) ,
-				 'album'	   : track.get('parentTitle', tree.get('parentTitle','')) ,
-				 'artist'	  : track.get('grandparentTitle', tree.get('grandparentTitle','')) ,
-				 'duration'	: int(track.get('duration',0))/1000 }
-								   
-		extraData={'type'		 : "Music" ,
-				   'fanart_image' : self.getFanart(track, server) ,
-				   'thumb'		: self.getThumb(track, server) ,
-				   'ratingKey'	: track.get('key','') }
-	
-		if '/resources/plex.png' in extraData['thumb']:
-			printl("thumb is default", self, "I")
-			extraData['thumb']=self.getThumb(tree, server)
-			
-		if extraData['fanart_image'] == "":
-			extraData['fanart_image']=self.getFanart(tree, server)
-		
-		#If we are streaming, then get the virtual location
-		url=self.mediaType(partDetails,server)
-	
-		u="%s&mode=%s&id=%s" % (url, str(_MODE_BASICPLAY), str(extraData['ratingKey']))
-			
-		self.addGUIItem(u,details,extraData,folder=False)		
-		printl("", self, "C")   
 	#===============================================================================
 	# 
 	#===============================================================================
@@ -3482,96 +3644,7 @@ class PlexLibrary(Screen):
 		# xbmcplugin.endOfDirectory(pluginhandle)
 		#=======================================================================
 
-	#============================================================================
-	# 
-	#============================================================================
-	def music(self, url, tree=None ): # CHECKED
-		'''
-		'''
-		printl("", self, "S")
-		
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'artists')
-		#=======================================================================
 	
-		server=self.getServerFromURL(url)
-		
-		if tree is None:
-			html=self.getURL(url)
-		
-			if html is False:
-				printl("", self, "C")
-				return
-	   
-			try:
-				tree = etree.fromstring(html)
-			except Exception, e:
-				self._showErrorOnTv("no xml as response", html)
-	  
-		for grapes in tree:
-		   
-			if grapes.get('key',None) is None:
-				continue
-	
-			details={'genre'	   : grapes.get('genre','') ,
-					 'artist'	  : grapes.get('artist','') ,
-					 'year'		: int(grapes.get('year',0)) ,
-					 'album'	   : grapes.get('album','') ,
-					 'tracknumber' : int(grapes.get('index',0)) ,
-					 'title'	   : "Unknown" }
-	
-			
-			extraData={'type'		: "Music" ,						  
-					   'thumb'	   : self.getThumb(grapes, server) ,
-					   'fanart_image': self.getFanart(grapes, server) }
-	
-			if extraData['fanart_image'] == "":
-				extraData['fanart_image']=self.getFanart(tree, server)
-	
-			u=self.getLinkURL(url, grapes, server)
-			
-			if grapes.tag == "Track":
-				printl("Track Tag", self, "I")
-				#===============================================================
-				# xbmcplugin.setContent(pluginhandle, 'songs')
-				#===============================================================
-				
-				details['title']=grapes.get('track','Unknown').encode('utf-8')
-				details['duration']=int(grapes.get('totalTime',0)/1000)
-		
-				u=u+"&mode="+str(_MODE_BASICPLAY)
-				self.addGUIItem(u,details,extraData,folder=False)
-	
-			else: 
-			
-				if grapes.tag == "Artist":
-					printl("Artist Tag", self, "I")
-					#===========================================================
-					# xbmcplugin.setContent(pluginhandle, 'artists')
-					#===========================================================
-					details['title']=grapes.get('artist','Unknown')
-				 
-				elif grapes.tag == "Album":
-					printl("Album Tag", self, "I")
-					#===========================================================
-					# xbmcplugin.setContent(pluginhandle, 'albums')
-					#===========================================================
-					details['title']=grapes.get('album','Unknown')
-	
-				elif grapes.tag == "Genre":
-					details['title']=grapes.get('genre','Unknown')
-				
-				else:
-					printl("Generic Tag: " + grapes.tag, self, "I")
-					details['title']=grapes.get('title','Unknown')
-				
-				u=u+"&mode="+str(_MODE_MUSIC)
-				self.addGUIItem(u,details,extraData)
-			
-			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)	
-		#=======================================================================
 
 	#=============================================================================
 	# 

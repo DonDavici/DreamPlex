@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #=================================
 import sys
 import time
+import copy
 
 from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from os import system, popen
@@ -100,7 +101,6 @@ class DPS_MainMenu(Screen):
 		
 		self.setText("infoText", self.getInfoText())
 		
-
 		self.mainMenuList = []
 		
 		# add servers to list 
@@ -126,7 +126,7 @@ class DPS_MainMenu(Screen):
 				"cancel":   (self.cancel, ""),
 				#"info":   	(self.info, ""),
 				#"blue": 	(self.info, ""),
-				#"red": 		(self.exit, ""),
+				#"red": 	(self.exit, ""),
 				#"green": 	(self.getSettingsMenuList, ""),
 			}, -2)
 		
@@ -325,6 +325,9 @@ class DPS_MainMenu(Screen):
 				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
+				
+				elif selection[1] == "getMusicSections":
+					self.getMusicSections(selection)
 					
 			else:
 				printl("selected entry is executable", self, "D")
@@ -342,6 +345,42 @@ class DPS_MainMenu(Screen):
 					
 			printl("", self, "C")
 					
+	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getMusicSections(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+	
+		mainMenuList = []
+		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
+		
+		origSelection = selection
+		
+		# ARTISTS
+		params = copy.deepcopy(selection[3])
+		url = params['t_url']
+		params['t_url'] = url + "?type=8"
+		mainMenuList.append((_("by Artists"), plugin, params))
+		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
+		
+		#ALBUMS
+		params = copy.deepcopy(selection[3])
+		params['t_url'] = url + "?type=9"
+		mainMenuList.append((_("by Albums"), plugin, params))
+		printl("mainMenuList 2: " + str(mainMenuList), self, "D")
+		
+		self["menu"].setList(mainMenuList)
+		self.refreshMenu(0)
+		
+		printl("mainMenuList: " + str(mainMenuList), self, "D")
+		
+		printl("", self, "C")
+
 	
 	#===========================================================================
 	# 

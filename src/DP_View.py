@@ -949,10 +949,11 @@ class DP_View(Screen, NumericalTextInput):
 			#details
 			viewMode		= details['viewMode']
 			server		  = details['server']
+			printl("server!!!!: " +str(server), self, "D")
 			
 			#extraData
 			url_path		= extraData['key']
-		
+			printl("url_path!!!!: " +str(url_path), self, "D")
 		
 			if (viewMode == "ShowSeasons"):
 				printl("viewMode -> ShowSeasons", self, "I")
@@ -986,6 +987,7 @@ class DP_View(Screen, NumericalTextInput):
 			else:
 				printl("SOMETHING WENT WRONG", self, "W")
 				
+		printl("server2222: " +str(server), self, "D")
 		self.refresh()
 		
 		printl("", self, "C")

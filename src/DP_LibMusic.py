@@ -104,8 +104,9 @@ class DP_LibMusic(DP_LibMain):
 				printl("show seasons of TV show ...", self, "I")
 				
 				url = params["url"]
+				printl("URL: " + str(url), self, "D")
 	
-				library = Singleton().getPlexInstance().tracks(url)
+				library = Singleton().getPlexInstance().albums(url)
 				
 				sort = (("by season", "season", False), )
 				
@@ -122,7 +123,7 @@ class DP_LibMusic(DP_LibMain):
 				
 				url = params["url"]
 				
-				library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+				library = Singleton().getPlexInstance().tracks(url)
 	
 				sort = [("by title", None, False), ]
 				
