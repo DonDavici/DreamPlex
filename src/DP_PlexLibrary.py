@@ -3329,6 +3329,10 @@ class PlexLibrary(Screen):
 				 'album'	   : track.get('parentTitle', tree.get('parentTitle','')) ,
 				 'artist'	  : track.get('grandparentTitle', tree.get('grandparentTitle','')) ,
 				 'duration'	: int(track.get('duration',0))/1000 }
+		
+		details["viewMode"]				 = "ShowSeasons"
+		details["ratingKey"]				 = "1"
+		details['server']				   = str(server)
 								   
 		extraData={'type'		 : "Music" ,
 				   'fanart_image' : self.getFanart(track, server) ,
@@ -3341,17 +3345,17 @@ class PlexLibrary(Screen):
 			
 		if extraData['fanart_image'] == "":
 			extraData['fanart_image']=self.getFanart(tree, server)
+			
+		extraData['theme']="1"
+		context = {}
+		context["watchedURL"]	 = "1"
+		seenVisu = None
 		
 		#If we are streaming, then get the virtual location
 		url=self.mediaType(partDetails,server)
 	
 		u="%s&mode=%s&id=%s" % (url, str(_MODE_BASICPLAY), str(extraData['ratingKey']))
 			
-		self.addGUIItem(u,details,extraData,folder=False)	
-		
-		context = None
-		seenVisu = None
-
 		guiItem = self.addGUIItem(url, details, extraData, context, seenVisu)
 		
 		#printl ("fullList = " + fullList, self, "D")
