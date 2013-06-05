@@ -29,6 +29,7 @@ from urllib2 import urlopen, Request
 
 from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
+from Screens.MinuteInput import MinuteInput
 
 from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation #@UnresolvedImport
 
@@ -163,15 +164,16 @@ class DP_Player(MoviePlayer):
 		self.bufferSecondsLeft = 0
 		self.bitrate = 0
 		self.endReached = False
-		self.buffersize = 1
-		self.localCache = False
-		self.dlactive = False
-		#self.url = self.service.getPath()
-		self.localsize = 0
  
-		self["actions"] = ActionMap(["InfobarInstantRecord", "MoviePlayerActions"],
+		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
 		{
-		 "leavePlayer": self.leavePlayer,
+		"ok": self.ok,
+		"cancel": self.leavePlayer,
+		"keyTV": self.leavePlayer,
+		"stop": self.leavePlayer,
+		"leavePlayer": self.leavePlayer,
+		"next": self.seekManual,
+		"seekFwd": self.seekManual,
 		}, -2)
  
 		service1 = self.session.nav.getCurrentService()
@@ -252,54 +254,6 @@ class DP_Player(MoviePlayer):
 		
 		printl("", self, "C")
 		return info is not None
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def UpdateStatus(self):
-		'''
-		'''
-		printl("", self, "S")
-
-		if not self.dlactive:
-			
-			printl("", self, "C")
-			return
-		
-		lastSize = 0;
-		if fileExists(config.plugins.dreamplex.playerTempPath.value + self.filename, 'r'):
-			lastSize = self.localsize
-			self.localsize = os.path.getsize(config.plugins.dreamplex.playerTempPath.value + self.filename)
-		else:
-			self.localsize = 0
-		
-		self["label_buffer"].setText("Cache: "+self.formatKB(self.localsize,"B",1))
-		
-		if self.localsize > 0 and self.filesize >0:
-			percent = float(float(self.localsize)/float(self.filesize))
-			percent = percent * 100.0
-			self["bufferslider"].setValue(int( percent ))
-		
-		self.StatusTimer.start(1000, True)
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def DLfinished(self,retval):
-		'''
-		'''
-		printl("", self, "S")
-		
-		self.dlactive = False
-		printl( "download finished", self, "I")
-		
-		self["label_buffer"].setText("Download: Done")
-		self["bufferslider"].setValue(int( 100 ))
-		self.setSeekState(self.SEEK_STATE_PLAY) # this plays the file
-
-		printl("", self, "C")
 
 	#===========================================================================
 	# 
@@ -745,3 +699,28 @@ class DP_Player(MoviePlayer):
 		
 		printl("", self, "C")   
 		return None
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def seekToMinute(self, minutes):
+		'''
+		'''
+		printl("", self, "S")
+		#self.server.seek(str(int(minutes)*60))
+		self.doSeek(int(minutes)*60)
+		#self.showInfobar()
+		
+		printl("", self, "C")   
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def seekManual(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.session.openWithCallback(self.seekToMinute, MinuteInput)
+		
+		printl("", self, "C")   
