@@ -174,8 +174,14 @@ class DP_Player(MoviePlayer):
 		"leavePlayer": self.leavePlayer,
 		"next": self.seekManual,
 		"seekFwd": self.seekManual,
+		"seekBack": self.seekManual,
+		"seekFwdDown": self.seekManual,
+		"seekBackDown": self.seekManual,
+		"seekFwdManual": self.seekManual,
+		"seekBackManual": self.seekManual,
+		"previous": self.seekManual
 		}, -2)
- 
+		
 		service1 = self.session.nav.getCurrentService()
 		self.seek = service1 and service1.seek()
 
@@ -218,32 +224,6 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getPlayLength(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		length = self.seek.getLength()
-		
-		printl("", self, "C")
-		return length	
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPlayPosition(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		position = self.seek.getPlayPosition()
-		
-		printl("", self, "C")
-		return position
-	
-	#===========================================================================
-	# 
-	#===========================================================================
 	def isValidServiceId(self, id):
 		'''
 		'''
@@ -262,25 +242,47 @@ class DP_Player(MoviePlayer):
 		'''
 		'''
 		#printl("", self, "S")
-		
-		if self.localCache:
-			printl("", self, "C")
-			return
+		self.bufferInfo()
+		#printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def ok(self):
+		'''
+		'''
+		#printl("", self, "S")
+		self.bufferInfo()
+
+		self.show()
+		#printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def bufferInfo(self):
+		'''
+		'''
+		#printl("", self, "S")
 		
 		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
-		self.buffersize = bufferInfo[4]
+		
 		self.bufferPercent = bufferInfo[0]
-		#printl("bufferPercent: " + str(self.bufferPercent), self, "D")
-		self["bufferslider"].setValue(int(self.bufferPercent))
+		self.buffer1 = bufferInfo[1]
+		self.bufferAvgOutRate = bufferInfo[2]
+		self.buffer3 = bufferInfo[3]
+		self.buffersize = bufferInfo[4]
 
+		self["bufferslider"].setValue(int(self.bufferPercent))
+		
 		if(self.bufferPercent > 95):
 			self.bufferFull()
 				
 		if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
 			self.bufferEmpty()
 		
-		#printl("self.buffersize: " + str(self.buffersize), self, "D")
-		#printl("self.bufferPercent: " + str(self.bufferPercent), self, "D")
+		printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
+		
 		
 		#printl("", self, "C")
 
@@ -723,4 +725,30 @@ class DP_Player(MoviePlayer):
 		
 		self.session.openWithCallback(self.seekToMinute, MinuteInput)
 		
-		printl("", self, "C")   
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getPlayLength(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		length = self.seek.getLength()
+		
+		printl("", self, "C")
+		return length	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getPlayPosition(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		position = self.seek.getPlayPosition()
+		
+		printl("", self, "C")
+		return position

@@ -81,9 +81,6 @@ config.plugins.dreamplex.fastScroll		   		= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 		= ConfigYesNo(default = False)
 config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = False)
 
-config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
-config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
-
 config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
@@ -136,8 +133,6 @@ def printGlobalSettings():
 	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::initGlobalSettings", "I")
 	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::initGlobalSettings", "I")
 	printl("stopLiveTvOnStartup: " + str(config.plugins.dreamplex.stopLiveTvOnStartup.value), "__init__::initGlobalSettings", "I")
-	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::initGlobalSettings", "I")
-	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
 	printl("fastScroll: " + str(config.plugins.dreamplex.fastScroll.value), "__init__::initGlobalSettings", "I")
 	printl("summerizeSections: " + str(config.plugins.dreamplex.summerizeSections.value), "__init__::initGlobalSettings", "I")
@@ -163,7 +158,6 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
-	#config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
@@ -209,23 +203,7 @@ def initServerEntryConfig():
 	# TRANSCODED VIA PROXY
 	
 	# DIRECT LOCAL
-	config.plugins.dreamplex.Entries[i].remoteServerType					= ConfigSelection(default="0", choices = [("0", _("Linux")),("1", _("Windows"))])
-	config.plugins.dreamplex.Entries[i].remotePathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].remotePathPart1						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart1						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].remotePathPart2						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart2						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].remotePathPart3						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart3						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].remotePathPart4						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart4						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	#config.plugins.dreamplex.Entries[i].localPathPart						= ConfigDirectory()
-	
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
-	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "D")
-	printl("remotePathPart: " + str(config.plugins.dreamplex.Entries[i].remotePathPart.value), "__init__::initServerEntryConfig", "D")
-	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "D")
 	
 	# DIRECT REMOTE
 	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
