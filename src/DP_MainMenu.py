@@ -118,16 +118,16 @@ class DPS_MainMenu(Screen):
 
 		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions", 
 			{
-				"ok":    	(self.okbuttonClick, ""),
-				"left":  	(self.left, ""),
-				"right": 	(self.right, ""),
-				"up":    	(self.up, ""),
-				"down":  	(self.down, ""),
-				"cancel":   (self.cancel, ""),
-				#"info":   	(self.info, ""),
-				#"blue": 	(self.info, ""),
-				#"red": 	(self.exit, ""),
-				#"green": 	(self.getSettingsMenuList, ""),
+				"ok":		(self.okbuttonClick, ""),
+				"left":		(self.left, ""),
+				"right":	(self.right, ""),
+				"up":		(self.up, ""),
+				"down":		(self.down, ""),
+				"cancel":	(self.cancel, ""),
+				#"info":	(self.info, ""),
+				#"blue":	(self.info, ""),
+				#"red":		(self.exit, ""),
+				#"green":	(self.getSettingsMenuList, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -355,7 +355,6 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-	
 		mainMenuList = []
 		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
 		
@@ -380,7 +379,6 @@ class DPS_MainMenu(Screen):
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		
 		printl("", self, "C")
-
 	
 	#===========================================================================
 	# 
@@ -560,7 +558,6 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
-			if self.currentService != None:
 				self.session.nav.playService(self.currentService)
 		self.close((True,) )
 		
