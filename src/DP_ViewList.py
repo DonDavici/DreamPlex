@@ -768,7 +768,7 @@ class DPS_ViewList(DP_View):
 				ptr = self.EXpicloadPoster.getData()
 				
 				if ptr is not None:
-					self["poster"].instance.setPixmap(ptr.__deref__())
+					self["poster"].instance.setPixmap(ptr)
 
 		else:
 			self.downloadPoster()
@@ -793,7 +793,7 @@ class DPS_ViewList(DP_View):
 				ptr = self.EXpicloadBackdrop.getData()
 				
 				if ptr is not None:
-					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+					self["mybackdrop"].instance.setPixmap(ptr)
 
 		else:
 			self.downloadBackdrop()
