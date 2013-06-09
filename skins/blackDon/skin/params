@@ -1,1 +1,14 @@
-<params DP_ListView_itemsPerPage="14"/>
+<?xml version="1.0"?>
+<xml>
+    <view name="DP_ViewList">
+            <itemsPerPage>6</itemsPerPage>
+    </view>
+
+    <view name="DP_ViewBackdrop">
+            <itemsPerPage>8</itemsPerPage>
+    </view>
+    
+    <view name="DP_ViewListLong">
+            <itemsPerPage>14</itemsPerPage>
+    </view>
+</xml>
