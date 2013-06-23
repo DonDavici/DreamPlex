@@ -1,3 +1,16 @@
+=== bufix release 1.04b ===
+- fixed direct play location check for windows server
+- added some code to prevent misconfiguration in direct play ( slashes and backslashes)
+- fixed order (plex defaults are untouched now :-)
+- fixed newest and recently added in tv shows
+- fixed gs when option live tv is enabled
+- fixed streamed mode (buffer drained)
+- fixed update function
+- fixed media selection if more than one version is available
+- fixed yellow button toggle name direct local mode 
+- added font details to xml for skinners
+- several clean ups
+
 === bugfix release 1.04a ===
 - fixed gs in tvshow section
 
