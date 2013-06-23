@@ -1,4 +1,4 @@
-=== bufix release 1.04b ===
+=== 1.05 ===
 - fixed direct play location check for windows server
 - added some code to prevent misconfiguration in direct play ( slashes and backslashes)
 - fixed order (plex defaults are untouched now :-)
@@ -10,8 +10,9 @@
 - fixed yellow button toggle name direct local mode 
 - added font details to xml for skinners
 - several clean ups
+... not finished yet
 
-=== bugfix release 1.04a ===
+=== 1.04a (bugfix release) ===
 - fixed gs in tvshow section
 
 === 1.04 ===
