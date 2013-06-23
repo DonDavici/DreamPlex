@@ -1365,8 +1365,7 @@ class PlexLibrary(Screen):
 		if self.g_stream == "0":
 			#check if the file can be found locally
 			if type == "unixfile" or type == "winfile" or type == "UNC":
-
-
+				
 				tree = getXmlContent(config.plugins.dreamplex.configfolderpath.value + "mountMappings")
 				
 				self.serverID = str(self.g_serverConfig.id.value)
@@ -1478,13 +1477,21 @@ class PlexLibrary(Screen):
 		
 		printl("Checking for local file", self, "I")
 		
+		printl("untouched remotePathPart: " + str(remotePathPart), self, "D")
+		
+		if self.currentType == "winfile" or self.currentType == "UNC":
+			# to prevent wrong configuration errors we change all slashes to backslahes
+			# this is nessesarry if the users enters the path with slashes instead fo backslahes
+			remotePathPart.replace("/", "\\")
+		
 		printl("remotePathPart: " + str(remotePathPart), self, "D")
 		printl("localPathPart: " + str(localPathPart), self, "D")
 		file = self.currentFile
 		
 		file = file.replace(remotePathPart, localPathPart)
 		
-		if self.currentType == "winfile":
+		# now we change backslahes back to slahes
+		if self.currentType == "winfile" or self.currentType == "UNC":
 			file = file.replace("\\", "/")
 
 		file = urllib.unquote(file)
