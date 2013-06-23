@@ -1296,29 +1296,6 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("", self, "C")
 
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleNavigationData(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		itemsPerPage = self.itemsPerPage
-		itemsTotal = self["listview"].count()
-		correctionVal = 0.5
-		
-		if (itemsTotal%itemsPerPage) == 0:
-			correctionVal = 0
-		
-		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
-		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
-		
-		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
-		
-		printl("", self, "C")
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -1327,7 +1304,9 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		result = 0
-		if choice != None:
+		printl("choice: " + str(choice), self, "D")
+		
+		if choice is not None:
 			result = choice[1]
 		
 		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
@@ -1336,6 +1315,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("We have selected media at " + self.mediaFileUrl, self, "I")
 		printl("", self, "C")
+
 	#===============================================================================
 	# 
 	#===============================================================================
@@ -1397,6 +1377,29 @@ class DP_View(Screen, NumericalTextInput):
 		
 		else:
 			self.session.open(DP_Player, self.playerData)
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def handleNavigationData(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		itemsPerPage = self.itemsPerPage
+		itemsTotal = self["listview"].count()
+		correctionVal = 0.5
+		
+		if (itemsTotal%itemsPerPage) == 0:
+			correctionVal = 0
+		
+		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
+		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
+		
+		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
+		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
 		
 		printl("", self, "C")
 

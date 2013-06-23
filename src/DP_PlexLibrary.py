@@ -329,7 +329,7 @@ class PlexLibrary(Screen):
 		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, params))
 		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, params))
 		
-		extend = True # SWITCH
+		extend = False # SWITCH
 		
 		if extend == True:
 			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, params))
@@ -2091,8 +2091,6 @@ class PlexLibrary(Screen):
 		printl("parts: " + str(self.streams['parts']), self, "D")
 		printl("server: " + str(self.streams), self, "D")	
 		
-		#url = self.selectMedia(self.streams['partsCount'],self.streams['parts'], self.server)
-		
 		printl("", self, "C")
 		return self.streams['partsCount'], self.streams['parts'], self.server
 	
@@ -2319,87 +2317,6 @@ class PlexLibrary(Screen):
 		#=======================================================================
 		printl("", self, "C")   
 		return False
- 
-	#===========================================================
-	# 
-	#===========================================================
-	def selectMedia(self, count, options, server ):   # CHECKED
-		'''
-		'''
-		printl("", self, "S")
-		
-		#if we have two or more files for the same movie, then present a screen
-		result=0
-		self.options = options
-		self.server = server
-		self.dvdplayback=False
-		
-		if count == 1:
-			printl("count higher than 1 SOLVE THIS", self, "I") 
-	#==========================================================================
-	#	   dialogOptions=[]
-	#	   dvdIndex=[]
-	#	   indexCount=0
-	#	   for items in options:
-	# 
-	#		   name=items[1].split('/')[-1]
-	#	   
-	#		   if self.g_forcedvd == "true":
-	#			   if '.ifo' in name.lower():
-	#				   printl( "Found IFO DVD file in " + name )
-	#				   name="DVD Image"
-	#				   dvdIndex.append(indexCount)
-	#				   
-	#		   dialogOptions.append(name)
-	#		   indexCount+=1
-	#   
-	#	   printl("Create selection dialog box - we have a decision to make!") 
-	#	   startTime = xbmcgui.Dialog()
-	#	   result = startTime.select('Select media to play',dialogOptions)
-	#	   if result == -1:
-	#		   return None
-	#	   
-	#	   if result in dvdIndex:
-	#		   printl( "DVD Media selected")
-	#		   self.dvdplayback=True
-	#==========================================================================
-			indexCount=0
-			functionList = []
-			
-			for items in self.options:
-				name=items[1].split('/')[-1]
-				functionList.append((name ,indexCount, ))
-				indexCount+=1
-			
-			choice = self.session.open(ChoiceBox, title=_("Select media to play"), list=functionList)
-			printl("choice:" + str(choice), self, "D")
-			self.setSelectedMedia(choice)
-			
-		else:
-			if self.g_forcedvd == "true":
-				if '.ifo' in self.options[result]:
-					self.dvdplayback=True
-			
-			self.setSelectedMedia()
-
-		printl("", self, "C")
-		return self.newUrl
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setSelectedMedia(self, choice=None):
-		'''
-		'''
-		printl("", self, "S")
-		result = 0
-		#if choice != None:
-			#if choice[1]:
-				#pass
-		
-		self.newUrl=self.mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
-	   
-		printl("We have selected media at " + self.newUrl, self, "I")
-		printl("", self, "C")
 	
 	#=================================================================
 	# 
