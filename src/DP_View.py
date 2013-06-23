@@ -238,6 +238,10 @@ class DP_View(Screen, NumericalTextInput):
 				self.activeFilter = self.onFirstExecFilter
 				filter = True
 			
+			# lets override this
+			filter = True
+			sort = True
+			
 			self._load(ignoreSort=sort, ignoreFilter=filter)
 			self.refresh()
 		else: # changed views, reselect selected entry
@@ -1088,21 +1092,25 @@ class DP_View(Screen, NumericalTextInput):
 		else:
 			self.libraryFlags = {}
 		
-	
 		if ignoreSort is False:
 			# After changing the lsit always return to the default sort
 			self.activeSort = self.onSortKeyValuePair[0]
+			self.sort()
 		
 		if ignoreFilter is False:
 			# After changing the lsit always return to the default filter
 			x = self.onFilterKeyValuePair[0]
 			self.activeFilter = (x[0], x[1], x[2][0], )
+			self.listViewList = self.filter()
 		
-		self.sort()
-		self.filter()
-		
+		self.updateList()	
 		printl("", self, "C")
 
+	
+	def updateList(self):
+		
+		self["listview"].setList(self.listViewList)
+		self["listview"].setIndex(0)
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -1151,9 +1159,7 @@ class DP_View(Screen, NumericalTextInput):
 				else:
 					listViewList = [x for x in self.listViewList if x[1][self.activeFilter[1][0]].strip()[:testLength] == self.activeFilter[2].strip()[:testLength]]
 		
-		self["listview"].setList(listViewList)
-		self["listview"].setIndex(0)
-		
+		return listViewList
 		printl("", self, "C")
 
 	#===========================================================================
@@ -1191,6 +1197,10 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
+		# update the list to sync list with content
+		self.updateList()
+		
+		# show content for selected list item
 		selection = self["listview"].getCurrent()
 		
 		self._refresh(selection)
