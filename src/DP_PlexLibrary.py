@@ -817,7 +817,7 @@ class PlexLibrary(Screen):
 				
 				if t_mode == 'show' or t_mode == 'episode':
 					printl( "_MODE_TVSHOWS detected", self, "X")
-					if str(sections.get('key')) == "onDeck" or str(sections.get('key')) == "recentlyViewed":
+					if str(sections.get('key')) == "onDeck" or str(sections.get('key')) == "recentlyViewed" or str(sections.get('key')) == "newest" or str(sections.get('key')) == "recentlyAdded":
 						params["t_showEpisodesDirectly"] = True
 					mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), params))
 						
