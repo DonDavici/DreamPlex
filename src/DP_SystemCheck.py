@@ -140,8 +140,10 @@ class DPS_SystemCheck(Screen):
 			printl("curl_string: " + str(curl_string), self, "D")
 			response = popen(curl_string).read()
 			printl("response: " + str(response), self, "D")
-			
-			latestVersion = response[19:23] # is a bit dirty but better than forcing users to install simplejson
+			starter = 19
+			closer = response.find('",', 0, 30)
+			printl("closer: " + str(closer), self, "D")
+			latestVersion = response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
 			printl("latestVersion: " + str(latestVersion), self, "D")
 			
 			installedVersion = getVersion()
@@ -240,7 +242,12 @@ fi""" % str(remoteUrl)
 		printl("", self, "S")
 
 		if answer is True:
-			self.session.open(TryQuitMainloop, 3)
+			try:
+				self.session.open(TryQuitMainloop, 3)
+			except Exception, ex:
+				printl("Exception: " + str(ex), self, "W")
+				data = "TryQuitMainLoop is not implemented in your OS.\n Please restart your box manually."
+				self.session.open(MessageBox, _("Information:\n") + data, MessageBox.TYPE_INFO)
 		else:
 			self.close()
 		
