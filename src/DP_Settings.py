@@ -357,7 +357,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("OK"))
 		self["key_blue"] = StaticText(_("Delete"))
-		self["key_yellow"] = StaticText(_("check myPlex Token"))
+		self["key_yellow"] = StaticText(_("mappings"))
 		
 		if entry is None:
 			self.newmode = 1
@@ -372,7 +372,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		ConfigListScreen.__init__(self, self.cfglist, session)
 			
 		self.createSetup()
-
+		
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -415,17 +415,19 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType))
 		if self.current.playbackType.value == "0":
-			pass
+			self.useMappings = False
+			
 		elif self.current.playbackType.value == "1":
+			self.useMappings = False
 			self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality))
 			self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
 			
 		elif self.current.playbackType.value == "2":
+			printl("i am here", self, "D")
 			self.useMappings = True
-			self["key_yellow"] = StaticText(_("Mappings"))
 		
 		elif self.current.playbackType.value == "3":
-			pass
+			self.useMappings = True
 			#self.cfglist.append(getConfigListEntry(_(">> Username"), self.current.smbUser))
 			#self.cfglist.append(getConfigListEntry(_(">> Password"), self.current.smbPassword))
 			#self.cfglist.append(getConfigListEntry(_(">> Server override IP"), self.current.nasOverrideIp))
@@ -451,8 +453,25 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
 		
+		self.setKeyNames()
+			
 		printl("", self, "C")
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setKeyNames(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if self.useMappings == True:
+			self["key_yellow"].setText(_("Mappings"))
+		else:
+			self["key_yellow"].setText(_("check myPlex Token"))
+		
+		printl("", self, "C")
+		
 	#===========================================================================
 	# 
 	#===========================================================================
