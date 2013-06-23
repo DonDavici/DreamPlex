@@ -427,7 +427,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			self.useMappings = True
 		
 		elif self.current.playbackType.value == "3":
-			self.useMappings = True
+			self.useMappings = False
 			#self.cfglist.append(getConfigListEntry(_(">> Username"), self.current.smbUser))
 			#self.cfglist.append(getConfigListEntry(_(">> Password"), self.current.smbPassword))
 			#self.cfglist.append(getConfigListEntry(_(">> Server override IP"), self.current.nasOverrideIp))
