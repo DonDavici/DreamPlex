@@ -200,7 +200,7 @@ fi
 echo "Binary: $BIN"
 
 if [ $BIN != "" ]; then
- $BIN remove project-valerie
+ $BIN remove DreamPlex
  echo "Cleaning up"
  rm -rf /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/*
  if [ $BIN == "opkg" ]; then
@@ -240,7 +240,7 @@ fi""" % str(remoteUrl)
 		printl("", self, "S")
 
 		if answer is True:
-			quitMainloop(3)
+			self.session.open(TryQuitMainloop, 3)
 		else:
 			self.close()
 		
