@@ -1,3 +1,6 @@
+=== bugfix release 1.04a ===
+- fixed gs in tvshow section
+
 === 1.04 ===
 - fixed direct local with UNC path
 - fixed direct local for plex on windows
