@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <xml>
-    <view name="DP_ViewList">
-            <itemsPerPage>6</itemsPerPage>
-    </view>
-
-    <view name="DP_ViewBackdrop">
-            <itemsPerPage>6</itemsPerPage>
-    </view>
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/mayatypeuitvg.ttf" size="100" name="Modern" />
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf" size="100"  name="Named" /> 
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/saint.ttf" size="100" name="Saint" />
     
-    <view name="DP_ViewListLong">
-            <itemsPerPage>14</itemsPerPage>
-    </view>
+    <view name="DP_ViewList" itemsPerPage="6"/>
+    <view name="DP_ViewBackdrop" itemsPerPage="6"/>
+    <view name="DP_ViewListLong" itemsPerPage="14"/>
+    <view name="DP_ViewMusic" itemsPerPage="6"/>
+
 </xml>
