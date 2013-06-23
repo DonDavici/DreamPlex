@@ -408,7 +408,9 @@ class PlexLibrary(Screen):
 					printl( "_MODE_ARTISTS detected", self, "D")
 					if (filter is not None) and (filter != "music"):
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
+					extend = False # SWITCH
+					if extend == True:
+						mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
 						
 				elif section.get('type') == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "D")
