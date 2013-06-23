@@ -227,8 +227,6 @@ class PlexLibrary(Screen):
 		elif self.g_playbackType == "2": # DIRECT LOCAL
 			self.g_stream = "0"
 			self.g_transcode = "false"
-			self.g_remotePathPart = serverConfig.remotePathPart.value
-			self.g_localPathPath = serverConfig.localPathPart.value
 		
 		elif self.g_playbackType == "3": # DIRECT REMOTE
 			self.g_stream = "2"
