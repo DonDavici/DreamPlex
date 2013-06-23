@@ -309,15 +309,21 @@ def registerPlexFonts():
 	printl2("", "__common__::registerPlexFonts", "S")
 	
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
-
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/mayatypeuitvg.ttf", "Modern", 100, False)
-	printl2("added => mayatypeuitvg.ttf", "__common__::registerPlexFonts", "I")
 	
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf", "Named", 100, False)
-	printl2("added => goodtime.ttf", "__common__::registerPlexFonts", "I")
-	
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/saint.ttf", "Saint", 100, False)
-	printl2("added => saint.ttf", "__common__::registerPlexFonts", "I")
+	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
+	for font in tree.findall('font'):
+		
+		path = str(font.get('path'))
+		printl2("path: " + str(font.get('path')), "__common__::registerPlexFonts", "D")
+		
+		size = int(font.get('size'))
+		printl2("size: " + str(font.get('size')), "__common__::registerPlexFonts", "D")
+		
+		name = str(font.get('name'))
+		printl2("name: " + str(font.get('name')), "__common__::registerPlexFonts", "D")
+		
+		addFont(path, name, size, False)
+		printl2("added => " + name, "__common__::registerPlexFonts", "I")
 	
 	printl2("", "__common__::registerPlexFonts", "C")
 

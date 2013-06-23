@@ -215,7 +215,7 @@ class DP_View(Screen, NumericalTextInput):
 		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
 		for view in tree.findall('view'):
 			if view.get('name') == viewName:
-				self.itemsPerPage = int(view.find('itemsPerPage').text)
+				self.itemsPerPage = int(view.get('itemsPerPage'))
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 			
 		printl("", self, "C")
