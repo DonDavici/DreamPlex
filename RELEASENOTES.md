@@ -10,7 +10,6 @@
 - fixed yellow button toggle name direct local mode 
 - added font details to xml for skinners
 - several clean ups
-... not finished yet
 
 === 1.04a (bugfix release) ===
 - fixed gs in tvshow section
