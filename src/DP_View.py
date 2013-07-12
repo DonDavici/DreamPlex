@@ -1504,12 +1504,25 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
+		selection = self["listview"].getCurrent()
+		
+		media_id = selection[1]['ratingKey']
+		server = selection[1]['server']
+		
 		functionList = []
 		
-		functionList.append((_("Audio"), Plugin("View", fnc=self.markUnwatched), ))
+		subtitlesList = Singleton().getPlexInstance().getSubtitlesById(server, media_id)
 		
-		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
-			title=_("Audio Functions"), list=functionList)
+		for item in subtitlesList:
+			
+			name = item.get('language').encode("utf-8", "")
+			id = item.get('id', "")
+			languageCode = item.get('languageCode', "")
+
+			functionList.append((name, id, languageCode, media_id, server))
+		
+		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, \
+			title=_("Subtitle Functions"), list=functionList)
 		
 		printl("", self, "C")
 	
@@ -1670,9 +1683,9 @@ class DP_View(Screen, NumericalTextInput):
 		if choice is None or choice[1] is None:
 			return
 		
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			pass
+		printl("choice" + str(choice), self, "D")
+		
+		doRequest = Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2])
 		
 		printl("", self, "C")
 	
