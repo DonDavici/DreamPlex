@@ -46,7 +46,7 @@ class DP_LibShows(DP_LibMain):
 		'''
 		printl ("", self, "S")
 		
-		DP_LibMain.__init__(self, session, "tv shows")
+		DP_LibMain.__init__(self, session, "tvshows")
 		self.g_url = url
 		self.showEpisodesDirectly = showEpisodesDirectly
 		
@@ -127,7 +127,7 @@ class DP_LibShows(DP_LibMain):
 				sort = [("by title", None, False), ]
 				
 				filter = [("All", (None, False), ("", )), ]
-				
+
 				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 				
 				printl ("", self, "C")

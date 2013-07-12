@@ -25,6 +25,7 @@ You should have received a copy of the GNU General Public License
 import sys
 import os
 import datetime
+import shutil
 
 from enigma import getDesktop, addFont
 from skin import loadSkin
@@ -34,6 +35,21 @@ from Components.AVSwitch import AVSwitch
 from DPH_Singleton import Singleton
 
 #===============================================================================
+# import cProfile
+#===============================================================================
+try:
+# Python 2.5
+	import xml.etree.cElementTree as etree
+	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
+except ImportError:
+	try:
+		# Python 2.5
+		import xml.etree.ElementTree as etree
+		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	except ImportError:
+		printl2("something went wrong during etree import" + str(e), self, "E")
+
+#===============================================================================
 # GLOBAL
 #===============================================================================
 gConnectivity = None
@@ -41,15 +57,15 @@ gLogFile = None
 gBoxType = None
 
 # ****************************** VERBOSITY Level *******************************
-VERB_ERROR       = 0  # "E" shows error
+VERB_ERROR	   = 0  # "E" shows error
 VERB_INFORMATION = 0  # "I" shows important highlights to have better overview if something really happening or not
 
-VERB_WARNING     = 1  # "W" shows warning
+VERB_WARNING	 = 1  # "W" shows warning
 
 VERB_DEBUG 		 = 2  # "D" shows additional debug information
 
-VERB_STARTING    = 3  # "S" shows started functions/classes etc.
-VERB_CLOSING     = 3  # "C" shows closing functions/classes etc.
+VERB_STARTING	= 3  # "S" shows started functions/classes etc.
+VERB_CLOSING	 = 3  # "C" shows closing functions/classes etc.
 
 VERB_EXTENDED	 = 4  # "X" shows information that are not really needed at all can only be activated by hand
 
@@ -195,6 +211,12 @@ def openLogFile():
 	
 	now = datetime.datetime.now()
 	try:
+		if os.path.exists(logDir + "dreamplex_former.log"):
+			os.remove(logDir + "dreamplex_former.log")
+			
+		if os.path.exists(logDir + "dreamplex.log"):
+			shutil.copy2(logDir + "dreamplex.log", logDir + "dreamplex_former.log")
+		
 		instance = Singleton()
 		instance.getLogFileInstance(open(logDir + "dreamplex.log", "w"))
 		
@@ -287,15 +309,21 @@ def registerPlexFonts():
 	printl2("", "__common__::registerPlexFonts", "S")
 	
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
-
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/mayatypeuitvg.ttf", "Modern", 100, False)
-	printl2("added => mayatypeuitvg.ttf", "__common__::registerPlexFonts", "I")
 	
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf", "Named", 100, False)
-	printl2("added => goodtime.ttf", "__common__::registerPlexFonts", "I")
-	
-	addFont("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/saint.ttf", "Saint", 100, False)
-	printl2("added => saint.ttf", "__common__::registerPlexFonts", "I")
+	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
+	for font in tree.findall('font'):
+		
+		path = str(font.get('path'))
+		printl2("path: " + str(font.get('path')), "__common__::registerPlexFonts", "D")
+		
+		size = int(font.get('size'))
+		printl2("size: " + str(font.get('size')), "__common__::registerPlexFonts", "D")
+		
+		name = str(font.get('name'))
+		printl2("name: " + str(font.get('name')), "__common__::registerPlexFonts", "D")
+		
+		addFont(path, name, size, False)
+		printl2("added => " + name, "__common__::registerPlexFonts", "I")
 	
 	printl2("", "__common__::registerPlexFonts", "C")
 
@@ -341,10 +369,12 @@ def checkPlexEnvironment():
 	playerTempFolder = config.plugins.dreamplex.playerTempPath.value
 	logFolder = config.plugins.dreamplex.logfolderpath.value
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
+	configFolder = config.plugins.dreamplex.configfolderpath.value
 	
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
 	checkDirectory(mediaFolder)
+	checkDirectory(configFolder)
 	
 	printl2("","__common__::checkPlexEnvironment", "C")
 	
@@ -513,7 +543,7 @@ def getBoxArch():
    
 	if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
 		ARCH = "oe16"
-                   
+				   
 	if (sys.version_info < (2, 7, 4) and sys.version_info > (2, 7, 0)):
 		ARCH = "oe20"
 			
@@ -527,15 +557,15 @@ def findMountPoint(pth):
 	'''
 	Example: findMountPoint("/media/hdd/some/file") returns "/media/hdd" 
 	'''
-	printl2("","__common__::findMountPoint", "S")                                    
+	printl2("","__common__::findMountPoint", "S")									
 	
-	pth = path.abspath(pth)                                                                                        
+	pth = path.abspath(pth)																						
 	
-	while not path.ismount(pth):                                                                                    
-		pth = path.dirname(pth)                                                                                
+	while not path.ismount(pth):																					
+		pth = path.dirname(pth)																				
 	
 	printl2("","__common__::findMountPoint", "C")
-	return pth                                                                                                         
+	return pth																										 
 
 #===============================================================================
 # 
@@ -680,3 +710,97 @@ def getScale():
 	return AVSwitch().getFramebufferScale()
 	
 	printl2("","__common__::getScale", "C")
+
+#===========================================================================
+# 
+#===========================================================================
+def checkXmlFile(location):
+	'''
+	'''
+	printl2("", "__common__::checkXmlFile", "S")
+	
+	if os.path.isfile(location) == False:
+		printl2("xml file not found, generating ...", "__common__::checkXmlFile", "D")
+		with open(location, "a") as writefile:
+			writefile.write("<xml></xml>")
+			printl2("writing xml file done", "__common__::checkXmlFile", "D")
+		
+	else:
+		printl2("found xml file, nothing to do", "__common__::checkXmlFile", "D")
+	
+	printl2("", "__common__::checkXmlFile", "C")
+
+#===========================================================================
+# 
+#===========================================================================
+def getXmlContent(location):
+	'''
+	'''
+	
+	printl2("", "__common__::getXmlContent", "S")
+	
+	checkXmlFile(location)
+	
+	xml = open(location).read()
+	printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
+	
+	try:
+		tree = etree.fromstring(xml)
+	except Exception, e:
+		printl2("something weng wrong during xml parsing" + str(e), __name__, "E")
+	
+	printl2("", "__common__::getXmlContent", "C")
+	return tree
+
+#===========================================================================
+# 
+#===========================================================================
+def writeXmlContent(content, location):
+	'''
+	'''
+	printl2("", "__common__::writeXmlContent", "S")
+	
+	indented = indentXml(content)
+	xmlString = etree.tostring(indented)
+	fobj = open(location, "w")
+	fobj.write(xmlString)
+	fobj.close
+	printl2("xmlString: " + str(xmlString), "__common__::getXmlContent", "C")
+	
+	printl2("", "__common__::getXmlContent", "C")
+
+
+#===========================================================================
+# 
+#===========================================================================
+def indentXml(elem, level=0, more_sibs=False):
+	'''
+	'''
+	printl2("", "__common__::indentXml", "S")
+
+	i = "\n"
+	if level:
+		i += (level-1) * '  '
+	num_kids = len(elem)
+	if num_kids:
+		if not elem.text or not elem.text.strip():
+			elem.text = i + "  "
+			if level:
+				elem.text += '  '
+		count = 0
+		for kid in elem:
+			indentXml(kid, level+1, count < num_kids - 1)
+			count += 1
+		if not elem.tail or not elem.tail.strip():
+			elem.tail = i
+			if more_sibs:
+				elem.tail += '  '
+	else:
+		if level and (not elem.tail or not elem.tail.strip()):
+			elem.tail = i
+			if more_sibs:
+				elem.tail += '  '
+	
+	return elem
+	
+	printl2("", "__common__::indentXml", "C")

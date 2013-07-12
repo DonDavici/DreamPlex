@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #=================================
 import sys
 import time
+import copy
 
 from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from os import system, popen
@@ -53,6 +54,9 @@ from Plugins.Extensions.DreamPlex.DP_Settings import DPS_Settings
 from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntriesListConfigScreen
 from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntryConfigScreen
 
+from Plugins.Extensions.DreamPlex.DP_Help import DPS_Help
+from Plugins.Extensions.DreamPlex.DP_About import DPS_About
+
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
@@ -76,6 +80,7 @@ class DPS_MainMenu(Screen):
 	g_serverDataMenu = None
 	g_filterDataMenu = None
 	nextExitIsQuit = True
+	currentService = None
 	
 	#===========================================================================
 	# 
@@ -90,13 +95,12 @@ class DPS_MainMenu(Screen):
 		self["infoText"] = Label()
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
-		self["txt_blue"] = StaticText(_("Info"))
+		#self["txt_blue"] = StaticText(_("Info"))
 		#self["txt_red"] = StaticText(_("Exit"))
-		self["txt_green"] = StaticText(_("Settings"))
+		#self["txt_green"] = StaticText(_("Settings"))
 		
 		self.setText("infoText", self.getInfoText())
 		
-
 		self.mainMenuList = []
 		
 		# add servers to list 
@@ -105,8 +109,8 @@ class DPS_MainMenu(Screen):
 		
 			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
 	
-		#self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
-		#self.mainMenuList.append((_("Exit"), "DPS_Exit"))
+		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
+		self.mainMenuList.append((_("About"), "DPS_About"))
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -114,16 +118,16 @@ class DPS_MainMenu(Screen):
 
 		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions", 
 			{
-				"ok":    	(self.okbuttonClick, ""),
-				"left":  	(self.left, ""),
-				"right": 	(self.right, ""),
-				"up":    	(self.up, ""),
-				"down":  	(self.down, ""),
-				"cancel":   (self.cancel, ""),
-				"info":   	(self.info, ""),
-				"blue": 	(self.info, ""),
-				"red": 		(self.exit, ""),
-				"green": 	(self.getSettingsMenuList, ""),
+				"ok":		(self.okbuttonClick, ""),
+				"left":		(self.left, ""),
+				"right":	(self.right, ""),
+				"up":		(self.up, ""),
+				"down":		(self.down, ""),
+				"cancel":	(self.cancel, ""),
+				#"info":	(self.info, ""),
+				#"blue":	(self.info, ""),
+				#"red":		(self.exit, ""),
+				#"green":	(self.getSettingsMenuList, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -229,6 +233,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
+		mainMenuList.append((_("Help"), "DPS_Help"))
 		nextExitIsQuit = False
 		
 		printl("", self, "C")
@@ -274,6 +279,10 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
+				
+				elif self.selectedEntry == Plugin.MENU_MUSIC:
+					printl("found Plugin.MENU_MUSIC", self, "D")
+					self.getServerData("music")
 					
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
@@ -283,22 +292,17 @@ class DPS_MainMenu(Screen):
 					t_url = params.get('t_url', "notSet")
 					t_mode = params.get('t_mode', "notSet")
 					t_final = params.get('t_final', "notSet")
-					t_accessToken = params.get('t_accessToken', "notSet")
 
 					self.s_url = t_url
 					self.s_mode = t_mode
 					self.s_final = t_final
-					self.s_accessToken = t_accessToken
 					
 					self.getFilterData()
-			#===================================================================
-			# 
-			#	elif self.selectedEntry == Plugin.MENU_SYSTEM:
-			#		printl("found Plugin.MENU_SYSTEM", self, "D")
-			#		self["menu"].setList(self.getSettingsMenu())
-			#		self.refreshMenu(0)
-			#===================================================================
-
+			 
+				elif self.selectedEntry == Plugin.MENU_SYSTEM:
+					printl("found Plugin.MENU_SYSTEM", self, "D")
+					self["menu"].setList(self.getSettingsMenu())
+					self.refreshMenu(0)
 				
 			elif type(self.selectedEntry) is str:
 				printl("selected entry is string", self, "D")
@@ -311,9 +315,19 @@ class DPS_MainMenu(Screen):
 					
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
-					
+				
+				elif selection[1] == "DPS_About":
+					self.session.open(DPS_About)
+					#self.info()
+				
+				elif selection[1] == "DPS_Help":
+					self.session.open(DPS_Help)
+				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
+				
+				elif selection[1] == "getMusicSections":
+					self.getMusicSections(selection)
 					
 			else:
 				printl("selected entry is executable", self, "D")
@@ -332,6 +346,43 @@ class DPS_MainMenu(Screen):
 			printl("", self, "C")
 					
 	
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getMusicSections(self, selection):
+		'''
+		'''
+		printl("", self, "S")
+		
+		mainMenuList = []
+		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
+		
+		origSelection = selection
+		
+		# ARTISTS
+		params = copy.deepcopy(selection[3])
+		url = params['t_url']
+		params['t_url'] = url + "?type=8"
+		mainMenuList.append((_("by Artists"), plugin, params))
+		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
+		
+		#ALBUMS
+		params = copy.deepcopy(selection[3])
+		params['t_url'] = url + "?type=9"
+		mainMenuList.append((_("by Albums"), plugin, params))
+		printl("mainMenuList 2: " + str(mainMenuList), self, "D")
+		
+		self["menu"].setList(mainMenuList)
+		self.refreshMenu(0)
+		
+		printl("mainMenuList: " + str(mainMenuList), self, "D")
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def getSettingsMenuList(self):
 		'''
 		'''
@@ -506,7 +557,8 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		self.session.nav.playService(self.currentService)
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
+				self.session.nav.playService(self.currentService)
 		self.close((True,) )
 		
 		printl("", self, "C")
@@ -647,7 +699,7 @@ class DPS_MainMenu(Screen):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 
-		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_accessToken)
+		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
 
 		
 		self["menu"].setList(menuData)

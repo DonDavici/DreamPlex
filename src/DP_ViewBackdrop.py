@@ -57,15 +57,15 @@ def getViewClass():
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
-	return DPS_ListView
+	return DPS_ViewBackdrop
 
 #===============================================================================
 # 
 #===============================================================================
-class DPS_ListView(DP_View):
+class DPS_ViewBackdrop(DP_View):
 	'''
 	'''
-	backdrop_postfix 		= "_backdrop.jpg"
+	backdrop_postfix 		= "_backdrop_1280x720.jpg"
 	poster_postfix 			= "_poster.jpg"
 	image_prefix 			= ""
 	plexInstance 			= None
@@ -101,8 +101,6 @@ class DPS_ListView(DP_View):
 		self.session = session
 		
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
-		
-		self.setListViewElementsCount()
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -206,11 +204,10 @@ class DPS_ListView(DP_View):
 			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
 			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 			
-			if self.fastScroll == False or self.showMedia == True:
-				# if we are a show an if playtheme is enabled we start playback here
-				if self.playTheme: 
-					if self.startPlaybackNow:
-						self.startThemePlayback()
+			# if we are a show an if playtheme is enabled we start playback here
+			if self.playTheme: 
+				if self.startPlaybackNow:
+					self.startThemePlayback()
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
@@ -338,28 +335,7 @@ class DPS_ListView(DP_View):
 		
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleNavigationData(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		itemsPerPage = self.itemsPerPage
-		itemsTotal = self["listview"].count()
-		correctionVal = 0.5
-		
-		if (itemsTotal%itemsPerPage) == 0:
-			correctionVal = 0
-		
-		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
-		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
-		
-		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
-		
-		printl("", self, "C")
+
 		
 	#===========================================================================
 	# 
@@ -592,7 +568,7 @@ class DPS_ListView(DP_View):
 		'''
 		'''
 		printl("", self, "S")
-		
+
 		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
@@ -607,16 +583,18 @@ class DPS_ListView(DP_View):
 	
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
+			self.isTvShow = True
 			bname = self.parentSeasonId
 			pname = self.parentSeasonId
 			self.startPlaybackNow = False
 			self.changeBackdrop = True
 			self.changePoster = True
-			self.resetPoster = True
+			self.resetPoster = False
 			self.resetBackdrop = False
 			
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
+			self.isTvShow = True
 			self.parentSeasonNr = self.details["ratingKey"]			
 			bname = self.parentSeasonId
 			pname = self.details["ratingKey"]
@@ -627,18 +605,21 @@ class DPS_ListView(DP_View):
 			self.resetBackdrop = False
 		
 		else:
+			printl( "is playable content",self, "D")
 			bname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 			if self.isTvShow is True:
-				pname = self.parentSeasonNr
+				printl( "is episode",self, "D")
+				pname = self.parentSeasonId
 				# we dont want to have the same poster downloaded and used for each episode
 				self.changePoster = False
 				self.changeBackdrop = True
 			else:
+				printl( "is movie",self, "D")
 				self.changeBackdrop = True
 				self.changePoster = True
 				pname = self.details["ratingKey"]
-			
+		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		
@@ -652,7 +633,6 @@ class DPS_ListView(DP_View):
 		'''
 		printl("", self, "S")
 		
-		self.session.nav.stopService()
 		super(getViewClass(), self).close(arg)
 		
 		printl("", self, "C")
@@ -787,7 +767,7 @@ class DPS_ListView(DP_View):
 				ptr = self.EXpicloadPoster.getData()
 				
 				if ptr is not None:
-					self["poster"].instance.setPixmap(ptr.__deref__())
+					self["poster"].instance.setPixmap(ptr)
 
 		else:
 			self.downloadPoster()
@@ -812,7 +792,7 @@ class DPS_ListView(DP_View):
 				ptr = self.EXpicloadBackdrop.getData()
 				
 				if ptr is not None:
-					self["mybackdrop"].instance.setPixmap(ptr.__deref__())
+					self["mybackdrop"].instance.setPixmap(ptr)
 
 		else:
 			self.downloadBackdrop()
@@ -849,6 +829,8 @@ class DPS_ListView(DP_View):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
+		download_url = download_url.replace('&width=560&height=315', '&width=1280&height=720')
+		#http://192.168.45.190:32400/photo/:/transcode?url=http%3A%2F%2Flocalhost%3A32400%2Flibrary%2Fmetadata%2F6209%2Fart%2F1354571799&width=560&height=315'
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
@@ -860,26 +842,7 @@ class DPS_ListView(DP_View):
 				
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setListViewElementsCount(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		#=======================================================================
-		# desktop = getDesktop(0).size().width()
-		# if desktop == 720:
-		#	self.itemsPerPage = int(12)
-		# elif desktop == 1024:
-		#	self.itemsPerPage = int(12)
-		# elif desktop == 1280:
-		#=======================================================================
-		self.itemsPerPage = int(6)
-			
-		printl("", self, "C")
-		
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -952,6 +915,9 @@ class DPS_ListView(DP_View):
 		self["resolution"].hide()
 		self["rated"].hide()
 		self["audio"].hide()
+		
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+		self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")
 		

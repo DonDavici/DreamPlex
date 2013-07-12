@@ -41,6 +41,8 @@ from Components.config import ConfigYesNo
 from Components.config import ConfigPassword
 from Components.config import ConfigIP
 from Components.config import ConfigMAC
+from Components.config import ConfigDirectory
+
 from Components.Language import language
 
 import Plugins.Plugin
@@ -51,6 +53,7 @@ from Plugins.Extensions.DreamPlex.__plugin__ import registerPlugin, Plugin
 
 from Plugins.Extensions.DreamPlex.DP_LibMovies import DP_LibMovies
 from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
+from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
 
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
@@ -60,23 +63,23 @@ defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/"
 defaultLogFolderPath    = "/tmp/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
+defaultConfigFolderPath	= "/hdd/dreamplex/config/"
 
 config.plugins.dreamplex = ConfigSubsection()
-
+config.plugins.dreamplex.about                  = ConfigSelection(default = "1", choices = [("1", " ")])
 config.plugins.dreamplex.debugMode         		= ConfigSelection(default="0", choices = [("0", _("Silent")),("1", _("Normal")),("2", _("High")),("3", _("All"))])
 config.plugins.dreamplex.pluginfolderpath  		= ConfigText(default = defaultPluginFolderPath)
 config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.mediafolderpath   		= ConfigText(default = defaultMediaFolderPath, fixed_size=False)
+config.plugins.dreamplex.configfolderpath   	= ConfigText(default = defaultConfigFolderPath, fixed_size=False)
 config.plugins.dreamplex.showInMainMenu	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      		= ConfigYesNo(default = False)
 config.plugins.dreamplex.playTheme         		= ConfigYesNo(default = False)
+config.plugins.dreamplex.showUnSeenCounts		= ConfigYesNo(default = False)
 config.plugins.dreamplex.fastScroll		   		= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 		= ConfigYesNo(default = False)
-config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = True)
-
-config.plugins.dreamplex.useBufferControl			= ConfigYesNo(default = True)
-config.plugins.dreamplex.setSeekOnStart 			= ConfigYesNo(default = True)
+config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = False)
 
 config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
 
@@ -130,8 +133,6 @@ def printGlobalSettings():
 	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::initGlobalSettings", "I")
 	printl("autoLanguage: " + str(config.plugins.dreamplex.autoLanguage.value), "__init__::initGlobalSettings", "I")
 	printl("stopLiveTvOnStartup: " + str(config.plugins.dreamplex.stopLiveTvOnStartup.value), "__init__::initGlobalSettings", "I")
-	printl("useBufferControl: " + str(config.plugins.dreamplex.useBufferControl.value), "__init__::initGlobalSettings", "I")
-	printl("setSeekOnStart: " + str(config.plugins.dreamplex.setSeekOnStart.value), "__init__::initGlobalSettings", "I")
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
 	printl("fastScroll: " + str(config.plugins.dreamplex.fastScroll.value), "__init__::initGlobalSettings", "I")
 	printl("summerizeSections: " + str(config.plugins.dreamplex.summerizeSections.value), "__init__::initGlobalSettings", "I")
@@ -150,17 +151,18 @@ def initServerEntryConfig():
 	i = len(config.plugins.dreamplex.Entries) -1
 	
 	# SERVER SETTINGS
+	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
 	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
-	#config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Transcoded via Proxy")), ("3", _("Direct Local")), ("4", _("Direct Remote"))])
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
+	printl("id: " + str(config.plugins.dreamplex.Entries[i].id.value), "__init__::initServerEntryConfig", "D")
 	printl("state: " + str(config.plugins.dreamplex.Entries[i].state.value), "__init__::initServerEntryConfig", "D")
 	printl("name: " + str(config.plugins.dreamplex.Entries[i].name.value), "__init__::initServerEntryConfig", "D")
 	printl("connectionType: " + str(config.plugins.dreamplex.Entries[i].connectionType.value), "__init__::initServerEntryConfig", "D")
@@ -201,14 +203,7 @@ def initServerEntryConfig():
 	# TRANSCODED VIA PROXY
 	
 	# DIRECT LOCAL
-	config.plugins.dreamplex.Entries[i].remoteServerType					= ConfigSelection(default="0", choices = [("0", _("Linux")),("1", _("Windows"))])
-	config.plugins.dreamplex.Entries[i].remotePathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].localPathPart						= ConfigText(default = "/my/path/", visible_width = 50, fixed_size = False)
-	
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
-	printl("remoteServerType: " + str(config.plugins.dreamplex.Entries[i].remoteServerType.value), "__init__::initServerEntryConfig", "D")
-	printl("remotePathPart: " + str(config.plugins.dreamplex.Entries[i].remotePathPart.value), "__init__::initServerEntryConfig", "D")
-	printl("localPathPart: " + str(config.plugins.dreamplex.Entries[i].localPathPart.value), "__init__::initServerEntryConfig", "D")
 	
 	# DIRECT REMOTE
 	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
@@ -261,10 +256,19 @@ def loadPlexPlugins():
 	printl("", "__init__::loadPlexPlugins", "S")
 	
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
-	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_VIDEOS))
+	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
 	
-	printl("registering ... tvhshows", "__inigetBoxInformationt__::loadPlexPlugins", "D")
-	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_VIDEOS))
+	printl("registering ... tvhshows", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
+	
+	printl("registering ... music", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
+	
+	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibPictures, where=Plugin.MENU_PICTURES))
+	
+	#printl("registering ... channels", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibChannels, where=Plugin.MENU_CHANNELS))
 	
 	printl("", "__init__::loadPlexPlugins", "C")
 
