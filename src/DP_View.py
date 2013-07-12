@@ -158,6 +158,7 @@ class DP_View(Screen, NumericalTextInput):
 			"info":			(self.onKeyInfo, ""),
 			"menu":			(self.onKeyMenu, ""),
 			"video":		(self.onKeyVideo, ""),
+			"audio":		(self.onKeyAudio, ""),
 			"red":			(self.onKeyRed, ""),
 			"green":	  	(self.onKeyGreen, ""),
 			"yellow":		(self.onKeyYellow, ""),
@@ -529,6 +530,18 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		'''
 		printl("", self, "S")
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def onKeyAudio(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.displayAudioMenu()
 		
 		printl("", self, "C")
 
@@ -1486,6 +1499,23 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
+	def displayAudioMenu(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		functionList = []
+		
+		functionList.append((_("Audio"), Plugin("View", fnc=self.markUnwatched), ))
+		
+		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
+			title=_("Audio Functions"), list=functionList)
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def markUnwatched(self, unused=None, unused2=None):
 		'''
 		'''
@@ -1626,6 +1656,23 @@ class DP_View(Screen, NumericalTextInput):
 				choice[1].fnc(self.session, selection[1])
 				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
 					self.refresh()
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def displayAudioMenuCallback(self, choice):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if choice is None or choice[1] is None:
+			return
+		
+		selection = self["listview"].getCurrent()
+		if selection is not None:
+			pass
 		
 		printl("", self, "C")
 	
