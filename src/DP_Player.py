@@ -32,7 +32,8 @@ from Screens.MessageBox import MessageBox
 
 from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation #@UnresolvedImport
 
-from thread import start_new_thread
+import threading
+
 
 from Tools.Directories import fileExists
 from Tools import Notifications
@@ -85,6 +86,7 @@ class DP_Player(MoviePlayer):
     nTracks = False
     switchedLanguage = False
     startNewServiceOnPlay = False
+    
   
     def __init__(self, session, playerData, resume=False):
         '''
@@ -102,6 +104,8 @@ class DP_Player(MoviePlayer):
         self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
         self.server = str(playerData['server'])
         self.id = str(playerData['id'])
+        self.servermultiuser = playerData['servermultiuser']
+        self.playbacktype = playerData['playbackType']
         self.url = str(playerData['playUrl'])
         self.transcodingSession = str(playerData['transcodingSession'])
         
@@ -144,6 +148,7 @@ class DP_Player(MoviePlayer):
         printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
         
         sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
+        
         sref.setName("DreamPlex")
         
         # lets call the movieplayer
@@ -185,11 +190,22 @@ class DP_Player(MoviePlayer):
             printl("rPos: " + str(rPos), self, "I")
             
         if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
-            start_new_thread(self.seekWatcher,(self,))
+            seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
+            seekwatcherThread.start()
         
         if config.plugins.dreamplex.autoLanguage.value: 
-            start_new_thread(self.audioTrackWatcher,(self,))
+            audiotrackwatcherThread = threading.Thread(target=self.audioTrackWatcher,args=(self,))
+            audiotrackwatcherThread.start()
         
+        if self.servermultiuser == True:
+        	self.timelinewatcherthread_stop = threading.Event()
+        	self.timelinewatcherthread_wait = threading.Event()
+        	self.timelinewatcherthread_stop.clear()
+        	self.timelinewatcherthread_wait.clear()
+        	self.timelinewatcherThread = threading.Thread(target=self.timelineWatcher,name="TimeLineWatcherThread", args=(self.timelinewatcherthread_stop, self.timelinewatcherthread_wait,))
+        	self.timelinewatcherThread.daemon = True
+
+   
         self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
             {
                 iPlayableService.evUser+10: self.__evAudioDecodeError,
@@ -305,12 +321,14 @@ class DP_Player(MoviePlayer):
         self.buffersize = bufferInfo[4]
         self.bufferPercent = bufferInfo[0]
         #printl("bufferPercent: " + str(self.bufferPercent), self, "D")
-        self["bufferslider"].setValue(int(self.bufferPercent))
+        if self.useBufferControl and self.playbacktype != "0":
+        	self["bufferslider"].setValue(int(self.bufferPercent))
 
         if(self.bufferPercent > 95):
             self.bufferFull()
                 
-        if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
+        #if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
+        if(self.bufferPercent < 3 and not self.endReached):
             self.bufferEmpty()
         
         #printl("self.buffersize: " + str(self.buffersize), self, "D")
@@ -474,13 +492,24 @@ class DP_Player(MoviePlayer):
         '''
         #printl("", self, "S")
         
-        if self.useBufferControl:
+        if self.useBufferControl and self.playbacktype != "0":
             if self.seekstate != self.SEEK_STATE_PLAY :
                 printl( "Buffer filled start playing", self, "I")
                 self.setSeekState(self.SEEK_STATE_PLAY)
+                self.hide()
         
+        if self.servermultiuser == True:
+		self.timelinewatcherthread_wait.clear()
+		if not self.timelinewatcherThread.isAlive():
+			self.timelinewatcherthread_stop.clear()
+			sleep(2)
+			try:
+				self.timelinewatcherThread.start()
+			except:
+				pass
+
         #hide infobar to indicate buffer is ready
-        self.hide()
+        
         
         #printl("", self, "C")
 
@@ -492,14 +521,25 @@ class DP_Player(MoviePlayer):
         '''
         #printl("", self, "S")
         
-        #show infobar to indicate buffer is empty 
+
+        
+        if self.useBufferControl and self.playbacktype != "0":
+                #show infobar to indicate buffer is empty 
+        	if self.seekstate != self.SEEK_STATE_PAUSE :
+        		pass
+        	        #printl( "Buffer drained pause", self, "I")
+        	        #self.setSeekState(self.SEEK_STATE_PAUSE)
+                
+	if self.servermultiuser == True:
+		instance = Singleton()
+		plexInstance = instance.getPlexInstance()
+		currentTime = self.getPlayPosition()[1] / 90000
+        	totalTime = self.getPlayLength()[1] / 90000
+		self.timelinewatcherthread_wait.set()
+		plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "buffering", 0, str(totalTime*1000))
+			
+			
         self.show()
-        
-        if self.useBufferControl:
-            if self.seekstate != self.SEEK_STATE_PAUSE :
-                printl( "Buffer drained pause", self, "I")
-                self.setSeekState(self.SEEK_STATE_PAUSE)
-        
         #printl("", self, "C")
         
     #===========================================================================
@@ -517,8 +557,10 @@ class DP_Player(MoviePlayer):
             self.startNewServiceOnPlay = False
             super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
             sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
+            
             sref.setName("DreamPlex")
             self.session.nav.playService(sref)
+            
         #self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
         
         printl("", self, "C")
@@ -574,32 +616,38 @@ class DP_Player(MoviePlayer):
         '''
         printl("", self, "S")
         
-        currentTime = self.getPlayPosition()[1] / 90000
+	try:
+	    progress = int(( float(currentTime) / float(totalTime) ) * 100)
+	except:
+	    progress = 0
+
+
+	currentTime = self.getPlayPosition()[1] / 90000
         totalTime = self.getPlayLength()[1] / 90000
-        progress = currentTime / (totalTime/100)
-        #progress = 0
-        printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+        #progress = currentTime / (totalTime/100)
         
         instance = Singleton()
         plexInstance = instance.getPlexInstance()
         
-        
-        if currentTime < 30:
-            printl("Less that 30 seconds, will not set resume", self, "I")
-        
-        #If we are less than 95% complete, store resume time
-        elif progress < 95:
-            printl("Less than 95% progress, will store resume time", self, "I" )
-            plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
 
-        #Otherwise, mark as watched
-        else:
-            printl( "Movie marked as watched. Over 95% complete", self, "I")
-            plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
-            
-        
-        printl("", self, "C")       
-        
+	#Legacy PMS Server server support before MultiUser version v0.9.8.0  
+	if self.servermultiuser == False:
+		if currentTime < 30:
+		    #printDebug("Less that 30 seconds, will not set resume")
+		    printl("Played less than 30 seconds not setting time", self, "D")
+		elif progress < 95:
+		    #printDebug( "Movies played time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress) )
+		    plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
+
+		#Otherwise, mark as watched
+		else:
+			#printDebug( "Movie marked as watched. Over 95% complete")
+			plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+id+"&identifier=com.plexapp.plugins.library")
+
+
+	
+        printl("", self, "C")
+
     
     #===========================================================================
     # stopTranscoding
@@ -609,11 +657,20 @@ class DP_Player(MoviePlayer):
         '''
         printl("", self, "S")
         
+        self.timelinewatcherthread_wait.set()
+        self.timelinewatcherthread_stop.set()
+        
         instance = Singleton()
         plexInstance = instance.getPlexInstance()
         
+        currentTime = self.getPlayPosition()[1] / 90000
+        totalTime = self.getPlayLength()[1] / 90000
+        
         #sample from log /video/:/transcode/segmented/stop?session=0EBD197D-389A-4784-8CC5-709BAD5E1137&X-Plex-Client-Capabilities=protocols%3Dhttp-live-streaming%2Chttp-mp4-streaming%2Chttp-streaming-video%2Chttp-streaming-video-720p%2Chttp-mp4-video%2Chttp-mp4-video-720p%3BvideoDecoders%3Dh264%7Bprofile%3Ahigh%26resolution%3A1080%26level%3A41%7D%3BaudioDecoders%3Dmp3%2Caac%7Bbitrate%3A160000%7D&X-Plex-Client-Platform=iOS&X-Plex-Product=Plex%2FiOS&X-Plex-Version=3.0.2&X-Plex-Device-Name=DDiPhone [192.168.45.6:62662] (4 live)
         plexInstance.getURL("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
+        
+        if self.servermultiuser == True:
+		plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
         
         printl("", self, "C")
     
@@ -624,11 +681,13 @@ class DP_Player(MoviePlayer):
         '''
         '''
         printl("", self, "S")
-        
-        if self.seekstate != self.SEEK_STATE_PLAY:
-            return False
-        else:
-            return True
+        try:
+        	if self.seekstate != self.SEEK_STATE_PLAY and self.seekstate != self.SEEK_STATE_PAUSE:
+        	    return False
+        	else:
+        	    return True
+	except:
+		return False
         
         printl("", self, "C")
 
@@ -643,6 +702,7 @@ class DP_Player(MoviePlayer):
         
         try:
             while self.nTracks == False and self is not None:
+            	printl("nTracks: " + str(self.nTracks),self,"I")
                 self.setAudioTrack()
                 sleep(1)
         
@@ -651,6 +711,71 @@ class DP_Player(MoviePlayer):
         
         printl("", self, "C")
     
+    
+    
+    #===========================================================================
+    # timelineWatcher
+    #===========================================================================
+    def timelineWatcher(self, stop_event, wait_event):
+        '''
+        '''
+        printl("", self, "S")
+	   
+	while(not stop_event.is_set()):
+		while(not wait_event.is_set()):
+				ret = self.updateTimeline()
+				if ret:
+					wait_event.wait(3)
+					continue
+				else:
+					wait_event.wait(3)
+					break
+				
+		stop_event.wait(1)						
+		continue
+
+        printl("", self, "C")
+        
+    
+    #===========================================================================
+    # 
+    #===========================================================================
+    def updateTimeline(self):
+     	printl("ENTERING: updateTimeline" ,self,"S")
+	try:	
+			currentTime = self.getPlayPosition()[1] / 90000
+			totalTime = self.getPlayLength()[1] / 90000
+			progress = int(( float(currentTime) / float(totalTime) ) * 100)
+			if totalTime > 100000:
+				return True
+
+			printl("CURRENTTIME: " + str(currentTime), self, "C")
+			printl("TOTALTIME: " + str(totalTime), self, "C")
+
+			instance = Singleton()
+			plexInstance = instance.getPlexInstance()
+
+			seekState = self.seekstate
+			if seekState == self.SEEK_STATE_PAUSE:
+			    if self.servermultiuser:
+				printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
+				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "paused", str(currentTime*1000), str(totalTime*1000))
+
+			if seekState == self.SEEK_STATE_PLAY :
+			    if self.servermultiuser:
+				printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
+				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "playing", str(currentTime*1000), str(totalTime*1000))
+			
+       
+	except Exception, e:    
+            		printl("exception: " + str(e), self, "E")
+            		return False
+            		
+	return True            		
+     	printl("LEAVING: updateTimeline" ,self,"C")
+	
+			
+			
     #===========================================================================
     # 
     #===========================================================================
