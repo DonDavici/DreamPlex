@@ -158,6 +158,7 @@ class DP_View(Screen, NumericalTextInput):
 			"info":			(self.onKeyInfo, ""),
 			"menu":			(self.onKeyMenu, ""),
 			"video":		(self.onKeyVideo, ""),
+			"audio":		(self.onKeyAudio, ""),
 			"red":			(self.onKeyRed, ""),
 			"green":	  	(self.onKeyGreen, ""),
 			"yellow":		(self.onKeyYellow, ""),
@@ -529,6 +530,18 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		'''
 		printl("", self, "S")
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def onKeyAudio(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.displayAudioMenu()
 		
 		printl("", self, "C")
 
@@ -1486,6 +1499,36 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
+	def displayAudioMenu(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		selection = self["listview"].getCurrent()
+		
+		media_id = selection[1]['ratingKey']
+		server = selection[1]['server']
+		
+		functionList = []
+		
+		subtitlesList = Singleton().getPlexInstance().getSubtitlesById(server, media_id)
+		
+		for item in subtitlesList:
+			
+			name = item.get('language').encode("utf-8", "")
+			id = item.get('id', "")
+			languageCode = item.get('languageCode', "")
+
+			functionList.append((name, id, languageCode, media_id, server))
+		
+		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, \
+			title=_("Subtitle Functions"), list=functionList)
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def markUnwatched(self, unused=None, unused2=None):
 		'''
 		'''
@@ -1626,6 +1669,23 @@ class DP_View(Screen, NumericalTextInput):
 				choice[1].fnc(self.session, selection[1])
 				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
 					self.refresh()
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def displayAudioMenuCallback(self, choice):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if choice is None or choice[1] is None:
+			return
+		
+		printl("choice" + str(choice), self, "D")
+		
+		doRequest = Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2])
 		
 		printl("", self, "C")
 	

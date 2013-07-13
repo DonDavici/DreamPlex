@@ -1,3 +1,6 @@
+=== 1.06 ===
+- fixed #56: theme stops playing on leave
+
 === 1.05 ===
 - fixed direct play location check for windows server
 - added some code to prevent misconfiguration in direct play ( slashes and backslashes)
