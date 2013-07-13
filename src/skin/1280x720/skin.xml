@@ -263,7 +263,9 @@
         <eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="885,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+        <eLabel text="SUBTITLES:" transparent="1" zPosition="4" halign="left" position="500,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
 
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="550,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="966,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>

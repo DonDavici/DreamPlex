@@ -1340,10 +1340,9 @@ class PlexLibrary(Screen):
 	#============================================================================
 	# 
 	#============================================================================
-
-
 	def getTimelineURL(self, server, container, id, state, time=0, duration=0):
-
+		'''
+		'''
 		printl("", self, "S")
 		try:
 
@@ -1364,11 +1363,10 @@ class PlexLibrary(Screen):
 			accessToken = self.getAuthDetails({'token':self.g_myplex_token})
 			urlPath += accessToken
 
-
-
 			if self.g_sessionID is None:
 				self.g_sessionID=str(uuid.uuid4())
-
+			
+			# TODO lets make this dynamic
 			getHeader={'X-Plex-Platform': "Enigma2-DreamPlex",
 					'X-Plex-Platform-Version': "oe2.0",
 					'X-Plex-Provides': "player",
@@ -2046,7 +2044,7 @@ class PlexLibrary(Screen):
 		printl("Gather media stream info", self, "I" ) 
 		printl("server: " + str(server), self, "I" )	
 		#get metadata for audio and subtitle
-        	suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
+		suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
 				
 		html=self.getURL(suburl)
 		printl("retrived html: " + str(html), self, "D")
@@ -2059,6 +2057,54 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return tree
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getSelectedSubtitleDataById(self, server, id):
+		'''
+		'''
+		printl("",self, "S")
+		
+		tree = self.getStreamDataById(server, id)
+		
+		fromParts = tree.getiterator('Part')	
+		
+		#Get the Parts info for media type and source selection 
+		for part in fromParts:
+			try:
+				partitem=part.get('id'), part.get('file')
+				
+			except: pass
+			
+		tags=tree.getiterator('Stream')
+		
+		printl("**********Part Item: " + str(partitem),self,"I")
+		
+		selectedSubtitle = {	'id': -1,
+							'index': 		-1,
+							'language':	 	"Disabled",
+							'languageCode': "NA",
+							'format': 		"Disabled",
+							'partid' : 	partitem[0]
+							}
+		for bits in tags:
+			stream=dict(bits.items())
+			if stream['streamType'] == '3' and stream['selected'] == '1': #subtitle
+				try:
+					selectedSubtitle = {		'id': stream['id'],
+								'index': 		stream['index'],
+								'language':	 	stream['language'],
+								'languageCode': stream['languageCode'],
+								'format' : 		stream['format'],
+								'partid' : 	partitem[0]
+						   }
+					printl ("selectedSubtitle = " + str(selectedSubtitle), self, "D" )
+				except:
+					printl ("Unable to read subtitles due to XML parsing error", self, "E" )
+		
+		printl("", self, "C")
+		return selectedSubtitle
+
 	#===========================================================================
 	# 
 	#===========================================================================	
@@ -3565,7 +3611,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		
+
 		tempgenre=[]
 		tempcast=[]
 		tempdir=[]
@@ -3634,6 +3680,12 @@ class PlexLibrary(Screen):
 		extraData['fanart_image']	   = self.getImage(movie, server, x = 560, y = 315, type = "art")
 		extraData['token']			  = self.g_myplex_accessToken
 		extraData['key']				= movie.get('key','')
+		
+		subtitleData = self.getSelectedSubtitleDataById(details['server'], extraData['key'])
+		printl("subtitleData: "+ str(subtitleData),self, "D")
+		extraData['selectedSub']	= subtitleData.get('Language')
+		
+		extraData['selectedAudio']	= ""
 
 		#Add extra media flag data
 		if self.g_skipmediaflags == "false":

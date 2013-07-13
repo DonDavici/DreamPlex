@@ -216,6 +216,7 @@ class DPS_ViewList(DP_View):
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 			self.setText("year", str(self.details.get("year", " - ")))
 			self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+			self.setText("subtitles", str(self.extraData.get("selectedSub", " - ")))
 			self.setText("runtime", str(self.details.get("runtime", " - ")))
 			self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 			
