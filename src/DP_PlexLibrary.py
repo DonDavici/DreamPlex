@@ -2079,22 +2079,39 @@ class PlexLibrary(Screen):
 		#Get the Parts info for media type and source selection 
 		for part in fromParts:
 			try:
-				bits=part.get('key'), part.get('file')
+				partitem=part.get('id'), part.get('file')
+				
 			except: pass
 			
 		tags=tree.getiterator('Stream')
 		
+		
+		subtitle = {	'id': -1,
+				'index': 		-1,
+				'language':	 	"Disabled",
+				'languageCode': "NA",
+				'format': 		"Disabled",
+				'partid' : 	partitem[0]
+			   }
+			   
+		subtitlesList.append(subtitle)
+		printl("**********Part Item: " + str(partitem),self,"I")
 		for bits in tags:
 			stream=dict(bits.items())
 			if stream['streamType'] == '3': #subtitle
-				subtitle = {'id': 			stream['id'],
-							'index': 		stream['index'],
-							'language':	 	stream['language'],
-							'languageCode': stream['languageCode'],
-							'format': 		stream['format']
-							}
+				try:
+					subtitle = {		'id': stream['id'],
+								'index': 		stream['index'],
+								'language':	 	stream['language'],
+								'languageCode': stream['languageCode'],
+								'format' : 		stream['format'],
+								'partid' : 	partitem[0]
+						   }
 				
-				subtitlesList.append(subtitle)
+					subtitlesList.append(subtitle)
+				except:
+					printl ("Unable to set subtitles due to XML parsing error", self, "E" )
+					pass
 		
 		printl ("subtitlesList = " + str(subtitlesList), self, "D" )
 		
@@ -2104,12 +2121,15 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setSubtitleById(self, server, media_id, languageCode):
+	def setSubtitleById(self, server, sub_id, languageCode, part_id):
 		'''
 		'''
 		printl("", self, "S")
 		
-		# request here
+		
+		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?subtitleStreamID="+ str(sub_id) +self.getAuthDetails({'token':self.g_myplex_accessToken})
+		
+		html = self.getURL(url, type="PUT")
 		
 		printl("", self, "C")
 		
