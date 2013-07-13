@@ -156,7 +156,7 @@ class PlexLibrary(Screen):
 	g_myplex_password = ""
 	g_myplex_token = ""
 	g_myplex_accessToken = ""
-    g_serverVersion = ""
+    	g_serverVersion = ""
 	g_accessTokenHeader = None
 	g_transcode = "true"
 	g_wolon = "true"
@@ -172,7 +172,7 @@ class PlexLibrary(Screen):
 	g_capability = ""
 	g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
 	g_session = None
-    global g_serverConfig
+    	global g_serverConfig
 	g_serverConfig = None
 	g_error = False
 	g_showUnSeenCounts = False
