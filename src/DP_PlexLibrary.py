@@ -142,7 +142,7 @@ class PlexLibrary(Screen):
 	g_playbackType = None
 	g_stream = "0" # 0 = linux local mount override, 1 = Selecting stream, 2 = smb/unc override 3 = transcode!?!?!
 	g_secondary = "true" # show filter for media
-    	g_streamControl = "1" # 1 unknown, 2 = unknown, 3 = All subs disabled
+	g_streamControl = "1" # 1 unknown, 2 = unknown, 3 = All subs disabled
 	g_channelview = "false" # unknown
 	g_flatten = "0" # 0 = show seasons, 1 = show all
 	g_playtheme = "false"
@@ -156,7 +156,7 @@ class PlexLibrary(Screen):
 	g_myplex_password = ""
 	g_myplex_token = ""
 	g_myplex_accessToken = ""
-    	g_serverVersion = ""
+    g_serverVersion = ""
 	g_accessTokenHeader = None
 	g_transcode = "true"
 	g_wolon = "true"
@@ -172,7 +172,7 @@ class PlexLibrary(Screen):
 	g_capability = ""
 	g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
 	g_session = None
-    	global g_serverConfig
+    global g_serverConfig
 	g_serverConfig = None
 	g_error = False
 	g_showUnSeenCounts = False
@@ -2034,18 +2034,15 @@ class PlexLibrary(Screen):
 		#printl ("fullList = " + fullList, self, "D")
 		printl("", self, "C")
 		return fullList
- 
+	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getAudioSubtitlesMedia(self, server, id ): # CHECKED
+	def getStreamDataById(self, server, id):
 		'''
-		Cycle through the Parts sections to find all "selected" audio and subtitle streams
-		If a stream is marked as selected=1 then we will record it in the dict
-		Any that are not, are ignored as we do not need to set them
-		We also record the media locations for playback decision later on
 		'''
 		printl("", self, "S")
+
 		printl("Gather media stream info", self, "I" ) 
 		printl("server: " + str(server), self, "I" )	
 		#get metadata for audio and subtitle
@@ -2058,6 +2055,78 @@ class PlexLibrary(Screen):
 			tree = etree.fromstring(html)
 		except Exception, e:
 			self._showErrorOnTv("no xml as response", html)
+		
+		printl("", self, "C")
+		return tree
+	
+	#===========================================================================
+	# 
+	#===========================================================================	
+	def getSubtitlesById(self, server, id):
+		'''
+		sample: 
+		<Stream id="25819" streamType="3" selected="1" default="1" index="4" language="Deutsch" languageCode="ger" format="srt"/>
+		<Stream id="25820" streamType="3" index="5" language="English" languageCode="eng" format="srt"/>
+		'''
+		printl("", self, "S")
+		
+		subtitlesList = []
+		
+		tree = self.getStreamDataById(server, id)
+		
+		fromParts = tree.getiterator('Part')	
+		
+		#Get the Parts info for media type and source selection 
+		for part in fromParts:
+			try:
+				bits=part.get('key'), part.get('file')
+			except: pass
+			
+		tags=tree.getiterator('Stream')
+		
+		for bits in tags:
+			stream=dict(bits.items())
+			if stream['streamType'] == '3': #subtitle
+				subtitle = {'id': 			stream['id'],
+							'index': 		stream['index'],
+							'language':	 	stream['language'],
+							'languageCode': stream['languageCode'],
+							'format': 		stream['format']
+							}
+				
+				subtitlesList.append(subtitle)
+		
+		printl ("subtitlesList = " + str(subtitlesList), self, "D" )
+		
+		printl("", self, "C")
+		return subtitlesList
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setSubtitleById(self, server, media_id, languageCode):
+		'''
+		'''
+		printl("", self, "S")
+		
+		# request here
+		
+		printl("", self, "C")
+		
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getAudioSubtitlesMedia(self, server, id ): # CHECKED
+		'''
+		Cycle through the Parts sections to find all "selected" audio and subtitle streams
+		If a stream is marked as selected=1 then we will record it in the dict
+		Any that are not, are ignored as we do not need to set them
+		We also record the media locations for playback decision later on
+		'''
+		printl("", self, "S")
+		
+		tree = self.getStreamDataById(server, id)
 			
 		parts=[]
 		partsCount=0
