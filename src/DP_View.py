@@ -1516,10 +1516,10 @@ class DP_View(Screen, NumericalTextInput):
 		for item in subtitlesList:
 			
 			name = item.get('language').encode("utf-8", "")
-			id = item.get('id', "")
+			sub_id = item.get('id', "")
 			languageCode = item.get('languageCode', "")
-
-			functionList.append((name, id, languageCode, media_id, server))
+			part_id = item.get('partid', "")
+			functionList.append((name, media_id, languageCode, sub_id, server, part_id))
 		
 		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, \
 			title=_("Subtitle Functions"), list=functionList)
@@ -1685,7 +1685,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("choice" + str(choice), self, "D")
 		
-		doRequest = Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2])
+		doRequest = Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2], choice[5])
 		
 		printl("", self, "C")
 	
