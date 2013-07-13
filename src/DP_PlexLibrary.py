@@ -131,7 +131,7 @@ class PlexLibrary(Screen):
 	
 	g_sessionID=None
 	g_serverDict=[]
-    g_serverVersion=""
+    	g_serverVersion=""
 	g_sections=[]
 	g_name = "Plexserver"
 	g_host = "192.168.45.190"
@@ -142,7 +142,7 @@ class PlexLibrary(Screen):
 	g_playbackType = None
 	g_stream = "0" # 0 = linux local mount override, 1 = Selecting stream, 2 = smb/unc override 3 = transcode!?!?!
 	g_secondary = "true" # show filter for media
-    g_streamControl = "1" # 1 unknown, 2 = unknown, 3 = All subs disabled
+    	g_streamControl = "1" # 1 unknown, 2 = unknown, 3 = All subs disabled
 	g_channelview = "false" # unknown
 	g_flatten = "0" # 0 = show seasons, 1 = show all
 	g_playtheme = "false"
@@ -156,7 +156,7 @@ class PlexLibrary(Screen):
 	g_myplex_password = ""
 	g_myplex_token = ""
 	g_myplex_accessToken = ""
-    g_serverVersion = ""
+    	g_serverVersion = ""
 	g_accessTokenHeader = None
 	g_transcode = "true"
 	g_wolon = "true"
@@ -172,7 +172,7 @@ class PlexLibrary(Screen):
 	g_capability = ""
 	g_audioOutput = "2" #0 = "mp3,aac", 1 = "mp3,aac,ac3", 2 ="mp3,aac,ac3,dts"
 	g_session = None
-    global g_serverConfig
+    	global g_serverConfig
 	g_serverConfig = None
 	g_error = False
 	g_showUnSeenCounts = False
@@ -618,7 +618,7 @@ class PlexLibrary(Screen):
 		
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
-        return self.g_serverDict
+ 	        return self.g_serverDict
 
 	#=============================================================================
 	# 
@@ -1138,13 +1138,13 @@ class PlexLibrary(Screen):
 		
 		try:
 			#user,token = (__settings__.getSetting('self.g_myplex_token')).split('|')
-            token = self.g_myplex_token
-            #user = self.g_myplex_token.split('|')[1]
+	        	token = self.g_myplex_token
+	        	#user = self.g_myplex_token.split('|')[1]
 		except:
 			token=""
-            user=""
+			user=""
 		#if ( token == "" ) or (renew) or (user != __settings__.getSetting('myplex_user')):
-        if ( token == "" ) or (renew) or (user != self.g_myplex_username):
+	        if ( token == "" ) or (renew) or (user != self.g_myplex_username):
 			token = self.getNewMyPlexToken()
 		
 		printl("Using token: " + str(token), self, "D", True, 8)
@@ -1205,7 +1205,7 @@ class PlexLibrary(Screen):
 			printl("", self, "C")
 			return False
 		
-        self.g_myplex_token = token
+        	self.g_myplex_token = token
     #===========================================================================
     #    try:
     #        conn = httplib.HTTPSConnection(MYPLEX_SERVER)
@@ -1219,9 +1219,9 @@ class PlexLibrary(Screen):
     #            try:
     #                token=etree.fromstring(link).findtext('authentication-token')
     #                #===========================================================
-        self.g_serverConfig.myplexTokenUsername.value = self.g_myplex_username
-        self.g_serverConfig.myplexTokenUsername.save()
-        self.g_serverConfig.myplexToken.value = self.g_myplex_token
+       		self.g_serverConfig.myplexTokenUsername.value = self.g_myplex_username
+       		self.g_serverConfig.myplexTokenUsername.save()
+       		self.g_serverConfig.myplexToken.value = self.g_myplex_token
     #                #todo add function call to save token in config
     #            except:
     #                printl(link)
@@ -1235,7 +1235,7 @@ class PlexLibrary(Screen):
     #            #===============================================================
     #            print error
     #            return False
-        self.g_serverConfig.myplexToken.save()
+       		self.g_serverConfig.myplexToken.save()
     #        #===================================================================
     #        # error = 'Unable to lookup host: ' + server + "\nCheck host name is correct"
     #        #===================================================================
@@ -1246,7 +1246,7 @@ class PlexLibrary(Screen):
     #        #===================================================================
     #        print error
     #        return False
-    #    except socket.error, msg : 
+    #    		except socket.error, msg : 
     #        #===================================================================
     #        # error="Unable to connect to " + server +"\nReason: " + str(msg)
     #        #===================================================================
@@ -1291,7 +1291,7 @@ class PlexLibrary(Screen):
 			
 			printl("server: " + str(server), self, "D")
 			printl("urlPath: " + str(urlPath), self, "D")				
-            authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
+            		authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
 			printl("header: " + str(authHeader), self, "D")
 			self.urlPath = urlPath
 			
@@ -1337,81 +1337,81 @@ class PlexLibrary(Screen):
 			printl("", self, "C")
 			return False
 	
-    #============================================================================
-    # 
-    #============================================================================
-   
-   
-    def getTimelineURL(self, server, container, id, state, time=0, duration=0):
-   
-       printl("", self, "S")
-       try:
-           
-		urlPath="/:/timeline?containerKey=" + container + "&key=/library/metadata/" + id + "&ratingKey=" + id
+	#============================================================================
+	# 
+	#============================================================================
 
-		if state == "buffering":
-			urlPath += "&state=buffering&time=" + str(time)        	
-		elif state == "playing":
-			urlPath += "&state=playing&time=" + str(time) + "&duration=" + str(duration)
-		elif state == "stopped":
-			urlPath += "&state=stopped&time=" + str(time) + "&duration=" + str(duration)
-		elif state == "paused":
-			urlPath += "&state=paused&time=" + str(time) + "&duration=" + str(duration)
-		else:
-			printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
-			return
 
-		accessToken = self.getAuthDetails({'token':self.g_myplex_token})
-		urlPath += accessToken
-		
+	def getTimelineURL(self, server, container, id, state, time=0, duration=0):
 
-		
-		if self.g_sessionID is None:
-			self.g_sessionID=str(uuid.uuid4())
+		printl("", self, "S")
+		try:
 
-		getHeader={'X-Plex-Platform': "Enigma2-DreamPlex",
-				'X-Plex-Platform-Version': "oe2.0",
-				'X-Plex-Provides': "player",
-				'X-Plex-Product': "DreamPlex",
-				'X-Plex-Version': "0.9.2",
-				'X-Plex-Device': "Dreambox",
-				'X-Plex-Client-Identifier': self.g_sessionID,
-				'X-Plex-Device-Name': "Dreambox-DreamPlex"}
+			urlPath="/:/timeline?containerKey=" + container + "&key=/library/metadata/" + id + "&ratingKey=" + id
 
-		conn = httplib.HTTPConnection(server)#,timeout=5)
-		conn.request("GET", urlPath, headers=getHeader)
-		data = conn.getresponse()
+			if state == "buffering":
+				urlPath += "&state=buffering&time=" + str(time)        	
+			elif state == "playing":
+				urlPath += "&state=playing&time=" + str(time) + "&duration=" + str(duration)
+			elif state == "stopped":
+				urlPath += "&state=stopped&time=" + str(time) + "&duration=" + str(duration)
+			elif state == "paused":
+				urlPath += "&state=paused&time=" + str(time) + "&duration=" + str(duration)
+			else:
+				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
+				return
 
-		if int(data.status) == 200:
-		       link=data.read()
-		       try: conn.close()
-		       except: pass
-		       printl("", self, "C")
-		       return link
+			accessToken = self.getAuthDetails({'token':self.g_myplex_token})
+			urlPath += accessToken
 
 
 
-		else:
-		       link=data.read()
-		       try: conn.close()
-		       except: pass
-		       printl("", self, "C")
-		       return link
-               
-       except socket.gaierror :
-		error = "Unable to locate host [%s]\nCheck host name is correct" % server
-		printl( error, self, "I")
-           
-           
-       except socket.error, msg :
-		error="Server[%s] is offline, or not responding\nReason: %s" % (server, str(msg))
-		printl( error, self, "I")
-           
-       try: conn.close()
-       except: pass
-       
-       printl("", self, "C")
-       return False
+			if self.g_sessionID is None:
+				self.g_sessionID=str(uuid.uuid4())
+
+			getHeader={'X-Plex-Platform': "Enigma2-DreamPlex",
+					'X-Plex-Platform-Version': "oe2.0",
+					'X-Plex-Provides': "player",
+					'X-Plex-Product': "DreamPlex",
+					'X-Plex-Version': "0.9.2",
+					'X-Plex-Device': "Dreambox",
+					'X-Plex-Client-Identifier': self.g_sessionID,
+					'X-Plex-Device-Name': "Dreambox-DreamPlex"}
+
+			conn = httplib.HTTPConnection(server)#,timeout=5)
+			conn.request("GET", urlPath, headers=getHeader)
+			data = conn.getresponse()
+
+			if int(data.status) == 200:
+			       link=data.read()
+			       try: conn.close()
+			       except: pass
+			       printl("", self, "C")
+			       return link
+
+
+
+			else:
+			       link=data.read()
+			       try: conn.close()
+			       except: pass
+			       printl("", self, "C")
+			       return link
+
+		except socket.gaierror :
+			error = "Unable to locate host [%s]\nCheck host name is correct" % server
+			printl( error, self, "I")
+
+
+		except socket.error, msg :
+			error="Server[%s] is offline, or not responding\nReason: %s" % (server, str(msg))
+			printl( error, self, "I")
+
+		try: conn.close()
+		except: pass
+
+		printl("", self, "C")
+		return False
 
 	#========================================================================
 	# 
@@ -2049,7 +2049,7 @@ class PlexLibrary(Screen):
 		printl("Gather media stream info", self, "I" ) 
 		printl("server: " + str(server), self, "I" )	
 		#get metadata for audio and subtitle
-        suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
+        	suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
 				
 		html=self.getURL(suburl)
 		printl("retrived html: " + str(html), self, "D")
@@ -2109,7 +2109,7 @@ class PlexLibrary(Screen):
 	
 			contents="all"
 			tags=tree.getiterator('Stream')
-            printl("****TAGS = " + str(tags),self,"I")
+            		
 			#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle) 
 			
 			for bits in tags:
@@ -2277,15 +2277,15 @@ class PlexLibrary(Screen):
     #        xbmc.Player().pause()
     #===========================================================================
 	
-        if not (self.g_transcode == "true" ): 
-            self.setAudioSubtitles(streams)
+        	if not (self.g_transcode == "true" ): 
+        	    self.setAudioSubtitles(streams)
 	 
 		self.monitorPlayback(id,self.server)
 
-        serverVersion = "0"
+        	serverVersion = "0"
         
 		for sectionsData in self.g_sections:
-			if sectionsData['address'] == server:
+			if sectionsData['address'] == self.server:
 				#split server version string up as it contains a '-' and cannot use this with > operator
 				serverVersion = sectionsData['serverVersion'].split('-')[0]
 
@@ -2308,7 +2308,7 @@ class PlexLibrary(Screen):
 		playerData["resumeStamp"] = resume
 		playerData["server"] = self.server
 		playerData["id"] = id
-        playerData["servermultiuser"] = serverMultiUser
+        	playerData["servermultiuser"] = serverMultiUser
 		playerData["playbackType"] =self.g_playbackType
 		playerData["transcodingSession"] = self.g_sessionID
 		playerData["videoData"] = self.streams['videoData']
@@ -2421,7 +2421,7 @@ class PlexLibrary(Screen):
 		printl("", self, "C")   
 		return False
 	
-    # 
+    	# 
 	#=================================================================
 	# 
 	#=================================================================
@@ -2439,54 +2439,10 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def monitorPlayback(self, id, server ): # CHECKED
-        '''
-        '''
-        printl("", self, "S")
-    #===========================================================================
-    # 
-    #    if len(server.split(':')) == 1:
-    #        server=server
-    #        
-    #    monitorCount = 0
-    #    progress = 0
-    #    complete = 0
-    #    #Whilst the file is playing back
-    #    while xbmc.Player().isPlaying():
-    #        #Get the current playback time
-    #      
-    #        currentTime = int(xbmc.Player().getTime())
-    #        totalTime = int(xbmc.Player().getTotalTime())
-    #        try:      
-    #            progress = int(( float(currentTime) / float(totalTime) ) * 100)
-    #        except:
-    #            progress = 0
-    #        
-    #        if currentTime < 30:
-    #            printl("Less that 30 seconds, will not set resume")
-    #        
-    #        #If we are less than 95% completem, store resume time
-    #        elif progress < 95:
-    #            printl( "self.Movies played time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress) )
-    #            self.getURL("http://"+server+"/:/progress?key="+id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000),suppress=True)
-    #            complete=0
-    # 
-    #        #Otherwise, mark as watched
-    #        else:
-    #            if complete == 0:
-    #                printl( "Movie marked as watched. Over 95% complete")
-    #                self.getURL("http://"+server+"/:/scrobble?key="+id+"&identifier=com.plexapp.plugins.library",suppress=True)
-    #                complete=1
-    # 
-    #        time.sleep(5)
-    #          
-    #    #If we get this far, playback has stopped
-    #    printl("Playback Stopped")
-    #    
-    #    if self.g_sessionID is not None:
-    #        printl("Stopping PMS self.transcode job with session " + self.g_sessionID)
-    #        stopURL='http://'+server+'/video/:/self.transcode/segmented/stop?session='+self.g_sessionID          
-    #        html=self.getURL(stopURL)
-    #===========================================================================
+		'''
+		'''
+		printl("", self, "S")
+ 
 		printl("", self, "C")	   
 		return
 	 
@@ -2919,8 +2875,8 @@ class PlexLibrary(Screen):
 			transcode.append("quality=%d" % int(self.g_quality ))
 			transcode.append("session=%s" % self.g_sessionID)
 			transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
-        	transcode.append("url=%s%s" % (quote_plus('http://127.0.0.1:32400/'), quote_plus(filename)))
-        	transcode.append("key=%s%s" % (quote_plus('http://127.0.0.1:32400/library/metadata/'), id))
+	        	transcode.append("url=%s%s" % (quote_plus('http://127.0.0.1:32400/'), quote_plus(filename)))
+	        	transcode.append("key=%s%s" % (quote_plus('http://127.0.0.1:32400/library/metadata/'), id))
 			transcode.append("3g=0")
 			transcode.append("httpCookies=")
 			transcode.append("userAgent=")
@@ -4285,8 +4241,8 @@ class PlexLibrary(Screen):
 			printl( "Transcode quality is " + self.g_quality, self, "I")
 			
 			#baseCapability = "http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-            protocols = "protocols=http-video;"
-            #protocols = "protocols=http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video;"
+            		protocols = "protocols=http-video;"
+            		#protocols = "protocols=http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video;"
                 
 			#===================================================================
 			# self.g_audioOutput=__settings__.getSetting("audiotype")
