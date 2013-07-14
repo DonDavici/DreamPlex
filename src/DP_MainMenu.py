@@ -298,7 +298,6 @@ class DPS_MainMenu(Screen):
 					self.s_final = t_final
 					
 					self.getFilterData()
-			 
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
