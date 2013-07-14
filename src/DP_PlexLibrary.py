@@ -1835,7 +1835,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 
 		printl("Gather media stream info", self, "I" ) 
-		printl("server: " + str(server), self, "I" )	
+		
 		#get metadata for audio and subtitle
 		suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
 				
@@ -1878,26 +1878,26 @@ class PlexLibrary(Screen):
 		
 		
 		subtitle = {	'id': -1,
-				'index': 		-1,
-				'language':	 	"Disabled",
-				'languageCode': "NA",
-				'format': 		"Disabled",
-				'partid' : 	partitem[0]
-			   }
+						'index': 		-1,
+						'language':	 	"None",
+						'languageCode': "NA",
+						'format': 		"None",
+						'partid' : 	partitem[0]
+					}
 			   
 		subtitlesList.append(subtitle)
-		printl("**********Part Item: " + str(partitem),self,"I")
 		for bits in tags:
 			stream=dict(bits.items())
 			if stream['streamType'] == '3': #subtitle
 				try:
-					subtitle = {		'id': stream['id'],
-								'index': 		stream['index'],
-								'language':	 	stream['language'],
-								'languageCode': stream['languageCode'],
-								'format' : 		stream['format'],
-								'partid' : 	partitem[0]
-						   }
+					subtitle = {		'id': stream.get('id',-1),
+										'index': 		stream.get('index',-1),
+										'language':	 	stream.get('language','Unknown'),
+										'languageCode': stream.get('languageCode','Ukn'),
+										'format' : 		stream.get('format', 'UKN'),
+										'partid' : 	partitem[0],
+										'selected' : stream.get('selected',0)
+								}
 				
 					subtitlesList.append(subtitle)
 				except:
