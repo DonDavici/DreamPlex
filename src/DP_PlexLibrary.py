@@ -1707,9 +1707,6 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'episodes')
-		#=======================================================================
 					
 		if tree is None:
 			#Get URL, XML and Parse
@@ -2100,20 +2097,10 @@ class PlexLibrary(Screen):
 		
 		printl("Resume has been set to " + str(resume),self, "I")
 		
-		#=======================================================================
-		# item = xbmcgui.ListItem(path=playurl)
-		#=======================================================================
 		result=1
 	
-		if resume > 0:	   
-			#===================================================================
-			# displayTime = str(datetime.timedelta(seconds=int(resume)))
-			# dialogOptions = [ "Resume from " + displayTime , "Start from beginning"]
-			# printl( "We have part way through video.  Display resume dialog")
-			# startTime = xbmcgui.Dialog()
-			# result = startTime.select('Resuming playback..',dialogOptions)
-			#===================================================================
-	
+		if resume > 0:
+				
 			if result == -1:
 				printl("", self, "C")
 				return
@@ -2305,10 +2292,7 @@ class PlexLibrary(Screen):
 		else:
 			playurl=url
 
-		#===================================================================
-		# item = xbmcgui.ListItem(path=playurl)
-		# return xbmcplugin.setResolvedUrl(pluginhandle, True, item)
-		#===================================================================
+
 		printl("", self, "C")   
 		return playurl
 	
@@ -2358,9 +2342,6 @@ class PlexLibrary(Screen):
 			if mediaCount > 1:
 				printl ("Select from plugin video sources", self, "I")
 				dialogOptions=[x['videoResolution'] for x in mediaDetails ]
-				#===============================================================
-				# videoResolution = xbmcgui.Dialog()
-				#===============================================================
 				
 				#===============================================================
 				# result = videoResolution.select('Select resolution..',dialogOptions)
@@ -2436,10 +2417,6 @@ class PlexLibrary(Screen):
 
 		printl("Final URL is : " + url, self, "I")
 		
-		#=======================================================================
-		# item = xbmcgui.ListItem(path=url)
-		# start = xbmcplugin.setResolvedUrl(pluginhandle, True, item)		
-		#=======================================================================
 	
 		if 'self.transcode' in url:
 			try:
@@ -2535,10 +2512,7 @@ class PlexLibrary(Screen):
 	
 		if view_group == "movie":
 			printl( "This is movie XML, passing to self.Movies", self, "I")
-			#===================================================================
-			# if not (lastbit.startswith('recently') or lastbit.startswith('newest')):
-			#	xbmcplugin.addSortMethod(pluginhandle,xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE)
-			#===================================================================
+
 			self.getMoviesFromSection(url, tree)
 		elif view_group == "show":
 			printl( "This is tv show XML", self, "I")
@@ -2571,10 +2545,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		printl("Processing secondary menus", self, "I")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'movies')
-		#=======================================================================
-	
+
 		server=self.getServerFromURL(url)
 		
 		for directory in tree:
@@ -2589,9 +2560,6 @@ class PlexLibrary(Screen):
 	
 			self.addGUIItem(u,details,extraData)
 			
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)
-		#=======================================================================
 		printl("", self, "C")   
 		
 	#===============================================================================
@@ -2774,10 +2742,6 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'artists')
-		#=======================================================================
-		
 		fullList = []
 		
 		server=self.getServerFromURL(url)
@@ -2828,9 +2792,6 @@ class PlexLibrary(Screen):
 			
 			if grapes.tag == "Track":
 				printl("Track Tag", self, "I")
-				#===============================================================
-				# xbmcplugin.setContent(pluginhandle, 'songs')
-				#===============================================================
 				
 				details['title']=grapes.get('track','Unknown').encode('utf-8')
 				details['duration']=int(grapes.get('totalTime',0)/1000)
@@ -2845,16 +2806,12 @@ class PlexLibrary(Screen):
 			
 				if grapes.tag == "Artist":
 					printl("Artist Tag", self, "I")
-					#===========================================================
-					# xbmcplugin.setContent(pluginhandle, 'artists')
-					#===========================================================
+
 					details['title']=grapes.get('artist','Unknown')
 
 				elif grapes.tag == "Album":
 					printl("Album Tag", self, "I")
-					#===========================================================
-					# xbmcplugin.setContent(pluginhandle, 'albums')
-					#===========================================================
+
 					details['title']=grapes.get('album','Unknown')
 	
 				elif grapes.tag == "Genre":
@@ -2892,9 +2849,7 @@ class PlexLibrary(Screen):
 			@return: nothing
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'artists')
-		#=======================================================================
+
 		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:	  
@@ -2928,9 +2883,7 @@ class PlexLibrary(Screen):
 			
 			self.addGUIItem(url,details,extraData) 
 			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)
-		#=======================================================================
+
 	
 	#===============================================================================
 	# 
@@ -2939,9 +2892,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'albums')
-		#=======================================================================
+
 		fullList = []
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
@@ -3003,9 +2954,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'songs')
-		#=======================================================================
+
 		fullList = []
 					
 		if tree is None:	   
@@ -3096,9 +3045,7 @@ class PlexLibrary(Screen):
 			@return: nothing, creates XBMC GUI listing
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'movies')
-		#=======================================================================
+
 		server=self.getServerFromURL(url)
 		if tree is None:
 	
@@ -3137,10 +3084,8 @@ class PlexLibrary(Screen):
 			elif plugin.tag == "Video":
 				self.addGUIItem(p_url+"&mode="+str(_MODE_VIDEOPLUGINPLAY), details, extraData, folder=False)
 			
-			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)		
-		#=======================================================================
+			printl("", self, "C")
+
 
 	#============================================================================
 	# 
@@ -3154,9 +3099,7 @@ class PlexLibrary(Screen):
 			@return: nothing, creates XBMC GUI listing
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'movies')
-		#=======================================================================
+
 		server=self.getServerFromURL(url)
 		if tree is None:
 	
@@ -3204,11 +3147,7 @@ class PlexLibrary(Screen):
 				printl("", self, "C")   
 				return
 
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle) 
-		#=======================================================================
-	
-#===============================================================================
+	#===============================================================================
 	# 
 	#===============================================================================
 	def movieTag(self, url, server, tree, movie):
@@ -3365,10 +3304,7 @@ class PlexLibrary(Screen):
 				
 				self.addGUIItem(u,details,extraData,folder=False)
 			
-			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)
-		#=======================================================================
+			printl("", self, "C")
 
 	
 
@@ -3555,9 +3491,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# xbmcplugin.setContent(pluginhandle, 'files')
-		#=======================================================================
+
 	
 		server=self.getServerFromURL(url)
 		
@@ -3593,9 +3527,7 @@ class PlexLibrary(Screen):
 			u=u+"&mode="+str(mode)+"&name="+urllib.quote_plus(details['title'])
 			self.addGUIItem(u, details, extraData)
 			printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)	
-		#=======================================================================
+
 
 	#==========================================================================
 	# 
@@ -3606,51 +3538,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		
 		html=self.getURL(url)
-	#===========================================================================
-	#	if html is False:
-	#		return
-	#	tree = etree.fromstring(html)
-	#	
-	#	operations={}
-	#	i=0
-	#	for plums in tree.findall('Directory'):
-	#		operations[i]=plums.get('title')
-	#		
-	#		#If we find an install option, switch to a yes/no dialog box
-	#		if operations[i].lower() == "install":
-	#			printl("Not installed.  Print dialog")
-	#			ret = xbmcgui.Dialog().yesno("Plex Online","About to install " + name)
-	# 
-	#			if ret:
-	#				printl("Installing....")
-	#				installed = self.getURL(url+"/install")
-	#				tree = etree.fromstring(installed)
-	# 
-	#				msg=tree.get('message','(blank)')
-	#				printl(msg)
-	#				xbmcgui.Dialog().ok("Plex Online",msg)
-	#			return
-	# 
-	#		i+=1
-	#	 
-	#	#Else continue to a selection dialog box
-	#	ret = xbmcgui.Dialog().select("This plugin is already installed..",operations.values())
-	#	
-	#	if ret == -1:
-	#		printl("No option selected, cancelling")
-	#		return
-	#	
-	#	printl("Option " + str(ret) + " selected.  Operation is " + operations[ret])
-	#	u=url+"/"+operations[ret].lower()
-	# 
-	#	action = self.getURL(u)
-	#	tree = etree.fromstring(action)
-	# 
-	#	msg=tree.get('message')
-	#	printl(msg)
-	#	xbmcgui.Dialog().ok("Plex Online",msg)
-	#	xbmc.executebuiltin("Container.Refresh")
-	#===========================================================================
+
 	
 		printl("", self, "C")   
 		return   
@@ -3740,107 +3628,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		#Get the global host variable set in settings
-	#===========================================================================
-	#	WINDOW = xbmcgui.Window( 10000 )
-	#  
-	#	self.getAllSections()
-	#	sectionCount=0
-	#	serverCount=0
-	#	
-	#	#For each of the servers we have identified
-	#	for section in self.g_sections:
-	# 
-	#		extraData={ 'fanart_image' : self.getFanart(section, section['address']) ,
-	#					'thumb'		: self.getFanart(section, section['address'], False) }
-	#																				  
-	#		#Determine what we are going to do process after a link is selected by the user, based on the content we find
-	#		
-	#		path=section['path']
-	#		
-	#		if section['type'] == 'show':
-	#			window="VideoLibrary"
-	#			mode=_MODE_TVSHOWS
-	#		if  section['type'] == 'movie':
-	#			window="VideoLibrary"
-	#			mode=_MODE_MOVIES
-	#		if  section['type'] == 'artist':
-	#			window="MusicFiles"
-	#			mode=_MODE_ARTISTS
-	#		if  section['type'] == 'photo':
-	#			window="Pictures"
-	#			mode=_MODE_PHOTOS
-	#			   
-	#		aToken=self.getAuthDetails(section)
-	#		qToken=self.getAuthDetails(section, prefix='?')
-	# 
-	#		if self.g_secondary == "true":
-	#			mode=_MODE_GETCONTENT
-	#		else:
-	#			path=path+'/all'
-	# 
-	#		s_url='http://%s%s&mode=%s%s' % ( section['address'], path, mode, aToken)
-	# 
-	#		#Build that listing..
-	#		WINDOW.setProperty("DreamPlex.%d.title"	% (sectionCount) , section['title'])
-	#		WINDOW.setProperty("DreamPlex.%d.subtitle" % (sectionCount) , section['serverName'])
-	#		WINDOW.setProperty("DreamPlex.%d.path"	 % (sectionCount) , "ActivateWindow("+window+",plugin://plugin.video.DreamPlex/?url="+s_url+",return)")
-	#		WINDOW.setProperty("DreamPlex.%d.art"	  % (sectionCount) , extraData['fanart_image']+qToken)
-	#		WINDOW.setProperty("DreamPlex.%d.type"	 % (sectionCount) , section['type'])
-	#		WINDOW.setProperty("DreamPlex.%d.icon"	 % (sectionCount) , extraData['thumb']+qToken)
-	#		WINDOW.setProperty("DreamPlex.%d.thumb"	% (sectionCount) , extraData['thumb']+qToken)
-	#		WINDOW.setProperty("DreamPlex.%d.partialpath" % (sectionCount) , "ActivateWindow("+window+",plugin://plugin.video.DreamPlex/?url=http://"+section['address']+section['path'])
-	#  
-	#		printl("Building window properties index [" + str(sectionCount) + "] which is [" + section['title'] + "]")
-	#		printl("PATH in use is: ActivateWindow("+window+",plugin://plugin.video.DreamPlex/?url="+s_url+",return)")
-	#		sectionCount += 1
-	#	
-	#	#For each of the servers we have identified
-	#	allservers=self.resolveAllServers()
-	#	numOfServers=len(allservers)
-	#	
-	#	for server in allservers:
-	#	
-	#		if self.g_channelview == "true":
-	#			WINDOW.setProperty("DreamPlex.channel", "1")
-	#			WINDOW.setProperty("DreamPlex.%d.server.channel" % (serverCount) , "ActivateWindow(VideoLibrary,plugin://plugin.video.DreamPlex/?url=http://"+server['address']+"/system/plugins/all&mode=21"+aToken+",return)")
-	#		else:
-	#			WINDOW.clearProperty("DreamPlex.channel")
-	#			WINDOW.setProperty("DreamPlex.%d.server.video" % (serverCount) , "http://"+server['address']+"/video&mode=7"+aToken)
-	#			WINDOW.setProperty("DreamPlex.%d.server.music" % (serverCount) , "http://"+server['address']+"/music&mode=17"+aToken)
-	#			WINDOW.setProperty("DreamPlex.%d.server.photo" % (serverCount) , "http://"+server['address']+"/photos&mode=16"+aToken)
-	#				
-	#		WINDOW.setProperty("DreamPlex.%d.server.online" % (serverCount) , "http://"+server['address']+"/system/plexonline&mode=19"+aToken)
-	# 
-	#		WINDOW.setProperty("DreamPlex.%d.server" % (serverCount) , server['serverName'])
-	#		printl ("Name mapping is :" + server['serverName'])
-	#			
-	#		serverCount+=1
-	#				   
-	#	#Clear out old data
-	#	try:
-	#		printl("Clearing properties from [" + str(sectionCount) + "] to [" + WINDOW.getProperty("DreamPlex.sectionCount") + "]")
-	# 
-	#		for i in range(sectionCount, int(WINDOW.getProperty("DreamPlex.sectionCount"))+1):
-	#			WINDOW.clearProperty("DreamPlex.%d.title"	% ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.subtitle" % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.url"	  % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.path"	 % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.window"   % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.art"	  % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.type"	 % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.icon"	 % ( i ) )
-	#			WINDOW.clearProperty("DreamPlex.%d.thumb"	% ( i ) )
-	#	except:
-	#		pass
-	# 
-	#	printl("Total number of skin sections is [" + str(sectionCount) + "]")
-	#	printl("Total number of servers is ["+str(numOfServers)+"]")
-	#	WINDOW.setProperty("DreamPlex.sectionCount", str(sectionCount))
-	#	WINDOW.setProperty("DreamPlex.numServers", str(numOfServers))
-	#	if __settings__.getSetting('myplex_user') != '':
-	#		WINDOW.setProperty("DreamPlex.queue" , "ActivateWindow(VideoLibrary,plugin://plugin.video.DreamPlex/?url=http://myplexqueue&mode=24,return)")
-	#		WINDOW.setProperty("DreamPlex.myplex",  "1" )	 
-	#===========================================================================
+
 		printl("", self, "C")   
 		return
 
@@ -3851,16 +3639,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")	
-	#===========================================================================
-	#	if __settings__.getSetting('myplex_user') == '':
-	#		xbmc.executebuiltin("XBMC.Notification(myplex not configured,)")	  
-	#		return
-	# 
-	#	html=self.getMyPlexURL('/pms/playlists/queue/all')
-	#	tree=etree.fromstring(html)
-	#	
-	#	self.PlexPlugins('http://my.plexapp.com/playlists/queue/all', tree)
-	#===========================================================================
+
 		printl("", self, "C")   
 		return
 		
@@ -3871,12 +3650,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# printl("== ENTER: libraryRefresh ==", False)
-		# html=self.getURL(url)
-		# printl ("Library refresh requested")
-		# xbmc.executebuiltin("XBMC.Notification(\"DreamPlex\",Library Refresh started,100)")
-		#=======================================================================
+
 		printl("", self, "C")   
 		return
 
@@ -3894,9 +3668,7 @@ class PlexLibrary(Screen):
 			printl ("Marking as watched with: " + url, self, "I")
 		
 		html=self.getURL(url)
-		#=======================================================================
-		# xbmc.executebuiltin("Container.Refresh")
-		#=======================================================================
+
 		printl("", self, "C")   
 		return
 
@@ -3932,9 +3704,7 @@ class PlexLibrary(Screen):
 			self.addGUIItem(s_url, details, {} )
 		
 		printl("", self, "C")   
-		#=======================================================================
-		# xbmcplugin.endOfDirectory(pluginhandle)  
-		#=======================================================================
+
 
 	#===============================================================================
 	# 
@@ -3943,64 +3713,20 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#=======================================================================
-		# global self.g_transcode 
-		# self.g_transcode = __settings__.getSetting('self.transcode')
-		#=======================================================================
-	
+
 		if override is True:
 			printl( "Transcode override.  Will play media with addon transcoding settings", self, "I")
 			self.g_transcode="true"
 	
 		if self.g_transcode == "true":
-			#If self.transcode is set, ignore the stream setting for file and smb:
-			#===================================================================
-			# global self.g_stream
-			# self.g_stream = "1"
-			#===================================================================
-			printl( "We are set to Transcode, overriding stream selection", self, "I")
-			#===================================================================
-			# global self.g_transcodetype 
-			# global self.g_transcodefmt
-			#===================================================================
-			#===================================================================
-			# self.g_transcodetype = __settings__.getSetting('self.transcodefmt')
-			#===================================================================
-			#===================================================================
-			# self.g_transcodetype = __settings__.getSetting('self.transcodefmt')
-			# if self.g_transcodetype == "0":
-			#	self.g_transcodefmt="m3u8"
-			# elif self.g_transcodetype == "1":
-			#	self.g_transcodefmt="flv"
-			#===================================================================
 			
-			#self.g_quality = str(int(__settings__.getSetting('quality'))+3)
-			#printl( "Transcode format is " + self.g_transcodefmt, self, "I")
+			printl( "We are set to Transcode, overriding stream selection", self, "I")
+		
 			printl( "Transcode quality is " + self.g_quality, self, "I")
 			
-			#baseCapability = "http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-			protocols = "protocols=http-video;"
 			#protocols = "protocols=http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video;"
-
-			#===================================================================
-			# self.g_audioOutput=__settings__.getSetting("audiotype")
-			#===================================================================
-
-			#===================================================================
-			# if self.g_audioOutput == "0":
-			#   audio="mp3,aac"
-			# elif self.g_audioOutput == "1":
-			#   audio="mp3,aac,ac3"
-			# elif self.g_audioOutput == "2":
-			#   audio="mp3,aac,ac3,dts"
-			#===================================================================
+			protocols = "protocols=http-video;"
 			
-			
-			#===================================================================
-			# from VLC defaults
-			#===================================================================
-			#baseCapability="http-live-streaming,http-mp4-streaming,http-streaming-video,http-mp4-video"
-			#protocols = "protocols=http-video"
 			videoDecoders = "videoDecoders=mpeg2video{profile:high&resolution:1080&level:51},mpeg4{profile:high&resolution:1080&level:51},mpeg1video{profile:high&resolution:1080&level:51},mp4{profile:high&resolution:1080&level:51},h264{profile:high&resolution:1080&level:51}"
 			
 			#videoDecoders = "videoDecoders=h264{profile:high&resolution:1080&level:41}"
@@ -4009,9 +3735,8 @@ class PlexLibrary(Screen):
 			#dts is not running for some reason
 			audioDecoders = "audioDecoders=mp3,aac"
 
-			#self.g_capability="X-Plex-Client-Capabilities="+urllib.quote_plus("baseCapability="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)			  
 			self.g_capability = urllib.quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
-			#self.g_capability = urllib.quote_plus("protocols="+baseCapability+";videoDecoders=h264{profile:high&resolution:1080&level:51};audioDecoders="+audio)
+
 			printl("Plex Client Capability = " + self.g_capability, self, "I")
 			
 			printl("", self, "C")   
@@ -4025,16 +3750,10 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl ("deleting media at: " + url, self, "I")
 		
-		#=======================================================================
-		# return_value = xbmcgui.Dialog().yesno("Confirm file delete?","Delete this item? This action will delete media and associated data files.")
-		#=======================================================================
 		return_value = True
 		if return_value:
 			printl("Deleting....")
 			installed = self.getURL(url,type="DELETE")	
-			#===================================================================
-			# xbmc.executebuiltin("Container.Refresh")
-			#===================================================================
 		
 		printl("", self, "C")   
 		return True
