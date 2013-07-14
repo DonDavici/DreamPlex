@@ -2,3 +2,6 @@
 .project
 .settings
 .pydevproject
+*.sln
+*.suo
+*.pyproj
