@@ -239,8 +239,6 @@
            <convert type="ClockToText">Date</convert>
         </widget>
         
-        <widget name="rated" position="545,262" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-not-fs8.png" />
-        
         <widget name="audio" position="646,630" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/audio-mp3-fs8.png" />
         
         <widget name="resolution" position="532,630" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/resolution-sd-fs8.png" />
@@ -259,14 +257,16 @@
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;25" foregroundColor="#FF8C00"  backgroundColor="#000000" />
                         
         <widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-            
-        <eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="885,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+        <widget name="rated" position="50,650" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/rated-not-fs8.png" />
+        <eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-        <eLabel text="SUBTITLES:" transparent="1" zPosition="4" halign="left" position="500,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="550,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
-        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="966,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <eLabel text="SUBTITLES:" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+		<eLabel text="AUDIO:" transparent="1" zPosition="4" halign="left" position="545,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+        
+        <widget name="selectedAudio" transparent="1" zPosition="4" halign="left" valign="top"  position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
         

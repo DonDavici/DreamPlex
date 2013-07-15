@@ -2064,6 +2064,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("",self, "S")
+		printl("server +  id: " + str(server) + " / " + str(id), self, "D")
 		
 		tree = self.getStreamDataById(server, id)
 		
@@ -2089,7 +2090,8 @@ class PlexLibrary(Screen):
 							}
 		for bits in tags:
 			stream=dict(bits.items())
-			if stream['streamType'] == '3' and stream['selected'] == '1': #subtitle
+			selected = stream.get('selected', "")
+			if stream['streamType'] == '3' and selected == '1': #subtitle
 				try:
 					selectedSubtitle = {		'id': stream['id'],
 								'index': 		stream['index'],
@@ -3681,9 +3683,8 @@ class PlexLibrary(Screen):
 		extraData['token']			  = self.g_myplex_accessToken
 		extraData['key']				= movie.get('key','')
 		
-		subtitleData = self.getSelectedSubtitleDataById(details['server'], extraData['key'])
-		printl("subtitleData: "+ str(subtitleData),self, "D")
-		extraData['selectedSub']	= subtitleData.get('Language')
+		subtitleData = self.getSelectedSubtitleDataById(details['server'], extraData['ratingKey'])
+		extraData['selectedSub']	= subtitleData.get('language')
 		
 		extraData['selectedAudio']	= ""
 

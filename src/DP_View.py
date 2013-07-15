@@ -1210,7 +1210,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		'''
 		printl("", self, "S")
-		
+		printl("setting text for " + str(name) + " with value " + str(value), self, "D")
 		try:
 			if self[name]:
 				if len(value) > 0:
