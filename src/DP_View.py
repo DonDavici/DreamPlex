@@ -1697,6 +1697,8 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("choice" + str(choice), self, "D")
 		
+		self.setText("subtitles", str(choice[0]).encode('utf8'))
+		
 		doRequest = Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2], choice[5])
 		
 		printl("", self, "C")
