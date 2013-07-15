@@ -540,7 +540,7 @@ def getBoxArch():
 	printl2("", "__common__::getBoxArch", "S")
 	
 	ARCH = "unknown"
-   
+
 	if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
 		ARCH = "oe16"
 				   

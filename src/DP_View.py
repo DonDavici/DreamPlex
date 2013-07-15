@@ -1515,14 +1515,26 @@ class DP_View(Screen, NumericalTextInput):
 		
 		for item in subtitlesList:
 			
-			name = item.get('language').encode("utf-8", "")
+			selected = item.get('selected', "")
+			if selected == "1":
+				name = item.get('language').encode("utf-8", "") + " [Currently Enabled]"
+			else:
+				name = item.get('language').encode("utf-8", "")
+			
 			sub_id = item.get('id', "")
 			languageCode = item.get('languageCode', "")
 			part_id = item.get('partid', "")
-			functionList.append((name, media_id, languageCode, sub_id, server, part_id))
+			
+			functionList.append((name, media_id, languageCode, sub_id, server, part_id, selected))
+		
+		selection = 0
+		for i in range(len(functionList)):
+			if functionList[i][6] == "1":
+				selection = i
+				break
 		
 		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, \
-			title=_("Subtitle Functions"), list=functionList)
+			title=_("Subtitle Functions"), list=functionList,selection=selection)
 		
 		printl("", self, "C")
 	
