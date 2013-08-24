@@ -92,7 +92,7 @@ class DPS_SystemCheck(Screen):
 		
 		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
-		vlist.append((_("Check for update."), "check_Update"))
+# 		vlist.append((_("Check for update."), "check_Update"))
 		
 		self["content"] = MenuList(vlist)
 		
