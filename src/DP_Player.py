@@ -172,10 +172,10 @@ class DP_Player(MoviePlayer):
 		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
 		{
 		"ok": self.ok,
-		"cancel": self.leavePlayer,
+		"cancel": self.hide,
 		"keyTV": self.leavePlayer,
 		"stop": self.leavePlayer,
-		"leavePlayer": self.leavePlayer,
+		"leavePlayer": self.hide,
 		"next": self.seekManual,
 		"seekFwd": self.seekManual,
 		"seekBack": self.seekManual,
