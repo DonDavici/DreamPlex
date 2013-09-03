@@ -2116,10 +2116,10 @@ class PlexLibrary(Screen):
 			printl( "We are playing a stream", self, "I")
 			if self.g_transcode == "true":
 				printl( "We will be transcoding the stream", self, "I")
-				playurl = self.transcode(id,url) #+self.getAuthDetails({'token':self.g_myplex_accessToken})
+				playurl = self.transcode(id,url)+self.getAuthDetails({'token':self.g_myplex_accessToken})
 	
 			else:
-				playurl=url #+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
 		else:
 			playurl=url
 	
