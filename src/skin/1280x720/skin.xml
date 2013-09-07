@@ -186,7 +186,7 @@
         <widget source="key_blue" render="Label" position="1050,635" zPosition="4" size="331,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
     </screen>
 
-    <!-- DPS_ServerEntryConfigScreen -->x
+    <!-- DPS_ServerEntryConfigScreen -->
     <screen name="DPS_ServerEntryConfigScreen" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
         <eLabel text="Plex-Server" transparent="1" zPosition="4" valign="center" position="116,22" size="190,30" font="Saint; 24" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left" />
         <!-- visu -->
