@@ -38,13 +38,14 @@ from Components.Sources.StaticText import StaticText
 from Components.config import config, getConfigListEntry, configfile
 
 from Screens.MessageBox import MessageBox
+from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
 from Screens.HelpMenu import HelpableScreen
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, getBoxInformation
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig
+from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
 
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 from Plugins.Extensions.DreamPlex.DP_SystemCheck import DPS_SystemCheck
@@ -52,6 +53,7 @@ from Plugins.Extensions.DreamPlex.DP_Mappings import DPS_Mappings
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from Plugins.Extensions.DreamPlex.DPH_PlexGdm import plexgdm
 
 #===============================================================================
 # class
@@ -191,7 +193,8 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 		self["ip"] = StaticText(_("IP"))
 		self["port"] = StaticText(_("Port"))
 		
-		self["key_red"] = StaticText(_("Add"))
+		self["key_red"] = StaticText(_("Discover"))
+		self["key_green"] = StaticText(_("Add"))
 		self["key_yellow"] = StaticText(_("Edit"))
 		self["key_blue"] = StaticText(_("Delete"))
 		self["entrylist"] = DPS_ServerEntryList([])
@@ -201,7 +204,8 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 			 "back"	:	self.keyClose,
 			 "red"	:	self.keyRed,
 			 "yellow":	self.keyYellow,
-			 "blue":	 self.keyDelete,
+			 "green":	self.keyGreen,
+			 "blue":	self.keyDelete,
 			 }, -1)
 		self.what = what
 		self.updateList()
@@ -235,12 +239,60 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	#=======================================================================
 	# 
 	#=======================================================================
-	def keyRed(self):
+	def keyGreen(self):
 		'''
 		'''
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.updateList, DPS_ServerEntryConfigScreen, None)
+		
+		printl("", self, "C")
+		
+		#=======================================================================
+	# 
+	#=======================================================================
+	def keyRed(self):
+		'''
+		'''
+		printl("", self, "S")
+
+		client = plexgdm(debug=3)
+		version = str(getVersion())
+		gBoxType = getBoxInformation()
+		clientBox = gBoxType[1]
+		printl("clientBox: " + str(gBoxType), self, "D")
+		client.clientDetails(clientBox, "DreamPlex Client", "3003", "DreamPlex", version)
+
+		client.start_discovery()
+		while not client.discovery_complete:
+			print "Waiting for results"
+			time.sleep(1)
+		
+		client.stop_discovery()
+		serverList = client.getServerList()
+		printl("serverList: " + str(serverList),self, "D")
+		
+		menu = []
+		for server in serverList:
+			printl("server: " + str(server), self, "D")
+			menu.append((str(server.get("serverName")) + " (" + str(server.get("server")) + ":" + str(server.get("port")) + ")", server,))
+			
+		printl("menu: " + str(menu), self, "D")
+		self.session.openWithCallback(self.useSelectedServerData, ChoiceBox, title=_("Select server"), list=menu)
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def useSelectedServerData(self, choice):
+		'''
+		'''
+		printl("", self, "S")
+		
+		if choice is not None:
+			serverData = choice[1]
+			self.session.openWithCallback(self.updateList, DPS_ServerEntryConfigScreen, None, serverData)
 		
 		printl("", self, "C")
 
@@ -337,7 +389,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	
 	useMappings = False
 
-	def __init__(self, session, entry):
+	def __init__(self, session, entry, data = None):
 		printl("", self, "S")
 		
 		self.session = session
@@ -361,7 +413,8 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		if entry is None:
 			self.newmode = 1
-			self.current = initServerEntryConfig()
+			self.current = initServerEntryConfig(data)
+
 		else:
 			self.newmode = 0
 			self.current = entry
@@ -370,7 +423,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 
 		self.cfglist = []
 		ConfigListScreen.__init__(self, self.cfglist, session)
-			
+
 		self.createSetup()
 		
 		printl("", self, "C")
@@ -378,7 +431,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def createSetup(self):
+	def createSetup(self, data = None):
 		'''
 		'''
 		printl("", self, "S")
