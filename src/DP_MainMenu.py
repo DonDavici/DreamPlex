@@ -140,7 +140,6 @@ class DPS_MainMenu(Screen):
 		self.onLayoutFinish.append(self.setCustomTitle)
 		printl("", self, "C")
 
-
 #===============================================================================
 # SCREEN FUNCTIONS
 #===============================================================================

@@ -142,7 +142,7 @@ def printGlobalSettings():
 #===============================================================================
 # 
 #===============================================================================
-def initServerEntryConfig():
+def initServerEntryConfig(data = None):
 	'''
 	'''
 	printl("", "__init__::initServerEntryConfig", "S")
@@ -150,14 +150,24 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
 	i = len(config.plugins.dreamplex.Entries) -1
 	
+	defaultName = "PlexServer"
+	defaultIp = [192,168,0,1]
+	defaultPort = 32400
+	
+	if data is not None:
+		ipBlocks = data.get("server").split(".")
+		defaultName = data.get("serverName")
+		defaultIp = [int(ipBlocks[0]),int(ipBlocks[1]),int(ipBlocks[2]),int(ipBlocks[3])]
+		defaultPort = int(data.get("port"))
+	
 	# SERVER SETTINGS
 	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
-	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = "PlexServer", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = defaultName, visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
-	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = [192,168,0,1])
+	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = defaultIp)
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default=32400, limits=(1, 65555))
+	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default = defaultPort, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
