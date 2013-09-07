@@ -530,7 +530,7 @@ class PlexLibrary(Screen):
 		multiple_list = []
 		for server in self.g_serverDict:
 																			
-			if server['discovery'] == "local" or server['discovery'] == "bonjour":												
+			if server['discovery'] == "local" or server['discovery'] == "bonjour":
 				html = self.getURL('http://'+server['address']+'/library/sections')
 			elif server['discovery'] == "myplex":
 				
@@ -1080,13 +1080,12 @@ class PlexLibrary(Screen):
 			server=url.split('/')[serversplit]
 			urlPath="/"+"/".join(url.split('/')[urlsplit:])
 			printl("g_myplex_accessToken: " + str(self.g_myplex_accessToken), self, "D")
-
-			authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
-			
 			printl("server: " + str(server), self, "D")
 			printl("urlPath: " + str(urlPath), self, "D")
+
 			authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
 			printl("header: " + str(authHeader), self, "D")
+			
 			self.urlPath = urlPath
 			
 			conn = httplib.HTTPConnection(server) 
@@ -1154,7 +1153,7 @@ class PlexLibrary(Screen):
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
 
-			accessToken = self.getAuthDetails({'token':self.g_myplex_token})
+			accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
 			urlPath += accessToken
 
 			if self.g_sessionID is None:
@@ -1835,7 +1834,7 @@ class PlexLibrary(Screen):
 		printl("Gather media stream info", self, "I" ) 
 		
 		#get metadata for audio and subtitle
-		suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_token}, True, prefix="?")
+		suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_accessToken}, True, prefix="?")
 				
 		html=self.getURL(suburl)
 		printl("retrived html: " + str(html), self, "D")
@@ -2131,10 +2130,10 @@ class PlexLibrary(Screen):
 			printl( "We are playing a stream", self, "I")
 			if self.g_transcode == "true":
 				printl( "We will be transcoding the stream", self, "I")
-				playurl = self.transcode(id,url)+self.getAuthDetails({'token':self.g_myplex_accessToken})
+				playurl = self.transcode(id,url)#+self.getAuthDetails({'token':self.g_myplex_accessToken})
 	
 			else:
-				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+				playurl=url#+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
 		else:
 			playurl=url
 	
@@ -2155,7 +2154,7 @@ class PlexLibrary(Screen):
 		
 	
 			if not (self.g_transcode == "true" ):
-				self.setAudioSubtitles(streams)
+				self.setAudioSubtitles(self.streams)
 
 		self.monitorPlayback(id,self.server)
 		serverVersion = "0"
