@@ -59,6 +59,7 @@ from Plugins.Extensions.DreamPlex.DP_About import DPS_About
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from Plugins.Extensions.DreamPlex.DPH_RemoteListener import HttpDeamon
 
 #===============================================================================
 # class
@@ -758,5 +759,13 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
-	
+		
+		# activate this to develop plex player via ios or android app
+		# state server is starting
+		# test over: 127.0.0.1:8000/version
+		# registration on plex server is working - player is showing up in handy app
+		# next step is to find out what should happen if a button is pressed. 
+		# for now we do not see any incoming traffic from the app :-(
+		#HttpDeamon().startDeamon()
+		
 		printl("", self, "C")

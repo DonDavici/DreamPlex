@@ -1,0 +1,41 @@
+http://192.168.x.x/web/remotecontrol?command=114
+
+
+
+<area class="remoteKey" alt="Power" data-keyid="116" nohref="" coords="94,24,10" shape="circle">
+<area class="remoteKey" alt="1" data-keyid="2" nohref="" coords="37,81,10" shape="circle">
+<area class="remoteKey" alt="2" data-keyid="3" nohref="" coords="76,81,10" shape="circle">
+<area class="remoteKey" alt="3" data-keyid="4" nohref="" coords="113,81,10" shape="circle">
+<area class="remoteKey" alt="4" data-keyid="5" nohref="" coords="38,100,10" shape="circle">
+<area class="remoteKey" alt="5" data-keyid="6" nohref="" coords="75,102,10" shape="circle">
+<area class="remoteKey" alt="6" data-keyid="7" nohref="" coords="113,101,10" shape="circle">
+<area class="remoteKey" alt="7" data-keyid="8" nohref="" coords="37,122,10" shape="circle">
+<area class="remoteKey" alt="8" data-keyid="9" nohref="" coords="74,122,10" shape="circle">
+<area class="remoteKey" alt="9" data-keyid="10" nohref="" coords="113,122,10" shape="circle">
+<area class="remoteKey" alt="previous" data-keyid="412" nohref="" coords="35,144,10" shape="circle">
+<area class="remoteKey" alt="0" data-keyid="11" nohref="" coords="76,144,10" shape="circle">
+<area class="remoteKey" alt="next" data-keyid="407" nohref="" coords="113,143,10" shape="circle">
+<area class="remoteKey" alt="volume up" data-keyid="115" nohref="" coords="32,180,13" shape="circle">
+<area class="remoteKey" alt="mute" data-keyid="113" nohref="" coords="76,172,10" shape="circle">
+<area class="remoteKey" alt="bouquet up" data-keyid="402" nohref="" coords="121,178,13" shape="circle">
+<area class="remoteKey" alt="volume down" data-keyid="114" nohref="" coords="44,208,13" shape="circle">
+<area class="remoteKey" alt="lame" data-keyid="174" nohref="" coords="76,195,10" shape="circle">
+<area class="remoteKey" alt="bouquet down" data-keyid="403" nohref="" coords="113,209,13" shape="circle">
+<area class="remoteKey" alt="info" data-keyid="358" nohref="" coords="26,233,10" shape="circle">
+<area class="remoteKey" alt="up" data-keyid="103" nohref="" coords="76,233,13" shape="circle">
+<area class="remoteKey" alt="menu" data-keyid="139" nohref="" coords="125,234,10" shape="circle">
+<area class="remoteKey" alt="left" data-keyid="105" nohref="" coords="43,263,13" shape="circle">
+<area class="remoteKey" alt="OK" data-keyid="352" nohref="" coords="76,263,13" shape="circle">
+<area class="remoteKey" alt="right" data-keyid="106" nohref="" coords="110,263,13" shape="circle">
+<area class="remoteKey" alt="audio" data-keyid="392" nohref="" coords="29,295,10" shape="circle">
+<area class="remoteKey" alt="down" data-keyid="108" nohref="" coords="76,292,13" shape="circle">
+<area class="remoteKey" alt="video" data-keyid="393" nohref="" coords="122,296,10" shape="circle">
+<area class="remoteKey" alt="red" data-keyid="398" nohref="" coords="35,329,10" shape="circle">
+<area class="remoteKey" alt="green" data-keyid="399" nohref="" coords="63,330,10" shape="circle">
+<area class="remoteKey" alt="yellow" data-keyid="400" nohref="" coords="90,331,10" shape="circle">
+<area class="remoteKey" alt="blue" data-keyid="401" nohref="" coords="119,329,10" shape="circle">
+<area class="remoteKey" alt="tv" data-keyid="377" nohref="" coords="38,361,10" shape="circle">
+<area class="remoteKey" alt="radio" data-keyid="385" nohref="" coords="63,362,10" shape="circle">
+<area class="remoteKey" alt="text" data-keyid="388" nohref="" coords="89,363,10" shape="circle">
+<area class="remoteKey" alt="help" data-keyid="138" nohref="" coords="114,362,10" shape="circle">
+
