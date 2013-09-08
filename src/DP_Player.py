@@ -146,7 +146,7 @@ class DP_Player(MoviePlayer):
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
 		
 		sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
-		sref.setName("DreamPlex")
+		sref.setName(self.title)
 		
 		# lets call the movieplayer
 		MoviePlayer.__init__(self, session, sref)
@@ -485,7 +485,7 @@ class DP_Player(MoviePlayer):
 			self.startNewServiceOnPlay = False
 			super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
 			sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
-			sref.setName("DreamPlex")
+			sref.setName(self.title)
 			self.session.nav.playService(sref)
 		#self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
 		

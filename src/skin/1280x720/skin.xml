@@ -568,9 +568,7 @@
         <ePixmap zPosition="-1" position="625,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
         <ePixmap zPosition="-1" position="15,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/progress_grey.png" />
         
-        <widget source="session.CurrentService" render="Label" position="15, 5" size="260,28" font="Regular;26" valign="top" noWrap="1" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
-            <convert type="ServiceName">Name</convert>
-        </widget>
+        <eLabel text="DreamPlex" position="15, 5" size="260,28" font="Regular;26" valign="top" noWrap="1" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1" />
        
         <widget source="global.CurrentTime" render="Label" position="280,12" size=" 80,25" font="Regular;23" halign="right" backgroundColor="#00000000" foregroundColor="#00404040" transparent="1">
             <convert type="ClockToText">Default</convert>
