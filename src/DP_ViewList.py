@@ -152,6 +152,8 @@ class DPS_ViewList(DP_View):
 		self["title"] 				= Label()
 		self["tag"] 				= Label()
 		self["shortDescription"] 	= ScrollLabel()
+		self["subtitles"] 			= Label()
+		self["selectedAudio"] 		= Label()
 		self["genre"] 				= Label()
 		self["year"] 				= Label()
 		self["runtime"] 			= Label()
@@ -216,6 +218,8 @@ class DPS_ViewList(DP_View):
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 			self.setText("year", str(self.details.get("year", " - ")))
 			self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+			self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
+			self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
 			self.setText("runtime", str(self.details.get("runtime", " - ")))
 			self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 			

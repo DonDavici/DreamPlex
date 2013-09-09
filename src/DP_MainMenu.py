@@ -100,17 +100,8 @@ class DPS_MainMenu(Screen):
 		#self["txt_green"] = StaticText(_("Settings"))
 		
 		self.setText("infoText", self.getInfoText())
-		
-		self.mainMenuList = []
-		
-		# add servers to list 
-		for serverConfig in config.plugins.dreamplex.Entries:
-			serverName = serverConfig.name.value
-		
-			self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
-	
-		self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
-		self.mainMenuList.append((_("About"), "DPS_About"))
+				
+		self.getServerList()
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -139,7 +130,6 @@ class DPS_MainMenu(Screen):
 	
 		self.onLayoutFinish.append(self.setCustomTitle)
 		printl("", self, "C")
-
 
 #===============================================================================
 # SCREEN FUNCTIONS
@@ -298,7 +288,6 @@ class DPS_MainMenu(Screen):
 					self.s_final = t_final
 					
 					self.getFilterData()
-			 
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
@@ -544,6 +533,7 @@ class DPS_MainMenu(Screen):
 		else:
 			printl("coming from ELSEWHERE", self, "D")
 			printl("selectedEntry " +  str(self.selectedEntry), self, "D")
+			self.getServerList()
 			self["menu"].setList(self.menu_main_list)
 			self.nextExitIsQuit = True
 
@@ -559,7 +549,9 @@ class DPS_MainMenu(Screen):
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
 				self.session.nav.playService(self.currentService)
-		self.close((True,) )
+		self.close((True,) )	#===============================================================================
+	# 
+	#===============================================================================
 		
 		printl("", self, "C")
 		
@@ -724,6 +716,26 @@ class DPS_MainMenu(Screen):
 		
 		printl("", self, "C")
 	
+	#===============================================================================
+	# 
+	#===============================================================================
+	def getServerList(self):
+			'''
+			'''
+			printl("", self, "S")
+			
+			self.mainMenuList = []
+			
+			# add servers to list 
+			for serverConfig in config.plugins.dreamplex.Entries:
+				serverName = serverConfig.name.value
+			
+				self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
+		
+			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
+			self.mainMenuList.append((_("About"), "DPS_About"))
+			
+			printl("", self, "C")
 		
 #===============================================================================
 # ADDITIONAL STARTUPS

@@ -45,7 +45,7 @@ def wake_on_lan(macaddress):
 	else:
 		printl ("Incorrect MAC address format", "DPH_WOL::wake_on_lan", "W")
 		raise ValueError('Incorrect MAC address format')
- 
+
 	# Pad the synchronization stream.
 	data = ''.join(['FFFFFFFFFFFF', macaddress * 20])
 	send_data = '' 
