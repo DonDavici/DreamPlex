@@ -464,15 +464,16 @@ class DP_Player(MoviePlayer):
 				self.setSeekState(self.SEEK_STATE_PLAY)
 				self.hide()
 		
-		if self.servermultiuser == True:
-			self.timelinewatcherthread_wait.clear()
-		if not self.timelinewatcherThread.isAlive():
-			self.timelinewatcherthread_stop.clear()
-			sleep(2)
-			try:
-				self.timelinewatcherThread.start()
-			except:
-				pass
+		if self.playbackType == "1":
+			if self.servermultiuser == True:
+				self.timelinewatcherthread_wait.clear()
+			if not self.timelinewatcherThread.isAlive():
+				self.timelinewatcherthread_stop.clear()
+				sleep(2)
+				try:
+					self.timelinewatcherThread.start()
+				except:
+					pass
 
 		#hide infobar to indicate buffer is ready
 		self.hide()
@@ -503,7 +504,8 @@ class DP_Player(MoviePlayer):
 			plexInstance = instance.getPlexInstance()
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
-			self.timelinewatcherthread_wait.set()
+			if self.playbackType == "1":
+				self.timelinewatcherthread_wait.set()
 			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "buffering", 0, str(totalTime*1000))		
 			self.show()
 
@@ -617,8 +619,9 @@ class DP_Player(MoviePlayer):
 		'''
 		printl("", self, "S")
 		
-		self.timelinewatcherthread_wait.set()
-		self.timelinewatcherthread_stop.set()
+		if self.playbackType == "1" and self.servermultiuser == True:
+			self.timelinewatcherthread_wait.set()
+			self.timelinewatcherthread_stop.set()
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
