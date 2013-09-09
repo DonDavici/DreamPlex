@@ -101,7 +101,7 @@ class DP_Player(MoviePlayer):
 		
 		# go through the data out of the function call
 		self.resume = resume
-		self.resumeStamp = int(360)#int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
+		self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
 		self.server = str(playerData['server'])
 		self.id = str(playerData['id'])
 		self.servermultiuser = playerData['servermultiuser']
