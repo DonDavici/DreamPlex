@@ -780,7 +780,7 @@ class PlexLibrary(Screen):
 		content = (details.get('title',''), details, extraData, context, seenVisu, newUrl)
 		# todo hier sollte weider image rein
 		
-		printl("content = " + str(content), self, "D")
+		#printl("content = " + str(content), self, "D")
 		printl("", self, "C")
 		return content
 	
@@ -812,7 +812,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		
 		token = details.get('token', None)
-		printl("token: " + str(token), self, "D")
+		printl("token: " + str(token), self, "D", True, 8)
 		if url_format:
 			if token:
 				printl("", self, "C")
@@ -957,9 +957,9 @@ class PlexLibrary(Screen):
 		printl("curl_string: " + str(curl_string), self, "D", True, 10)
 		response = os.popen(curl_string).read()
 		
-		printl("====== XML returned =======", self, "D")
-		printl("link = " + str(response), self, "D")
-		printl("====== XML finished ======", self, "D")
+		#printl("====== XML returned =======", self, "D")
+		#printl("link = " + str(response), self, "D")
+		#printl("====== XML finished ======", self, "D")
 		
 		
 		printl("", self, "C")
@@ -1079,18 +1079,23 @@ class PlexLibrary(Screen):
 				
 			server=url.split('/')[serversplit]
 			urlPath="/"+"/".join(url.split('/')[urlsplit:])
-			printl("g_myplex_accessToken: " + str(self.g_myplex_accessToken), self, "D")
+			printl("g_myplex_accessToken: " + str(self.g_myplex_accessToken), self, "D", True, 8)
 			printl("server: " + str(server), self, "D")
 			printl("urlPath: " + str(urlPath), self, "D")
 
-			authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
-			printl("header: " + str(authHeader), self, "D")
-			
 			self.urlPath = urlPath
+			conn = httplib.HTTPConnection(server)
 			
-			conn = httplib.HTTPConnection(server) 
-			conn.request(type, urlPath, headers=authHeader) 
-			data = conn.getresponse() 
+			if self.g_serverConfig.connectionType.value == "2":
+				printl("using myPlex - lets add auth token", self, "D")
+				authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
+				printl("header: " + str(authHeader), self, "D", True, 8)
+				conn.request(type, urlPath, headers=authHeader)
+			else:
+				printl("not using myPlex no token information will be added", self, "D")
+				conn.request(type, urlPath)
+			
+			data = conn.getresponse()
 	
 			if ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
 				printl("status 301 or 302 found", self, "I")
@@ -1174,20 +1179,18 @@ class PlexLibrary(Screen):
 			data = conn.getresponse()
 
 			if int(data.status) == 200:
-			       link=data.read()
-			       try: conn.close()
-			       except: pass
-			       printl("", self, "C")
-			       return link
-
-
+				link=data.read()
+				try: conn.close()
+				except: pass
+				printl("", self, "C")
+				return link
 
 			else:
-			       link=data.read()
-			       try: conn.close()
-			       except: pass
-			       printl("", self, "C")
-			       return link
+				link=data.read()
+				try: conn.close()
+				except: pass
+				printl("", self, "C")
+				return link
 
 		except socket.gaierror :
 			error = "Unable to locate host [%s]\nCheck host name is correct" % server
@@ -1587,7 +1590,6 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		printl("hab dich: " + str(url), self, "S")
 		#Get URL, XML and parse
 		server=self.getServerFromURL(url)
 		html=self.getURL(url)
@@ -1834,10 +1836,10 @@ class PlexLibrary(Screen):
 		printl("Gather media stream info", self, "I" ) 
 		
 		#get metadata for audio and subtitle
-		suburl="http://"+server+"/library/metadata/"+id +self.getAuthDetails({'token':self.g_myplex_accessToken}, True, prefix="?")
+		suburl="http://"+server+"/library/metadata/"+id
 				
 		html=self.getURL(suburl)
-		printl("retrived html: " + str(html), self, "D")
+		#printl("retrived html: " + str(html), self, "D")
 		
 		try:
 			tree = etree.fromstring(html)
@@ -1869,9 +1871,9 @@ class PlexLibrary(Screen):
 			
 		tags=tree.getiterator('Stream')
 		
-		printl("**********Part Item: " + str(partitem),self,"I")
+		printl("Part Item: " + str(partitem),self,"I")
 		
-		selectedSubtitle = {	'id': -1,
+		selectedSubtitle = {'id': -1,
 							'index': 		-1,
 							'language':	 	"Disabled",
 							'languageCode': "NA",
@@ -1964,8 +1966,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
-		
-		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?subtitleStreamID="+ str(sub_id) +self.getAuthDetails({'token':self.g_myplex_accessToken})
+		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?subtitleStreamID="+ str(sub_id)
 		
 		html = self.getURL(url, type="PUT")
 		

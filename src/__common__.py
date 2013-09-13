@@ -96,7 +96,17 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 	
 	#TODO change before making new version
 	#debugMode = 2 
-	
+	offset = string.find("X-Plex-Token")
+	if not string.find("X-Plex-Token") == -1:
+		#print "[DreamPlex] " + "E" + "  " + "*************************"
+		#print "offset: " + str(offset)
+		#13+8
+		steps = 8
+		start = offset + 13
+		end = start + steps
+		new_string = string[0:start] + "********" + string[end:]
+		string = new_string
+		
 	out = ""
 	if obfuscate is True:
 		string = string[:-steps]

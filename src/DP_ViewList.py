@@ -180,7 +180,7 @@ class DPS_ViewList(DP_View):
 		'''
 		'''
 		printl("", self, "S")
-		printl("selection: " + str(selection), self, "D")
+		#printl("selection: " + str(selection), self, "D")
 		
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		
