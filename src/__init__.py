@@ -320,12 +320,13 @@ def _(txt):
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
-localeInit()
-initBoxInformation()
-printGlobalSettings()
-initPlexServerConfig()
-checkPlexEnvironment()
-registerPlexFonts()
-loadPlexSkin()
-loadPlexPlugins()
+def prepareEnvironment():
+	localeInit()
+	initBoxInformation()
+	printGlobalSettings()
+	initPlexServerConfig()
+	checkPlexEnvironment()
+	registerPlexFonts()
+	loadPlexSkin()
+	loadPlexPlugins()
 
