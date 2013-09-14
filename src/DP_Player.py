@@ -101,7 +101,7 @@ class DP_Player(MoviePlayer):
 		
 		# go through the data out of the function call
 		self.resume = resume
-		self.resumeStamp = int(360)#int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
+		self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
 		self.server = str(playerData['server'])
 		self.id = str(playerData['id'])
 		self.servermultiuser = playerData['servermultiuser']
@@ -149,8 +149,7 @@ class DP_Player(MoviePlayer):
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
 		
 		sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
-
-		sref.setName("DreamPlex")
+		sref.setName(self.title)
 		
 		# lets call the movieplayer
 		MoviePlayer.__init__(self, session, sref)
@@ -465,15 +464,16 @@ class DP_Player(MoviePlayer):
 				self.setSeekState(self.SEEK_STATE_PLAY)
 				self.hide()
 		
-		if self.servermultiuser == True:
-			self.timelinewatcherthread_wait.clear()
-		if not self.timelinewatcherThread.isAlive():
-			self.timelinewatcherthread_stop.clear()
-			sleep(2)
-			try:
-				self.timelinewatcherThread.start()
-			except:
-				pass
+		if self.playbackType == "1":
+			if self.servermultiuser == True:
+				self.timelinewatcherthread_wait.clear()
+			if not self.timelinewatcherThread.isAlive():
+				self.timelinewatcherthread_stop.clear()
+				sleep(2)
+				try:
+					self.timelinewatcherThread.start()
+				except:
+					pass
 
 		#hide infobar to indicate buffer is ready
 		self.hide()
@@ -504,7 +504,8 @@ class DP_Player(MoviePlayer):
 			plexInstance = instance.getPlexInstance()
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
-			self.timelinewatcherthread_wait.set()
+			if self.playbackType == "1":
+				self.timelinewatcherthread_wait.set()
 			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "buffering", 0, str(totalTime*1000))		
 			self.show()
 
@@ -525,8 +526,7 @@ class DP_Player(MoviePlayer):
 			self.startNewServiceOnPlay = False
 			super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
 			sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
-
-			sref.setName("DreamPlex")
+			sref.setName(self.title)
 			self.session.nav.playService(sref)
 
 		#self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
@@ -619,8 +619,9 @@ class DP_Player(MoviePlayer):
 		'''
 		printl("", self, "S")
 		
-		self.timelinewatcherthread_wait.set()
-		self.timelinewatcherthread_stop.set()
+		if self.playbackType == "1" and self.servermultiuser == True:
+			self.timelinewatcherthread_wait.set()
+			self.timelinewatcherthread_stop.set()
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
