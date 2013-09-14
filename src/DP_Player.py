@@ -57,8 +57,8 @@ class DP_Player(MoviePlayer):
 	'''
 	
 	ENIGMA_SERVICE_ID = None
-	ENIGMA_SERVICETS_ID = 0x1	   #1
-	ENIGMA_SERVIDEM2_ID = 0x3	   #3
+	ENIGMA_SERVICETS_ID = 0x1		#1
+	ENIGMA_SERVIDEM2_ID = 0x3		#3
 	ENIGMA_SERVICEGS_ID = 0x1001	#4097
 	
 	seek = None
@@ -196,12 +196,8 @@ class DP_Player(MoviePlayer):
 		#=======================================================================
 			
 		if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
-		    seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
-		    seekwatcherThread.start()
-		    asda = 123
-
-		test123 = 123123
-		asdasd = 123
+			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
+			seekwatcherThread.start()
 		
 		if self.playbackType == "1": # TRANSCODED
 			self.useBufferControl = True
@@ -688,7 +684,7 @@ class DP_Player(MoviePlayer):
 					wait_event.wait(3)
 					break
 				
-			stop_event.wait(1)						
+			stop_event.wait(1)
 			continue
 		
 		printl("", self, "C")
