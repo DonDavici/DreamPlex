@@ -87,6 +87,7 @@ class DP_Player(MoviePlayer):
 	nTracks = False
 	switchedLanguage = False
 	startNewServiceOnPlay = False
+	timeshift_enabled = False
 
 	def __init__(self, session, playerData, resume=False):
 		'''
@@ -618,6 +619,7 @@ class DP_Player(MoviePlayer):
 		if self.playbackType == "1" and self.servermultiuser == True:
 			self.timelinewatcherthread_wait.set()
 			self.timelinewatcherthread_stop.set()
+		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
