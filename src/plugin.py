@@ -4,6 +4,7 @@
 #------------------------------------------------------------------------------------------
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config
+from __init__ import prepareEnvironment
 
 #===============================================================================
 # main
@@ -14,7 +15,6 @@ def main(session, **kwargs):
 	
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
-	from __init__ import prepareEnvironment
 	prepareEnvironment()
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
 
