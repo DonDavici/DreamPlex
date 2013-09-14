@@ -293,6 +293,7 @@ def testPlexConnectivity(ip, port):
 	printl2("PORT => " + str(port), "__common__::testPlexConnectivity","I")
 	
 	try:
+		sock.settimeout(5)
 		sock.connect((ip, port))
 		sock.close()
 		
