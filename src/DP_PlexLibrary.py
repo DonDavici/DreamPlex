@@ -58,6 +58,7 @@ from Screens.ChoiceBox import ChoiceBox
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
+from re import findall
 #from DPH_bonjourFind import *
 
 #===============================================================================
@@ -131,7 +132,7 @@ class PlexLibrary(Screen):
 	
 	g_sessionID=None
 	g_serverDict=[]
-	g_serverVersion=""
+	g_serverVersion=None
 	g_sections=[]
 	g_name = "Plexserver"
 	g_host = "192.168.45.190"
@@ -156,7 +157,6 @@ class PlexLibrary(Screen):
 	g_myplex_password = ""
 	g_myplex_token = ""
 	g_myplex_accessToken = ""
-	g_serverVersion = ""
 	g_accessTokenHeader = None
 	g_transcode = "true"
 	g_wolon = "true"
@@ -243,7 +243,7 @@ class PlexLibrary(Screen):
 		printl("using this debugMode: " + str(config.plugins.dreamplex.debugMode.value), self, "D")
 		printl("using this serverName: " +  self.g_name, self, "I") 
 		printl("using this connectionType: " +  self.g_connectionType, self, "I")
-
+		
 		# CONNECTIONS TYPES
 		if self.g_connectionType == "2": # MYPLEX
 			self.g_myplex_username = serverConfig.myplexUsername.value
@@ -293,6 +293,9 @@ class PlexLibrary(Screen):
 		else:
 			#Fill serverdata to global g_serverDict
 			self.discoverAllServers()
+		
+		self.g_serverVersion = self.getServerVersion()
+		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 			
 		self.seenPic	= loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
 		self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
@@ -506,11 +509,10 @@ class PlexLibrary(Screen):
 									 'uuid'	  : None ,
 									 'role'	  : 'master' })   
 
-		
-		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
+		printl("serverList: " + str(self.g_serverDict), self, "I")
 		printl("", self, "C")
 		
-		printl("mainMenuList: " + str(mainMenuList), self, "D")
+		printl("mainMenuList2: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return self.g_serverDict
 
@@ -2123,21 +2125,21 @@ class PlexLibrary(Screen):
 			return
 			
 		protocol=url.split(':',1)[0]
-	
+		
+		# set standard playurl
+		playurl=url
+		
+		#alter playurl if needed
 		if protocol == "file":
 			printl( "We are playing a local file", self, "I")
 			playurl=url.split(':',1)[1]
+		
 		elif protocol == "http":
 			printl( "We are playing a stream", self, "I")
 			if self.g_transcode == "true":
 				printl( "We will be transcoding the stream", self, "I")
-				playurl = self.transcode(id,url)#+self.getAuthDetails({'token':self.g_myplex_accessToken})
-	
-			else:
-				playurl=url#+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
-		else:
-			playurl=url
-	
+				playurl = self.transcode(id,url)
+
 		try:
 			resume=int(int(self.streams['videoData']['viewOffset']))
 		except:
@@ -2153,19 +2155,13 @@ class PlexLibrary(Screen):
 				printl("", self, "C")
 				return
 		
-	
 			if not (self.g_transcode == "true" ):
 				self.setAudioSubtitles(self.streams)
 
 		self.monitorPlayback(id,self.server)
-		serverVersion = "0"
-		for sectionsData in self.g_sections:
-			if sectionsData['address'] == self.server:
-				#split server version string up as it contains a '-' and cannot use this with > operator
-				serverVersion = sectionsData['serverVersion'].split('-')[0]
 
 		serverMultiUser = False
-		if serverVersion >= "0.9.8.0":
+		if self.getServerVersion() >= "0.9.8.0":
 			serverMultiUser = True
 		
 		printl("Server is MultiUser version: " + str(serverMultiUser),self,"I")
@@ -4064,4 +4060,27 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 		return self.g_name
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getServerVersion(self):
+		'''
+		'''
+		printl("", self, "S")
 		
+		if self.g_serverVersion is None:
+			url = self.g_address + "/servers"
+			xml = self.getURL(url)
+			
+			tree = etree.fromstring(xml).findall("Server")
+
+			# this should be only one run. maybe i find a way to read directly without the for :-)
+			for server in tree:
+				version = server.get("version").split('-')[0]
+
+			self.g_serverVersion = str(version)
+
+		printl("", self, "C")
+		return self.g_serverVersion
+
