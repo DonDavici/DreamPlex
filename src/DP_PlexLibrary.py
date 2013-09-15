@@ -2132,8 +2132,8 @@ class PlexLibrary(Screen):
 		token = self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
 		if token.find('None') != -1:
 			token = ""
-		print 'TOKEN:',token
-		print 'TRANSCODE:',self.g_transcode
+		#print 'TOKEN:',token
+		#print 'TRANSCODE:',self.g_transcode
 		
 		#alter playurl if needed
 		if protocol == "file":
