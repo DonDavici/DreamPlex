@@ -4069,6 +4069,10 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
+		if self.g_address is None:
+			# todo we have to find out a way to get the version even with myplex servers
+			self.g_serverVersion = "myPlex Server"
+			
 		if self.g_serverVersion is None:
 			url = self.g_address + "/servers"
 			xml = self.getURL(url)
