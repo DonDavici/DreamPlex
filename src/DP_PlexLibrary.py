@@ -2128,6 +2128,12 @@ class PlexLibrary(Screen):
 		
 		# set standard playurl
 		playurl=url
+
+		token = self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+		if token.find('None') != -1:
+			token = ""
+		print 'TOKEN:',token
+		print 'TRANSCODE:',self.g_transcode
 		
 		#alter playurl if needed
 		if protocol == "file":
@@ -2138,7 +2144,10 @@ class PlexLibrary(Screen):
 			printl( "We are playing a stream", self, "I")
 			if self.g_transcode == "true":
 				printl( "We will be transcoding the stream", self, "I")
-				playurl = self.transcode(id,url)
+				playurl = self.transcode(id,url+token)
+			else:
+				printl( "We will be playing raw stream", self, "I")
+				playurl = url+token
 
 		try:
 			resume=int(int(self.streams['videoData']['viewOffset']))
