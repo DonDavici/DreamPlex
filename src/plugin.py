@@ -15,7 +15,6 @@ def main(session, **kwargs):
 	
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
-	prepareEnvironment()
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
 
 def menu_dreamplex(menuid, **kwargs):
@@ -23,12 +22,19 @@ def menu_dreamplex(menuid, **kwargs):
 		return [(_("DreamPlex"), main, "dreamplex", 47)]
 	return []
 
+def Autostart(reason, session=None, **kwargs):
+	if reason == 0:
+		prepareEnvironment()
+	else:
+		config.plugins.dreamplex.save()
+
 #===============================================================================
 # plugins
 # Actions to take place in Plugins
 #===============================================================================
 def Plugins(**kwargs):
-	list = [PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main)]
+	list = [PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main),
+			PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc = Autostart)]
 		
 	if config.plugins.dreamplex.showInMainMenu.value == True:
 		list.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
