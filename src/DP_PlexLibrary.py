@@ -3865,7 +3865,7 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def _showErrorOnTv(self, text, content):
-	   self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
+	   self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s\n%s") % (text, content), MessageBox.TYPE_INFO, timeout = 5)
 
 	#===============================================================================
 	# 

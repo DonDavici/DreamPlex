@@ -1613,7 +1613,7 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO, timeout = 5)
 		
 		printl("", self, "C")
 	
