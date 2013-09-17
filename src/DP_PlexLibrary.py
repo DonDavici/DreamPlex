@@ -1866,6 +1866,65 @@ class PlexLibrary(Screen):
 	
 	#===========================================================================
 	# 
+	#===========================================================================	
+	def getAudioById(self, server, id):
+		'''
+		sample: 
+		<Stream id="25819" streamType="3" selected="1" default="1" index="4" language="Deutsch" languageCode="ger" format="srt"/>
+		<Stream id="25820" streamType="3" index="5" language="English" languageCode="eng" format="srt"/>
+		'''
+		printl("", self, "S")
+		
+		audioList = []
+		
+		tree = self.getStreamDataById(server, id)
+		
+		fromParts = tree.getiterator('Part')	
+		
+		#Get the Parts info for media type and source selection 
+		for part in fromParts:
+			try:
+				partitem=part.get('id'), part.get('file')
+				
+			except: pass
+			
+		tags=tree.getiterator('Stream')
+		
+		
+		audio = {	'id': -1,
+						'index': 		-1,
+						'language':	 	"None",
+						'languageCode': "NA",
+						'format': 		"None",
+						'partid' : 	partitem[0]
+					}
+			   
+		audioList.append(audio)
+		for bits in tags:
+			stream=dict(bits.items())
+			if stream['streamType'] == '2': #audio
+				try:
+					audio = {		'id': stream.get('id',-1),
+										'index': 		stream.get('index',-1),
+										'language':	 	stream.get('language','Unknown'),
+										'languageCode': stream.get('languageCode','Ukn'),
+										'format' : 		stream.get('format', 'UKN'),
+										'partid' : 	partitem[0],
+										'selected' : stream.get('selected',0)
+								}
+				
+					audioList.append(audio)
+				except:
+					printl ("Unable to set audio due to XML parsing error", self, "E" )
+					pass
+		
+		printl ("audioList = " + str(audioList), self, "D" )
+		
+		printl("", self, "C")
+		return audioList
+	
+	#===========================================================================
+	# 
 	#===========================================================================
 	def setSubtitleById(self, server, sub_id, languageCode, part_id):
 		'''
@@ -1878,6 +1937,20 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setAudioById(self, server, audio_id, languageCode, part_id):
+		'''
+		'''
+		printl("", self, "S")
+		
+		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?audioStreamID="+ str(audio_id)
+		
+		html = self.doRequest(url, type="PUT")
+		
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================
