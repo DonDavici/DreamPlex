@@ -336,8 +336,9 @@ class DPS_MainMenu(Screen):
 					
 			
 			# now that we know the server we establish global plexInstance
-			instance = Singleton()
-			self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+			#instance = Singleton()
+			#self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+			self.plexInstance = PlexLibrary.instance
 					
 			printl("", self, "C")
 	

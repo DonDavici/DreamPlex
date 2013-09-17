@@ -129,6 +129,7 @@ _OVERLAY_PLEX_PARTIAL=5	#half - Reusing XBMC overlaytrained
 class PlexLibrary(Screen):
 	'''
 	'''
+	instance = None
 	g_sessionID=None
 	g_sections=[]
 	g_name = "Plexserver"
@@ -182,6 +183,7 @@ class PlexLibrary(Screen):
 	g_serverDict=[]
 	g_serverVersion=None
 	g_myplex_accessTokenDict = {}
+	myPlexServers = None
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -303,8 +305,14 @@ class PlexLibrary(Screen):
 		self.seenPic	= loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
 		self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
 		self.unseenPic  = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
-								   
+					   
 		printl("", self, "C")
+		
+		assert PlexLibrary.instance is None, "class InfoBar is a singleton class and just one instance of this class is allowed!"
+		PlexLibrary.instance = self
+
+	def __onClose(self):
+		PlexLibrary.instance = None
 	
 	#===========================================================================
 	# 
@@ -800,7 +808,7 @@ class PlexLibrary(Screen):
 			
 			tempServers.append({'serverName': data['name'].encode('utf-8') ,
 								'address'   : data['address']+":"+data['port'] ,
-                                'version'   : data['version'] ,
+								'version'   : data['version'] ,
 								'discovery' : 'myplex' , 
 								'token'	 : accessToken ,
 								'uuid'	  : data['machineIdentifier'] ,
@@ -812,61 +820,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")					   
 		return tempServers						 
 		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getLocalServers(self): # CHECKED
-		'''
-			Connect to the defined local server (either direct or via bonjour discovery)
-			and get a list of all known servers.
-			@input: nothing
-			@return: a list of servers (as Dict)
-		'''
-		printl("", self, "S")
-	
-		tempServers=[]
-		url_path="/servers"
-		html=False
-		
-		for local in self.g_serverDict:
-		
-			if local.get('discovery') == "local" or local.get('discovery') == "bonjour":
-				html = self.getURL(local['address']+url_path)
-				break
-			
-		if html is False:
-			printl("", self, "C")
-			return tempServers
-		
-		try:
-			server=etree.fromstring(html).findall('Server')
-		except Exception, e:
-			self._showErrorOnTv("no xml as response", html)
-		
-		count=0
-		for servers in server:
-			data=dict(servers.items())
-			
-			if count == 0:
-				master=1
-			else:
-				master=0
-			
-			tempServers.append({'serverName': data['name'].encode('utf-8') ,
-								'address'   : data['address']+":"+data['port'] ,
-                                'version'   : data['version'] ,
-								'discovery' : 'local' , 
-								'token'	 : data.get('accessToken',None) ,
-								'uuid'	  : data['machineIdentifier'] ,
-								'owned'	 : '1' ,
-								'master'	: master })
-	
-			count+=1 
-			
-		#printl("tempServers = " + str(tempServers), self, "C")
-		printl("", self, "C")				   
-		return tempServers						 
-
 	#===============================================================================
 	# 
 	#===============================================================================
@@ -2642,7 +2595,7 @@ class PlexLibrary(Screen):
 		
 		#Check for myplex user, which we need to alter to a master server
 		if 'plexapp.com' in url:
-			server=self.getMasterServer()
+			server=self.getMasterServer() #  ip:port
 		
 		printl("Using preferred transcoding server: " + server, self, "I")
 			
@@ -3719,40 +3672,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")   
 		return
 
-	#==========================================================================
-	# 
-	#==========================================================================
-	def displayServers(self, url ): # CHECKED
-		'''
-		'''
-		printl("", self, "S")
-
-		type=url.split('/')[2]
-		printl("Displaying entries for " + type, self, "I")
-		Servers = self.resolveAllServers()
-	
-		#For each of the servers we have identified
-		for mediaserver in Servers:
-		
-			details={'title' : mediaserver.get('serverName','Unknown') }
-	
-			if type == "video":
-				s_url='http://%s/video&mode=%s' % ( mediaserver.get('address','') , _MODE_PLEXPLUGINS )
-				
-			elif type == "online":
-				s_url='http://%s/system/plexonline&mode=%s' % ( mediaserver.get('address','') , _MODE_PLEXONLINE )
-				
-			elif type == "music":
-				s_url='http://%s/music&mode=%s' % ( mediaserver.get('address','') , _MODE_MUSIC )
-				
-			elif type == "photo":
-				s_url='http://%s/photos&mode=%s' % ( mediaserver.get('address','') , _MODE_PHOTOS )
-					
-			self.addGUIItem(s_url, details, {} )
-		
-		printl("", self, "C")   
-
-
 	#===============================================================================
 	# 
 	#===============================================================================
@@ -3927,7 +3846,8 @@ class PlexLibrary(Screen):
 		#!!!!
 			
 		if self.g_connectionType == "2": # MYPLEX
-			printl( "DreamPlex -> Adding myplex as a server location", self, "I")
+			printl("myPlexServers: " + str(self.myPlexServers), self, "D")
+			printl( "Adding myplex as a server location", self, "I")
 			self.g_serverDict.append({	'serverName'	: 'MYPLEX',
 										'address'		: "my.plex.app",
 										'discovery'		: 'myplex',
@@ -3960,7 +3880,7 @@ class PlexLibrary(Screen):
 			self.g_myplex_accessTokenDict = {}
 			self.g_myplex_accessTokenDict[str(self.g_address)] = None
 			self.setAccessTokenHeader()
-
+		
 		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
 		printl("", self, "C")
 
@@ -4063,23 +3983,26 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		self.g_serverVersion = "1.1.1."
-#		if self.g_address is None:
-#			# todo we have to find out a way to get the version even with myplex servers
-#			self.g_serverVersion = "myPlex Server"
-#			
-#		if self.g_serverVersion is None:
-#			url = self.g_address + "/servers"
-#			xml = self.getURL(url)
-#			
-#			tree = etree.fromstring(xml).findall("Server")
-#
-#			# this should be only one run. maybe i find a way to read directly without the for :-)
-#			for server in tree:
-#				version = server.get("version").split('-')[0]
-#
-#			self.g_serverVersion = str(version)
+
+		if self.g_address is None:
+			# todo we have to find out a way to get the version even with myplex servers
+			self.g_serverVersion = "myPlex Server"
+			
+		if self.g_serverVersion is None:
+			url = self.g_address + "/servers"
+			xml = self.getURL(url)
+			
+			tree = etree.fromstring(xml).findall("Server")
+
+			# this should be only one run. maybe i find a way to read directly without the for :-)
+			for server in tree:
+				version = server.get("version").split('-')[0]
+
+			self.g_serverVersion = str(version)
 
 		printl("", self, "C")
 		return self.g_serverVersion
 
+	
+	def __onClose(self):
+		PlexLibrary.instance = None
