@@ -364,7 +364,6 @@ class PlexLibrary(Screen):
 					self.g_myplex_accessTokenDict[str(section.get('address'))] = str(section.get('token', None))
 			
 			#Determine what we are going to do process after a link is selected by the user, based on the content we find
-			
 			path = section['path']
 			address =  section['address']
 			
@@ -694,16 +693,16 @@ class PlexLibrary(Screen):
 			printl("no token found .. using g_myplex_accessToken", self, "D")
 			extraData['token']=self.g_myplex_accessToken
 
-		aToken=self.getAuthDetails(extraData)
-		qToken=self.getAuthDetails(extraData, prefix='?')
+		#aToken=self.getAuthDetails(extraData)
+		#uToken = self.get_uTokenForServer()
+		#aToken=self.getAuthDetails(extraData, prefix='?')
+		#aToken = self.get_aTokenForServer()
 		
 		#Create the URL to pass to the item
 		if ( not folder) and ( extraData['type'] =="Picture" ):
-			newUrl = str(url) + qToken
+			newUrl = str(url) + self.get_aTokenForServer()
 		else:
-			#printl("sys.argv: " + str(sys.argv), self, "D")
-			#u= sys.argv[0] + "?url="+str(url)+aToken
-			newUrl= str(url) + aToken
+			newUrl= str(url) + self.get_uTokenForServer()
 
 		printl("URL to use for listing: " + newUrl, self, "D")
 	
@@ -1091,8 +1090,8 @@ class PlexLibrary(Screen):
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
 
-			accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
-			urlPath += accessToken
+			#accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
+			urlPath += self.get_uTokenForServer()
 
 			if self.g_sessionID is None:
 				self.g_sessionID=str(uuid.uuid4())
@@ -2130,24 +2129,6 @@ class PlexLibrary(Screen):
 		return playerData
 	
 	#===========================================================================
-	# DEPRECATED
-	#===========================================================================
-	def getAccessToken(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		if self.g_connectionType == "2":
-			self.g_accessTokenHeader = self.getAuthDetails({'token':self.g_myplex_accessToken})
-			printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
-		else:
-			self.g_accessTokenHeader = None
-		
-		printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
-		printl("", self, "C")
-		return self.g_accessTokenHeader
-	
-	#===========================================================================
 	# 
 	#===========================================================================
 	def setAccessTokenHeader(self):
@@ -2330,9 +2311,9 @@ class PlexLibrary(Screen):
 		elif url[0:4] == "http":
 			printl( "We are playing a stream", self, "I")
 			if '?' in url:
-				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken})
+				playurl=url+ self.get_uTokenForServer() #self.getAuthDetails({'token':self.g_myplex_accessToken})
 			else:
-				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+				playurl=url+self.get_aTokenForServer() #self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
 		else:
 			playurl=url
 
@@ -2455,7 +2436,7 @@ class PlexLibrary(Screen):
 		if 'trailers.apple.com' in vids:
 			url=vids+"|User-Agent=QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
 		elif server in vids:
-			url=vids+self.getAuthDetails({'token': self.g_myplex_accessToken})
+			url=vids+self.get_uTokenForServer() #self.getAuthDetails({'token': self.g_myplex_accessToken})
 		else:
 			url=vids
 
@@ -3824,19 +3805,19 @@ class PlexLibrary(Screen):
 	
 		#Initiate Library refresh 
 		refreshURL=url.replace("/all", "/refresh")
-		libraryRefreshURL = refreshURL.split('?')[0]+self.getAuthDetails(itemData,prefix="?")
+		libraryRefreshURL = refreshURL.split('?')[0]+self.get_aTokenForServer() #self.getAuthDetails(itemData,prefix="?")
 		context['libraryRefreshURL'] = libraryRefreshURL
 		
 		#Mark media unwatched
-		unwatchedURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+		unwatchedURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['unwatchURL'] = unwatchedURL
 				
 		#Mark media watched		
-		watchedURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+		watchedURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['watchedURL'] = watchedURL
 	
 		#Delete media from Library
-		deleteURL="http://"+server+"/library/metadata/"+ID+self.getAuthDetails(itemData)
+		deleteURL="http://"+server+"/library/metadata/"+ID+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['deleteURL'] = deleteURL
 	
 		#Display plugin setting menu

@@ -35,10 +35,12 @@ from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
+from enigma import eServiceReference
+
+from urllib import urlencode, quote_plus
+
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
-
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
@@ -1703,3 +1705,23 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("", self, "C")
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def startThemePlayback(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		printl("start pĺaying theme", self, "I")
+		accessToken = Singleton().getPlexInstance().get_aTokenForServer()#g_myplex_accessToken
+		theme = self.extraData["theme"]
+		server = self.details["server"]
+		printl("theme: " + str(theme), self, "D")
+		url = "http://" + str(server) + str(theme) + str(accessToken) #"?X-Plex-Token=" + str(accessToken)
+		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
+		printl("sref: " + str(sref), self, "D")
+		self.session.nav.stopService()
+		self.session.nav.playService(eServiceReference(sref))
+		
+		printl("", self, "C")

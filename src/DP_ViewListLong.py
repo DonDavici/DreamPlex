@@ -208,7 +208,7 @@ class DPS_ViewListLong(DP_View):
 			# if we are a show an if playtheme is enabled we start playback here
 			if self.playTheme: 
 				if self.startPlaybackNow:
-					self.startThemePlayback()
+					super(DP_ViewListLong, self).startThemePlayback()
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
@@ -839,27 +839,6 @@ class DPS_ViewListLong(DP_View):
 				
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def startThemePlayback(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		printl("start pĺaying theme", self, "I")
-		accessToken = Singleton().getPlexInstance().g_myplex_accessToken
-		theme = self.extraData["theme"]
-		server = self.details["server"]
-		printl("theme: " + str(theme), self, "D")
-		url = "http://" + str(server) + str(theme) + "?X-Plex-Token=" + str(accessToken)
-		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
-		printl("sref: " + str(sref), self, "D")
-		self.session.nav.stopService()
-		self.session.nav.playService(eServiceReference(sref))
-		
-		printl("", self, "C")
-		
 	#==============================================================================
 	# 
 	#==============================================================================
