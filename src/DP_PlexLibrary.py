@@ -1375,6 +1375,9 @@ class PlexLibrary(Screen):
 		self.tmpAbc = []
 		self.tmpGenres = []
 		
+		server=self.getServerFromURL(url)
+		self.g_currentServer = server
+		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
 			html=self.getURL(url)
@@ -1388,8 +1391,8 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 	
-		server=self.getServerFromURL(url)
-	
+
+		
 		#For each directory tag we find
 		ShowTags=tree.findall('Directory') 
 		
@@ -2057,11 +2060,9 @@ class PlexLibrary(Screen):
 		
 		# set standard playurl
 		playurl=url
-
-		token = self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
-		if token.find('None') != -1:
-			token = ""
 		
+		token = self.get_aTokenForServer()
+
 		#alter playurl if needed
 		if protocol == "file":
 			printl( "We are playing a local file", self, "I")
@@ -2178,8 +2179,9 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-
-		printl("", self, "C")   
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		printl("self.g_currentServer: " + str(self.g_currentServer), self, "D")
+		printl("", self, "C")
 		return self.g_myplex_accessTokenDict[self.g_currentServer]["hToken"]
 
 	#===========================================================================
@@ -2189,7 +2191,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 		printl("", self, "C")   
 		return self.g_myplex_accessTokenDict[self.g_currentServer]["aToken"]
 
@@ -2200,7 +2202,7 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "")
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 		printl("", self, "C")   
 		return self.g_myplex_accessTokenDict[self.g_currentServer]["uToken"]
 	
@@ -4063,22 +4065,21 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		self.g_serverVersion = "1.1.1."
-#		if self.g_address is None:
-#			# todo we have to find out a way to get the version even with myplex servers
-#			self.g_serverVersion = "myPlex Server"
-#			
-#		if self.g_serverVersion is None:
-#			url = self.g_address + "/servers"
-#			xml = self.getURL(url)
-#			
-#			tree = etree.fromstring(xml).findall("Server")
-#
-#			# this should be only one run. maybe i find a way to read directly without the for :-)
-#			for server in tree:
-#				version = server.get("version").split('-')[0]
-#
-#			self.g_serverVersion = str(version)
+		if self.g_address is None:
+			# todo we have to find out a way to get the version even with myplex servers
+			self.g_serverVersion = "myPlex Server"
+			
+		if self.g_serverVersion is None:
+			url = self.g_address + "/servers"
+			xml = self.getURL(url)
+			
+			tree = etree.fromstring(xml).findall("Server")
+
+			# this should be only one run. maybe i find a way to read directly without the for :-)
+			for server in tree:
+				version = server.get("version").split('-')[0]
+
+			self.g_serverVersion = str(version)
 
 		printl("", self, "C")
 		return self.g_serverVersion

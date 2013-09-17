@@ -242,7 +242,6 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
-
 		selection = self["menu"].getCurrent()
 		
 		printl("selection = " + str(selection), self, "D")
@@ -263,6 +262,10 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
 					self.checkServerState()
+					
+					# now that we know the server we establish global plexInstance
+					instance = Singleton()
+					self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 					
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
@@ -333,11 +336,6 @@ class DPS_MainMenu(Screen):
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()
-					
-			
-			# now that we know the server we establish global plexInstance
-			instance = Singleton()
-			self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 					
 			printl("", self, "C")
 	
