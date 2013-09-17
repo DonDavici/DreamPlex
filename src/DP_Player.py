@@ -598,12 +598,12 @@ class DP_Player(MoviePlayer):
 			#If we are less than 95% complete, store resume time
 			elif progress < 95:
 				printl("Less than 95% progress, will store resume time", self, "I" )
-				plexInstance.getURL("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
+				plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
 
 			#Otherwise, mark as watched
 			else:
 				printl( "Movie marked as watched. Over 95% complete", self, "I")
-				plexInstance.getURL("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
+				plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
 		printl("", self, "C")	   
 
@@ -626,7 +626,7 @@ class DP_Player(MoviePlayer):
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 		#sample from log /video/:/transcode/segmented/stop?session=0EBD197D-389A-4784-8CC5-709BAD5E1137&X-Plex-Client-Capabilities=protocols%3Dhttp-live-streaming%2Chttp-mp4-streaming%2Chttp-streaming-video%2Chttp-streaming-video-720p%2Chttp-mp4-video%2Chttp-mp4-video-720p%3BvideoDecoders%3Dh264%7Bprofile%3Ahigh%26resolution%3A1080%26level%3A41%7D%3BaudioDecoders%3Dmp3%2Caac%7Bbitrate%3A160000%7D&X-Plex-Client-Platform=iOS&X-Plex-Product=Plex%2FiOS&X-Plex-Version=3.0.2&X-Plex-Device-Name=DDiPhone [192.168.45.6:62662] (4 live)
-		plexInstance.getURL("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
+		plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
 		if self.servermultiuser == True:
 			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
 		

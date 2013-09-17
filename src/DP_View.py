@@ -1211,8 +1211,8 @@ class DP_View(Screen, NumericalTextInput):
 		@todo: lets check this. seems to be some kind of too much
 		
 		'''
-		printl("", self, "S")
-		printl("setting text for " + str(name) + " with value " + str(value), self, "D")
+		#printl("", self, "S")
+		#printl("setting text for " + str(name) + " with value " + str(value), self, "D")
 		try:
 			if self[name]:
 				if len(value) > 0:
@@ -1227,7 +1227,7 @@ class DP_View(Screen, NumericalTextInput):
 		except Exception, ex:
 			printl("Exception: " + str(ex), self)
 			
-		printl("", self, "C")
+		#printl("", self, "C")
 
 	#===========================================================================
 	# 
@@ -1548,7 +1548,7 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 
-		Singleton().getPlexInstance().getURL(self.unseenUrl)
+		Singleton().getPlexInstance().doRequest(self.unseenUrl)
 		self.showMessage()
 		
 		printl("", self, "C")
@@ -1561,7 +1561,7 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		Singleton().getPlexInstance().getURL(self.seenUrl)
+		Singleton().getPlexInstance().doRequest(self.seenUrl)
 		self.showMessage()
 		
 		printl("", self, "C")
@@ -1574,7 +1574,7 @@ class DP_View(Screen, NumericalTextInput):
 		'''
 		printl("", self, "S")
 		
-		Singleton().getPlexInstance().getURL(self.refreshUrl)
+		Singleton().getPlexInstance().doRequest(self.refreshUrl)
 		self.showMessage()
 		
 		printl("", self, "C")
@@ -1600,7 +1600,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		if confirm:
-			Singleton().getPlexInstance().getURL(self.deleteUrl)
+			Singleton().getPlexInstance().doRequest(self.deleteUrl)
 			self.showMessage()
 		else:
 			self.session.open(MessageBox,_("Deleting aborted!"), MessageBox.TYPE_INFO)

@@ -194,7 +194,7 @@ class DPS_MainMenu(Screen):
 	def setText(self, name, value, ignore=False, what=None):
 		'''
 		'''
-		printl("", self, "S")
+		#printl("", self, "S")
 		
 		try:
 			if self[name]:
@@ -210,7 +210,7 @@ class DPS_MainMenu(Screen):
 		except Exception, ex:
 			printl("Exception: " + str(ex), self, "E")
 		
-		printl("", self, "C")
+		#printl("", self, "C")
 	
 	#=======================================================================
 	# 
