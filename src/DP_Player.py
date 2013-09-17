@@ -160,7 +160,7 @@ class DP_Player(MoviePlayer):
 		self.service = sref
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
-		self["bufferslider"].setValue(0)
+		self["bufferslider"].setValue(1)
 		self["mediaTitle"] = StaticText(self.title)
 		self["label_update"] = StaticText("")
 		self.bufferSeconds = 0
@@ -201,7 +201,6 @@ class DP_Player(MoviePlayer):
 			seekwatcherThread.start()
 		
 		if self.playbackType == "1": # TRANSCODED
-			self.useBufferControl = True
 			if self.servermultiuser == True:
 				self.timelinewatcherthread_stop = threading.Event()
 				self.timelinewatcherthread_wait = threading.Event()
@@ -221,12 +220,12 @@ class DP_Player(MoviePlayer):
 			printl("using buffer control: " + str(self.useBufferControl),self, "D")
 		
 		else: # all other types
-			self.useBufferControl = False
 			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
 			{
 				iPlayableService.evUser+10: self.__evAudioDecodeError,
 				iPlayableService.evUser+11: self.__evVideoDecodeError,
 				iPlayableService.evUser+12: self.__evPluginError,
+				iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
 				iPlayableService.evEOF: self.__evEOF,
 			})
 			#if config.plugins.dreamplex.autoLanguage.value: 
@@ -285,18 +284,18 @@ class DP_Player(MoviePlayer):
 		self.bufferAvgOutRate = bufferInfo[2]
 		self.buffer3 = bufferInfo[3]
 		self.buffersize = bufferInfo[4]
-		if self.useBufferControl and self.playbacktype != "0":
+		if int(self.bufferPercent) > 10:
 			self["bufferslider"].setValue(int(self.bufferPercent))
-		
+			printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
+		else:
+			self["bufferslider"].setValue(1)
+
 		if(self.bufferPercent > 95):
 			self.bufferFull()
 				
 		if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
 			self.bufferEmpty()
-		
-		printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
-		
-		
+
 		#printl("", self, "C")
 
 	#===========================================================================
@@ -455,12 +454,11 @@ class DP_Player(MoviePlayer):
 		'''
 		#printl("", self, "S")
 		
-		if self.useBufferControl:
-			if self.seekstate != self.SEEK_STATE_PLAY :
-				printl( "Buffer filled start playing", self, "I")
-				self.setSeekState(self.SEEK_STATE_PLAY)
-				self.hide()
-		
+		if self.seekstate != self.SEEK_STATE_PLAY :
+			printl( "Buffer filled start playing", self, "I")
+			self.setSeekState(self.SEEK_STATE_PLAY)
+			self.hide()
+	
 		if self.playbackType == "1":
 			if self.servermultiuser == True:
 				self.timelinewatcherthread_wait.clear()
@@ -488,9 +486,6 @@ class DP_Player(MoviePlayer):
 		#show infobar to indicate buffer is empty 
 		self.show()
 		
-		if self.useBufferControl and self.playbacktype != "0":
-			#show infobar to indicate buffer is empty 
-			pass
 		if self.seekstate != self.SEEK_STATE_PAUSE :
 			pass
 			#printl( "Buffer drained pause", self, "I")
