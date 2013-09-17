@@ -197,37 +197,23 @@ class DP_Player(MoviePlayer):
 		if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
-		
-		if self.playbackType == "1": # TRANSCODED
-			if self.servermultiuser == True:
-				self.timelinewatcherthread_stop = threading.Event()
-				self.timelinewatcherthread_wait = threading.Event()
-				self.timelinewatcherthread_stop.clear()
-				self.timelinewatcherthread_wait.clear()
-				self.timelinewatcherThread = threading.Thread(target=self.timelineWatcher,name="TimeLineWatcherThread", args=(self.timelinewatcherthread_stop, self.timelinewatcherthread_wait,))
-				self.timelinewatcherThread.daemon = True
 
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-			{
-				iPlayableService.evUser+10: self.__evAudioDecodeError,
-				iPlayableService.evUser+11: self.__evVideoDecodeError,
-				iPlayableService.evUser+12: self.__evPluginError,
-				iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
-				iPlayableService.evEOF: self.__evEOF,
-			})
-			printl("using buffer control: " + str(self.useBufferControl),self, "D")
-		
-		else: # all other types
-			self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
-			{
-				iPlayableService.evUser+10: self.__evAudioDecodeError,
-				iPlayableService.evUser+11: self.__evVideoDecodeError,
-				iPlayableService.evUser+12: self.__evPluginError,
-				iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
-				iPlayableService.evEOF: self.__evEOF,
-			})
-			#if config.plugins.dreamplex.autoLanguage.value: 
-				#start_new_thread(self.audioTrackWatcher,(self,))
+		if self.servermultiuser == True:
+			self.timelinewatcherthread_stop = threading.Event()
+			self.timelinewatcherthread_wait = threading.Event()
+			self.timelinewatcherthread_stop.clear()
+			self.timelinewatcherthread_wait.clear()
+			self.timelinewatcherThread = threading.Thread(target=self.timelineWatcher,name="TimeLineWatcherThread", args=(self.timelinewatcherthread_stop, self.timelinewatcherthread_wait,))
+			self.timelinewatcherThread.daemon = True
+
+		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
+		{
+			iPlayableService.evUser+10: self.__evAudioDecodeError,
+			iPlayableService.evUser+11: self.__evVideoDecodeError,
+			iPlayableService.evUser+12: self.__evPluginError,
+			iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
+			iPlayableService.evEOF: self.__evEOF,
+		})
 
 		printl("", self, "C")
 	
@@ -276,7 +262,7 @@ class DP_Player(MoviePlayer):
 		self.buffersize = bufferInfo[4]
 		if int(self.bufferPercent) > 10:
 			self["bufferslider"].setValue(int(self.bufferPercent))
-			printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
+			#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
 		else:
 			self["bufferslider"].setValue(1)
 
