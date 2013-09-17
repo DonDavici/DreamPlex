@@ -280,14 +280,12 @@ class PlexLibrary(Screen):
 			
 			printl("using this serverIp: " +  self.g_host, self, "I")
 			printl("using this serverPort: " +  self.g_port, self, "I")
-			doIt = True
 		else: # DNS
 			try:
 				self.g_host = str(socket.gethostbyname(serverConfig.dns.value))
 				printl("using this FQDN: " +  serverConfig.dns.value, self, "I")
 				printl("found this ip for fqdn: " + self.g_host, self, "I")
 				printl("using this serverPort: " +  self.g_port, self, "I")
-				doIt = True
 			except Exception, e:
 				printl("socket error: " + str(e), self, "W")
 				printl("trying fallback to ip", self, "I")
@@ -297,14 +295,8 @@ class PlexLibrary(Screen):
 			self.leaveOnError()
 		else:
 			#Fill serverdata to global g_serverDict
-			self.discoverAllServers()
+			self.prepareServerDict()
 			
-		if doIt == True:
-			printl("reseting: !!!!!!!!!!!!!!!!!", self, "D")
-			self.g_myplex_accessTokenDict = {}
-			self.g_myplex_accessTokenDict[str(self.g_address)] = None
-			self.setAccessTokenHeader()
-		
 		self.g_serverVersion = self.getServerVersion()
 		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 			
@@ -2618,7 +2610,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
-		self.discoverAllServers()
+		self.prepareServerDict()
 		possibleServers=[]
 		for serverData in self.resolveAllServers():
 			printl("serverData: " + str(serverData), self, "D")
@@ -3925,17 +3917,8 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 		
-	def discoverAllServers(self): # CHECKED
+	def prepareServerDict(self): # CHECKED
 		'''
-			Take the users settings and add the required master servers
-			to the server list.  These are the devices which will be queried
-			for complete library listings.  There are 3 types:
-				local server - from IP configuration
-				bonjour server - from a bonjour lookup
-				myplex server - from myplex configuration
-			Alters the global self.g_serverDict value
-			@input: None
-			@return: None	   
 		'''
 		printl("", self, "S")
 
@@ -3943,17 +3926,15 @@ class PlexLibrary(Screen):
 		self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
 		#!!!!
 			
-		if self.g_myplex_username != "": #check if this server has myplex data
+		if self.g_connectionType == "2": # MYPLEX
 			printl( "DreamPlex -> Adding myplex as a server location", self, "I")
-			self.g_serverDict.append({'serverName': 'MYPLEX' ,
-								 'address'   : "my.plex.app" ,
-								 'discovery' : 'myplex' , 
-								 'token'	 : None ,
-								 'uuid'	  : None ,
-								 'role'	  : 'master' })
+			self.g_serverDict.append({	'serverName'	: 'MYPLEX',
+										'address'		: "my.plex.app",
+										'discovery'		: 'myplex',
+										'token'			: None,
+										'uuid'			: None,
+										'role'			: 'master'})
 		else:
-
-			
 			if not self.g_host or self.g_host == "<none>":
 				self.g_host = None
 			
@@ -3973,11 +3954,13 @@ class PlexLibrary(Screen):
 											'uuid'			: None,
 											'role'			: 'master' })
 			
-			# we need this to handle different server locations when myPlex is used
 			self.g_currentServer = self.g_address
 			printl("currentServer: " + str(self.g_currentServer), self, "D")
+			
+			self.g_myplex_accessTokenDict = {}
+			self.g_myplex_accessTokenDict[str(self.g_address)] = None
+			self.setAccessTokenHeader()
 
-		
 		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
 		printl("", self, "C")
 
