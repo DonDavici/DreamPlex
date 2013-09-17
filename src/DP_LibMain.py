@@ -46,8 +46,6 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def __init__(self, session, libraryName):
-		'''
-		'''
 		printl("", self, "S")
 		printl("libraryName: " + str(libraryName), self, "D")
 		
@@ -67,8 +65,6 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def getDefault(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -90,8 +86,6 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def setDefault(self, selection, sort, filter):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if selection is None and sort is None and filter is None:
@@ -120,8 +114,6 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def showDefaultView(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		default = self.getDefault()
@@ -333,8 +325,6 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def buildInfoPlaybackArgs(self, entry):
-		'''
-		'''
 		printl("", self, "S")
 		
 		

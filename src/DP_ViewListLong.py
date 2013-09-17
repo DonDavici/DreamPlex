@@ -96,8 +96,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
-		'''
-		'''
 		printl("", self , "S")
 		self.session = session
 		
@@ -173,8 +171,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def _refresh(self, selection):
-		'''
-		'''
 		printl("", self, "S")
 		printl("selection: " + str(selection), self, "D")
 		
@@ -254,8 +250,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyVideo(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.showMedia = True
@@ -268,8 +262,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyYellow(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.fastScroll == True:
@@ -285,8 +277,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def showFunctions(self, visible):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.areFunctionsHidden = visible
@@ -328,8 +318,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyInfo(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.showFunctions(not self.areFunctionsHidden)
@@ -340,8 +328,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handleRatedPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		mpaa = self.extraData.get("contentRating", "unknown").upper()
@@ -389,8 +375,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handleSoundPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		audio = self.extraData.get("audioCodec", "unknown").upper()
@@ -430,8 +414,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handleResolutionPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		resolution = self.extraData.get("videoResolution", "unknown").upper()
@@ -467,8 +449,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handleAspectPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		aspect = self.extraData.get("aspectRatio", "unknown").upper()
@@ -504,8 +484,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handleCodecPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		codec = self.extraData.get("videoCodec", "unknown").upper()
@@ -545,8 +523,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def handlePopularityPixmaps(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -564,8 +540,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def getPictureInformationToLoad(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		if self.details ["viewMode"] == "ShowSeasons":
@@ -628,8 +602,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def close(self, arg=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		super(getViewClass(), self).close(arg)
@@ -640,8 +612,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def playEntry(self, entry):
-		'''
-		'''
 		printl("", self, "S")
 		
 		super(getViewClass(), self).playEntry(entry)
@@ -652,8 +622,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def sort(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		text = "toogle Sorting (sorted %s)" % (_(self.activeSort[0]))
@@ -667,8 +635,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def filter(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if len(self.activeFilter[2]) > 0:
@@ -687,8 +653,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyUp(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onPreviousEntry()
@@ -699,8 +663,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyDown(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNextEntry()
@@ -711,8 +673,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyLeft(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onPreviousPage()
@@ -723,8 +683,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def onKeyRight(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNextPage()
@@ -735,8 +693,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def resetCurrentImages(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
@@ -753,8 +709,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def showPoster(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		dwl_poster = False
@@ -778,8 +732,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def showBackdrop(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		dwl_backdrop = False
@@ -803,8 +755,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def downloadPoster(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		download_url = self.extraData["thumb"]
@@ -823,8 +773,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def downloadBackdrop(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
@@ -843,8 +791,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#==============================================================================
 	def setPara(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
@@ -879,8 +825,6 @@ class DPS_ViewListLong(DP_View):
 	# 
 	#===========================================================================
 	def resetGuiElementsInFastScrollMode(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		# lets hide them so that fastScroll does not show up old information

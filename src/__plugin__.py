@@ -135,8 +135,6 @@ class Plugin():
 	# 
 	#===========================================================================
 	def __init__(self, pid, name=None, desc=None, start=None, fnc=None, where=None, supportStillPicture=False, weight=100):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.pid = pid

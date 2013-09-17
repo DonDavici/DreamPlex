@@ -41,8 +41,6 @@ class HttpDeamon():
 
 	
 	def startDeamon(self):
-		'''
-		'''
 		printl("", self, "S")
 		t = Thread(target=runHttp)
 		t.start()

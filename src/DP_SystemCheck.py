@@ -62,8 +62,6 @@ class DPS_SystemCheck(Screen):
 	latestVersion = None
 	
 	def __init__(self, session):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -105,8 +103,6 @@ class DPS_SystemCheck(Screen):
 	# 
 	#===========================================================================
 	def startSelection(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		selection = self["content"].getCurrent()
@@ -129,8 +125,6 @@ class DPS_SystemCheck(Screen):
 	# 
 	#===========================================================================
 	def checkForUpdate(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if testInetConnectivity():
@@ -165,8 +159,6 @@ class DPS_SystemCheck(Screen):
 	# 
 	#===========================================================================
 	def startUpdate(self, answer):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if answer is True:
@@ -224,8 +216,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===========================================================================
 	def finishupdate(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		time.sleep(2)
@@ -237,8 +227,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===========================================================================
 	def e2restart(self, answer):
-		'''
-		'''
 		printl("", self, "S")
 
 		if answer is True:
@@ -257,8 +245,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===========================================================================
 	def checkCurlInstallation(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		command = "opkg status curl"
@@ -272,8 +258,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===========================================================================
 	def checkDreamPlexInstallation(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		command = "opkg status DreamPlex"
@@ -287,8 +271,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===============================================================================	
 	def checkLib(self, arch):
-		'''
-		'''
 		printl("", self, "S")
 		
 		command = None
@@ -314,8 +296,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===============================================================================
 	def executeCommand(self, command):
-		'''
-		'''
 		printl("", self, "S")
 		
 		pipe = popen(command, "r")
@@ -347,8 +327,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===============================================================================
 	def installCurlLibs(self, confirm):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if confirm:
@@ -389,8 +367,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===============================================================================
 	def installStreamingLibs(self, confirm):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if confirm:
@@ -431,8 +407,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===================================================================
 	def cancel(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		self.close(False,self.session)
@@ -443,8 +417,6 @@ fi""" % str(remoteUrl)
 	# 
 	#===========================================================================
 	def getBoxArch(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		ARCH = "unknown"

@@ -88,8 +88,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def __init__(self, session):
-		'''
-		'''
 		printl("", self, "S")
 		Screen.__init__(self, session)
 		
@@ -141,8 +139,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================================
 	def setCustomTitle(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.setTitle(_("DreamPlex"))
@@ -154,8 +150,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def showInfo(self, visible):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.isInfoHidden = visible
@@ -173,8 +167,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getInfoText(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		content = ""
@@ -216,8 +208,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#=======================================================================
 	def getSettingsMenu (self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		mainMenuList = []
@@ -239,8 +229,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================
 	def okbuttonClick(self):
-		'''
-		'''
 		printl("", self, "S")
 		selection = self["menu"].getCurrent()
 		
@@ -343,8 +331,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getMusicSections(self, selection):
-		'''
-		'''
 		printl("", self, "S")
 		
 		mainMenuList = []
@@ -376,8 +362,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getSettingsMenuList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.nextExitIsQuit = False
@@ -390,8 +374,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def addSearchString(self, searchString):
-		'''
-		'''
 		printl("", self, "S")
 		# sample: http://192.168.45.190:32400/search?type=1&query=fringe
 		serverUrl = self.plexInstance.getServerFromURL(self.s_url)
@@ -407,8 +389,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def executeSelectedEntry(self):
-		'''
-		'''
 		printl("", self, "S")
 		printl("self.s_url: " + str(self.s_url), self, "D")
 		
@@ -430,8 +410,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#==========================================================================
 	def up(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["menu"].selectPrevious()
@@ -442,8 +420,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def down(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["menu"].selectNext()
@@ -454,8 +430,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================================
 	def right(self):
-		'''
-		'''
 		printl("", self, "S")
 				
 		try:
@@ -470,8 +444,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def left(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -486,8 +458,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def info(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.showInfo(not self.isInfoHidden)
@@ -498,8 +468,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def exit(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.Exit()
@@ -510,8 +478,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def cancel(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.selectedEntry == Plugin.MENU_FILTER:
@@ -542,8 +508,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def Exit(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
@@ -558,8 +522,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def refreshMenu(self, value):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if value == 1:
@@ -573,8 +535,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def checkServerState(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		self.g_wolon = self.g_serverConfig.wol.value
@@ -612,8 +572,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def executeWakeOnLan(self, confirm):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if confirm:
@@ -643,8 +601,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def sleepNow (self):
-		'''
-		'''
 		printl("", self, "S")
 			
 		time.sleep(int(self.g_woldelay))
@@ -656,8 +612,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getServerData(self, filter=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		summerize = config.plugins.dreamplex.summerizeSections.value
@@ -678,8 +632,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getFilterData(self):
-		'''
-		'''
 		printl("", self, "S")
 		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
 		
@@ -694,8 +646,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def getSectionTypes(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		mainMenuList = []
@@ -721,8 +671,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================================
 	def Error(self, error):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s") % (error), MessageBox.TYPE_INFO)
@@ -758,8 +706,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================================
 	def onExecRunDev(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")		
@@ -768,8 +714,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===========================================================================
 	def onExec(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		# activate this to develop plex player via ios or android app

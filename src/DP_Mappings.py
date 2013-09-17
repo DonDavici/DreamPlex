@@ -81,8 +81,6 @@ class DPS_Mappings(Screen):
 	localPath = None
 	
 	def __init__(self, session, serverID):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -109,8 +107,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===========================================================================
 	def updateList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["content"].buildList()
@@ -121,8 +117,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===================================================================
 	def cancel(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		self.close(False,self.session)
@@ -133,8 +127,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===================================================================
 	def greenKey(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.setLocalPathCallback, MovieLocationBox,_("Enter your local path segment here:"), "/mnt/x")
@@ -146,8 +138,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===================================================================
 	def setLocalPathCallback(self, callback = None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if callback is not None and len(callback):
@@ -162,8 +152,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===================================================================
 	def setRemotePathCallback(self, callback = None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if callback is not None and len(callback):
@@ -182,8 +170,6 @@ class DPS_Mappings(Screen):
 	# 
 	#===================================================================
 	def redKey(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		content = self["content"].getCurrent()
@@ -205,8 +191,6 @@ class DPS_MappingsEntryList(MenuList):
 	location = None
 	
 	def __init__(self, menuList, serverID, enableWrapAround = True):
-		'''
-		'''
 		printl("", self, "S")
 		self.serverID = serverID
 		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
@@ -222,8 +206,6 @@ class DPS_MappingsEntryList(MenuList):
 	# 
 	#===========================================================================
 	def postWidgetCreate(self, instance):
-		'''
-		'''
 		printl("", self, "S")
 		
 		MenuList.postWidgetCreate(self, instance)
@@ -235,8 +217,6 @@ class DPS_MappingsEntryList(MenuList):
 	# 
 	#===========================================================================
 	def buildList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.list=[]
@@ -274,8 +254,6 @@ class DPS_MappingsEntryList(MenuList):
 	# 
 	#===========================================================================
 	def deleteSelectedMapping(self, mappingId):
-		'''
-		'''
 		printl("", self, "S")
 		tree = getXmlContent(self.location)
 		printl("serverID: " + str(self.serverID), self, "D")
@@ -294,8 +272,6 @@ class DPS_MappingsEntryList(MenuList):
 	# 
 	#===========================================================================	
 	def addNewMapping(self, remotePath, localPath):
-		'''
-		'''
 		printl("", self, "S")
 
 		tree = getXmlContent(self.location)
