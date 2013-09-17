@@ -358,7 +358,6 @@ class PlexLibrary(Screen):
 					self.g_myplex_accessTokenDict[str(section.get('address'))] = str(section.get('token', None))
 			
 			#Determine what we are going to do process after a link is selected by the user, based on the content we find
-			
 			path = section['path']
 			address =  section['address']
 			
@@ -455,7 +454,7 @@ class PlexLibrary(Screen):
 		for server in self.g_serverDict:
 																			
 			if server['discovery'] == "local" or server['discovery'] == "bonjour":
-				html = self.getURL('http://'+server['address']+'/library/sections')
+				html = self.doRequest('http://'+server['address']+'/library/sections')
 			elif server['discovery'] == "myplex":
 				
 				if self.g_myplex_token == "ERROR":
@@ -574,7 +573,7 @@ class PlexLibrary(Screen):
 		server=self.getServerFromURL(p_url)
 		self.g_currentServer = server
 		
-		html = self.getURL(p_url)  
+		html = self.doRequest(p_url)  
 				
 		try:
 			tree = etree.fromstring(html)
@@ -682,16 +681,16 @@ class PlexLibrary(Screen):
 			printl("no token found .. using g_myplex_accessToken", self, "D")
 			extraData['token']=self.g_myplex_accessToken
 
-		aToken=self.getAuthDetails(extraData)
-		qToken=self.getAuthDetails(extraData, prefix='?')
+		#aToken=self.getAuthDetails(extraData)
+		#uToken = self.get_uTokenForServer()
+		#aToken=self.getAuthDetails(extraData, prefix='?')
+		#aToken = self.get_aTokenForServer()
 		
 		#Create the URL to pass to the item
 		if ( not folder) and ( extraData['type'] =="Picture" ):
-			newUrl = str(url) + qToken
+			newUrl = str(url) + self.get_aTokenForServer()
 		else:
-			#printl("sys.argv: " + str(sys.argv), self, "D")
-			#u= sys.argv[0] + "?url="+str(url)+aToken
-			newUrl= str(url) + aToken
+			newUrl= str(url) + self.get_uTokenForServer()
 
 		printl("URL to use for listing: " + newUrl, self, "D")
 	
@@ -819,7 +818,7 @@ class PlexLibrary(Screen):
 		for local in self.g_serverDict:
 		
 			if local.get('discovery') == "local" or local.get('discovery') == "bonjour":
-				html = self.getURL(local['address']+url_path)
+				html = self.doRequest(local['address']+url_path)
 				break
 			
 		if html is False:
@@ -982,7 +981,7 @@ class PlexLibrary(Screen):
 	#============================================================================
 	# 
 	#============================================================================
-	def getURL(self, url, type="GET", popup=0 ): # CHECKED
+	def doRequest(self, url, type="GET", popup=0 ): # CHECKED
 		printl("", self, "S")
 
 		try:		
@@ -994,24 +993,18 @@ class PlexLibrary(Screen):
 				urlsplit=1
 				
 			server=url.split('/')[serversplit]
-			urlPath="/"+"/".join(url.split('/')[urlsplit:])
-			#currentToken = self.g_myplex_accessTokenDict[str(server)]
-			#printl("currentToken: " + str(currentToken), self, "D", True, 8)
 			printl("server: " + str(server), self, "D")
+			
+			urlPath="/"+"/".join(url.split('/')[urlsplit:])
 			printl("urlPath: " + str(urlPath), self, "D")
 
 			self.urlPath = urlPath
 			conn = httplib.HTTPConnection(server)
-			
-			#if self.g_serverConfig.connectionType.value == "2":
-			printl("using myPlex - lets add auth token", self, "D")
-			authHeader = self.get_hTokenForServer()#self.getAuthDetails({'token':currentToken}, False)
+
+			authHeader = self.get_hTokenForServer()
 			printl("header: " + str(authHeader), self, "D", True, 8)
 			conn.request(type, urlPath, headers=authHeader)
-#			else:
-#				printl("not using myPlex no token information will be added", self, "D")
-#				conn.request(type, urlPath)
-			
+
 			data = conn.getresponse()
 	
 			if ( int(data.status) == 301 ) or ( int(data.status) == 302 ): 
@@ -1073,8 +1066,8 @@ class PlexLibrary(Screen):
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
 
-			accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
-			urlPath += accessToken
+			#accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
+			urlPath += self.get_uTokenForServer()
 
 			if self.g_sessionID is None:
 				self.g_sessionID=str(uuid.uuid4())
@@ -1318,7 +1311,7 @@ class PlexLibrary(Screen):
 		#get the server name from the URL, which was passed via the on screen listing..
 		if tree is None:
 			#Get some XML and parse it
-			html=self.getURL(url)
+			html=self.doRequest(url)
 			
 			if html is False:
 				printl("", self, "C")
@@ -1356,7 +1349,7 @@ class PlexLibrary(Screen):
 		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
-			html=self.getURL(url)
+			html=self.doRequest(url)
 		
 			if html is False:
 				printl("", self, "C")
@@ -1500,7 +1493,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		#Get URL, XML and parse
 		server=self.getServerFromURL(url)
-		html=self.getURL(url)
+		html=self.doRequest(url)
 		
 		if html is False:
 			printl("", self, "C")
@@ -1613,7 +1606,7 @@ class PlexLibrary(Screen):
 					
 		if tree is None:
 			#Get URL, XML and Parse
-			html=self.getURL(url)
+			html=self.doRequest(url)
 			
 			if html is False:
 				printl("", self, "C")
@@ -1740,7 +1733,7 @@ class PlexLibrary(Screen):
 		#get metadata for audio and subtitle
 		suburl="http://"+server+"/library/metadata/"+id
 				
-		html=self.getURL(suburl)
+		html=self.doRequest(suburl)
 		#printl("retrived html: " + str(html), self, "D")
 		
 		try:
@@ -1866,7 +1859,7 @@ class PlexLibrary(Screen):
 		
 		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?subtitleStreamID="+ str(sub_id)
 		
-		html = self.getURL(url, type="PUT")
+		html = self.doRequest(url, type="PUT")
 		
 		printl("", self, "C")
 		
@@ -2088,22 +2081,6 @@ class PlexLibrary(Screen):
 		return playerData
 	
 	#===========================================================================
-	# DEPRECATED
-	#===========================================================================
-	def getAccessToken(self):
-		printl("", self, "S")
-		
-		if self.g_connectionType == "2":
-			self.g_accessTokenHeader = self.getAuthDetails({'token':self.g_myplex_accessToken})
-			printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
-		else:
-			self.g_accessTokenHeader = None
-		
-		printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
-		printl("", self, "C")
-		return self.g_accessTokenHeader
-	
-	#===========================================================================
 	# 
 	#===========================================================================
 	def setAccessTokenHeader(self):
@@ -2270,9 +2247,9 @@ class PlexLibrary(Screen):
 		elif url[0:4] == "http":
 			printl( "We are playing a stream", self, "I")
 			if '?' in url:
-				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken})
+				playurl=url+ self.get_uTokenForServer() #self.getAuthDetails({'token':self.g_myplex_accessToken})
 			else:
-				playurl=url+self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
+				playurl=url+self.get_aTokenForServer() #self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
 		else:
 			playurl=url
 
@@ -2297,7 +2274,7 @@ class PlexLibrary(Screen):
 		#If we find the url lookup service, then we probably have a standard plugin, but possibly with resolution choices
 		if '/services/url/lookup' in vids:
 			printl("URL Lookup service", self, "I")
-			html=self.getURL(vids, suppress=False)
+			html=self.doRequest(vids, suppress=False)
 			if not html:
 				printl("", self, "C")   
 				return
@@ -2342,7 +2319,7 @@ class PlexLibrary(Screen):
 		#Check if there is a further level of XML required
 		if '&indirect=1' in vids:
 			printl("Indirect link", self, "I")
-			html=self.getURL(vids, suppress=False)
+			html=self.doRequest(vids, suppress=False)
 			if not html:
 				printl("", self, "C")   
 				return
@@ -2371,7 +2348,7 @@ class PlexLibrary(Screen):
 		#Everything else should be this
 		#else:
 		#	printl("Direct link")
-		#	output=self.getURL(vids, type="HEAD", suppress=False)
+		#	output=self.doRequest(vids, type="HEAD", suppress=False)
 		#	if not output:
 		#		return
 		#		
@@ -2395,7 +2372,7 @@ class PlexLibrary(Screen):
 		if 'trailers.apple.com' in vids:
 			url=vids+"|User-Agent=QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
 		elif server in vids:
-			url=vids+self.getAuthDetails({'token': self.g_myplex_accessToken})
+			url=vids+self.get_uTokenForServer() #self.getAuthDetails({'token': self.g_myplex_accessToken})
 		else:
 			url=vids
 
@@ -2473,7 +2450,7 @@ class PlexLibrary(Screen):
 		printl("URL suffix: " + str(lastbit), self, "I")
 		
 		 
-		html=self.getURL(url, suppress=False, popup=1 )
+		html=self.doRequest(url, suppress=False, popup=1 )
 		
 		if html is False:
 			printl("", self, "C")   
@@ -2717,7 +2694,7 @@ class PlexLibrary(Screen):
 		server=self.getServerFromURL(url)
 		
 		if tree is None:
-			html=self.getURL(url)
+			html=self.doRequest(url)
 		
 			if html is False:
 				printl("", self, "C")
@@ -2823,7 +2800,7 @@ class PlexLibrary(Screen):
 		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:	  
-			html=self.getURL(url)
+			html=self.doRequest(url)
 			if html is False:
 				printl("", self, "C")
 				return
@@ -2864,7 +2841,7 @@ class PlexLibrary(Screen):
 		fullList = []
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
-			html=self.getURL(url)
+			html=self.doRequest(url)
 			if html is False:
 				printl("", self, "C")
 				return
@@ -2924,7 +2901,7 @@ class PlexLibrary(Screen):
 		fullList = []
 					
 		if tree is None:	   
-			html=self.getURL(url)		  
+			html=self.doRequest(url)		  
 			if html is False:
 				printl("", self, "C")
 				return
@@ -3013,7 +2990,7 @@ class PlexLibrary(Screen):
 		server=self.getServerFromURL(url)
 		if tree is None:
 	
-			html=self.getURL(url)
+			html=self.doRequest(url)
 		
 			if html is False:
 				printl("", self, "C")
@@ -3067,7 +3044,7 @@ class PlexLibrary(Screen):
 		server=self.getServerFromURL(url)
 		if tree is None:
 	
-			html=self.getURL(url)
+			html=self.doRequest(url)
 		
 			if html is False:
 				printl("", self, "C")   
@@ -3226,7 +3203,7 @@ class PlexLibrary(Screen):
 
 		
 		if tree is None:
-			html=self.getURL(url)
+			html=self.doRequest(url)
 			
 			if html is False:
 				printl("", self, "C")
@@ -3458,7 +3435,7 @@ class PlexLibrary(Screen):
 	
 		server=self.getServerFromURL(url)
 		
-		html=self.getURL(url)
+		html=self.doRequest(url)
 		
 		if html is False:
 			printl("", self, "C")
@@ -3498,7 +3475,7 @@ class PlexLibrary(Screen):
 	def install(self, url, name ): # CHECKED
 		printl("", self, "S")
 		
-		html=self.getURL(url)
+		html=self.doRequest(url)
 
 	
 		printl("", self, "C")   
@@ -3510,7 +3487,7 @@ class PlexLibrary(Screen):
 	def channelView(self, url ): # CHECKED 
 		printl("", self, "S")
 
-		html=self.getURL(url)
+		html=self.doRequest(url)
 		if html is False:
 			printl("", self, "C")
 			return
@@ -3618,7 +3595,7 @@ class PlexLibrary(Screen):
 		else:
 			printl ("Marking as watched with: " + url, self, "I")
 		
-		html=self.getURL(url)
+		html=self.doRequest(url)
 
 		printl("", self, "C")   
 		return
@@ -3698,7 +3675,7 @@ class PlexLibrary(Screen):
 		return_value = True
 		if return_value:
 			printl("Deleting....")
-			installed = self.getURL(url,type="DELETE")	
+			installed = self.doRequest(url,type="DELETE")	
 		
 		printl("", self, "C")   
 		return True
@@ -3716,19 +3693,19 @@ class PlexLibrary(Screen):
 	
 		#Initiate Library refresh 
 		refreshURL=url.replace("/all", "/refresh")
-		libraryRefreshURL = refreshURL.split('?')[0]+self.getAuthDetails(itemData,prefix="?")
+		libraryRefreshURL = refreshURL.split('?')[0]+self.get_aTokenForServer() #self.getAuthDetails(itemData,prefix="?")
 		context['libraryRefreshURL'] = libraryRefreshURL
 		
 		#Mark media unwatched
-		unwatchedURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+		unwatchedURL="http://"+server+"/:/unscrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['unwatchURL'] = unwatchedURL
 				
 		#Mark media watched		
-		watchedURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.getAuthDetails(itemData)
+		watchedURL="http://"+server+"/:/scrobble?key="+ID+"&identifier=com.plexapp.plugins.library"+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['watchedURL'] = watchedURL
 	
 		#Delete media from Library
-		deleteURL="http://"+server+"/library/metadata/"+ID+self.getAuthDetails(itemData)
+		deleteURL="http://"+server+"/library/metadata/"+ID+self.get_uTokenForServer() #self.getAuthDetails(itemData)
 		context['deleteURL'] = deleteURL
 	
 		#Display plugin setting menu
@@ -3955,7 +3932,7 @@ class PlexLibrary(Screen):
 			
 		if self.g_serverVersion is None:
 			url = self.g_address + "/servers"
-			xml = self.getURL(url)
+			xml = self.doRequest(url)
 			
 			tree = etree.fromstring(xml).findall("Server")
 
