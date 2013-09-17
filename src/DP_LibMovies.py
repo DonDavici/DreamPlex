@@ -41,8 +41,6 @@ class DP_LibMovies(DP_LibMain):
 	# 
 	#===========================================================================
 	def __init__(self, session, url=None):
-		'''
-		'''
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "movies")
@@ -55,8 +53,6 @@ class DP_LibMovies(DP_LibMain):
 	# 
 	#===========================================================================
 	def loadLibrary(self, params):
-		'''
-		'''
 		printl ("", self, "S")
 		printl("params =" + str(params), self, "D")
 		
@@ -85,8 +81,6 @@ class DP_LibMovies(DP_LibMain):
 	# 
 	#===========================================================================
 	def buildInfoPlaybackArgs(self, entry):
-		'''
-		'''
 		printl ("", self, "S")
 		
 		args = {}

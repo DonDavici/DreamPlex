@@ -90,8 +90,6 @@ class DP_Player(MoviePlayer):
 	timeshift_enabled = False
 
 	def __init__(self, session, playerData, resume=False):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session = session
@@ -237,8 +235,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def isValidServiceId(self, id):
-		'''
-		'''
 		printl("", self, "S")
 		
 		testSRef = eServiceReference(id, 0, "Just a TestReference")
@@ -251,8 +247,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def __evUpdatedBufferInfo(self):
-		'''
-		'''
 		#printl("", self, "S")
 		self.bufferInfo()
 		#printl("", self, "C")
@@ -261,8 +255,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def ok(self):
-		'''
-		'''
 		#printl("", self, "S")
 		self.bufferInfo()
 
@@ -273,8 +265,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def bufferInfo(self):
-		'''
-		'''
 		#printl("", self, "S")
 		
 		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
@@ -302,8 +292,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def __evAudioDecodeError(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -321,8 +309,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def __evVideoDecodeError(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -340,8 +326,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def __evPluginError(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -359,8 +343,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def __evEOF(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl( "got evEOF", self, "W")
@@ -381,8 +363,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def seekWatcher(self,*args):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl( "seekWatcher started", self, "I")
@@ -400,8 +380,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def seekToStartPos(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		time = 0
@@ -450,8 +428,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def bufferFull(self):
-		'''
-		'''
 		#printl("", self, "S")
 		
 		if self.seekstate != self.SEEK_STATE_PLAY :
@@ -479,8 +455,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def bufferEmpty(self):
-		'''
-		'''
 		#printl("", self, "S")
 		
 		#show infobar to indicate buffer is empty 
@@ -507,8 +481,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def setSeekState(self, state, unknow=False):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if not self.startNewServiceOnPlay:
@@ -529,8 +501,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def leavePlayer(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.leavePlayerConfirmed(True)
@@ -541,8 +511,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def leavePlayerConfirmed(self, answer):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if answer:
@@ -556,8 +524,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def doEofInternal(self, playing):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.handleProgress()
@@ -572,8 +538,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def handleProgress(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		currentTime = self.getPlayPosition()[1] / 90000
@@ -607,8 +571,6 @@ class DP_Player(MoviePlayer):
 	# stopTranscoding
 	#===========================================================================
 	def stopTranscoding(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.playbackType == "1" and self.servermultiuser == True:
@@ -631,8 +593,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def isPlaying(self):
-		'''
-		'''
 		printl("", self, "S")
 		try:
 			if self.seekstate != self.SEEK_STATE_PLAY and self.seekstate != self.SEEK_STATE_PAUSE:
@@ -649,8 +609,6 @@ class DP_Player(MoviePlayer):
 	# audioTrackWatcher
 	#===========================================================================
 	def audioTrackWatcher(self,*args):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -667,8 +625,6 @@ class DP_Player(MoviePlayer):
 	# timelineWatcher
 	#===========================================================================
 	def timelineWatcher(self, stop_event, wait_event):
-		'''
-		'''
 		printl("", self, "S")
 
 		while(not stop_event.is_set()):
@@ -727,8 +683,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def setAudioTrack(self):
-		'''
-		'''
 		printl("", self, "S")
 		if self.switchedLanguage == False:
 			try:
@@ -767,8 +721,6 @@ class DP_Player(MoviePlayer):
 	# tryAudioEnable
 	#===========================================================================
 	def tryAudioEnable(self, alist, match, tracks):
-		'''
-		'''
 		printl("", self, "S")
 		printl("alist: " + str(alist), self, "D")
 		printl("match: " + str(match), self, "D")
@@ -793,8 +745,6 @@ class DP_Player(MoviePlayer):
 	# getServiceInterface
 	#===========================================================================
 	def getServiceInterface(self, iface):
-		'''
-		'''
 		printl("", self, "S")
 		service = self.session.nav.getCurrentService() # self.service
 		if service:
@@ -810,8 +760,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def seekToMinute(self, minutes):
-		'''
-		'''
 		printl("", self, "S")
 		#self.server.seek(str(int(minutes)*60))
 		self.doSeek(int(minutes)*60)
@@ -823,8 +771,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def seekManual(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.seekToMinute, MinuteInput)
@@ -835,8 +781,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def getPlayLength(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		length = self.seek.getLength()
@@ -848,8 +792,6 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def getPlayPosition(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		position = self.seek.getPlayPosition()

@@ -64,8 +64,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	_session = None
 	
 	def __init__(self, session):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -116,8 +114,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	# 
 	#===========================================================================
 	def setCustomTitle(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.setTitle(_("Settings"))
@@ -128,8 +124,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	# 
 	#===========================================================================
 	def _changed(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self._hasChanged = True
@@ -140,8 +134,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	# 
 	#===========================================================================
 	def ok(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -150,8 +142,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	# 
 	#===========================================================================
 	def keySave(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		self.saveAll()
@@ -163,8 +153,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	# 
 	#===========================================================================
 	def restartGUI(self, answer):
-		'''
-		'''
 		printl("", self, "S")
 		if answer is True:
 			from Screens.Standby import TryQuitMainloop
@@ -181,8 +169,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 class DPS_ServerEntriesListConfigScreen(Screen):
 
 	def __init__(self, session, what = None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -216,8 +202,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def updateList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["entrylist"].buildList()
@@ -228,8 +212,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def keyClose(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.close(self.session, self.what, None)
@@ -240,8 +222,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#=======================================================================
 	def keyGreen(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.updateList, DPS_ServerEntryConfigScreen, None)
@@ -252,8 +232,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#=======================================================================
 	def keyRed(self):
-		'''
-		'''
 		printl("", self, "S")
 
 		client = plexgdm(debug=3)
@@ -286,8 +264,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def useSelectedServerData(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is not None:
@@ -300,8 +276,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def keyOK(self): #not in use for now
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -318,8 +292,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def keyYellow(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -341,8 +313,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def keyDelete(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		try:
@@ -363,8 +333,6 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	# 
 	#===========================================================================
 	def deleteConfirm(self, result):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if not result:
@@ -432,8 +400,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def createSetup(self, data = None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		separator = "".ljust(90,"_")
@@ -514,8 +480,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def setKeyNames(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.useMappings == True:
@@ -529,8 +493,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keyLeft(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		ConfigListScreen.keyLeft(self)
@@ -542,8 +504,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keyRight(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		ConfigListScreen.keyRight(self)
@@ -555,8 +515,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keySave(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.newmode == 1:
@@ -573,8 +531,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keyCancel(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.newmode == 1:
@@ -587,8 +543,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keyYellow(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		
@@ -604,8 +558,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def keyDelete(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.newmode == 1:
@@ -619,8 +571,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	# 
 	#===========================================================================
 	def deleteConfirm(self, result):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if not result:
@@ -643,8 +593,6 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 class DPS_ServerEntryList(MenuList):
 	
 	def __init__(self, menuList, enableWrapAround = True):
-		'''
-		'''
 		printl("", self, "S")
 		
 		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
@@ -657,8 +605,6 @@ class DPS_ServerEntryList(MenuList):
 	# 
 	#===========================================================================
 	def postWidgetCreate(self, instance):
-		'''
-		'''
 		printl("", self, "S")
 		
 		MenuList.postWidgetCreate(self, instance)
@@ -670,8 +616,6 @@ class DPS_ServerEntryList(MenuList):
 	# 
 	#===========================================================================
 	def buildList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.list=[]

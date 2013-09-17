@@ -190,8 +190,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def __init__(self, session, serverConfig=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -310,8 +308,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def leaveOnError(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		mainMenuList = []
@@ -327,8 +323,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def displaySections(self, filter=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		printl("filter: " + str(filter), self, "D")
 		
@@ -534,8 +528,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def appendEntry(self, sections, server):
-		'''
-		'''
 		#printl("", self, "S")
 		
 		if self.g_connectionType != "2": # is not myPlex		
@@ -571,8 +563,6 @@ class PlexLibrary(Screen):
 	# 
 	#=============================================================================
 	def getSectionFilter(self, p_url, p_mode, p_final): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		printl("p_url: " + str(p_url), self, "I")
 		printl("p_mode: " + str(p_mode), self, "I")
@@ -682,8 +672,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def addGUIItem(self, url, details, extraData, context, seenVisu, folder=True ):
-		'''
-		'''
 		printl("", self, "S")
 		if details.get('title','') == '':
 			printl('leaving now because title is empty', self, "I")
@@ -721,8 +709,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getSectionUrl(self, address, path):
-		'''
-		'''
 		printl("", self, "S")
 
 		sectionUrl = 'http://%s%s' % ( address, path)
@@ -997,8 +983,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def getURL(self, url, type="GET", popup=0 ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		try:		
@@ -1072,8 +1056,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def getTimelineURL(self, server, container, id, state, time=0, duration=0):
-		'''
-		'''
 		printl("", self, "S")
 		try:
 
@@ -1144,8 +1126,6 @@ class PlexLibrary(Screen):
 	# 
 	#========================================================================
 	def mediaType(self, partData, server, dvdplayback=False ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")   
 		stream = partData['key']
 		file = partData['file']
@@ -1287,8 +1267,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def checkFileLocation(self, remotePathPart, localPathPart):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("Checking for local file", self, "I")
@@ -1329,8 +1307,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getMoviesFromSection(self, url, tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 		
@@ -1369,8 +1345,6 @@ class PlexLibrary(Screen):
 	# 
 	#=======================================================================
 	def getShowsFromSection(self, url, tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		fullList=[]
@@ -1523,8 +1497,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getSeasonsOfShow(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		#Get URL, XML and parse
 		server=self.getServerFromURL(url)
@@ -1625,8 +1597,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getUniqueId (self, path):
-		'''
-		'''
 		printl("", self, "S")
 		
 		parts = string.split(path, "/")
@@ -1639,8 +1609,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getEpisodesOfSeason(self, url, tree=None ): # CHECKED	
-		'''
-		'''
 		printl("", self, "S")
 					
 		if tree is None:
@@ -1765,8 +1733,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getStreamDataById(self, server, id):
-		'''
-		'''
 		printl("", self, "S")
 
 		printl("Gather media stream info", self, "I" ) 
@@ -1789,8 +1755,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getSelectedSubtitleDataById(self, server, id):
-		'''
-		'''
 		printl("",self, "S")
 		printl("server +  id: " + str(server) + " / " + str(id), self, "D")
 		
@@ -1898,8 +1862,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def setSubtitleById(self, server, sub_id, languageCode, part_id):
-		'''
-		'''
 		printl("", self, "S")
 		
 		url = "http://"+str(server)+"/library/parts/"+str(part_id)+"?subtitleStreamID="+ str(sub_id)
@@ -2030,8 +1992,6 @@ class PlexLibrary(Screen):
 	# 
 	#========================================================================
 	def getMediaOptionsToPlay(self, id, vids, override=False ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.getTranscodeSettings(override)
@@ -2049,8 +2009,6 @@ class PlexLibrary(Screen):
 	# 
 	#========================================================================
 	def playLibraryMedia(self, id, url): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		 
 		printl("url: " + str(url), self, "I")
@@ -2133,8 +2091,6 @@ class PlexLibrary(Screen):
 	# DEPRECATED
 	#===========================================================================
 	def getAccessToken(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if self.g_connectionType == "2":
@@ -2151,8 +2107,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def setAccessTokenHeader(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		for key, value in self.g_myplex_accessTokenDict.iteritems():
@@ -2178,8 +2132,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def get_hTokenForServer(self):
-		'''
-		'''
 		printl("", self, "S")
 		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 		printl("self.g_currentServer: " + str(self.g_currentServer), self, "D")
@@ -2190,8 +2142,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def get_aTokenForServer(self):
-		'''
-		'''
 		printl("", self, "S")
 		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 		printl("", self, "C")   
@@ -2201,8 +2151,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def get_uTokenForServer(self):
-		'''
-		'''
 		printl("", self, "S")
 		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 		printl("", self, "C")   
@@ -2212,8 +2160,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def setAudioSubtitles(self, stream ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 			
 		if stream['contents'] == "type":
@@ -2296,8 +2242,6 @@ class PlexLibrary(Screen):
 	# 
 	#=================================================================
 	def remove_html_tags(self, data): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		p = re.compile(r'<.*?>')
@@ -2309,8 +2253,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def monitorPlayback(self, id, server ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		#TODO?: code goes here
 		printl("", self, "C")	   
@@ -2319,8 +2261,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def PLAY(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 			  
 		if url[0:4] == "file":
@@ -2477,8 +2417,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def pluginTranscodeMonitor(self, sessionID, server ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 	
 		#TODO?: Code goes here
@@ -2490,8 +2428,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def get_params(self, paramstring ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("Parameter string: " + paramstring, self, "I")
@@ -2585,8 +2521,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def processDirectory(self, url, tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		printl("Processing secondary menus", self, "I")
 
@@ -2610,8 +2544,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getMasterServer(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.prepareServerDict()
@@ -2638,8 +2570,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def transcode(self, id, url, identifier=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		server=self.getServerFromURL(url)
@@ -2745,8 +2675,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getMusicTypes(self, url):
-		'''
-		'''
 		printl("", self, "S")
 		mainMenuList = []
 		server=self.getServerFromURL(url)
@@ -2782,8 +2710,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def music(self, url, tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		fullList = []
@@ -2933,8 +2859,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def albums(self, url, tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		fullList = []
@@ -2995,8 +2919,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def tracks(self, url,tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		fullList = []
@@ -3027,8 +2949,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def trackTag(self, server, tree, track ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		for child in track:
@@ -3195,8 +3115,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def movieTag(self, url, server, tree, movie):
-		'''
-		'''
 		printl("", self, "S")
 
 		tempgenre=[]
@@ -3302,8 +3220,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def photo(self, url,tree=None ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		server=url.split('/')[2]
@@ -3537,8 +3453,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def plexOnline(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 	
@@ -3582,8 +3496,6 @@ class PlexLibrary(Screen):
 	# 
 	#==========================================================================
 	def install(self, url, name ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		html=self.getURL(url)
@@ -3596,8 +3508,6 @@ class PlexLibrary(Screen):
 	# 
 	#=============================================================================
 	def channelView(self, url ): # CHECKED 
-		'''
-		'''
 		printl("", self, "S")
 
 		html=self.getURL(url)
@@ -3651,8 +3561,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def photoTranscode(self, server, url, width, height ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s%s' % (server, urllib.quote_plus(url), width, height, self.get_uTokenForServer())
@@ -3675,8 +3583,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def skin(self ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		#Get the global host variable set in settings
 
@@ -3687,8 +3593,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def myPlexQueue(self): # CHECKED
-		'''
-		'''
 		printl("", self, "S")	
 
 		printl("", self, "C")   
@@ -3698,8 +3602,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def libraryRefresh(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		printl("", self, "C")   
@@ -3709,8 +3611,6 @@ class PlexLibrary(Screen):
 	# 
 	#============================================================================
 	def watched(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 	
 		if url.find("unscrobble") > 0:
@@ -3727,8 +3627,6 @@ class PlexLibrary(Screen):
 	# 
 	#==========================================================================
 	def displayServers(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		type=url.split('/')[2]
@@ -3761,8 +3659,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getTranscodeSettings(self, override=False ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		if override is True:
@@ -3796,8 +3692,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def deleteMedia(self, url ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		printl ("deleting media at: " + url, self, "I")
 		
@@ -3815,8 +3709,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def buildContextMenu(self, url, itemData ): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		context={}
 		server=self.getServerFromURL(url)
@@ -3866,8 +3758,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def checkNasOverride(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		#NAS Override
@@ -3922,8 +3812,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		
 	def prepareServerDict(self): # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 
 		#!!!!
@@ -4034,8 +3922,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def __xmlRequest(self, uri, params):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if params is not None: uri = uri + "?" + urlencode(params).replace('+', '%20')
@@ -4053,8 +3939,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getServerName(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -4064,8 +3948,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getServerVersion(self):
-		'''
-		'''
 		printl("", self, "S")
 		if self.g_address is None:
 			# todo we have to find out a way to get the version even with myplex servers

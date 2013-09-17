@@ -113,8 +113,6 @@ class DP_View(Screen, NumericalTextInput):
 	g_forcedvd						= "false"
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("viewName: "+ str(viewName), self, "I")
@@ -197,8 +195,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def setCustomTitle(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.setTitle(_(self.libraryName))
@@ -209,8 +205,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def setListViewElementsCount(self, viewName):
-		'''
-		'''
 		printl("", self, "S")
 		
 		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
@@ -225,8 +219,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onFirstExec(self):
-		'''
-		'''
 		printl("", self, "S")		
 		
 		if self.select is None: # Initial Start of View, select first entry in list
@@ -277,8 +269,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def bouquetUp(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["shortDescription"].pageUp()
@@ -289,8 +279,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def bouquetDown(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self["shortDescription"].pageDown()
@@ -301,8 +289,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey1(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(1)
@@ -313,8 +299,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey2(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(2)
@@ -325,8 +309,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey3(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(3)
@@ -337,8 +319,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey4(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(4)
@@ -349,8 +329,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey5(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(5)
@@ -361,8 +339,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey6(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(6)
@@ -374,8 +350,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey7(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(7)
@@ -386,8 +360,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey8(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(8)
@@ -398,8 +370,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey9(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(9)
@@ -410,8 +380,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKey0(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNumberKey(0)
@@ -422,8 +390,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onNumberKey(self, number):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl(str(number), self, "I")
@@ -441,8 +407,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onNumberKeyPopup(self, value, visible):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if visible:
@@ -481,8 +445,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyOk(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onEnter()
@@ -493,8 +455,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyCancel(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onLeave()
@@ -505,8 +465,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyInfo(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -515,8 +473,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyMenu(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.displayOptionsMenu()
@@ -527,8 +483,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyVideo(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -537,8 +491,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyAudio(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.displayAudioMenu()
@@ -549,8 +501,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyLeft(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -559,8 +509,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyRight(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -569,8 +517,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyUp(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onPreviousEntry()
@@ -581,8 +527,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyDown(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onNextEntry()
@@ -593,8 +537,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyRed(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onToggleSort()
@@ -605,8 +547,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyRedLong(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onChooseSort()
@@ -617,8 +557,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyGreen(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onToggleFilter()
@@ -629,8 +567,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyGreenLong(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onChooseFilter()
@@ -641,8 +577,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyYellow(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		
@@ -652,8 +586,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyYellowLong(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -662,8 +594,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyBlue(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.onToggleView()
@@ -674,8 +604,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onKeyBlueLong(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		#self.onChooseView()
@@ -687,8 +615,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onToggleSort(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		for i in range(len(self.onSortKeyValuePair)):
@@ -709,8 +635,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseSortCallback(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is not None:
@@ -725,8 +649,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseSort(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		menu = []
@@ -745,8 +667,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onToggleFilter(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		for i in range(len(self.onFilterKeyValuePair)):
@@ -787,8 +707,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseFilterCallback(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is not None:
@@ -803,8 +721,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseFilter(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		menu = []
@@ -832,8 +748,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onToggleView(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		select = None
@@ -854,8 +768,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseViewCallback(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is not None:
@@ -876,8 +788,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onChooseView(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		menu = getViews()
@@ -894,8 +804,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onNextEntry(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.refresh()
@@ -906,8 +814,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onPreviousEntry(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.refresh()
@@ -918,8 +824,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onNextPage(self):
-		'''
-		'''
 		printl("", self, "S")
 		itemsTotal = self["listview"].count()
 		index = self["listview"].getIndex()
@@ -935,8 +839,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onPreviousPage(self):
-		'''
-		'''
 		printl("", self, "S")
 		index = self["listview"].getIndex()
 		
@@ -952,8 +854,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onEnter(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		selection = self["listview"].getCurrent()
@@ -1013,8 +913,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def showMediaDetail(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 		self.showDetail = True
 		selection = self["listview"].getCurrent()
@@ -1041,8 +939,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def onLeave(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
@@ -1127,8 +1023,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def updateList(self):
-		'''
-		'''
 		printl("", self, "S")
 		self["listview"].setList(self.listViewList)
 		self["listview"].setIndex(0)
@@ -1139,8 +1033,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def resetList(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.listViewList = self.origListViewList
@@ -1150,8 +1042,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def sort(self):
-		'''
-		'''
 		printl("", self, "S")
 		#printl("listViewList: " + str(self.listViewList), self, "D")
 		
@@ -1173,8 +1063,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def filter(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
@@ -1231,8 +1119,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def refresh(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		# update the list to sync list with content
@@ -1249,8 +1135,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def _refresh(self, selection):
-		'''
-		'''
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -1259,8 +1143,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===============================================================================
 	def playEntry(self, selection):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.media_id = selection[1]['ratingKey']
@@ -1276,8 +1158,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================
 	def selectMedia(self, count, options, server ):   # CHECKED
-		'''
-		'''
 		printl("", self, "S")
 		
 		#if we have two or more files for the same movie, then present a screen
@@ -1338,8 +1218,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def setSelectedMedia(self, choice=None):
-		'''
-		'''
 		printl("", self, "S")
 		result = 0
 		printl("choice: " + str(choice), self, "D")
@@ -1358,8 +1236,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===============================================================================
 	def playSelectedMedia(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.playerData = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
@@ -1387,8 +1263,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def checkResume(self, resumeStamp):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if resumeStamp > 0:
@@ -1403,8 +1277,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def handleResume(self, confirm):
-		'''
-		'''
 		printl("", self, "S")
 		
 		resume = False
@@ -1422,8 +1294,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def handleNavigationData(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		itemsPerPage = self.itemsPerPage
@@ -1445,8 +1315,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def setDefaultView(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 
 		select = None
@@ -1466,8 +1334,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def clearDefaultView(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, ))
@@ -1479,8 +1345,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def displayOptionsMenu(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		functionList = []
@@ -1500,8 +1364,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def displayAudioMenu(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		selection = self["listview"].getCurrent()
@@ -1542,8 +1404,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def markUnwatched(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().getURL(self.unseenUrl)
@@ -1555,8 +1415,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def markWatched(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Singleton().getPlexInstance().getURL(self.seenUrl)
@@ -1568,8 +1426,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def initiateRefresh(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Singleton().getPlexInstance().getURL(self.refreshUrl)
@@ -1581,8 +1437,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def deleteFromLibrary(self, unused=None, unused2=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.openWithCallback(self.executeLibraryDelete, MessageBox, _("Are you sure?"), MessageBox.TYPE_YESNO)
@@ -1593,8 +1447,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def executeLibraryDelete(self, confirm):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if confirm:
@@ -1609,8 +1461,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def showMessage(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO, timeout = 5)
@@ -1621,8 +1471,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def displayViewMenu(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		pluginList = []
@@ -1646,8 +1494,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def pluginCallback(self, args=None):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.refresh()
@@ -1658,8 +1504,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def displayOptionsMenuCallback(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is None or choice[1] is None:
@@ -1688,8 +1532,6 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def displayAudioMenuCallback(self, choice):
-		'''
-		'''
 		printl("", self, "S")
 		
 		if choice is None or choice[1] is None:

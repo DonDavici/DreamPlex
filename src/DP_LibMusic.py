@@ -56,8 +56,6 @@ class DP_LibMusic(DP_LibMain):
 	# 
 	#===============================================================================
 	def loadLibrary(self, params):
-		'''
-		'''
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 		
@@ -141,8 +139,6 @@ class DP_LibMusic(DP_LibMain):
 	# 
 	#===========================================================================
 	def getPlaybackList(self, entry):
-		'''
-		'''
 		printl ("", self, "S")
 		
 		playbackList = []
@@ -179,8 +175,6 @@ class DP_LibMusic(DP_LibMain):
 	# 
 	#===========================================================================
 	def buildInfoPlaybackArgs(self, entry):
-		'''
-		'''
 		printl ("", self, "S")
 		
 		args = {}
