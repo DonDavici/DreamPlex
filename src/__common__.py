@@ -95,85 +95,86 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 	
 	
 	#TODO change before making new version
-	#debugMode = 2 
-	offset = string.find("X-Plex-Token")
-	if not string.find("X-Plex-Token") == -1:
-		#print "[DreamPlex] " + "E" + "  " + "*************************"
-		#print "offset: " + str(offset)
-		#13+8
-		steps = 8
-		start = offset + 13
-		end = start + steps
-		new_string = string[0:start] + "********" + string[end:]
-		string = new_string
-		
-	out = ""
-	if obfuscate is True:
-		string = string[:-steps]
-		for i in range(steps):
-			string += "*"
-		
-	if parent is None:
-		out = str(string)
-	else:
-		classname = str(parent.__class__).rsplit(".", 1)
-		if len(classname) == 2:
-			classname = classname[1]
-			classname = classname.rstrip("\'>")
-			classname += "::"
-			out = str(classname) + str(sys._getframe(1).f_code.co_name) +" -> " + str(string)
+	#debugMode = 2
+	if debugMode != 4:
+		offset = string.find("X-Plex-Token")
+		if not string.find("X-Plex-Token") == -1:
+			#print "[DreamPlex] " + "E" + "  " + "*************************"
+			#print "offset: " + str(offset)
+			#13+8
+			steps = 8
+			start = offset + 13
+			end = start + steps
+			new_string = string[0:start] + "********" + string[end:]
+			string = new_string
+			
+		out = ""
+		if obfuscate is True:
+			string = string[:-steps]
+			for i in range(steps):
+				string += "*"
+			
+		if parent is None:
+			out = str(string)
 		else:
-			classname = ""
-			out = str(parent) + " -> " + str(string)
-
-	if dmode == "E" :
-		verbLevel = VERB_ERROR
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "E" + "  " + str(out)
-			writeToLog(dmode, out)
+			classname = str(parent.__class__).rsplit(".", 1)
+			if len(classname) == 2:
+				classname = classname[1]
+				classname = classname.rstrip("\'>")
+				classname += "::"
+				out = str(classname) + str(sys._getframe(1).f_code.co_name) +" -> " + str(string)
+			else:
+				classname = ""
+				out = str(parent) + " -> " + str(string)
 	
-	elif dmode == "W":
-		verbLevel = VERB_WARNING
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "W" + "  " + str(out)
-			writeToLog(dmode, out)
-	
-	elif dmode == "I":
-		verbLevel = VERB_INFORMATION
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "I" + "  " + str(out)
-			writeToLog(dmode, out)
-	
-	elif dmode == "D":
-		verbLevel = VERB_DEBUG
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "D" + "  " + str(out)	
-			writeToLog(dmode, out)
-	
-	elif dmode == "S":
-		verbLevel = VERB_STARTING
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "S" + "  " + str(out) + STARTING_MESSAGE
-			writeToLog(dmode, out + STARTING_MESSAGE)
-	
-	elif dmode == "C":
-		verbLevel = VERB_CLOSING
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "C" + "  " + str(out) +  CLOSING_MESSAGE
-			writeToLog(dmode, out +  CLOSING_MESSAGE)
-	
-	elif dmode == "U":
-		print "[DreamPlex] " + "U  specify me!!!!!" + "  " + str(out)
-		writeToLog(dmode, out)
+		if dmode == "E" :
+			verbLevel = VERB_ERROR
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "E" + "  " + str(out)
+				writeToLog(dmode, out)
 		
-	elif dmode == "X":
-		verbLevel = VERB_EXTENDED
-		if verbLevel <= debugMode:
-			print "[DreamPlex] " + "D" + "  " + str(out)	
-			writeToLog(dmode, out)
+		elif dmode == "W":
+			verbLevel = VERB_WARNING
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "W" + "  " + str(out)
+				writeToLog(dmode, out)
 		
-	else:
-		print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
+		elif dmode == "I":
+			verbLevel = VERB_INFORMATION
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "I" + "  " + str(out)
+				writeToLog(dmode, out)
+		
+		elif dmode == "D":
+			verbLevel = VERB_DEBUG
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "D" + "  " + str(out)	
+				writeToLog(dmode, out)
+		
+		elif dmode == "S":
+			verbLevel = VERB_STARTING
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "S" + "  " + str(out) + STARTING_MESSAGE
+				writeToLog(dmode, out + STARTING_MESSAGE)
+		
+		elif dmode == "C":
+			verbLevel = VERB_CLOSING
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "C" + "  " + str(out) +  CLOSING_MESSAGE
+				writeToLog(dmode, out +  CLOSING_MESSAGE)
+		
+		elif dmode == "U":
+			print "[DreamPlex] " + "U  specify me!!!!!" + "  " + str(out)
+			writeToLog(dmode, out)
+			
+		elif dmode == "X":
+			verbLevel = VERB_EXTENDED
+			if verbLevel <= debugMode:
+				print "[DreamPlex] " + "D" + "  " + str(out)	
+				writeToLog(dmode, out)
+			
+		else:
+			print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
 	
 
 

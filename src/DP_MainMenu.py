@@ -82,6 +82,7 @@ class DPS_MainMenu(Screen):
 	g_filterDataMenu = None
 	nextExitIsQuit = True
 	currentService = None
+	plexInstance = None
 	
 	#===========================================================================
 	# 
@@ -241,7 +242,6 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
-
 		selection = self["menu"].getCurrent()
 		
 		printl("selection = " + str(selection), self, "D")
@@ -262,6 +262,10 @@ class DPS_MainMenu(Screen):
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
 					self.checkServerState()
+					
+					# now that we know the server we establish global plexInstance
+					instance = Singleton()
+					self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 					
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
@@ -334,8 +338,6 @@ class DPS_MainMenu(Screen):
 					self.executeSelectedEntry()
 					
 			printl("", self, "C")
-					
-	
 	
 	#===========================================================================
 	# 
@@ -392,11 +394,7 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		# sample: http://192.168.45.190:32400/search?type=1&query=fringe
-		instance = Singleton()
-		instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-		
-		plexInstance = instance.getPlexInstance()
-		serverUrl = plexInstance.getServerFromURL(self.s_url)
+		serverUrl = self.plexInstance.getServerFromURL(self.s_url)
 		
 		if searchString is not "" and searchString is not None:
 			self.s_url = serverUrl + "/search?type=1&query=" + searchString
@@ -662,18 +660,13 @@ class DPS_MainMenu(Screen):
 		'''
 		printl("", self, "S")
 		
-		instance = Singleton()
-		instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-		
-		plexInstance = instance.getPlexInstance()
-		
 		summerize = config.plugins.dreamplex.summerizeSections.value
 		
 		if summerize == True and filter == None:
-			serverData = plexInstance.getSectionTypes()
+			serverData = self.getSectionTypes()
 			self.g_sectionDataMenu = serverData
 		else:
-			serverData = plexInstance.displaySections(filter)
+			serverData = self.plexInstance.displaySections(filter)
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 		
 		self["menu"].setList(serverData)
@@ -688,12 +681,7 @@ class DPS_MainMenu(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-
-		menuData = plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
-
+		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
 		
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
@@ -701,6 +689,30 @@ class DPS_MainMenu(Screen):
 
 		printl("", self, "S")
 
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getSectionTypes(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		mainMenuList = []
+		params = {} 
+		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, params))
+		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, params))
+		
+		extend = False # SWITCH
+		
+		if extend == True:
+			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, params))
+			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, params))
+			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, params))
+		
+		printl("mainMenuList: " + str(mainMenuList), self, "D")
+		printl("", self, "C")
+		return mainMenuList
 #===============================================================================
 # HELPER
 #===============================================================================

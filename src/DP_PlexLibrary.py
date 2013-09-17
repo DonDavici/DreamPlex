@@ -129,14 +129,12 @@ _OVERLAY_PLEX_PARTIAL=5	#half - Reusing XBMC overlaytrained
 class PlexLibrary(Screen):
 	'''
 	'''
-	
 	g_sessionID=None
-	g_serverDict=[]
-	g_serverVersion=None
 	g_sections=[]
 	g_name = "Plexserver"
 	g_host = "192.168.45.190"
 	g_port = "32400"
+	g_currentServer = None
 	g_connectionType = None
 	g_showForeign = True
 	g_address = None # is later the combination of g_host : g_port
@@ -157,7 +155,8 @@ class PlexLibrary(Screen):
 	g_myplex_password = ""
 	g_myplex_token = ""
 	g_myplex_accessToken = ""
-	g_accessTokenHeader = None
+	g_accessTokenDictHeader = ""
+	g_accessTokenUrlHeader= ""
 	g_transcode = "true"
 	g_wolon = "true"
 	g_wakeserver = "00-11-32-12-C5-F9"
@@ -177,10 +176,15 @@ class PlexLibrary(Screen):
 	g_error = False
 	g_showUnSeenCounts = False
 	
+	##################
+	# CHECKED
+	##################
+	g_serverDict=[]
+	g_serverVersion=None
+	g_myplex_accessTokenDict = {}
+	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
-	g_txheaders = {
-				  'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',	
-				  }
+	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
 	
 	#===========================================================================
 	# 
@@ -194,7 +198,7 @@ class PlexLibrary(Screen):
 		self.g_session = session
 		self.g_error = False
 		printl("running on " + str(sys.version_info), self, "I")
-		
+		doIt = False
 		# global serverConfig
 		self.g_serverConfig = serverConfig
 				
@@ -276,7 +280,6 @@ class PlexLibrary(Screen):
 			
 			printl("using this serverIp: " +  self.g_host, self, "I")
 			printl("using this serverPort: " +  self.g_port, self, "I")
-		
 		else: # DNS
 			try:
 				self.g_host = str(socket.gethostbyname(serverConfig.dns.value))
@@ -292,8 +295,8 @@ class PlexLibrary(Screen):
 			self.leaveOnError()
 		else:
 			#Fill serverdata to global g_serverDict
-			self.discoverAllServers()
-		
+			self.prepareServerDict()
+			
 		self.g_serverVersion = self.getServerVersion()
 		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 			
@@ -319,30 +322,6 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 		return mainMenuList
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getSectionTypes(self):
-		'''
-		'''
-		printl("", self, "S")
-		
-		mainMenuList = []
-		params = {} 
-		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, params))
-		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, params))
-		
-		extend = False # SWITCH
-		
-		if extend == True:
-			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, params))
-			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, params))
-			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, params))
-		
-		printl("mainMenuList: " + str(mainMenuList), self, "D")
-		printl("", self, "C")
-		return mainMenuList  
 	
 	#============================================================================
 	# 
@@ -377,9 +356,12 @@ class PlexLibrary(Screen):
 						'type'		 : "Video" ,
 						'thumb'		: self.getFanart(section, section.get('address'), False) ,
 						'token'		: str(section['token']) }
-											   
-			#very dirty because in the for but no better way for now
-			self.g_myplex_accessToken = str(section['token'])
+
+			if self.g_connectionType == "2": # MYPLEX
+				# we have to do this because via myPlex there could be diffrent servers with other tokens
+				if str(section.get('address')) not in self.g_myplex_accessToken:
+					printl("section address" + section.get('address'), self, "D")
+					self.g_myplex_accessTokenDict[str(section.get('address'))] = str(section.get('token', None))
 			
 			#Determine what we are going to do process after a link is selected by the user, based on the content we find
 			
@@ -455,66 +437,12 @@ class PlexLibrary(Screen):
 					printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
 					continue
 		
+		if self.g_connectionType == "2": # MYPLEX
+			self.setAccessTokenHeader()
+		
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return mainMenuList  
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def discoverAllServers(self): # CHECKED
-		'''
-			Take the users settings and add the required master servers
-			to the server list.  These are the devices which will be queried
-			for complete library listings.  There are 3 types:
-				local server - from IP configuration
-				bonjour server - from a bonjour lookup
-				myplex server - from myplex configuration
-			Alters the global self.g_serverDict value
-			@input: None
-			@return: None	   
-		'''
-		printl("", self, "S")
-
-		#!!!!
-		self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
-		#!!!!
-			
-		if self.g_myplex_username != "": #check if this server has myplex data
-			printl( "DreamPlex -> Adding myplex as a server location", self, "I")
-			self.g_serverDict.append({'serverName': 'MYPLEX' ,
-								 'address'   : "my.plex.app" ,
-								 'discovery' : 'myplex' , 
-								 'token'	 : None ,
-								 'uuid'	  : None ,
-								 'role'	  : 'master' })
-		else:
-			
-			if not self.g_host or self.g_host == "<none>":
-				self.g_host = None
-			
-			elif not self.g_port:
-				printl( "No port defined.  Using default of " + DEFAULT_PORT, self, "I")
-				self.g_address = self.g_host + ":" + DEFAULT_PORT
-			
-			else:
-				self.g_address = self.g_host + ":" + self.g_port
-				printl( "Settings hostname and port: " + self.g_address, self, "I")
-		
-			if self.g_address is not None:
-				self.g_serverDict.append({'serverName': self.g_name ,
-									 'address'   : self.g_address ,
-									 'discovery' : 'local' , 
-									 'token'	 : None ,
-									 'uuid'	  : None ,
-									 'role'	  : 'master' })   
-
-		printl("serverList: " + str(self.g_serverDict), self, "I")
-		printl("", self, "C")
-		
-		printl("mainMenuList2: " + str(mainMenuList), self, "D")
-		printl("", self, "C")
-		return self.g_serverDict
 
 	#=============================================================================
 	# 
@@ -653,7 +581,9 @@ class PlexLibrary(Screen):
 		#===>
 		mainMenuList = []
 		#===>
-
+		server=self.getServerFromURL(p_url)
+		self.g_currentServer = server
+		
 		html = self.getURL(p_url)  
 				
 		try:
@@ -816,14 +746,14 @@ class PlexLibrary(Screen):
 		token = details.get('token', None)
 		printl("token: " + str(token), self, "D", True, 8)
 		if url_format:
-			if token:
+			if token is not None:
 				printl("", self, "C")
 				return prefix+"X-Plex-Token="+str(token)
 			else:
 				printl("", self, "C")
 				return ""
 		else:
-			if token:
+			if token is not None:
 				printl("", self, "C")
 				return {'X-Plex-Token' : token }
 			else:
@@ -1081,21 +1011,22 @@ class PlexLibrary(Screen):
 				
 			server=url.split('/')[serversplit]
 			urlPath="/"+"/".join(url.split('/')[urlsplit:])
-			printl("g_myplex_accessToken: " + str(self.g_myplex_accessToken), self, "D", True, 8)
+			#currentToken = self.g_myplex_accessTokenDict[str(server)]
+			#printl("currentToken: " + str(currentToken), self, "D", True, 8)
 			printl("server: " + str(server), self, "D")
 			printl("urlPath: " + str(urlPath), self, "D")
 
 			self.urlPath = urlPath
 			conn = httplib.HTTPConnection(server)
 			
-			if self.g_serverConfig.connectionType.value == "2":
-				printl("using myPlex - lets add auth token", self, "D")
-				authHeader = self.getAuthDetails({'token':self.g_myplex_accessToken}, False)
-				printl("header: " + str(authHeader), self, "D", True, 8)
-				conn.request(type, urlPath, headers=authHeader)
-			else:
-				printl("not using myPlex no token information will be added", self, "D")
-				conn.request(type, urlPath)
+			#if self.g_serverConfig.connectionType.value == "2":
+			printl("using myPlex - lets add auth token", self, "D")
+			authHeader = self.get_hTokenForServer()#self.getAuthDetails({'token':currentToken}, False)
+			printl("header: " + str(authHeader), self, "D", True, 8)
+			conn.request(type, urlPath, headers=authHeader)
+#			else:
+#				printl("not using myPlex no token information will be added", self, "D")
+#				conn.request(type, urlPath)
 			
 			data = conn.getresponse()
 	
@@ -1406,7 +1337,8 @@ class PlexLibrary(Screen):
 		fullList=[]
 		self.tmpAbc = []
 		self.tmpGenres = []
-				
+		server=self.getServerFromURL(url)
+		self.g_currentServer = server		
 		#get the server name from the URL, which was passed via the on screen listing..
 		if tree is None:
 			#Get some XML and parse it
@@ -1421,8 +1353,7 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 	
-		server=self.getServerFromURL(url)
-						
+
 		#Find all the video tags, as they contain the data we need to link to a file.
 		movies=tree.findall('Video')
 		
@@ -1446,6 +1377,9 @@ class PlexLibrary(Screen):
 		self.tmpAbc = []
 		self.tmpGenres = []
 		
+		server=self.getServerFromURL(url)
+		self.g_currentServer = server
+		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
 			html=self.getURL(url)
@@ -1459,8 +1393,8 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 	
-		server=self.getServerFromURL(url)
-	
+
+		
 		#For each directory tag we find
 		ShowTags=tree.findall('Directory') 
 		
@@ -2128,11 +2062,9 @@ class PlexLibrary(Screen):
 		
 		# set standard playurl
 		playurl=url
-
-		token = self.getAuthDetails({'token':self.g_myplex_accessToken},prefix="?")
-		if token.find('None') != -1:
-			token = ""
 		
+		token = self.get_aTokenForServer()
+
 		#alter playurl if needed
 		if protocol == "file":
 			printl( "We are playing a local file", self, "I")
@@ -2198,7 +2130,7 @@ class PlexLibrary(Screen):
 		return playerData
 	
 	#===========================================================================
-	# 
+	# DEPRECATED
 	#===========================================================================
 	def getAccessToken(self):
 		'''
@@ -2214,6 +2146,67 @@ class PlexLibrary(Screen):
 		printl("g_accessTokenHeader: " +  str(self.g_accessTokenHeader), self, "D", True, 6)
 		printl("", self, "C")
 		return self.g_accessTokenHeader
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setAccessTokenHeader(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		for key, value in self.g_myplex_accessTokenDict.iteritems():
+			self.g_myplex_accessTokenDict[key] = {}
+			
+			uToken = self.getAuthDetails({'token':value})
+			#printl("uToken: " +  str(uToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[key]["uToken"] = uToken
+			
+			hToken = self.getAuthDetails({'token':value}, False)
+			#printl("hToken: " +  str(hToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[key]["hToken"] = hToken
+			
+			aToken = self.getAuthDetails({'token':value}, prefix="?")
+			#printl("aToken: " +  str(aToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[key]["aToken"] = aToken
+			
+		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def get_hTokenForServer(self):
+		'''
+		'''
+		printl("", self, "S")
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		printl("self.g_currentServer: " + str(self.g_currentServer), self, "D")
+		printl("", self, "C")
+		return self.g_myplex_accessTokenDict[self.g_currentServer]["hToken"]
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def get_aTokenForServer(self):
+		'''
+		'''
+		printl("", self, "S")
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		printl("", self, "C")   
+		return self.g_myplex_accessTokenDict[self.g_currentServer]["aToken"]
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def get_uTokenForServer(self):
+		'''
+		'''
+		printl("", self, "S")
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		printl("", self, "C")   
+		return self.g_myplex_accessTokenDict[self.g_currentServer]["uToken"]
 	
 	#===========================================================================
 	# 
@@ -2621,7 +2614,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
-		self.discoverAllServers()
+		self.prepareServerDict()
 		possibleServers=[]
 		for serverData in self.resolveAllServers():
 			printl("serverData: " + str(serverData), self, "D")
@@ -3662,19 +3655,21 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		
-		new_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, urllib.quote_plus(url), width, height)
-		
-		if self.g_connectionType == "2": # MYPLEX
-			
-			if self.g_accessTokenHeader == None:
-				token = self.getAccessToken()
-			else:
-				token = self.g_accessTokenHeader
-			
-			new_url += token
+		transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s%s' % (server, urllib.quote_plus(url), width, height, self.get_uTokenForServer())
+		printl("transcode_url: " + str(transcode_url), self, "D")
+#		
+
+		#if self.g_connectionType == "2": # MYPLEX
+#			
+#			if self.g_accessTokenHeader == None:
+#				token = self.getAccessToken()
+#			else:
+#				token = self.g_accessTokenHeader
+#			
+#			new_url += token
 		
 		printl("", self, "C")   
-		return new_url
+		return transcode_url
 				  
 	#===============================================================================
 	# 
@@ -3926,17 +3921,8 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 		
-	def discoverAllServers(self): # CHECKED
+	def prepareServerDict(self): # CHECKED
 		'''
-			Take the users settings and add the required master servers
-			to the server list.  These are the devices which will be queried
-			for complete library listings.  There are 3 types:
-				local server - from IP configuration
-				bonjour server - from a bonjour lookup
-				myplex server - from myplex configuration
-			Alters the global self.g_serverDict value
-			@input: None
-			@return: None	   
 		'''
 		printl("", self, "S")
 
@@ -3944,16 +3930,15 @@ class PlexLibrary(Screen):
 		self.g_serverDict=[] #we clear g_serverDict because we use plex for now only with one server to seperate them within the plugin
 		#!!!!
 			
-		if self.g_myplex_username != "": #check if this server has myplex data
+		if self.g_connectionType == "2": # MYPLEX
 			printl( "DreamPlex -> Adding myplex as a server location", self, "I")
-			self.g_serverDict.append({'serverName': 'MYPLEX' ,
-								 'address'   : "my.plex.app" ,
-								 'discovery' : 'myplex' , 
-								 'token'	 : None ,
-								 'uuid'	  : None ,
-								 'role'	  : 'master' })
+			self.g_serverDict.append({	'serverName'	: 'MYPLEX',
+										'address'		: "my.plex.app",
+										'discovery'		: 'myplex',
+										'token'			: None,
+										'uuid'			: None,
+										'role'			: 'master'})
 		else:
-			
 			if not self.g_host or self.g_host == "<none>":
 				self.g_host = None
 			
@@ -3966,13 +3951,20 @@ class PlexLibrary(Screen):
 				printl( "Settings hostname and port: " + self.g_address, self, "I")
 		
 			if self.g_address is not None:
-				self.g_serverDict.append({'serverName': self.g_name ,
-									 'address'   : self.g_address ,
-									 'discovery' : 'local' , 
-									 'token'	 : None ,
-									 'uuid'	  : None ,
-									 'role'	  : 'master' })   
-		
+				self.g_serverDict.append({	'serverName'	: self.g_name,
+											'address'		: self.g_address,
+											'discovery'		: 'local', 
+											'token'			: None,
+											'uuid'			: None,
+											'role'			: 'master' })
+			
+			self.g_currentServer = self.g_address
+			printl("currentServer: " + str(self.g_currentServer), self, "D")
+			
+			self.g_myplex_accessTokenDict = {}
+			self.g_myplex_accessTokenDict[str(self.g_address)] = None
+			self.setAccessTokenHeader()
+
 		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "I")
 		printl("", self, "C")
 
@@ -4075,7 +4067,6 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		
 		if self.g_address is None:
 			# todo we have to find out a way to get the version even with myplex servers
 			self.g_serverVersion = "myPlex Server"
