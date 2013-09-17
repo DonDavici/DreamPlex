@@ -581,7 +581,9 @@ class PlexLibrary(Screen):
 		#===>
 		mainMenuList = []
 		#===>
-
+		server=self.getServerFromURL(p_url)
+		self.g_currentServer = server
+		
 		html = self.getURL(p_url)  
 				
 		try:
