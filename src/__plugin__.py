@@ -67,7 +67,7 @@ def getPlugins(where=None):
 				plist.append(plugin)
 		
 		plist.sort(key=lambda x: x.weight)
-		printl(plist, "__plugin__::getPlugins", "D")
+		printl(str(plist), "__plugin__::getPlugins", "D")
 		
 		printl("", "__plugin__::getPlugins", "C")
 		return plist
