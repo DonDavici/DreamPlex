@@ -3129,9 +3129,6 @@ class PlexLibrary(Screen):
 		extraData['token']			  = self.g_myplex_accessToken
 		extraData['key']				= movie.get('key','')
 		
-		subtitleData = self.getSelectedSubtitleDataById(details['server'], extraData['ratingKey'])
-		extraData['selectedSub']	= subtitleData.get('language')
-		
 		extraData['selectedAudio']	= ""
 
 		#Add extra media flag data
