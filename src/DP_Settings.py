@@ -438,8 +438,12 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
-			self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality))
-			self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
+			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder))
+			if self.current.universalTranscoder.value == False:
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality))
+				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
+			else:
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality))
 			
 		elif self.current.playbackType.value == "2":
 			printl("i am here", self, "D")

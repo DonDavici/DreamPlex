@@ -201,15 +201,21 @@ def initServerEntryConfig(data = None):
 	# no options at the moment
 	
 	# TRANSCODED
-	config.plugins.dreamplex.Entries[i].transcode		= ConfigYesNo(default = False)
-	config.plugins.dreamplex.Entries[i].quality			= ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
-	config.plugins.dreamplex.Entries[i].segments 		= ConfigInteger(default=5, limits=(1, 10))
+	config.plugins.dreamplex.Entries[i].universalTranscoder	= ConfigYesNo(default = True)
+	
+	# old transcoder settings
+	config.plugins.dreamplex.Entries[i].quality				= ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
+	config.plugins.dreamplex.Entries[i].segments 			= ConfigInteger(default=5, limits=(1, 10))
+	
+	# universal transcoder settings
+	config.plugins.dreamplex.Entries[i].uniQuality = ConfigSelection(default="3", choices = [("0", _("420x240, 320kbps")), ("1", _("576x320, 720 kbps")), ("2", _("720x480, 1,5mbps")), ("3", _("1024x768, 2mbps")),("4", _("1280x720, 3mbps")), ("5", _("1280x720, 4mbps")), ("6", _("1920x1080, 8mbps")), ("7", _("1920x1080, 10mbps")), ("8", _("1920x1080, 12mbps")), ("9", _("1920x1080, 20mbps"))])
+	
 	
 	printl("=== TRANSCODED ===", "__init__::initServerEntryConfig", "D")
-	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].transcode.value), "__init__::initServerEntryConfig", "D")
+	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].universalTranscoder.value), "__init__::initServerEntryConfig", "D")
 	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "D")
 	printl("segments: " + str(config.plugins.dreamplex.Entries[i].segments.value), "__init__::initServerEntryConfig", "D")
-	
+	printl("uniQuality: " + str(config.plugins.dreamplex.Entries[i].uniQuality.value), "__init__::initServerEntryConfig", "D")
 	# TRANSCODED VIA PROXY
 	
 	# DIRECT LOCAL
