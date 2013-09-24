@@ -2602,30 +2602,9 @@ class PlexLibrary(Screen):
 			
 		streamURL = ""
 		transcode = []
-		universalTranscoder = False
-		if universalTranscoder == False:
-			ts = int(time())
-			printl("Setting up HTTP Stream", self, "I")
-			streamPath = "video/:/transcode/segmented"
-			streamFile = 'start.m3u8'
-			transcode.append("identifier=com.plexapp.plugins.library")
-			transcode.append("ratingKey=%s" % id)
-			transcode.append("offset=0")
-			transcode.append("quality=%d" % int(self.g_quality ))
-			transcode.append("session=%s" % self.g_sessionID)
-			transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
-			transcode.append("url=%s%s" % (quote_plus('http://127.0.0.1:32400/'), quote_plus(filename)))
-			transcode.append("key=%s%s" % (quote_plus('http://127.0.0.1:32400/library/metadata/'), id))
-			transcode.append("3g=0")
-			transcode.append("httpCookies=")
-			transcode.append("userAgent=")
-			timestamp = "@%d" % ts
-			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
-			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
-			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
-			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
-		else:
-			ts = int(time())
+		ts = int(time())
+		if self.g_serverConfig.universalTranscoder.value:
+			videoQuality, videoResolution, maxVideoBitrate = self.getUniversalTranscoderSettings()
 			printl("Setting up HTTP Stream with universal transcoder", self, "I")
 			streamPath = "video/:/transcode/universal"
 			streamFile = 'start.m3u8'
@@ -2638,9 +2617,9 @@ class PlexLibrary(Screen):
 			transcode.append("3g=0")
 			transcode.append("directPlay=0")
 			transcode.append("directStream=0")
-			transcode.append("videoQuality=100")
-			transcode.append("videoResolution=1280x720")
-			transcode.append("maxVideoBitrate=4000")
+			transcode.append("videoQuality=" + videoQuality)
+			transcode.append("videoResolution=" + videoResolution)
+			transcode.append("maxVideoBitrate=" + maxVideoBitrate)
 			transcode.append("subtitleSize=100")
 			transcode.append("audioBoost=100")
 			transcode.append("waitForSegments=1")
@@ -2660,6 +2639,27 @@ class PlexLibrary(Screen):
 			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
 			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
 			#videoResolution=1280x720&maxVideoBitrate=4000&videoQuality=100
+		else:
+			printl("Setting up HTTP Stream", self, "I")
+			streamPath = "video/:/transcode/segmented"
+			streamFile = 'start.m3u8'
+			transcode.append("identifier=com.plexapp.plugins.library")
+			transcode.append("ratingKey=%s" % id)
+			transcode.append("offset=0")
+			transcode.append("quality=%d" % int(self.g_quality ))
+			transcode.append("session=%s" % self.g_sessionID)
+			transcode.append("secondsPerSegment=%d" % int(self.g_segments ))
+			transcode.append("url=%s%s" % (quote_plus('http://127.0.0.1:32400/'), quote_plus(filename)))
+			transcode.append("key=%s%s" % (quote_plus('http://127.0.0.1:32400/library/metadata/'), id))
+			transcode.append("3g=0")
+			transcode.append("httpCookies=")
+			transcode.append("userAgent=")
+			timestamp = "@%d" % ts
+			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
+			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
+			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
+			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
+
 		req = Request(streamURL)
 		#req.add_header('X-Plex-Client-Capabilities', self.g_capability)
 		#printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
@@ -3816,3 +3816,72 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return self.g_serverVersion
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getUniversalTranscoderSettings(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		quality = int(self.g_serverConfig.uniQuality.value)
+		
+		if quality == 0:
+			#420x240, 320kbps
+			videoResolution="420x240"
+			maxVideoBitrate="320"
+			videoQuality="30"
+		elif quality == 1:
+			#576x320, 720 kbps
+			videoResolution="576x320"
+			maxVideoBitrate="720"
+			videoQuality="40"
+		elif quality == 2:
+			#720x480, 1,5mbps
+			videoResolution="720x480"
+			maxVideoBitrate="1500"
+			videoQuality="60"
+		elif quality == 3:
+			#1024x768, 2mbps
+			videoResolution="1024x768"
+			maxVideoBitrate="2000"
+			videoQuality="60"
+		elif quality == 4:
+			#1280x720, 3mbps
+			videoResolution="1280x720"
+			maxVideoBitrate="3000"
+			videoQuality="75"
+		elif quality == 5:
+			#1280x720, 4mbps
+			videoResolution="1280x720"
+			maxVideoBitrate="4000"
+			videoQuality="100"
+		elif quality == 6:
+			#1920x1080, 8mbps
+			videoResolution="1920x1080"
+			maxVideoBitrate="8000"
+			videoQuality="60"
+		elif quality == 7:
+			#1920x1080, 10mbps
+			videoResolution="1920x1080"
+			maxVideoBitrate="10000"
+			videoQuality="75"
+		elif quality == 8:
+			#1920x1080, 12mbps
+			videoResolution="1920x1080"
+			maxVideoBitrate="12000"
+			videoQuality="90"
+		elif quality == 9:
+			#1920x1080, 20mbps
+			videoResolution="1920x1080"
+			maxVideoBitrate="20000"
+			videoQuality="100"
+		else:
+			#1920x1080, 20mbps
+			videoResolution="no settings"
+			maxVideoBitrate="no settings"
+			videoQuality="no settings"
+		
+		printl("", self, "C")
+		return videoQuality, videoResolution, maxVideoBitrate
