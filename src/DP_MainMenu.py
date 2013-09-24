@@ -249,12 +249,12 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_SERVER:
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.g_serverConfig = selection[2]
-					self.checkServerState()
 					
 					# now that we know the server we establish global plexInstance
-					instance = Singleton()
-					self.plexInstance = instance.getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 					
+					self.checkServerState()
+
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
