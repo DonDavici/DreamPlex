@@ -22,6 +22,10 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
+import cPickle as pickle
+
+from Components.config import config
+
 from DP_LibMain import DP_LibMain
 
 from DPH_Singleton import Singleton
@@ -46,6 +50,8 @@ class DP_LibMovies(DP_LibMain):
 		DP_LibMain.__init__(self, session, "movies")
 		
 		self.g_url = url
+		pickelName = "test"
+		self.moviePickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, pickelName, )
 
 		printl ("", self, "C")
 		
@@ -54,13 +60,29 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	def loadLibrary(self, params):
 		printl ("", self, "S")
-		printl("params =" + str(params), self, "D")
+		printl("params: " + str(params), self, "D")
 		
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
-		
-		library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
-
+		useCache = False
+		if useCache == True:
+			try:
+				fd = open(self.moviePickle, "rb")
+				pickleData = pickle.load(fd)
+				library = pickleData[0]
+				tmpAbc = pickleData[1]
+				tmpGenres = pickleData [2]
+				fd.close()
+				printl("from pickle", self, "D")
+			except:
+				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+				pickleData = library, tmpAbc, tmpGenres
+				fd = open(self.moviePickle, "wb")
+				pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+				fd.close()
+				printl("from server", self, "D")
+		else:
+			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 		# sort
 		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 		

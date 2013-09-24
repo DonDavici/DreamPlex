@@ -299,10 +299,16 @@ class PlexLibrary(Screen):
 			
 		self.g_serverVersion = self.getServerVersion()
 		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
-			
-		self.seenPic	= loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
-		self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
-		self.unseenPic  = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+		
+		useCache = False
+		if useCache == False:
+			self.seenPic	= loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
+			self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
+			self.unseenPic  = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
+		else:
+			self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
+			self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
+			self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
 								   
 		printl("", self, "C")
 
@@ -3195,23 +3201,23 @@ class PlexLibrary(Screen):
 			details['writer']   = " / ".join(tempwriter)
 		
 		extraData = {}
-		extraData['type']			   = "Video"
-		extraData['ratingKey']		  = str(movie.get('ratingKey', 0)) # primary key in plex
-		extraData['thumb']			  = self.getImage(movie, server, x = 195, y = 268, type = "thumb")
-		extraData['fanart_image']	   = self.getImage(movie, server, x = 560, y = 315, type = "art")
-		extraData['token']			  = self.g_myplex_accessToken
-		extraData['key']				= movie.get('key','')
+		extraData['type']			= "Video"
+		extraData['ratingKey']		= str(movie.get('ratingKey', 0)) # primary key in plex
+		extraData['thumb']			= self.getImage(movie, server, x = 195, y = 268, type = "thumb")
+		extraData['fanart_image']	= self.getImage(movie, server, x = 560, y = 315, type = "art")
+		extraData['token']			= self.g_myplex_accessToken
+		extraData['key']			= movie.get('key','')
 		
 		extraData['selectedAudio']	= ""
 
 		#Add extra media flag data
 		if self.g_skipmediaflags == "false":
-			extraData['contentRating']   = movie.get('contentRating', '')
-			extraData['videoResolution'] = mediaarguments.get('videoResolution', '')
-			extraData['videoCodec']	  = mediaarguments.get('videoCodec', '')
-			extraData['audioCodec']	  = mediaarguments.get('audioCodec', '')
-			extraData['aspectRatio']	 = mediaarguments.get('aspectRatio', '')
-			extraData['audioCodec']	  = mediaarguments.get('audioCodec', '')
+			extraData['contentRating']		= movie.get('contentRating', '')
+			extraData['videoResolution']	= mediaarguments.get('videoResolution', '')
+			extraData['videoCodec']			= mediaarguments.get('videoCodec', '')
+			extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
+			extraData['aspectRatio']		= mediaarguments.get('aspectRatio', '')
+			extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
 	
 		#Build any specific context menu entries
 		if self.g_skipcontext == "false":
