@@ -419,7 +419,6 @@ class DP_Player(MoviePlayer):
 		if self.seekstate != self.SEEK_STATE_PLAY :
 			printl( "Buffer filled start playing", self, "I")
 			self.setSeekState(self.SEEK_STATE_PLAY)
-			self.hide()
 	
 		if self.playbackType == "1":
 			if self.servermultiuser == True:
@@ -431,9 +430,6 @@ class DP_Player(MoviePlayer):
 					self.timelinewatcherThread.start()
 				except:
 					pass
-
-		#hide infobar to indicate buffer is ready
-		self.hide()
 		
 		#printl("", self, "C")
 
