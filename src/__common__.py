@@ -56,22 +56,8 @@ gConnectivity = None
 gLogFile = None
 gBoxType = None
 
-# ****************************** VERBOSITY Level *******************************
-VERB_ERROR			= 0 # "E" shows error
-VERB_INFORMATION	= 0 # "I" shows important highlights to have better overview if something really happening or not
-
-VERB_WARNING		= 1 # "W" shows warning
-
-VERB_DEBUG 			= 2 # "D" shows additional debug information
-
-VERB_STARTING		= 3 # "S" shows started functions/classes etc.
-VERB_CLOSING		= 3 # "C" shows closing functions/classes etc.
-
-VERB_EXTENDED		= 4 # "X" shows information that are not really needed at all can only be activated by hand
-
 STARTING_MESSAGE	= ">>>>>>>>>>"
 CLOSING_MESSAGE		= "<<<<<<<<<<"
-
 #===============================================================================
 # 
 #===============================================================================
