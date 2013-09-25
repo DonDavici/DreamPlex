@@ -2174,6 +2174,7 @@ class PlexLibrary(Screen):
 		playerData["fallback"] = self.fallback
 		playerData["locations"] = self.locations
 		playerData["currentFile"] = self.currentFile
+		playerData["universalTranscoder"] = self.g_serverConfig.universalTranscoder.value
 		
 		return playerData
 	

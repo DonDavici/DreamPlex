@@ -68,6 +68,7 @@ class DP_Player(MoviePlayer):
 	id = None
 	url = None
 	transcodingSession = None
+	universalTranscoder = False
 	videoData = None
 	mediaData = None
 	
@@ -108,6 +109,7 @@ class DP_Player(MoviePlayer):
 		self.url = str(playerData['playUrl'])
 		self.transcodingSession = str(playerData['transcodingSession'])
 		self.playbackType = str(playerData['playbackType'])
+		self.universalTranscoder = playerData['universalTranscoder']
 		
 		# lets prepare all additional data for a better experience :-)
 		self.title = str(self.videoData['title'])
@@ -497,7 +499,8 @@ class DP_Player(MoviePlayer):
 		
 		if answer:
 			self.handleProgress()
-			self.stopTranscoding()
+			if self.playbackType == "1":
+				self.stopTranscoding()
 			self.close()
 		
 		printl("", self, "C")
@@ -508,11 +511,7 @@ class DP_Player(MoviePlayer):
 	def doEofInternal(self, playing):
 		printl("", self, "S")
 		
-		self.handleProgress()
-		self.stopTranscoding()
-		#check this
-		#self.stop()
-		self.close()
+		self.leavePlayerConfirmed(True)
 		
 		printl("", self, "C")
 
@@ -531,8 +530,10 @@ class DP_Player(MoviePlayer):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
+		if self.servermultiuser == True:
+			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
 		#Legacy PMS Server server support before MultiUser version v0.9.8.0  
-		if self.servermultiuser == False:
+		else:
 			if currentTime < 30:
 				printl("Less that 30 seconds, will not set resume", self, "I")
 		
@@ -548,14 +549,13 @@ class DP_Player(MoviePlayer):
 
 		printl("", self, "C")	   
 
-	
 	#===========================================================================
 	# stopTranscoding
 	#===========================================================================
 	def stopTranscoding(self):
 		printl("", self, "S")
 		
-		if self.playbackType == "1" and self.servermultiuser == True:
+		if self.servermultiuser == True:
 			self.timelinewatcherthread_wait.set()
 			self.timelinewatcherthread_stop.set()
 		
@@ -564,10 +564,11 @@ class DP_Player(MoviePlayer):
 		
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
-		#sample from log /video/:/transcode/segmented/stop?session=0EBD197D-389A-4784-8CC5-709BAD5E1137&X-Plex-Client-Capabilities=protocols%3Dhttp-live-streaming%2Chttp-mp4-streaming%2Chttp-streaming-video%2Chttp-streaming-video-720p%2Chttp-mp4-video%2Chttp-mp4-video-720p%3BvideoDecoders%3Dh264%7Bprofile%3Ahigh%26resolution%3A1080%26level%3A41%7D%3BaudioDecoders%3Dmp3%2Caac%7Bbitrate%3A160000%7D&X-Plex-Client-Platform=iOS&X-Plex-Product=Plex%2FiOS&X-Plex-Version=3.0.2&X-Plex-Device-Name=DDiPhone [192.168.45.6:62662] (4 live)
-		plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
-		if self.servermultiuser == True:
-			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
+		
+		if self.universalTranscoder:
+			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
+		else:
+			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
 		
 		printl("", self, "C")
 	
@@ -648,10 +649,10 @@ class DP_Player(MoviePlayer):
 					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
 					plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "paused", str(currentTime*1000), str(totalTime*1000))
 
-				if seekState == self.SEEK_STATE_PLAY :
-					if self.servermultiuser:
-						printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
-						plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "playing", str(currentTime*1000), str(totalTime*1000))
+			if seekState == self.SEEK_STATE_PLAY :
+				if self.servermultiuser:
+					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
+					plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "playing", str(currentTime*1000), str(totalTime*1000))
 
 
 		except Exception, e:    
