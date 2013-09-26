@@ -69,26 +69,29 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
 		
-		ConfigListScreen.__init__(
-			self,
-			[
-				getConfigListEntry(_("Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")),
-				getConfigListEntry(_("Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")),
-				getConfigListEntry(_("Show Filter for Section"), config.plugins.dreamplex.showFilter, _("fill me")),
-				getConfigListEntry(_("Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("fill me")),
-				getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")),
-				getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
-				getConfigListEntry(_("Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")),
-				getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")),
-				getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")),
-				getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")),
-				getConfigListEntry(_("Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("fill me")),
-				getConfigListEntry(_("Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")),
-				
-			],
-			session = self.session,
-			on_change = self._changed
-		)
+		self.cfglist = []
+		ConfigListScreen.__init__(self, self.cfglist, session, on_change = self._changed)
+		
+#		ConfigListScreen.__init__(
+#			self,
+#			[
+#				getConfigListEntry(_("Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")),
+#				getConfigListEntry(_("Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")),
+#				getConfigListEntry(_("Show Filter for Section"), config.plugins.dreamplex.showFilter, _("fill me")),
+#				getConfigListEntry(_("Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("fill me")),
+#				getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")),
+#				getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")),
+#				getConfigListEntry(_("Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")),
+#				getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")),
+#				getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")),
+#				getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")),
+#				getConfigListEntry(_("Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("fill me")),
+#				getConfigListEntry(_("Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")),
+#				
+#			],
+#			session = self.session,
+#			on_change = self._changed
+#		)
 		
 		#getConfigListEntry(_("Use Autolanguage in Movieplayer"), config.plugins.dreamplex.autoLanguage, _("fill me")),
 		
@@ -105,7 +108,12 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			"red": self.keyCancel,
 			"cancel": self.keyCancel,
 			"ok": self.ok,
+			"left": self.keyLeft,
+			"right": self.keyRight,
 		}, -2)
+		
+		self.createSetup()
+		
 		self.onLayoutFinish.append(self.setCustomTitle)
 		
 		printl("", self, "C")
@@ -118,6 +126,51 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		self.setTitle(_("Settings"))
 
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def createSetup(self, data = None):
+		printl("", self, "S")
+		
+		separator = "".ljust(90,"_")
+		
+		self.cfglist = []
+		
+		# GENERAL SETTINGS
+		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry(_("Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")))
+		
+		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
+			self.cfglist.append(getConfigListEntry(_("Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("fill me")))
+		else:
+			# if the live startup stops is not set we have to turn of playtheme automatically
+			config.plugins.dreamplex.playTheme.value = False
+		
+		# USERINTERFACE SETTINGS
+		self.cfglist.append(getConfigListEntry("Userinteface Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry(_("Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Show Filter for Section"), config.plugins.dreamplex.showFilter, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")))
+		
+		# PATH SETTINGS
+		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry(_("Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")))
+		
+		# MISC
+		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry(_("Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")))
+
+		self["config"].list = self.cfglist
+		self["config"].l.setList(self.cfglist)
+		
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -146,6 +199,28 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 
 		self.saveAll()
 		self.close(None)
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyLeft(self):
+		printl("", self, "S")
+		
+		ConfigListScreen.keyLeft(self)
+		self.createSetup()
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyRight(self):
+		printl("", self, "S")
+		
+		ConfigListScreen.keyRight(self)
+		self.createSetup()
 		
 		printl("", self, "C")
 
