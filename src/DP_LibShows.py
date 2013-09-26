@@ -22,6 +22,10 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
+import cPickle as pickle
+
+from Components.config import config
+
 from Plugins.Extensions.DreamPlex.DP_LibMain import DP_LibMain
 
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
@@ -40,7 +44,7 @@ class DP_LibShows(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False):
+	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None):
 		'''
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		'''
@@ -49,6 +53,8 @@ class DP_LibShows(DP_LibMain):
 		DP_LibMain.__init__(self, session, "tvshows")
 		self.g_url = url
 		self.showEpisodesDirectly = showEpisodesDirectly
+		self.g_uuid = uuid
+		self.g_source = source
 		
 		printl ("", self, "C")
 
@@ -80,8 +86,29 @@ class DP_LibShows(DP_LibMain):
 				printl("show TV shows ...", self, "I")
 	
 				url = self.g_url
+				printl("url: " + str(url), self, "D")
 				
-				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+				self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
+				
+				if self.g_source == "cache":
+					try:
+						fd = open(self.tvShowPickle, "rb")
+						pickleData = pickle.load(fd)
+						library = pickleData[0]
+						tmpAbc = pickleData[1]
+						tmpGenres = pickleData [2]
+						fd.close()
+						printl("from pickle", self, "D")
+					except:
+						printl("movie cache not found ... saving", self, "D")
+						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+						reason = "cache file does not exists, recreating ..."
+						self.generatingCacheForTvShowSection(reason,library, tmpAbc, tmpGenres)
+						printl("fallback to: from server", self, "D")
+				else:
+					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+					reason = "generating cache first time, creating ..."
+					self.generatingCacheForTvShowSection(reason, library, tmpAbc, tmpGenres)
 	
 				# sort
 				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
@@ -95,8 +122,7 @@ class DP_LibShows(DP_LibMain):
 				printl ("", self, "C")
 				return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-	
-			
+
 			# Display the Seasons Menu
 			elif params["viewMode"] == "ShowSeasons":
 				printl("show seasons of TV show ...", self, "I")
@@ -132,6 +158,20 @@ class DP_LibShows(DP_LibMain):
 				return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
+		printl ("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def generatingCacheForTvShowSection(self, reason, library, tmpAbc, tmpGenres):
+		printl ("", self, "S")
+		
+		printl ("reason: " + str(reason), self, "S")
+		pickleData = library, tmpAbc, tmpGenres
+		fd = open(self.tvShowPickle, "wb")
+		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
+		
 		printl ("", self, "C")
 
 	#===========================================================================

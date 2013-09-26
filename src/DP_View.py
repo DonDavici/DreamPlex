@@ -36,6 +36,7 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
 from enigma import eServiceReference
+from enigma import loadPNG
 
 from urllib import urlencode, quote_plus
 
@@ -996,7 +997,16 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.listViewList = library[0]
 		self.origListViewList = library[0]
-		#printl("listViewList: " + str(library[0]), self, "D")
+		
+		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
+		# so we implement it here
+		self.newList = []
+		for listView in self.listViewList:
+			seenVisu = loadPNG(listView[4])
+			content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
+			self.newList.append(content)
+		
+		self.listViewList = self.newList
 		
 		self.onEnterPrimaryKeys = library[1]
 		printl("onEnterPrimaryKeys: " + str(library[1]), self, "D")

@@ -61,6 +61,7 @@ version = "changeMe"
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultLogFolderPath    = "/tmp/"
+defaultCacheFolderPath	= "/hdd/dreamplex/cache/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
 defaultConfigFolderPath	= "/hdd/dreamplex/config/"
@@ -69,9 +70,6 @@ config.plugins.dreamplex = ConfigSubsection()
 config.plugins.dreamplex.about                  = ConfigSelection(default = "1", choices = [("1", " ")])
 config.plugins.dreamplex.debugMode         		= ConfigYesNo(default = False)
 config.plugins.dreamplex.pluginfolderpath  		= ConfigText(default = defaultPluginFolderPath)
-config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
-config.plugins.dreamplex.mediafolderpath   		= ConfigText(default = defaultMediaFolderPath, fixed_size=False)
-config.plugins.dreamplex.configfolderpath   	= ConfigText(default = defaultConfigFolderPath, fixed_size=False)
 config.plugins.dreamplex.showInMainMenu	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   		= ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      		= ConfigYesNo(default = False)
@@ -81,7 +79,11 @@ config.plugins.dreamplex.fastScroll		   		= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 		= ConfigYesNo(default = False)
 config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = False)
 
-config.plugins.dreamplex.playerTempPath 			= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
+config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
+config.plugins.dreamplex.cachefolderpath  		= ConfigText(default = defaultCacheFolderPath, visible_width = 50, fixed_size = False)
+config.plugins.dreamplex.mediafolderpath   		= ConfigText(default = defaultMediaFolderPath, visible_width = 50, fixed_size=False)
+config.plugins.dreamplex.configfolderpath   	= ConfigText(default = defaultConfigFolderPath, visible_width = 50, fixed_size=False)
+config.plugins.dreamplex.playerTempPath 		= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()

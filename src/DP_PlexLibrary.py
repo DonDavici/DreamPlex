@@ -37,6 +37,8 @@ import hmac
 import uuid
 import string
 
+import cPickle as pickle
+
 #===============================================================================
 # 
 #===============================================================================
@@ -49,7 +51,6 @@ from urllib2 import urlopen, Request
 from random import randint, seed
 from threading import Thread
 from Queue import Queue
-from enigma import loadPNG
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -182,6 +183,7 @@ class PlexLibrary(Screen):
 	g_serverDict=[]
 	g_serverVersion=None
 	g_myplex_accessTokenDict = {}
+	g_sectionCache = None
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -199,6 +201,9 @@ class PlexLibrary(Screen):
 		self.g_error = False
 		printl("running on " + str(sys.version_info), self, "I")
 		doIt = False
+		
+		self.sectionCache = "%s%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "sections", )
+		
 		# global serverConfig
 		self.g_serverConfig = serverConfig
 				
@@ -300,15 +305,9 @@ class PlexLibrary(Screen):
 		self.g_serverVersion = self.getServerVersion()
 		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 		
-		useCache = False
-		if useCache == False:
-			self.seenPic	= loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png")
-			self.startedPic = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png")
-			self.unseenPic  = loadPNG("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png")
-		else:
-			self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
-			self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
-			self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
+		self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
+		self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
+		self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
 								   
 		printl("", self, "C")
 
@@ -431,10 +430,22 @@ class PlexLibrary(Screen):
 		mainMenuList = []
 		self.g_sections = []
 		#===>
-		
+
+		try:
+			fd = open(self.sectionCache, "rb")
+			self.g_sectionCache = pickle.load(fd)
+			fd.close()
+			printl("section chache data loaded", self, "D")
+			sectionCacheLoaded = True
+		except:
+			printl("section chache data not loaded", self, "D")
+			sectionCacheLoaded = False
+			self.g_sectionCache = {}
+
 		numOfServers=len(self.g_serverDict)
 		printl( "Using list of "+str(numOfServers)+" servers: " +  str(self.g_serverDict), self, "I")
-		self.getAllSections()
+		
+		self.getAllSections(sectionCacheLoaded)
 		
 		for section in self.g_sections:
 				
@@ -464,9 +475,13 @@ class PlexLibrary(Screen):
 			else:
 				path=path+'/all'	
 			
+			source = str(section.get('source'))
+			
 			params = {} 
 			params['t_url'] = self.getSectionUrl(address, path)
 			params['t_mode'] = str(section.get('type'))
+			params['t_source'] = source
+			params['t_uuid'] = str(section.get('uuid'))
 			
 			if self.g_secondary == "true":	  
 				if section.get('type') == 'show':
@@ -529,6 +544,10 @@ class PlexLibrary(Screen):
 		
 		if self.g_connectionType == "2": # MYPLEX
 			self.setAccessTokenHeader()
+			
+		fd = open(self.sectionCache, "wb")
+		pickle.dump(self.g_sectionCache, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
 		
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
@@ -537,7 +556,7 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	# 
 	#=============================================================================
-	def getAllSections(self): # CHECKED
+	def getAllSections(self, sectionCacheLoaded): # CHECKED
 		'''
 			from self.g_serverDict, get a list of all the available sections
 			and deduplicate the sections list
@@ -569,15 +588,15 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 			
-			for sections in tree:
+			for section in tree:
 				
 				#we need this until we do not support music and photos
-				type = sections.get('type', 'unknown')
+				type = section.get('type', 'unknown')
 				if type == "movie" or type == "show" or type == "artist": #or type == "artist" or type == "photo"
-					self.appendEntry(sections, server)
+					self.appendEntry(section, server, sectionCacheLoaded)
 				else:
 					printl("type: " + str(type), self, "D")
-					printl("excluded unsupported section: " + str(sections.get('title','Unknown').encode('utf-8')),self, "I")
+					printl("excluded unsupported section: " + str(section.get('title','Unknown').encode('utf-8')),self, "I")
 				
 		if multiple == True:
 			printl("there are other plex servers in the network => " + str(multiple_list), self, "I")
@@ -623,38 +642,58 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def appendEntry(self, sections, server):
+	def appendEntry(self, sections, server, sectionCacheLoaded):
 		'''
 		'''
 		#printl("", self, "S")
 		
+		source = "plex"
+		
+		uuid = sections.get('uuid','Unknown')
+		updatedAt = sections.get('updatedAt', 'Unknown')
+		printl("uuid: " + str(uuid), self, "D")
+		printl("updatedAt: " + str(updatedAt), self, "D")
+		
+		try:
+			if sectionCacheLoaded == False:
+				self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
+			
+			elif sectionCacheLoaded and uuid != "Unknown" and updatedAt != "Unknown":
+				printl("searching in cache ...", self, "D")
+
+				if int(self.g_sectionCache[uuid].get("updatedAt")) == int(updatedAt):
+					printl("unchanged data, using cache data ...", self, "D")
+					source = "cache"
+				else:
+					printl("updating cache ...", self, "D")
+					self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
+		except Exception, e:
+			printl("something went wrong with section cache", self, "D")
+			
 		if self.g_connectionType != "2": # is not myPlex		
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': self.g_host + ":" + self.g_port,
 								   'serverName' : self.g_name.encode('utf-8'),
-                                   'serverVersion' : sections.get('serverVersion','Unknown') ,
-								   'uuid' : sections.get('machineIdentifier','Unknown') ,
+								   'uuid' : uuid ,
 								   'path' : '/library/sections/' + sections.get('key') ,
 								   'token' : sections.get('accessToken',None) ,
 								   'location' : server['discovery'] ,
 								   'art' : sections.get('art') ,
-								   #'local' : sections.get('local') ,
+								   'source' : source,
 								   'type' : sections.get('type','Unknown') }) 
 			
 		else:
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': sections.get('address') + ":" + sections.get('port'),
 								   'serverName' : self.g_name.encode('utf-8'),
-                                   'serverVersion' : sections.get('serverVersion','Unknown') ,
-								   'uuid' : sections.get('machineIdentifier','Unknown') ,
+								   'uuid' : uuid,
 								   'path' : sections.get('path') ,
 								   'token' : sections.get('accessToken',None) ,
 								   'location' : server['discovery'] ,
 								   'art' : sections.get('art') ,
-								   #'local' : sections.get('local') ,
+								   'source' : source,
 								   'type' : sections.get('type','Unknown') }) 
 
-		#printl("accessToken: " + str(sections.get('accessToken',None)), self, "D")
 		#printl("", self, "C")
 
 	#=============================================================================

@@ -345,11 +345,13 @@ def checkPlexEnvironment():
 	logFolder = config.plugins.dreamplex.logfolderpath.value
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
 	configFolder = config.plugins.dreamplex.configfolderpath.value
+	cacheFolder = config.plugins.dreamplex.cachefolderpath.value
 	
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
 	checkDirectory(mediaFolder)
 	checkDirectory(configFolder)
+	checkDirectory(cacheFolder)
 	
 	printl2("","__common__::checkPlexEnvironment", "C")
 	

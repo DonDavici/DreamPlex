@@ -26,9 +26,9 @@ import cPickle as pickle
 
 from Components.config import config
 
-from DP_LibMain import DP_LibMain
+from Plugins.Extensions.DreamPlex.DP_LibMain import DP_LibMain
 
-from DPH_Singleton import Singleton
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
@@ -44,15 +44,15 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None):
+	def __init__(self, session, url=None, uuid=None, source=None):
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "movies")
 		
 		self.g_url = url
-		pickelName = "test"
-		self.moviePickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, pickelName, )
-
+		self.g_uuid = uuid
+		self.g_source = source
+		
 		printl ("", self, "C")
 		
 	#===========================================================================
@@ -61,11 +61,13 @@ class DP_LibMovies(DP_LibMain):
 	def loadLibrary(self, params):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
+
+		self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
 		
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
-		useCache = False
-		if useCache == True:
+		
+		if self.g_source == "cache":
 			try:
 				fd = open(self.moviePickle, "rb")
 				pickleData = pickle.load(fd)
@@ -75,14 +77,15 @@ class DP_LibMovies(DP_LibMain):
 				fd.close()
 				printl("from pickle", self, "D")
 			except:
+				printl("movie cache not found ... saving", self, "D")
 				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
-				pickleData = library, tmpAbc, tmpGenres
-				fd = open(self.moviePickle, "wb")
-				pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
-				fd.close()
-				printl("from server", self, "D")
+				reason = "cache file does not exists, recreating ..."
+				self.generatingCacheForMovieSection(reason,library, tmpAbc, tmpGenres)
+				printl("fallback to: from server", self, "D")
 		else:
 			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+			reason = "generating cache first time, creating ..."
+			self.generatingCacheForMovieSection(reason, library, tmpAbc, tmpGenres)
 		# sort
 		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
@@ -99,6 +102,20 @@ class DP_LibMovies(DP_LibMain):
 		printl ("", self, "C")
 		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
 
+	#===========================================================================
+	# 
+	#===========================================================================
+	def generatingCacheForMovieSection(self, reason, library, tmpAbc, tmpGenres):
+		printl ("", self, "S")
+		
+		printl ("reason: " + str(reason), self, "S")
+		pickleData = library, tmpAbc, tmpGenres
+		fd = open(self.moviePickle, "wb")
+		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
+		
+		printl ("", self, "C")
+	
 	#===========================================================================
 	# 
 	#===========================================================================

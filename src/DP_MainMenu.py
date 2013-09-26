@@ -91,8 +91,6 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 		
-		self["infoContainer"] = Label()
-		self["infoText"] = Label()
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
 
@@ -270,9 +268,11 @@ class DPS_MainMenu(Screen):
 			else:
 				printl("selected entry is executable", self, "D")
 				params = selection[2]
-				
+				printl("params: " + str(params), self, "D")
 				self.s_url = params.get('t_url', "notSet")
 				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
+				self.uuid = params.get('t_uuid', "notSet")
+				self.source = params.get('t_source', "notSet")
 				
 				isSearchFilter = params.get('isSearchFilter', "notSet")
 				
@@ -349,10 +349,11 @@ class DPS_MainMenu(Screen):
 		printl("self.s_url: " + str(self.s_url), self, "D")
 		
 		if self.selectedEntry.start is not None:
+			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source}
+			
 			if self.showEpisodesDirectly == True:
-				kwargs = {"url": self.s_url, "showEpisodesDirectly": self.showEpisodesDirectly}
-			else:
-				kwargs = {"url": self.s_url}
+				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
+
 			self.session.open(self.selectedEntry.start, **kwargs)
 					
 		elif self.selectedEntry.fnc is not None:
