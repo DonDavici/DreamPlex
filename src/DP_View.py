@@ -956,8 +956,9 @@ class DP_View(Screen, NumericalTextInput):
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
 		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
 		
-		printl("stoping theme playback", self, "D")
-		self.session.nav.stopService()
+		if config.plugins.dreamplex.playTheme.value == True:
+			printl("stoping theme playback", self, "D")
+			self.session.nav.stopService()
 		
 		if selectKeyValuePair == "backToSeasons":
 			self._load(self.currentSeasonsParams)
