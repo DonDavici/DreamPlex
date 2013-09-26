@@ -236,7 +236,9 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def __evUpdatedBufferInfo(self):
 		#printl("", self, "S")
+		
 		self.bufferInfo()
+		
 		#printl("", self, "C")
 	
 	#===========================================================================
@@ -244,9 +246,10 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def ok(self):
 		#printl("", self, "S")
+		
 		self.bufferInfo()
-
 		self.show()
+
 		#printl("", self, "C")
 	
 	#===========================================================================
@@ -262,6 +265,7 @@ class DP_Player(MoviePlayer):
 		self.bufferAvgOutRate = bufferInfo[2]
 		self.buffer3 = bufferInfo[3]
 		self.buffersize = bufferInfo[4]
+		
 		if int(self.bufferPercent) > 10:
 			self["bufferslider"].setValue(int(self.bufferPercent))
 			#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
@@ -532,7 +536,8 @@ class DP_Player(MoviePlayer):
 		
 		if self.servermultiuser == True:
 			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
-		#Legacy PMS Server server support before MultiUser version v0.9.8.0  
+		
+		#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
 		else:
 			if currentTime < 30:
 				printl("Less that 30 seconds, will not set resume", self, "I")
@@ -629,7 +634,7 @@ class DP_Player(MoviePlayer):
 	# 
 	#===========================================================================
 	def updateTimeline(self):
-		printl("ENTERING: updateTimeline" ,self,"S")
+		printl("" ,self,"S")
 		try:	
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
@@ -637,8 +642,8 @@ class DP_Player(MoviePlayer):
 			if totalTime > 100000:
 				return True
 
-			printl("CURRENTTIME: " + str(currentTime), self, "C")
-			printl("TOTALTIME: " + str(totalTime), self, "C")
+			printl("currentTime: " + str(currentTime), self, "C")
+			printl("totalTime: " + str(totalTime), self, "C")
 
 			instance = Singleton()
 			plexInstance = instance.getPlexInstance()
@@ -659,7 +664,7 @@ class DP_Player(MoviePlayer):
 			printl("exception: " + str(e), self, "E")
 			return False
 
-		printl("LEAVING: updateTimeline" ,self,"C")
+		printl("" ,self,"C")
 		return True		
 			
 	#===========================================================================

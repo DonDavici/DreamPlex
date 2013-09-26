@@ -2148,7 +2148,8 @@ class PlexLibrary(Screen):
 		self.monitorPlayback(id,self.server)
 
 		serverMultiUser = False
-		if self.getServerVersion() >= "0.9.8.0":
+		# multiuser works only if the server is compatible and we are connected via myPlex
+		if self.getServerVersion() >= "0.9.8.0" and self.g_connectionType == "2":
 			serverMultiUser = True
 		
 		printl("Server is MultiUser version: " + str(serverMultiUser),self,"I")
