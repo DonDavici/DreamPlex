@@ -95,12 +95,7 @@ class DPS_MainMenu(Screen):
 		self["infoText"] = Label()
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
-		#self["txt_blue"] = StaticText(_("Info"))
-		#self["txt_red"] = StaticText(_("Exit"))
-		#self["txt_green"] = StaticText(_("Settings"))
-		
-		self.setText("infoText", self.getInfoText())
-				
+
 		self.getServerList()
 		
 		self["menu"]= List(self.mainMenuList, True)
@@ -115,10 +110,6 @@ class DPS_MainMenu(Screen):
 				"up":		(self.up, ""),
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
-				#"info":	(self.info, ""),
-				#"blue":	(self.info, ""),
-				#"red":		(self.exit, ""),
-				#"green":	(self.getSettingsMenuList, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -142,43 +133,8 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		self.setTitle(_("DreamPlex"))
-		self.showInfo(False)
 		
 		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showInfo(self, visible):
-		printl("", self, "S")
-		
-		self.isInfoHidden = visible
-
-		if visible:
-			self["infoContainer"].show()
-			self["infoText"].show()
-		else:
-			self["infoContainer"].hide()
-			self["infoText"].hide()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getInfoText(self):
-		printl("", self, "S")
-		
-		content = ""
-		content += "Information\n\n"
-		content += "DreamPlex - a plex client for Enigma2 \n" 
-		content += "Version: \t" + getVersion() + "\n\n"
-		content += "Autor: \t DonDavici\n"
-		content += "Skinner: \t IPMAN\n"
-
-		
-		printl("", self, "C")
-		return content
 	
 	#===========================================================================
 	# 

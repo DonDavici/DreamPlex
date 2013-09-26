@@ -41,73 +41,78 @@ from Plugins.Extensions.DreamPlex.__init__ import getVersion
 #===============================================================================
 # class
 # DPS_Settings
-#===============================================================================        
+#===============================================================================		
 class DPS_About(Screen):
-    _session = None
-    
-    def __init__(self, session):
-        '''
-        '''
-        printl("", self, "S")
-        
-        Screen.__init__(self, session)
-        
-        self._session = session
-        
-        self["about"] = Label()
-        
-        
-        self["key_red"] = StaticText(_("Close"))
-        
-        self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
-        {
-            "red": self.keyCancel,
-            "cancel": self.keyCancel,
-        }, -2)
-        
-        self.onLayoutFinish.append(self.setContent)
-        
-        
-        printl("", self, "C")
+	_session = None
+	
+	def __init__(self, session):
+		'''
+		'''
+		printl("", self, "S")
+		
+		Screen.__init__(self, session)
+		
+		self._session = session
+		
+		self["about"] = Label()
+		
+		
+		self["key_red"] = StaticText(_("Close"))
+		
+		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
+		{
+			"red": self.keyCancel,
+			"cancel": self.keyCancel,
+		}, -2)
+		
+		self.onLayoutFinish.append(self.setContent)
+		
+		
+		printl("", self, "C")
 
-    #===========================================================================
-    # 
-    #===========================================================================
-    def setContent(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self.setTitle(_("About"))
-        self["about"].setText(self.getText())
-        printl("", self, "C")
-        
-    #===========================================================================
-    # 
-    #===========================================================================
-    def keyCancel(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        self.close()
-        
-        printl("", self, "C")
-        
-    #===========================================================================
-    # 
-    #===========================================================================
-    def getText(self):
-        '''
-        '''
-        printl("", self, "S")
-        
-        content = "DreamPlex - a plex client for Enigma2 \n" 
-        content += "Version: \t" + getVersion() + "\n\n"
-        content += "Autor: \t DonDavici\n"
-        content += "Skinner: \t IPMAN\n"
-        content += "\n\n If you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
-
-        
-        printl("", self, "C")
-        return content
+	#===========================================================================
+	# 
+	#===========================================================================
+	def setContent(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.setTitle(_("About"))
+		self["about"].setText(self.getText())
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyCancel(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		self.close()
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def getText(self):
+		'''
+		'''
+		printl("", self, "S")
+		
+		content = ""
+		content += "Information\n\n"
+		content += "DreamPlex - a plex client for Enigma2 \n" 
+		content += "Version: \t" + getVersion() + "\n\n"
+		content += "Autor: \t DonDavici\n"
+		content += "\n"
+		content += "Contributors: \t wezhunter\n"
+		content += "\t andyblac \n"
+		content += "\n"
+		content += "Skinner: \t IPMAN\n"
+		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
+		
+		printl("", self, "C")
+		return content
