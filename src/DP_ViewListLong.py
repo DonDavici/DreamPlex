@@ -95,12 +95,11 @@ class DPS_ViewListLong(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=False):
 		printl("", self , "S")
 		self.session = session
-		
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
-
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
+		printl("cache: " + str(cache), self, "D")
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.playTheme = config.plugins.dreamplex.playTheme.value
@@ -204,7 +203,7 @@ class DPS_ViewListLong(DP_View):
 			# if we are a show an if playtheme is enabled we start playback here
 			if self.playTheme: 
 				if self.startPlaybackNow:
-					super(DP_ViewListLong, self).startThemePlayback()
+					super(DPS_ViewListLong, self).startThemePlayback()
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)

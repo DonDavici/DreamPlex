@@ -94,11 +94,11 @@ class DPS_ViewMusic(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=False):
 		printl("", self , "S")
 		self.session = session
 		
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value

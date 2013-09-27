@@ -99,8 +99,6 @@ class DP_View(Screen, NumericalTextInput):
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
 
-	FAST_STILLPIC = False
-
 	onNumberKeyLastChar				= "#"
 	activeSort						= ("Default", None, False)
 	activeFilter					= ("All", (None, False), "")
@@ -115,8 +113,9 @@ class DP_View(Screen, NumericalTextInput):
 	showDetail						= False
 	g_forcedvd						= "false"
 	
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=False):
 		printl("", self, "S")
+		printl("cache: " + str(cache), self, "D")
 		
 		printl("viewName: "+ str(viewName), self, "I")
 		self.skinName = viewName[2]
@@ -124,6 +123,7 @@ class DP_View(Screen, NumericalTextInput):
 		NumericalTextInput.__init__(self)
 		self.skinName = viewName[2]
 		self.select = select
+		self.cache = cache
 		self.onFirstExecSort = sort
 		self.onFirstExecFilter = filter
 		
@@ -990,7 +990,15 @@ class DP_View(Screen, NumericalTextInput):
 			params["index"] = int
 		'''
 		printl("", self, "S")
-
+		printl("params: " + str(params), self, "D")
+		printl("cache: " + str(self.cache), self, "D")
+		
+		if params is None:
+			params = {}
+			params["viewMode"] = None
+			
+		params["cache"] = self.cache
+		
 		library = self.loadLibrary(params)
 		#library for e.g. = return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
 		# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry

@@ -125,14 +125,13 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showView(self, selection=None, sort=None, filter=None):
+	def showView(self, selection=None, sort=None, filter=None, cache=False):
 		'''
 		Displays the selected View
 		'''
 		printl("", self, "S")
-		
 		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [], -1)
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=filter)
+		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=filter, cache=cache)
 		
 		printl("", self, "C")
 
@@ -179,7 +178,7 @@ class DP_LibMain(Screen):
 						if cause[4]== self._views[i][1]:
 							self.currentViewIndex = i
 							break
-				self.showView(selection, sort, filter)
+				self.showView(selection, sort, filter, cache=True)
 			else:
 				self.close()
 		else:

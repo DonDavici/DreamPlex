@@ -82,7 +82,7 @@ class DP_LibShows(DP_LibMain):
 			return (library, ("viewMode", "ratingKey", ), None, "None", sort, filter)
 		else:
 			# Diplay all TVShows
-			if params is None:
+			if params["viewMode"] is None:
 				printl("show TV shows ...", self, "I")
 	
 				url = self.g_url
@@ -90,7 +90,7 @@ class DP_LibShows(DP_LibMain):
 				
 				self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
 				
-				if self.g_source == "cache":
+				if self.g_source == "cache" or params['cache'] == True:
 					try:
 						fd = open(self.tvShowPickle, "rb")
 						pickleData = pickle.load(fd)
