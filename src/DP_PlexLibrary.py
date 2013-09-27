@@ -660,12 +660,16 @@ class PlexLibrary(Screen):
 			
 			elif sectionCacheLoaded and uuid != "Unknown" and updatedAt != "Unknown":
 				printl("searching in cache ...", self, "D")
-
-				if int(self.g_sectionCache[uuid].get("updatedAt")) == int(updatedAt):
-					printl("unchanged data, using cache data ...", self, "D")
-					source = "cache"
-				else:
-					printl("updating cache ...", self, "D")
+				
+				try:
+					if int(self.g_sectionCache[uuid].get("updatedAt")) == int(updatedAt):
+						printl("unchanged data, using cache data ...", self, "D")
+						source = "cache"
+					else:
+						printl("updating cache ...", self, "D")
+						self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
+				except Exception, e:
+					printl("new uuid found, updating cache ...", self, "D")
 					self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
 		except Exception, e:
 			printl("something went wrong with section cache", self, "D")
