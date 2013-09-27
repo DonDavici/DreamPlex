@@ -36,7 +36,9 @@ from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config, getConfigListEntry, configfile
+from Components.FileList import FileList
 
+from Screens.LocationBox import MovieLocationBox
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
@@ -50,6 +52,7 @@ from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVers
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 from Plugins.Extensions.DreamPlex.DP_SystemCheck import DPS_SystemCheck
 from Plugins.Extensions.DreamPlex.DP_Mappings import DPS_Mappings
+from Plugins.Extensions.DreamPlex.DP_PathSelector import DPS_PathSelector
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
@@ -138,7 +141,10 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about))
 		self.cfglist.append(getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")))
-		self.cfglist.append(getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me")))
+		
+		self.databasepath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me"))
+		self.cfglist.append(self.databasepath)
+		
 		self.cfglist.append(getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _("fill me")))
 		
@@ -166,9 +172,27 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	#===========================================================================
 	def ok(self):
 		printl("", self, "S")
+
+		cur = self["config"].getCurrent()
+		if cur == self.databasepath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.databasepath[1].value)
 		
 		printl("", self, "C")
 
+	#===========================================================================
+	# 
+	#===========================================================================
+	def savePathConfig(self, res):
+		printl("", self, "S")
+		
+		if res is not None:
+			self.databasepath[1].value = res
+			config.plugins.dreamplex.save()
+		
+		self.createSetup()
+		
+		printl("", self, "C")
+		
 	#===========================================================================
 	# 
 	#===========================================================================

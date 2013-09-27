@@ -84,7 +84,7 @@ config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFo
 config.plugins.dreamplex.cachefolderpath  		= ConfigText(default = defaultCacheFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.mediafolderpath   		= ConfigText(default = defaultMediaFolderPath, visible_width = 50, fixed_size=False)
 config.plugins.dreamplex.configfolderpath   	= ConfigText(default = defaultConfigFolderPath, visible_width = 50, fixed_size=False)
-config.plugins.dreamplex.playerTempPath 		= ConfigText(default = defaultPlayerTempPath, visible_width = 50, fixed_size=False)
+config.plugins.dreamplex.playerTempPath 		= ConfigDirectory(default = defaultPlayerTempPath)
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
@@ -131,6 +131,7 @@ def printGlobalSettings():
 	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("mediafolderpath: " + str(config.plugins.dreamplex.mediafolderpath.value), "__init__::initGlobalSettings", "I")
+	printl("cachefolderpath: " + str(config.plugins.dreamplex.cachefolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("playerTempPath: " + str(config.plugins.dreamplex.playerTempPath.value), "__init__::initGlobalSettings", "I")
 	printl("showInMainMenu: " + str(config.plugins.dreamplex.showInMainMenu.value), "__init__::initGlobalSettings", "I")
 	printl("showFilter: " + str(config.plugins.dreamplex.showFilter.value), "__init__::initGlobalSettings", "I")

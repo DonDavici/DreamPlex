@@ -52,6 +52,7 @@ from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVers
 from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
 
 from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
+from Plugins.Extensions.DreamPlex.DP_PathSelector import DPS_PathSelector
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from twisted.python.versions import getVersionString
 
@@ -129,7 +130,7 @@ class DPS_Mappings(Screen):
 	def greenKey(self):
 		printl("", self, "S")
 		
-		self.session.openWithCallback(self.setLocalPathCallback, MovieLocationBox,_("Enter your local path segment here:"), "/mnt/x")
+		self.session.openWithCallback(self.setLocalPathCallback, DPS_PathSelector,"/")
 		
 		printl("", self, "C")
 		
