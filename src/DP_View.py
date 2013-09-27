@@ -98,6 +98,7 @@ class DP_View(Screen, NumericalTextInput):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
+	ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE = 3
 
 	onNumberKeyLastChar				= "#"
 	activeSort						= ("Default", None, False)
@@ -113,7 +114,7 @@ class DP_View(Screen, NumericalTextInput):
 	showDetail						= False
 	g_forcedvd						= "false"
 	
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=False):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
 		printl("", self, "S")
 		printl("cache: " + str(cache), self, "D")
 		
@@ -760,7 +761,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def onToggleView(self):
+	def onToggleView(self, forceUpdate=False):
 		printl("", self, "S")
 		
 		select = None
@@ -773,8 +774,11 @@ class DP_View(Screen, NumericalTextInput):
 					params[key] = selection[1][key]
 			select = (self.currentKeyValuePair, params)
 		
-		self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter))
-		
+		if forceUpdate:
+			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, select, self.activeSort, self.activeFilter))
+		else:
+			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter))
+			
 		printl("", self, "C")
 
 	#===========================================================================
@@ -872,18 +876,19 @@ class DP_View(Screen, NumericalTextInput):
 		selection = self["listview"].getCurrent()
 				
 		if selection is not None:
-			details		 = selection[1]
-			extraData	   = selection[2]
-			image		   = selection[3]
+			details		= selection[1]
+			extraData	= selection[2]
+			image		= selection[3]
 			
 			#details
-			viewMode		= details['viewMode']
-			server		  = details['server']
-			printl("server!!!!: " +str(server), self, "D")
+			viewMode	= details['viewMode']
+			server		= details['server']
+			printl("viewMode: " +str(viewMode), self, "D")
+			printl("server: " +str(server), self, "D")
 			
 			#extraData
-			url_path		= extraData['key']
-			printl("url_path!!!!: " +str(url_path), self, "D")
+			url_path	= extraData['key']
+			printl("url_path: " +str(url_path), self, "D")
 		
 			if (viewMode == "ShowSeasons"):
 				printl("viewMode -> ShowSeasons", self, "I")
@@ -913,11 +918,9 @@ class DP_View(Screen, NumericalTextInput):
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
 				
-
 			else:
 				printl("SOMETHING WENT WRONG", self, "W")
 				
-		printl("server2222: " +str(server), self, "D")
 		self.refresh()
 		
 		printl("", self, "C")
@@ -1384,13 +1387,23 @@ class DP_View(Screen, NumericalTextInput):
 		functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
 		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
 		functionList.append((_("Show media details"), Plugin("View", fnc=self.showMediaDetail), ))
+		functionList.append((_("Refresh this section"), Plugin("View", fnc=self.refreshSection), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 		
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
 			title=_("Media Functions"), list=functionList)
 		
 		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def refreshSection(self, unused=None, unused2=None):
+		printl("", self, "S")
+		
+		self.onToggleView(forceUpdate=True)
 	
+		printl("", self, "C")
 	#===========================================================================
 	# 
 	#===========================================================================

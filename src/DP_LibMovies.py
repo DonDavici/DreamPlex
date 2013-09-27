@@ -67,7 +67,7 @@ class DP_LibMovies(DP_LibMain):
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
 		
-		if self.g_source == "cache" or params['cache'] == True:
+		if (self.g_source == "cache" and params['cache'] is None) or params['cache'] == True:
 			try:
 				fd = open(self.moviePickle, "rb")
 				pickleData = pickle.load(fd)

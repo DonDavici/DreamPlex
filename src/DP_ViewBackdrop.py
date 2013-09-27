@@ -94,7 +94,7 @@ class DPS_ViewBackdrop(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=False):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
 		printl("", self , "S")
 		self.session = session
 		

@@ -158,7 +158,7 @@ class DP_LibMain(Screen):
 					filter = cause[3]
 				self.setDefault(selection, sort, filter)
 				self.close()
-			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW:
+			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW or cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE:
 				selection = None
 				sort = None
 				filter = None
@@ -178,7 +178,11 @@ class DP_LibMain(Screen):
 						if cause[4]== self._views[i][1]:
 							self.currentViewIndex = i
 							break
-				self.showView(selection, sort, filter, cache=True)
+				
+				if cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW:
+					self.showView(selection, sort, filter, cache=True)
+				else:
+					self.showView(selection, sort, filter, cache=False)
 			else:
 				self.close()
 		else:

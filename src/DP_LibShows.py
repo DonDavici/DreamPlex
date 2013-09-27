@@ -90,7 +90,7 @@ class DP_LibShows(DP_LibMain):
 				
 				self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
 				
-				if self.g_source == "cache" or params['cache'] == True:
+				if (self.g_source == "cache" and params['cache'] is None) or params['cache'] == True:
 					try:
 						fd = open(self.tvShowPickle, "rb")
 						pickleData = pickle.load(fd)
