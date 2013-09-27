@@ -117,6 +117,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		# GENERAL SETTINGS
 		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about))
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")))
+		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")))
 		
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set

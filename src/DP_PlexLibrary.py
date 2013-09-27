@@ -202,8 +202,6 @@ class PlexLibrary(Screen):
 		printl("running on " + str(sys.version_info), self, "I")
 		doIt = False
 		
-		self.sectionCache = "%s%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "sections", )
-		
 		# global serverConfig
 		self.g_serverConfig = serverConfig
 				
@@ -430,22 +428,23 @@ class PlexLibrary(Screen):
 		mainMenuList = []
 		self.g_sections = []
 		#===>
-
-		try:
-			fd = open(self.sectionCache, "rb")
-			self.g_sectionCache = pickle.load(fd)
-			fd.close()
-			printl("section chache data loaded", self, "D")
-			sectionCacheLoaded = True
-		except:
-			printl("section chache data not loaded", self, "D")
-			sectionCacheLoaded = False
-			self.g_sectionCache = {}
-
+		self.sectionCacheLoaded = False
+		if config.plugins.dreamplex.useCache.value == True:
+			self.sectionCache = "%s%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "sections", )
+			try:
+				fd = open(self.sectionCache, "rb")
+				self.g_sectionCache = pickle.load(fd)
+				fd.close()
+				printl("section chache data loaded", self, "D")
+				self.sectionCacheLoaded = True
+			except:
+				printl("section chache data not loaded", self, "D")
+				self.g_sectionCache = {}
+		
 		numOfServers=len(self.g_serverDict)
 		printl( "Using list of "+str(numOfServers)+" servers: " +  str(self.g_serverDict), self, "I")
 		
-		self.getAllSections(sectionCacheLoaded)
+		self.getAllSections()
 		
 		for section in self.g_sections:
 				
@@ -544,10 +543,11 @@ class PlexLibrary(Screen):
 		
 		if self.g_connectionType == "2": # MYPLEX
 			self.setAccessTokenHeader()
-			
-		fd = open(self.sectionCache, "wb")
-		pickle.dump(self.g_sectionCache, fd, 2) #pickle.HIGHEST_PROTOCOL
-		fd.close()
+		
+		if config.plugins.dreamplex.useCache.value == True:
+			fd = open(self.sectionCache, "wb")
+			pickle.dump(self.g_sectionCache, fd, 2) #pickle.HIGHEST_PROTOCOL
+			fd.close()
 		
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
@@ -556,7 +556,7 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	# 
 	#=============================================================================
-	def getAllSections(self, sectionCacheLoaded): # CHECKED
+	def getAllSections(self): # CHECKED
 		'''
 			from self.g_serverDict, get a list of all the available sections
 			and deduplicate the sections list
@@ -593,7 +593,7 @@ class PlexLibrary(Screen):
 				#we need this until we do not support music and photos
 				type = section.get('type', 'unknown')
 				if type == "movie" or type == "show" or type == "artist": #or type == "artist" or type == "photo"
-					self.appendEntry(section, server, sectionCacheLoaded)
+					self.appendEntry(section, server)
 				else:
 					printl("type: " + str(type), self, "D")
 					printl("excluded unsupported section: " + str(section.get('title','Unknown').encode('utf-8')),self, "I")
@@ -642,7 +642,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def appendEntry(self, sections, server, sectionCacheLoaded):
+	def appendEntry(self, sections, server):
 		'''
 		'''
 		#printl("", self, "S")
@@ -654,25 +654,30 @@ class PlexLibrary(Screen):
 		printl("uuid: " + str(uuid), self, "D")
 		printl("updatedAt: " + str(updatedAt), self, "D")
 		
-		try:
-			if sectionCacheLoaded == False:
-				self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
-			
-			elif sectionCacheLoaded and uuid != "Unknown" and updatedAt != "Unknown":
-				printl("searching in cache ...", self, "D")
-				
-				try:
-					if int(self.g_sectionCache[uuid].get("updatedAt")) == int(updatedAt):
-						printl("unchanged data, using cache data ...", self, "D")
-						source = "cache"
-					else:
-						printl("updating cache ...", self, "D")
-						self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
-				except Exception, e:
-					printl("new uuid found, updating cache ...", self, "D")
+		if config.plugins.dreamplex.useCache.value == True:
+			try:
+				if self.sectionCacheLoaded == False:
 					self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
-		except Exception, e:
-			printl("something went wrong with section cache", self, "D")
+				
+				elif self.sectionCacheLoaded and uuid != "Unknown" and updatedAt != "Unknown":
+					printl("searching in cache ...", self, "D")
+					
+					# check if uuid is in dict
+					if uuid in self.g_sectionCache:
+						if int(self.g_sectionCache[uuid].get("updatedAt")) == int(updatedAt):
+							printl("unchanged data, using cache data ...", self, "D")
+							source = "cache"
+						else:
+							printl("updating existing uuid in cache ...", self, "D")
+							self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
+					else:
+						printl("new uuid found, updating cache ...", self, "D")
+						self.g_sectionCache[uuid] = {'updatedAt': updatedAt}
+				else:
+					printl("uuid or updateAt are unknown", self, "D")
+			except Exception, e:
+				printl("something went wrong with section cache", self, "D")
+				printl("error: " + str(e), self, "D")
 			
 		if self.g_connectionType != "2": # is not myPlex		
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 

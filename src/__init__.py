@@ -78,6 +78,7 @@ config.plugins.dreamplex.showUnSeenCounts		= ConfigYesNo(default = False)
 config.plugins.dreamplex.fastScroll		   		= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 		= ConfigYesNo(default = False)
 config.plugins.dreamplex.stopLiveTvOnStartup 	= ConfigYesNo(default = False)
+config.plugins.dreamplex.useCache			 	= ConfigYesNo(default = True)
 
 config.plugins.dreamplex.logfolderpath     		= ConfigText(default = defaultLogFolderPath, visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.cachefolderpath  		= ConfigText(default = defaultCacheFolderPath, visible_width = 50, fixed_size = False)

@@ -125,7 +125,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showView(self, selection=None, sort=None, filter=None, cache=False):
+	def showView(self, selection=None, sort=None, filter=None, cache=None):
 		'''
 		Displays the selected View
 		'''
