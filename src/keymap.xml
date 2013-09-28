@@ -14,6 +14,11 @@
 		<key id="KEY_RED" mapto="red" flags="m" />
 		<key id="KEY_GREEN" mapto="green" flags="b" />
 	</map>
+	
+	<map context="DPS_Settings">
+		<key id="KEY_CHANNELUP" mapto="bouquet_up" flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="bouquet_down" flags="m" />
+	</map>
 
 	<map context="DP_View">
 		<key id="KEY_OK" mapto="ok" flags="m" />

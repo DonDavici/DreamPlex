@@ -81,8 +81,9 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 
 		self["key_red"] = StaticText(_("Cancel"))
 		self["key_green"] = StaticText(_("Save"))
+		self["help"] = StaticText()
 		
-		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
+		self["setupActions"] = ActionMap(["SetupActions", "ColorActions", "DPS_Settings"],
 		{
 			"green": self.keySave,
 			"red": self.keyCancel,
@@ -90,14 +91,14 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			"ok": self.ok,
 			"left": self.keyLeft,
 			"right": self.keyRight,
+			"bouquet_up":	self.keyBouquetUp,
+			"bouquet_down":	self.keyBouquetDown,
 		}, -2)
 		
 		self.createSetup()
 		
-		self.onLayoutFinish.append(self.setCustomTitle)
+		self["config"].onSelectionChanged.append(self.updateHelp)
 		
-		printl("", self, "C")
-
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -119,8 +120,8 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist = []
 		
 		# GENERAL SETTINGS
-		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about))
-		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me")))
+		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about, _("fill me1")))
+		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("fill me2")))
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("fill me")))
 		
@@ -132,14 +133,14 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			config.plugins.dreamplex.playTheme.value = False
 		
 		# USERINTERFACE SETTINGS
-		self.cfglist.append(getConfigListEntry("Userinteface Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Userinteface Settings" + separator, config.plugins.dreamplex.about, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Show Filter for Section"), config.plugins.dreamplex.showFilter, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("fill me")))
 		
 		# PATH SETTINGS
-		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about, _("fill me")))
 		
 		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), NoSave(config.plugins.dreamplex.mediafolderpath), _("fill me"))
 		self.cfglist.append(self.mediafolderpath)
@@ -157,7 +158,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(self.logfolderpath)
 		
 		# MISC
-		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about, _("fill me")))
 		self.cfglist.append(getConfigListEntry(_("> Debug Mode"), config.plugins.dreamplex.debugMode, _("fill me")))
 
 		self["config"].list = self.cfglist
@@ -173,6 +174,18 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		self._hasChanged = True
 
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def updateHelp(self):
+		printl("", self, "S")
+		
+		cur = self["config"].getCurrent()
+		printl("cur: " + str(cur), self, "D")
+		self["help"].text = cur and cur[2] or ""
+		
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -263,6 +276,26 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		ConfigListScreen.keyRight(self)
 		self.createSetup()
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyBouquetUp(self):
+		printl("", self, "S")
+		
+		self["config"].instance.moveSelection(self["config"].instance.pageUp)
+		
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def keyBouquetDown(self):
+		printl("", self, "S")
+		
+		self["config"].instance.moveSelection(self["config"].instance.pageDown)
+
 		printl("", self, "C")
 
 	#===========================================================================
