@@ -74,7 +74,7 @@ class DPS_PathSelector(Screen):
 	def cancel(self):
 		printl("", self, "S")
 		
-		self.close(None)
+		self.close(self["filelist"].getSelection()[0], self.type)
 		
 		printl("", self, "C")
 	

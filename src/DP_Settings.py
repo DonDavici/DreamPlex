@@ -30,6 +30,7 @@ from os import system, popen
 
 from Components.ActionMap import ActionMap, HelpableActionMap
 from Components.ConfigList import ConfigListScreen
+from Components.config import NoSave
 from Components.Label import Label
 from Components.Input import Input
 from Components.MenuList import MenuList
@@ -140,7 +141,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about))
 		
-		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me"))
+		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), NoSave(config.plugins.dreamplex.mediafolderpath), _("fill me"))
 		self.cfglist.append(self.mediafolderpath)
 		
 		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me"))
