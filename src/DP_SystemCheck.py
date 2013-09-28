@@ -154,7 +154,7 @@ class DPS_SystemCheck(Screen):
 				self.session.openWithCallback(self.startUpdate, MessageBox,_("Your current Version is " + str(installedVersion) + "\nUpdate to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
 
 			else:
-				self.session.openWithCallback(self.callback, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
+				self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
 
 		else:
 			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_OK)
@@ -193,12 +193,16 @@ class DPS_SystemCheck(Screen):
 			end = starter + 50
 			closer = self.response.find('",', starter, end)
 			printl("closer: " + str(closer), self, "D")
-			start = closer - 4
+			start = closer - 11
 			latestStabel = self.response[start:closer] # is a bit dirty but better than forcing users to install simplejson
+			printl("found version: " + str(latestStabel), self, "D")
 			isBeta = self.checkIfBetaVersion(latestStabel)
 			if isBeta == False:
 				isStable = True
+				latestStabel = latestStabel[-4:]
 				break
+			else:
+				leftLimiter = closer
 		
 		printl("latestStable: " + str(latestStabel), self, "D")
 		
