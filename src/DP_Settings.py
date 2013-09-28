@@ -146,14 +146,14 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me"))
 		self.cfglist.append(self.configfolderpath)
 		
-		self.logfolderpath = getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me"))
-		self.cfglist.append(self.logfolderpath)
-		
 		self.cachefolderpath = getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _("fill me"))
 		self.cfglist.append(self.cachefolderpath)
 
 		self.playerTempPath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me"))
 		self.cfglist.append(self.playerTempPath)
+		
+		self.logfolderpath = getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me"))
+		self.cfglist.append(self.logfolderpath)
 		
 		# MISC
 		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about))
