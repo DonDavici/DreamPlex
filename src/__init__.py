@@ -57,7 +57,7 @@ from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
 
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
-version = "changeMe"
+version = "0.1"
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultLogFolderPath    = "/tmp/"

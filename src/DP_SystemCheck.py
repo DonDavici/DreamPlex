@@ -132,28 +132,77 @@ class DPS_SystemCheck(Screen):
 			curl_string = 'curl -s -k "%s"' % ("https://api.github.com/repos/DonDavici/DreamPlex/tags")
 			
 			printl("curl_string: " + str(curl_string), self, "D")
-			response = popen(curl_string).read()
-			printl("response: " + str(response), self, "D")
+			self.response = popen(curl_string).read()
+			printl("response: " + str(self.response), self, "D")
 			starter = 19
-			closer = response.find('",', 0, 50)
+			closer = self.response.find('",', 0, 50)
 			printl("closer: " + str(closer), self, "D")
-			latestVersion = response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
+			latestVersion = self.response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
 			printl("latestVersion: " + str(latestVersion), self, "D")
 			
 			installedVersion = getVersion()
 			printl("InstalledVersion: " + str(installedVersion), self, "D")
 			
-			if latestVersion != installedVersion:
+			isBeta = self.checkIfBetaVersion(latestVersion)
+			printl("isBeta: " + str(isBeta), self, "D")
+			
+			if config.plugins.dreamplex.updateType.value == "1" and isBeta == True: # Stable
+				latestVersion = self.searchLatestStable()
+			
+			if latestVersion > installedVersion:
 				self.latestVersion = latestVersion
-				self.session.openWithCallback(self.startUpdate, MessageBox,_("Update to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
+				self.session.openWithCallback(self.startUpdate, MessageBox,_("Your current Version is " + str(installedVersion) + "\nUpdate to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
 			else:
 				self.session.openWithCallback(self.callback, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
-		
+			
 		else:
 			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_OK)
 		
 		printl("", self, "C")
-	
+
+	#===========================================================================
+	# 
+	#===========================================================================	
+	def checkIfBetaVersion(self, foundVersion):
+		printl("", self, "S")
+		
+		isBeta = foundVersion.find("beta")
+		if isBeta != -1:
+			
+			printl("", self, "C")
+			return True
+		else:
+			
+			printl("", self, "C")
+			return False
+			
+	#===========================================================================
+	# 
+	#===========================================================================s	
+	def searchLatestStable(self):
+		printl("", self, "S")
+		
+		isStable = False
+		
+		leftLimiter = 0
+		
+		while isStable == False:
+			starter = self.response.find('},', leftLimiter)
+			printl("starter: " + str(starter), self, "D")
+			end = starter + 50
+			closer = self.response.find('",', starter, end)
+			printl("closer: " + str(closer), self, "D")
+			start = closer - 4
+			latestStabel = self.response[start:closer] # is a bit dirty but better than forcing users to install simplejson
+			isBeta = self.checkIfBetaVersion(latestStabel)
+			if isBeta == False:
+				isStable = True
+				break
+		
+		printl("latestStable: " + str(latestStabel), self, "D")
+		
+		printl("", self, "C")
+		return latestStabel
 	
 	#===========================================================================
 	# 
@@ -179,7 +228,9 @@ class DPS_SystemCheck(Screen):
 		# RTV = 255 ERROR
 		'''
 		printl("", self, "S")
+		
 		remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
+
 		cmd = """
 BIN=""
 opkg > /dev/null 2>/dev/null
