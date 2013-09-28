@@ -177,12 +177,6 @@ class DP_Player(MoviePlayer):
 		"stop": self.leavePlayer,
 		"leavePlayer": self.hide,
 		"next": self.seekManual,
-		"seekFwd": self.seekManual,
-		"seekBack": self.seekManual,
-		"seekFwdDown": self.seekManual,
-		"seekBackDown": self.seekManual,
-		"seekFwdManual": self.seekManual,
-		"seekBackManual": self.seekManual,
 		"previous": self.seekManual
 		}, -2)
 		
@@ -749,10 +743,10 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def seekToMinute(self, minutes):
 		printl("", self, "S")
-		#self.server.seek(str(int(minutes)*60))
-		self.doSeek(int(minutes)*60)
-		#self.showInfobar()
-		
+
+		self.resumeStamp = int(minutes)*60
+		self.seekToStartPos()
+
 		printl("", self, "C")   
 
 	#===========================================================================
