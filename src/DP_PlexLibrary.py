@@ -1789,7 +1789,9 @@ class PlexLibrary(Screen):
 		
 		#get metadata for audio and subtitle
 		suburl="http://"+server+"/library/metadata/"+id
-				
+		
+		self.g_currentServer = server
+		
 		html=self.doRequest(suburl)
 		#printl("retrived html: " + str(html), self, "D")
 		
