@@ -116,7 +116,7 @@ class DPS_MainMenu(Screen):
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
 			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 			self.session.nav.stopService()
-	
+		
 		self.onLayoutFinish.append(self.setCustomTitle)
 		printl("", self, "C")
 
@@ -680,5 +680,8 @@ class DPS_MainMenu(Screen):
 		# next step is to find out what should happen if a button is pressed. 
 		# for now we do not see any incoming traffic from the app :-(
 		#HttpDeamon().startDeamon()
+		
+		if config.plugins.dreamplex.checkForUpdateOnStartup.value == True:
+			updateable = DPS_SystemCheck(self.session).checkForUpdate()
 		
 		printl("", self, "C")

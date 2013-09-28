@@ -341,4 +341,3 @@ def prepareEnvironment():
 	registerPlexFonts()
 	loadPlexSkin()
 	loadPlexPlugins()
-

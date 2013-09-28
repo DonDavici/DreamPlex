@@ -152,9 +152,10 @@ class DPS_SystemCheck(Screen):
 			if latestVersion > installedVersion:
 				self.latestVersion = latestVersion
 				self.session.openWithCallback(self.startUpdate, MessageBox,_("Your current Version is " + str(installedVersion) + "\nUpdate to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
+
 			else:
 				self.session.openWithCallback(self.callback, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
-			
+
 		else:
 			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_OK)
 		
