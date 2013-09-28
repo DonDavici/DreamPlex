@@ -139,14 +139,21 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about))
-		self.cfglist.append(getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me")))
-		self.cfglist.append(getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me")))
 		
-		self.databasepath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me"))
-		self.cfglist.append(self.databasepath)
+		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _("fill me"))
+		self.cfglist.append(self.mediafolderpath)
 		
-		self.cfglist.append(getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me")))
-		self.cfglist.append(getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _("fill me")))
+		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _("fill me"))
+		self.cfglist.append(self.configfolderpath)
+		
+		self.playerTempPath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _("fill me"))
+		self.cfglist.append(self.playerTempPath)
+		
+		self.logfolderpath = getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _("fill me"))
+		self.cfglist.append(self.logfolderpath)
+		
+		self.cachefolderpath = getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _("fill me"))
+		self.cfglist.append(self.cachefolderpath)
 		
 		# MISC
 		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about))
@@ -174,19 +181,50 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		printl("", self, "S")
 
 		cur = self["config"].getCurrent()
-		if cur == self.databasepath:
-			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.databasepath[1].value)
+		
+		if cur == self.mediafolderpath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.mediafolderpath[1].value, "media")
+		
+		elif cur == self.configfolderpath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.configfolderpath[1].value, "config")
+		
+		elif cur == self.playerTempPath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.playerTempPath[1].value, "player")
+
+		elif cur == self.logfolderpath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.logfolderpath[1].value, "log")
+
+		elif cur == self.cachefolderpath:
+			self.session.openWithCallback(self.savePathConfig,DPS_PathSelector,self.cachefolderpath[1].value, "cache")
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def savePathConfig(self, res):
+	def savePathConfig(self, pathValue, type):
 		printl("", self, "S")
 		
-		if res is not None:
-			self.databasepath[1].value = res
+		printl("pathValue: " + str(pathValue), self, "D")
+		printl("type: " + str(type), self, "D")
+		
+		if pathValue is not None:
+
+			if type == "media":
+				self.mediafolderpath[1].value = pathValue
+			
+			elif type == "config":
+				self.configfolderpath[1].value = pathValue
+			
+			elif type == "player":
+				self.playerTempPath[1].value = pathValue
+	
+			elif type == "log":
+				self.logfolderpath[1].value = pathValue
+	
+			elif type == "cache":
+				self.cachefolderpath[1].value = pathValue
+			
 			config.plugins.dreamplex.save()
 		
 		self.createSetup()

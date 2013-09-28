@@ -40,10 +40,12 @@ class DPS_PathSelector(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, initDir):
+	def __init__(self, session, initDir, type):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
+		
+		self.type = type
 		inhibitDirs = ["/bin", "/boot", "/dev", "/etc", "/lib", "/proc", "/sbin", "/sys", "/usr", "/var"]
 		inhibitMounts = []
 		self["filelist"] = FileList(initDir, showDirectories = True, showMountpoints = True, showFiles = False, inhibitMounts = inhibitMounts, inhibitDirs = inhibitDirs)
@@ -82,7 +84,7 @@ class DPS_PathSelector(Screen):
 	def green(self):
 		printl("", self, "S")
 		
-		self.close(self["filelist"].getSelection()[0])
+		self.close(self["filelist"].getSelection()[0], self.type)
 		
 		printl("", self, "C")
 
