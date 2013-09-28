@@ -135,7 +135,7 @@ class DPS_SystemCheck(Screen):
 			response = popen(curl_string).read()
 			printl("response: " + str(response), self, "D")
 			starter = 19
-			closer = response.find('",', 0, 30)
+			closer = response.find('",', 0, 50)
 			printl("closer: " + str(closer), self, "D")
 			latestVersion = response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
 			printl("latestVersion: " + str(latestVersion), self, "D")
