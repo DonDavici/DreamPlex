@@ -391,9 +391,6 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 
-	
-	
-
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -1361,8 +1358,10 @@ class PlexLibrary(Screen):
 		fullList=[]
 		self.tmpAbc = []
 		self.tmpGenres = []
+		
 		server=self.getServerFromURL(url)
 		self.g_currentServer = server		
+		
 		#get the server name from the URL, which was passed via the on screen listing..
 		if tree is None:
 			#Get some XML and parse it
@@ -1546,22 +1545,26 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getSeasonsOfShow(self, url ): # CHECKED
+	def getSeasonsOfShow(self, url, tree=None): # CHECKED
 		'''
 		'''
 		printl("", self, "S")
 		#Get URL, XML and parse
-		server=self.getServerFromURL(url)
-		html=self.doRequest(url)
 		
-		if html is False:
-			printl("", self, "C")
-			return
-
-		try:
-			tree = etree.fromstring(html)
-		except Exception, e:
-			self._showErrorOnTv("no xml as response", html)
+		server=self.getServerFromURL(url)
+		self.g_currentServer = server
+		
+		if tree is None:
+			html=self.doRequest(url)
+			
+			if html is False:
+				printl("", self, "C")
+				return
+	
+			try:
+				tree = etree.fromstring(html)
+			except Exception, e:
+				self._showErrorOnTv("no xml as response", html)
 		
 		willFlatten=False
 		if self.g_flatten == "1":
@@ -1648,25 +1651,15 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def getUniqueId (self, path):
-		'''
-		'''
-		printl("", self, "S")
-		
-		parts = string.split(path, "/")
-		id = parts[3]
-		
-		printl("", self, "C")
-		return id
-	
-	#===============================================================================
-	# 
-	#===============================================================================
 	def getEpisodesOfSeason(self, url, tree=None ): # CHECKED	
 		'''
 		'''
 		printl("", self, "S")
-					
+		
+		server=self.getServerFromURL(url)
+		
+		self.g_currentServer = server	
+		
 		if tree is None:
 			#Get URL, XML and Parse
 			html=self.doRequest(url)
@@ -1679,9 +1672,8 @@ class PlexLibrary(Screen):
 				tree = etree.fromstring(html)
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
-		
+				
 		ShowTags=tree.findall('Video')
-		server=self.getServerFromURL(url)
 		
 		if self.g_skipimages == "false":		
 			sectionart=self.getThumb(tree, server)
@@ -3801,8 +3793,8 @@ class PlexLibrary(Screen):
 		'''
 		'''
 		printl("", self, "S")
-		#printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
-		#printl("self.g_currentServer: " + str(self.g_currentServer), self, "D")
+		printl("self.g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		printl("self.g_currentServer: " + str(self.g_currentServer), self, "D")
 		printl("", self, "C")
 		return self.g_myplex_accessTokenDict[self.g_currentServer]["hToken"]
 
