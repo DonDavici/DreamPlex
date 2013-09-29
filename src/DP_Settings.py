@@ -99,6 +99,8 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		self["config"].onSelectionChanged.append(self.updateHelp)
 		
+		printl("", self, "C")
+		
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -530,6 +532,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		self["key_green"] = StaticText(_("OK"))
 		self["key_blue"] = StaticText(_("Delete"))
 		self["key_yellow"] = StaticText(_("mappings"))
+		self["help"] = StaticText()
 		
 		if entry is None:
 			self.newmode = 1
@@ -546,6 +549,8 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 
 		self.createSetup()
 		
+		self["config"].onSelectionChanged.append(self.updateHelp)
+		
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -558,44 +563,44 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		self.cfglist = []
 		##
-		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about, _("fill me1")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state))
-		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name))
+		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("fill me1")))
+		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _("fill me1")))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Connection Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Connection Settings" + separator, config.plugins.dreamplex.about, _("fill me1")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType))
+		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _("fill me1")))
 		
 		if self.current.connectionType.value == "0": # IP
-			self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port))
+			self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _("fill me1")))
 		elif self.current.connectionType.value == "1": # DNS
-			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port))
+			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _("fill me1")))
 		elif self.current.connectionType.value == "2": # MYPLEX
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _("fill me1")))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Playback Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Playback Settings" + separator, config.plugins.dreamplex.about, _("fill me1")))
 		##
 		
-		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType))
+		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType, _("fill me1")))
 		if self.current.playbackType.value == "0":
 			self.useMappings = False
 			
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
-			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder))
+			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _("fill me1")))
 			if self.current.universalTranscoder.value == False:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality))
-				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _("fill me1")))
+				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _("fill me1")))
 			else:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _("fill me1")))
 			
 		elif self.current.playbackType.value == "2":
 			printl("i am here", self, "D")
@@ -609,13 +614,13 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			#self.cfglist.append(getConfigListEntry(_(">> Servers root"), self.current.nasRoot))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Wake On Lan Settings" + separator, config.plugins.dreamplex.about))
+		self.cfglist.append(getConfigListEntry("Wake On Lan Settings" + separator, config.plugins.dreamplex.about, _("fill me1")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol))
+		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol, _("fill me1")))
 
 		if self.current.wol.value == True:
-			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac))
-			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay))
+			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac, _("fill me1")))
+			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _("fill me1")))
 		
 		#===================================================================
 		# 
@@ -632,6 +637,18 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			
 		printl("", self, "C")
 	
+	#===========================================================================
+	# 
+	#===========================================================================
+	def updateHelp(self):
+		printl("", self, "S")
+		
+		cur = self["config"].getCurrent()
+		printl("cur: " + str(cur), self, "D")
+		self["help"].text = cur and cur[2] or ""
+		
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================

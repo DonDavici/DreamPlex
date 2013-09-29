@@ -38,8 +38,6 @@
         <!-- visu -->
          <eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#70000000" transparent="1" />
          <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0" />
-            
-        
          <widget name="config" zPosition="3" position="125,180" size="1025,250" transparent="1" itemHeight="35" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png"/>
          <widget source="help" render="Label" position="125,500" size="1025,100" font="Saint; 22" foregroundColor="#5C5C5C" zPosition="30" />
          <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" valign="top">
@@ -193,8 +191,8 @@
         <eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#ffffffff" transparent="1" />
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/settings-fs8.png" position="0,0" zPosition="2" size="1280,720" transparent="0" />
         <!-- content -->
-        <widget name="config" zPosition="3" position="125,205" size="1025,370" transparent="1" itemHeight="30" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png"/>
-        
+        <widget name="config" zPosition="3" position="125,180" size="1025,250" transparent="1" itemHeight="35" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png"/>
+        <widget source="help" render="Label" position="125,500" size="1025,100" font="Saint; 22" foregroundColor="#5C5C5C" zPosition="30" />
         <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" valign="top">
            <convert type="ClockToText">Default</convert>
         </widget>
