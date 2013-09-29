@@ -180,6 +180,10 @@ class DP_Player(MoviePlayer):
 		"previous": self.seekManual
 		}, -2)
 		
+		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
+		if self.has_key('MovieListActions'):
+			self["MovieListActions"].setEnabled(False)
+		
 		service1 = self.session.nav.getCurrentService()
 		self.seek = service1 and service1.seek()
 
