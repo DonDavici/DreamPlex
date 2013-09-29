@@ -1164,7 +1164,7 @@ class PlexLibrary(Screen):
 	#========================================================================
 	# 
 	#========================================================================
-	def mediaType(self, partData, server, dvdplayback=False ): # CHECKED
+	def mediaType(self, partData, server): # CHECKED
 		'''
 		'''
 		printl("", self, "S")   
@@ -1230,14 +1230,8 @@ class PlexLibrary(Screen):
 			
 			self.fallback = True
 			printl("No local mount override possible ... switching to transcoded mode", self, "I")
-			#===================================================================
-			# global self.g_stream
-			#===================================================================
-			if dvdplayback:
-				printl("Forcing SMB for DVD playback", self, "I")
-				self.g_stream="2"
-			else:
-				self.g_stream="1"
+
+			self.g_stream="1"
 			
 		# 1 is stream no matter what
 		if self.g_stream == "1":
@@ -2053,8 +2047,10 @@ class PlexLibrary(Screen):
 		
 		#Get the Parts info for media type and source selection 
 		for part in fromParts:
+			printl("part.attrib: " + str(part.attrib), self, "D")
+
 			try:
-				bits=part.get('key'), part.get('file')
+				bits=part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
 				parts.append(bits)
 				partsCount += 1
 			except: pass
@@ -2062,12 +2058,14 @@ class PlexLibrary(Screen):
 		if self.g_streamControl == "1" or self.g_streamControl == "2":
 	
 			contents="all"
-			tags=tree.getiterator('Stream')
-
+			fromStream = tree.getiterator('Stream')
+			printl("fromStream: " + str(fromStream), self, "D")
 			#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle) 
 			
-			for bits in tags:
+			for bits in fromStream:
+				printl("bits.attrib: " + str(bits.attrib), self, "D")
 				stream=dict(bits.items())
+				printl("stream: " + str(stream), self, "D")
 				if stream['streamType'] == '2': #audio
 					audioCount += 1
 					audioOffset += 1

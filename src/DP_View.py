@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import math
+import time
 
 from Components.ActionMap import HelpableActionMap
 from Components.MenuList import MenuList
@@ -42,7 +43,7 @@ from urllib import urlencode, quote_plus
 
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
 #===============================================================================
@@ -1193,7 +1194,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================
 	# 
 	#===========================================================
-	def selectMedia(self, count, options, server ):   # CHECKED
+	def selectMedia(self, count, options, server ):
 		printl("", self, "S")
 		
 		#if we have two or more files for the same movie, then present a screen
@@ -1203,49 +1204,27 @@ class DP_View(Screen, NumericalTextInput):
 		self.dvdplayback=False
 		
 		if count > 1:
-			printl("count higher than 1 SOLVE THIS", self, "I") 
-	#==========================================================================
-	#	   dialogOptions=[]
-	#	   dvdIndex=[]
-	#	   indexCount=0
-	#	   for items in options:
-	# 
-	#		   name=items[1].split('/')[-1]
-	#	   
-	#		   if self.g_forcedvd == "true":
-	#			   if '.ifo' in name.lower():
-	#				   printl( "Found IFO DVD file in " + name )
-	#				   name="DVD Image"
-	#				   dvdIndex.append(indexCount)
-	#				   
-	#		   dialogOptions.append(name)
-	#		   indexCount+=1
-	#   
-	#	   printl("Create selection dialog box - we have a decision to make!") 
-	#	   startTime = xbmcgui.Dialog()
-	#	   result = startTime.select('Select media to play',dialogOptions)
-	#	   if result == -1:
-	#		   return None
-	#	   
-	#	   if result in dvdIndex:
-	#		   printl( "DVD Media selected")
-	#		   self.dvdplayback=True
-	#==========================================================================
+			printl("we have more than one playable part ...", self, "I") 
 			indexCount=0
 			functionList = []
 			
 			for items in self.options:
-				name=items[1].split('/')[-1]
+				printl("item: " + str(items), self, "D")
+				if items[1] is not None:
+					name=items[1].split('/')[-1]
+				else:
+					size = convertSize(int(items[3]))
+					duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
+					# this is the case when there is no information of the real file name
+					name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
+				
+				printl("name " + str(name), self, "D")
 				functionList.append((name ,indexCount, ))
 				indexCount+=1
 			
-			self.session.openWithCallback(self.setSelectedMedia(), ChoiceBox, title=_("Select media to play"), list=functionList)
+			self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
 			
 		else:
-			if self.g_forcedvd == "true":
-				if '.ifo' in self.options[result]:
-					self.dvdplayback=True
-			
 			self.setSelectedMedia()
 
 		printl("", self, "C")
@@ -1259,9 +1238,11 @@ class DP_View(Screen, NumericalTextInput):
 		printl("choice: " + str(choice), self, "D")
 		
 		if choice is not None:
-			result = choice[1]
+			result = int(choice[1])
 		
-		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0] , 'file' : self.options[result][1]},self.server,self.dvdplayback)
+		printl("result: " + str(result), self, "D")
+		
+		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
 		
 		self.playSelectedMedia()
 

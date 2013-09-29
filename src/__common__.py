@@ -26,6 +26,7 @@ import sys
 import os
 import datetime
 import shutil
+import math
 
 from enigma import getDesktop, addFont
 from skin import loadSkin
@@ -781,3 +782,21 @@ def indentXml(elem, level=0, more_sibs=False):
 	return elem
 	
 	printl2("", "__common__::indentXml", "C")
+
+#===========================================================================
+# 
+#===========================================================================	
+def convertSize(size):
+	printl2("", "__common__::convertSize", "S")
+	
+	size_name = ("KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+	i = int(math.floor(math.log(size,1024)))
+	p = math.pow(1024,i)
+	s = round(size/p,2)
+	
+	if (s > 0):
+		return '%s %s' % (s,size_name[i])
+	else:
+		return '0B'
+	
+	printl2("", "__common__::convertSize", "C")
