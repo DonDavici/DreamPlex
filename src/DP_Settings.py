@@ -122,10 +122,10 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist = []
 		
 		# GENERAL SETTINGS
-		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _("")))
+		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
 		
 		if config.plugins.dreamplex.showUpdateFunction.value == True:
 			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
@@ -133,39 +133,39 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
-			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _("")))
+			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
 			config.plugins.dreamplex.playTheme.value = False
 		
 		# USERINTERFACE SETTINGS
-		self.cfglist.append(getConfigListEntry("Userinteface Settings" + separator, config.plugins.dreamplex.about, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Summerize Sections"), config.plugins.dreamplex.summerizeSections, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Show Filter for Section"), config.plugins.dreamplex.showFilter, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _("")))
+		self.cfglist.append(getConfigListEntry(_("Userinterface Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Summerize Sections"), config.plugins.dreamplex.summerizeSections, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Show Filter for Section"), config.plugins.dreamplex.showFilter, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _(" ")))
 		
 		# PATH SETTINGS
-		self.cfglist.append(getConfigListEntry("Path Settings" + separator, config.plugins.dreamplex.about, _("")))
+		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		
-		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), NoSave(config.plugins.dreamplex.mediafolderpath), _(""))
+		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), NoSave(config.plugins.dreamplex.mediafolderpath), _(" "))
 		self.cfglist.append(self.mediafolderpath)
 		
-		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _(""))
+		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _(" "))
 		self.cfglist.append(self.configfolderpath)
 		
-		self.cachefolderpath = getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _(""))
+		self.cachefolderpath = getConfigListEntry(_("> Cache Folder Path"), config.plugins.dreamplex.cachefolderpath, _(" "))
 		self.cfglist.append(self.cachefolderpath)
 
-		self.playerTempPath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _(""))
+		self.playerTempPath =  getConfigListEntry(_("> Player Temp Path"), config.plugins.dreamplex.playerTempPath, _(" "))
 		self.cfglist.append(self.playerTempPath)
 		
-		self.logfolderpath = getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _(""))
+		self.logfolderpath = getConfigListEntry(_("> Log Folder Path"), config.plugins.dreamplex.logfolderpath, _(" "))
 		self.cfglist.append(self.logfolderpath)
 		
 		# MISC
-		self.cfglist.append(getConfigListEntry("Misc Settings" + separator, config.plugins.dreamplex.about, _("")))
-		self.cfglist.append(getConfigListEntry(_("> Debug Mode"), config.plugins.dreamplex.debugMode, _("")))
+		self.cfglist.append(getConfigListEntry(_("Misc Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Debug Mode"), config.plugins.dreamplex.debugMode, _(" ")))
 
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
@@ -564,44 +564,44 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		self.cfglist = []
 		##
-		self.cfglist.append(getConfigListEntry("General Settings" + separator, config.plugins.dreamplex.about, _("")))
+		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _("-")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("")))
-		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _("")))
+		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _(" ")))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Connection Settings" + separator, config.plugins.dreamplex.about, _("")))
+		self.cfglist.append(getConfigListEntry(_("Connection Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _("")))
+		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
 		
 		if self.current.connectionType.value == "0": # IP
-			self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _("")))
+			self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
 		elif self.current.connectionType.value == "1": # DNS
-			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _("")))
+			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
 		elif self.current.connectionType.value == "2": # MYPLEX
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _("")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _(" ")))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Playback Settings" + separator, config.plugins.dreamplex.about, _("")))
+		self.cfglist.append(getConfigListEntry(_("Playback Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
 		
-		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType, _("")))
+		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType, _(" ")))
 		if self.current.playbackType.value == "0":
 			self.useMappings = False
 			
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
-			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _("")))
+			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _(" ")))
 			if self.current.universalTranscoder.value == False:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _("")))
-				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _("")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _(" ")))
 			else:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _("")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _(" ")))
 			
 		elif self.current.playbackType.value == "2":
 			printl("i am here", self, "D")
@@ -615,13 +615,13 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			#self.cfglist.append(getConfigListEntry(_(">> Servers root"), self.current.nasRoot))
 		
 		##
-		self.cfglist.append(getConfigListEntry("Wake On Lan Settings" + separator, config.plugins.dreamplex.about, _("")))
+		self.cfglist.append(getConfigListEntry(_("Wake On Lan Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol, _("")))
+		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol, _(" ")))
 
 		if self.current.wol.value == True:
-			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac, _("")))
-			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _("")))
+			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _(" ")))
 		
 		#===================================================================
 		# 
