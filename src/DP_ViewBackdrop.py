@@ -25,7 +25,6 @@ You should have received a copy of the GNU General Public License
 import math
 
 from enigma import ePicLoad, getDesktop
-from enigma import loadPNG, loadJPG
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap, MultiPixmap

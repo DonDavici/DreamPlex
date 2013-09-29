@@ -306,7 +306,7 @@ class PlexLibrary(Screen):
 		self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
 		self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
 		self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
-								   
+
 		printl("", self, "C")
 
 	#===========================================================================

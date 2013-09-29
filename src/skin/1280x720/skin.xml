@@ -228,7 +228,7 @@
                 MultiContentEntryPixmapAlphaTest(pos = (10,6), size = (24,24), png = 4) ],
                 "fonts": [gFont("Saint", 25)],
                 "itemHeight": 40,
-                "scrollbarMode": "showNever"
+                "scrollbarMode": "showOnDemand"
                 }
         </convert>
         </widget>
