@@ -112,7 +112,7 @@
 		<!-- visu -->
 		<eLabel backgroundColor="#30000000" position="58,51" zPosition="-11" size="861,595"  transparent="0" />
 		<!-- content -->
-		<widget name="content" zPosition="3" position="72,116" size="830,495" transparent="1" itemHeight="35" scrollbarMode="showNever" foregroundColor="#00bbbbbb" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png"/>
+		<widget name="content" zPosition="3" position="72,116" size="830,495" transparent="1" itemHeight="35" scrollbarMode="showNever" foregroundColor="#00bbbbbb" foregroundColorSelected="#ffffff" />
 		<ePixmap position="952,59" size="256,256" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/setup.png" transparent="1" alphatest="blend" />
 		<eLabel backgroundColor="#30000000" position="940,51" zPosition="-1" size="280,270"  transparent="0" />
 		<widget source="global.CurrentTime" render="Label" position="914,334" size="169,80" font="Saint; 60" halign="right" backgroundColor="#30000000" transparent="1" valign="top">
@@ -163,7 +163,7 @@
 		<widget name="name" position="255,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
 		<widget name="ip" position="465,410" zPosition="2" size="200,50" font="Regular; 28" halign="left"/>
 		<widget name="port" position="650,410" zPosition="2" size="80,50" font="Regular; 28" halign="left"/>
-		<widget name="entrylist" zPosition="4" position="72,116" size="830,495" transparent="1" itemHeight="35" scrollbarMode="showNever" foregroundColor="#00bbbbbb" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/images/sel_bg-fs8.png"/>
+		<widget name="entrylist" zPosition="4" position="72,116" size="830,495" transparent="1" itemHeight="35" scrollbarMode="showNever" foregroundColor="#00bbbbbb" foregroundColorSelected="#ffffff" />
 			
 		<!-- buttons -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red-fs8.png" zPosition="3" position="118,605" size="30,40" alphatest="blend" />
