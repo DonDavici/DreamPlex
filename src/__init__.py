@@ -58,6 +58,7 @@ from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
 from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
 
 version = "0.1"
+source = "feed" # other option is "ipk"
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultLogFolderPath    = "/tmp/"
@@ -78,6 +79,12 @@ config.plugins.dreamplex.fastScroll		   			= ConfigYesNo(default = False)
 config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = False)
 config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo(default = False)
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
+
+if source == "feed":
+	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = False)
+else:
+	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = True)
+	
 config.plugins.dreamplex.checkForUpdateOnStartup 	= ConfigYesNo(default = False)
 config.plugins.dreamplex.updateType					= ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
 
