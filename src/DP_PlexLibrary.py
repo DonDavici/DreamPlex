@@ -300,9 +300,6 @@ class PlexLibrary(Screen):
 			#Fill serverdata to global g_serverDict
 			self.prepareServerDict()
 			
-		self.g_serverVersion = self.getServerVersion()
-		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
-		
 		self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
 		self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
 		self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
@@ -367,7 +364,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setAccessTokenHeader(self):
+	def setAccessTokenHeader(self, serverVersion = None):
 		'''
 		'''
 		printl("", self, "S")
@@ -386,6 +383,9 @@ class PlexLibrary(Screen):
 			aToken = self.getAuthDetails({'token':value}, prefix="?")
 			#printl("aToken: " +  str(aToken), self, "D", True, 6)
 			self.g_myplex_accessTokenDict[key]["aToken"] = aToken
+			
+			if serverVersion is not None:
+				self.g_myplex_accessTokenDict[key]["serverVersion"] = serverVersion
 			
 		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
@@ -478,6 +478,9 @@ class PlexLibrary(Screen):
 			params['t_mode'] = str(section.get('type'))
 			params['t_source'] = source
 			params['t_uuid'] = str(section.get('uuid'))
+			params['t_serverVersion'] = str(section.get('serverVersion'))
+			params['t_sourceTitle'] = str(section.get('sourceTitle'))
+			params['t_machineIdentifier'] = str(section.get('machineIdentifier'))
 			
 			if self.g_secondary == "true":	  
 				if section.get('type') == 'show':
@@ -539,7 +542,7 @@ class PlexLibrary(Screen):
 					continue
 		
 		if self.g_connectionType == "2": # MYPLEX
-			self.setAccessTokenHeader()
+			self.setAccessTokenHeader(str(section.get('serverVersion')))
 		
 		if config.plugins.dreamplex.useCache.value == True:
 			fd = open(self.sectionCache, "wb")
@@ -575,6 +578,7 @@ class PlexLibrary(Screen):
 					continue
 				else:
 					html = self.getMyPlexURL('/pms/system/library/sections')
+					printl("myPlexUrlwithSection: " + str(html),self, "D")
 				
 			if html is False or html is None:
 				self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % (html), MessageBox.TYPE_INFO)
@@ -681,6 +685,9 @@ class PlexLibrary(Screen):
 								   'address': self.g_host + ":" + self.g_port,
 								   'serverName' : self.g_name.encode('utf-8'),
 								   'uuid' : uuid ,
+								   'serverVersion' : sections.get('serverVersion',None) ,
+								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
+								   'sourceTitle' : sections.get('sourceTitle',None) ,
 								   'path' : '/library/sections/' + sections.get('key') ,
 								   'token' : sections.get('accessToken',None) ,
 								   'location' : server['discovery'] ,
@@ -693,6 +700,9 @@ class PlexLibrary(Screen):
 								   'address': sections.get('address') + ":" + sections.get('port'),
 								   'serverName' : self.g_name.encode('utf-8'),
 								   'uuid' : uuid,
+								   'serverVersion' : sections.get('serverVersion',None) ,
+								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
+								   'sourceTitle' : sections.get('sourceTitle',None) ,
 								   'path' : sections.get('path') ,
 								   'token' : sections.get('accessToken',None) ,
 								   'location' : server['discovery'] ,
@@ -2141,7 +2151,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		 
-		printl("url: " + str(url), self, "I")
+		printl("playLibraryMediaUrl: " + str(url), self, "I")
 
 		if url is None:
 			return
@@ -2186,18 +2196,17 @@ class PlexLibrary(Screen):
 				self.setAudioSubtitles(self.streams)
 
 		self.monitorPlayback(id,self.server)
-
-		serverMultiUser = False
-		# multiuser works only if the server is compatible and we are connected via myPlex
-		if self.getServerVersion() >= "0.9.8.0" and self.g_connectionType == "2":
-			serverMultiUser = True
 		
-		printl("Server is MultiUser version: " + str(serverMultiUser),self,"I")
+		server = self.getServerFromURL(url)
+		printl("server: " + str(server), self, "D")
 		
-		#TODO return playurl
-		#=======================================================================
-		# printl("TEST URL: " + test, False)
-		#=======================================================================
+		multiUserServer = False
+		# multiuser works only if the server is compatible
+		if self.getServerVersion() >= "0.9.8.0":
+			multiUserServer = True
+		
+		printl("multiUserServer (version): " + str(multiUserServer),self,"I")
+		
 		printl("PLAYURL => " + playurl, self, "I")
 		printl("RESUME => " + str(resume), self, "I")
 		printl("", self, "C")
@@ -2207,8 +2216,9 @@ class PlexLibrary(Screen):
 		playerData["resumeStamp"] = resume
 		playerData["server"] = self.server
 		playerData["id"] = id
-		playerData["servermultiuser"] = serverMultiUser
-		playerData["playbackType"] =self.g_playbackType
+		playerData["multiUserServer"] = multiUserServer
+		playerData["playbackType"] = self.g_playbackType
+		playerData["connectionType"] = self.g_connectionType
 		playerData["transcodingSession"] = self.g_sessionID
 		playerData["videoData"] = self.streams['videoData']
 		playerData["mediaData"] = self.streams['mediaData']
@@ -2219,7 +2229,6 @@ class PlexLibrary(Screen):
 		
 		return playerData
 	
-
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -3841,8 +3850,7 @@ class PlexLibrary(Screen):
 		'''
 		printl("", self, "S")
 		if self.g_address is None:
-			# todo we have to find out a way to get the version even with myplex servers
-			self.g_serverVersion = "myPlex Server"
+			self.g_serverVersion = self.g_myplex_accessTokenDict[self.g_currentServer]["serverVersion"].split('-')[0]
 			
 		if self.g_serverVersion is None:
 			url = self.g_address + "/servers"
@@ -3854,8 +3862,9 @@ class PlexLibrary(Screen):
 			for server in tree:
 				version = server.get("version").split('-')[0]
 
-			self.g_serverVersion = str(version)
-
+				self.g_serverVersion = str(version)
+			
+		printl("self.g_serverVersion: " + str(self.g_serverVersion), self, "D")
 		printl("", self, "C")
 		return self.g_serverVersion
 
