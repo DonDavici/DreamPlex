@@ -148,7 +148,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		
-		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), NoSave(config.plugins.dreamplex.mediafolderpath), _(" "))
+		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _(" "))
 		self.cfglist.append(self.mediafolderpath)
 		
 		self.configfolderpath = getConfigListEntry(_("> Config Folder Path"), config.plugins.dreamplex.configfolderpath, _(" "))
@@ -245,9 +245,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			elif type == "cache":
 				self.cachefolderpath[1].value = pathValue
 			
-			config.plugins.dreamplex.save()
-		
-		self.createSetup()
+		config.plugins.dreamplex.save()
 		
 		printl("", self, "C")
 		
