@@ -427,13 +427,13 @@ class DP_Player(MoviePlayer):
 		if self.playbackType == "1":
 			if self.servermultiuser == True:
 				self.timelinewatcherthread_wait.clear()
-			if not self.timelinewatcherThread.isAlive():
-				self.timelinewatcherthread_stop.clear()
-				sleep(2)
-				try:
-					self.timelinewatcherThread.start()
-				except:
-					pass
+				if not self.timelinewatcherThread.isAlive():
+					self.timelinewatcherthread_stop.clear()
+					sleep(2)
+					try:
+						self.timelinewatcherThread.start()
+					except:
+						pass
 		
 		#printl("", self, "C")
 
