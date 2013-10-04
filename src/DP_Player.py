@@ -446,21 +446,8 @@ class DP_Player(MoviePlayer):
 	def bufferEmpty(self):
 		#printl("", self, "S")
 		
-		#show infobar to indicate buffer is empty 
-		self.show()
-		
-		if self.seekstate != self.SEEK_STATE_PAUSE :
-			pass
-			#printl( "Buffer drained pause", self, "I")
-			#self.setSeekState(self.SEEK_STATE_PAUSE)
-			
-		if self.multiUser:
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
-			currentTime = self.getPlayPosition()[1] / 90000
-			totalTime = self.getPlayLength()[1] / 90000
-			self.timelinewatcherthread_wait.set()
-			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "buffering", 0, str(totalTime*1000))		
+		if config.plugins.dreamplex.showInfobarOnBuffer.value:
+			#show infobar to indicate buffer is empty 
 			self.show()
 
 		#printl("", self, "C")
