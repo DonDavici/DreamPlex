@@ -124,7 +124,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		# GENERAL SETTINGS
 		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _(" ")))
-		self.cfglist.append(getConfigListEntry(_("> Used Skin"), config.plugins.dreamplex.skins, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Used Skin"), config.plugins.dreamplex.skins, _("If you change the skin you have to restart at least the GUI!")))
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
