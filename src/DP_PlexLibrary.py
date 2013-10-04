@@ -299,9 +299,6 @@ class PlexLibrary(Screen):
 		else:
 			#Fill serverdata to global g_serverDict
 			self.prepareServerDict()
-			
-		self.g_serverVersion = self.getServerVersion()
-		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 		
 		self.getSeenVisus()
 
