@@ -275,7 +275,7 @@
 	<screen name="DPS_ViewList" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
 	    <eLabel backgroundColor="#30000000" position="0,0" zPosition="-1" size="1280,720" transparent="0" />
 		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="230,5" size="490,90" font="Saint;60" foregroundColor="#FF8C00" backgroundColor="#30000000" halign="left" />		
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
 		<widget source="listview" render="Listbox" zPosition="8" position="35,87" size="580,565" scrollbarMode="showNever" foregroundColor="#00bbbbbb" backgroundColor="#30000000" transparent="1" > 
           <convert type="TemplatedMultiContent">
                 {"template": [ MultiContentEntryText(pos = (40,1), size = (580,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
@@ -298,17 +298,17 @@
         
 		<widget name="tag" transparent="1" zPosition="48" halign="left" noWrap="1" position="670,81" size="680,24" font="Saint;18" foregroundColor="#00bbbbbb" backgroundColor="#30000000"/>
 		
-		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-not-fs8.png" />
+		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-not-fs8.png" />
         
-        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-mp3-fs8.png" />
+        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-mp3-fs8.png" />
         
-        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-sd-fs8.png" />
+        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-sd-fs8.png" />
         
-        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-2.35-fs8.png" />
+        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-2.35-fs8.png" />
         
-        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg2-fs8.png" />
+        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg2-fs8.png" />
         		
-        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/five_stars_bright-fs8.png" />
+        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/five_stars_bright-fs8.png" />
 		
 		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="670,140" size="605,185" font="Saint; 23" foregroundColor="#ffffff" backgroundColor="#30000000" />
 		
@@ -364,7 +364,7 @@
 	<screen name="DPS_ViewListLong" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
 		<eLabel backgroundColor="#30000000" position="0,0" zPosition="-1" size="1280,720" transparent="0" />
 		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="230,5" size="490,90" font="Saint;60" foregroundColor="#FF8C00" backgroundColor="#30000000" halign="left" />	
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
 		<widget source="listview" render="Listbox" zPosition="8" position="35,87" size="580,565" scrollbarMode="showNever" foregroundColor="#00bbbbbb" backgroundColor="#30000000" transparent="1" > 
           <convert type="TemplatedMultiContent">
                 {"template": [ MultiContentEntryText(pos = (40,1), size = (580,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
@@ -387,17 +387,17 @@
         
 		<widget name="tag" transparent="1" zPosition="48" halign="left" noWrap="1" position="670,81" size="680,24" font="Saint;18" foregroundColor="#00bbbbbb" backgroundColor="#30000000"/>
 		
-		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-not-fs8.png" />
+		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-not-fs8.png" />
         
-        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-mp3-fs8.png" />
+        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-mp3-fs8.png" />
         
-        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-sd-fs8.png" />
+        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-sd-fs8.png" />
         
-        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-2.35-fs8.png" />
+        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-2.35-fs8.png" />
         
-        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg2-fs8.png" />
+        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg2-fs8.png" />
         		
-        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/five_stars_bright-fs8.png" />
+        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/five_stars_bright-fs8.png" />
 		
 		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="670,140" size="605,185" font="Saint; 23" foregroundColor="#ffffff" backgroundColor="#30000000" />
 		
@@ -455,7 +455,7 @@
         <eLabel position="0,0" size="1280,720" zPosition="-3" backgroundColor="#90000000" transparent="0" />
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/back.png" zPosition="-1" position="0,0"  size="1280,720" alphatest="blend" transparent="0" />
 		<widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="230,5" size="490,90" font="Saint;60" foregroundColor="#FF8C00" backgroundColor="#30000000" halign="left" />		
-    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
+    	<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/all/info.png" zPosition="50" position="560,654"  size="81,40" alphatest="blend" transparent="0" />
 		<widget source="listview" render="Listbox" zPosition="8" position="35,87" size="580,565" scrollbarMode="showNever" foregroundColor="#00bbbbbb" backgroundColor="#30000000" transparent="1" > 
           <convert type="TemplatedMultiContent">
                 {"template": [ MultiContentEntryText(pos = (40,1), size = (580,36), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
@@ -478,17 +478,17 @@
         
 		<widget name="tag" transparent="1" zPosition="48" halign="left" noWrap="1" position="670,81" size="680,24" font="Saint;18" foregroundColor="#00bbbbbb" backgroundColor="#30000000"/>
 		
-		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/rated-not-fs8.png" />
+		<widget name="rated" position="670,302" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/rated-not-fs8.png" />
         
-        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/audio-mp3-fs8.png" />
+        <widget name="audio" position="786,658" size="80,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-dts-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-ac3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-stereo-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/audio-mp3-fs8.png" />
         
-        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/resolution-sd-fs8.png" />
+        <widget name="resolution" position="674,658" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/resolution-sd-fs8.png" />
         
-        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/aspect-2.35-fs8.png" />
+        <widget name="aspect" position="1046,654" size="64,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-4_3-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-16_9-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/aspect-2.35-fs8.png" />
         
-        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/codec-mpeg2-fs8.png" />
+        <widget name="codec"  position="1123,654" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/codec-mpeg2-fs8.png" />
         		
-        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/five_stars_bright-fs8.png" />
+        <widget name="rating_stars" zPosition="84" position="889,661" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/five_stars_bright-fs8.png" />
 		
 		<widget name="shortDescription" text="" transparent="1" zPosition="14" halign="left" position="670,140" size="605,185" font="Saint; 23" foregroundColor="#ffffff" backgroundColor="#30000000" />
 		
@@ -560,23 +560,23 @@
 		 <widget source="mediaTitle" render="Label" zPosition="4" position="0,593" size="1290,66" font="Saint; 50" halign="center" valign="top" noWrap="1" foregroundColor="#ffffff" backgroundColor="#30000000" transparent="1" />
 		 <widget source="mediaTitle" render="Label" position="40,413" size="1290,306" font="Saint; 140"  halign="left" valign="top" noWrap="1" backgroundColor="#ccffffff" transparent="1" foregroundColor="#ccffffff" zPosition="-99" />  
 		 
-		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/player-ac3-fs8.png" position="670,20" size="140,95" zPosition="5" alphatest="blend">
+		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/player-ac3-fs8.png" position="670,20" size="140,95" zPosition="5" alphatest="blend">
            <convert type="ServiceInfo">IsMultichannel</convert>
            <convert type="ConditionalShowHide" />
          </widget>
 		
-		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/player-1.78-fs8.png" position="804,20" size="140,95" zPosition="5" alphatest="blend">
+		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/player-1.78-fs8.png" position="804,20" size="140,95" zPosition="5" alphatest="blend">
            <convert type="ServiceInfo">IsWidescreen</convert>
            <convert type="ConditionalShowHide" />
          </widget>
 		 
-		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/player-sd-fs8.png" position="540,19" size="145,95" zPosition="7" alphatest="blend">
+		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/player-sd-fs8.png" position="540,19" size="145,95" zPosition="7" alphatest="blend">
 			<convert type="ServiceInfo">VideoWidth</convert>
 			<convert type="ValueRange">0,720</convert>
 			<convert type="ConditionalShowHide" />
 		 </widget>
 		
-		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/icons/player-hd-fs8.png" position="540,19" size="145,95" zPosition="7" alphatest="blend">
+		 <widget source="session.CurrentService" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/icons/player-hd-fs8.png" position="540,19" size="145,95" zPosition="7" alphatest="blend">
 			<convert type="ServiceInfo">VideoWidth</convert>
 			<convert type="ValueRange">721,1980</convert>
 			<convert type="ConditionalShowHide" />
@@ -610,8 +610,8 @@
            <convert type="ServicePosition">Remaining</convert>
          </widget>
 		     				
-         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/back_progress.png" position="151,670" size="980,1" zPosition="3" transparent="1"  />
-         <widget name="bufferslider" position="37,60" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/all/progress-fs8.png" />
+         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/all/back_progress.png" position="151,670" size="980,1" zPosition="3" transparent="1"  />
+         <widget name="bufferslider" position="37,60" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/all/progress-fs8.png" />
         
     </screen>	
     
