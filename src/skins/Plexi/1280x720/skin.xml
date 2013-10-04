@@ -28,7 +28,7 @@
 		 <eLabel text="DreamPlex" position="40,532" size="1273,296" font="Saint; 150" backgroundColor="#ccffffff" transparent="1" foregroundColor="#ccffffff" valign="top" zPosition="-50" />
 		<!-- visu -->
 		 <widget name="config" zPosition="3" position="72,146" size="830,346" transparent="1" itemHeight="38" scrollbarMode="showOnDemand" foregroundColor="#00bbbbbb" />
-		 <widget source="help" render="Label" position="72,500" size="830,100" font="Regular; 20" scrollbarMode="showOnDemand" zPosition="30" />
+		 <widget source="help" render="Label" position="72,500" size="830,100" font="Regular; 20" zPosition="30" />
 		 <ePixmap position="947,59" size="256,256" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/setup.png" transparent="1" alphatest="blend" />
 		 <widget source="global.CurrentTime" render="Label" position="914,334" size="169,80" font="Saint; 60" halign="right" backgroundColor="#30000000" transparent="1" valign="top">
            <convert type="ClockToText">Default</convert>

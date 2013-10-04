@@ -314,6 +314,7 @@ def loadPlexSkin():
 	@return none
 	'''
 	printl2("", "__common__::loadPlexSkin", "S")
+	printl2("current skin: " + str(config.plugins.dreamplex.skins.value), "__common__::loadPlexSkin", "S")
 	
 	skin = None
 	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/1280x720/skin.xml"

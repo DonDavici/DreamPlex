@@ -280,7 +280,7 @@
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000" />
         
         <widget name="txt_red" transparent="1" zPosition="50" halign="left" valign="top" position="700,384" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
-        <widget name="btn_red" transparent="0" zPosition="50" position="645,380" size="32,32"/>
+        <widget name="btn_red" transparent="0" zPosition="50" position="645,380" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/red.png"/>
         
         <widget name="txt_blue" transparent="1" zPosition="50" halign="left" valign="top" position="700,424" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
         <widget name="btn_blue" transparent="0" zPosition="50" position="645,420" size="32,32"/>

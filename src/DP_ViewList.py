@@ -802,7 +802,7 @@ class DPS_ViewList(DP_View):
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
-		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		#self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
 		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
