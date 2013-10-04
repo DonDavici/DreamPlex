@@ -306,19 +306,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 
 		printl("", self, "C")
 
-	#===========================================================================
-	# 
-	#===========================================================================
-	def restartGUI(self, answer):
-		printl("", self, "S")
-		if answer is True:
-			from Screens.Standby import TryQuitMainloop
-			self.session.open(TryQuitMainloop, 3)
-		else:
-			self.close()
-		
-		printl("", self, "C")
-
 #===============================================================================
 # class
 # DPS_ServerEntriesListConfigScreen
