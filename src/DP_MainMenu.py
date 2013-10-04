@@ -83,6 +83,7 @@ class DPS_MainMenu(Screen):
 	nextExitIsQuit = True
 	currentService = None
 	plexInstance = None
+	selectionOverride = None
 	
 	#===========================================================================
 	# 
@@ -131,6 +132,9 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		self.setTitle(_("DreamPlex"))
+		
+		if self.selectionOverride is not None:
+			self.okbuttonClick(self.selectionOverride)
 		
 		printl("", self, "C")
 	
@@ -182,9 +186,14 @@ class DPS_MainMenu(Screen):
 	#===============================================================
 	# 
 	#===============================================================
-	def okbuttonClick(self):
+	def okbuttonClick(self, selectionOverride = None):
 		printl("", self, "S")
-		selection = self["menu"].getCurrent()
+		
+		# this is used to step in directly into a server when there is only one entry in the serverlist
+		if selectionOverride is not None:
+			selection = selectionOverride
+		else:
+			selection = self["menu"].getCurrent()
 		
 		printl("selection = " + str(selection), self, "D")
 		self.nextExitIsQuit = False
@@ -646,9 +655,16 @@ class DPS_MainMenu(Screen):
 			
 			# add servers to list 
 			for serverConfig in config.plugins.dreamplex.Entries:
-				serverName = serverConfig.name.value
-			
-				self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
+				
+				# only add the server if state is active
+				if serverConfig.state.value == True:
+					serverName = serverConfig.name.value
+				
+					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
+					
+					# automatically enter the server if wanted
+					if serverConfig.autostart.value == True:
+						self.selectionOverride = [serverName, Plugin.MENU_SERVER, serverConfig]
 		
 			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
 			self.mainMenuList.append((_("About"), "DPS_About"))

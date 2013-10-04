@@ -554,7 +554,8 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		##
 		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _("-")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("Toggle state to on/off to show this server in lost or not.")))
+		self.cfglist.append(getConfigListEntry(_(" > Autostart"), self.current.autostart, _("Enter this server automatically on startup.")))
 		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _(" ")))
 		
 		##
