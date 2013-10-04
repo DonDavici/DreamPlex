@@ -286,7 +286,7 @@ def registerPlexFonts():
 	
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
 	
-	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
+	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 	for font in tree.findall('font'):
 		
 		path = str(font.get('path'))
@@ -316,7 +316,7 @@ def loadPlexSkin():
 	printl2("", "__common__::loadPlexSkin", "S")
 	
 	skin = None
-	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/skin.xml"
+	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/1280x720/skin.xml"
 	
 	if skin:
 		loadSkin(skin)

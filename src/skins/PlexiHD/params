@@ -3,10 +3,23 @@
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/mayatypeuitvg.ttf" size="100" name="Modern" />
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/goodtime.ttf" size="100"  name="Named" /> 
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/saint.ttf" size="100" name="Saint" />
-    
-    <view name="DP_ViewList" itemsPerPage="14"/>
-    <view name="DP_ViewBackdrop" itemsPerPage="14"/>
-    <view name="DP_ViewListLong" itemsPerPage="14"/>
-    <view name="DP_ViewMusic" itemsPerPage="14"/>
+	
+	<seenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
+	<startedPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png" />
+	<unseenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png" />
+	
+	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png" />
+	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/green.png" />
+	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png" />
+	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png"/>
+	<guiElement name="key_pvr" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/pvr.png" />
+	<guiElement name="key_menu" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/menu.png" />
+	<guiElement name="key_zero" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png" />
+	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_9.png" />
+	
+	<view name="DP_ViewList" itemsPerPage="14"/>
+	<view name="DP_ViewBackdrop" itemsPerPage="14"/>
+	<view name="DP_ViewListLong" itemsPerPage="14"/>
+	<view name="DP_ViewMusic" itemsPerPage="14"/>
 
 </xml>

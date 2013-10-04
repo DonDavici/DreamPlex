@@ -303,9 +303,28 @@ class PlexLibrary(Screen):
 		self.g_serverVersion = self.getServerVersion()
 		printl("PMS Version: " +  self.g_serverVersion, self, "I") 
 		
-		self.seenPic	= "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/seen-fs8.png"
-		self.startedPic = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/started-fs8.png"
-		self.unseenPic  = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/icons/unseen-fs8.png"
+		self.getSeenVisus()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	# 
+	#===============================================================================	
+	def getSeenVisus(self):
+		printl("", self, "S")
+		
+		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		for seenPic in tree.findall('seenPic'):
+			self.seenPic = str(seenPic.get('path'))
+			printl("self.seenPic: " + str(self.seenPic), self, "D")
+			
+		for startedPic in tree.findall('startedPic'):
+			self.startedPic = str(startedPic.get('path'))
+			printl("self.startedPic: " + str(self.startedPic), self, "D")
+			
+		for unseenPic in tree.findall('unseenPic'):
+			self.unseenPic = str(unseenPic.get('path'))
+			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
 
 		printl("", self, "C")
 

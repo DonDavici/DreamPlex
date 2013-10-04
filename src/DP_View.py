@@ -194,6 +194,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.onLayoutFinish.append(self.setCustomTitle)
 		self.onFirstExecBegin.append(self.onFirstExec)
 		
+		self.getGuiElements()
+		
 		printl("", self, "C")
 
 	#===========================================================================
@@ -209,10 +211,27 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
+	def getGuiElements(self):
+		printl("", self, "S")
+		
+		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		
+		self.guiElements = {}
+		for guiElement in tree.findall('guiElement'):
+			name = str(guiElement.get('name'))
+			path = str(guiElement.get('path'))
+			self.guiElements[name] = path
+			
+		printl("guiElements: " + str(self.guiElements))
+		printl("", self, "C")
+	
+	#===========================================================================
+	# 
+	#===========================================================================
 	def setListViewElementsCount(self, viewName):
 		printl("", self, "S")
 		
-		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/params")
+		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 		for view in tree.findall('view'):
 			if view.get('name') == viewName:
 				self.itemsPerPage = int(view.get('itemsPerPage'))
