@@ -186,69 +186,75 @@ class DPS_ViewList(DP_View):
 		self.resetCurrentImages()
 		printl("showMedia: " + str(self.showMedia), self, "D")
 		
+		printl("isDirectory: " + str(self.isDirectory), self, "D")
+		
 		if selection != None:
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
 			self.context		= selection[3]
-			
-			# lets get all data we need to show the needed pictures
-			# we also check if we want to play
-			self.getPictureInformationToLoad()
-			
-			# lets set the urls for context functions of the selected entry
-			self.seenUrl = self.context.get("watchedURL", None)
-			self.unseenUrl = self.context.get("unwatchURL", None)
-			self.deleteUrl = self.context.get("deleteURL", None)
-			self.refreshUrl = self.context.get("libraryRefreshURL", None)
-			printl("seenUrl: " + str(self.seenUrl),self, "D")
-			printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
-			
-			# if we are a show an if playtheme is enabled we start playback here
-			if self.playTheme: 
-				if self.startPlaybackNow:
-					super(DPS_ViewList, self).startThemePlayback()
-					
-			self.setText("title", self.details.get("title", " "))
-			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
-			self.setText("year", str(self.details.get("year", " - ")))
-			self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-			self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-			self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
-			self.setText("runtime", str(self.details.get("runtime", " - ")))
-			self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
-			
-			if self.fastScroll == False or self.showMedia == True:
-				# handle all pixmaps
-				self.handlePopularityPixmaps()
-				self.handleCodecPixmaps()
-				self.handleAspectPixmaps()
-				self.handleResolutionPixmaps()
-				self.handleRatedPixmaps()
-				self.handleSoundPixmaps()
-			
-			# navigation
-			self.handleNavigationData()
-			
-			# now lets switch images
-			if self.changePoster == True:
-				self.showPoster()
-			
-			if self.fastScroll == False or self.showMedia == True:
-				if self.changeBackdrop == True:
-					self.showBackdrop()
-			
-			self.showFunctions(False)
-			
-			# we need those for fastScroll
-			# this prevents backdrop load on next item
-			self.showMedia = False
-			
+		
+			if self.isDirectory:
+				pass
+			else:
+				# lets get all data we need to show the needed pictures
+				# we also check if we want to play
+				self.getPictureInformationToLoad()
+				
+				# lets set the urls for context functions of the selected entry
+				self.seenUrl = self.context.get("watchedURL", None)
+				self.unseenUrl = self.context.get("unwatchURL", None)
+				self.deleteUrl = self.context.get("deleteURL", None)
+				self.refreshUrl = self.context.get("libraryRefreshURL", None)
+				printl("seenUrl: " + str(self.seenUrl),self, "D")
+				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+				
+				# if we are a show an if playtheme is enabled we start playback here
+				if self.playTheme: 
+					if self.startPlaybackNow:
+						super(DPS_ViewList, self).startThemePlayback()
+						
+				self.setText("title", self.details.get("title", " "))
+				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
+				self.setText("year", str(self.details.get("year", " - ")))
+				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+				self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
+				self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
+				self.setText("runtime", str(self.details.get("runtime", " - ")))
+				self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
+				
+				if self.fastScroll == False or self.showMedia == True:
+					# handle all pixmaps
+					self.handlePopularityPixmaps()
+					self.handleCodecPixmaps()
+					self.handleAspectPixmaps()
+					self.handleResolutionPixmaps()
+					self.handleRatedPixmaps()
+					self.handleSoundPixmaps()
+				
+				# navigation
+				self.handleNavigationData()
+				
+				# now lets switch images
+				if self.changePoster == True:
+					self.showPoster()
+				
+				if self.fastScroll == False or self.showMedia == True:
+					if self.changeBackdrop == True:
+						self.showBackdrop()
+				
+				self.showFunctions(False)
+				
+				# we need those for fastScroll
+				# this prevents backdrop load on next item
+				self.showMedia = False
+				
 		else:
 			self.setText("title", "no data retrieved")
 			self.setText("shortDescription", "no data retrieved")
-			
+		
+		
 		printl("", self, "C")
 
 	

@@ -60,41 +60,10 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	def loadLibrary(self, params):
 		printl ("", self, "S")
-		printl("params: " + str(params), self, "D")
+		printl("params for me: " + str(params), self, "D")
 
 		url = self.g_url
 		printl("url: " + str(url), self, "D")
-		
-		if config.plugins.dreamplex.useCache.value == True:
-			self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
-			
-			# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
-			# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
-			if "cache" in params:
-				if params['cache'] == False:
-					self.g_source = "plex"
- 
-			if self.g_source == "cache" or params['cache'] == True:
-				try:
-					fd = open(self.moviePickle, "rb")
-					pickleData = pickle.load(fd)
-					library = pickleData[0]
-					tmpAbc = pickleData[1]
-					tmpGenres = pickleData [2]
-					fd.close()
-					printl("from pickle", self, "D")
-				except:
-					printl("movie cache not found ... saving", self, "D")
-					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
-					reason = "cache file does not exists, recreating ..."
-					self.generatingCacheForMovieSection(reason,library, tmpAbc, tmpGenres)
-					printl("fallback to: from server", self, "D")
-			else:
-				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
-				reason = "generating cache first time, creating ..."
-				self.generatingCacheForMovieSection(reason, library, tmpAbc, tmpGenres)
-		else:
-			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 		
 		# sort
 		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
@@ -108,6 +77,46 @@ class DP_LibMovies(DP_LibMain):
 		#if len(tmpGenres) > 0:
 			#tmpGenres.sort()
 			#filter.append(("Genre", ("genre", True), tmpGenres))
+		
+		if params["viewMode"] is None:
+			printl ("viewMode = None", self, "D")
+			if config.plugins.dreamplex.useCache.value == True:
+				self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
+				
+				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
+				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
+				if "cache" in params:
+					if params['cache'] == False:
+						self.g_source = "plex"
+	 
+				if self.g_source == "cache" or params['cache'] == True:
+					try:
+						fd = open(self.moviePickle, "rb")
+						pickleData = pickle.load(fd)
+						library = pickleData[0]
+						tmpAbc = pickleData[1]
+						tmpGenres = pickleData [2]
+						fd.close()
+						printl("from pickle", self, "D")
+					except:
+						printl("movie cache not found ... saving", self, "D")
+						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+						reason = "cache file does not exists, recreating ..."
+						self.generatingCacheForMovieSection(reason,library, tmpAbc, tmpGenres)
+						printl("fallback to: from server", self, "D")
+				else:
+					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+					reason = "generating cache first time, creating ..."
+					self.generatingCacheForMovieSection(reason, library, tmpAbc, tmpGenres)
+			else:
+				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+		else:
+			printl ("viewMode is Directory", self, "D")
+			url = params["url"]
+			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+			
+			printl ("", self, "C")
+			return (library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, filter)
 		
 		printl ("", self, "C")
 		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)

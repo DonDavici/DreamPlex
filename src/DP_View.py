@@ -111,9 +111,10 @@ class DP_View(Screen, NumericalTextInput):
 	
 	currentShowIndex				= None
 	currentSeasonIndex				= None
+	currentMovieIndex				= None
 	showMedia						= False
 	showDetail						= False
-	g_forcedvd						= "false"
+	isDirectory						= False
 	
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
 		printl("", self, "S")
@@ -937,6 +938,18 @@ class DP_View(Screen, NumericalTextInput):
 			elif (viewMode == "play"):
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
+			
+			elif (viewMode == "directory"):
+				printl("viewMode -> directory", self, "I")
+				
+				params = {}
+				params["viewMode"] = viewMode
+				params["url"] = "http://" + server + url_path
+				
+				self.currentMovieParams = params
+				self.currentMovieIndex = self["listview"].getIndex()
+				
+				self._load(params)
 				
 			else:
 				printl("SOMETHING WENT WRONG", self, "W")
@@ -991,6 +1004,10 @@ class DP_View(Screen, NumericalTextInput):
 		elif selectKeyValuePair == "backToShows":
 			self._load()
 			self["listview"].setIndex(self.currentShowIndex)
+			
+		elif selectKeyValuePair == "backToMovies":
+			self._load()
+			self["listview"].setIndex(self.currentMovieIndex)
 			
 		else:
 			self.close()
@@ -1182,6 +1199,11 @@ class DP_View(Screen, NumericalTextInput):
 		
 		# show content for selected list item
 		selection = self["listview"].getCurrent()
+		viewMode = selection[1]['viewMode']
+		
+		self.isDirectory = False
+		if viewMode == "directory":
+			self.isDirectory = True
 		
 		self._refresh(selection)
 		

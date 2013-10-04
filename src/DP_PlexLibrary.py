@@ -1408,6 +1408,13 @@ class PlexLibrary(Screen):
 			#Right, add that link...and loop around for another entry
 			content = self.movieTag(url, server, tree, movie)
 			fullList.append(content)
+		
+		directories = tree.findall('Directory')
+		
+		for directory in directories:
+			#Right, add that link...and loop around for another entry
+			content = self.directoryTag(url, server, tree, directory)
+			fullList.append(content)
 
 		printl("", self, "C")
 		return fullList, self.tmpAbc , self.tmpGenres
@@ -3304,7 +3311,30 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")   
 		return guiItem		
+	
+	#===============================================================================
+	# 
+	#===============================================================================
+	def directoryTag(self, url, server, tree, directory):
+		'''
+		'''
+		printl("", self, "S")
+
+		#Required listItem entries for XBMC
+		details = {}
+		details['title']	= directory.get('title','').encode('utf-8')
+		details['server'] 	= str(server)
+		details['viewMode'] = "directory"
+
+		extraData = {}
+		extraData['key']	= directory.get('key','')
+		extraData['type']	= "directory"
+
+		guiItem = self.addGUIItem(url, details, extraData, context = None, seenVisu = None, folder=False)
 		
+		printl("", self, "C")   
+		return guiItem			
+
 	#===============================================================================
 	# 
 	#===============================================================================
