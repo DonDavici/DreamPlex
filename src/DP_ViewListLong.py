@@ -110,13 +110,13 @@ class DPS_ViewListLong(DP_View):
 		# init skin elements
 		self["functionsContainer"]  = Label()
 		
-		self["btn_red"]  = Pixmap()
-		self["btn_blue"] = Pixmap()
-		self["btn_yellow"] = Pixmap()
-		self["btn_zero"] = Pixmap()
-		self["btn_nine"] = Pixmap()
-		self["btn_pvr"] = Pixmap()
-		self["btn_menu"] = Pixmap()
+		self["btn_red"]		= Pixmap()
+		self["btn_blue"]	= Pixmap()
+		self["btn_yellow"]	= Pixmap()
+		self["btn_zero"]	= Pixmap()
+		self["btn_nine"]	= Pixmap()
+		self["btn_pvr"]		= Pixmap()
+		self["btn_menu"]	= Pixmap()
 		
 		self["txt_red"]     = Label()
 		self["txt_filter"]  = Label()
@@ -794,26 +794,13 @@ class DPS_ViewListLong(DP_View):
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
-		ptr_red = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/red.png"
-		self["btn_red"].instance.setPixmapFromFile(ptr_red)
-		
-		ptr_blue = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/blue.png"
-		self["btn_blue"].instance.setPixmapFromFile(ptr_blue)
-		
-		ptr_yellow = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/1280x720/buttons/yellow.png"
-		self["btn_yellow"].instance.setPixmapFromFile(ptr_yellow)
-		
-		ptr_zero = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_0.png"
-		self["btn_zero"].instance.setPixmapFromFile(ptr_zero)
-		
-		ptr_nine = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/key_9.png"
-		self["btn_nine"].instance.setPixmapFromFile(ptr_nine)
-		
-		ptr_pvr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/pvr.png"
-		self["btn_pvr"].instance.setPixmapFromFile(ptr_pvr)
-		
-		ptr_menu = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/menu.png"
-		self["btn_menu"].instance.setPixmapFromFile(ptr_menu)
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
+		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
+		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
+		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
+		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
 		
 		self.resetGuiElementsInFastScrollMode()
 		

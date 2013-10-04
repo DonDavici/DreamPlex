@@ -130,7 +130,7 @@ class DPS_Mappings(Screen):
 	def greenKey(self):
 		printl("", self, "S")
 		
-		self.session.openWithCallback(self.setLocalPathCallback, DPS_PathSelector,"/")
+		self.session.openWithCallback(self.setLocalPathCallback, DPS_PathSelector,"/", "mapping")
 		
 		printl("", self, "C")
 		
@@ -138,7 +138,7 @@ class DPS_Mappings(Screen):
 	#===================================================================
 	# 
 	#===================================================================
-	def setLocalPathCallback(self, callback = None):
+	def setLocalPathCallback(self, callback = None, type = None):
 		printl("", self, "S")
 		
 		if callback is not None and len(callback):
@@ -174,10 +174,11 @@ class DPS_Mappings(Screen):
 		printl("", self, "S")
 
 		content = self["content"].getCurrent()
-		currentId = content[1][7]
-		printl("currentId: " + str(currentId), self, "D")
-		
-		self["content"].deleteSelectedMapping(currentId)
+		if content is not None:
+			currentId = content[1][7]
+			printl("currentId: " + str(currentId), self, "D")
+			
+			self["content"].deleteSelectedMapping(currentId)
 		self.close()
 		
 		printl("", self, "C")

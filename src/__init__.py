@@ -61,11 +61,16 @@ version = "0.1"
 source = "feed" # other option is "ipk"
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
+defaultSkinsFolderPath	= resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/skins")
 defaultLogFolderPath    = "/tmp/"
 defaultCacheFolderPath	= "/hdd/dreamplex/cache/"
 defaultMediaFolderPath  = "/hdd/dreamplex/media/"
 defaultPlayerTempPath  	= "/hdd/dreamplex/"
 defaultConfigFolderPath	= "/hdd/dreamplex/config/"
+
+# skin data
+defaultSkin = "default"
+skins = []
 
 config.plugins.dreamplex = ConfigSubsection()
 config.plugins.dreamplex.about                  	= ConfigSelection(default = "1", choices = [("1", " ")]) # need this for seperator in settings
@@ -89,6 +94,8 @@ config.plugins.dreamplex.checkForUpdateOnStartup 	= ConfigYesNo(default = False)
 config.plugins.dreamplex.updateType					= ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
 
 config.plugins.dreamplex.pluginfolderpath  		= ConfigDirectory(default = defaultPluginFolderPath)
+config.plugins.dreamplex.skinfolderpath			= ConfigDirectory(default = defaultSkinsFolderPath)
+
 config.plugins.dreamplex.logfolderpath     		= ConfigDirectory(default = defaultLogFolderPath, visible_width = 50)
 config.plugins.dreamplex.cachefolderpath  		= ConfigDirectory(default = defaultCacheFolderPath, visible_width = 50)
 config.plugins.dreamplex.mediafolderpath   		= ConfigDirectory(default = defaultMediaFolderPath, visible_width = 50)
@@ -321,6 +328,46 @@ def localeInit():
 #===============================================================================
 # 
 #===============================================================================
+def getInstalledSkins():
+	printl("", "__init__::getInstalledSkins", "S")
+	
+	skins = []
+	defaultSkin = "default"
+
+	try:
+		for skin in os.listdir(config.plugins.dreamplex.skinfolderpath.value):
+			print("skin: " + str(skin), None, "D")
+			if os.path.isdir(os.path.join(config.plugins.dreamplex.skinfolderpath.value, skin)):
+				skins.append(skin)
+	except Exception, ex:
+		printl("no skin found in Dreamplex", "__init__::getInstalledSkins", "D")
+		printl("Exception(" + str(type(ex)) + "): " + str(ex), "__init__::getInstalledSkins", "E")
+		skins.append(defaultSkin)
+	
+	#Also check if a real enigma2 skin contains dreamplex screens
+	try:
+		skinPath = resolveFilename(SCOPE_SKIN)
+		printl("__init__:: Current enigma2 skin " + resolveFilename(SCOPE_CURRENT_SKIN), "__init__::getInstalledSkins", "D")
+
+		for skin in os.listdir(skinPath):
+			path = os.path.join(skinPath, skin)
+			if os.path.isdir(path):
+				xml = os.path.join(path, "skin_dreamplex.xml")
+				if os.path.isfile(xml):
+					skins.append("~" + skin)
+	except Exception, ex:
+		printl("no skindata in enigma2 skin found", "__init__::getInstalledSkins", "D")
+		printl("Exception(" + str(type(ex)) + "): " + str(ex), "__init__::getInstalledSkins", "E")
+	
+	printl("Found enigma2 skins \"%s\"" % str(skins), "__init__::getInstalledSkins", "D")
+	
+	config.plugins.dreamplex.skins	= ConfigSelection(default = defaultSkin, choices = skins)
+	
+	printl("", "__init__::getInstalledSkins", "C")
+
+#===============================================================================
+# 
+#===============================================================================
 def _(txt):
 	'''
 	'''
@@ -341,6 +388,7 @@ def _(txt):
 #===============================================================================
 def prepareEnvironment():
 	localeInit()
+	getInstalledSkins()
 	initBoxInformation()
 	printGlobalSettings()
 	initPlexServerConfig()

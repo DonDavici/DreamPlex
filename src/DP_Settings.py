@@ -66,6 +66,7 @@ from Plugins.Extensions.DreamPlex.DPH_PlexGdm import plexgdm
 class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	_hasChanged = False
 	_session = None
+	skins = None
 	
 	def __init__(self, session):
 		printl("", self, "S")
@@ -123,6 +124,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		# GENERAL SETTINGS
 		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Used Skin"), config.plugins.dreamplex.skins, _("If you change the skin you have to restart at least the GUI!")))
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
@@ -300,19 +302,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		self["config"].instance.moveSelection(self["config"].instance.pageDown)
 
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def restartGUI(self, answer):
-		printl("", self, "S")
-		if answer is True:
-			from Screens.Standby import TryQuitMainloop
-			self.session.open(TryQuitMainloop, 3)
-		else:
-			self.close()
-		
 		printl("", self, "C")
 
 #===============================================================================
