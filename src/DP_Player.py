@@ -90,6 +90,7 @@ class DP_Player(MoviePlayer):
 	switchedLanguage = False
 	startNewServiceOnPlay = False
 	timeshift_enabled = False
+	isVisible = False
 
 	def __init__(self, session, playerData, resume=False):
 		printl("", self, "S")
@@ -173,10 +174,10 @@ class DP_Player(MoviePlayer):
 		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
 		{
 		"ok": self.ok,
-		"cancel": self.hide,
+		"cancel": self.cancel,
 		"keyTV": self.leavePlayer,
 		"stop": self.leavePlayer,
-		"leavePlayer": self.hide,
+		"leavePlayer": self.cancel,
 		"next": self.seekManual,
 		"previous": self.seekManual
 		}, -2)
@@ -243,6 +244,18 @@ class DP_Player(MoviePlayer):
 		
 		#printl("", self, "C")
 	
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def cancel(self):
+		#printl("", self, "S")
+
+		self.isVisible = False
+		self.hide()
+
+		#printl("", self, "C")
+	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -250,7 +263,13 @@ class DP_Player(MoviePlayer):
 		#printl("", self, "S")
 		
 		self.bufferInfo()
-		self.show()
+		
+		if self.isVisible == True:
+			self.isVisible = False
+			self.hide()
+		else:
+			self.isVisible = True
+			self.show()
 
 		#printl("", self, "C")
 	
