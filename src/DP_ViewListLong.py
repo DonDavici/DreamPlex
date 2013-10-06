@@ -35,7 +35,6 @@ from Components.ProgressBar import ProgressBar
 
 from DP_View import DP_View
 
-from DPH_Arts import getPictureData
 from enigma import eServiceReference
 from urllib import urlencode, quote_plus
 
@@ -586,6 +585,11 @@ class DPS_ViewListLong(DP_View):
 				self.changeBackdrop = True
 				self.changePoster = True
 				pname = self.details["ratingKey"]
+		
+		if self.usePicCache != True:
+			pname = "temp"
+			bname = "temp"
+			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
 		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix

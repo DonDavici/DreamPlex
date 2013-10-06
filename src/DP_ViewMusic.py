@@ -589,6 +589,11 @@ class DPS_ViewMusic(DP_View):
 				self.changeBackdrop = True
 				self.changePoster = True
 				pname = self.details["ratingKey"]
+				
+		if self.usePicCache != True:
+			pname = "temp"
+			bname = "temp"
+			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
 		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
@@ -662,7 +667,7 @@ class DPS_ViewMusic(DP_View):
 			
 		else:
 			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop())
+			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop(forceShow = True))
 				
 		printl("", self, "C")
 
