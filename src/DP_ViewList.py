@@ -34,13 +34,8 @@ from Components.config import config
 from Components.AVSwitch import AVSwitch
 from Components.ProgressBar import ProgressBar
 
-from Tools.Directories import fileExists
-
-from twisted.web.client import downloadPage
-
 from DP_View import DP_View
 
-from DPH_Arts import getPictureData
 from enigma import eServiceReference
 from urllib import urlencode, quote_plus
 
@@ -605,6 +600,11 @@ class DPS_ViewList(DP_View):
 				self.changePoster = True
 				pname = self.details["ratingKey"]
 		
+		if self.usePicCache != True:
+			pname = "temp"
+			bname = "temp"
+			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
+		
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		
@@ -660,182 +660,3 @@ class DPS_ViewList(DP_View):
 		super(getViewClass(), self).filter()
 		
 		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onKeyUp(self):
-		printl("", self, "S")
-		
-		self.onPreviousEntry()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onKeyDown(self):
-		printl("", self, "S")
-		
-		self.onNextEntry()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onKeyLeft(self):
-		printl("", self, "S")
-		
-		self.onPreviousPage()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def onKeyRight(self):
-		printl("", self, "S")
-		
-		self.onNextPage()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def resetCurrentImages(self):
-		printl("", self, "S")
-
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		
-		if self.resetPoster == True:
-			self["poster"].instance.setPixmapFromFile(ptr)
-		
-		if self.resetBackdrop == True:
-			self["mybackdrop"].instance.setPixmapFromFile(ptr)
-		
-		printl("", self, "C")
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showPoster(self):
-		printl("", self, "S")
-		
-		dwl_poster = False
-		
-		if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix)):
-			
-			if self.whatPoster is not None:
-				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-				ptr = self.EXpicloadPoster.getData()
-				
-				if ptr is not None:
-					self["poster"].instance.setPixmap(ptr)
-
-		else:
-			self.downloadPoster()
-			
-		printl("", self, "C")
-		return
-			
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showBackdrop(self):
-		printl("", self, "S")
-		
-		dwl_backdrop = False
-				
-		if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix)):
-			
-			if self.whatBackdrop is not None:
-				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
-				ptr = self.EXpicloadBackdrop.getData()
-				
-				if ptr is not None:
-					self["mybackdrop"].instance.setPixmap(ptr)
-
-		else:
-			self.downloadBackdrop()
-			
-		printl("", self, "C")
-		return
-			
-	#===========================================================================
-	# 
-	#===========================================================================
-	def downloadPoster(self):
-		printl("", self, "S")
-		
-		download_url = self.extraData["thumb"]
-		printl( "download url " + download_url, self, "D")
-		
-		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
-			printl("no pic data available", self, "D")
-		
-		else:
-			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix)).addCallback(lambda _: self.showPoster())
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def downloadBackdrop(self):
-		printl("", self, "S")
-		
-		download_url = self.extraData["fanart_image"]
-		printl( "download url " + download_url, self, "D")	
-		
-		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
-			printl("no pic data available", self, "D")
-			
-		else:
-			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix)).addCallback(lambda _: self.showBackdrop())
-				
-		printl("", self, "C")
-	
-	#==============================================================================
-	# 
-	#==============================================================================
-	def setPara(self):
-		printl("", self, "S")
-		
-		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		
-		#self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
-		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
-		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
-		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
-		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
-		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
-		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
-		
-		self.resetGuiElementsInFastScrollMode()
-		
-		printl("", self, "C")
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def resetGuiElementsInFastScrollMode(self):
-		printl("", self, "S")
-		
-		# lets hide them so that fastScroll does not show up old information
-		self["rating_stars"].hide()
-		self["codec"].hide()
-		self["aspect"].hide()
-		self["resolution"].hide()
-		self["rated"].hide()
-		self["audio"].hide()
-		
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		self["mybackdrop"].instance.setPixmapFromFile(ptr)
-				
-		printl("", self, "C")
-		

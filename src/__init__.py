@@ -85,7 +85,7 @@ config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = False)
 config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo(default = False)
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo(default = False)
-
+config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
 
 if source == "feed":
 	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = False)
@@ -158,7 +158,10 @@ def printGlobalSettings():
 	printl("playTheme: " + str(config.plugins.dreamplex.playTheme.value), "__init__::initGlobalSettings", "I")
 	printl("fastScroll: " + str(config.plugins.dreamplex.fastScroll.value), "__init__::initGlobalSettings", "I")
 	printl("summerizeSections: " + str(config.plugins.dreamplex.summerizeSections.value), "__init__::initGlobalSettings", "I")
-
+	printl("useCache: " + str(config.plugins.dreamplex.useCache.value), "__init__::initGlobalSettings", "I")
+	printl("showInfobarOnBuffer: " + str(config.plugins.dreamplex.showInfobarOnBuffer.value), "__init__::initGlobalSettings", "I")
+	printl("usePicCache: " + str(config.plugins.dreamplex.usePicCache.value), "__init__::initGlobalSettings", "I")
+	
 	printl("", "__init__::initPlexSettings", "C")
 
 #===============================================================================

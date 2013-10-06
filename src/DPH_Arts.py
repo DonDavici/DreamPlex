@@ -30,18 +30,22 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 #===============================================================================
 # 
 #===============================================================================
-def getPictureData(details, prefix, postfix):
+def getPictureData(details, prefix, postfix, usePicCache):
 	'''
 	'''
 	printl("", __name__, "S")
 	
-	mediaPath = config.plugins.dreamplex.mediafolderpath.value
-	
 	if details["ratingKey"] is None or details["ratingKey"] == "None" or details["ratingKey"] == "":
 		target = "None"
 	else:
-		try:
+		if usePicCache:
+			mediaPath = config.plugins.dreamplex.mediafolderpath.value
 			name = details["ratingKey"]
+		else:
+			mediaPath = config.plugins.dreamplex.logfolderpath.value
+			name = "temp"
+		try:
+
 			target = mediaPath + prefix + "_" + name + postfix
 			printl( "target: " + str(target), __name__, "D")
 		except:

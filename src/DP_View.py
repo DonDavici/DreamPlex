@@ -39,8 +39,13 @@ from Screens.MessageBox import MessageBox
 from enigma import eServiceReference
 from enigma import loadPNG
 
+from Tools.Directories import fileExists
+
 from urllib import urlencode, quote_plus
 
+from twisted.web.client import downloadPage
+
+from Plugins.Extensions.DreamPlex.DPH_Arts import getPictureData
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize
@@ -138,8 +143,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.playerData = None
 		
 		self.setListViewElementsCount(str(viewName[1]))
-		
-		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
+	
+		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 		
 		# Initialise library list
 		list = []
@@ -1689,4 +1694,142 @@ class DP_View(Screen, NumericalTextInput):
 		self.session.nav.stopService()
 		self.session.nav.playService(eServiceReference(sref))
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def showPoster(self):
+		printl("", self, "S")
+		
+		dwl_poster = False
+		
+		if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)):
+			
+			if self.whatPoster is not None:
+				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				ptr = self.EXpicloadPoster.getData()
+				
+				if ptr is not None:
+					self["poster"].instance.setPixmap(ptr)
+
+		else:
+			self.downloadPoster()
+			
+		printl("", self, "C")
+		return
+			
+	#===========================================================================
+	# 
+	#===========================================================================
+	def showBackdrop(self):
+		printl("", self, "S")
+		
+		dwl_backdrop = False
+				
+		if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)):
+			
+			if self.whatBackdrop is not None:
+				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				ptr = self.EXpicloadBackdrop.getData()
+				
+				if ptr is not None:
+					self["mybackdrop"].instance.setPixmap(ptr)
+
+		else:
+			self.downloadBackdrop()
+			
+		printl("", self, "C")
+		return
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def resetCurrentImages(self):
+		printl("", self, "S")
+
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+		
+		if self.resetPoster == True:
+			self["poster"].instance.setPixmapFromFile(ptr)
+		
+		if self.resetBackdrop == True:
+			self["mybackdrop"].instance.setPixmapFromFile(ptr)
+		
+		printl("", self, "C")
+		
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadPoster(self):
+		printl("", self, "S")
+		
+		download_url = self.extraData["thumb"]
+		printl( "download url " + download_url, self, "D")
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+		
+		else:
+			printl("starting download", self, "D")
+			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)).addCallback(lambda _: self.showPoster())
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def downloadBackdrop(self):
+		printl("", self, "S")
+		
+		download_url = self.extraData["fanart_image"]
+		printl( "download url " + download_url, self, "D")	
+		
+		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+			printl("no pic data available", self, "D")
+			
+		else:
+			printl("starting download", self, "D")	
+			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop())
+				
+		printl("", self, "C")
+		
+	#==============================================================================
+	# 
+	#==============================================================================
+	def setPara(self):
+		printl("", self, "S")
+		
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
+		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
+		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
+		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
+		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
+		
+		self.resetGuiElementsInFastScrollMode()
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	# 
+	#===========================================================================
+	def resetGuiElementsInFastScrollMode(self):
+		printl("", self, "S")
+		
+		# lets hide them so that fastScroll does not show up old information
+		self["rating_stars"].hide()
+		self["codec"].hide()
+		self["aspect"].hide()
+		self["resolution"].hide()
+		self["rated"].hide()
+		self["audio"].hide()
+		
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+		self["mybackdrop"].instance.setPixmapFromFile(ptr)
+				
 		printl("", self, "C")
