@@ -53,15 +53,15 @@
         <widget source="key_green" render="Label" position="140,608" zPosition="9" size="231,37" font="Saint;20" halign="left" valign="center" foregroundColor="#00bbbbbb" backgroundColor="#30000000" transparent="1" />
 	</screen>
 	<!-- DPS_About -->
-       <screen name="DPS_About" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
-         <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="72,50" size="90,60" font="Saint; 40" backgroundColor="#30000000" halign="left" />
-		 <eLabel text="DreamPlex" position="40,532" size="1273,296" font="Saint; 150" backgroundColor="#ccffffff" transparent="1" foregroundColor="#ccffffff" valign="top" zPosition="-50" />
+    <screen name="DPS_About" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+        <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="72,50" size="90,60" font="Saint; 40" backgroundColor="#30000000" halign="left" />
+		<eLabel text="DreamPlex" position="40,532" size="1273,296" font="Saint; 150" backgroundColor="#ccffffff" transparent="1" foregroundColor="#ccffffff" valign="top" zPosition="-50" />
 		<!-- visu -->
-         <eLabel backgroundColor="#30000000" position="58,51" zPosition="-11" size="861,595"  transparent="0"/>
-		 <widget name="about" zPosition="3" position="72,170" size="830,400" transparent="1" font="Regular;24" foregroundColor="#00bbbbbb" backgroundColor="#30000000" />
-         <ePixmap position="952,59" size="256,256" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/info.png" transparent="1" alphatest="blend" />
-		 <widget source="global.CurrentTime" render="Label" position="914,334" size="169,80" font="Saint; 60" halign="right" backgroundColor="#30000000" transparent="1" valign="top">
-           <convert type="ClockToText">Default</convert>
+        <eLabel backgroundColor="#30000000" position="58,51" zPosition="-11" size="861,595"  transparent="0"/>
+		<widget name="about" zPosition="3" position="72,130" size="830,440" transparent="1" font="Regular;22" foregroundColor="#00bbbbbb" backgroundColor="#30000000" />
+        <ePixmap position="952,59" size="256,256" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/info.png" transparent="1" alphatest="blend" />
+		<widget source="global.CurrentTime" render="Label" position="914,334" size="169,80" font="Saint; 60" halign="right" backgroundColor="#30000000" transparent="1" valign="top">
+          <convert type="ClockToText">Default</convert>
         </widget>
         <widget source="global.CurrentTime" render="Label" position="1092,380" size="148,29" font="Saint; 20" halign="left" backgroundColor="#30000000" foregroundColor="#00bbbbbb" transparent="1">
           <convert type="ClockToText">Format:%e. %B</convert>
@@ -84,7 +84,7 @@
          <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="72,50" size="90,60" font="Saint; 40" backgroundColor="#30000000" halign="left" />
 		 <eLabel text="DreamPlex" position="40,532" size="1273,296" font="Saint; 150" backgroundColor="#ccffffff" transparent="1" foregroundColor="#ccffffff" valign="top" zPosition="-50" />
          <eLabel backgroundColor="#30000000" position="58,51" zPosition="-11" size="861,595"  transparent="0" />
-		 <widget name="help" zPosition="3" position="72,155" size="830,400" transparent="1" font="Regular;22" itemHeight="28" scrollbarMode="showNever" foregroundColor="#00bbbbbb" backgroundColor="#30000000" />
+		 <widget name="help" zPosition="3" position="72,155" size="830,400" transparent="1" font="Regular;22" foregroundColor="#00bbbbbb" backgroundColor="#30000000" />
          <ePixmap position="952,59" size="256,256" zPosition="2" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/info.png" transparent="1" alphatest="blend" />
 		 <eLabel backgroundColor="#30000000" position="940,51" zPosition="-1" size="280,270"  transparent="0" />
 		 <widget source="global.CurrentTime" render="Label" position="914,334" size="169,80" font="Saint; 60" halign="right" backgroundColor="#30000000" transparent="1" valign="top">
@@ -413,14 +413,12 @@
 		<eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="900,420" size="120,30" font="Saint; 22" foregroundColor="#FF8C00"  backgroundColor="#30000000"/>
 		<eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="900,470" size="160,30" font="Saint; 22" foregroundColor="#FF8C00"  backgroundColor="#30000000"/>
 		<eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="900,520" size="160,30" font="Saint; 22" foregroundColor="#FF8C00"  backgroundColor="#30000000"/>
-        <eLabel text="SUBTITLES:" transparent="1" zPosition="4" halign="left" position="900,570" size="160,30" font="Saint; 22" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-		<eLabel text="AUDIO:" transparent="1" zPosition="4" halign="left" position="900,620" size="160,30" font="Saint; 22" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+       
 		
 		<widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="974,420" size="200,30" font="Saint; 22" backgroundColor="#30000000"/>
 		<widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="995,470" size="160,30" font="Saint; 22" backgroundColor="#30000000"/>
 		<widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="958,520" size="160,30" font="Saint; 22" backgroundColor="#30000000"/>
-		<widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="1040,570" size="200,25" font="Saint; 22" backgroundColor="#30000000"/>
-		<widget name="selectedAudio" transparent="1" zPosition="4" halign="left" valign="top"  position="974,620" size="200,25" font="Saint; 22"  backgroundColor="#30000000"/>
+		
 		
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/Plexi/1280x720/images/cover-fs8.png" zPosition="50" position="656,370" size="240,292" alphatest="blend" transparent="0" />
 		<widget name="poster" transparent="1" zPosition="49" position="687,379" size="195,268" alphatest="blend" />
