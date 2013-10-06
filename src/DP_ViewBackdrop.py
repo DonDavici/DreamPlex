@@ -670,7 +670,7 @@ class DPS_ViewBackdrop(DP_View):
 			
 		else:
 			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop())
+			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop(forceShow = True))
 				
 		printl("", self, "C")
 

@@ -1699,20 +1699,29 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showPoster(self):
+	def showPoster(self, forceShow = False):
 		printl("", self, "S")
 		
-		dwl_poster = False
-		
-		if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)):
-			
+		if forceShow == True:
 			if self.whatPoster is not None:
 				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
 				ptr = self.EXpicloadPoster.getData()
 				
 				if ptr is not None:
 					self["poster"].instance.setPixmap(ptr)
-
+					
+		elif self.usePicCache:
+			if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)):
+				
+				if self.whatPoster is not None:
+					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+					ptr = self.EXpicloadPoster.getData()
+					
+					if ptr is not None:
+						self["poster"].instance.setPixmap(ptr)
+	
+			else:
+				self.downloadPoster()
 		else:
 			self.downloadPoster()
 			
@@ -1722,23 +1731,32 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showBackdrop(self):
+	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
 		
-		dwl_backdrop = False
-				
-		if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)):
-			
+		if forceShow == True:
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
 				ptr = self.EXpicloadBackdrop.getData()
 				
 				if ptr is not None:
 					self["mybackdrop"].instance.setPixmap(ptr)
-
+		
+		elif self.usePicCache :
+			if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)):
+				
+				if self.whatBackdrop is not None:
+					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+					ptr = self.EXpicloadBackdrop.getData()
+					
+					if ptr is not None:
+						self["mybackdrop"].instance.setPixmap(ptr)
+	
+			else:
+				self.downloadBackdrop()
 		else:
 			self.downloadBackdrop()
-			
+		
 		printl("", self, "C")
 		return
 
@@ -1772,7 +1790,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)).addCallback(lambda _: self.showPoster())
+			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)).addCallback(lambda _: self.showPoster(forceShow = True))
 		
 		printl("", self, "C")
 
@@ -1790,7 +1808,7 @@ class DP_View(Screen, NumericalTextInput):
 			
 		else:
 			printl("starting download", self, "D")	
-			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop())
+			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop(forceShow = True))
 				
 		printl("", self, "C")
 		
