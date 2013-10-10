@@ -99,6 +99,7 @@ class DPS_ViewMovie(DP_View):
 		#DP_View.setListViewElementsCount("DPS_ViewList")
 		
 		printl("myParams: " + str(viewName[3]), self, "D")
+		self.myParams = viewName[3]
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -111,55 +112,94 @@ class DPS_ViewMovie(DP_View):
 		# init skin elements
 		self["functionsContainer"]  = Label()
 		
-		self["btn_red"]  = Pixmap()
-		self["btn_blue"] = Pixmap()
-		self["btn_yellow"] = Pixmap()
-		self["btn_zero"] = Pixmap()
-		self["btn_nine"] = Pixmap()
-		self["btn_pvr"] = Pixmap()
-		self["btn_menu"] = Pixmap()
+		self["btn_red"]			= Pixmap()
+		self["btn_blue"]		= Pixmap()
+		self["btn_yellow"]		= Pixmap()
+		self["btn_zero"]		= Pixmap()
+		self["btn_nine"]		= Pixmap()
+		self["btn_pvr"]			= Pixmap()
+		self["btn_menu"]		= Pixmap()
 		
-		self["txt_red"]     = Label()
-		self["txt_filter"]  = Label()
-		self["txt_blue"]    = Label()
+		self["txt_red"]			= Label()
+		self["txt_filter"]		= Label()
+		self["txt_yellow"]		= Label()
+		self["txt_blue"]		= Label()
 		self["txt_blue"].setText(_("toogle View ") + _("(current 'Default')"))
-		self["txt_yellow"]    = Label()
+		
 		
 		if self.fastScroll == True:
 			self["txt_yellow"].setText("fastScroll = On")
 		else:
 			self["txt_yellow"].setText("fastScroll = Off")
 		
-		self["txt_pvr"]    = Label()
+		self["txt_pvr"]			= Label()
 		self["txt_pvr"].setText("load additional data")
-		self["txt_menu"]    = Label()
+		
+		self["txt_menu"]		= Label()
 		self["txt_menu"].setText("show media functions")
 		
-		self["poster"] 				= Pixmap()
-		self["mybackdrop"] 			= Pixmap()
-
-		self["audio"] 				= MultiPixmap()
-		self["resolution"] 			= MultiPixmap()
-		self["aspect"] 				= MultiPixmap()
-		self["codec"] 				= MultiPixmap()
-		self["rated"] 				= MultiPixmap()
-	
-		self["title"] 				= Label()
-		self["tag"] 				= Label()
-		self["shortDescription"] 	= ScrollLabel()
-		self["subtitles"] 			= Label()
-		self["selectedAudio"] 		= Label()
-		self["genre"] 				= Label()
-		self["year"] 				= Label()
-		self["runtime"] 			= Label()
-		self["total"] 				= Label()
-		self["current"] 			= Label()
-		self["backdroptext"]		= Label()
-		self["postertext"]			= Label()
+		if self.myParams["showPoster"] == True:
+			self["poster"] 				= Pixmap()
 		
-		self["rating_stars"] = ProgressBar()
+		if self.myParams["showBackdrop"] == True:
+			self["mybackdrop"] 			= Pixmap()
 		
-		self.skinName = self.viewName[2]
+		if self.myParams["audio"] == True:
+			self["audio"] 				= MultiPixmap()
+		
+		if self.myParams["resolution"] == True:
+			self["resolution"] 			= MultiPixmap()
+		
+		if self.myParams["aspect"] == True:
+			self["aspect"] 				= MultiPixmap()
+		
+		if self.myParams["codec"] == True:
+			self["codec"] 				= MultiPixmap()
+		
+		if self.myParams["rated"] == True:
+			self["rated"] 				= MultiPixmap()
+		
+		if self.myParams["title"] == True:
+			self["title"] 				= Label()
+		
+		if self.myParams["tag"] == True:
+			self["tag"] 				= Label()
+		
+		if self.myParams["shortDescription"] == True:
+			self["shortDescription"] 	= ScrollLabel()
+		
+		if self.myParams["subtitles"] == True:
+			self["subtitles"] 			= Label()
+		
+		if self.myParams["selectedAudio"] == True:
+			self["selectedAudio"] 		= Label()
+		
+		if self.myParams["genre"] == True:
+			self["genre"] 				= Label()
+		
+		if self.myParams["year"] == True:
+			self["year"] 				= Label()
+		
+		if self.myParams["runtime"] == True:
+			self["runtime"] 			= Label()
+		
+		if self.myParams["total"] == True:
+			self["total"] 				= Label()
+		
+		if self.myParams["current"] == True:
+			self["current"] 			= Label()
+		
+		if self.myParams["backdroptext"] == True:
+			self["backdroptext"]		= Label()
+		
+		if self.myParams["postertext"] == True:
+			self["postertext"]			= Label()
+		
+		if self.myParams["rating_stars"] == True:
+			self["rating_stars"] = ProgressBar()
+		
+		printl("skinName: " + str(self.skinName), self, "C")
+		self.skinName = self.myParams["screen"]#self.viewName[2]
 
 		self.EXscale = (AVSwitch().getFramebufferScale())
 		self.EXpicloadPoster 		= ePicLoad()
@@ -180,7 +220,9 @@ class DPS_ViewMovie(DP_View):
 		if self.resetGuiElements == True:
 			self.resetGuiElementsInFastScrollMode()
 		
-		self.resetCurrentImages()
+		if self.myParams["showBackdrop"] == True or self.myParams["showPoster"] == True:
+			self.resetCurrentImages()
+		
 		printl("showMedia: " + str(self.showMedia), self, "D")
 		
 		printl("isDirectory: " + str(self.isDirectory), self, "D")
@@ -195,7 +237,8 @@ class DPS_ViewMovie(DP_View):
 			else:
 				# lets get all data we need to show the needed pictures
 				# we also check if we want to play
-				self.getPictureInformationToLoad()
+				if self.myParams["showBackdrop"] == True or self.myParams["showPoster"] == True:
+					self.getPictureInformationToLoad()
 				
 				# lets set the urls for context functions of the selected entry
 				self.seenUrl = self.context.get("watchedURL", None)
@@ -211,24 +254,50 @@ class DPS_ViewMovie(DP_View):
 				if self.playTheme: 
 					if self.startPlaybackNow:
 						super(DPS_ViewList, self).startThemePlayback()
-						
-				self.setText("title", self.details.get("title", " "))
-				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
-				self.setText("year", str(self.details.get("year", " - ")))
-				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-				self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-				self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
-				self.setText("runtime", str(self.details.get("runtime", " - ")))
-				self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
+				
+				if self.myParams["title"] == True:	
+					self.setText("title", self.details.get("title", " "))
+				
+				if self.myParams["tag"] == True:	
+					self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
+				
+				if self.myParams["year"] == True:	
+					self.setText("year", str(self.details.get("year", " - ")))
+				
+				if self.myParams["genre"] == True:	
+					self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+				
+				if self.myParams["subtitles"] == True:	
+					self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
+				
+				if self.myParams["selectedAudio"] == True:	
+					self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
+				
+				if self.myParams["runtime"] == True:		
+					self.setText("runtime", str(self.details.get("runtime", " - ")))
+				
+				if self.myParams["shortDescription"] == True:		
+					self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 				
 				if self.fastScroll == False or self.showMedia == True:
 					# handle all pixmaps
-					self.handlePopularityPixmaps()
-					self.handleCodecPixmaps()
-					self.handleAspectPixmaps()
-					self.handleResolutionPixmaps()
-					self.handleRatedPixmaps()
-					self.handleSoundPixmaps()
+					if self.myParams["rating_stars"] == True:		
+						self.handlePopularityPixmaps()
+					
+					if self.myParams["codec"] == True:			
+						self.handleCodecPixmaps()
+					
+					if self.myParams["aspect"] == True:			
+						self.handleAspectPixmaps()
+					
+					if self.myParams["resolution"] == True:			
+						self.handleResolutionPixmaps()
+					
+					if self.myParams["rated"] == True:			
+						self.handleRatedPixmaps()
+					
+					if self.myParams["audio"] == True:		
+						self.handleSoundPixmaps()
 				
 				# navigation
 				self.handleNavigationData()

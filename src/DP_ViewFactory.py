@@ -110,19 +110,21 @@ def getViewsFromSkinParams(type):
 	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 	
 	availableViewList = []
-	availableParams = ("itemsPerPage", "showPoster", "showBackdrop")
 	
 	if type == "movieView":
 		myFile = "DP_ViewMovie"
 		myClass = "DPS_ViewMovie"
+		currentParams = getMovieViewDefaults()
 	
 	elif type == "showView":
 		myFile = "DP_ViewShow"
 		myClass = "DPS_ViewShow"
+		currentParams = getShowViewDefaults()
 		
 	elif type == "musicView":
 		myFile = "DP_ViewMusic"
 		myClass = "DPS_ViewMusic"
+		currentParams = getMusicViewDefaults()
 		
 	else:
 		pass
@@ -130,15 +132,84 @@ def getViewsFromSkinParams(type):
 	for view in tree.findall(type):
 		name = str(view.get('name'))
 
-		params = {}
-		for param in availableParams:
-			params[param] = str(view.get(param))
+		for param in currentParams:
+			#check if there are params that we have to override
+			value = view.get(param, None)
+			printl("value: " + str(value), __name__, "D")
+			# check if this value is mandatory
+			# if we are mandatory we stop here
+			if currentParams[param] == "mandatory" and value is None:
+				assert()
+				
+			# if there is one we overwrite the default value
+			if value is not None:
+				
+				# translate xml value to real true or false
+				if value == "true" or value == "True":
+					value = True
+				
+				if value == "false" or value == "False":
+					value = False
+				
+				currentParams[param] = value
 		
-		printl("params: " + str(params),__name__, "D")
-		view = (_(name), myFile, myClass, params)
+		printl("currentParams: " + str(currentParams),__name__, "D")
+		view = (_(name), myFile, myClass, currentParams)
 		
 		availableViewList.append(view)
 	
 	printl("availableViewList: " + str(availableViewList), __name__, "D")
 	printl("", __name__, "C")
 	return availableViewList
+
+#===========================================================================
+# 
+#===========================================================================
+def getMovieViewDefaults():
+	printl("", __name__, "S")
+	
+	defaults = {}
+	# mandatory items have to be defined or a assert error will come
+	defaults["itemsPerPage"]		= "mandatory"
+	defaults["apiLevel"]			= "mandatory"
+	defaults["screen"]				= "mandatory"
+
+	defaults["current"]				= True
+	defaults["total"]				= True
+	defaults["functionsContainer"]	= True
+	defaults["showBackdrop"]		= True
+	defaults["showPoster"]			= True
+	defaults["audio"] 				= True
+	defaults["resolution"] 			= True
+	defaults["aspect"] 				= True
+	defaults["codec"] 				= True
+	defaults["rated"] 				= True
+	defaults["title"] 				= True
+	defaults["tag"] 				= True
+	defaults["shortDescription"] 	= True
+	defaults["subtitles"] 			= True
+	defaults["selectedAudio"] 		= True
+	defaults["genre"] 				= True
+	defaults["year"] 				= True
+	defaults["runtime"] 			= True
+	defaults["backdroptext"]		= True
+	defaults["postertext"]			= True
+	defaults["rating_stars"] 		= True
+	
+	printl("", __name__, "C")
+	return defaults
+#===========================================================================
+# 
+#===========================================================================
+def getShowViewDefaults():
+	printl("", __name__, "S")
+	
+	printl("", __name__, "C")
+#===========================================================================
+# 
+#===========================================================================
+def getMusicViewDefaults():
+	printl("", __name__, "S")
+	
+	printl("", __name__, "C")
+	

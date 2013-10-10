@@ -1742,11 +1742,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 		
-		if self.resetPoster == True:
-			self["poster"].instance.setPixmapFromFile(ptr)
+		if self.myParams["showPoster"] == True:
+			if self.resetPoster == True:
+				self["poster"].instance.setPixmapFromFile(ptr)
 		
-		if self.resetBackdrop == True:
-			self["mybackdrop"].instance.setPixmapFromFile(ptr)
+		if self.myParams["showBackdrop"] == True:
+			if self.resetBackdrop == True:
+				self["mybackdrop"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
 		
@@ -1792,8 +1794,11 @@ class DP_View(Screen, NumericalTextInput):
 	def setPara(self):
 		printl("", self, "S")
 		
-		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		if self.myParams["showPoster"] == True:
+			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		
+		if self.myParams["showBackdrop"] == True:
+			self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
@@ -1814,14 +1819,26 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		# lets hide them so that fastScroll does not show up old information
-		self["rating_stars"].hide()
-		self["codec"].hide()
-		self["aspect"].hide()
-		self["resolution"].hide()
-		self["rated"].hide()
-		self["audio"].hide()
+		if self.myParams["rating_stars"] == True:		
+			self["rating_stars"].hide()
 		
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
-		self["mybackdrop"].instance.setPixmapFromFile(ptr)
+		if self.myParams["codec"] == True:		
+			self["codec"].hide()
+		
+		if self.myParams["aspect"] == True:		
+			self["aspect"].hide()
+		
+		if self.myParams["resolution"] == True:		
+			self["resolution"].hide()
+		
+		if self.myParams["rated"] == True:		
+			self["rated"].hide()
+		
+		if self.myParams["audio"] == True:
+			self["audio"].hide()
+		
+		if self.myParams["showBackdrop"] == True:
+			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+			self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")
