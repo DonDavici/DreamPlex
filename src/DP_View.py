@@ -45,45 +45,12 @@ from urllib import urlencode, quote_plus
 
 from twisted.web.client import downloadPage
 
+from Plugins.Extensions.DreamPlex.DP_ViewFactory import getViews
 from Plugins.Extensions.DreamPlex.DPH_Arts import getPictureData
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
-
-#===============================================================================
-# 
-#===============================================================================
-def getViews(libraryName):
-	'''
-	@param: none 
-	@return: availableViewList
-	'''
-	printl("", "DP_View::getViews", "S")
-	
-	availableViewList = []
-	
-	if libraryName == "movies" or libraryName == "tvshows":
-		viewList = (
-			(_("Short List"), "DP_ViewList", "DPS_ViewList"),
-			(_("Long List"), "DP_ViewListLong", "DPS_ViewListLong"), 
-			(_("Backdrop"), "DP_ViewBackdrop", "DPS_ViewBackdrop"), 
-		)
-	elif libraryName == "music":
-		viewList = (
-					(_("Music"), "DP_ViewMusic", "DPS_ViewMusic"), 
-				)
-	else:
-		viewList = ()
-	
-	for view in viewList:
-		try:
-			availableViewList.append(view)
-		except Exception, ex:
-			printl("View %s not available in this skin" % view[1] + " exception: " + ex , __name__, "W")
-	
-	printl("", __name__, "C")
-	return availableViewList
 
 #===============================================================================
 # 
@@ -142,7 +109,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		self.playerData = None
 		
-		self.setListViewElementsCount(str(viewName[1]))
+		self.setListViewElementsCount(viewName)
 	
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 		
@@ -228,7 +195,7 @@ class DP_View(Screen, NumericalTextInput):
 			path = str(guiElement.get('path'))
 			self.guiElements[name] = path
 			
-		printl("guiElements: " + str(self.guiElements))
+		printl("guiElements: " + str(self.guiElements), self, "D")
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -237,10 +204,17 @@ class DP_View(Screen, NumericalTextInput):
 	def setListViewElementsCount(self, viewName):
 		printl("", self, "S")
 		
-		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
-		for view in tree.findall('view'):
-			if view.get('name') == viewName:
-				self.itemsPerPage = int(view.get('itemsPerPage'))
+		multiView = True
+	
+		if multiView:
+			params = viewName[3]
+			self.itemsPerPage = int(params['itemsPerPage'])
+		else:
+			tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+			for view in tree.findall('view'):
+				if view.get('name') == str(viewName[1]):
+					self.itemsPerPage = int(view.get('itemsPerPage'))
+		
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 			
 		printl("", self, "C")
