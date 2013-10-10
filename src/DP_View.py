@@ -93,10 +93,9 @@ class DP_View(Screen, NumericalTextInput):
 		printl("cache: " + str(cache), self, "D")
 		
 		printl("viewName: "+ str(viewName), self, "I")
-		self.skinName = viewName[2]
 		Screen.__init__(self, session)
 		NumericalTextInput.__init__(self)
-		self.skinName = viewName[2]
+		self.skinName = self.myParams["screen"]#viewName[2]
 		self.select = select
 		self.cache = cache
 		self.onFirstExecSort = sort

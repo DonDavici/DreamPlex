@@ -114,31 +114,32 @@ def getViewsFromSkinParams(type):
 	if type == "movieView":
 		myFile = "DP_ViewMovie"
 		myClass = "DPS_ViewMovie"
-		currentParams = getMovieViewDefaults()
+		defaultParams = getMovieViewDefaults()
 	
 	elif type == "showView":
 		myFile = "DP_ViewShow"
 		myClass = "DPS_ViewShow"
-		currentParams = getShowViewDefaults()
+		defaultParams = getShowViewDefaults()
 		
 	elif type == "musicView":
 		myFile = "DP_ViewMusic"
 		myClass = "DPS_ViewMusic"
-		currentParams = getMusicViewDefaults()
+		defaultParams = getMusicViewDefaults()
 		
 	else:
 		pass
 	
 	for view in tree.findall(type):
 		name = str(view.get('name'))
-
-		for param in currentParams:
+		currentParams = {}
+		
+		for param in defaultParams:
 			#check if there are params that we have to override
 			value = view.get(param, None)
 			printl("value: " + str(value), __name__, "D")
 			# check if this value is mandatory
 			# if we are mandatory we stop here
-			if currentParams[param] == "mandatory" and value is None:
+			if defaultParams[param] == "mandatory" and value is None:
 				assert()
 				
 			# if there is one we overwrite the default value
@@ -151,7 +152,7 @@ def getViewsFromSkinParams(type):
 				if value == "false" or value == "False":
 					value = False
 				
-				currentParams[param] = value
+			currentParams[param] = value
 		
 		printl("currentParams: " + str(currentParams),__name__, "D")
 		view = (_(name), myFile, myClass, currentParams)

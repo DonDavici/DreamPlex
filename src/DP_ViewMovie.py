@@ -92,14 +92,12 @@ class DPS_ViewMovie(DP_View):
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
 		printl("", self , "S")
 		self.session = session
-		
+		printl("myParams: " + str(viewName[3]), self, "D")
+		self.myParams = viewName[3]
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
 		printl("cache: " + str(cache), self, "D")
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
-		
-		printl("myParams: " + str(viewName[3]), self, "D")
-		self.myParams = viewName[3]
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
