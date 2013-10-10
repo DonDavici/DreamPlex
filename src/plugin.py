@@ -3,7 +3,7 @@
 #IMPORT
 #------------------------------------------------------------------------------------------
 from Plugins.Plugin import PluginDescriptor
-from Components.config import config
+from Components.config import config, configfile
 from __init__ import prepareEnvironment
 
 #===============================================================================
@@ -26,7 +26,10 @@ def Autostart(reason, session=None, **kwargs):
 	if reason == 0:
 		prepareEnvironment()
 	else:
+		config.plugins.dreamplex.entriescount.save()
+		config.plugins.dreamplex.Entries.save()
 		config.plugins.dreamplex.save()
+		configfile.save()
 
 #===============================================================================
 # plugins

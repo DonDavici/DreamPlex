@@ -174,10 +174,10 @@ class DP_Player(MoviePlayer):
 		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
 		{
 		"ok": self.ok,
-		"cancel": self.cancel,
+		"cancel": self.hide,
 		"keyTV": self.leavePlayer,
 		"stop": self.leavePlayer,
-		"leavePlayer": self.cancel,
+		"leavePlayer": self.hide,
 		"next": self.seekManual,
 		"previous": self.seekManual
 		}, -2)
@@ -248,27 +248,14 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def cancel(self):
-		#printl("", self, "S")
-
-		self.isVisible = False
-		self.hide()
-
-		#printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
 	def ok(self):
 		#printl("", self, "S")
 		
 		self.bufferInfo()
-		
-		if self.isVisible == True:
-			self.isVisible = False
+
+		if self.shown:
 			self.hide()
 		else:
-			self.isVisible = True
 			self.show()
 
 		#printl("", self, "C")
