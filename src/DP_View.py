@@ -37,7 +37,6 @@ from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
 from enigma import eServiceReference
-from enigma import loadPNG
 
 from Tools.Directories import fileExists
 
@@ -48,7 +47,7 @@ from twisted.web.client import downloadPage
 from Plugins.Extensions.DreamPlex.DPH_Arts import getPictureData
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize, loadPicture
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
 #===============================================================================
@@ -1055,7 +1054,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.newList = []
 		for listView in self.listViewList:
 			#printl("seenVisu location: " + str(listView[4]), self, "D")
-			seenVisu = loadPNG(listView[4])
+			seenVisu = loadPicture(listView[4])
 			#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
 			content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
 			self.newList.append(content)
