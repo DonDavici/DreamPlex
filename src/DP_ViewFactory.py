@@ -152,6 +152,10 @@ def getViewsFromSkinParams(type):
 				if value == "false" or value == "False":
 					value = False
 				
+			else:
+				# fill not existing params with default values
+				value = defaultParams[param]
+				
 			currentParams[param] = value
 		
 		printl("currentParams: " + str(currentParams),__name__, "D")
@@ -205,12 +209,71 @@ def getMovieViewDefaults():
 def getShowViewDefaults():
 	printl("", __name__, "S")
 	
+	defaults = {}
+	# mandatory items have to be defined or a assert error will come
+	defaults["itemsPerPage"]		= "mandatory"
+	defaults["apiLevel"]			= "mandatory"
+	defaults["screen"]				= "mandatory"
+
+	defaults["current"]				= True
+	defaults["total"]				= True
+	defaults["functionsContainer"]	= True
+	defaults["showBackdrop"]		= True
+	defaults["showPoster"]			= True
+	defaults["audio"] 				= True
+	defaults["resolution"] 			= True
+	defaults["aspect"] 				= True
+	defaults["codec"] 				= True
+	defaults["rated"] 				= True
+	defaults["title"] 				= True
+	defaults["tag"] 				= True
+	defaults["shortDescription"] 	= True
+	defaults["subtitles"] 			= True
+	defaults["selectedAudio"] 		= True
+	defaults["genre"] 				= True
+	defaults["year"] 				= True
+	defaults["runtime"] 			= True
+	defaults["backdroptext"]		= True
+	defaults["postertext"]			= True
+	defaults["rating_stars"] 		= True
+	
 	printl("", __name__, "C")
+	return defaults
+
 #===========================================================================
 # 
 #===========================================================================
 def getMusicViewDefaults():
 	printl("", __name__, "S")
 	
+	defaults = {}
+	# mandatory items have to be defined or a assert error will come
+	defaults["itemsPerPage"]		= "mandatory"
+	defaults["apiLevel"]			= "mandatory"
+	defaults["screen"]				= "mandatory"
+
+	defaults["current"]				= True
+	defaults["total"]				= True
+	defaults["functionsContainer"]	= True
+	defaults["showBackdrop"]		= True
+	defaults["showPoster"]			= True
+	defaults["audio"] 				= True
+	defaults["resolution"] 			= True
+	defaults["aspect"] 				= True
+	defaults["codec"] 				= True
+	defaults["rated"] 				= True
+	defaults["title"] 				= True
+	defaults["tag"] 				= True
+	defaults["shortDescription"] 	= True
+	defaults["subtitles"] 			= True
+	defaults["selectedAudio"] 		= True
+	defaults["genre"] 				= True
+	defaults["year"] 				= True
+	defaults["runtime"] 			= True
+	defaults["backdroptext"]		= True
+	defaults["postertext"]			= True
+	defaults["rating_stars"] 		= True
+	
 	printl("", __name__, "C")
+	return defaults
 	

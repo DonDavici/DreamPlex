@@ -26,10 +26,10 @@
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop"/>
 	<movieView name="Poster/Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewListLong"/>
 	
-	<showView name="Poster" apiLevel="1" itemsPerPage="14" showPoster="true" showBackdrop="false"/>
-	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" showPoster="true" showBackdrop="false"/>
-	<showView name="Poster/Backdrop" apiLevel="1" itemsPerPage="6" showPoster="true" showBackdrop="false"/>
+	<showView name="Poster" apiLevel="1" itemsPerPage="14" screen="DPS_ViewList"/>
+	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop"/>
+	<showView name="Poster/Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewListLong"/>
 	
-	<musicView name="" apiLevel="1" />
+	<musicView name="" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong"/>
 
 </xml>
