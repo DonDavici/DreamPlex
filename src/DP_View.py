@@ -1846,7 +1846,8 @@ class DP_View(Screen, NumericalTextInput):
 		self["rated"].hide()
 		self["audio"].hide()
 		
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+
 		self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")

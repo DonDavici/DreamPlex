@@ -49,7 +49,7 @@ def getPictureData(details, prefix, postfix, usePicCache):
 			target = mediaPath + prefix + "_" + name + postfix
 			printl( "target: " + str(target), __name__, "D")
 		except:
-			target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+			target = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 			printl( "something went wrong", __name__, "D")
 	
 	printl("", __name__, "C")
