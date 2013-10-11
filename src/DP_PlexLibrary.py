@@ -3073,7 +3073,7 @@ class PlexLibrary(Screen):
 				   'thumb'		: self.getThumb(track, server) ,
 				   'ratingKey'	: track.get('key','') }
 	
-		if '/resources/plex.png' in extraData['thumb']:
+		if extraData['thumb'] == "":
 			printl("thumb is default", self, "I")
 			extraData['thumb']=self.getThumb(tree, server)
 			
@@ -3407,7 +3407,7 @@ class PlexLibrary(Screen):
 
 		if image == '':
 			printl("", self, "C")   
-			return self.g_loc+'/resources/plex.png'
+			return ""
 			
 		elif image[0:4] == "http" :
 			printl("", self, "C")   
@@ -3423,7 +3423,7 @@ class PlexLibrary(Screen):
 		
 		else: 
 			printl("", self, "C")   
-			return self.g_loc+'/resources/plex.png'
+			return ""
 	
 	#=============================================================================
 	# 
@@ -3441,7 +3441,7 @@ class PlexLibrary(Screen):
 
 		if thumbnail == '':
 			printl("", self, "C")   
-			return self.g_loc+'/resources/plex.png'
+			return ""
 			
 		elif thumbnail[0:4] == "http" :
 			printl("", self, "C")   
@@ -3457,7 +3457,7 @@ class PlexLibrary(Screen):
 		
 		else: 
 			printl("", self, "C")   
-			return self.g_loc+'/resources/plex.png'
+			return ""
 	
 	#============================================================================
 	# 

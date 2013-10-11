@@ -1759,7 +1759,7 @@ class DP_View(Screen, NumericalTextInput):
 		download_url = self.extraData["thumb"]
 		printl( "download url " + download_url, self, "D")
 		
-		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+		if download_url == "":
 			printl("no pic data available", self, "D")
 		
 		else:
@@ -1777,7 +1777,7 @@ class DP_View(Screen, NumericalTextInput):
 		download_url = self.extraData["fanart_image"]
 		printl( "download url " + download_url, self, "D")	
 		
-		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+		if download_url == "":
 			printl("no pic data available", self, "D")
 			
 		else:

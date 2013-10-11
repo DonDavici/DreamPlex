@@ -665,7 +665,7 @@ class DPS_ViewBackdrop(DP_View):
 		#http://192.168.45.190:32400/photo/:/transcode?url=http%3A%2F%2Flocalhost%3A32400%2Flibrary%2Fmetadata%2F6209%2Fart%2F1354571799&width=560&height=315'
 		printl( "download url " + download_url, self, "D")	
 		
-		if download_url == "" or download_url == "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/resources/plex.png":
+		if download_url == "":
 			printl("no pic data available", self, "D")
 			
 		else:
