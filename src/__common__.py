@@ -28,7 +28,7 @@ import datetime
 import shutil
 import math
 
-from enigma import getDesktop, addFont
+from enigma import getDesktop, addFont, loadPNG, loadJPG
 from skin import loadSkin
 from Components.config import config
 from Components.AVSwitch import AVSwitch
@@ -793,3 +793,21 @@ def convertSize(size):
 		return '0B'
 	
 	printl2("", "__common__::convertSize", "C")
+
+#===========================================================================
+# 
+#===========================================================================	
+def loadPicture(filename):
+	printl2("", "__common__::loadPixmap", "S")
+	ptr = None
+
+	if filename[-4:] == ".png":
+		ptr = loadPNG(filename)
+	elif filename[-4:] == ".jpg":
+		ptr = loadJPG(filename)
+		if not ptr:
+			# kind of fallback if filetype is declared wrong
+			ptr = loadPNG(filename)
+
+	printl2("", "__common__::loadPixmap", "S")
+	return ptr
