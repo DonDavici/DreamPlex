@@ -52,12 +52,12 @@ def getViewClass():
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
-	return DPS_ViewShow
+	return DPS_ViewCine
 
 #===============================================================================
 # 
 #===============================================================================
-class DPS_ViewShow(DP_View):
+class DPS_ViewCine(DP_View):
 	'''
 	'''
 	backdrop_postfix 		= "_backdrop.jpg"

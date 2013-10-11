@@ -64,11 +64,8 @@ def getViews(libraryName):
 	multiView = True
 	
 	if multiView:
-		if libraryName == "movies":
-			availableViewList = getViewsFromSkinParams("movieView")
-		
-		elif libraryName == "tvshows":
-			availableViewList = getViewsFromSkinParams("showView")
+		if libraryName == "movies" or libraryName == "tvshows":
+			availableViewList = getViewsFromSkinParams("cineView")
 		
 		elif libraryName == "music":
 			availableViewList = getViewsFromSkinParams("musicView")
@@ -111,16 +108,11 @@ def getViewsFromSkinParams(type):
 	
 	availableViewList = []
 	
-	if type == "movieView":
-		myFile = "DP_ViewMovie"
-		myClass = "DPS_ViewMovie"
-		defaultParams = getMovieViewDefaults()
+	if type == "cineView":
+		myFile = "DP_ViewCine"
+		myClass = "DPS_ViewCine"
+		defaultParams = getCineViewDefaults()
 	
-	elif type == "showView":
-		myFile = "DP_ViewShow"
-		myClass = "DPS_ViewShow"
-		defaultParams = getShowViewDefaults()
-		
 	elif type == "musicView":
 		myFile = "DP_ViewMusic"
 		myClass = "DPS_ViewMusic"
@@ -170,43 +162,7 @@ def getViewsFromSkinParams(type):
 #===========================================================================
 # 
 #===========================================================================
-def getMovieViewDefaults():
-	printl("", __name__, "S")
-	
-	defaults = {}
-	# mandatory items have to be defined or a assert error will come
-	defaults["itemsPerPage"]		= "mandatory"
-	defaults["apiLevel"]			= "mandatory"
-	defaults["screen"]				= "mandatory"
-
-	defaults["current"]				= True
-	defaults["total"]				= True
-	defaults["functionsContainer"]	= True
-	defaults["showBackdrop"]		= True
-	defaults["showPoster"]			= True
-	defaults["audio"] 				= True
-	defaults["resolution"] 			= True
-	defaults["aspect"] 				= True
-	defaults["codec"] 				= True
-	defaults["rated"] 				= True
-	defaults["title"] 				= True
-	defaults["tag"] 				= True
-	defaults["shortDescription"] 	= True
-	defaults["subtitles"] 			= True
-	defaults["selectedAudio"] 		= True
-	defaults["genre"] 				= True
-	defaults["year"] 				= True
-	defaults["runtime"] 			= True
-	defaults["backdroptext"]		= True
-	defaults["postertext"]			= True
-	defaults["rating_stars"] 		= True
-	
-	printl("", __name__, "C")
-	return defaults
-#===========================================================================
-# 
-#===========================================================================
-def getShowViewDefaults():
+def getCineViewDefaults():
 	printl("", __name__, "S")
 	
 	defaults = {}
