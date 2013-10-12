@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <xml>
+	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/mayatypeuitvg.ttf" size="100" name="Modern" />
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/goodtime.ttf" size="100"  name="Named" /> 
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/saint.ttf" size="100" name="Saint" />
 	
+	<!-- SEEN/UNSEEN VISUS -->
 	<seenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
 	<startedPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png" />
 	<unseenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png" />
 	
+	<!-- GUI ELEMENTS -->
 	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/red.png" />
 	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/green.png" />
 	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/blue.png" />
@@ -17,13 +20,10 @@
 	<guiElement name="key_zero" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/key_0.png" />
 	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/key_9.png" />
 	
-	<view name="DP_ViewList" itemsPerPage="6"/>
-	<view name="DP_ViewBackdrop" itemsPerPage="6"/>
-	<view name="DP_ViewListLong" itemsPerPage="14"/>
-	<view name="DP_ViewMusic" itemsPerPage="6"/>
-
-	<cineView name="Poster" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
-	<cineView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop"/>
-	<cineView name="Poster/Backdrop" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropHeight="720" backdropWidth="1280"/>
-
+	<!-- VIEWS -->
+	<!-- CINE VIEWS -->
+	<cineView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
+	<cineView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
+	<cineView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
+	
 </xml>

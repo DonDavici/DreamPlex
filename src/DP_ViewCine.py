@@ -60,8 +60,8 @@ def getViewClass():
 class DPS_ViewCine(DP_View):
 	'''
 	'''
-	backdrop_postfix 		= "_backdrop.jpg"
-	poster_postfix 			= "_poster.jpg"
+	backdrop_postfix 		= ""
+	poster_postfix 			= ""
 	image_prefix 			= ""
 	plexInstance 			= None
 	details 				= None
@@ -98,6 +98,10 @@ class DPS_ViewCine(DP_View):
 		printl("cache: " + str(cache), self, "D")
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
+		
+		# set image names to use
+		self.poster_postfix = self.myParams["poster_postfix"]
+		self.backdrop_postfix = self.myParams["backdrop_postfix"]
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value

@@ -151,6 +151,8 @@ def getCineViewDefaults():
 	defaults["backdropWidth"]		= "560"
 	defaults["posterHeight"]		= "268"
 	defaults["posterWidth"]			= "195"
+	defaults["backdrop_postfix"]	= "_backdrop.jpg"
+	defaults["poster_postfix"]		= "_poster.jpg"
 	defaults["current"]				= True
 	defaults["total"]				= True
 	defaults["functionsContainer"]	= True
