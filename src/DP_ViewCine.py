@@ -305,11 +305,11 @@ class DPS_ViewCine(DP_View):
 				self.handleNavigationData()
 				
 				# now lets switch images
-				if self.changePoster == True:
+				if self.changePoster == True and self.myParams["showPoster"] == True:
 					self.showPoster()
 				
 				if self.fastScroll == False or self.showMedia == True:
-					if self.changeBackdrop == True:
+					if self.changeBackdrop == True and self.myParams["showBackdrop"] == True:
 						self.showBackdrop()
 				
 				self.showFunctions(False)
