@@ -24,6 +24,6 @@
 
 	<cineView name="Poster" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
 	<cineView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop"/>
-	<cineView name="Poster/Backdrop" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong"/>
+	<cineView name="Poster/Backdrop" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropHeight="720" backdropWidth="1280"/>
 
 </xml>

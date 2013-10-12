@@ -1775,6 +1775,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
+		download_url = download_url.replace('&width=560&height=315', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "":

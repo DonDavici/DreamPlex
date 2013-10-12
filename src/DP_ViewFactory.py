@@ -60,41 +60,16 @@ def getViews(libraryName):
 	@return: availableViewList
 	'''
 	printl("", "DP_View::getViews", "S")
+
+	if libraryName == "movies" or libraryName == "tvshows":
+		availableViewList = getViewsFromSkinParams("cineView")
 	
-	multiView = True
+	elif libraryName == "music":
+		availableViewList = getViewsFromSkinParams("musicView")
 	
-	if multiView:
-		if libraryName == "movies" or libraryName == "tvshows":
-			availableViewList = getViewsFromSkinParams("cineView")
-		
-		elif libraryName == "music":
-			availableViewList = getViewsFromSkinParams("musicView")
-		
-		else:
-			availableViewList = ()
-		
 	else:
-		availableViewList = []
-		
-		if libraryName == "movies" or libraryName == "tvshows":
-			viewList = (
-				(_("Short List"), "DP_ViewList", "DPS_ViewList"),
-				(_("Long List"), "DP_ViewListLong", "DPS_ViewListLong"), 
-				(_("Backdrop"), "DP_ViewBackdrop", "DPS_ViewBackdrop"), 
-			)
-		elif libraryName == "music":
-			viewList = (
-						(_("Music"), "DP_ViewMusic", "DPS_ViewMusic"), 
-					)
-		else:
-			viewList = ()
-		
-		for view in viewList:
-			try:
-				availableViewList.append(view)
-			except Exception, ex:
-				printl("View %s not available in this skin" % view[1] + " exception: " + ex , __name__, "W")
-	
+		availableViewList = ()
+
 	printl("", __name__, "C")
 	return availableViewList
 
@@ -170,7 +145,11 @@ def getCineViewDefaults():
 	defaults["itemsPerPage"]		= "mandatory"
 	defaults["apiLevel"]			= "mandatory"
 	defaults["screen"]				= "mandatory"
-
+	
+	defaults["backdropHeight"]		= "315"
+	defaults["backdropWidth"]		= "560"
+	defaults["posterHeight"]		= "315"
+	defaults["posterWidth"]			= "560"
 	defaults["current"]				= True
 	defaults["total"]				= True
 	defaults["functionsContainer"]	= True

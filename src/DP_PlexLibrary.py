@@ -470,9 +470,9 @@ class PlexLibrary(Screen):
 			if len(self.g_serverDict) > 1:
 				details['title']=section.get('serverName')+": "+details['title']
 			
-			extraData={ 'fanart_image' : self.getFanart(section, section.get('address')) ,
+			extraData={ 'fanart_image' : self.getImage(section, section.get('address'), type="art") ,
 						'type'		 : "Video" ,
-						'thumb'		: self.getFanart(section, section.get('address'), False) ,
+						'thumb'		: self.getImage(section, section.get('address'), False, type="art") ,
 						'token'		: str(section['token']) }
 
 			if self.g_connectionType == "2": # MYPLEX
@@ -1482,20 +1482,20 @@ class PlexLibrary(Screen):
 					tempcast.append(child.get('tag'))
 
 			details = {}
-			details["viewMode"]				 = "ShowSeasons"
-			details['ratingKey']				= str(show.get('ratingKey', 0)) # primary key in plex
-			details['summary']				  = show.get('summary','')
-			details['title']					= show.get('title','').encode('utf-8')
-			details['episode']				  = int(show.get('leafCount',0))
-			details['rating']				   = show.get('rating', 0)
-			details['studio']				   = show.get('studio','')
-			details['year']					 = show.get('year', 0)
-			details['tagline']				  = show.get('tagline','')
-			details['server']				   = str(server)
-			details['genre']					= " / ".join(tempgenre)
-			details['viewOffset']			   = show.get('viewOffset',0)
-			details['director']				 = " / ".join(tempdir)
-			details['originallyAvailableAt']	= show.get('originallyAvailableAt','')
+			details["viewMode"]				= "ShowSeasons"
+			details['ratingKey']			= str(show.get('ratingKey', 0)) # primary key in plex
+			details['summary']				= show.get('summary','')
+			details['title']				= show.get('title','').encode('utf-8')
+			details['episode']				= int(show.get('leafCount',0))
+			details['rating']				= show.get('rating', 0)
+			details['studio']				= show.get('studio','')
+			details['year']					= show.get('year', 0)
+			details['tagline']				= show.get('tagline','')
+			details['server']				= str(server)
+			details['genre']				= " / ".join(tempgenre)
+			details['viewOffset']			= show.get('viewOffset',0)
+			details['director']				= " / ".join(tempdir)
+			details['originallyAvailableAt']= show.get('originallyAvailableAt','')
 			
 			#Extended Metadata
 			if self.g_skipmetadata == "false":
@@ -1505,14 +1505,14 @@ class PlexLibrary(Screen):
 			watched = int(show.get('viewedLeafCount',0))
 			
 			extraData = {}
-			extraData['type']			   = "video"
-			extraData['ratingKey']		  = str(show.get('ratingKey', 0)) # primary key in plex
-			extraData['seenEpisodes']	   = watched
-			extraData['unseenEpisodes']	 = details['episode'] - watched
-			extraData['thumb']			  = self.getImage(show, server, x = 195, y = 268, type = "thumb")
-			extraData['fanart_image']	   = self.getImage(show, server, x = 560, y = 315, type = "art")
-			extraData['token']			  = self.g_myplex_accessToken
-			extraData['theme']			  = show.get('theme', '')
+			extraData['type']				= "video"
+			extraData['ratingKey']			= str(show.get('ratingKey', 0)) # primary key in plex
+			extraData['seenEpisodes']		= watched
+			extraData['unseenEpisodes']		= details['episode'] - watched
+			extraData['thumb']				= self.getImage(show, server, type = "thumb")
+			extraData['fanart_image']		= self.getImage(show, server, type = "art")
+			extraData['token']				= self.g_myplex_accessToken
+			extraData['theme']				= show.get('theme', '')
 			extraData['key']				= show.get('key','')
 			
 			# lets add this for another filter
@@ -1604,7 +1604,7 @@ class PlexLibrary(Screen):
 				printl("Flattening single season show", self, "I")
 				willFlatten=True
 		
-		sectionart=self.getFanart(tree, server)
+		sectionart=self.getImage(tree, server, type="art")
 			  
 		#For all the directory tags
 		SeasonTags=tree.findall('Directory')
@@ -1622,31 +1622,31 @@ class PlexLibrary(Screen):
 			watched=int(season.get('viewedLeafCount',0))
 		
 			details = {}
-			details["viewMode"]				 = "ShowEpisodes"
-			details['ratingKey']				= str(season.get('ratingKey', 0)) # primary key in plex
-			details['summary']				  = season.get('summary','')
-			details['season']				   = season.get('index','0')
-			details['title']					= season.get('title','').encode('utf-8')
-			details['episode']				  = int(season.get('leafCount',0))
-			details['rating']				   = season.get('rating', 0)
-			details['studio']				   = season.get('studio','')
-			details['year']					 = season.get('year', 0)
-			details['tagline']				  = season.get('tagline','')
-			details['server']				   = str(server)
-			details['viewOffset']			   = season.get('viewOffset',0)
-			details['originallyAvailableAt']	= season.get('originallyAvailableAt','')
+			details["viewMode"]				= "ShowEpisodes"
+			details['ratingKey']			= str(season.get('ratingKey', 0)) # primary key in plex
+			details['summary']				= season.get('summary','')
+			details['season']				= season.get('index','0')
+			details['title']				= season.get('title','').encode('utf-8')
+			details['episode']				= int(season.get('leafCount',0))
+			details['rating']				= season.get('rating', 0)
+			details['studio']				= season.get('studio','')
+			details['year']					= season.get('year', 0)
+			details['tagline']				= season.get('tagline','')
+			details['server']				= str(server)
+			details['viewOffset']			= season.get('viewOffset',0)
+			details['originallyAvailableAt']= season.get('originallyAvailableAt','')
 			
 			extraData = {}
-			extraData['type']			   = "video"
-			extraData['ratingKey']		  = str(season.get('ratingKey', 0)) # primary key in plex
-			extraData['seenEpisodes']	   = watched
-			extraData['unseenEpisodes']	 = details['episode'] - watched
-			extraData['thumb']			  = self.getThumb(season, server)
-			extraData['fanart_image']	   = self.getFanart(season, server)
-			#extraData['thumb']			  = self.getImage(season, server, x = 195, y = 268, type = "thumb")
-			#extraData['fanart_image']	   = self.getImage(season, server, x = 560, y = 315, type = "art")
-			extraData['token']			  = self.g_myplex_accessToken
-			extraData['theme']			  = season.get('theme', '')
+			extraData['type']				= "video"
+			extraData['ratingKey']			= str(season.get('ratingKey', 0)) # primary key in plex
+			extraData['seenEpisodes']		= watched
+			extraData['unseenEpisodes']		= details['episode'] - watched
+			#extraData['thumb']			 	= get.getImage(season, server)
+			#extraData['fanart_image']	 	= self.getImage(season, server)
+			extraData['thumb']				= self.getImage(season, server, type = "thumb")
+			extraData['fanart_image']		= self.getImage(season, server, type = "art")
+			extraData['token']				= self.g_myplex_accessToken
+			extraData['theme']				= season.get('theme', '')
 			extraData['key']				= season.get('key','')
 			 
 			# lets add this for another filter
@@ -1707,7 +1707,7 @@ class PlexLibrary(Screen):
 		ShowTags=tree.findall('Video')
 		
 		if self.g_skipimages == "false":		
-			sectionart=self.getThumb(tree, server)
+			sectionart=get.getImage(tree, server, type="thumb")
 		
 		fullList=[]
 		 
@@ -1737,24 +1737,24 @@ class PlexLibrary(Screen):
 					 
 			#Required listItem entries for XBMC
 			details = {}
-			details["viewMode"]			 = "play"
+			details["viewMode"]				= "play"
 			details['ratingKey']			= str(episode.get('ratingKey', 0)) # primary key in plex
 			details['title']				= episode.get('title','Unknown').encode('utf-8')
-			details['summary']			  = episode.get('summary','')
-			details['episode']			  = int(episode.get('index',0))
+			details['summary']				= episode.get('summary','')
+			details['episode']				= int(episode.get('index',0))
 			details['title']				= str(details['episode']).zfill(2) + ". " + details['title']
-			details['tvshowtitle']		  = episode.get('grandparentTitle',tree.get('grandparentTitle','')).encode('utf-8')
-			details['season']			   = episode.get('parentIndex',tree.get('parentIndex',0))
+			details['tvshowtitle']			= episode.get('grandparentTitle',tree.get('grandparentTitle','')).encode('utf-8')
+			details['season']				= episode.get('parentIndex',tree.get('parentIndex',0))
 			details['viewCount']			= episode.get('viewCount', 0)
-			details['rating']			   = episode.get('rating', 0)
-			details['studio']			   = episode.get('studio','')
-			details['year']				 = episode.get('year', 0)
-			details['tagline']			  = episode.get('tagline','')
-			details['runtime']			  = str(datetime.timedelta(seconds=duration))
-			details['server']			   = str(server)
+			details['rating']				= episode.get('rating', 0)
+			details['studio']				= episode.get('studio','')
+			details['year']					= episode.get('year', 0)
+			details['tagline']				= episode.get('tagline','')
+			details['runtime']				= str(datetime.timedelta(seconds=duration))
+			details['server']				= str(server)
 			details['genre']				= " / ".join(tempgenre)
-			details['viewOffset']		   = episode.get('viewOffset',0)
-			details['director']			 = " / ".join(tempdir)
+			details['viewOffset']			= episode.get('viewOffset',0)
+			details['director']				= " / ".join(tempdir)
 			
 			if tree.get('mixedParents',0) == 1:
 				details['title'] = details['tvshowtitle'] + ": " + details['title']
@@ -1778,21 +1778,21 @@ class PlexLibrary(Screen):
 				details['writer']   = " / ".join(tempwriter)
 			
 			extraData = {}
-			extraData['type']			   = "Video"
-			extraData['ratingKey']		  = str(episode.get('ratingKey', 0)) # primary key in plex
-			extraData['thumb']			  = self.getImage(episode, server, x = 195, y = 268, type = "grandparentThumb")
-			extraData['fanart_image']	   = self.getImage(episode, server, x = 560, y = 315, type = "thumb") #because this is a episode we have to use thumb
-			extraData['token']			  = self.g_myplex_accessToken
-			extraData['key']				= episode.get('key','')
+			extraData['type']					= "Video"
+			extraData['ratingKey']				= str(episode.get('ratingKey', 0)) # primary key in plex
+			extraData['thumb']					= self.getImage(episode, server, type = "grandparentThumb")
+			extraData['fanart_image']	 		= self.getImage(episode, server,type = "thumb") #because this is a episode we have to use thumb
+			extraData['token']					= self.g_myplex_accessToken
+			extraData['key']					= episode.get('key','')
 	
 			#Add extra media flag data
 			if self.g_skipmediaflags == "false":
-				extraData['contentRating']   = episode.get('contentRating', '')
-				extraData['videoResolution'] = mediaarguments.get('videoResolution', '')
-				extraData['videoCodec']	  = mediaarguments.get('videoCodec', '')
-				extraData['audioCodec']	  = mediaarguments.get('audioCodec', '')
-				extraData['aspectRatio']	 = mediaarguments.get('aspectRatio', '')
-				extraData['audioCodec']	  = mediaarguments.get('audioCodec', '')
+				extraData['contentRating']		= episode.get('contentRating', '')
+				extraData['videoResolution']	= mediaarguments.get('videoResolution', '')
+				extraData['videoCodec']			= mediaarguments.get('videoCodec', '')
+				extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
+				extraData['aspectRatio']		= mediaarguments.get('aspectRatio', '')
+				extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
 		
 			#Build any specific context menu entries
 			if self.g_skipcontext == "false":
@@ -2642,8 +2642,8 @@ class PlexLibrary(Screen):
 		
 		for directory in tree:
 			details={'title' : directory.get('title','Unknown').encode('utf-8') }
-			extraData={'thumb'		: self.getThumb(directory, server) ,
-					   'fanart_image' : self.getFanart(tree, server, False) } 
+			extraData={'thumb'		: get.getImage(directory, server, type="thumb") ,
+					   'fanart_image' : self.getImage(tree, server, False, type="art") } 
 			
 			if extraData['thumb'] == '':
 				extraData['thumb']=extraData['fanart_image']
@@ -2836,11 +2836,11 @@ class PlexLibrary(Screen):
 	
 			
 			extraData={'type'		: "Music" ,						  
-					   'thumb'	   : self.getThumb(grapes, server) ,
-					   'fanart_image': self.getFanart(grapes, server) }
+					   'thumb'	   : get.getImage(grapes, server, type="thumb") ,
+					   'fanart_image': self.getImage(grapes, server, type="art") }
 	
 			if extraData['fanart_image'] == "":
-				extraData['fanart_image']=self.getFanart(tree, server)
+				extraData['fanart_image']=self.getImage(tree, server, type="art")
 				
 			
 			details["viewMode"]				 = "ShowSeasons"
@@ -2938,8 +2938,8 @@ class PlexLibrary(Screen):
 			details['title']=details['artist']
 			  
 			extraData={'type'		 : "Music" ,
-					   'thumb'		: self.getThumb(artist, server) ,
-					   'fanart_image' : self.getFanart(artist, server) ,
+					   'thumb'		: get.getImage(artist, server, type="thumb") ,
+					   'fanart_image' : self.getImage(artist, server, type="art") ,
 					   'ratingKey'	: artist.get('title','') ,
 					   'key'		  : artist.get('key','') }
 	
@@ -2970,7 +2970,7 @@ class PlexLibrary(Screen):
 				self._showErrorOnTv("no xml as response", html)
 		
 		server=self.getServerFromURL(url)		
-		sectionart=self.getFanart(tree, server)
+		sectionart=self.getImage(tree, server, type="art")
 		
 		AlbumTags=tree.findall('Directory')
 		for album in AlbumTags:
@@ -2987,8 +2987,8 @@ class PlexLibrary(Screen):
 			details['title']=details['album']
 	
 			extraData={'type'		 : "Music" ,
-					   'thumb'		: self.getThumb(album, server) ,
-					   'fanart_image' : self.getFanart(album, server) ,
+					   'thumb'		: get.getImage(album, server, type="thumb") ,
+					   'fanart_image' : self.getImage(album, server, type="art") ,
 					   'key'		  : album.get('key','') }
 	
 			if extraData['fanart_image'] == "":
@@ -3031,8 +3031,8 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 		
-		server = self.getServerFromURL(url)							   
-		sectionart = self.getFanart(tree,server) 
+		server = self.getServerFromURL(url)
+		sectionart = self.getImage(tree,server, type="art") 
 		TrackTags = tree.findall('Track')	  
 		for track in TrackTags:		
 			content = self.trackTag(server, tree, track)
@@ -3069,16 +3069,16 @@ class PlexLibrary(Screen):
 		details['server']				   = str(server)
 								   
 		extraData={'type'		 : "Music" ,
-				   'fanart_image' : self.getFanart(track, server) ,
-				   'thumb'		: self.getThumb(track, server) ,
+				   'fanart_image' : self.getImage(track, server, type="art") ,
+				   'thumb'		: get.getImage(track, server, type="thumb") ,
 				   'ratingKey'	: track.get('key','') }
 	
 		if extraData['thumb'] == "":
 			printl("thumb is default", self, "I")
-			extraData['thumb']=self.getThumb(tree, server)
+			extraData['thumb']=get.getImage(tree, server, type="thumb")
 			
 		if extraData['fanart_image'] == "":
-			extraData['fanart_image']=self.getFanart(tree, server)
+			extraData['fanart_image']=self.getImage(tree, server, type="art")
 			
 		extraData['theme']="1"
 		context = {}
@@ -3130,14 +3130,14 @@ class PlexLibrary(Screen):
 			if details['title'] == "Unknown":
 				details['title']=plugin.get('name',"Unknown").encode('utf-8')
 	
-			extraData={'thumb'		: self.getThumb(plugin, server) , 
-					   'fanart_image' : self.getFanart(plugin, server) ,
+			extraData={'thumb'		: get.getImage(plugin, server, type="thumb") , 
+					   'fanart_image' : self.getImage(plugin, server, type="art") ,
 					   'identifier'   : tree.get('identifier','') ,
 					   'type'		 : "Video" ,
 					   'key'		  : plugin.get('key','') }
 			
 			if extraData['fanart_image'] == "":
-				extraData['fanart_image']=self.getFanart(tree, server)
+				extraData['fanart_image']=self.getImage(tree, server, type="art")
 				
 			p_url=self.getLinkURL(url, extraData, server)
 
@@ -3183,13 +3183,13 @@ class PlexLibrary(Screen):
 			if details['title'] == "Unknown":
 				details['title']=plugin.get('name',"Unknown").encode('utf-8')
 	
-			extraData={'thumb'		: self.getThumb(plugin, server) , 
-					   'fanart_image' : self.getFanart(plugin, server) ,
+			extraData={'thumb'		: get.getImage(plugin, server, type="thumb") , 
+					   'fanart_image' : self.getImage(plugin, server, type="art") ,
 					   'identifier'   : tree.get('identifier','') ,
 					   'type'		 : "Video" }
 			
 			if extraData['fanart_image'] == "":
-				extraData['fanart_image']=self.getFanart(tree, server)
+				extraData['fanart_image']=self.getImage(tree, server, type="art")
 				
 			p_url=self.getLinkURL(url, plugin, server)
 
@@ -3281,8 +3281,8 @@ class PlexLibrary(Screen):
 		extraData = {}
 		extraData['type']			= "Video"
 		extraData['ratingKey']		= str(movie.get('ratingKey', 0)) # primary key in plex
-		extraData['thumb']			= self.getImage(movie, server, x = 195, y = 268, type = "thumb")
-		extraData['fanart_image']	= self.getImage(movie, server, x = 560, y = 315, type = "art")
+		extraData['thumb']			= self.getImage(movie, server, type = "thumb")
+		extraData['fanart_image']	= self.getImage(movie, server, type = "art")
 		extraData['token']			= self.g_myplex_accessToken
 		extraData['key']			= movie.get('key','')
 		
@@ -3358,14 +3358,14 @@ class PlexLibrary(Screen):
 			except Exception, e:
 				self._showErrorOnTv("no xml as response", html)
 		
-		sectionArt=self.getFanart(tree,server)
+		sectionArt=self.getImage(tree,server, type="art")
 
 		for picture in tree:
 			
 			details={'title' : picture.get('title',picture.get('name','Unknown')).encode('utf-8') } 
 			
-			extraData={'thumb'		: self.getThumb(picture, server) ,
-					   'fanart_image' : self.getFanart(picture, server) ,
+			extraData={'thumb'		: get.getImage(picture, server, type="thumb") ,
+					   'fanart_image' : self.getImage(picture, server, type="art") ,
 					   'type'		 : "Picture" }
 	
 			if extraData['fanart_image'] == "":
@@ -3395,7 +3395,7 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	# 
 	#=============================================================================
-	def getImage(self,  data, server, x, y, type, transcode = True): # CHECKED
+	def getImage(self,  data, server, type, transcode = True): # CHECKED
 		'''
 			Simply take a URL or path and determine how to format for images
 			@ input: elementTree element, server name
@@ -3416,7 +3416,7 @@ class PlexLibrary(Screen):
 		elif image[0] == '/':
 			if transcode:
 				printl("", self, "C")   
-				return self.photoTranscode(server,'http://localhost:32400'+image, str(x), str(y))
+				return self.photoTranscode(server,'http://localhost:32400'+image)
 			else:
 				printl("", self, "C")   
 				return 'http://'+server+image
@@ -3424,75 +3424,6 @@ class PlexLibrary(Screen):
 		else: 
 			printl("", self, "C")   
 			return ""
-	
-	#=============================================================================
-	# 
-	#=============================================================================
-	def getThumb(self,  data, server, transcode = True, x = 195, y = 268): # CHECKED
-		'''
-			Simply take a URL or path and determine how to format for images
-			@ input: elementTree element, server name
-			@ return formatted URL
-			str(195), str(268)
-		'''
-		printl("", self, "S")
-		
-		thumbnail=data.get('thumb','').split('?t')[0]
-
-		if thumbnail == '':
-			printl("", self, "C")   
-			return ""
-			
-		elif thumbnail[0:4] == "http" :
-			printl("", self, "C")   
-			return thumbnail
-		
-		elif thumbnail[0] == '/':
-			if transcode:
-				printl("", self, "C")   
-				return self.photoTranscode(server,'http://localhost:32400'+thumbnail, str(x), str(y))
-			else:
-				printl("", self, "C")   
-				return 'http://'+server+thumbnail
-		
-		else: 
-			printl("", self, "C")   
-			return ""
-	
-	#============================================================================
-	# 
-	#============================================================================
-	def getFanart(self, data, server, transcode=True, x= 560, y= 315 ): # CHECKED
-		'''
-			Simply take a URL or path and determine how to format for fanart
-			@ input: elementTree element, server name
-			@ return formatted URL for photo resizing
-			str(450), str(260)
-		'''
-		printl("", self, "S")
-		printl("art: "  + str(data.get('art','')), self, "D")
-		
-		fanart=data.get('art','')
-		
-		if fanart == '':
-			printl("", self, "C")   
-			return ''
-	
-		elif fanart[0:4] == "http" :
-			printl("", self, "C")   
-			return fanart
-			
-		elif fanart[0] == '/':
-			if transcode:
-				printl("", self, "C")   
-				return self.photoTranscode(server,'http://localhost:32400'+fanart, str(x), str(y))
-			else:
-				printl("", self, "C")   
-				return 'http://%s%s' % (server, fanart)
-			
-		else: 
-			printl("", self, "C")	
-			return ''
 
 	#===============================================================================
 	# 
@@ -3522,7 +3453,7 @@ class PlexLibrary(Screen):
 			extraData={'type'	  : "Video" , 
 					   'installed' : int(plugin.get('installed',2)) ,
 					   'key'	   : plugin.get('key','') ,
-					   'thumb'	 : self.getThumb(plugin,server)} 
+					   'thumb'	 : get.getImage(plugin,server, type="thumb")} 
 					   
 			mode=_MODE_CHANNELINSTALL
 			
@@ -3579,8 +3510,8 @@ class PlexLibrary(Screen):
 				
 			arguments=dict(channels.items())
 	
-			extraData={'fanart_image' : self.getFanart(channels, server) ,
-					   'thumb'		: self.getThumb(channels, server) }
+			extraData={'fanart_image' : self.getImage(channels, server, type="art") ,
+					   'thumb'		: get.getImage(channels, server, type="thumb") }
 			
 			details={'title' : channels.get('title','Unknown') }
 	
@@ -3607,7 +3538,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def photoTranscode(self, server, url, width, height ): # CHECKED
+	def photoTranscode(self, server, url, width=999, height=999): # CHECKED
 		'''
 		'''
 		printl("", self, "S")
