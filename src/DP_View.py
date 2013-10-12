@@ -48,7 +48,7 @@ from Plugins.Extensions.DreamPlex.DP_ViewFactory import getViews
 from Plugins.Extensions.DreamPlex.DPH_Arts import getPictureData
 from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
 from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize, loadPicture
+from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, convertSize, loadPicture
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 
 #===============================================================================
@@ -185,7 +185,8 @@ class DP_View(Screen, NumericalTextInput):
 	def getGuiElements(self):
 		printl("", self, "S")
 		
-		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		tree = Singleton().getSkinParamsInstance()
 		
 		self.guiElements = {}
 		for guiElement in tree.findall('guiElement'):
@@ -208,7 +209,8 @@ class DP_View(Screen, NumericalTextInput):
 			params = viewName[3]
 			self.itemsPerPage = int(params['itemsPerPage'])
 		else:
-			tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+			#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+			tree = Singleton().getSkinParamsInstance()
 			for view in tree.findall('view'):
 				if view.get('name') == str(viewName[1]):
 					self.itemsPerPage = int(view.get('itemsPerPage'))
@@ -1757,6 +1759,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["thumb"]
+		download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 		printl( "download url " + download_url, self, "D")
 		
 		if download_url == "":
@@ -1775,7 +1778,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
-		download_url = download_url.replace('&width=560&height=315', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
+		download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 		printl( "download url " + download_url, self, "D")	
 		
 		if download_url == "":

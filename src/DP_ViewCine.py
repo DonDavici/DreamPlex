@@ -138,11 +138,13 @@ class DPS_ViewCine(DP_View):
 		
 		if self.myParams["showPoster"] == True:
 			self["poster"] 				= Pixmap()
+			self.posterHeight = self.myParams["posterHeight"]
+			self.posterWidth = self.myParams["posterWidth"]
 		
 		if self.myParams["showBackdrop"] == True:
 			self["mybackdrop"] 			= Pixmap()
 			self.backdropHeight = self.myParams["backdropHeight"]
-			self.backdropwidth = self.myParams["backdropwidth"]
+			self.backdropWidth = self.myParams["backdropWidth"]
 			
 		if self.myParams["audio"] == True:
 			self["audio"] 				= MultiPixmap()

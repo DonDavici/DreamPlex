@@ -22,6 +22,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
+#from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 
 #===============================================================================
 # 
@@ -33,6 +34,7 @@ class Singleton:
 	__we_are_one = {}
 	__plexInstance = ""
 	__logFileInstance = ""
+	__skinParamsInstance = ""
 
 	def __init__(self):
 		#implement the borg patter (we are one)
@@ -41,11 +43,33 @@ class Singleton:
 	def getPlexInstance(self, value=None):
 		'''with value you can set the singleton content'''
 		if value:
+			#printl("generating Plex instance ...", self, "D")
 			self.__plexInstance = value
+		else:
+			#printl("reusing Plex instance ...", self, "D")
+			pass
+			
 		return self.__plexInstance
 	
 	def getLogFileInstance(self, value=None):
 		'''with value you can set the singleton content'''
 		if value:
+			#printl("generating Logfile instance ...", self, "D")
 			self.__logFileInstance = value
+		else:
+			#printl("reusing Logfile instance ...", self, "D")
+			pass
+			
 		return self.__logFileInstance
+	
+	def getSkinParamsInstance(self, value=None):
+		'''with value you can set the singleton content'''
+		if value:
+			#printl("generating skinParam instance ...", self, "D")
+			self.__skinParamsInstance = value
+		else:
+			#printl("reusing skinParam instance ...", self, "D")
+			pass
+		
+		return self.__skinParamsInstance
+	

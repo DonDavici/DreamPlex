@@ -79,7 +79,8 @@ def getViews(libraryName):
 def getViewsFromSkinParams(type):
 	printl("", __name__, "S")
 	
-	tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+	tree = Singleton().getSkinParamsInstance()
+	#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 	
 	availableViewList = []
 	
@@ -148,8 +149,8 @@ def getCineViewDefaults():
 	
 	defaults["backdropHeight"]		= "315"
 	defaults["backdropWidth"]		= "560"
-	defaults["posterHeight"]		= "315"
-	defaults["posterWidth"]			= "560"
+	defaults["posterHeight"]		= "268"
+	defaults["posterWidth"]			= "195"
 	defaults["current"]				= True
 	defaults["total"]				= True
 	defaults["functionsContainer"]	= True

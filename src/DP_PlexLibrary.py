@@ -42,6 +42,7 @@ import cPickle as pickle
 #===============================================================================
 # 
 #===============================================================================
+from re import findall
 from time import time
 from urllib import urlencode, quote_plus
 from base64 import b64encode, b64decode
@@ -59,12 +60,9 @@ from Screens.ChoiceBox import ChoiceBox
 
 from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent
-from re import findall
-#from DPH_bonjourFind import *
 
-#===============================================================================
-# import cProfile
-#===============================================================================
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+
 #===============================================================================
 # import cProfile
 #===============================================================================
@@ -200,7 +198,6 @@ class PlexLibrary(Screen):
 		self.g_session = session
 		self.g_error = False
 		printl("running on " + str(sys.version_info), self, "I")
-		doIt = False
 		
 		# global serverConfig
 		self.g_serverConfig = serverConfig
@@ -310,7 +307,9 @@ class PlexLibrary(Screen):
 	def getSeenVisus(self):
 		printl("", self, "S")
 		
-		tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+		tree = Singleton().getSkinParamsInstance()
+		
 		for seenPic in tree.findall('seenPic'):
 			self.seenPic = str(seenPic.get('path'))
 			printl("self.seenPic: " + str(self.seenPic), self, "D")
@@ -472,7 +471,7 @@ class PlexLibrary(Screen):
 			
 			extraData={ 'fanart_image' : self.getImage(section, section.get('address'), type="art") ,
 						'type'		 : "Video" ,
-						'thumb'		: self.getImage(section, section.get('address'), False, type="art") ,
+						'thumb'		: self.getImage(section, section.get('address'), type="art", transcode=False) ,
 						'token'		: str(section['token']) }
 
 			if self.g_connectionType == "2": # MYPLEX
@@ -1707,7 +1706,7 @@ class PlexLibrary(Screen):
 		ShowTags=tree.findall('Video')
 		
 		if self.g_skipimages == "false":		
-			sectionart=get.getImage(tree, server, type="thumb")
+			sectionart=self.getImage(tree, server, type="thumb")
 		
 		fullList=[]
 		 

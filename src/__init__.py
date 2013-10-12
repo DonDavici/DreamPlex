@@ -54,8 +54,9 @@ from Plugins.Extensions.DreamPlex.__plugin__ import registerPlugin, Plugin
 from Plugins.Extensions.DreamPlex.DP_LibMovies import DP_LibMovies
 from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
 from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
+from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl
+from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 version = "0.1"
 source = "feed" # other option is "ipk"
@@ -276,9 +277,17 @@ def initServerEntryConfig(data = None):
 #===============================================================================
 # 
 #===============================================================================
+def registerSkinParamsInstance():
+	printl("", "__init__::registerSkinParamsInstance", "S")
+	
+	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+	Singleton().getSkinParamsInstance(configXml)
+	
+	printl("", "__init__::registerSkinParamsInstance", "C")
+#===============================================================================
+# 
+#===============================================================================
 def initPlexServerConfig():
-	'''
-	'''
 	printl("", "__init__::initPlexServerConfig", "S")
 	
 	count = config.plugins.dreamplex.entriescount.value
@@ -400,6 +409,8 @@ def prepareEnvironment():
 	printGlobalSettings()
 	initPlexServerConfig()
 	checkPlexEnvironment()
+	registerSkinParamsInstance()
 	registerPlexFonts()
 	loadPlexSkin()
 	loadPlexPlugins()
+
