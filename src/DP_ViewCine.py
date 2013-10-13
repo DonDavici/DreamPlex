@@ -205,12 +205,18 @@ class DPS_ViewCine(DP_View):
 			self["rating_stars"] = ProgressBar()
 		
 		printl("skinName: " + str(self.skinName), self, "C")
-		self.skinName = self.myParams["screen"]#self.viewName[2]
-
-		self.EXscale = (AVSwitch().getFramebufferScale())
-		self.EXpicloadPoster 		= ePicLoad()
-		self.EXpicloadBackdrop 		= ePicLoad()
-		self.onLayoutFinish.append(self.setPara)
+		self.skinName = self.myParams["screen"]
+		
+		if self.myParams["showPoster"] == True or self.myParams["showBackdrop"] == True:
+			self.EXscale = (AVSwitch().getFramebufferScale())
+			
+			if self.myParams["showPoster"] == True:
+				self.EXpicloadPoster 		= ePicLoad()
+			
+			if self.myParams["showBackdrop"] == True:
+				self.EXpicloadBackdrop 		= ePicLoad()
+			
+			self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
 	
