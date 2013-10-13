@@ -1840,7 +1840,7 @@ class DP_View(Screen, NumericalTextInput):
 			self["audio"].hide()
 		
 		if self.myParams["showBackdrop"] == True:
-			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skin/all/picreset.png"
+			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 			self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")

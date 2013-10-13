@@ -332,10 +332,8 @@ class DPS_ViewCine(DP_View):
 			self.setText("title", "no data retrieved")
 			self.setText("shortDescription", "no data retrieved")
 		
-		
 		printl("", self, "C")
-
-	
+		
 	#===========================================================================
 	# 
 	#===========================================================================
