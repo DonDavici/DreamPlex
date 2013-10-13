@@ -93,6 +93,8 @@ class DPS_ViewCine(DP_View):
 		printl("", self , "S")
 		self.session = session
 		printl("myParams: " + str(viewName[3]), self, "D")
+		printl("libraryName: " + str(libraryName), self, "D")
+		
 		self.myParams = viewName[3]
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
 		printl("cache: " + str(cache), self, "D")

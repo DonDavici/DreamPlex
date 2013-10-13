@@ -138,30 +138,6 @@ class DPS_MainMenu(Screen):
 		
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setText(self, name, value, ignore=False, what=None):
-		'''
-		'''
-		#printl("", self, "S")
-		
-		try:
-			if self[name]:
-				if len(value) > 0:
-					self[name].setText(value)
-				elif ignore is False:
-					if what is None:
-						self[name].setText(_("Not available"))
-					else:
-						self[name].setText(what + ' ' + _("not available"))
-				else:
-					self[name].setText(" ")
-		except Exception, ex:
-			printl("Exception: " + str(ex), self, "E")
-		
-		#printl("", self, "C")
-	
 	#=======================================================================
 	# 
 	#=======================================================================
