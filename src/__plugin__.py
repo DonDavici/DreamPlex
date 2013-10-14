@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -33,8 +33,6 @@ gPlugins = []
 # 
 #===============================================================================
 def registerPlugin(plugin):
-	'''
-	'''
 	printl("", "__plugin__::registerPlugin", "S")
 	
 	ps = []
@@ -53,8 +51,6 @@ def registerPlugin(plugin):
 # 
 #===============================================================================
 def getPlugins(where=None):
-	'''
-	'''
 	printl("", "__plugin__::getPlugins", "S")
 	
 	if where is None:
@@ -76,8 +72,6 @@ def getPlugins(where=None):
 # 
 #===============================================================================
 def getPlugin(pid, where):
-	'''
-	'''
 	printl("", "__plugin__::getPlugin", "S")
 	
 	for plugin in gPlugins:

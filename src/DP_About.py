@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -46,8 +46,6 @@ class DPS_About(Screen):
 	_session = None
 	
 	def __init__(self, session):
-		'''
-		'''
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -74,8 +72,6 @@ class DPS_About(Screen):
 	# 
 	#===========================================================================
 	def setContent(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.setTitle(_("About"))
@@ -86,8 +82,6 @@ class DPS_About(Screen):
 	# 
 	#===========================================================================
 	def keyCancel(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		self.close()
@@ -98,8 +92,6 @@ class DPS_About(Screen):
 	# 
 	#===========================================================================
 	def getText(self):
-		'''
-		'''
 		printl("", self, "S")
 		
 		content = ""
