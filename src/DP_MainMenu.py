@@ -94,7 +94,8 @@ class DPS_MainMenu(Screen):
 		
 		self["title"] = StaticText("")
 		self["welcomemessage"] = StaticText("")
-
+		
+		# get all our servers as list
 		self.getServerList()
 		
 		self["menu"]= List(self.mainMenuList, True)
@@ -137,23 +138,6 @@ class DPS_MainMenu(Screen):
 			self.okbuttonClick(self.selectionOverride)
 		
 		printl("", self, "C")
-	
-	#=======================================================================
-	# 
-	#=======================================================================
-	def getSettingsMenu (self):
-		printl("", self, "S")
-		
-		mainMenuList = []
-
-		mainMenuList.append((_("Settings"), "DPS_Settings"))
-		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
-		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
-		mainMenuList.append((_("Help"), "DPS_Help"))
-		nextExitIsQuit = False
-		
-		printl("", self, "C")
-		return mainMenuList
 
 #===============================================================================
 # KEYSTROKES
@@ -211,15 +195,12 @@ class DPS_MainMenu(Screen):
 					params = selection[2]
 					printl("params: " + str(params), self, "D")
 					
-					t_url = params.get('t_url', "notSet")
-					t_mode = params.get('t_mode', "notSet")
-					t_final = params.get('t_final', "notSet")
-
-					self.s_url = t_url
-					self.s_mode = t_mode
-					self.s_final = t_final
+					self.s_url = params.get('t_url', "notSet")
+					self.s_mode = params.get('t_mode', "notSet")
+					self.s_final = params.get('t_final', "notSet")
 					
 					self.getFilterData()
+				
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
@@ -618,6 +599,23 @@ class DPS_MainMenu(Screen):
 		self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s") % (error), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
+		
+	#=======================================================================
+	# 
+	#=======================================================================
+	def getSettingsMenu (self):
+		printl("", self, "S")
+		
+		mainMenuList = []
+
+		mainMenuList.append((_("Settings"), "DPS_Settings"))
+		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
+		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
+		mainMenuList.append((_("Help"), "DPS_Help"))
+		nextExitIsQuit = False
+		
+		printl("", self, "C")
+		return mainMenuList
 	
 	#===============================================================================
 	# 

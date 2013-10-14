@@ -29,7 +29,7 @@ from Screens.Screen import Screen
 
 from Components.config import config
 
-from DP_View import DP_View, getViews
+from DP_ViewFactory import getViews
 from DP_Player import DP_Player
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl

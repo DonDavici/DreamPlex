@@ -310,10 +310,10 @@ def loadPlexPlugins():
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
 	
-	printl("registering ... tvhshows", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	printl("registering ... tvhshows", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
 	
-	printl("registering ... music", "__initgetBoxInformationt__::loadPlexPlugins", "D")
+	printl("registering ... music", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
 	
 	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
