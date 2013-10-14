@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -26,13 +26,10 @@ import socket
 import struct
 
 from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
-
 #===============================================================================
 # 
 #===============================================================================
 def wake_on_lan(macaddress):
-	'''
-	'''
 	printl ("", "DPH_WOL::wake_on_lan", "S")
 	printl ("using this mac ... " + macaddress, "DPH_WOL::wake_on_lan", "i")
 	

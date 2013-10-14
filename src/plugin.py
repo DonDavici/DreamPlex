@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-#------------------------------------------------------------------------------------------
-#IMPORT
-#------------------------------------------------------------------------------------------
+#===============================================================================
+# IMPORT
+#===============================================================================
 from Plugins.Plugin import PluginDescriptor
 from Components.config import config, configfile
 from __init__ import prepareEnvironment
@@ -36,10 +36,10 @@ def Autostart(reason, session=None, **kwargs):
 # Actions to take place in Plugins
 #===============================================================================
 def Plugins(**kwargs):
-	list = [PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main),
+	myList = [PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main),
 			PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc = Autostart)]
 		
-	if config.plugins.dreamplex.showInMainMenu.value == True:
-		list.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
+	if config.plugins.dreamplex.showInMainMenu.value:
+		myList.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
 
-	return list
+	return myList
