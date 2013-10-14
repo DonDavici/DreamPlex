@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -92,7 +92,7 @@ if source == "feed":
 	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = False)
 else:
 	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = True)
-	
+
 config.plugins.dreamplex.checkForUpdateOnStartup 	= ConfigYesNo(default = False)
 config.plugins.dreamplex.updateType					= ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
 
@@ -112,39 +112,38 @@ config.plugins.dreamplex.Entries                   = ConfigSubList()
 # 
 #===============================================================================
 def getVersion():
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::getVersion", "S")
 
-	return version
-
 	printl("", "__init__::getVersion", "C")
+	return version
 
 #===============================================================================
 # 
 #===============================================================================
 def initBoxInformation():
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::getBoxInformation", "S")
-	
+
 	boxInfo = getBoxInformation()
 	printl("=== BOX INFORMATION ===", "__init__::getBoxInformation", "I")
 	printl("Box: " + str(boxInfo), "__init__::getBoxInformation", "I")
-	
+
 	printl("", "__init__::getBoxInformation", "C")
-	
+
 #===============================================================================
 # 
 #===============================================================================
 def printGlobalSettings():
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::initGlobalSettings", "S")
-	
+
 	printl("=== VERSION ===", "__init__::getBoxInformation", "I")
 	printl("current Version : " + str(version), "__init__::initGlobalSettings", "I")
-	
+
 	printl("=== GLOBAL SETTINGS ===", "__init__::getBoxInformation", "I")
 	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::initGlobalSettings", "I")
 	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::initGlobalSettings", "I")
@@ -162,30 +161,30 @@ def printGlobalSettings():
 	printl("useCache: " + str(config.plugins.dreamplex.useCache.value), "__init__::initGlobalSettings", "I")
 	printl("showInfobarOnBuffer: " + str(config.plugins.dreamplex.showInfobarOnBuffer.value), "__init__::initGlobalSettings", "I")
 	printl("usePicCache: " + str(config.plugins.dreamplex.usePicCache.value), "__init__::initGlobalSettings", "I")
-	
+
 	printl("", "__init__::initPlexSettings", "C")
 
 #===============================================================================
 # 
 #===============================================================================
 def initServerEntryConfig(data = None):
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::initServerEntryConfig", "S")
-	
+
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
 	i = len(config.plugins.dreamplex.Entries) -1
-	
+
 	defaultName = "PlexServer"
 	defaultIp = [192,168,0,1]
 	defaultPort = 32400
-	
+
 	if data is not None:
 		ipBlocks = data.get("server").split(".")
 		defaultName = data.get("serverName")
 		defaultIp = [int(ipBlocks[0]),int(ipBlocks[1]),int(ipBlocks[2]),int(ipBlocks[3])]
 		defaultPort = int(data.get("port"))
-	
+
 	# SERVER SETTINGS
 	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
@@ -196,7 +195,7 @@ def initServerEntryConfig(data = None):
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default = defaultPort, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
-	
+
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
 	printl("id: " + str(config.plugins.dreamplex.Entries[i].id.value), "__init__::initServerEntryConfig", "D")
@@ -208,7 +207,7 @@ def initServerEntryConfig(data = None):
 	printl("dns: " + str(config.plugins.dreamplex.Entries[i].dns.value), "__init__::initServerEntryConfig", "D")
 	printl("port: " + str(config.plugins.dreamplex.Entries[i].port.value), "__init__::initServerEntryConfig", "D")
 	printl("playbackType: " + str(config.plugins.dreamplex.Entries[i].playbackType.value), "__init__::initServerEntryConfig", "D")
-		
+
 	# myPlex
 	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
@@ -216,7 +215,7 @@ def initServerEntryConfig(data = None):
 	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)
-	
+
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
 	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
@@ -224,53 +223,53 @@ def initServerEntryConfig(data = None):
 	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "D", True, 8)
 	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
 	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "D")
-	
+
 	# STREAMED
 	# no options at the moment
-	
+
 	# TRANSCODED
 	config.plugins.dreamplex.Entries[i].universalTranscoder	= ConfigYesNo(default = True)
-	
+
 	# old transcoder settings
 	config.plugins.dreamplex.Entries[i].quality				= ConfigSelection(default="7", choices = [("0", _("64kbps, 128p, 3fps")), ("1", _("96kbps, 128p, 12fps")), ("2", _("208kbps, 160p, 15fps")), ("3", _("320kbps, 240p")),("4", _("720kbps, 320p")), ("5", _("1.5Mbps, 480p")), ("6", _("2Mbps, 720p")), ("7", _("3Mbps, 720p")), ("8", _("4Mbps, 720p")), ("9", _("8Mbps, 1080p")), ("10", _("10Mbps, 1080p")),("11", _("12Mbps, 1080p")),("12", _("20Mbps, 1080p"))])
 	config.plugins.dreamplex.Entries[i].segments 			= ConfigInteger(default=5, limits=(1, 10))
-	
+
 	# universal transcoder settings
 	config.plugins.dreamplex.Entries[i].uniQuality = ConfigSelection(default="3", choices = [("0", _("420x240, 320kbps")), ("1", _("576x320, 720 kbps")), ("2", _("720x480, 1,5mbps")), ("3", _("1024x768, 2mbps")),("4", _("1280x720, 3mbps")), ("5", _("1280x720, 4mbps")), ("6", _("1920x1080, 8mbps")), ("7", _("1920x1080, 10mbps")), ("8", _("1920x1080, 12mbps")), ("9", _("1920x1080, 20mbps"))])
-	
-	
+
+
 	printl("=== TRANSCODED ===", "__init__::initServerEntryConfig", "D")
 	printl("transcode: " + str(config.plugins.dreamplex.Entries[i].universalTranscoder.value), "__init__::initServerEntryConfig", "D")
 	printl("quality: " + str(config.plugins.dreamplex.Entries[i].quality.value), "__init__::initServerEntryConfig", "D")
 	printl("segments: " + str(config.plugins.dreamplex.Entries[i].segments.value), "__init__::initServerEntryConfig", "D")
 	printl("uniQuality: " + str(config.plugins.dreamplex.Entries[i].uniQuality.value), "__init__::initServerEntryConfig", "D")
 	# TRANSCODED VIA PROXY
-	
+
 	# DIRECT LOCAL
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
-	
+
 	# DIRECT REMOTE
 	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].smbPassword					= ConfigText(default = "", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].nasOverrideIp				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].nasRoot						= ConfigText(default = "/", visible_width = 50, fixed_size = False)
-	
+
 	printl("=== DIRECT REMOTE ===", "__init__::initServerEntryConfig", "D")
 	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "D", True, 4)
 	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "D", True, 4)
 	printl("nasOverrideIp: " + str(config.plugins.dreamplex.Entries[i].nasOverrideIp.value), "__init__::initServerEntryConfig", "D")
 	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "D")
-	
+
 	# WOL
 	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo(default = False)
 	config.plugins.dreamplex.Entries[i].wol_mac			= ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
-	
+
 	printl ("=== WOL ===", "__init__::initServerEntryConfig", "D")
 	printl("wol: " + str(config.plugins.dreamplex.Entries[i].wol.value), "__init__::initServerEntryConfig", "D")
 	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "D")
 	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "D")
-	
+
 	printl("", "__init__::initServerEntryConfig", "C")
 	return config.plugins.dreamplex.Entries[i]
 
@@ -279,49 +278,49 @@ def initServerEntryConfig(data = None):
 #===============================================================================
 def registerSkinParamsInstance():
 	printl("", "__init__::registerSkinParamsInstance", "S")
-	
+
 	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 	Singleton().getSkinParamsInstance(configXml)
-	
+
 	printl("", "__init__::registerSkinParamsInstance", "C")
 #===============================================================================
 # 
 #===============================================================================
 def initPlexServerConfig():
 	printl("", "__init__::initPlexServerConfig", "S")
-	
+
 	count = config.plugins.dreamplex.entriescount.value
 	if count != 0:
 		i = 0
 		while i < count:
 			initServerEntryConfig()
 			i += 1
-	
+
 	printl("", "__init__::initPlexServerConfig", "C")
-	
+
 #===============================================================================
 # 
 #===============================================================================
 def loadPlexPlugins():
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::loadPlexPlugins", "S")
-	
+
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
-	
+
 	printl("registering ... tvhshows", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
-	
+
 	printl("registering ... music", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
-	
+
 	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
 	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibPictures, where=Plugin.MENU_PICTURES))
-	
+
 	#printl("registering ... channels", "__initgetBoxInformationt__::loadPlexPlugins", "D")
 	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibChannels, where=Plugin.MENU_CHANNELS))
-	
+
 	printl("", "__init__::loadPlexPlugins", "C")
 
 
@@ -329,16 +328,16 @@ def loadPlexPlugins():
 # 
 #===============================================================================
 def localeInit():
-	'''
-	'''
+	"""
+	"""
 	printl("", "__init__::localeInit", "S")
-	
+
 	lang = language.getLanguage()
 	os.environ["LANGUAGE"] = lang[:2]
 	gettext.bindtextdomain("enigma2", resolveFilename(SCOPE_LANGUAGE))
 	gettext.textdomain("enigma2")
 	gettext.bindtextdomain("DreamPlex", "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/DreamPlex/locale/"))
-	
+
 	printl("", "__init__::localeInit", "C")
 
 #===============================================================================
@@ -346,20 +345,20 @@ def localeInit():
 #===============================================================================
 def getInstalledSkins():
 	printl("", "__init__::getInstalledSkins", "S")
-	
-	skins = []
-	defaultSkin = "default"
+
+	mySkins = []
+	myDefaultSkin = "default"
 
 	try:
 		for skin in os.listdir(config.plugins.dreamplex.skinfolderpath.value):
 			print("skin: " + str(skin), None, "D")
 			if os.path.isdir(os.path.join(config.plugins.dreamplex.skinfolderpath.value, skin)):
-				skins.append(skin)
+				mySkins.append(skin)
 	except Exception, ex:
 		printl("no skin found in Dreamplex", "__init__::getInstalledSkins", "D")
 		printl("Exception(" + str(type(ex)) + "): " + str(ex), "__init__::getInstalledSkins", "E")
-		skins.append(defaultSkin)
-	
+		mySkins.append(myDefaultSkin)
+
 	#Also check if a real enigma2 skin contains dreamplex screens
 	try:
 		skinPath = resolveFilename(SCOPE_SKIN)
@@ -370,35 +369,35 @@ def getInstalledSkins():
 			if os.path.isdir(path):
 				xml = os.path.join(path, "skin_dreamplex.xml")
 				if os.path.isfile(xml):
-					skins.append("~" + skin)
+					mySkins.append("~" + skin)
 	except Exception, ex:
 		printl("no skindata in enigma2 skin found", "__init__::getInstalledSkins", "D")
 		printl("Exception(" + str(type(ex)) + "): " + str(ex), "__init__::getInstalledSkins", "E")
-	
-	printl("Found enigma2 skins \"%s\"" % str(skins), "__init__::getInstalledSkins", "D")
-	
-	config.plugins.dreamplex.skins	= ConfigSelection(default = defaultSkin, choices = skins)
-	
+
+	printl("Found enigma2 skins \"%s\"" % str(mySkins), "__init__::getInstalledSkins", "D")
+
+	config.plugins.dreamplex.skins	= ConfigSelection(default = myDefaultSkin, choices = mySkins)
+
 	printl("", "__init__::getInstalledSkins", "C")
 
 #===============================================================================
 # 
 #===============================================================================
 def _(txt):
-	'''
-	'''
+	"""
+	"""
 	#printl("", "__init__::_(txt)", "S")
-	
+
 	if len(txt) == 0:
 		return ""
 	text = gettext.dgettext("DreamPlex", txt)
 	if text == txt:
 		text = gettext.gettext(txt)
-	
-	printl("text = " + str(text), "__init__::_(txt)", "X")	
+
+	printl("text = " + str(text), "__init__::_(txt)", "X")
 	#printl("", "__init__::_(txt)", "C")initGlobalSettings
 	return text
-	
+
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -28,7 +28,7 @@ import datetime
 import shutil
 import math
 
-from enigma import getDesktop, addFont, loadPNG, loadJPG
+from enigma import addFont, loadPNG, loadJPG
 from skin import loadSkin
 from Components.config import config
 from Components.AVSwitch import AVSwitch
@@ -41,29 +41,27 @@ from DPH_Singleton import Singleton
 try:
 # Python 2.5
 	import xml.etree.cElementTree as etree
-	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
+#printl2("running with cElementTree on Python 2.5+", __name__, "D")
 except ImportError:
 	try:
 		# Python 2.5
 		import xml.etree.ElementTree as etree
-		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
+	#printl2("running with ElementTree on Python 2.5+", __name__, "D")
 	except ImportError:
-		printl2("something went wrong during etree import" + str(e), self, "E")
+		#printl2("something went wrong during etree import" + str(e), self, "E")
+		pass
 
 #===============================================================================
-# GLOBAL
+# CONSTANTS
 #===============================================================================
-gConnectivity = None
-gLogFile = None
 gBoxType = None
-
-STARTING_MESSAGE	= ">>>>>>>>>>"
-CLOSING_MESSAGE		= "<<<<<<<<<<"
+STARTING_MESSAGE = ">>>>>>>>>>"
+CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
 # 
 #===============================================================================
-def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
-	'''
+def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
+	"""
 	@param string: 
 	@param parent:
 	@param dmode: default = "U" undefined 
@@ -74,12 +72,12 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 							"S" shows started functions/classes etc.
 							"C" shows closing functions/classes etc.
 	@return: none
-	'''
+	"""
 
 	debugMode = config.plugins.dreamplex.debugMode.value
-	
+
 	if debugMode:
-		
+
 		offset = string.find("X-Plex-Token")
 		if not string.find("X-Plex-Token") == -1:
 			steps = 8
@@ -87,13 +85,12 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 			end = start + steps
 			new_string = string[0:start] + "********" + string[end:]
 			string = new_string
-			
-		out = ""
+
 		if obfuscate is True:
 			string = string[:-steps]
 			for i in range(steps):
 				string += "*"
-			
+
 		if parent is None:
 			out = str(string)
 		else:
@@ -102,43 +99,42 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 				classname = classname[1]
 				classname = classname.rstrip("\'>")
 				classname += "::"
-				out = str(classname) + str(sys._getframe(1).f_code.co_name) +" -> " + str(string)
+				out = str(classname) + str(sys._getframe(1).f_code.co_name) + " -> " + str(string)
 			else:
-				classname = ""
 				out = str(parent) + " -> " + str(string)
-	
-		if dmode == "E" :
+
+		if dmode == "E":
 			print "[DreamPlex] " + "E" + "  " + str(out)
 			writeToLog(dmode, out)
-		
+
 		elif dmode == "W":
 			print "[DreamPlex] " + "W" + "  " + str(out)
 			writeToLog(dmode, out)
-		
+
 		elif dmode == "I":
 			print "[DreamPlex] " + "I" + "  " + str(out)
 			writeToLog(dmode, out)
-		
+
 		elif dmode == "D":
-			print "[DreamPlex] " + "D" + "  " + str(out)	
+			print "[DreamPlex] " + "D" + "  " + str(out)
 			writeToLog(dmode, out)
-		
+
 		elif dmode == "S":
 			print "[DreamPlex] " + "S" + "  " + str(out) + STARTING_MESSAGE
 			writeToLog(dmode, out + STARTING_MESSAGE)
-		
+
 		elif dmode == "C":
-			print "[DreamPlex] " + "C" + "  " + str(out) +  CLOSING_MESSAGE
-			writeToLog(dmode, out +  CLOSING_MESSAGE)
-		
+			print "[DreamPlex] " + "C" + "  " + str(out) + CLOSING_MESSAGE
+			writeToLog(dmode, out + CLOSING_MESSAGE)
+
 		elif dmode == "U":
 			print "[DreamPlex] " + "U  specify me!!!!!" + "  " + str(out)
 			writeToLog(dmode, out)
-			
+
 		elif dmode == "X":
-			print "[DreamPlex] " + "D" + "  " + str(out)	
+			print "[DreamPlex] " + "D" + "  " + str(out)
 			writeToLog(dmode, out)
-			
+
 		else:
 			print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
 
@@ -146,13 +142,13 @@ def printl2 (string, parent=None, dmode= "U", obfuscate = False, steps = 4):
 # 
 #===============================================================================
 def writeToLog(dmode, out):
-	'''
+	"""
 	singleton handler for the log file
 	
 	@param dmode: E, W, S, H, A, C, I
 	@param out: message string
 	@return: none
-	'''
+	"""
 	try:
 		instance = Singleton()
 		if instance.getLogFileInstance() is "":
@@ -161,11 +157,12 @@ def writeToLog(dmode, out):
 			gLogFile.truncate()
 		else:
 			gLogFile = instance.getLogFileInstance()
-			
+
 		now = datetime.datetime.now()
-		gLogFile.write("%02d:%02d:%02d.%07d " % (now.hour, now.minute, now.second, now.microsecond) + " >>> " + str(dmode) + " <<<  " + str(out) + "\n")
+		gLogFile.write("%02d:%02d:%02d.%07d " % (now.hour, now.minute, now.second, now.microsecond) + " >>> " + str(
+			dmode) + " <<<  " + str(out) + "\n")
 		gLogFile.flush()
-	
+
 	except Exception, ex:
 		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::writeToLog", "E")
 
@@ -174,66 +171,62 @@ def writeToLog(dmode, out):
 # 
 #===============================================================================
 def openLogFile():
-	'''
+	"""
 	singleton instance for logfile
-	
-	@param: none
-	@return: none
-	'''
+	"""
 	#printl2("", "openLogFile", "S")
-	
+
 	logDir = config.plugins.dreamplex.logfolderpath.value
-	
-	now = datetime.datetime.now()
+
 	try:
 		if os.path.exists(logDir + "dreamplex_former.log"):
 			os.remove(logDir + "dreamplex_former.log")
-			
+
 		if os.path.exists(logDir + "dreamplex.log"):
 			shutil.copy2(logDir + "dreamplex.log", logDir + "dreamplex_former.log")
-		
+
 		instance = Singleton()
 		instance.getLogFileInstance(open(logDir + "dreamplex.log", "w"))
-		
+
 	except Exception, ex:
 		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "openLogFile", "E")
-	
+
 	#printl2("", "openLogFile", "C")
 
 #===============================================================================
 # 
 #===============================================================================
-def testInetConnectivity(target = "http://www.google.com"):
-	'''
+def testInetConnectivity(target="http://www.google.com"):
+	"""
 	test if we get an answer from the specified url
 	
-	@param url:
+	@param target:
 	@return: bool
-	'''
+	"""
 	printl2("", "__common__::testInetConnectivity", "S")
-	
+
 	import urllib2
 	from   sys import version_info
 	import socket
-	
+
 	try:
 		opener = urllib2.build_opener()
-		page = None
+
 		if version_info[1] >= 6:
 			page = opener.open(target, timeout=2)
 		else:
 			socket.setdefaulttimeout(2)
 			page = opener.open(target)
 		if page is not None:
-			
-			printl2("","__common__::testInetConnectivity", "C")
+
+			printl2("", "__common__::testInetConnectivity", "C")
 			return True
 		else:
-			
-			printl2("","__common__::testInetConnectivity", "C")
+
+			printl2("", "__common__::testInetConnectivity", "C")
 			return False
 	except:
-		
+
 		printl2("", "__common__::testInetConnectivity", "C")
 		return False
 
@@ -241,33 +234,33 @@ def testInetConnectivity(target = "http://www.google.com"):
 # 
 #===============================================================================
 def testPlexConnectivity(ip, port):
-	'''
+	"""
 	test if the plex server is online on the specified port
 	
 	@param ip: e.g. 192.168.0.1
 	@param port: e.g. 32400
 	@return: bool
-	'''
+	"""
 	printl2("", "__common__::testPlexConnectivity", "S")
-	
+
 	import socket
-	
+
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	
+
 	printl2("IP => " + str(ip), "__common__::testPlexConnectivity", "I")
-	printl2("PORT => " + str(port), "__common__::testPlexConnectivity","I")
-	
+	printl2("PORT => " + str(port), "__common__::testPlexConnectivity", "I")
+
 	try:
 		sock.settimeout(5)
 		sock.connect((ip, port))
 		sock.close()
-		
+
 		printl2("", "__common__::testPlexConnectivity", "C")
 		return True
 	except socket.error, e:
 		printl2("Strange error creating socket: %s" % e, "__common__::testPlexConnectivity", "E")
 		sock.close()
-		
+
 		printl2("", "__common__::testPlexConnectivity", "C")
 		return False
 
@@ -276,142 +269,139 @@ def testPlexConnectivity(ip, port):
 # 
 #===============================================================================	
 def registerPlexFonts():
-	'''
+	"""
 	registers fonts for skins
 	
 	@param: none 
 	@return none
-	'''
+	"""
 	printl2("", "__common__::registerPlexFonts", "S")
-	
+
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
-	
+
 	tree = Singleton().getSkinParamsInstance()
 	#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 	for font in tree.findall('font'):
-		
 		path = str(font.get('path'))
 		printl2("path: " + str(font.get('path')), "__common__::registerPlexFonts", "D")
-		
+
 		size = int(font.get('size'))
 		printl2("size: " + str(font.get('size')), "__common__::registerPlexFonts", "D")
-		
+
 		name = str(font.get('name'))
 		printl2("name: " + str(font.get('name')), "__common__::registerPlexFonts", "D")
-		
+
 		addFont(path, name, size, False)
 		printl2("added => " + name, "__common__::registerPlexFonts", "I")
-	
+
 	printl2("", "__common__::registerPlexFonts", "C")
 
 #===============================================================================
 # 
 #===============================================================================
 def loadPlexSkin():
-	'''
+	"""
 	loads the corresponding skin.xml file
 	
 	@param: none 
 	@return none
-	'''
+	"""
 	printl2("", "__common__::loadPlexSkin", "S")
 	printl2("current skin: " + str(config.plugins.dreamplex.skins.value), "__common__::loadPlexSkin", "S")
-	
-	skin = None
-	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/1280x720/skin.xml"
-	
+
+	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/1280x720/skin.xml"
+
 	if skin:
 		loadSkin(skin)
-		
+
 	printl2("", "__common__::loadPlexSkin", "C")
+
 #===============================================================================
 # 
 #===============================================================================
 def checkPlexEnvironment():
-	'''
+	"""
 	checks needed file structure for plex
 	
 	@param: none 
 	@return none	
-	'''
-	printl2("","__common__::checkPlexEnvironment", "S")
-	
+	"""
+	printl2("", "__common__::checkPlexEnvironment", "S")
+
 	playerTempFolder = config.plugins.dreamplex.playerTempPath.value
 	logFolder = config.plugins.dreamplex.logfolderpath.value
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
 	configFolder = config.plugins.dreamplex.configfolderpath.value
 	cacheFolder = config.plugins.dreamplex.cachefolderpath.value
-	
+
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
 	checkDirectory(mediaFolder)
 	checkDirectory(configFolder)
 	checkDirectory(cacheFolder)
-	
-	printl2("","__common__::checkPlexEnvironment", "C")
-	
+
+	printl2("", "__common__::checkPlexEnvironment", "C")
+
 #===============================================================================
 # 
 #===============================================================================
 def checkDirectory(directory):
-	'''
+	"""
 	checks if dir exists. if not it is added
 	
 	@param directory: e.g. /media/hdd/
 	@return: none
-	'''
+	"""
 	printl2("", "__common__::checkDirectory", "S")
 	printl2("checking ... " + directory, "__common__::checkDirectory", "D")
-	
+
 	try:
 		if not os.path.exists(directory):
 			os.makedirs(directory)
 			printl2("directory not found ... added", "__common__::checkDirectory", "D")
 		else:
 			printl2("directory found ... nothing to do", "__common__::checkDirectory", "D")
-		
+
 	except Exception, ex:
 		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::checkDirectory", "E")
-	
-	printl2("","__common__::checkDirectory", "C")
+
+	printl2("", "__common__::checkDirectory", "C")
 
 #===============================================================================
 # 
 #===============================================================================		
-def getServerFromURL(url ): # CHECKED
-	'''
+def getServerFromURL(url): # CHECKED
+	"""
 	Simply split the URL up and get the server portion, sans port
 	
 	@param url: with or without protocol
 	@return: the server URL
-	'''
-	printl2("","__common__::getServerFromURL", "S")
-	
+	"""
+	printl2("", "__common__::getServerFromURL", "S")
+
 	if url[0:4] == "http" or url[0:4] == "plex":
-		
+
 		printl2("", "__common__::getServerFromURL", "C")
 		return url.split('/')[2]
 	else:
-		
+
 		printl2("", "__common__::getServerFromURL", "C")
 		return url.split('/')[0]
-	
+
 #===============================================================================
 # 
 #===============================================================================
 def getBoxInformation():
-	'''
-	'''
 	printl2("", "__common__::getBoxtype", "C")
 	global gBoxType
 
 	if gBoxType is not None:
-		
+
 		printl2("", "__common__::getBoxtype", "C")
 		return gBoxType
 	else:
-		setBoxInformation()
-		
+		gBoxType = setBoxInformation()
+
 		printl2("", "__common__::getBoxtype", "C")
 		return gBoxType
 
@@ -419,21 +409,19 @@ def getBoxInformation():
 # 
 #===============================================================================
 def setBoxInformation():
-	'''
-	'''
 	printl2("", "__common__::_setBoxtype", "C")
-	global gBoxType
-	
+
 	try:
-		file = open("/proc/stb/info/model", "r")
+		filePointer = open("/proc/stb/info/model", "r")
 	except:
-		file = open("/hdd/model", "r")
-	box = file.readline().strip()
-	file.close()
+		filePointer = open("/hdd/model", "r")
+
+	box = filePointer.readline().strip()
+	filePointer.close()
 	manu = "Unknown"
-	model = box #"UNKNOWN" # Fallback to internal string
+	model = box # "UNKNOWN" # Fallback to internal string
 	arch = "sh4" # "unk" # Its better so set the arch by default to unkown so no wrong update information will be displayed
-	version = ""
+
 	if box == "ufs910":
 		manu = "Kathrein"
 		model = "UFS-910"
@@ -465,11 +453,11 @@ def setBoxInformation():
 	elif box == "dm500hd":
 		manu = "Dreambox"
 		model = "500hd"
-		arch = "mipsel" 
+		arch = "mipsel"
 	elif box == "dm7025":
-		manu = "Dreambox" 
+		manu = "Dreambox"
 		model = "7025"
-		arch = "mipsel"  
+		arch = "mipsel"
 	elif box == "dm7020hd":
 		manu = "Dreambox"
 		model = "7020hd"
@@ -494,233 +482,137 @@ def setBoxInformation():
 		manu = "Fortis"
 		model = "HdBox"
 		arch = "sh4"
-	
+
 	if arch == "mipsel":
 		version = getBoxArch()
 	else:
 		version = "duckbox"
-	
-	gBoxType = (manu, model, arch, version)
+
+	boxData = (manu, model, arch, version)
 	printl2("", "__common__::_setBoxtype", "C")
+	return boxData
 
 #===============================================================================
 # 
 #===============================================================================
 def getBoxArch():
-	'''
-	'''
 	printl2("", "__common__::getBoxArch", "S")
-	
+
 	ARCH = "unknown"
 
-	if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
+	if (2, 6, 8) > sys.version_info > (2, 6, 6):
 		ARCH = "oe16"
-				   
-	if (sys.version_info < (2, 7, 4) and sys.version_info > (2, 7, 0)):
+
+	if (2, 7, 4) > sys.version_info > (2, 7, 0):
 		ARCH = "oe20"
-			
+
 	printl2("", "__common__::getBoxArch", "C")
 	return ARCH
-
-#===============================================================================
-# 
-#===============================================================================
-def findMountPoint(pth):
-	'''
-	Example: findMountPoint("/media/hdd/some/file") returns "/media/hdd" 
-	'''
-	printl2("","__common__::findMountPoint", "S")									
-	
-	pth = path.abspath(pth)																						
-	
-	while not path.ismount(pth):																					
-		pth = path.dirname(pth)																				
-	
-	printl2("","__common__::findMountPoint", "C")
-	return pth																										 
-
-#===============================================================================
-# 
-#===============================================================================
-def findSafeRecordPath(dirname):
-	'''
-	'''  
-	printl2("","__common__::findSafeRecordPath", "S")					   
-	
-	if not dirname:
-		printl2("","__common__::findSafeRecordPath", "C")								   
-		return None							   
-	
-	dirname = path.realpath(dirname)			   
-	mountpoint = findMountPoint(dirname)	 
-	
-	if mountpoint in ('/', '/media'):			  
-		printl2('media is not mounted:'+ str(dirname), "__common__::findSafeRecordPath", "D")
-		
-		printl2("","__common__::findSafeRecordPath", "C")
-		return None										 
-	
-	if not path.isdir(dirname):							  
-		try:												
-			makedirs(dirname)						
-		except Exception, ex:							   
-			printl2('Failed to create dir "%s":' % str(dirname) + str(ex), "__common__::findSafeRecordPath", "D")
-			
-			printl2("","__common__::findSafeRecordPath", "C")
-			return None												   
-	
-	printl2("","__common__::findSafeRecordPath", "C")
-	return dirname																
-
-#===============================================================================
-# 
-#===============================================================================
-def normpath(path):
-	'''
-	'''
-	printl2("","__common__::normpath", "S")
-	
-	if path is None:
-		printl2("","__common__::normpath", "C")
-		return None
-	
-	path = path.replace("\\","/").replace("//", "/")
-	
-	if path == "/..":
-		printl2("","__common__::normpath", "C")
-		return None
-	
-	if len(path) > 0 and path[0] != '/':
-		path = posixpath.normpath('/' + path)[1:]
-	else:
-		path = posixpath.normpath(path)
-
-	if len(path) == 0 or path == "//":
-		printl2("","__common__::normpath", "C")
-		return "/"
-	
-	elif path == ".":
-		printl2("","__common__::normpath", "C")
-		return None
-	
-	printl2("","__common__::normpath", "C")
-	return path
 
 #===============================================================================
 # pretty_time_format
 #===============================================================================
 def prettyFormatTime(msec):
-	'''
-	'''
-	printl2("","__common__::prettyFormatTime", "S")
-	
+	printl2("", "__common__::prettyFormatTime", "S")
+
 	seconds = msec / 1000
-	hours = seconds // (60*60)
-	seconds %= (60*60)
+	hours = seconds // (60 * 60)
+	seconds %= (60 * 60)
 	minutes = seconds // 60
 	seconds %= 60
 	hrstr = "hour"
 	minstr = "min"
 	secstr = "sec"
-	
+
 	if hours != 1:
 		hrstr += "s"
-	
+
 	if minutes != 1:
 		minstr += "s"
-	
+
 	if seconds != 1:
 		secstr += "s"
-	
+
 	if hours > 0:
-		printl2("","__common__::prettyFormatTime", "C")
+		printl2("", "__common__::prettyFormatTime", "C")
 		return "%i %s %02i %s %02i %s" % (hours, hrstr, minutes, minstr, seconds, secstr)
-	
+
 	elif minutes > 0:
-		printl2("","__common__::prettyFormatTime", "C")
+		printl2("", "__common__::prettyFormatTime", "C")
 		return "%i %s %02i %s" % (minutes, minstr, seconds, secstr)
-	
+
 	else:
-		printl2("","__common__::prettyFormatTime", "C")
+		printl2("", "__common__::prettyFormatTime", "C")
 		return "%i %s" % (seconds, secstr)
 
 #===============================================================================
 # time_format
 #===============================================================================
 def formatTime(msec):
-	'''
-	'''
-	printl2("","__common__::formatTime", "S")
-	
+	printl2("", "__common__::formatTime", "S")
+
 	seconds = msec / 1000
-	hours = seconds // (60*60)
-	seconds %= (60*60)
+	hours = seconds // (60 * 60)
+	seconds %= (60 * 60)
 	minutes = seconds // 60
 	seconds %= 60
-	
+
 	if hours > 0:
-		printl2("","__common__::formatTime", "C")
+		printl2("", "__common__::formatTime", "C")
 		return "%i:%02i:%02i" % (hours, minutes, seconds)
-	
+
 	elif minutes > 0:
-		printl2("","__common__::formatTime", "C")
+		printl2("", "__common__::formatTime", "C")
 		return "%i:%02i" % (minutes, seconds)
-	
+
 	else:
-		printl2("","__common__::formatTime", "C")
-		return "%i" % (seconds)
-	
+		printl2("", "__common__::formatTime", "C")
+		return "%i" % seconds
+
 #===============================================================================
 # 
 #===============================================================================
 def getScale():
-	'''
-	'''
-	
-	printl2("","__common__::getScale", "S")
-	
+	printl2("", "__common__::getScale", "S")
+
+	printl2("", "__common__::getScale", "C")
 	return AVSwitch().getFramebufferScale()
-	
-	printl2("","__common__::getScale", "C")
 
 #===========================================================================
 # 
 #===========================================================================
 def checkXmlFile(location):
-	'''
-	'''
 	printl2("", "__common__::checkXmlFile", "S")
-	
-	if os.path.isfile(location) == False:
+
+	if not os.path.isfile(location):
 		printl2("xml file not found, generating ...", "__common__::checkXmlFile", "D")
 		with open(location, "a") as writefile:
 			writefile.write("<xml></xml>")
 			printl2("writing xml file done", "__common__::checkXmlFile", "D")
-		
+
 	else:
 		printl2("found xml file, nothing to do", "__common__::checkXmlFile", "D")
-	
+
 	printl2("", "__common__::checkXmlFile", "C")
 
 #===========================================================================
 # 
 #===========================================================================
 def getXmlContent(location):
-	'''
-	'''
-	
 	printl2("", "__common__::getXmlContent", "S")
-	
+
 	checkXmlFile(location)
-	
+
 	xml = open(location).read()
 	printl2("xml: " + str(xml), "__common__::getXmlContent", "D")
-	
+
+	tree = None
+
 	try:
 		tree = etree.fromstring(xml)
 	except Exception, e:
 		printl2("something weng wrong during xml parsing" + str(e), __name__, "E")
-	
+
 	printl2("", "__common__::getXmlContent", "C")
 	return tree
 
@@ -728,17 +620,15 @@ def getXmlContent(location):
 # 
 #===========================================================================
 def writeXmlContent(content, location):
-	'''
-	'''
 	printl2("", "__common__::writeXmlContent", "S")
-	
+
 	indented = indentXml(content)
 	xmlString = etree.tostring(indented)
 	fobj = open(location, "w")
 	fobj.write(xmlString)
-	fobj.close
+	fobj.close()
 	printl2("xmlString: " + str(xmlString), "__common__::getXmlContent", "C")
-	
+
 	printl2("", "__common__::getXmlContent", "C")
 
 
@@ -746,13 +636,11 @@ def writeXmlContent(content, location):
 # 
 #===========================================================================
 def indentXml(elem, level=0, more_sibs=False):
-	'''
-	'''
 	printl2("", "__common__::indentXml", "S")
 
 	i = "\n"
 	if level:
-		i += (level-1) * '  '
+		i += (level - 1) * '  '
 	num_kids = len(elem)
 	if num_kids:
 		if not elem.text or not elem.text.strip():
@@ -761,7 +649,7 @@ def indentXml(elem, level=0, more_sibs=False):
 				elem.text += '  '
 		count = 0
 		for kid in elem:
-			indentXml(kid, level+1, count < num_kids - 1)
+			indentXml(kid, level + 1, count < num_kids - 1)
 			count += 1
 		if not elem.tail or not elem.tail.strip():
 			elem.tail = i
@@ -772,28 +660,27 @@ def indentXml(elem, level=0, more_sibs=False):
 			elem.tail = i
 			if more_sibs:
 				elem.tail += '  '
-	
-	return elem
-	
+
 	printl2("", "__common__::indentXml", "C")
+	return elem
 
 #===========================================================================
 # 
 #===========================================================================	
 def convertSize(size):
 	printl2("", "__common__::convertSize", "S")
-	
+
 	size_name = ("KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-	i = int(math.floor(math.log(size,1024)))
-	p = math.pow(1024,i)
-	s = round(size/p,2)
-	
-	if (s > 0):
-		return '%s %s' % (s,size_name[i])
+	i = int(math.floor(math.log(size, 1024)))
+	p = math.pow(1024, i)
+	s = round(size / p, 2)
+
+	if s > 0:
+		printl2("", "__common__::convertSize", "C")
+		return '%s %s' % (s, size_name[i])
 	else:
+		printl2("", "__common__::convertSize", "C")
 		return '0B'
-	
-	printl2("", "__common__::convertSize", "C")
 
 #===========================================================================
 # 
