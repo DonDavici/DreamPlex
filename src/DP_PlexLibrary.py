@@ -307,7 +307,6 @@ class PlexLibrary(Screen):
 	def getSeenVisus(self):
 		printl("", self, "S")
 		
-		#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 		tree = Singleton().getSkinParamsInstance()
 		
 		for seenPic in tree.findall('seenPic'):
@@ -563,7 +562,7 @@ class PlexLibrary(Screen):
 		if self.g_connectionType == "2": # MYPLEX
 			self.setAccessTokenHeader(str(section.get('serverVersion')))
 		
-		if config.plugins.dreamplex.useCache.value == True:
+		if config.plugins.dreamplex.useCache.value:
 			fd = open(self.sectionCache, "wb")
 			pickle.dump(self.g_sectionCache, fd, 2) #pickle.HIGHEST_PROTOCOL
 			fd.close()
@@ -587,7 +586,6 @@ class PlexLibrary(Screen):
 		multiple = False
 		multiple_list = []
 		for server in self.g_serverDict:
-																			
 			if server['discovery'] == "local" or server['discovery'] == "bonjour":
 				html = self.doRequest('http://'+server['address']+'/library/sections')
 			elif server['discovery'] == "myplex":
