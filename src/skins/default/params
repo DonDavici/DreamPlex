@@ -59,8 +59,8 @@
 		-->
 	
 	<!-- CINE VIEWS -->
-	<cineView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
-	<cineView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
-	<cineView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
+	<movieView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
+	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
+	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
 	
 </xml>

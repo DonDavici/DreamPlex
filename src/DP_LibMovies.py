@@ -116,10 +116,10 @@ class DP_LibMovies(DP_LibMain):
 			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 			
 			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, filter)
+			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, filter
 		
 		printl ("", self, "C")
-		return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
+		return library, ("viewMode", "ratingKey", ), None, None, sort, filter
 
 	#===========================================================================
 	# 
@@ -142,7 +142,7 @@ class DP_LibMovies(DP_LibMain):
 		printl ("", self, "S")
 		
 		args = {}
-		args["id"] 	= entry["ratingKey"]
+		args["id"]      = entry["ratingKey"]
 		args["title"]   = entry["title"]
 		args["year"]    = entry["year"]
 		args["type"]    = "movie"

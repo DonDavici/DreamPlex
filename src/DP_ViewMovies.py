@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -47,19 +47,20 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 def getViewClass():
-	'''
-	'''
+	"""
+	"""
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
-	return DPS_ViewCine
+	return DPS_ViewMovies
 
 #===============================================================================
 # 
 #===============================================================================
-class DPS_ViewCine(DP_View):
-	'''
-	'''
+#noinspection PyShadowingBuiltins
+class DPS_ViewMovies(DP_View):
+	"""
+	"""
 	backdrop_postfix 		= ""
 	poster_postfix 			= ""
 	image_prefix 			= ""
@@ -131,79 +132,79 @@ class DPS_ViewCine(DP_View):
 		self["txt_blue"].setText(_("toogle View ") + _("(current 'Default')"))
 		
 		
-		if self.fastScroll == True:
+		if self.fastScroll:
 			self["txt_yellow"].setText("fastScroll = On")
 		else:
 			self["txt_yellow"].setText("fastScroll = Off")
 		
-		self["txt_pvr"]			= Label()
+		self["txt_pvr"] = Label()
 		self["txt_pvr"].setText("load additional data")
 		
-		self["txt_menu"]		= Label()
+		self["txt_menu"] = Label()
 		self["txt_menu"].setText("show media functions")
 		
-		if self.myParams["showPoster"] == True:
-			self["poster"] 				= Pixmap()
+		if self.myParams["showPoster"]:
+			self["poster"] = Pixmap()
 			self.posterHeight = self.myParams["posterHeight"]
 			self.posterWidth = self.myParams["posterWidth"]
 		
-		if self.myParams["showBackdrop"] == True:
-			self["mybackdrop"] 			= Pixmap()
+		if self.myParams["showBackdrop"]:
+			self["mybackdrop"] = Pixmap()
 			self.backdropHeight = self.myParams["backdropHeight"]
 			self.backdropWidth = self.myParams["backdropWidth"]
 			
-		if self.myParams["audio"] == True:
-			self["audio"] 				= MultiPixmap()
+		if self.myParams["audio"]:
+			self["audio"] = MultiPixmap()
 		
-		if self.myParams["resolution"] == True:
-			self["resolution"] 			= MultiPixmap()
+		if self.myParams["resolution"]:
+			self["resolution"] = MultiPixmap()
 		
-		if self.myParams["aspect"] == True:
-			self["aspect"] 				= MultiPixmap()
+		if self.myParams["aspect"]:
+			self["aspect"] = MultiPixmap()
 		
-		if self.myParams["codec"] == True:
-			self["codec"] 				= MultiPixmap()
+		if self.myParams["codec"]:
+			self["codec"] = MultiPixmap()
 		
-		if self.myParams["rated"] == True:
-			self["rated"] 				= MultiPixmap()
+		if self.myParams["rated"]:
+			self["rated"] = MultiPixmap()
 		
-		if self.myParams["title"] == True:
-			self["title"] 				= Label()
+		if self.myParams["title"]:
+			self["title"] = Label()
 		
-		if self.myParams["tag"] == True:
-			self["tag"] 				= Label()
+		if self.myParams["tag"]:
+			self["tag"] = Label()
 		
-		if self.myParams["shortDescription"] == True:
-			self["shortDescription"] 	= ScrollLabel()
+		if self.myParams["shortDescription"]:
+			self["shortDescription"] = ScrollLabel()
 		
-		if self.myParams["subtitles"] == True:
-			self["subtitles"] 			= Label()
+		if self.myParams["subtitles"]:
+			self["subtitles"] = Label()
 		
-		if self.myParams["selectedAudio"] == True:
-			self["selectedAudio"] 		= Label()
+		if self.myParams["selectedAudio"]:
+			self["selectedAudio"] = Label()
 		
-		if self.myParams["genre"] == True:
-			self["genre"] 				= Label()
+		if self.myParams["genre"]:
+			self["genre"] = Label()
 		
-		if self.myParams["year"] == True:
-			self["year"] 				= Label()
+		if self.myParams["year"]:
+			self["year"] = Label()
 		
-		if self.myParams["runtime"] == True:
-			self["runtime"] 			= Label()
+		if self.myParams["runtime"]:
+			self["runtime"] = Label()
 		
-		if self.myParams["total"] == True:
-			self["total"] 				= Label()
+		if self.myParams["total"]:
+			self["total"] = Label()
 		
-		if self.myParams["current"] == True:
-			self["current"] 			= Label()
+		if self.myParams["current"]:
+			self["current"] = Label()
 		
-		if self.myParams["backdroptext"] == True:
-			self["backdroptext"]		= Label()
+		if self.myParams["backdroptext"]:
+			self["backdroptext"] = Label()
 		
-		if self.myParams["postertext"] == True:
-			self["postertext"]			= Label()
+		if self.myParams["postertext"]:
+			self["postertext"] = Label()
 		
-		if self.myParams["rating_stars"] == True:
+		if self.myParams["rating_stars"]:
 			self["rating_stars"] = ProgressBar()
 		
 		printl("skinName: " + str(self.skinName), self, "C")
@@ -212,16 +213,16 @@ class DPS_ViewCine(DP_View):
 		if self.myParams["showPoster"] == True or self.myParams["showBackdrop"] == True:
 			self.EXscale = (AVSwitch().getFramebufferScale())
 			
-			if self.myParams["showPoster"] == True:
-				self.EXpicloadPoster 		= ePicLoad()
+			if self.myParams["showPoster"]:
+				self.EXpicloadPoster = ePicLoad()
 			
-			if self.myParams["showBackdrop"] == True:
-				self.EXpicloadBackdrop 		= ePicLoad()
+			if self.myParams["showBackdrop"]:
+				self.EXpicloadBackdrop = ePicLoad()
 			
 			self.onLayoutFinish.append(self.setPara)
 	
 		printl("", self, "C")
-	
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -231,17 +232,17 @@ class DPS_ViewCine(DP_View):
 		
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		
-		if self.resetGuiElements == True:
+		if self.resetGuiElements:
 			self.resetGuiElementsInFastScrollMode()
 		
-		if self.myParams["showBackdrop"] == True or self.myParams["showPoster"] == True:
+		if self.myParams["showBackdrop"] or self.myParams["showPoster"]:
 			self.resetCurrentImages()
 		
 		printl("showMedia: " + str(self.showMedia), self, "D")
 		
 		printl("isDirectory: " + str(self.isDirectory), self, "D")
 		
-		if selection != None:
+		if selection is not None:
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
 			self.context		= selection[3]
@@ -269,48 +270,48 @@ class DPS_ViewCine(DP_View):
 					if self.startPlaybackNow:
 						super(DPS_ViewList, self).startThemePlayback()
 				
-				if self.myParams["title"] == True:	
+				if self.myParams["title"]:
 					self.setText("title", self.details.get("title", " "))
 				
-				if self.myParams["tag"] == True:	
+				if self.myParams["tag"]:
 					self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 				
-				if self.myParams["year"] == True:	
+				if self.myParams["year"]:
 					self.setText("year", str(self.details.get("year", " - ")))
 				
-				if self.myParams["genre"] == True:	
+				if self.myParams["genre"]:
 					self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
 				
-				if self.myParams["subtitles"] == True:	
+				if self.myParams["subtitles"]:
 					self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
 				
-				if self.myParams["selectedAudio"] == True:	
+				if self.myParams["selectedAudio"]:
 					self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
 				
-				if self.myParams["runtime"] == True:		
+				if self.myParams["runtime"]:
 					self.setText("runtime", str(self.details.get("runtime", " - ")))
 				
-				if self.myParams["shortDescription"] == True:		
+				if self.myParams["shortDescription"]:
 					self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 				
 				if self.fastScroll == False or self.showMedia == True:
 					# handle all pixmaps
-					if self.myParams["rating_stars"] == True:		
+					if self.myParams["rating_stars"]:
 						self.handlePopularityPixmaps()
 					
-					if self.myParams["codec"] == True:			
+					if self.myParams["codec"]:
 						self.handleCodecPixmaps()
 					
-					if self.myParams["aspect"] == True:			
+					if self.myParams["aspect"]:
 						self.handleAspectPixmaps()
 					
-					if self.myParams["resolution"] == True:			
+					if self.myParams["resolution"]:
 						self.handleResolutionPixmaps()
 					
-					if self.myParams["rated"] == True:			
+					if self.myParams["rated"]:
 						self.handleRatedPixmaps()
 					
-					if self.myParams["audio"] == True:		
+					if self.myParams["audio"]:
 						self.handleSoundPixmaps()
 				
 				# navigation
@@ -329,7 +330,7 @@ class DPS_ViewCine(DP_View):
 				# we need those for fastScroll
 				# this prevents backdrop load on next item
 				self.showMedia = False
-				
+
 		else:
 			self.setText("title", "no data retrieved")
 			self.setText("shortDescription", "no data retrieved")
@@ -354,7 +355,7 @@ class DPS_ViewCine(DP_View):
 	def onKeyYellow(self):
 		printl("", self, "S")
 		
-		if self.fastScroll == True:
+		if self.fastScroll:
 			self.fastScroll = False
 			self["txt_yellow"].setText("fastScroll = Off")
 		else:
@@ -454,7 +455,7 @@ class DPS_ViewCine(DP_View):
 			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["rated"].show()
 		else:
 			self["rated"].hide()
@@ -487,13 +488,13 @@ class DPS_ViewCine(DP_View):
 			self["audio"].setPixmapNum(3)
 		
 		elif audio == "UNKNOWN" or audio == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! audio: " + str(audio), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["audio"].show()
 		else:
 			self["audio"].hide()
@@ -522,13 +523,13 @@ class DPS_ViewCine(DP_View):
 			self["resolution"].setPixmapNum(2)
 		
 		elif resolution == "UNKNOWN" or resolution == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! resolution: " + str(resolution), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["resolution"].show()
 		else:
 			self["resolution"].hide()
@@ -563,7 +564,7 @@ class DPS_ViewCine(DP_View):
 			printl("we have a value but no match!! aspect: " + str(aspect), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["aspect"].show()
 		else:
 			self["aspect"].hide()
@@ -596,13 +597,13 @@ class DPS_ViewCine(DP_View):
 			self["codec"].setPixmapNum(3)
 		
 		elif codec == "UNKNOWN" or codec == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! codec: " + str(codec), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["codec"].show()
 		else:
 			self["codec"].hide()
@@ -683,7 +684,7 @@ class DPS_ViewCine(DP_View):
 				self.changePoster = True
 				pname = self.details["ratingKey"]
 		
-		if self.usePicCache != True:
+		if not self.usePicCache:
 			pname = "temp"
 			bname = "temp"
 			self.mediaPath = config.plugins.dreamplex.logfolderpath.value

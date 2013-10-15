@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -55,18 +55,18 @@ from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 # 
 #===============================================================================
 def getViewClass():
-	'''
+	"""
 	@param: none
 	@return: DP_View Class 
-	'''
+	"""
 	printl("", __name__, "S")
 	
 	printl("", __name__, "C")
 	return DP_View
 
 class DP_View(Screen, NumericalTextInput):
-	'''
-	'''
+	"""
+	"""
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -185,7 +185,6 @@ class DP_View(Screen, NumericalTextInput):
 	def getGuiElements(self):
 		printl("", self, "S")
 		
-		#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 		tree = Singleton().getSkinParamsInstance()
 		
 		self.guiElements = {}
@@ -209,7 +208,6 @@ class DP_View(Screen, NumericalTextInput):
 			params = viewName[3]
 			self.itemsPerPage = int(params['itemsPerPage'])
 		else:
-			#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
 			tree = Singleton().getSkinParamsInstance()
 			for view in tree.findall('view'):
 				if view.get('name') == str(viewName[1]):
@@ -425,9 +423,9 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def timeout(self):
-		'''
+		"""
 		onNumberKeyTimeout
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl(self.onNumberKeyLastChar, self, "I")
@@ -890,41 +888,35 @@ class DP_View(Screen, NumericalTextInput):
 			url_path	= extraData['key']
 			printl("url_path: " +str(url_path), self, "D")
 		
-			if (viewMode == "ShowSeasons"):
+			if viewMode == "ShowSeasons":
 				printl("viewMode -> ShowSeasons", self, "I")
 
-				params = {}
-				params["viewMode"] = viewMode
-				params["url"] = "http://" + server + url_path
-				
+				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+
 				self.currentSeasonsParams = params
 				self.currentShowIndex = self["listview"].getIndex()
 
 				self._load(params)
 
-			elif (viewMode == "ShowEpisodes"):
+			elif viewMode == "ShowEpisodes":
 				printl("viewMode -> ShowEpisodes", self, "I")
 
-				params = {}
-				params["viewMode"] = viewMode
-				params["url"] = "http://" + server + url_path
-				
+				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+
 				self.currentEpisodesParams = params
 				self.currentSeasonIndex = self["listview"].getIndex()
 				
 				self._load(params)
 			
-			elif (viewMode == "play"):
+			elif viewMode == "play":
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
 			
-			elif (viewMode == "directory"):
+			elif viewMode == "directory":
 				printl("viewMode -> directory", self, "I")
 				
-				params = {}
-				params["viewMode"] = viewMode
-				params["url"] = "http://" + server + url_path
-				
+				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+
 				self.currentMovieParams = params
 				self.currentMovieIndex = self["listview"].getIndex()
 				
@@ -1001,13 +993,13 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def _load(self, params=None, ignoreSort=False, ignoreFilter=False):
-		'''
+		"""
 			e.g.
 			params = {}
 			params["viewMode"] = viewMode
 			params["url"] = "http://" + server + url_path
 			params["index"] = int
-		'''
+		"""
 		printl("", self, "S")
 		printl("params: " + str(params), self, "D")
 		printl("cache: " + str(self.cache), self, "D")
@@ -1144,11 +1136,11 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def setText(self, name, value, ignore=False, what=None):
-		'''
+		"""
 		
 		@todo: lets check this. seems to be some kind of too much
 		
-		'''
+		"""
 		#printl("", self, "S")
 		#printl("setting text for " + str(name) + " with value " + str(value), self, "D")
 		try:
@@ -1653,8 +1645,8 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#===========================================================================
 	def startThemePlayback(self):
-		'''
-		'''
+		"""
+		"""
 		printl("", self, "S")
 		
 		printl("start pĺaying theme", self, "I")

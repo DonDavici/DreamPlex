@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -55,15 +55,18 @@ from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 # 
 #===============================================================================
 def getViews(libraryName):
-	'''
+	"""
 	@param: none 
 	@return: availableViewList
-	'''
+	"""
 	printl("", "DP_View::getViews", "S")
 
-	if libraryName == "movies" or libraryName == "tvshows":
-		availableViewList = getViewsFromSkinParams("cineView")
-	
+	if libraryName == "movies":
+		availableViewList = getViewsFromSkinParams("movieView")
+
+	elif libraryName == "tvshows":
+		availableViewList = getViewsFromSkinParams("showView")
+
 	elif libraryName == "music":
 		availableViewList = getViewsFromSkinParams("musicView")
 	
@@ -85,16 +88,22 @@ def getViewsFromSkinParams(type):
 	availableViewList = []
 	
 	if type == "cineView":
-		myFile = "DP_ViewCine"
-		myClass = "DPS_ViewCine"
-		defaultParams = getCineViewDefaults()
-	
+		myFile = "DP_ViewMovies"
+		myClass = "DPS_ViewMovies"
+		defaultParams = getMovieViewDefaults()
+
+	elif type == "showView":
+		myFile = "DP_ViewShows"
+		myClass = "DPS_ViewShows"
+		defaultParams = getShowViewDefaults()
+
 	elif type == "musicView":
 		myFile = "DP_ViewMusic"
 		myClass = "DPS_ViewMusic"
 		defaultParams = getMusicViewDefaults()
 		
 	else:
+		# TODO add errorhandler here
 		pass
 	
 	for view in tree.findall(type):
@@ -138,7 +147,7 @@ def getViewsFromSkinParams(type):
 #===========================================================================
 # 
 #===========================================================================
-def getCineViewDefaults():
+def getMovieViewDefaults():
 	printl("", __name__, "S")
 	
 	defaults = {}
@@ -175,6 +184,49 @@ def getCineViewDefaults():
 	defaults["postertext"]			= True
 	defaults["rating_stars"] 		= True
 	
+	printl("", __name__, "C")
+	return defaults
+
+#===========================================================================
+#
+#===========================================================================
+def getShowViewDefaults():
+	printl("", __name__, "S")
+
+	defaults = {}
+	# mandatory items have to be defined or a assert error will come
+	defaults["itemsPerPage"]		= "mandatory"
+	defaults["apiLevel"]			= "mandatory"
+	defaults["screen"]				= "mandatory"
+
+	defaults["backdropHeight"]		= "315"
+	defaults["backdropWidth"]		= "560"
+	defaults["posterHeight"]		= "268"
+	defaults["posterWidth"]			= "195"
+	defaults["backdrop_postfix"]	= "_backdrop.jpg"
+	defaults["poster_postfix"]		= "_poster.jpg"
+	defaults["current"]				= True
+	defaults["total"]				= True
+	defaults["functionsContainer"]	= True
+	defaults["showBackdrop"]		= True
+	defaults["showPoster"]			= True
+	defaults["audio"] 				= True
+	defaults["resolution"] 			= True
+	defaults["aspect"] 				= True
+	defaults["codec"] 				= True
+	defaults["rated"] 				= True
+	defaults["title"] 				= True
+	defaults["tag"] 				= True
+	defaults["shortDescription"] 	= True
+	defaults["subtitles"] 			= True
+	defaults["selectedAudio"] 		= True
+	defaults["genre"] 				= True
+	defaults["year"] 				= True
+	defaults["runtime"] 			= True
+	defaults["backdroptext"]		= True
+	defaults["postertext"]			= True
+	defaults["rating_stars"] 		= True
+
 	printl("", __name__, "C")
 	return defaults
 
