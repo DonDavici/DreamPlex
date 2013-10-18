@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -36,8 +36,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 class DP_LibMovies(DP_LibMain):
-	'''
-	'''
+	"""
+	"""
 	
 	g_url = None
 	
@@ -80,13 +80,13 @@ class DP_LibMovies(DP_LibMain):
 		
 		if params["viewMode"] is None:
 			printl ("viewMode = None", self, "D")
-			if config.plugins.dreamplex.useCache.value == True:
+			if config.plugins.dreamplex.useCache.value:
 				self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
 				
 				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
 				if "cache" in params:
-					if params['cache'] == False:
+					if not params['cache']:
 						self.g_source = "plex"
 	 
 				if self.g_source == "cache" or params['cache'] == True:

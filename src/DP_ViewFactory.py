@@ -79,7 +79,7 @@ def getViews(libraryName):
 #===========================================================================
 # 
 #===========================================================================
-def getViewsFromSkinParams(type):
+def getViewsFromSkinParams(myType):
 	printl("", __name__, "S")
 	
 	tree = Singleton().getSkinParamsInstance()
@@ -87,17 +87,17 @@ def getViewsFromSkinParams(type):
 	
 	availableViewList = []
 	
-	if type == "cineView":
+	if myType == "movieView":
 		myFile = "DP_ViewMovies"
 		myClass = "DPS_ViewMovies"
 		defaultParams = getMovieViewDefaults()
 
-	elif type == "showView":
+	elif myType == "showView":
 		myFile = "DP_ViewShows"
 		myClass = "DPS_ViewShows"
 		defaultParams = getShowViewDefaults()
 
-	elif type == "musicView":
+	elif myType == "musicView":
 		myFile = "DP_ViewMusic"
 		myClass = "DPS_ViewMusic"
 		defaultParams = getMusicViewDefaults()
@@ -106,7 +106,7 @@ def getViewsFromSkinParams(type):
 		# TODO add errorhandler here
 		pass
 	
-	for view in tree.findall(type):
+	for view in tree.findall(myType):
 		name = str(view.get('name'))
 		currentParams = {}
 		

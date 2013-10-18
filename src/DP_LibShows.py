@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -36,8 +36,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 class DP_LibShows(DP_LibMain):
-	'''
-	'''
+	"""
+	"""
 	
 	g_url = None
 	
@@ -45,9 +45,9 @@ class DP_LibShows(DP_LibMain):
 	# 
 	#===========================================================================
 	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None):
-		'''
+		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
-		'''
+		"""
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "tvshows")

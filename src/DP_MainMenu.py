@@ -358,7 +358,7 @@ class DPS_MainMenu(Screen):
 		if self.selectedEntry.start is not None:
 			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source}
 			
-			if self.showEpisodesDirectly:
+			if self.showEpisodesDirectly != "notSet":
 				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
 
 			self.session.open(self.selectedEntry.start, **kwargs)
