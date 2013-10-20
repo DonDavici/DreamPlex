@@ -1296,9 +1296,8 @@ class PlexLibrary(Screen):
 	
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
-	
 
 		#Find all the video tags, as they contain the data we need to link to a file.
 		movies=tree.findall('Video')
@@ -1357,7 +1356,9 @@ class PlexLibrary(Screen):
 			#We'll process it later
 			for child in show:
 				if child.tag == "Media":
-					mediaarguments = dict(child.items())
+					# todo check if we need this for something
+					mediaArguments = dict(child.items())
+					printl("mediaArguments: " + str(mediaArguments), self, "D")
 				
 				elif child.tag == "Genre" and self.g_skipmetadata == "false":
 					genreTag = child.get('tag')
@@ -1489,7 +1490,7 @@ class PlexLibrary(Screen):
 	
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 		
 		willFlatten=False
@@ -1595,13 +1596,10 @@ class PlexLibrary(Screen):
 			
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 				
 		ShowTags=tree.findall('Video')
-		
-		if self.g_skipimages == "false":		
-			sectionart=self.getImage(tree, server, type="thumb")
 		
 		fullList=[]
 		 
