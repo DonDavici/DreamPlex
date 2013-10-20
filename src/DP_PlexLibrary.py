@@ -28,13 +28,12 @@ import socket
 import sys
 import os
 import datetime 
-import time
-import base64 
+import base64
 import hmac
 import uuid
 import cPickle as pickle
 
-
+from time import time
 from urllib import quote_plus
 from base64 import b64encode, b64decode
 from Components.config import config
@@ -2974,8 +2973,6 @@ class PlexLibrary(Screen):
 
 		streamURL = ""
 		transcode = []
-
-		#noinspection PyCallingNonCallable
 		ts = int(time())
 		if self.g_serverConfig.universalTranscoder.value:
 			videoQuality, videoResolution, maxVideoBitrate = self.getUniversalTranscoderSettings()
