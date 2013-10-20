@@ -268,8 +268,9 @@ class DPS_MainMenu(Screen):
 				self.source = params.get('t_source', "notSet")
 				
 				isSearchFilter = params.get('isSearchFilter', "notSet")
-				
-				if isSearchFilter == "True" or isSearchFilter:
+				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
+				if isSearchFilter == "True" or isSearchFilter and isSearchFilter != "notSet":
+						printl("i am here: " + str(isSearchFilter), self, "D")
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()

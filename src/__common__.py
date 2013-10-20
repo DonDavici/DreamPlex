@@ -698,5 +698,5 @@ def loadPicture(filename):
 			# kind of fallback if filetype is declared wrong
 			ptr = loadPNG(filename)
 	printl2("filename: " + str(filename), "__common__::loadPicture", "D")
-	printl2("", "__common__::loadPicture", "S")
+	printl2("", "__common__::loadPicture", "C")
 	return ptr
