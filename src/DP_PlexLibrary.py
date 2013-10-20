@@ -2974,7 +2974,9 @@ class PlexLibrary(Screen):
 
 		streamURL = ""
 		transcode = []
-		ts = int(time)
+
+		#noinspection PyCallingNonCallable
+		ts = int(time())
 		if self.g_serverConfig.universalTranscoder.value:
 			videoQuality, videoResolution, maxVideoBitrate = self.getUniversalTranscoderSettings()
 			printl("Setting up HTTP Stream with universal transcoder", self, "I")
