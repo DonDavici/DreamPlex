@@ -186,7 +186,7 @@ class DPS_SystemCheck(Screen):
 		printl("", self, "S")
 		
 		isStable = False
-		
+		latestStabel = ""
 		leftLimiter = 0
 		
 		while not isStable:
@@ -385,7 +385,9 @@ fi""" % str(remoteUrl)
 	#===============================================================================
 	def installCurlLibs(self, confirm):
 		printl("", self, "S")
-		
+
+		command = ""
+
 		if confirm:
 			# User said 'Yes'
 			
@@ -425,7 +427,9 @@ fi""" % str(remoteUrl)
 	#===============================================================================
 	def installStreamingLibs(self, confirm):
 		printl("", self, "S")
-		
+
+		command = ""
+
 		if confirm:
 			# User said 'Yes'
 			

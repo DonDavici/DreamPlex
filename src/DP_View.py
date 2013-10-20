@@ -64,6 +64,9 @@ def getViewClass():
 	printl("", __name__, "C")
 	return DP_View
 
+#===========================================================================
+#
+#===========================================================================
 class DP_View(Screen, NumericalTextInput):
 	"""
 	"""
@@ -86,8 +89,11 @@ class DP_View(Screen, NumericalTextInput):
 	showMedia						= False
 	showDetail						= False
 	isDirectory						= False
-	
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
 		printl("", self, "S")
 		printl("cache: " + str(cache), self, "D")
 		
@@ -98,7 +104,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.select = select
 		self.cache = cache
 		self.onFirstExecSort = sort
-		self.onFirstExecFilter = filter
+		self.onFirstExecFilter = myFilter
 		
 		self.libraryName = libraryName
 		self.loadLibrary = loadLibrary
@@ -112,10 +118,10 @@ class DP_View(Screen, NumericalTextInput):
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 		
 		# Initialise library list
-		list = []
-		self["listview"] = List(list, True)
+		myList = []
+		self["listview"] = List(myList, True)
 		
-		self["number_key_popup"] = Label("")
+		self["number_key_popup"] = Label()
 		self["number_key_popup"].hide()
 
 		self.seenPng = None
@@ -228,16 +234,16 @@ class DP_View(Screen, NumericalTextInput):
 			if self.onFirstExecSort is not None:
 				self.activeSort = self.onFirstExecSort
 				sort = True
-			filter = False
+			myFilter = False
 			if self.onFirstExecFilter is not None:
 				self.activeFilter = self.onFirstExecFilter
-				filter = True
+				myFilter = True
 			
 			# lets override this
-			filter = True
+			myFilter = True
 			sort = True
 			
-			self._load(ignoreSort=sort, ignoreFilter=filter)
+			self._load(ignoreSort=sort, ignoreFilter=myFilter)
 			self.refresh()
 		else: # changed views, reselect selected entry
 			printl("self.select: " +  str(self.select), self, "D")
@@ -245,12 +251,12 @@ class DP_View(Screen, NumericalTextInput):
 			if self.onFirstExecSort is not None:
 				self.activeSort = self.onFirstExecSort
 				sort = True
-			filter = False
+			myFilter = False
 			if self.onFirstExecFilter is not None:
 				self.activeFilter = self.onFirstExecFilter
-				filter = True
+				myFilter = True
 			
-			self._load(self.select[0], ignoreSort=sort, ignoreFilter=filter)
+			self._load(self.select[0], ignoreSort=sort, ignoreFilter=myFilter)
 			keys = self.select[1].keys()
 			listViewList = self["listview"].list
 			for i in range(len(listViewList)):
@@ -687,6 +693,7 @@ class DP_View(Screen, NumericalTextInput):
 				
 				# Try to select the next genres subelement
 				found = False
+				y = None
 				subelements = self.onFilterKeyValuePair[i][2]
 				for j in range(len(subelements)):
 					if self.activeFilter[2] == subelements[j]:
@@ -696,7 +703,7 @@ class DP_View(Screen, NumericalTextInput):
 							found = True
 							break
 				
-				if found is True:
+				if found:
 					x = self.onFilterKeyValuePair[i]
 					self.activeFilter = (x[0], x[1], y, )
 				else:
@@ -949,7 +956,7 @@ class DP_View(Screen, NumericalTextInput):
 			#extraData
 			url_path		= extraData['key']
 			
-			if (viewMode == "play"):
+			if viewMode == "play":
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
 		
@@ -964,7 +971,7 @@ class DP_View(Screen, NumericalTextInput):
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
 		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
 		
-		if config.plugins.dreamplex.playTheme.value == True:
+		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
 			self.session.nav.stopService()
 		
@@ -1272,12 +1279,12 @@ class DP_View(Screen, NumericalTextInput):
 		resumeStamp = self.playerData['resumeStamp']
 		printl("resumeStamp: " + str(resumeStamp), self, "I")
 
-		if self.showDetail == True:
+		if self.showDetail:
 			currentFile = "Location:\n " + str(self.playerData['currentFile'])
-			self.session.open(MessageBox,_("%s") % (currentFile), MessageBox.TYPE_INFO)
+			self.session.open(MessageBox,_("%s") % currentFile, MessageBox.TYPE_INFO)
 			self.showDetail = False
 		else:
-			if self.playerData['fallback'] == True:
+			if self.playerData['fallback']:
 				message = "Sorry I didn't find the file on the provided locations"
 				locations = "Location:\n " + self.playerData['locations']
 				suggestion = "Please verify you direct local settings"
@@ -1385,8 +1392,7 @@ class DP_View(Screen, NumericalTextInput):
 		functionList.append((_("Refresh this section"), Plugin("View", fnc=self.refreshSection), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 		
-		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
-			title=_("Media Functions"), list=functionList)
+		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Media Functions"), list=functionList)
 		
 		printl("", self, "C")
 
@@ -1434,8 +1440,7 @@ class DP_View(Screen, NumericalTextInput):
 				selection = i
 				break
 		
-		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, \
-			title=_("Subtitle Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions"), list=functionList,selection=selection)
 		
 		printl("", self, "C")
 	
@@ -1474,8 +1479,7 @@ class DP_View(Screen, NumericalTextInput):
 				selection = i
 				break
 		
-		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, \
-			title=_("Audio Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, title=_("Audio Functions"), list=functionList,selection=selection)
 		
 		printl("", self, "C")
 	
@@ -1564,8 +1568,7 @@ class DP_View(Screen, NumericalTextInput):
 		if len(pluginList) == 0:
 			pluginList.append((_("No plugins available"), None, ))
 		
-		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, \
-			title=_("Options"), list=pluginList)
+		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Options"), list=pluginList)
 		
 		printl("", self, "C")
 
@@ -1668,7 +1671,7 @@ class DP_View(Screen, NumericalTextInput):
 	def showPoster(self, forceShow = False):
 		printl("", self, "S")
 		
-		if forceShow == True:
+		if forceShow:
 			if self.whatPoster is not None:
 				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
 				ptr = self.EXpicloadPoster.getData()
@@ -1700,7 +1703,7 @@ class DP_View(Screen, NumericalTextInput):
 	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
 		
-		if forceShow == True:
+		if forceShow:
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
 				ptr = self.EXpicloadBackdrop.getData()
@@ -1734,12 +1737,12 @@ class DP_View(Screen, NumericalTextInput):
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 		
-		if self.myParams["showPoster"] == True:
-			if self.resetPoster == True:
+		if self.myParams["showPoster"]:
+			if self.resetPoster:
 				self["poster"].instance.setPixmapFromFile(ptr)
 		
-		if self.myParams["showBackdrop"] == True:
-			if self.resetBackdrop == True:
+		if self.myParams["showBackdrop"]:
+			if self.resetBackdrop:
 				self["mybackdrop"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
@@ -1788,10 +1791,10 @@ class DP_View(Screen, NumericalTextInput):
 	def setPara(self):
 		printl("", self, "S")
 		
-		if self.myParams["showPoster"] == True:
+		if self.myParams["showPoster"]:
 			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
-		if self.myParams["showBackdrop"] == True:
+		if self.myParams["showBackdrop"]:
 			self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
@@ -1813,25 +1816,25 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		# lets hide them so that fastScroll does not show up old information
-		if self.myParams["rating_stars"] == True:		
+		if self.myParams["rating_stars"]:
 			self["rating_stars"].hide()
 		
-		if self.myParams["codec"] == True:		
+		if self.myParams["codec"]:
 			self["codec"].hide()
 		
-		if self.myParams["aspect"] == True:		
+		if self.myParams["aspect"]:
 			self["aspect"].hide()
 		
-		if self.myParams["resolution"] == True:		
+		if self.myParams["resolution"]:
 			self["resolution"].hide()
 		
-		if self.myParams["rated"] == True:		
+		if self.myParams["rated"]:
 			self["rated"].hide()
 		
-		if self.myParams["audio"] == True:
+		if self.myParams["audio"]:
 			self["audio"].hide()
 		
-		if self.myParams["showBackdrop"] == True:
+		if self.myParams["showBackdrop"]:
 			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 			self["mybackdrop"].instance.setPixmapFromFile(ptr)
 				

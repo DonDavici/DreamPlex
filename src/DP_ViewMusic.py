@@ -90,11 +90,11 @@ class DPS_ViewMusic(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
 		printl("", self , "S")
 		self.session = session
 		
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 		
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -121,7 +121,7 @@ class DPS_ViewMusic(DP_View):
 		self["txt_blue"].setText(_("toogle View ") + _("(current 'Default')"))
 		self["txt_yellow"]    = Label()
 		
-		if self.fastScroll == True:
+		if self.fastScroll:
 			self["txt_yellow"].setText("fastScroll = On")
 		else:
 			self["txt_yellow"].setText("fastScroll = Off")
@@ -221,11 +221,11 @@ class DPS_ViewMusic(DP_View):
 			self.handleNavigationData()
 			
 			# now lets switch images
-			if self.changePoster == True:
+			if self.changePoster:
 				self.showPoster()
 			
 			if self.fastScroll == False or self.showMedia == True:
-				if self.changeBackdrop == True:
+				if self.changeBackdrop:
 					self.showBackdrop()
 			
 			self.showFunctions(False)
@@ -259,7 +259,7 @@ class DPS_ViewMusic(DP_View):
 	def onKeyYellow(self):
 		printl("", self, "S")
 		
-		if self.fastScroll == True:
+		if self.fastScroll:
 			self.fastScroll = False
 			self["txt_yellow"].setText("fastScroll = Off")
 		else:
@@ -361,7 +361,7 @@ class DPS_ViewMusic(DP_View):
 			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["rated"].show()
 		else:
 			self["rated"].hide()
@@ -394,13 +394,13 @@ class DPS_ViewMusic(DP_View):
 			self["audio"].setPixmapNum(3)
 		
 		elif audio == "UNKNOWN" or audio == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! audio: " + str(audio), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["audio"].show()
 		else:
 			self["audio"].hide()
@@ -429,13 +429,13 @@ class DPS_ViewMusic(DP_View):
 			self["resolution"].setPixmapNum(2)
 		
 		elif resolution == "UNKNOWN" or resolution == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! resolution: " + str(resolution), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["resolution"].show()
 		else:
 			self["resolution"].hide()
@@ -470,7 +470,7 @@ class DPS_ViewMusic(DP_View):
 			printl("we have a value but no match!! aspect: " + str(aspect), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["aspect"].show()
 		else:
 			self["aspect"].hide()
@@ -503,13 +503,13 @@ class DPS_ViewMusic(DP_View):
 			self["codec"].setPixmapNum(3)
 		
 		elif codec == "UNKNOWN" or codec == "":
-			found = False;
+			found = False
 		
 		else:
 			printl("we have a value but no match!! codec: " + str(codec), self, "I")
 			found = False
 		
-		if found == True:
+		if found:
 			self["codec"].show()
 		else:
 			self["codec"].hide()
@@ -590,7 +590,7 @@ class DPS_ViewMusic(DP_View):
 				self.changePoster = True
 				pname = self.details["ratingKey"]
 				
-		if self.usePicCache != True:
+		if not self.usePicCache:
 			pname = "temp"
 			bname = "temp"
 			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
