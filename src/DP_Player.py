@@ -146,7 +146,7 @@ class DP_Player(MoviePlayer):
 				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
 			else:
 				# todo add errorhandler
-				pass
+				raise Exception
 
 		
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
