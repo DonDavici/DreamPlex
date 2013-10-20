@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import urllib
-import re
 import httplib
 import socket
 import sys
@@ -1337,7 +1336,7 @@ class PlexLibrary(Screen):
 			
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 
 		#For each directory tag we find
@@ -1353,7 +1352,7 @@ class PlexLibrary(Screen):
 			#We'll process it later
 			for child in show:
 				if child.tag == "Media":
-					# todo check if we need this for something
+					# todo we have to check if we need this
 					mediaArguments = dict(child.items())
 					printl("mediaArguments: " + str(mediaArguments), self, "D")
 				
@@ -2352,12 +2351,13 @@ class PlexLibrary(Screen):
 
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 		
 		server=self.getServerFromURL(url)
 		
 		ArtistTag=tree.findall('Directory')
+
 		for artist in ArtistTag:
 		
 			details={'plot'	: artist.get('summary','') ,
@@ -2392,7 +2392,7 @@ class PlexLibrary(Screen):
 
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 		
 		server=self.getServerFromURL(url)		
@@ -2452,11 +2452,11 @@ class PlexLibrary(Screen):
 
 			try:
 				tree = etree.fromstring(html)
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 		
 		server = self.getServerFromURL(url)
-		sectionart = self.getImage(tree,server, myType="art")
+
 		TrackTags = tree.findall('Track')	  
 		for track in TrackTags:		
 			content = self.trackTag(server, tree, track)
@@ -3039,7 +3039,7 @@ class PlexLibrary(Screen):
 
 		streamURL = ""
 		transcode = []
-		ts = int(time())
+		ts = int(time)
 		if self.g_serverConfig.universalTranscoder.value:
 			videoQuality, videoResolution, maxVideoBitrate = self.getUniversalTranscoderSettings()
 			printl("Setting up HTTP Stream with universal transcoder", self, "I")
