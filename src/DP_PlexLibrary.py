@@ -1730,13 +1730,11 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getSelectedSubtitleDataById(self, server, id):
-		"""
-		"""
+	def getSelectedSubtitleDataById(self, server, myId):
 		printl("",self, "S")
-		printl("server +  id: " + str(server) + " / " + str(id), self, "D")
+		printl("server +  myId: " + str(server) + " / " + str(myId), self, "D")
 		
-		tree = self.getStreamDataById(server, id)
+		tree = self.getStreamDataById(server, myId)
 		
 		fromParts = tree.getiterator('Part')	
 		
@@ -1780,7 +1778,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================	
-	def getSubtitlesById(self, server, id):
+	def getSubtitlesById(self, server, myId):
 		"""
 		sample: 
 		<Stream id="25819" streamType="3" selected="1" default="1" index="4" language="Deutsch" languageCode="ger" format="srt"/>
@@ -1790,7 +1788,7 @@ class PlexLibrary(Screen):
 		
 		subtitlesList = []
 		
-		tree = self.getStreamDataById(server, id)
+		tree = self.getStreamDataById(server, myId)
 		
 		fromParts = tree.getiterator('Part')	
 		
@@ -1839,7 +1837,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================	
-	def getAudioById(self, server, id):
+	def getAudioById(self, server, myId):
 		"""
 		sample: 
 		<Stream id="25819" streamType="3" selected="1" default="1" index="4" language="Deutsch" languageCode="ger" format="srt"/>
@@ -1849,7 +1847,7 @@ class PlexLibrary(Screen):
 		
 		audioList = []
 		
-		tree = self.getStreamDataById(server, id)
+		tree = self.getStreamDataById(server, myId)
 		
 		fromParts = tree.getiterator('Part')	
 		
@@ -1926,7 +1924,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getAudioSubtitlesMedia(self, server, id ): 
+	def getAudioSubtitlesMedia(self, server, myId ):
 		"""
 		Cycle through the Parts sections to find all "selected" audio and subtitle streams
 		If a stream is marked as selected=1 then we will record it in the dict
@@ -1935,7 +1933,7 @@ class PlexLibrary(Screen):
 		"""
 		printl("", self, "S")
 		
-		tree = self.getStreamDataById(server, id)
+		tree = self.getStreamDataById(server, myId)
 			
 		parts=[]
 		partsCount=0
@@ -2047,14 +2045,14 @@ class PlexLibrary(Screen):
 	#========================================================================
 	# 
 	#========================================================================
-	def getMediaOptionsToPlay(self, id, vids, override=False ): 
+	def getMediaOptionsToPlay(self, myId, vids, override=False ):
 		"""
 		"""
 		printl("", self, "S")
 		
 		self.getTranscodeSettings(override)
 		self.server = self.getServerFromURL(vids)
-		self.streams=self.getAudioSubtitlesMedia(self.server,id) 
+		self.streams=self.getAudioSubtitlesMedia(self.server,myId)
 		
 		printl("partsCount: " + str(self.streams['partsCount']), self, "D")
 		printl("parts: " + str(self.streams['parts']), self, "D")
@@ -2247,7 +2245,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def monitorPlayback(self, id, server ): 
+	def monitorPlayback(self, myId, server ):
 		"""
 		"""
 		printl("", self, "S")
