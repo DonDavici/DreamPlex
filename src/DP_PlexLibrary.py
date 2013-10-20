@@ -246,7 +246,7 @@ class PlexLibrary(Screen):
 			if self.g_myplex_token == "" or serverConfig.renewMyplexToken.value == True:
 				printl("serverconfig: " + str(serverConfig), self, "D")
 				self.g_myplex_token = self.getNewMyPlexToken()
-				
+
 				if self.g_myplex_token is False:
 					self.g_error = True
 					
@@ -904,7 +904,7 @@ class PlexLibrary(Screen):
 			
 		if token == ""  or renew or user != self.g_myplex_username:
 			token = self.getNewMyPlexToken()
-		
+
 		printl("Using token: " + str(token), self, "D", True, 8)
 		printl("", self, "C")
 		return token
@@ -961,7 +961,7 @@ class PlexLibrary(Screen):
 			
 			printl("", self, "C")
 			return False
-		
+		else:
 			self.g_myplex_token = token
 			self.g_serverConfig.myplexTokenUsername.value = self.g_myplex_username
 			self.g_serverConfig.myplexTokenUsername.save()
@@ -1046,22 +1046,20 @@ class PlexLibrary(Screen):
 	#============================================================================
 	# 
 	#============================================================================
-	def getTimelineURL(self, server, container, id, state, time=0, duration=0):
-		"""
-		"""
+	def getTimelineURL(self, server, container, myId, state, myTime=0, duration=0):
 		printl("", self, "S")
 		try:
 
-			urlPath="/:/timeline?containerKey=" + container + "&key=/library/metadata/" + id + "&ratingKey=" + id
+			urlPath="/:/timeline?containerKey=" + container + "&key=/library/metadata/" + myId + "&ratingKey=" + myId
 
 			if state == "buffering":
-				urlPath += "&state=buffering&time=" + str(time)        	
+				urlPath += "&state=buffering&time=" + str(myTime)
 			elif state == "playing":
-				urlPath += "&state=playing&time=" + str(time) + "&duration=" + str(duration)
+				urlPath += "&state=playing&time=" + str(myTime) + "&duration=" + str(duration)
 			elif state == "stopped":
-				urlPath += "&state=stopped&time=" + str(time) + "&duration=" + str(duration)
+				urlPath += "&state=stopped&time=" + str(myTime) + "&duration=" + str(duration)
 			elif state == "paused":
-				urlPath += "&state=paused&time=" + str(time) + "&duration=" + str(duration)
+				urlPath += "&state=paused&time=" + str(myTime) + "&duration=" + str(duration)
 			else:
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
@@ -1119,43 +1117,41 @@ class PlexLibrary(Screen):
 	# 
 	#========================================================================
 	def mediaType(self, partData, server): # CHECKED
-		"""
-		"""
-		printl("", self, "S")   
+		printl("", self, "S")
 		stream = partData['key']
-		file = partData['file']
+		myFile = partData['file']
 		self.fallback = False
 		self.locations = ""
 		
 		#First determine what sort of 'file' file is
-		printl("physical file location: " + str(file), self, "I")   
+		printl("physical file location: " + str(myFile), self, "I")   
 		try:
-			if file[0:2] == "\\\\":
+			if myFile[0:2] == "\\\\":
 				printl("Looks like a UNC",self, "I")
-				type="UNC"
-			elif file[0:1] == "/" or file[0:1] == "\\":
+				myType="UNC"
+			elif myFile[0:1] == "/" or myFile[0:1] == "\\":
 				printl("looks like a unix file", self, "I")
-				type="unixfile"
-			elif file[1:3] == ":\\" or file[1:2] == ":/":
+				myType="unixfile"
+			elif myFile[1:3] == ":\\" or myFile[1:2] == ":/":
 				printl("looks like a windows file", self, "I")
-				type="winfile"
+				myType="winfile"
 			else:
 				printl("uknown file type", self, "I")
-				printl("file = " + str(file),self, "I")
-				type="notsure"
+				printl("file = " + str(myFile),self, "I")
+				myType="notsure"
 		except Exception:
 				printl("uknown file type", self, "I")
-				printl("file = " + str(file),self, "I")
-				type="notsure"  
+				printl("file = " + str(myFile),self, "I")
+				myType="notsure"  
 		
-		self.currentFile = file
-		self.currentType = type
+		self.currentFile = myFile
+		self.currentType = myType
 		self.fallback = ""
 		
 		# 0 is linux local mount override
 		if self.g_stream == "0":
 			#check if the file can be found locally
-			if type == "unixfile" or type == "winfile" or type == "UNC":
+			if myType == "unixfile" or myType == "winfile" or myType == "UNC":
 				
 				tree = getXmlContent(config.plugins.dreamplex.configfolderpath.value + "mountMappings")
 				
@@ -1201,8 +1197,8 @@ class PlexLibrary(Screen):
 				protocol="afp"
 				
 			printl( "Selecting smb/unc")
-			if type=="UNC":
-				filelocation=protocol+":"+file.replace("\\","/")
+			if myType=="UNC":
+				filelocation=protocol+":"+myFile.replace("\\","/")
 			else:
 				#Might be OSX type, in which case, remove Volumes and replace with server
 				server=server.split(':')[0]
@@ -1225,14 +1221,14 @@ class PlexLibrary(Screen):
 						printl("Adding AFP/SMB login info for user " + nasuser, self, "I")
 					
 					
-				if file.find('Volumes') > 0:
-					filelocation=protocol+":/"+file.replace("Volumes",loginstring+server)
+				if myFile.find('Volumes') > 0:
+					filelocation=protocol+":/"+myFile.replace("Volumes",loginstring+server)
 				else:
-					if type == "winfile":
-						filelocation=protocol+"://"+loginstring+server+"/"+file[3:]
+					if myType == "winfile":
+						filelocation=protocol+"://"+loginstring+server+"/"+myFile[3:]
 					else:
 						#else assume its a file local to server available over smb/samba (now we have linux PMS).  Add server name to file path.
-						filelocation=protocol+"://"+loginstring+server+file
+						filelocation=protocol+"://"+loginstring+server+myFile
 						
 			if self.g_nasoverride == "true" and self.g_nasroot != "":
 				#Re-root the file path
@@ -1257,6 +1253,9 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def checkFileLocation(self, remotePathPart, localPathPart):
 		"""
+		@type localPathPart: basestring
+		@type remotePathPart: basestring
+		@return file: path or False
 		"""
 		printl("", self, "S")
 		
