@@ -22,26 +22,22 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import threading
-import BaseHTTPServer
-import inspect
 import traceback
 import re
-import time
+import urllib
 
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler, test
-from thread import start_new_thread
+from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 
-from Plugins.Extensions.DreamPlex.__init__ import getVersion
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getBoxInformation
-from Plugins.Extensions.DreamPlex.DPH_PlexGdm import plexgdm
+from DPH_PlexGdm import PlexGdm
+
+from __init__ import getVersion
+from __common__ import printl2 as printl, getBoxInformation
 
 #===============================================================================
 #
 #===============================================================================
-class HttpDeamon():
-
+class HttpDeamon(object):
 	#===========================================================================
 	#
 	#===========================================================================
@@ -56,15 +52,15 @@ class HttpDeamon():
 
 		t = Thread(target=runHttp)
 		t.start()
-		
-		client = plexgdm(debug=3)
+
+		client = PlexGdm(debug=3)
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
 		clientBox = "8000"
 		printl("clientBox: " + str(gBoxType), self, "D")
 		client.clientDetails(clientBox, "192.168.45.80", "8000", "DreamPlex", version)
 		client.start_registration()
-		
+
 		if client.check_client_registration():
 			printl("Successfully registered", self, "D")
 		else:
@@ -72,6 +68,10 @@ class HttpDeamon():
 
 		printl("", self, "C")
 
+#===============================================================================
+#
+#===============================================================================
+#noinspection PyClassicStyleClass
 class MyHandler(BaseHTTPRequestHandler):
 	"""
 	Serves a HEAD request
@@ -119,10 +119,6 @@ class MyHandler(BaseHTTPRequestHandler):
 
 			elif request_path=="verify":
 				printl("DreamPlex Helper -> listener -> detected remote verification request", self, "D")
-				#command=XBMCjson("ping()")
-				#result=command.send()
-				s.wfile.write("XBMC JSON connection test:\r\n")
-				s.wfile.write(result)
 				s.send_response(200)
 
 			elif request_path == "xbmcCmds/xbmcHttp":
@@ -136,8 +132,6 @@ class MyHandler(BaseHTTPRequestHandler):
 
 				if command_path.split('=')[0] == 'command':
 					printl("Command: Sending a json to Plex", self, "D")
-					#command=XBMCjson(urllib.unquote(command_path.split('=',1)[1]))
-					#command.send()
 			else:
 				s.send_response(200)
 		except:
@@ -174,7 +168,7 @@ def runHttp(HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.
 		This runs an HTTP server on port 8000 (or the first command line
 		argument).
 		"""
-		printl("", self, "S")
+		printl("", __name__, "S")
 
 		port = 8000
 		server_address = ('', port)
@@ -183,7 +177,7 @@ def runHttp(HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.
 		httpd = ServerClass(server_address, HandlerClass)
 	
 		sa = httpd.socket.getsockname()
-		printl("Serving HTTP on" + sa[0] + "port " + sa[1] + "...", self, "D")
+		printl("Serving HTTP on" + sa[0] + "port " + sa[1] + "...", __name__, "D")
 		httpd.serve_forever()
 
-		printl("", self, "C")
+		printl("", __name__, "C")

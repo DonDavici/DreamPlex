@@ -24,27 +24,22 @@ You should have received a copy of the GNU General Public License
 #=================================
 from Components.ActionMap import ActionMap
 from Components.Label import Label
-from Components.Input import Input
-from Components.MenuList import MenuList
-from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-from Components.config import config, getConfigListEntry, configfile
 
-from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Screens.InputBox import InputBox
-from Screens.HelpMenu import HelpableScreen
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
-from Plugins.Extensions.DreamPlex.__init__ import getVersion
+from __common__ import printl2 as printl
+from __init__ import getVersion, _ # _ is translation
 
 #===============================================================================
-# class
-# DPS_Settings
+#
 #===============================================================================		
 class DPS_About(Screen):
 	_session = None
-	
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def __init__(self, session):
 		printl("", self, "S")
 		

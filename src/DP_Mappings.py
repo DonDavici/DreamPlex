@@ -22,39 +22,21 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
-import sys
-import time
-import os.path
+from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
 
-from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER, getDesktop
-from os import system, popen
-
-from Components.ActionMap import ActionMap, HelpableActionMap
-from Components.ConfigList import ConfigListScreen
-from Components.Label import Label
-from Components.Input import Input
+from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-from Components.config import config, getConfigListEntry, configfile
+from Components.config import config
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Screens.LocationBox import MovieLocationBox
-from Screens.InputBox import InputBox
-from Screens.Console import Console as SConsole
 from Screens.VirtualKeyBoard import VirtualKeyBoard
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, checkXmlFile, getXmlContent, writeXmlContent
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
+from __common__ import printl2 as printl, checkXmlFile, getXmlContent, writeXmlContent
+from __init__ import _ # _ is translation
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-
-from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
-from Plugins.Extensions.DreamPlex.DP_PathSelector import DPS_PathSelector
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from twisted.python.versions import getVersionString
+from DP_PathSelector import DPS_PathSelector
 
 #===============================================================================
 # import cProfile
@@ -69,12 +51,13 @@ except ImportError:
 		import xml.etree.ElementTree as etree
 		#printl2("running with ElementTree on Python 2.5+", __name__, "D")
 	except ImportError:
-		printl2("something weng wrong during xml parsing" + str(e), self, "E")
+		etree = None
+		raise Exception
+		#printl2("something weng wrong during xml parsing" + str(e), self, "E")
 
 
 #===============================================================================
-# class
-# DPS_SystemCheck
+#
 #===============================================================================
 class DPS_Mappings(Screen):
 	
@@ -185,8 +168,7 @@ class DPS_Mappings(Screen):
 		printl("", self, "C")
 		
 #===============================================================================
-# class
-# DPS_ServerEntryList
+#
 #===============================================================================
 class DPS_MappingsEntryList(MenuList):
 	

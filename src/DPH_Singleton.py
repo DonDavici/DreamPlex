@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # 
 #===============================================================================
-class Singleton:
+class Singleton(object):
 	"""
 	singlton config object
 	"""
@@ -48,9 +48,9 @@ class Singleton:
 		else:
 			#printl("reusing Plex instance ...", self, "D")
 			pass
-			
+
 		return self.__plexInstance
-	
+
 	def getLogFileInstance(self, value=None):
 		"""with value you can set the singleton content"""
 		if value:
@@ -59,9 +59,9 @@ class Singleton:
 		else:
 			#printl("reusing Logfile instance ...", self, "D")
 			pass
-			
+
 		return self.__logFileInstance
-	
+
 	def getSkinParamsInstance(self, value=None):
 		"""with value you can set the singleton content"""
 		if value:
@@ -70,6 +70,6 @@ class Singleton:
 		else:
 			#printl("reusing skinParam instance ...", self, "D")
 			pass
-		
+
 		return self.__skinParamsInstance
 	

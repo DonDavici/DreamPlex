@@ -22,34 +22,29 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import math
+from enigma import ePicLoad
 
-from enigma import ePicLoad, getDesktop
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap, MultiPixmap
-from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.AVSwitch import AVSwitch
 from Components.ProgressBar import ProgressBar
 
-from DP_View import DP_View
-
 from twisted.web.client import downloadPage
 
-from enigma import eServiceReference
-from urllib import urlencode, quote_plus
+from DP_View import DP_View
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from DPH_Singleton import Singleton
+from DPH_Arts import getPictureData
+
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
 #===============================================================================
 def getViewClass():
-	"""
-	"""
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
@@ -59,8 +54,7 @@ def getViewClass():
 # 
 #===============================================================================
 class DPS_ViewMusic(DP_View):
-	"""
-	"""
+
 	backdrop_postfix 		= "_backdrop_1280x720.jpg"
 	poster_postfix 			= "_poster.jpg"
 	image_prefix 			= ""
@@ -199,7 +193,7 @@ class DPS_ViewMusic(DP_View):
 			# if we are a show an if playtheme is enabled we start playback here
 			if self.playTheme: 
 				if self.startPlaybackNow:
-					super(DP_ViewMusic, self).startThemePlayback()
+					super(getViewClass(), self).startThemePlayback()
 
 			self.setText("title", self.details.get("title", " "))
 			self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)

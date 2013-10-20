@@ -22,21 +22,17 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import os
+import threading
 
 from time import sleep
-from urllib2 import urlopen, Request
 
 from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
 
-from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation #@UnresolvedImport
+#noinspection PyUnresolvedReferences
+from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation
 
-import threading
-
-
-from Tools.Directories import fileExists
 from Tools import Notifications
 
 from Components.config import config
@@ -46,16 +42,16 @@ from Components.Language import language
 from Components.Sources.StaticText import StaticText
 from Components.ServiceEventTracker import ServiceEventTracker
 
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from DPH_Singleton import Singleton
+
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
-# class
-#===============================================================================	
+#
+#===============================================================================
 class DP_Player(MoviePlayer):
-	"""
-	"""
-	
+
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
 	ENIGMA_SERVIDEM2_ID = 0x3		#3
@@ -88,16 +84,17 @@ class DP_Player(MoviePlayer):
 	
 	nTracks = False
 	switchedLanguage = False
-	startNewServiceOnPlay = False
 	timeshift_enabled = False
 	isVisible = False
 
+	#===========================================================================
+	#
+	#===========================================================================
 	def __init__(self, session, playerData, resume=False):
 		printl("", self, "S")
 		
 		self.session = session
 				
-		self.startNewServiceOnPlay = False
 		self.videoData = playerData['videoData']
 		self.mediaData = playerData['mediaData']
 		
@@ -362,6 +359,7 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	# 
 	#===========================================================================
+	#noinspection PyUnusedLocal
 	def seekWatcher(self,*args):
 		printl("", self, "S")
 		
@@ -463,18 +461,8 @@ class DP_Player(MoviePlayer):
 	def setSeekState(self, state, unknow=False):
 		printl("", self, "S")
 		
-		if not self.startNewServiceOnPlay:
-			super(DP_Player, self).setSeekState(state)
-		else:
-			printl( "start downloaded file now", self, "I")
-			self.startNewServiceOnPlay = False
-			super(DP_Player, self).setSeekState(self.SEEK_STATE_PLAY)
-			sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, config.plugins.dreamplex.playerTempPath.value + self.filename)
-			sref.setName(self.title)
-			self.session.nav.playService(sref)
+		super(DP_Player, self).setSeekState(state)
 
-		#self.session.openWithCallback(self.MoviePlayerCallback, DP_Player, sref, self)
-		
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -588,6 +576,7 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	# audioTrackWatcher
 	#===========================================================================
+	#noinspection PyUnusedLocal
 	def audioTrackWatcher(self,*args):
 		printl("", self, "S")
 		

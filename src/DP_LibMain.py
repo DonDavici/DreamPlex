@@ -31,16 +31,15 @@ from Components.config import config
 
 from DP_ViewFactory import getViews
 from DP_Player import DP_Player
+from DP_View import DP_View
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
+from __common__ import printl2 as printl
+from __plugin__ import getPlugins, Plugin
 
 #===============================================================================
 # 
 #===============================================================================
 class DP_LibMain(Screen):
-	"""
-	"""
 
 	#===========================================================================
 	# 
@@ -193,10 +192,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self):
-		"""
-		prototype for library loading, is called by the view
-		"""
+	def loadLibrary(self, params):
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -207,7 +203,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	def playEntry(self, entry, flags=None):
 		"""
-		tarts playback, is called by the view
+		starts playback, is called by the view
 		"""
 		printl("", self, "S")
 		if not flags:
@@ -259,6 +255,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
+	#noinspection PyUnresolvedReferences
 	def playDVD(self, dvdDevice, dvdFilelist):
 		"""
 		playbacks a dvd by callinf dvdplayer plugin

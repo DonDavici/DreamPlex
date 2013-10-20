@@ -22,41 +22,16 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import math
-import time
+from DPH_Singleton import Singleton
 
-from Components.ActionMap import HelpableActionMap
-from Components.MenuList import MenuList
-from Components.Sources.List import List
-from Components.Label import Label
-from Components.config import config
-from Components.config import NumericalTextInput
-
-from Screens.ChoiceBox import ChoiceBox
-from Screens.Screen import Screen
-from Screens.MessageBox import MessageBox
-
-from enigma import eServiceReference
-from enigma import loadPNG
-
-from Tools.Directories import fileExists
-
-from urllib import urlencode, quote_plus
-
-from twisted.web.client import downloadPage
-
-from Plugins.Extensions.DreamPlex.DPH_Arts import getPictureData
-from Plugins.Extensions.DreamPlex.DP_Player import DP_Player
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, getXmlContent, convertSize
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
 #===============================================================================
 def getViews(libraryName):
 	"""
-	@param: none 
 	@return: availableViewList
 	"""
 	printl("", "DP_View::getViews", "S")
@@ -80,7 +55,6 @@ def getViews(libraryName):
 # 
 #===========================================================================
 def getViewsFromSkinParams(myType):
-	global myFile
 	printl("", __name__, "S")
 	
 	tree = Singleton().getSkinParamsInstance()
@@ -117,7 +91,7 @@ def getViewsFromSkinParams(myType):
 			# check if this value is mandatory
 			# if we are mandatory we stop here
 			if defaultParams[param] == "mandatory" and value is None:
-				assert()
+				raise Exception
 				
 			# if there is one we overwrite the default value
 			if value is not None:

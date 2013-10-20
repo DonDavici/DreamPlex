@@ -22,33 +22,26 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import math
+from enigma import ePicLoad
 
-from enigma import ePicLoad, getDesktop
-from enigma import loadPNG, loadJPG
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap, MultiPixmap
-from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.AVSwitch import AVSwitch
 from Components.ProgressBar import ProgressBar
 
 from DP_View import DP_View
 
-from enigma import eServiceReference
-from urllib import urlencode, quote_plus
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
 #===============================================================================
 def getViewClass():
-	"""
-	"""
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
@@ -57,10 +50,8 @@ def getViewClass():
 #===============================================================================
 # 
 #===============================================================================
-#noinspection PyShadowingBuiltins
 class DPS_ViewShows(DP_View):
-	"""
-	"""
+
 	backdrop_postfix 		= ""
 	poster_postfix 			= ""
 	image_prefix 			= ""
@@ -90,14 +81,14 @@ class DPS_ViewShows(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, filter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
 		printl("", self , "S")
 		self.session = session
 		printl("myParams: " + str(viewName[3]), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 		
 		self.myParams = viewName[3]
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, filter, cache)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 		printl("cache: " + str(cache), self, "D")
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
@@ -268,7 +259,7 @@ class DPS_ViewShows(DP_View):
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme: 
 					if self.startPlaybackNow:
-						super(DPS_ViewList, self).startThemePlayback()
+						super(getViewClass(), self).startThemePlayback()
 				
 				if self.myParams["title"]:
 					self.setText("title", self.details.get("title", " "))

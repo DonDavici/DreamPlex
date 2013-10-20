@@ -26,19 +26,17 @@ import cPickle as pickle
 
 from Components.config import config
 
-from Plugins.Extensions.DreamPlex.DP_LibMain import DP_LibMain
+from DP_LibMain import DP_LibMain
 
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 # 
 #===============================================================================
 class DP_LibMovies(DP_LibMain):
-	"""
-	"""
-	
+
 	g_url = None
 	
 	#===========================================================================
@@ -54,7 +52,7 @@ class DP_LibMovies(DP_LibMain):
 		self.g_source = source
 		
 		printl ("", self, "C")
-		
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -81,8 +79,9 @@ class DP_LibMovies(DP_LibMain):
 		if params["viewMode"] is None:
 			printl ("viewMode = None", self, "D")
 			if config.plugins.dreamplex.useCache.value:
+				#noinspection PyAttributeOutsideInit
 				self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
-				
+
 				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
 				if "cache" in params:

@@ -26,19 +26,17 @@ import cPickle as pickle
 
 from Components.config import config
 
-from Plugins.Extensions.DreamPlex.DP_LibMain import DP_LibMain
+from DP_LibMain import DP_LibMain
 
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 # 
 #===============================================================================
 class DP_LibShows(DP_LibMain):
-	"""
-	"""
-	
+
 	g_url = None
 	
 	#===========================================================================
@@ -89,6 +87,7 @@ class DP_LibShows(DP_LibMain):
 				printl("url: " + str(url), self, "D")
 				
 				if config.plugins.dreamplex.useCache.value:
+					#noinspection PyAttributeOutsideInit
 					self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
 					
 					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh

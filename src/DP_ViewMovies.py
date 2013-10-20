@@ -22,33 +22,26 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import math
+from enigma import ePicLoad
 
-from enigma import ePicLoad, getDesktop
-from enigma import loadPNG, loadJPG
 from Components.Label import Label
 from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap, MultiPixmap
-from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.AVSwitch import AVSwitch
 from Components.ProgressBar import ProgressBar
 
 from DP_View import DP_View
 
-from enigma import eServiceReference
-from urllib import urlencode, quote_plus
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
 #===============================================================================
 def getViewClass():
-	"""
-	"""
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
@@ -59,31 +52,16 @@ def getViewClass():
 #===============================================================================
 #noinspection PyShadowingBuiltins
 class DPS_ViewMovies(DP_View):
-	"""
-	"""
-	backdrop_postfix 		= ""
-	poster_postfix 			= ""
-	image_prefix 			= ""
+
 	plexInstance 			= None
-	details 				= None
-	extraData 				= None
-	context					= None
 	parentSeasonId 			= None
 	parentSeasonNr 			= None
 	isTvShow 				= False
 	playTheme 				= False
 	startPlaybackNow 		= False
 	itemsPerPage 			= 0
-	whatPoster 				= None
-	whatBackdrop 			= None
 	changePoster 			= True
 	changeBackdrop 			= True
-	resetPoster				= True
-	resetBackdrop			= True
-	seenUrl 				= None
-	unseenUrl 				= None
-	deleteUrl 				= None
-	refreshUrl 				= None
 	resetGuiElements		= False
 	fastScroll 				= False
 
@@ -209,18 +187,18 @@ class DPS_ViewMovies(DP_View):
 		
 		printl("skinName: " + str(self.skinName), self, "C")
 		self.skinName = self.myParams["screen"]
-		
+
 		if self.myParams["showPoster"] == True or self.myParams["showBackdrop"] == True:
 			self.EXscale = (AVSwitch().getFramebufferScale())
-			
+
 			if self.myParams["showPoster"]:
 				self.EXpicloadPoster = ePicLoad()
-			
+
 			if self.myParams["showBackdrop"]:
 				self.EXpicloadBackdrop = ePicLoad()
-			
+
 			self.onLayoutFinish.append(self.setPara)
-	
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -268,7 +246,7 @@ class DPS_ViewMovies(DP_View):
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme: 
 					if self.startPlaybackNow:
-						super(DPS_ViewList, self).startThemePlayback()
+						super(getViewClass(), self).startThemePlayback()
 				
 				if self.myParams["title"]:
 					self.setText("title", self.details.get("title", " "))

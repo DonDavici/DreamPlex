@@ -25,38 +25,27 @@ You should have received a copy of the GNU General Public License
 import sys
 import time
 
-from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
 from os import system, popen
+from Screens.Standby import TryQuitMainloop
 
-from Components.ActionMap import ActionMap, HelpableActionMap
-from Components.ConfigList import ConfigListScreen
-from Components.Label import Label
-from Components.Input import Input
+from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-from Components.config import config, getConfigListEntry, configfile
+from Components.config import config
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Screens.InputBox import InputBox
 from Screens.Console import Console as SConsole
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
+from __common__ import printl2 as printl, testInetConnectivity
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-
-from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from twisted.python.versions import getVersionString
+from __init__ import getVersion, _ # _ is translation
 
 #===============================================================================
-# class
-# DPS_SystemCheck
+#
 #===============================================================================
 class DPS_SystemCheck(Screen):
+
 	oeVersion = None
 	check = None
 	latestVersion = None
@@ -159,7 +148,7 @@ class DPS_SystemCheck(Screen):
 				self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
 
 		else:
-			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_OK)
+			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 

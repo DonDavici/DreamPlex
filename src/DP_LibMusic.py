@@ -22,19 +22,17 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from Plugins.Extensions.DreamPlex.DP_LibMain import DP_LibMain
+from DP_LibMain import DP_LibMain
 
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 # 
 #===============================================================================
 class DP_LibMusic(DP_LibMain):
-	"""
-	"""
-	
+
 	g_url = None
 	
 	#===========================================================================

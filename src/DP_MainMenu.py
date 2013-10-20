@@ -22,53 +22,38 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
-import sys
 import time
 import copy
 
-from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
-from os import system, popen
-
-from Components.ActionMap import ActionMap, HelpableActionMap
-from Components.ConfigList import ConfigListScreen
-from Components.Label import Label
+from Components.ActionMap import HelpableActionMap
 from Components.Input import Input
-from Components.MenuList import MenuList
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
-from Components.config import config, getConfigListEntry, configfile
+from Components.config import config
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import getVersion
+from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
+from __plugin__ import Plugin
+from __init__ import _ # _ is translation
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
+from DP_PlexLibrary import PlexLibrary
+from DP_SystemCheck import DPS_SystemCheck
+from DP_Settings import DPS_Settings
+from DP_Settings import DPS_ServerEntriesListConfigScreen
+from DP_Help import DPS_Help
+from DP_About import DPS_About
 
-from Plugins.Extensions.DreamPlex.DP_SystemCheck import DPS_SystemCheck
-
-from Plugins.Extensions.DreamPlex.DP_Settings import DPS_Settings
-from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntriesListConfigScreen
-from Plugins.Extensions.DreamPlex.DP_Settings import DPS_ServerEntryConfigScreen
-
-from Plugins.Extensions.DreamPlex.DP_Help import DPS_Help
-from Plugins.Extensions.DreamPlex.DP_About import DPS_About
-
-from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.DPH_RemoteListener import HttpDeamon
+from DPH_WOL import wake_on_lan
+from DPH_Singleton import Singleton
 
 #===============================================================================
-# class
-# DPS_MainMenu
+#
 #===============================================================================	
 class DPS_MainMenu(Screen):
-	"""
-	"""
-	
+
 	g_wolon = False
 	g_wakeserver = "00-11-32-12-C5-F9"
 	g_woldelay = 10
@@ -263,8 +248,7 @@ class DPS_MainMenu(Screen):
 				
 				elif selection[1] == "DPS_About":
 					self.session.open(DPS_About)
-					#self.info()
-				
+
 				elif selection[1] == "DPS_Help":
 					self.session.open(DPS_Help)
 				
@@ -417,17 +401,7 @@ class DPS_MainMenu(Screen):
 			self["menu"].selectPrevious()
 		
 		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def info(self):
-		printl("", self, "S")
-		
-		self.showInfo(not self.isInfoHidden)
-		
-		printl("", self, "C")
-	
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -666,8 +640,6 @@ class DPS_MainMenu(Screen):
 	# 
 	#===============================================================================
 	def getServerList(self):
-			"""
-			"""
 			printl("", self, "S")
 			
 			self.mainMenuList = []

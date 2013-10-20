@@ -49,7 +49,8 @@ except ImportError:
 	#printl2("running with ElementTree on Python 2.5+", __name__, "D")
 	except ImportError:
 		#printl2("something went wrong during etree import" + str(e), self, "E")
-		pass
+		etree = None
+		raise Exception
 
 #===============================================================================
 # CONSTANTS
@@ -62,7 +63,7 @@ CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
 def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
 	"""
-	@param string: 
+	@param string:
 	@param parent:
 	@param dmode: default = "U" undefined 
 							"E" shows error
@@ -510,7 +511,7 @@ def getBoxArch():
 	return ARCH
 
 #===============================================================================
-# pretty_time_format
+#
 #===============================================================================
 def prettyFormatTime(msec):
 	printl2("", "__common__::prettyFormatTime", "S")
@@ -546,7 +547,7 @@ def prettyFormatTime(msec):
 		return "%i %s" % (seconds, secstr)
 
 #===============================================================================
-# time_format
+#
 #===============================================================================
 def formatTime(msec):
 	printl2("", "__common__::formatTime", "S")

@@ -25,12 +25,12 @@ You should have received a copy of the GNU General Public License
 from Screens.Screen import Screen
 from Components.Sources.StaticText import StaticText
 from Components.ActionMap import ActionMap
-from Tools.BoundFunction import boundFunction
 
 from Components.FileList import FileList
 from Components.Label import Label
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===========================================================================
 # 

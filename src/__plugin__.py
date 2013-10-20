@@ -22,7 +22,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 # GLOBAL
@@ -87,7 +87,7 @@ def getPlugin(pid, where):
 #===============================================================================
 # 
 #===============================================================================
-class Plugin():
+class Plugin(object):
 	MENU_SERVER = 0
 	MENU_MAIN = 1
 	MENU_PICTURES = 2
@@ -98,17 +98,17 @@ class Plugin():
 	MENU_PROGRAMS = 7
 	MENU_SYSTEM = 8
 	AUTOSTART = 9
-	
+
 	SETTINGS = 10
-	
+
 	MENU_MOVIES_PLUGINS = 11
 	AUTOSTART_E2 = 12
 	STOP_E2 = 13
 	MENU_DEV = 14
-	
+
 	WAKEUP = 15
 	AUTOSTART_DELAYED = 16
-	MENU_FILTER =17
+	MENU_FILTER = 17
 	MENU_ABOUT = 18
 	MENU_HELP = 19
 	MENU_CHANNELS = 20
@@ -117,10 +117,10 @@ class Plugin():
 	#INFO_SEEN = 101
 
 	pid = None
-	name  = None
+	name = None
 	desc = None
 	start = None
-	fnc   = None
+	fnc = None
 	where = None
 	weight = 100
 	supportStillPicture = False
@@ -130,7 +130,7 @@ class Plugin():
 	#===========================================================================
 	def __init__(self, pid, name=None, desc=None, start=None, fnc=None, where=None, supportStillPicture=False, weight=100):
 		printl("", self, "S")
-		
+
 		self.pid = pid
 		self.name = name
 		if desc is None:
@@ -142,5 +142,5 @@ class Plugin():
 		self.where = where
 		self.weight = weight
 		self.supportStillPicture = supportStillPicture
-		
+
 		printl("", self, "C")

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 PlexGDM.py - Version 0.2
 
@@ -25,7 +26,7 @@ MA 02110-1301, USA.
 
 Example usage
 if __name__ == '__main__':
-	client = plexgdm(debug=3)
+	client = PlexGdm(debug=3)
 	client.clientDetails("Test-Name", "Test Client", "3003", "Test-App", "1.2.3")
 	client.start_all()
 	while not client.discovery_complete:
@@ -44,30 +45,27 @@ if __name__ == '__main__':
 #===============================================================================
 import socket
 import struct
-import sys
-import re
 import threading
 import time
 import urllib2
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 #
 #===============================================================================
-class plexgdm:
-
+class PlexGdm(object):
 	#===========================================================================
 	#
 	#===========================================================================
 	def __init__(self, debug=0):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		self.discover_message = 'M-SEARCH * HTTP/1.0'
 		self.client_header = '* HTTP/1.0'
 		self.client_data = None
 		self.client_id = None
-		
+
 		self._multicast_address = '239.0.0.250'
 		self.discover_group = (self._multicast_address, 32414)
 		self.client_register_group = (self._multicast_address, 32413)
@@ -75,7 +73,7 @@ class plexgdm:
 
 		self.server_list = []
 		self.discovery_interval = 120
-		
+
 		self._discovery_is_running = False
 		self._registration_is_running = False
 
@@ -89,7 +87,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def clientDetails(self, c_id, c_name, c_post, c_product, c_version):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		self.client_data = "Content-Type: plex/media-player\nResource-Identifier: %s\nName: %s\nPort: %s\nProduct: %s\nVersion: %s" % ( c_id, c_name, c_post, c_product, c_version )
 		self.client_id = c_id
@@ -100,7 +98,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def getClientDetails(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		if not self.client_data:
 			printl("Client data has not been initialised.  Please use PlexGDM.clientDetails()", self, "D")
@@ -111,26 +109,26 @@ class plexgdm:
 	#===========================================================================
 	#
 	#===========================================================================
-	def client_update (self):
-		printl("", self , "S")
+	def client_update(self):
+		printl("", self, "S")
 
 		update_sock = socket.socket(socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-		
+
 		#Set socket reuse, may not work on all OSs.
 		try:
-			update_sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+			update_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		except:
 			pass
-		
+
 		#Attempt to bind to the socket to recieve and send data.  If we can;t do this, then we cannot send registration
 		try:
-			update_sock.bind(('0.0.0.0',self.client_update_port))
+			update_sock.bind(('0.0.0.0', self.client_update_port))
 		except:
 			printl("Error: Unable to bind to port [%s] - client will not be registered" % self.client_update_port, self, "D")
 
 			printl("", self, "C")
 			return
-		
+
 		update_sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 255)
 		update_sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(self._multicast_address) + socket.inet_aton('0.0.0.0'))
 		update_sock.setblocking(0)
@@ -159,7 +157,7 @@ class plexgdm:
 
 					printl("Sending registration data: HTTP/1.0 200 OK\n%s" % self.client_data, self, "D")
 					self.client_registered = True
-			time.sleep(0.5)		
+			time.sleep(0.5)
 
 		printl("Client Update loop stopped", self, "D")
 
@@ -169,7 +167,7 @@ class plexgdm:
 			update_sock.sendto("BYE %s\n%s" % (self.client_header, self.client_data), self.client_register_group)
 		except:
 			printl("Error: Unable to send client update message", self, "D")
-					   
+
 		self.client_registered = False
 
 		printl("", self, "C")
@@ -178,10 +176,10 @@ class plexgdm:
 	#
 	#===========================================================================
 	def check_client_registration(self):
-		printl("", self , "S")
-		
+		printl("", self, "S")
+
 		if self.client_registered and self.discovery_complete:
-		
+
 			if not self.server_list:
 				printl("Server list is empty. Unable to check", self, "D")
 
@@ -189,8 +187,8 @@ class plexgdm:
 				return False
 
 			try:
-				media_server=self.server_list[0]['server']
-				media_port=self.server_list[0]['port']
+				media_server = self.server_list[0]['server']
+				media_port = self.server_list[0]['port']
 
 				printl("Checking server [%s] on port [%s]" % (media_server, media_port), self, "D")
 				f = urllib2.urlopen('http://%s:%s/clients' % (media_server, media_port))
@@ -214,8 +212,8 @@ class plexgdm:
 	#===========================================================================
 	#
 	#===========================================================================
-	def getServerList (self):
-		printl("", self , "S")
+	def getServerList(self):
+		printl("", self, "S")
 
 		printl("", self, "C")
 		return self.server_list
@@ -224,7 +222,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def discover(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		sock = socket.socket(socket.SOCK_DGRAM)
 
@@ -247,8 +245,8 @@ class plexgdm:
 					data, server = sock.recvfrom(1024)
 					printl("Received data from %s" % server, self, "D")
 					printl("Data received is:\n %s" % data, self, "D")
-					returnData.append( { 'from' : server,
-										 'data' : data } )
+					returnData.append({'from': server,
+					                   'data': data})
 				except socket.timeout:
 					break
 		finally:
@@ -261,19 +259,19 @@ class plexgdm:
 		if returnData:
 
 			for response in returnData:
-				update = { 'server' : response.get('from')[0] }
+				update = {'server': response.get('from')[0]}
 
 				#Check if we had a positive HTTP response
 				if "200 OK" in response.get('data'):
-			
+
 					for each in response.get('data').split('\n'):
 
 						update['discovery'] = "auto"
-						update['owned']='1'
-						update['master']= 1
-						update['role']='master'
-						update['class']=None
-					
+						update['owned'] = '1'
+						update['master'] = 1
+						update['role'] = 'master'
+						update['class'] = None
+
 						if "Content-Type:" in each:
 							update['content-type'] = each.split(':')[1].strip()
 						elif "Resource-Identifier:" in each:
@@ -289,10 +287,10 @@ class plexgdm:
 						elif "Server-Class:" in each:
 							update['class'] = each.split(':')[1].strip()
 
-				discovered_servers.append(update)					
+				discovered_servers.append(update)
 
 		self.server_list = discovered_servers
-		
+
 		if not self.server_list:
 			printl("No servers have been discovered", self, "D")
 		else:
@@ -306,7 +304,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def setInterval(self, interval):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		self.discovery_interval = interval
 
@@ -316,7 +314,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def stop_all(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		self.stop_discovery()
 		self.stop_registration()
@@ -327,7 +325,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def stop_discovery(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		if self._discovery_is_running:
 			printl("Discovery shutting down", self, "D")
@@ -343,7 +341,7 @@ class plexgdm:
 	#
 	#===========================================================================
 	def stop_registration(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		if self._registration_is_running:
 			printl("Registration shutting down", self, "D")
@@ -359,17 +357,17 @@ class plexgdm:
 	#
 	#===========================================================================
 	def run_discovery_loop(self):
-		printl("", self , "S")
+		printl("", self, "S")
 
 		#Run initial discovery
 		self.discover()
 
-		discovery_count=0
+		discovery_count = 0
 		while self._discovery_is_running:
-			discovery_count+=1
+			discovery_count += 1
 			if discovery_count > self.discovery_interval:
 				self.discover()
-				discovery_count=0
+				discovery_count = 0
 			time.sleep(1)
 
 		printl("", self, "C")
@@ -377,8 +375,8 @@ class plexgdm:
 	#===========================================================================
 	#
 	#===========================================================================
-	def start_discovery(self, daemon = False):
-		printl("", self , "S")
+	def start_discovery(self, daemon=False):
+		printl("", self, "S")
 
 		if not self._discovery_is_running:
 			printl("Discovery starting up", self, "D")
@@ -394,8 +392,8 @@ class plexgdm:
 	#===========================================================================
 	#
 	#===========================================================================
-	def start_registration(self, daemon = False):
-		printl("", self , "S")
+	def start_registration(self, daemon=False):
+		printl("", self, "S")
 
 		if not self._registration_is_running:
 			printl("Registration starting up", self, "D")
@@ -411,8 +409,8 @@ class plexgdm:
 	#===========================================================================
 	#
 	#===========================================================================
-	def start_all(self, daemon = False):
-		printl("", self , "S")
+	def start_all(self, daemon=False):
+		printl("", self, "S")
 
 		self.start_discovery(daemon)
 		self.start_registration(daemon)

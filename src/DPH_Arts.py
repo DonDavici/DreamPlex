@@ -22,17 +22,14 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import urllib
 from Components.config import config
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
+from __common__ import printl2 as printl
 
 #===============================================================================
 # 
 #===============================================================================
 def getPictureData(details, prefix, postfix, usePicCache):
-	"""
-	"""
 	printl("", __name__, "S")
 	
 	if details["ratingKey"] is None or details["ratingKey"] == "None" or details["ratingKey"] == "":

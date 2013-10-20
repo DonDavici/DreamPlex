@@ -23,41 +23,32 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import os
-import sys
 import gettext
 
-from enigma import getDesktop, addFont
-from skin import loadSkin, loadSingleSkinData
 from Components.config import config
 from Components.config import ConfigSubsection
 from Components.config import ConfigSelection
 from Components.config import ConfigInteger
 from Components.config import ConfigSubList
-from Components.config import ConfigSubDict
 from Components.config import ConfigText
-from Components.config import ConfigNumber
-from Components.config import configfile
 from Components.config import ConfigYesNo
-from Components.config import ConfigPassword
 from Components.config import ConfigIP
-from Components.config import ConfigMAC
 from Components.config import ConfigDirectory
-
 from Components.Language import language
-
-import Plugins.Plugin
 
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_LANGUAGE
 
-from Plugins.Extensions.DreamPlex.__plugin__ import registerPlugin, Plugin
+from __plugin__ import registerPlugin, Plugin
+from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
-from Plugins.Extensions.DreamPlex.DP_LibMovies import DP_LibMovies
-from Plugins.Extensions.DreamPlex.DP_LibShows import DP_LibShows
-from Plugins.Extensions.DreamPlex.DP_LibMusic import DP_LibMusic
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
+from DP_LibMovies import DP_LibMovies
+from DP_LibShows import DP_LibShows
+from DP_LibMusic import DP_LibMusic
+from DPH_Singleton import Singleton
 
-from Plugins.Extensions.DreamPlex.__common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
-
+#===============================================================================
+#
+#===============================================================================
 version = "0.1"
 source = "feed" # other option is "ipk"
 
@@ -112,8 +103,6 @@ config.plugins.dreamplex.Entries                   = ConfigSubList()
 # 
 #===============================================================================
 def getVersion():
-	"""
-	"""
 	printl("", "__init__::getVersion", "S")
 
 	printl("", "__init__::getVersion", "C")
@@ -123,8 +112,6 @@ def getVersion():
 # 
 #===============================================================================
 def initBoxInformation():
-	"""
-	"""
 	printl("", "__init__::getBoxInformation", "S")
 
 	boxInfo = getBoxInformation()
@@ -137,8 +124,6 @@ def initBoxInformation():
 # 
 #===============================================================================
 def printGlobalSettings():
-	"""
-	"""
 	printl("", "__init__::initGlobalSettings", "S")
 
 	printl("=== VERSION ===", "__init__::getBoxInformation", "I")
@@ -168,8 +153,6 @@ def printGlobalSettings():
 # 
 #===============================================================================
 def initServerEntryConfig(data = None):
-	"""
-	"""
 	printl("", "__init__::initServerEntryConfig", "S")
 
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
@@ -249,14 +232,14 @@ def initServerEntryConfig(data = None):
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
 
 	# DIRECT REMOTE
-	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(visible_width=50, fixed_size=False)
-	config.plugins.dreamplex.Entries[i].smbPassword					= ConfigText(visible_width=50, fixed_size=False)
-	config.plugins.dreamplex.Entries[i].nasOverrideIp				= ConfigIP(default = [192,168,0,1])
-	config.plugins.dreamplex.Entries[i].nasRoot						= ConfigText(default = "/", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].smbUser = ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].smbPassword = ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].nasOverrideIp = ConfigIP(default=[192, 168, 0, 1])
+	config.plugins.dreamplex.Entries[i].nasRoot = ConfigText(default="/", visible_width=50, fixed_size=False)
 
 	printl("=== DIRECT REMOTE ===", "__init__::initServerEntryConfig", "D")
-	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "D", True, 4)
-	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "D", True, 4)
+	printl("smbUser: " + str(config.plugins.dreamplex.Entries[i].smbUser.value), "__init__::initServerEntryConfig", "D", True)
+	printl("smbPassword: " + str(config.plugins.dreamplex.Entries[i].smbPassword.value), "__init__::initServerEntryConfig", "D", True)
 	printl("nasOverrideIp: " + str(config.plugins.dreamplex.Entries[i].nasOverrideIp.value), "__init__::initServerEntryConfig", "D")
 	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "D")
 
@@ -302,8 +285,6 @@ def initPlexServerConfig():
 # 
 #===============================================================================
 def loadPlexPlugins():
-	"""
-	"""
 	printl("", "__init__::loadPlexPlugins", "S")
 
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
@@ -328,8 +309,6 @@ def loadPlexPlugins():
 # 
 #===============================================================================
 def localeInit():
-	"""
-	"""
 	printl("", "__init__::localeInit", "S")
 
 	lang = language.getLanguage()
@@ -384,8 +363,6 @@ def getInstalledSkins():
 # 
 #===============================================================================
 def _(txt):
-	"""
-	"""
 	#printl("", "__init__::_(txt)", "S")
 
 	if len(txt) == 0:
@@ -394,8 +371,9 @@ def _(txt):
 	if text == txt:
 		text = gettext.gettext(txt)
 
-	printl("text = " + str(text), "__init__::_(txt)", "X")
-	#printl("", "__init__::_(txt)", "C")initGlobalSettings
+	printl("text = " + str(text), "__init__::_(txt)", "D")
+
+	#printl("", "__init__::_(txt)", "C")
 	return text
 
 #===============================================================================

@@ -22,48 +22,33 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
-import sys
 import time
 
 from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_CENTER
-from os import system, popen
 
-from Components.ActionMap import ActionMap, HelpableActionMap
+from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
-from Components.config import NoSave
-from Components.Label import Label
-from Components.Input import Input
 from Components.MenuList import MenuList
-from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config, getConfigListEntry, configfile
-from Components.FileList import FileList
 
-from Screens.LocationBox import MovieLocationBox
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
-from Screens.InputBox import InputBox
 from Screens.HelpMenu import HelpableScreen
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl, testPlexConnectivity, getBoxInformation
-from Plugins.Extensions.DreamPlex.__plugin__ import getPlugin, Plugin
-from Plugins.Extensions.DreamPlex.__init__ import initServerEntryConfig, getVersion
+from __common__ import printl2 as printl, getBoxInformation
+from __init__ import initServerEntryConfig, getVersion, _ # _ is translation
 
-from Plugins.Extensions.DreamPlex.DP_PlexLibrary import PlexLibrary
-from Plugins.Extensions.DreamPlex.DP_SystemCheck import DPS_SystemCheck
-from Plugins.Extensions.DreamPlex.DP_Mappings import DPS_Mappings
-from Plugins.Extensions.DreamPlex.DP_PathSelector import DPS_PathSelector
-
-from Plugins.Extensions.DreamPlex.DPH_WOL import wake_on_lan
-from Plugins.Extensions.DreamPlex.DPH_Singleton import Singleton
-from Plugins.Extensions.DreamPlex.DPH_PlexGdm import plexgdm
+from DP_Mappings import DPS_Mappings
+from DP_PathSelector import DPS_PathSelector
+from DPH_PlexGdm import PlexGdm
 
 #===============================================================================
-# class
-# DPS_Settings
-#===============================================================================		
+#
+#===============================================================================
 class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
+
 	_hasChanged = False
 	_session = None
 	skins = None
@@ -307,8 +292,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		printl("", self, "C")
 
 #===============================================================================
-# class
-# DPS_ServerEntriesListConfigScreen
+#
 #===============================================================================
 class DPS_ServerEntriesListConfigScreen(Screen):
 
@@ -378,7 +362,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		client = plexgdm(debug=3)
+		client = PlexGdm(debug=3)
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
 		clientBox = gBoxType[1]
@@ -494,8 +478,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 		printl("", self, "C")
 
 #===============================================================================
-# class
-# DPS_ServerEntryConfigScreen
+#
 #===============================================================================
 class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	
@@ -751,8 +734,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		printl("", self, "C")
 
 #===============================================================================
-# class
-# DPS_ServerEntryList
+#
 #===============================================================================
 class DPS_ServerEntryList(MenuList):
 	
