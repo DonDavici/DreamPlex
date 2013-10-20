@@ -563,7 +563,7 @@ class PlexLibrary(Screen):
 			elif server['discovery'] == "myplex":
 				
 				if self.g_myplex_token == "ERROR":
-					self.session.open(MessageBox,_("MyPlex Token error:\nCheck Username and Password.\n%s") % (self.g_myplex_token), MessageBox.TYPE_INFO)
+					self.session.open(MessageBox,_("MyPlex Token error:\nCheck Username and Password.\n%s") % self.g_myplex_token, MessageBox.TYPE_INFO)
 					continue
 				else:
 					html = self.getMyPlexURL('/pms/system/library/sections')
@@ -635,7 +635,7 @@ class PlexLibrary(Screen):
 		if self.g_connectionType != "2": # is not myPlex		
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': self.g_host + ":" + self.g_port,
-								   'serverName' : self.g_name.encode('utf-8'),
+								   'serverName' : self.g_name.encode(),
 								   'uuid' : myUuid ,
 								   'serverVersion' : sections.get('serverVersion',None) ,
 								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
@@ -680,7 +680,8 @@ class PlexLibrary(Screen):
 		self.g_currentServer = server
 		
 		html = self.doRequest(p_url)  
-				
+
+		tree = None
 		try:
 			tree = etree.fromstring(html)
 		except Exception:
@@ -711,7 +712,7 @@ class PlexLibrary(Screen):
 						 "rating":"secondary",
 						 "resolution":"secondary",
 						 "firstCharacter":"secondary"
-					  }		
+					  }
 
 		for sections in directories:   
 			
@@ -721,10 +722,9 @@ class PlexLibrary(Screen):
 			
 			if prompt != "noSearch": # prompt for search string
 				isSearchFilter = True
-				t_url = p_url
 				t_mode = str(p_mode)
 			
-			elif p_final == True:
+			elif p_final:
 				printl("final", self, "D" )
 				t_mode = p_mode
 			
@@ -929,7 +929,6 @@ class PlexLibrary(Screen):
 			return False
 		
 		base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
-		txdata=""
 		token = None
 		
 		myplex_header = []
@@ -954,10 +953,10 @@ class PlexLibrary(Screen):
 
 		try:
 			token = etree.fromstring(response).findtext('authentication-token')
-		except Exception, e:
+		except Exception:
 			self._showErrorOnTv("no xml as response", response)
 			 
-		if token == None:
+		if token is None:
 			self._showErrorOnTv("", response)
 			
 			printl("", self, "C")
@@ -980,12 +979,10 @@ class PlexLibrary(Screen):
 	#============================================================================
 	# 
 	#============================================================================
-	def doRequest(self, url, type="GET", popup=0 ): # CHECKED
-		"""
-		"""
+	def doRequest(self, url, myType="GET" ):
 		printl("", self, "S")
 
-		try:		
+		try:
 			if url[0:4] == "http":
 				serversplit=2
 				urlsplit=3
@@ -1004,7 +1001,7 @@ class PlexLibrary(Screen):
 
 			authHeader = self.get_hTokenForServer()
 			printl("header: " + str(authHeader), self, "D", True, 8)
-			conn.request(type, urlPath, headers=authHeader)
+			conn.request(myType, urlPath, headers=authHeader)
 
 			data = conn.getresponse()
 	
@@ -1180,7 +1177,7 @@ class PlexLibrary(Screen):
 							locationCheck = self.checkFileLocation(remotePathPart, localPathPart)
 							
 							# if we find the media within the provided location we leave 
-							if locationCheck != False:
+							if locationCheck:
 								return locationCheck
 
 				printl("Sorry I didn't find the file on the provided locations", self, "I")
