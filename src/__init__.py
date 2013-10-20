@@ -41,9 +41,6 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_
 from __plugin__ import registerPlugin, Plugin
 from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
-from DP_LibMovies import DP_LibMovies
-from DP_LibShows import DP_LibShows
-from DP_LibMusic import DP_LibMusic
 from DPH_Singleton import Singleton
 
 #===============================================================================
@@ -286,6 +283,11 @@ def initPlexServerConfig():
 #===============================================================================
 def loadPlexPlugins():
 	printl("", "__init__::loadPlexPlugins", "S")
+
+	# we have to load them here because they are not ready though
+	from DP_LibMovies import DP_LibMovies
+	from DP_LibShows import DP_LibShows
+	from DP_LibMusic import DP_LibMusic
 
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))

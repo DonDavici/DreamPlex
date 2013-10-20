@@ -55,29 +55,15 @@ def getViewClass():
 #===============================================================================
 class DPS_ViewMusic(DP_View):
 
-	backdrop_postfix 		= "_backdrop_1280x720.jpg"
-	poster_postfix 			= "_poster.jpg"
-	image_prefix 			= ""
 	plexInstance 			= None
-	details 				= None
-	extraData 				= None
-	context					= None
 	parentSeasonId 			= None
 	parentSeasonNr 			= None
 	isTvShow 				= False
 	playTheme 				= False
 	startPlaybackNow 		= False
 	itemsPerPage 			= 0
-	whatPoster 				= None
-	whatBackdrop 			= None
 	changePoster 			= True
 	changeBackdrop 			= True
-	resetPoster				= True
-	resetBackdrop			= True
-	seenUrl 				= None
-	unseenUrl 				= None
-	deleteUrl 				= None
-	refreshUrl 				= None
 	resetGuiElements		= False
 	fastScroll 				= False
 
@@ -262,47 +248,7 @@ class DPS_ViewMusic(DP_View):
 		
 		printl("", self, "C")
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showFunctions(self, visible):
-		printl("", self, "S")
-		
-		self.areFunctionsHidden = visible
 
-		if visible:
-			self["functionsContainer"].show()
-			self["btn_red"].show()
-			self["btn_blue"].show()
-			self["btn_yellow"].show()
-			self["txt_red"].show()
-			self["txt_filter"].show()
-			self["txt_blue"].show()
-			self["txt_yellow"].show()
-			self["btn_zero"].show()
-			self["btn_nine"].show()
-			self["btn_pvr"].show()
-			self["txt_pvr"].show()
-			self["btn_menu"].show()
-			self["txt_menu"].show()
-		else:
-			self["functionsContainer"].hide()
-			self["btn_red"].hide()
-			self["btn_blue"].hide()
-			self["btn_yellow"].hide()
-			self["txt_red"].hide()
-			self["txt_filter"].hide()
-			self["txt_blue"].hide()
-			self["txt_yellow"].hide()
-			self["btn_zero"].hide()
-			self["btn_nine"].hide()
-			self["btn_pvr"].hide()
-			self["txt_pvr"].hide()
-			self["btn_menu"].hide()
-			self["txt_menu"].hide()
-		
-		printl("", self, "C")
-	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -313,220 +259,6 @@ class DPS_ViewMusic(DP_View):
 		
 		printl("", self, "C")
 	
-
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleRatedPixmaps(self):
-		printl("", self, "S")
-
-		mpaa = self.extraData.get("contentRating", "unknown").upper()
-		printl("contentRating: " + str(mpaa), self, "D")
-		
-		if mpaa == "PG-13" or mpaa == "TV-14":
-			found = True
-			self["rated"].setPixmapNum(0)
-		
-		elif mpaa == "PG" or mpaa == "TV-PG":
-			found = True
-			self["rated"].setPixmapNum(1)
-		
-		elif mpaa == "R" or mpaa == "14A":
-			found = True
-			self["rated"].setPixmapNum(2)
-		
-		elif mpaa == "NC-17" or mpaa == "TV-MA":
-			found = True
-			self["rated"].setPixmapNum(3)
-		
-		elif mpaa == "DE/0" or mpaa == "G":
-			found = True
-			self["rated"].setPixmapNum(4)
-		
-		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
-			found = True
-			self["rated"].setPixmapNum(5)
-		
-		elif mpaa == "UNKNOWN" or mpaa == "UNKNOWN" or mpaa == "":
-			found = False
-		
-		else:
-			printl("we have a value but no match!! mpaa: " + str(mpaa), self, "I")
-			found = False
-		
-		if found:
-			self["rated"].show()
-		else:
-			self["rated"].hide()
-		
-		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleSoundPixmaps(self):
-		printl("", self, "S")
-		
-		audio = self.extraData.get("audioCodec", "unknown").upper()
-		printl("audioCodec: " + str(audio), self, "D")
-		
-		if audio == "DCA":
-			found = True
-			self["audio"].setPixmapNum(0)
-		
-		elif audio == "AC3":
-			found = True
-			self["audio"].setPixmapNum(1)
-		
-		elif audio == "MP2":
-			found = True
-			self["audio"].setPixmapNum(2)
-			
-		elif audio == "MP3":
-			found = True
-			self["audio"].setPixmapNum(3)
-		
-		elif audio == "UNKNOWN" or audio == "":
-			found = False
-		
-		else:
-			printl("we have a value but no match!! audio: " + str(audio), self, "I")
-			found = False
-		
-		if found:
-			self["audio"].show()
-		else:
-			self["audio"].hide()
-		
-		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleResolutionPixmaps(self):
-		printl("", self, "S")
-
-		resolution = self.extraData.get("videoResolution", "unknown").upper()
-		printl("videoResolution: " + str(resolution), self, "D")
-		
-		if resolution == "1080":
-			found = True
-			self["resolution"].setPixmapNum(0)
-		
-		elif resolution == "720":
-			found = True
-			self["resolution"].setPixmapNum(1)
-		
-		elif resolution == "480" or resolution == "576" or resolution == "SD":
-			found = True
-			self["resolution"].setPixmapNum(2)
-		
-		elif resolution == "UNKNOWN" or resolution == "":
-			found = False
-		
-		else:
-			printl("we have a value but no match!! resolution: " + str(resolution), self, "I")
-			found = False
-		
-		if found:
-			self["resolution"].show()
-		else:
-			self["resolution"].hide()
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleAspectPixmaps(self):
-		printl("", self, "S")
-
-		aspect = self.extraData.get("aspectRatio", "unknown").upper()
-		printl("aspectRatio: " + str(aspect), self, "D")
-		
-		if aspect == "1.33":
-			found = True
-			self["aspect"].setPixmapNum(0)
-		
-		elif aspect == "1.66" or aspect == "1.78" or aspect == "1.85":
-			found = True
-			self["aspect"].setPixmapNum(1)
-		
-		elif aspect == "2.35": # 21:9
-			found = True
-			self["aspect"].setPixmapNum(1)
-		
-		elif aspect == "UNKNOWN" or aspect == "":
-			found = False
-			
-		else:
-			printl("we have a value but no match!! aspect: " + str(aspect), self, "I")
-			found = False
-		
-		if found:
-			self["aspect"].show()
-		else:
-			self["aspect"].hide()
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handleCodecPixmaps(self):
-		printl("", self, "S")
-		
-		codec = self.extraData.get("videoCodec", "unknown").upper()
-		printl("videoCodec: " + str(codec), self, "D")
-		
-		if codec == "VC1":
-			found = True
-			self["codec"].setPixmapNum(0)
-		
-		elif codec == "H264":
-			found = True
-			self["codec"].setPixmapNum(1)
-		
-		elif codec == "MPEG4":
-			found = True
-			self["codec"].setPixmapNum(2)
-		
-		elif codec == "MPEG2VIDEO":
-			found = True
-			self["codec"].setPixmapNum(3)
-		
-		elif codec == "UNKNOWN" or codec == "":
-			found = False
-		
-		else:
-			printl("we have a value but no match!! codec: " + str(codec), self, "I")
-			found = False
-		
-		if found:
-			self["codec"].show()
-		else:
-			self["codec"].hide()
-		
-		printl("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def handlePopularityPixmaps(self):
-		printl("", self, "S")
-		
-		try:
-			popularity = float(self.details ["rating"])
-		except Exception, e: 
-			popularity = 0
-			printl( "error in popularity " + str(e),self, "D")
-			
-		self["rating_stars"].setValue(int(popularity) * 10)
-		self["rating_stars"].show()
-		
-		printl("", self, "C")
-
 	#===========================================================================
 	# 
 	#===========================================================================
