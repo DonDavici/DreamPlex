@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -39,8 +39,8 @@ from Plugins.Extensions.DreamPlex.__plugin__ import getPlugins, Plugin
 # 
 #===============================================================================
 class DP_LibMain(Screen):
-	'''
-	'''
+	"""
+	"""
 
 	#===========================================================================
 	# 
@@ -85,10 +85,10 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setDefault(self, selection, sort, filter):
+	def setDefault(self, selection, sort, myFilter):
 		printl("", self, "S")
 		
-		if selection is None and sort is None and filter is None:
+		if selection is None and sort is None and myFilter is None:
 			try:
 				os.remove(self.defaultPickle)
 			except:
@@ -101,7 +101,7 @@ class DP_LibMain(Screen):
 			"view": self.currentViewIndex, 
 			"selection": selection, 
 			"sort": sort, 
-			"filter": filter, 
+			"filter": myFilter,
 		}
 		
 		fd = open(self.defaultPickle, "wb")
@@ -125,13 +125,13 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showView(self, selection=None, sort=None, filter=None, cache=None):
-		'''
+	def showView(self, selection=None, sort=None, myFilter=None, cache=None):
+		"""
 		Displays the selected View
-		'''
+		"""
 		printl("", self, "S")
-		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [], -1)
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=filter, cache=cache)
+		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [])
+		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=myFilter, cache=cache)
 		
 		printl("", self, "C")
 
@@ -139,29 +139,29 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def onViewClosed(self, cause=None):
-		'''
+		"""
 		Called if View has closed, react on cause for example change to different view
-		'''
+		"""
 		printl("", self, "S")
 		printl("cause: %s" % str(cause), self, "D")
 		if cause is not None:
 			if cause[0] == DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT:
 				selection = None
 				sort = None
-				filter = None
+				myFilter = None
 				if len(cause) >= 2 and cause[1] is not None:
 					#self.currentViewIndex = cause[1]
 					selection = cause[1]
 				if len(cause) >= 3 and cause[2] is not None:
 					sort = cause[2]
 				if len(cause) >= 4 and cause[3] is not None:
-					filter = cause[3]
-				self.setDefault(selection, sort, filter)
+					myFilter = cause[3]
+				self.setDefault(selection, sort, myFilter)
 				self.close()
 			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW or cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE:
 				selection = None
 				sort = None
-				filter = None
+				myFilter = None
 				self.currentViewIndex += 1
 				if len(self._views) <= self.currentViewIndex:
 					self.currentViewIndex = 0
@@ -172,7 +172,7 @@ class DP_LibMain(Screen):
 				if len(cause) >= 3 and cause[2] is not None:
 					sort = cause[2]
 				if len(cause) >= 4 and cause[3] is not None:
-					filter = cause[3]
+					myFilter = cause[3]
 				if len(cause) >= 5 and cause[4] is not None:
 					for i in range(len(self._views)):
 						if cause[4]== self._views[i][1]:
@@ -180,9 +180,9 @@ class DP_LibMain(Screen):
 							break
 				
 				if cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW:
-					self.showView(selection, sort, filter, cache=True)
+					self.showView(selection, sort, myFilter, cache=True)
 				else:
-					self.showView(selection, sort, filter, cache=False)
+					self.showView(selection, sort, myFilter, cache=False)
 			else:
 				self.close()
 		else:
@@ -193,10 +193,10 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self, params=None):
-		'''
+	def loadLibrary(self):
+		"""
 		prototype for library loading, is called by the view
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl("", self, "C")
@@ -205,11 +205,13 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def playEntry(self, entry, flags={}):
-		'''
+	def playEntry(self, entry, flags=None):
+		"""
 		tarts playback, is called by the view
-		'''
+		"""
 		printl("", self, "S")
+		if not flags:
+			flags = {}
 
 		playbackPath = entry["Path"]
 		
@@ -234,9 +236,9 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def checkIfDVD(self, playbackPath):
-		'''
+		"""
 		tries to determin if media entry is a dvd
-		'''
+		"""
 		printl("", self, "S")
 
 		isDVD = False
@@ -252,22 +254,21 @@ class DP_LibMain(Screen):
 			dvdFilelist.append(str(playbackPath))
 		
 		printl("", self, "C")
-		return (isDVD, dvdFilelist, dvdDevice, )
+		return isDVD, dvdFilelist, dvdDevice
 
 	#===========================================================================
 	# 
 	#===========================================================================
 	def playDVD(self, dvdDevice, dvdFilelist):
-		'''
+		"""
 		playbacks a dvd by callinf dvdplayer plugin
-		'''
+		"""
 		printl("", self, "S")
 		
 		try:
 			from Plugins.Extensions.DVDPlayer.plugin import DVDPlayer
 			# when iso -> filelist, when folder -> device
-			self.session.openWithCallback(self.leaveMoviePlayer, DVDPlayer, \
-				dvd_device = dvdDevice, dvd_filelist = dvdFilelist)
+			self.session.openWithCallback(self.leaveMoviePlayer, DVDPlayer, dvd_device = dvdDevice, dvd_filelist = dvdFilelist)
 		except Exception, ex:
 			printl("Exception: " + str(ex), self, "E")
 		
@@ -277,9 +278,9 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def playFile(self, entry, flags):
-		'''
+		"""
 		playbacks a file by calling DP_player
-		'''
+		"""
 		printl("", self, "S")
 		
 		playbackList = self.getPlaybackList(entry)
@@ -296,12 +297,15 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def leaveMoviePlayer(self, flags={}): 
-		'''
+	def leaveMoviePlayer(self, flags=None):
+		"""
 		After calling this the view should auto reappear
-		'''
+		"""
 		printl("", self, "S")
-		
+
+		if not flags:
+			flags = {}
+
 		self.notifyEntryStopped(flags)
 		
 		self.session.nav.playService(None) 
@@ -312,9 +316,9 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def getPlaybackList(self, entry):
-		'''
+		"""
 		prototype fore playbacklist creation
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl("", self, "D")
@@ -329,18 +333,20 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	def buildInfoPlaybackArgs(self, entry):
 		printl("", self, "S")
-		
-		
+
+		args = {}
+		args["entry"] = entry
+
 		printl("", self, "C")
-		return {}
+		return args
 
 	#===========================================================================
 	# 
 	#===========================================================================
 	def notifyEntryPlaying(self, entry, flags):
-		'''
+		"""
 		called on start of playback
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl("", self, "D")
@@ -358,9 +364,9 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def notifyEntryStopped(self, flags):
-		'''
+		"""
 		called on end of playback
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl("", self, "D")
@@ -378,9 +384,9 @@ class DP_LibMain(Screen):
 	# 
 	#===========================================================================
 	def notifyNextEntry(self, entry, flags):
-		'''
+		"""
 		called if the next entry in the playbacklist is being playbacked
-		'''
+		"""
 		printl("", self, "S")
 		
 		printl("", self, "D")

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -32,8 +32,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 class DP_LibMusic(DP_LibMain):
-	'''
-	'''
+	"""
+	"""
 	
 	g_url = None
 	
@@ -41,9 +41,9 @@ class DP_LibMusic(DP_LibMain):
 	# 
 	#===========================================================================
 	def __init__(self, session, url=None, showEpisodesDirectly=False):
-		'''
+		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
-		'''
+		"""
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "music")
@@ -59,7 +59,7 @@ class DP_LibMusic(DP_LibMain):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 		
-		if self.showEpisodesDirectly == True:
+		if self.showEpisodesDirectly:
 			printl("show episodes in OnDeck ...", self, "I")
 			
 			url = self.g_url
@@ -68,12 +68,12 @@ class DP_LibMusic(DP_LibMain):
 
 			sort = [("by title", None, False), ]
 			
-			filter = [("All", (None, False), ("", )), ]
+			myFilter = [("All", (None, False), ("", )), ]
 			
 			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, "None", sort, filter)
+			return library, ("viewMode", "ratingKey", ), None, "None", sort, myFilter
 		else:
 			# Diplay all TVShows
 			if params is None:
@@ -86,14 +86,14 @@ class DP_LibMusic(DP_LibMain):
 				# sort
 				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 				
 				#if len(tmpGenres) > 0:
 					#tmpGenres.sort()
 					#filter.append(("Genre", ("Genres", True), tmpGenres))
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 	
 			
@@ -108,10 +108,10 @@ class DP_LibMusic(DP_LibMain):
 				
 				sort = (("by season", "season", False), )
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 	
 		
@@ -125,12 +125,12 @@ class DP_LibMusic(DP_LibMain):
 	
 				sort = [("by title", None, False), ]
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 
 				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		printl ("", self, "C")

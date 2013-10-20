@@ -68,7 +68,7 @@ class DP_LibMovies(DP_LibMain):
 		# sort
 		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
-		filter = [("All", (None, False), ("", )), ]
+		myFilter = [("All", (None, False), ("", )), ]
 		
 		# filter seen unseen
 		#filter.append(("Seen", ("viewState", "seen", ), ("", )))
@@ -94,8 +94,11 @@ class DP_LibMovies(DP_LibMain):
 						fd = open(self.moviePickle, "rb")
 						pickleData = pickle.load(fd)
 						library = pickleData[0]
-						tmpAbc = pickleData[1]
-						tmpGenres = pickleData [2]
+
+						# todo we have to check if we will need this in future or not
+						#tmpAbc = pickleData[1]
+						#tmpGenres = pickleData [2]
+
 						fd.close()
 						printl("from pickle", self, "D")
 					except:
@@ -116,10 +119,10 @@ class DP_LibMovies(DP_LibMain):
 			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 			
 			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, filter
+			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, myFilter
 		
 		printl ("", self, "C")
-		return library, ("viewMode", "ratingKey", ), None, None, sort, filter
+		return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 
 	#===========================================================================
 	# 
@@ -147,7 +150,7 @@ class DP_LibMovies(DP_LibMain):
 		args["year"]    = entry["year"]
 		args["type"]    = "movie"
 		
-		printl ("args = " + args, self, "D")
+		printl ("args = " + str(args), self, "D")
 		
 		printl ("", self, "C")
 		return args

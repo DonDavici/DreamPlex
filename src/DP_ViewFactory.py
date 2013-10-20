@@ -80,6 +80,7 @@ def getViews(libraryName):
 # 
 #===========================================================================
 def getViewsFromSkinParams(myType):
+	global myFile
 	printl("", __name__, "S")
 	
 	tree = Singleton().getSkinParamsInstance()
@@ -103,8 +104,7 @@ def getViewsFromSkinParams(myType):
 		defaultParams = getMusicViewDefaults()
 		
 	else:
-		# TODO add errorhandler here
-		pass
+		raise Exception()
 	
 	for view in tree.findall(myType):
 		name = str(view.get('name'))

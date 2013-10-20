@@ -179,7 +179,7 @@ class DPS_MainMenu(Screen):
 
 		printl("", self, "C")
 
-	def setMainMenu(self,answer):
+	def setMainMenu(self):
 		self["menu"].setList(self.menu_main_list)
 
 #===============================================================================

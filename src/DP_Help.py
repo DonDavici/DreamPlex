@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -46,8 +46,8 @@ class DPS_Help(Screen):
     _session = None
     
     def __init__(self, session):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
         
         Screen.__init__(self, session)
@@ -75,8 +75,8 @@ class DPS_Help(Screen):
     # 
     #===========================================================================
     def setContent(self):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
         
         self.setTitle(_("Help"))
@@ -88,8 +88,8 @@ class DPS_Help(Screen):
     # 
     #===========================================================================
     def keyCancel(self):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
         
         self.close()
@@ -100,8 +100,8 @@ class DPS_Help(Screen):
     # 
     #===========================================================================
     def getText(self):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
 
         content = "Direct Local"
@@ -136,8 +136,8 @@ class DPS_Help(Screen):
     # 
     #===========================================================================
     def bouquetUp(self):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
         
         self["help"].pageUp()
@@ -148,8 +148,8 @@ class DPS_Help(Screen):
     # 
     #===========================================================================
     def bouquetDown(self):
-        '''
-        '''
+        """
+        """
         printl("", self, "S")
         
         self["help"].pageDown()

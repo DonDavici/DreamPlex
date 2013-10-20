@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -53,8 +53,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # class
 #===============================================================================	
 class DP_Player(MoviePlayer):
-	'''
-	'''
+	"""
+	"""
 	
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -130,13 +130,7 @@ class DP_Player(MoviePlayer):
 		# check for playable services
 		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
 		
-		gstreamer = False
-
-		if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
-			printl("we are able to stream over 4097", self, "I")
-			gstreamer = True
-		
-		# lets built the sref for the movieplayer out of the gathered information			
+		# lets built the sref for the movieplayer out of the gathered information
 		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
 		
@@ -146,8 +140,14 @@ class DP_Player(MoviePlayer):
 		elif self.url[-5:] == ".m2ts":
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
 		
-		else: # if we have a real file but no ts but for eg mkv we will also use sref 4097
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
+			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
+				printl("we are able to stream over 4097", self, "I")
+				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+			else:
+				# todo add errorhandler
+				pass
+
 		
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
 		
@@ -164,7 +164,7 @@ class DP_Player(MoviePlayer):
 		self["bufferslider"] = self.bufferslider
 		self["bufferslider"].setValue(1)
 		self["mediaTitle"] = StaticText(self.title)
-		self["label_update"] = StaticText("")
+		self["label_update"] = StaticText()
 		self.bufferSeconds = 0
 		self.bufferPercent = 0
 		self.bufferSecondsLeft = 0
@@ -196,7 +196,7 @@ class DP_Player(MoviePlayer):
 		#	printl("rPos: " + str(rPos), self, "I")
 		#=======================================================================
 			
-		if self.resume == True and self.resumeStamp != None and self.resumeStamp > 0.0:
+		if self.resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
 
@@ -225,10 +225,10 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def isValidServiceId(self, id):
+	def isValidServiceId(self, myId):
 		printl("", self, "S")
 		
-		testSRef = eServiceReference(id, 0, "Just a TestReference")
+		testSRef = eServiceReference(myId, 0, "Just a TestReference")
 		info = eServiceCenter.getInstance().info(testSRef)
 		
 		printl("", self, "C")
@@ -280,10 +280,10 @@ class DP_Player(MoviePlayer):
 		else:
 			self["bufferslider"].setValue(1)
 
-		if(self.bufferPercent > 95):
+		if self.bufferPercent > 95:
 			self.bufferFull()
 				
-		if(self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0)):
+		if self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0):
 			self.bufferEmpty()
 
 		#printl("", self, "C")
@@ -297,7 +297,7 @@ class DP_Player(MoviePlayer):
 		try:
 			currPlay = self.session.nav.getCurrentService()
 			sTagAudioCodec = currPlay.info().getInfoString(iServiceInformation.sTagAudioCodec)
-			printl( "audio-codec %s can't be decoded by hardware" % (sTagAudioCodec), self, "I")
+			printl( "audio-codec %s can't be decoded by hardware" % sTagAudioCodec, self, "I")
 			Notifications.AddNotification(MessageBox, _("This Box can't decode %s streams!") % sTagAudioCodec, type=MessageBox.TYPE_INFO, timeout=10)
 		
 		except Exception, e:
@@ -314,7 +314,7 @@ class DP_Player(MoviePlayer):
 		try:
 			currPlay = self.session.nav.getCurrentService()
 			sTagVideoCodec = currPlay.info().getInfoString(iServiceInformation.sTagVideoCodec)
-			printl( "video-codec %s can't be decoded by hardware" % (sTagVideoCodec), self, "I")
+			printl( "video-codec %s can't be decoded by hardware" % sTagVideoCodec, self, "I")
 			Notifications.AddNotification(MessageBox, _("This Box can't decode %s streams!") % sTagVideoCodec, type=MessageBox.TYPE_INFO, timeout=10)
 		
 		except Exception, e:
@@ -382,12 +382,11 @@ class DP_Player(MoviePlayer):
 	def seekToStartPos(self):
 		printl("", self, "S")
 		
-		time = 0
 		try:
 			if self.resumeStamp is not None:
 				service = self.session.nav.getCurrentService()
 				seek = service and service.seek()
-				if seek != None:
+				if seek is not None:
 					r = seek.getLength()
 					if not r[0]:
 						printl ("got duration", self, "I")
@@ -560,9 +559,6 @@ class DP_Player(MoviePlayer):
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
 		
-		currentTime = self.getPlayPosition()[1] / 90000
-		totalTime = self.getPlayLength()[1] / 90000
-		
 		if self.universalTranscoder:
 			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
 		else:
@@ -577,15 +573,18 @@ class DP_Player(MoviePlayer):
 		printl("", self, "S")
 		try:
 			if self.seekstate != self.SEEK_STATE_PLAY and self.seekstate != self.SEEK_STATE_PAUSE:
+
+				printl("", self, "C")
 				return False
 			else:
+
+				printl("", self, "C")
 				return True
 		except:
-			return False
-		
-		printl("", self, "C")
 
-	
+			printl("", self, "C")
+			return False
+
 	#===========================================================================
 	# audioTrackWatcher
 	#===========================================================================
@@ -608,8 +607,8 @@ class DP_Player(MoviePlayer):
 	def timelineWatcher(self, stop_event, wait_event):
 		printl("", self, "S")
 
-		while(not stop_event.is_set()):
-			while(not wait_event.is_set()):
+		while not stop_event.is_set():
+			while not wait_event.is_set():
 				ret = self.updateTimeline()
 				if ret:
 					wait_event.wait(3)
@@ -662,7 +661,7 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def setAudioTrack(self):
 		printl("", self, "S")
-		if self.switchedLanguage == False:
+		if not self.switchedLanguage:
 			try:
 				service = self.session.nav.getCurrentService()
 		

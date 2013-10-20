@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -41,7 +41,7 @@ class Singleton:
 		self.__dict__ = self.__we_are_one
 
 	def getPlexInstance(self, value=None):
-		'''with value you can set the singleton content'''
+		"""with value you can set the singleton content"""
 		if value:
 			#printl("generating Plex instance ...", self, "D")
 			self.__plexInstance = value
@@ -52,7 +52,7 @@ class Singleton:
 		return self.__plexInstance
 	
 	def getLogFileInstance(self, value=None):
-		'''with value you can set the singleton content'''
+		"""with value you can set the singleton content"""
 		if value:
 			#printl("generating Logfile instance ...", self, "D")
 			self.__logFileInstance = value
@@ -63,7 +63,7 @@ class Singleton:
 		return self.__logFileInstance
 	
 	def getSkinParamsInstance(self, value=None):
-		'''with value you can set the singleton content'''
+		"""with value you can set the singleton content"""
 		if value:
 			#printl("generating skinParam instance ...", self, "D")
 			self.__skinParamsInstance = value

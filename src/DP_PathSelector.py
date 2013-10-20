@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -40,15 +40,15 @@ class DPS_PathSelector(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, initDir, type):
+	def __init__(self, session, initDir, myType):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
 		
-		self.type = type
+		self.myType = myType
 		inhibitDirs = ["/bin", "/boot", "/dev", "/etc", "/lib", "/proc", "/sbin", "/sys", "/usr", "/var"]
 		inhibitMounts = []
-		self["filelist"] = FileList(initDir, showDirectories = True, showMountpoints = True, showFiles = False, inhibitMounts = inhibitMounts, inhibitDirs = inhibitDirs)
+		self["filelist"] = FileList(initDir, showFiles=False, inhibitMounts=inhibitMounts, inhibitDirs=inhibitDirs)
 		self["target"] = Label()
 		self["target"].setText(initDir)
 		self["actions"] = ActionMap(["WizardActions", "DirectionActions", "ColorActions", "EPGSelectActions"],
@@ -74,7 +74,7 @@ class DPS_PathSelector(Screen):
 	def cancel(self):
 		printl("", self, "S")
 		
-		self.close(self["filelist"].getSelection()[0], self.type)
+		self.close(self["filelist"].getSelection()[0], self.myType)
 		
 		printl("", self, "C")
 	
@@ -84,7 +84,7 @@ class DPS_PathSelector(Screen):
 	def green(self):
 		printl("", self, "S")
 		
-		self.close(self["filelist"].getSelection()[0], self.type)
+		self.close(self["filelist"].getSelection()[0], self.myType)
 		
 		printl("", self, "C")
 

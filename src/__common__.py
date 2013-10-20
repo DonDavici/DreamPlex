@@ -245,7 +245,7 @@ def testPlexConnectivity(ip, port):
 
 	import socket
 
-	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sock = socket.socket()
 
 	printl2("IP => " + str(ip), "__common__::testPlexConnectivity", "I")
 	printl2("PORT => " + str(port), "__common__::testPlexConnectivity", "I")
@@ -412,9 +412,9 @@ def setBoxInformation():
 	printl2("", "__common__::_setBoxtype", "C")
 
 	try:
-		filePointer = open("/proc/stb/info/model", "r")
+		filePointer = open("/proc/stb/info/model")
 	except:
-		filePointer = open("/hdd/model", "r")
+		filePointer = open("/hdd/model")
 
 	box = filePointer.readline().strip()
 	filePointer.close()

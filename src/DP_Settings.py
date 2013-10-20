@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -115,7 +115,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def createSetup(self, data = None):
+	def createSetup(self):
 		printl("", self, "S")
 		
 		separator = "".ljust(90,"_")
@@ -131,12 +131,12 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Infobar when buffer drained"), config.plugins.dreamplex.showInfobarOnBuffer, _(" ")))
 		
-		if config.plugins.dreamplex.showUpdateFunction.value == True:
+		if config.plugins.dreamplex.showUpdateFunction.value:
 			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
 			self.cfglist.append(getConfigListEntry(_("> Updatetype"), config.plugins.dreamplex.updateType, _("Use Beta only if you really want to help with testing")))
 
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
-		if config.plugins.dreamplex.stopLiveTvOnStartup.value == True:
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
 			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
@@ -226,27 +226,27 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def savePathConfig(self, pathValue, type):
+	def savePathConfig(self, pathValue, myType):
 		printl("", self, "S")
 		
 		printl("pathValue: " + str(pathValue), self, "D")
-		printl("type: " + str(type), self, "D")
+		printl("type: " + str(myType), self, "D")
 		
 		if pathValue is not None:
 
-			if type == "media":
+			if myType == "media":
 				self.mediafolderpath[1].value = pathValue
 			
-			elif type == "config":
+			elif myType == "config":
 				self.configfolderpath[1].value = pathValue
 			
-			elif type == "player":
+			elif myType == "player":
 				self.playerTempPath[1].value = pathValue
 	
-			elif type == "log":
+			elif myType == "log":
 				self.logfolderpath[1].value = pathValue
 	
-			elif type == "cache":
+			elif myType == "cache":
 				self.cachefolderpath[1].value = pathValue
 			
 		config.plugins.dreamplex.save()
@@ -483,7 +483,7 @@ class DPS_ServerEntriesListConfigScreen(Screen):
 			return
 		
 		sel = self["entrylist"].l.getCurrentSelection()[0]
-		config.plugins.dreamplex.entriescount.value = config.plugins.dreamplex.entriescount.value - 1
+		config.plugins.dreamplex.entriescount.value -= 1
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.remove(sel)
 		config.plugins.dreamplex.Entries.save()
@@ -546,7 +546,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def createSetup(self, data = None):
+	def createSetup(self):
 		printl("", self, "S")
 		
 		separator = "".ljust(90,"_")
@@ -587,7 +587,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
 			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _(" ")))
-			if self.current.universalTranscoder.value == False:
+			if not self.current.universalTranscoder.value:
 				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _(" ")))
 				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _(" ")))
 			else:
@@ -609,7 +609,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		##
 		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol, _(" ")))
 
-		if self.current.wol.value == True:
+		if self.current.wol.value:
 			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac, _(" ")))
 			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _(" ")))
 		
@@ -646,7 +646,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	def setKeyNames(self):
 		printl("", self, "S")
 		
-		if self.useMappings == True:
+		if self.useMappings:
 			self["key_yellow"].setText(_("Mappings"))
 		else:
 			self["key_yellow"].setText(_("check myPlex Token"))
@@ -682,7 +682,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		printl("", self, "S")
 		
 		if self.newmode == 1:
-			config.plugins.dreamplex.entriescount.value = config.plugins.dreamplex.entriescount.value + 1
+			config.plugins.dreamplex.entriescount.value += 1
 			config.plugins.dreamplex.entriescount.save()
 		ConfigListScreen.keySave(self)
 		config.plugins.dreamplex.save()
@@ -710,7 +710,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		printl("", self, "S")
 		
 		
-		if self.useMappings == True:
+		if self.useMappings:
 			serverID = self.currentId
 			self.session.open(DPS_Mappings, serverID)
 		else:
@@ -739,8 +739,8 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		if not result:
 			return
-		
-		config.plugins.dreamplex.entriescount.value = config.plugins.dreamplex.entriescount.value - 1
+
+		config.plugins.dreamplex.entriescount.value -= 1
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.remove(self.current)
 		config.plugins.dreamplex.Entries.save()
@@ -785,17 +785,16 @@ class DPS_ServerEntryList(MenuList):
 		self.list=[]
 
 		
-		for c in config.plugins.dreamplex.Entries:
-			res = [c]
-			#res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(c.state.value)))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 55, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(c.name.value)))
+		for entry in config.plugins.dreamplex.Entries:
+			res = [entry]
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 55, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(entry.name.value)))
 			
-			if c.connectionType.value == "2":
-				text1 = c.myplexUrl.value
-				text2 = c.myplexUsername.value
+			if entry.connectionType.value == "2":
+				text1 = entry.myplexUrl.value
+				text2 = entry.myplexUsername.value
 			else:
-				text1 = "%d.%d.%d.%d" % tuple(c.ip.value)
-				text2 = "%d"%(c.port.value)
+				text1 = "%d.%d.%d.%d" % tuple(entry.ip.value)
+				text2 = "%d"% entry.port.value
 				
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 260, 0, 150, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(text1)))
 			res.append((eListboxPythonMultiContent.TYPE_TEXT, 450, 0, 80, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(text2)))

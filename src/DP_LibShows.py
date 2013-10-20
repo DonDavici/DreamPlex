@@ -65,7 +65,7 @@ class DP_LibShows(DP_LibMain):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 		
-		if self.showEpisodesDirectly == True:
+		if self.showEpisodesDirectly:
 			printl("show episodes in OnDeck ...", self, "I")
 			
 			url = self.g_url
@@ -74,12 +74,12 @@ class DP_LibShows(DP_LibMain):
 
 			sort = [("by title", None, False), ]
 			
-			filter = [("All", (None, False), ("", )), ]
+			myFilter = [("All", (None, False), ("", )), ]
 			
 			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 			
 			printl ("", self, "C")
-			return (library, ("viewMode", "ratingKey", ), None, "None", sort, filter)
+			return library, ("viewMode", "ratingKey", ), None, "None", sort, myFilter
 		else:
 			# Diplay all TVShows
 			if params["viewMode"] is None:
@@ -88,13 +88,13 @@ class DP_LibShows(DP_LibMain):
 				url = self.g_url
 				printl("url: " + str(url), self, "D")
 				
-				if config.plugins.dreamplex.useCache.value == True:
+				if config.plugins.dreamplex.useCache.value:
 					self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
 					
 					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
 					if "cache" in params:
-						if params['cache'] == False:
+						if not params['cache']:
 							self.g_source = "plex"
 					
 					if self.g_source == "cache" or params['cache'] == True:
@@ -102,8 +102,11 @@ class DP_LibShows(DP_LibMain):
 							fd = open(self.tvShowPickle, "rb")
 							pickleData = pickle.load(fd)
 							library = pickleData[0]
-							tmpAbc = pickleData[1]
-							tmpGenres = pickleData [2]
+
+							# todo we have to check if we will need this in future or not
+							#tmpAbc = pickleData[1]
+							#tmpGenres = pickleData [2]
+
 							fd.close()
 							printl("from pickle", self, "D")
 						except:
@@ -122,14 +125,14 @@ class DP_LibShows(DP_LibMain):
 				# sort
 				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 				
 				#if len(tmpGenres) > 0:
 					#tmpGenres.sort()
 					#filter.append(("Genre", ("Genres", True), tmpGenres))
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, None, sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 			# Display the Seasons Menu
@@ -142,10 +145,10 @@ class DP_LibShows(DP_LibMain):
 				
 				sort = (("by season", "season", False), )
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 	
 		
@@ -159,12 +162,12 @@ class DP_LibShows(DP_LibMain):
 	
 				sort = [("by title", None, False), ]
 				
-				filter = [("All", (None, False), ("", )), ]
+				myFilter = [("All", (None, False), ("", )), ]
 
 				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
 				
 				printl ("", self, "C")
-				return (library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, filter)
+				return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
 		printl ("", self, "C")

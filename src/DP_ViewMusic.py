@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -48,8 +48,8 @@ from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
 # 
 #===============================================================================
 def getViewClass():
-	'''
-	'''
+	"""
+	"""
 	printl("",__name__ , "S")
 	
 	printl("",__name__ , "C")
@@ -59,8 +59,8 @@ def getViewClass():
 # 
 #===============================================================================
 class DPS_ViewMusic(DP_View):
-	'''
-	'''
+	"""
+	"""
 	backdrop_postfix 		= "_backdrop_1280x720.jpg"
 	poster_postfix 			= "_poster.jpg"
 	image_prefix 			= ""
@@ -171,13 +171,13 @@ class DPS_ViewMusic(DP_View):
 		
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		
-		if self.resetGuiElements == True:
+		if self.resetGuiElements:
 			self.resetGuiElementsInFastScrollMode()
 		
 		self.resetCurrentImages()
 		printl("showMedia: " + str(self.showMedia), self, "D")
 		
-		if selection != None:
+		if selection is not None:
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
 			self.context		= selection[3]

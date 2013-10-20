@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -138,8 +138,9 @@ class DPS_Mappings(Screen):
 	#===================================================================
 	# 
 	#===================================================================
-	def setLocalPathCallback(self, callback = None, type = None):
+	def setLocalPathCallback(self, callback = None, myType = None):
 		printl("", self, "S")
+		printl("myType: " + str(myType), self, "S")
 		
 		if callback is not None and len(callback):
 			printl("localPath: " + str(callback), self, "D")
@@ -294,7 +295,7 @@ class DPS_MappingsEntryList(MenuList):
 				server.append(etree.Element('mapping id="' + str(newId) + '" remotePathPart="' + remotePath + '" localPathPart="' + localPath + '"'))
 				writeXmlContent(tree, self.location)
 		
-		if existingServer == False: # this server has no node in the xml
+		if not existingServer: # this server has no node in the xml
 			printl("expanding server list", self, "D")
 			tree.append(etree.Element('server id="' + str(self.serverID) + '"'))
 			writeXmlContent(tree, self.location)

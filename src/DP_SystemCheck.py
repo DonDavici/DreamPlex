@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 DreamPlex Plugin by DonDavici, 2012
  
 https://github.com/DonDavici/DreamPlex
@@ -18,7 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-'''
+"""
 #=================================
 #IMPORT
 #=================================
@@ -91,7 +91,7 @@ class DPS_SystemCheck(Screen):
 		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
 		
-		if config.plugins.dreamplex.showUpdateFunction.value == True:
+		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
 		
 		self["content"] = MenuList(vlist)
@@ -131,7 +131,7 @@ class DPS_SystemCheck(Screen):
 		
 		if testInetConnectivity():
 			printl( "Starting request", self, "D")
-			curl_string = 'curl -s -k "%s"' % ("https://api.github.com/repos/DonDavici/DreamPlex/tags")
+			curl_string = 'curl -s -k "%s"' % "https://api.github.com/repos/DonDavici/DreamPlex/tags"
 			
 			printl("curl_string: " + str(curl_string), self, "D")
 			self.response = popen(curl_string).read()
@@ -189,7 +189,7 @@ class DPS_SystemCheck(Screen):
 		
 		leftLimiter = 0
 		
-		while isStable == False:
+		while not isStable:
 			starter = self.response.find('},', leftLimiter)
 			printl("starter: " + str(starter), self, "D")
 			end = starter + 50
@@ -199,10 +199,9 @@ class DPS_SystemCheck(Screen):
 			latestStabel = self.response[start:closer] # is a bit dirty but better than forcing users to install simplejson
 			printl("found version: " + str(latestStabel), self, "D")
 			isBeta = self.checkIfBetaVersion(latestStabel)
-			if isBeta == False:
+			if not isBeta:
 				isStable = True
 				latestStabel = latestStabel[-4:]
-				break
 			else:
 				leftLimiter = closer
 		
@@ -228,12 +227,12 @@ class DPS_SystemCheck(Screen):
 	# 
 	#===========================================================================
 	def updateToLatestVersion(self):
-		'''
+		"""
 		# RTV = 0 opkg install successfull
 		# RTV = 1 bianry found but no cmdline given
 		# RTV = 127 Binary not found
 		# RTV = 255 ERROR
-		'''
+		"""
 		printl("", self, "S")
 		
 		remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
@@ -356,7 +355,7 @@ fi""" % str(remoteUrl)
 	def executeCommand(self, command):
 		printl("", self, "S")
 		
-		pipe = popen(command, "r")
+		pipe = popen(command)
 		
 		if pipe:
 			data = pipe.read(8192)
@@ -406,7 +405,7 @@ fi""" % str(remoteUrl)
 				pass
 			else:
 				# Fail, try again and report the output...
-				pipe = popen(command, "r")
+				pipe = popen(command)
 				if pipe is not None:
 					data = pipe.read(8192)
 					if data is None:
@@ -446,7 +445,7 @@ fi""" % str(remoteUrl)
 				pass
 			else:
 				# Fail, try again and report the output...
-				pipe = popen(command, "r")
+				pipe = popen(command)
 				if pipe is not None:
 					data = pipe.read(8192)
 					if data is None:
@@ -479,10 +478,10 @@ fi""" % str(remoteUrl)
 		
 		ARCH = "unknown"
 		
-		if (sys.version_info < (2, 6, 8) and sys.version_info > (2, 6, 6)):
+		if (2, 6, 8) > sys.version_info > (2, 6, 6):
 			ARCH = "mipsel"
 				
-		if (sys.version_info < (2, 7, 4) and sys.version_info > (2, 7, 0)):
+		if (2, 7, 4) > sys.version_info > (2, 7, 0):
 			ARCH = "mips32el"
 				
 		printl("", self, "C")

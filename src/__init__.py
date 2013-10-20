@@ -75,25 +75,25 @@ skins = []
 
 config.plugins.dreamplex = ConfigSubsection()
 config.plugins.dreamplex.about                  	= ConfigSelection(default = "1", choices = [("1", " ")]) # need this for seperator in settings
-config.plugins.dreamplex.debugMode         			= ConfigYesNo(default = False)
+config.plugins.dreamplex.debugMode         			= ConfigYesNo()
 config.plugins.dreamplex.showInMainMenu	   			= ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   			= ConfigYesNo(default = True)
-config.plugins.dreamplex.autoLanguage      			= ConfigYesNo(default = False)
-config.plugins.dreamplex.playTheme         			= ConfigYesNo(default = False)
-config.plugins.dreamplex.showUnSeenCounts			= ConfigYesNo(default = False)
-config.plugins.dreamplex.fastScroll		   			= ConfigYesNo(default = False)
-config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = False)
-config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo(default = False)
+config.plugins.dreamplex.autoLanguage      			= ConfigYesNo()
+config.plugins.dreamplex.playTheme         			= ConfigYesNo()
+config.plugins.dreamplex.showUnSeenCounts			= ConfigYesNo()
+config.plugins.dreamplex.fastScroll		   			= ConfigYesNo()
+config.plugins.dreamplex.summerizeSections 			= ConfigYesNo()
+config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
-config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo(default = False)
+config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo()
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
 
 if source == "feed":
-	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = False)
+	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
 else:
-	config.plugins.dreamplex.showUpdateFunction					= ConfigYesNo(default = True)
+	config.plugins.dreamplex.showUpdateFunction	    = ConfigYesNo(default = True)
 
-config.plugins.dreamplex.checkForUpdateOnStartup 	= ConfigYesNo(default = False)
+config.plugins.dreamplex.checkForUpdateOnStartup 	= ConfigYesNo()
 config.plugins.dreamplex.updateType					= ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
 
 config.plugins.dreamplex.pluginfolderpath  		= ConfigDirectory(default = defaultPluginFolderPath)
@@ -188,7 +188,7 @@ def initServerEntryConfig(data = None):
 	# SERVER SETTINGS
 	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
 	config.plugins.dreamplex.Entries[i].state 			= ConfigYesNo(default = True)
-	config.plugins.dreamplex.Entries[i].autostart		= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].autostart		= ConfigYesNo()
 	config.plugins.dreamplex.Entries[i].name 			= ConfigText(default = defaultName, visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].connectionType  = ConfigSelection(default="0", choices = [("0", _("IP")),("1", _("DNS")), ("2", _("MYPLEX"))])
 	config.plugins.dreamplex.Entries[i].ip				= ConfigIP(default = defaultIp)
@@ -210,11 +210,11 @@ def initServerEntryConfig(data = None):
 
 	# myPlex
 	config.plugins.dreamplex.Entries[i].myplexUrl		= ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo()
 
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
@@ -249,8 +249,8 @@ def initServerEntryConfig(data = None):
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
 
 	# DIRECT REMOTE
-	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(default = "", visible_width = 50, fixed_size = False)
-	config.plugins.dreamplex.Entries[i].smbPassword					= ConfigText(default = "", visible_width = 50, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].smbUser						= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].smbPassword					= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].nasOverrideIp				= ConfigIP(default = [192,168,0,1])
 	config.plugins.dreamplex.Entries[i].nasRoot						= ConfigText(default = "/", visible_width = 50, fixed_size = False)
 
@@ -261,7 +261,7 @@ def initServerEntryConfig(data = None):
 	printl("nasRoot: " + str(config.plugins.dreamplex.Entries[i].nasRoot.value), "__init__::initServerEntryConfig", "D")
 
 	# WOL
-	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo(default = False)
+	config.plugins.dreamplex.Entries[i].wol				= ConfigYesNo()
 	config.plugins.dreamplex.Entries[i].wol_mac			= ConfigText(default = "00AA00BB00CC", visible_width = 12, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].wol_delay		= ConfigInteger(default=60, limits=(1, 180))
 
