@@ -446,16 +446,7 @@ class PlexLibrary(Screen):
 		self.getAllSections()
 		
 		for section in self.g_sections:
-				
-			details={'title' : section.get('title', 'Unknown') }
-			
-			if len(self.g_serverDict) > 1:
-				details['title']=section.get('serverName')+": "+details['title']
-			
-			extraData={ 'fanart_image' : self.getImage(section, section.get('address'), type="art") ,
-						'type'		 : "Video" ,
-						'thumb'		: self.getImage(section, section.get('address'), type="art", transcode=False) ,
-						'token'		: str(section['token']) }
+			title = section.get('title', 'Unknown')
 
 			if self.g_connectionType == "2": # MYPLEX
 				# we have to do this because via myPlex there could be diffrent servers with other tokens
@@ -509,7 +500,7 @@ class PlexLibrary(Screen):
 						continue
 
 				else:
-					printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
+					printl("Ignoring section " + title + " of type " + section.get('type') + " as unable to process")
 					continue
 			
 			else: # lets start here we configured no filters		  
@@ -537,7 +528,7 @@ class PlexLibrary(Screen):
 					if (myFilter is not None) and (myFilter != "photos"):
 						continue
 				else:
-					printl("Ignoring section "+details['title']+" of type " + section.get('type') + " as unable to process")
+					printl("Ignoring section " + title + " of type " + section.get('type') + " as unable to process")
 					continue
 		
 		if self.g_connectionType == "2": # MYPLEX
@@ -585,7 +576,7 @@ class PlexLibrary(Screen):
 			tree = None
 			try:
 				tree = etree.fromstring(html).getiterator("Directory")
-			except Exception, e:
+			except Exception:
 				self._showErrorOnTv("no xml as response", html)
 			
 			for section in tree:
@@ -659,7 +650,7 @@ class PlexLibrary(Screen):
 		else:
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': sections.get('address') + ":" + sections.get('port'),
-								   'serverName' : self.g_name.encode('utf-8'),
+								   'serverName' : self.g_name.encode(),
 								   'uuid' : myUuid,
 								   'serverVersion' : sections.get('serverVersion',None) ,
 								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
@@ -677,8 +668,6 @@ class PlexLibrary(Screen):
 	# 
 	#=============================================================================
 	def getSectionFilter(self, p_url, p_mode, p_final): # CHECKED
-		"""
-		"""
 		printl("", self, "S")
 		printl("p_url: " + str(p_url), self, "I")
 		printl("p_mode: " + str(p_mode), self, "I")
@@ -694,7 +683,7 @@ class PlexLibrary(Screen):
 				
 		try:
 			tree = etree.fromstring(html)
-		except Exception, e:
+		except Exception:
 			self._showErrorOnTv("no xml as response", html)
 		
 		directories = tree.getiterator("Directory")
@@ -868,7 +857,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def getMyPlexURL(self, url_path, renew=False, suppress=True ): # CHECKED
+	def getMyPlexURL(self, url_path):
 		"""
 			Connect to the my.plexapp.com service and get an XML pages
 			A seperate function is required as interfacing into myplex
@@ -876,7 +865,7 @@ class PlexLibrary(Screen):
 			@input: url to get, whether we need a new token, whether to display on screen err
 			@return: an xml page as string or false
 		"""
-		printl("", self, "S")				
+		printl("", self, "S")
 		printl("url = " + MYPLEX_SERVER + url_path, self, "D")
 	
 		printl( "Starting request", self, "D")
@@ -888,8 +877,7 @@ class PlexLibrary(Screen):
 		#printl("====== XML returned =======", self, "D")
 		#printl("link = " + str(response), self, "D")
 		#printl("====== XML finished ======", self, "D")
-		
-		
+
 		printl("", self, "C")
 		return response
 		
