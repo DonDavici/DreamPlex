@@ -76,46 +76,14 @@ seed()
 #===============================================================================
 # 
 #===============================================================================
-#DEBUG ON/OFF
-DEBUG = "true"
-
-#Get the setting from the appropriate file.
 DEFAULT_PORT="32400"
 MYPLEX_SERVER="my.plexapp.com"
-
-_MODE_GETCONTENT=0
-_MODE_TVSHOWS=1
-_MODE_MOVIES=2
-_MODE_ARTISTS=3
-_MODE_getSeasonsOfShow=4
-_MODE_PLAYLIBRARY=5
-_MODE_TVEPISODES=6
-_MODE_PLEXPLUGINS=7
-_MODE_PROCESSXML=8
-_MODE_BASICPLAY=12
-_MODE_ALBUMS=14
-_MODE_TRACKS=15
-_MODE_PHOTOS=16
-_MODE_MUSIC=17
-_MODE_PLEXONLINE=19
-_MODE_CHANNELINSTALL=20
-_MODE_CHANNELVIEW=21
-_MODE_DISPLAYSERVERS=22
-_MODE_PLAYLIBRARY_TRANSCODE=23
-_MODE_MYPLEXQUEUE=24
-
-_OVERLAY_XBMC_UNWATCHED=6  #Blank
-_OVERLAY_XBMC_WATCHED=7	#Tick
-_OVERLAY_PLEX_UNWATCHED=4  #Dot
-_OVERLAY_PLEX_WATCHED=0	#Blank
-_OVERLAY_PLEX_PARTIAL=5	#half - Reusing XBMC overlaytrained
 
 #===============================================================================
 # PlexLibrary
 #===============================================================================
 class PlexLibrary(Screen):
-	"""
-	"""
+
 	g_sessionID=None
 	g_sections=[]
 	g_name = "Plexserver"
@@ -286,29 +254,6 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 
-	#===============================================================================
-	# 
-	#===============================================================================	
-	def getSeenVisus(self):
-		printl("", self, "S")
-		
-		tree = Singleton().getSkinParamsInstance()
-		
-		for seenPic in tree.findall('seenPic'):
-			self.seenPic = str(seenPic.get('path'))
-			printl("self.seenPic: " + str(self.seenPic), self, "D")
-			
-		for startedPic in tree.findall('startedPic'):
-			self.startedPic = str(startedPic.get('path'))
-			printl("self.startedPic: " + str(self.startedPic), self, "D")
-			
-		for unseenPic in tree.findall('unseenPic'):
-			self.unseenPic = str(unseenPic.get('path'))
-			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
-
-
-		printl("", self, "C")
-
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -364,8 +309,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def setAccessTokenHeader(self, serverVersion = None):
-		"""
-		"""
 		printl("", self, "S")
 		
 		for key, value in self.g_myplex_accessTokenDict.iteritems():
@@ -394,8 +337,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def leaveOnError(self):
-		"""
-		"""
 		printl("", self, "S")
 		
 		mainMenuList = []
@@ -544,10 +485,10 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	def getAllSections(self): 
 		"""
-			from self.g_serverDict, get a list of all the available sections
-			and deduplicate the sections list
-			@input: None
-			@return: MainMenu for DP_MainMenu and alters the global value g_sectionList for other functions
+		from self.g_serverDict, get a list of all the available sections
+		and deduplicate the sections list
+		@input: None
+		@return: MainMenu for DP_MainMenu and alters the global value g_sectionList for other functions
 		"""
 		printl("", self, "S")
 		  
@@ -771,9 +712,8 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def addGUIItem(self, url, details, extraData, context, seenVisu, folder=True ):
-		"""
-		"""
 		printl("", self, "S")
+
 		if details.get('title','') == '':
 			printl('leaving now because title is empty', self, "I")
 			printl("", self, "C")
@@ -783,11 +723,6 @@ class PlexLibrary(Screen):
 			printl("no token found .. using g_myplex_accessToken", self, "D")
 			extraData['token']=self.g_myplex_accessToken
 
-		#aToken=self.getAuthDetails(extraData)
-		#uToken = self.get_uTokenForServer()
-		#aToken=self.getAuthDetails(extraData, prefix='?')
-		#aToken = self.get_aTokenForServer()
-		
 		#Create the URL to pass to the item
 		if ( not folder) and ( extraData['type'] =="Picture" ):
 			newUrl = str(url) + self.get_aTokenForServer()
@@ -795,23 +730,17 @@ class PlexLibrary(Screen):
 			newUrl= str(url) + self.get_uTokenForServer()
 
 		printl("URL to use for listing: " + newUrl, self, "D")
-	
-		#xcontent = (newUrl, details, extraData, context)
-		
+
 		content = (details.get('title',''), details, extraData, context, seenVisu, newUrl)
-		# todo hier sollte weider image rein
-		
+
 		#printl("content = " + str(content), self, "D")
 		printl("", self, "C")
 		return content
-	
-	
+
 	#===============================================================================
 	# 
 	#===============================================================================
 	def getSectionUrl(self, address, path):
-		"""
-		"""
 		printl("", self, "S")
 
 		sectionUrl = 'http://%s%s' % ( address, path)
@@ -825,10 +754,10 @@ class PlexLibrary(Screen):
 	#====================================================================
 	def getAuthDetails(self, details, url_format=True, prefix="&" ): 
 		"""
-			Takes the token and creates the required arguments to allow
-			authentication.  This is really just a formatting tools
-			@input: token as dict, style of output [opt] and prefix style [opt]
-			@return: header string or header dict
+		Takes the token and creates the required arguments to allow
+		authentication.  This is really just a formatting tools
+		@input: token as dict, style of output [opt] and prefix style [opt]
+		@return: header string or header dict
 		"""
 		printl("", self, "S")
 		
@@ -855,11 +784,11 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def getMyPlexURL(self, url_path):
 		"""
-			Connect to the my.plexapp.com service and get an XML pages
-			A seperate function is required as interfacing into myplex
-			is slightly different than getting a standard URL
-			@input: url to get, whether we need a new token, whether to display on screen err
-			@return: an xml page as string or false
+		Connect to the my.plexapp.com service and get an XML pages
+		A seperate function is required as interfacing into myplex
+		is slightly different than getting a standard URL
+		@input: url to get, whether we need a new token, whether to display on screen err
+		@return: an xml page as string or false
 		"""
 		printl("", self, "S")
 		printl("url = " + MYPLEX_SERVER + url_path, self, "D")
@@ -924,15 +853,7 @@ class PlexLibrary(Screen):
 		base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
 		token = None
 		
-		myplex_header = []
-		# todo add function to return version
-		myplex_header.append('X-Plex-Platform: Enigma2')
-		myplex_header.append('X-Plex-Platform-Version: oe2.0')
-		myplex_header.append('X-Plex-Provides: player')
-		myplex_header.append('X-Plex-Product: DreamPlex')
-		myplex_header.append('X-Plex-Version: 0.9.2beta')  
-		myplex_header.append('X-Plex-Device: DM500HD')
-		myplex_header.append('X-Plex-Client-Identifier: 1234567890')
+		myplex_header = getPlexHeader(self.g_sessionID, asString=False)
 		myplex_header.append('Authorization: Basic ' + base64string)
 		
 		printl( "Starting auth request", self, "I")
@@ -1054,7 +975,6 @@ class PlexLibrary(Screen):
 			if self.g_sessionID is None:
 				self.g_sessionID=str(uuid.uuid4())
 			
-			# TODO lets make this dynamic
 			plexHeader = getPlexHeader(self.g_sessionID)
 
 			conn = httplib.HTTPConnection(server)#,timeout=5)
@@ -1188,14 +1108,8 @@ class PlexLibrary(Screen):
 						server=self.g_nasoverrideip
 						printl("Overriding server with: " + server, self, "I")
 						
-					#===========================================================
-					# nasuser = __settings__.getSetting('self.g_nasuserid')
-					#===========================================================
 					nasuser = self.g_nasuserid
 					if not nasuser == "":
-						#=======================================================
-						# loginstring=__settings__.getSetting('self.g_nasuserid')+":"+__settings__.getSetting('naspass')+"@"
-						#=======================================================
 						loginstring = self.g_nasuserid +":"+ self.g_naspass + "@"
 						printl("Adding AFP/SMB login info for user " + nasuser, self, "I")
 					
@@ -1453,9 +1367,9 @@ class PlexLibrary(Screen):
 			#Create URL based on whether we are going to flatten the season view
 			if self.g_flatten == "2":
 				printl("Flattening all shows", self, "I")
-				u='http://%s%s&mode=%s'  % ( server, extraData['key'].replace("children","allLeaves"), str(_MODE_TVEPISODES))
+				u='http://%s%s'  % ( server, extraData['key'].replace("children","allLeaves"))
 			else:
-				u='http://%s%s&mode=%s'  % ( server, extraData['key'], str(_MODE_TVEPISODES))
+				u='http://%s%s'  % ( server, extraData['key'])
 				
 			#Right, add that link...and loop around for another entry
 			content = self.addGUIItem(u,details,extraData, context, seenVisu)
@@ -1469,11 +1383,8 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def getSeasonsOfShow(self, url, tree=None): 
-		"""
-		"""
 		printl("", self, "S")
-		#Get URL, XML and parse
-		
+
 		server=self.getServerFromURL(url)
 		self.g_currentServer = server
 		
@@ -1554,8 +1465,8 @@ class PlexLibrary(Screen):
 			if extraData['fanart_image'] == "":
 				extraData['fanart_image'] = sectionart
 	
-			url='http://%s%s&mode=%s' % ( server , extraData['key'], str(_MODE_TVEPISODES) )
-	
+			url='http://%s%s' % ( server , extraData['key'])
+
 			if self.g_skipcontext == "false":
 				context=self.buildContextMenu(url, season)
 			else:
@@ -1572,8 +1483,6 @@ class PlexLibrary(Screen):
 	# 
 	#===============================================================================
 	def getEpisodesOfSeason(self, url, tree=None ): 	
-		"""
-		"""
 		printl("", self, "S")
 		
 		server=self.getServerFromURL(url)
@@ -2336,9 +2245,9 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def artist(self, url, tree=None ): 
 		"""
-			Process artist XML and display data
-			@input: url of XML page, or existing tree of XML page
-			@return: nothing
+		Process artist XML and display data
+		@input: url of XML page, or existing tree of XML page
+		@return: nothing
 		"""
 		printl("", self, "S")
 
@@ -2371,9 +2280,12 @@ class PlexLibrary(Screen):
 					   'ratingKey'	: artist.get('title','') ,
 					   'key'		  : artist.get('key','') }
 	
-			url='http://%s%s&mode=%s' % (server, extraData['key'], str(_MODE_ALBUMS) )
-			
-			self.addGUIItem(url,details,extraData) 
+			url = 'http://%s%s' % (server, extraData['key'])
+
+			context = {}
+			seenVisu = None
+
+			self.addGUIItem(url, details, extraData, context, seenVisu)
 			printl("", self, "C")   
 
 	#===============================================================================
@@ -2424,7 +2336,7 @@ class PlexLibrary(Screen):
 			context = {}
 			context["watchedURL"]				 = "1"
 										
-			url='http://%s%s&mode=%s' % (server, extraData['key'], str(_MODE_TRACKS) )
+			url='http://%s%s' % (server, extraData['key'] )
 	
 			#context = None
 			seenVisu = None
@@ -2810,10 +2722,10 @@ class PlexLibrary(Screen):
 	#============================================================================
 	def getLinkURL(self, url, pathData, server ): 
 		"""
-			Investigate the passed URL and determine what is required to 
-			turn it into a usable URL
-			@ input: url, XML data and PM server address
-			@ return: Usable http URL
+		Investigate the passed URL and determine what is required to
+		turn it into a usable URL
+		@ input: url, XML data and PM server address
+		@ return: Usable http URL
 		"""
 		printl("", self, "S")
 
@@ -2887,6 +2799,29 @@ class PlexLibrary(Screen):
 			printl("Plex Client Capability = " + self.g_capability, self, "I")
 			
 			printl("", self, "C")   
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getSeenVisus(self):
+		printl("", self, "S")
+
+		tree = Singleton().getSkinParamsInstance()
+
+		for seenPic in tree.findall('seenPic'):
+			self.seenPic = str(seenPic.get('path'))
+			printl("self.seenPic: " + str(self.seenPic), self, "D")
+
+		for startedPic in tree.findall('startedPic'):
+			self.startedPic = str(startedPic.get('path'))
+			printl("self.startedPic: " + str(self.startedPic), self, "D")
+
+		for unseenPic in tree.findall('unseenPic'):
+			self.unseenPic = str(unseenPic.get('path'))
+			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
+
+
+		printl("", self, "C")
 
 	#===========================================================================
 	# 

@@ -704,18 +704,29 @@ def loadPicture(filename):
 #===========================================================================
 #
 #===========================================================================
-def getPlexHeader(g_sessionID):
+def getPlexHeader(g_sessionID, asString = True):
 	printl2("", "__common__::getPlexHeader", "S")
 
 	boxData = getBoxInformation()
-	plexHeader={'X-Plex-Platform': "Enigma2",
-				'X-Plex-Platform-Version': boxData[3],
-				'X-Plex-Provides': "player",
-				'X-Plex-Product': "DreamPlex",
-				'X-Plex-Version': "",
-				'X-Plex-Device': boxData[0],
-				'X-Plex-Client-Identifier': g_sessionID,
-				'X-Plex-Device-Name': boxData[1]}
+
+	if asString:
+		plexHeader={'X-Plex-Platform': "Enigma2",
+					'X-Plex-Platform-Version': boxData[3],
+					'X-Plex-Provides': "player",
+					'X-Plex-Product': "DreamPlex",
+					'X-Plex-Version': "1",
+					'X-Plex-Device': boxData[0],
+					'X-Plex-Client-Identifier': g_sessionID,
+					'X-Plex-Device-Name': boxData[1]}
+	else:
+		plexHeader = []
+		plexHeader.append('X-Plex-Platform: Enigma2')
+		plexHeader.append('X-Plex-Platform-Version: ' + boxData[3])
+		plexHeader.append('X-Plex-Provides: player')
+		plexHeader.append('X-Plex-Product: DreamPlex')
+		plexHeader.append('X-Plex-Version: 1')
+		plexHeader.append('X-Plex-Device: ' +  boxData[0])
+		plexHeader.append('X-Plex-Client-Identifier: ' + g_sessionID)
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
