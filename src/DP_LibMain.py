@@ -130,7 +130,7 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [])
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, filter=myFilter, cache=cache)
+		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, myFilter=myFilter, cache=cache)
 		
 		printl("", self, "C")
 
