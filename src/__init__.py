@@ -38,10 +38,9 @@ from Components.Language import language
 
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_LANGUAGE
 
-from __plugin__ import registerPlugin, Plugin
-from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
-
 from DPH_Singleton import Singleton
+
+from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 #===============================================================================
 #
@@ -288,6 +287,7 @@ def loadPlexPlugins():
 	from DP_LibMovies import DP_LibMovies
 	from DP_LibShows import DP_LibShows
 	from DP_LibMusic import DP_LibMusic
+	from __plugin__ import registerPlugin, Plugin
 
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))

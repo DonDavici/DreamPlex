@@ -685,7 +685,7 @@ def convertSize(size):
 
 #===========================================================================
 # 
-#===========================================================================	
+#===========================================================================
 def loadPicture(filename):
 	printl2("", "__common__::loadPicture", "S")
 	ptr = None
@@ -700,3 +700,22 @@ def loadPicture(filename):
 	printl2("filename: " + str(filename), "__common__::loadPicture", "D")
 	printl2("", "__common__::loadPicture", "C")
 	return ptr
+
+#===========================================================================
+#
+#===========================================================================
+def getPlexHeader(g_sessionID):
+	printl2("", "__common__::getPlexHeader", "S")
+
+	boxData = getBoxInformation()
+	plexHeader={'X-Plex-Platform': "Enigma2",
+				'X-Plex-Platform-Version': boxData[3],
+				'X-Plex-Provides': "player",
+				'X-Plex-Product': "DreamPlex",
+				'X-Plex-Version': "",
+				'X-Plex-Device': boxData[0],
+				'X-Plex-Client-Identifier': g_sessionID,
+				'X-Plex-Device-Name': boxData[1]}
+
+	printl2("", "__common__::getPlexHeader", "C")
+	return plexHeader
