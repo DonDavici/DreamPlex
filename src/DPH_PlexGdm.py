@@ -224,7 +224,8 @@ class PlexGdm(object):
 	def discover(self):
 		printl("", self, "S")
 
-		sock = socket.socket(socket.SOCK_DGRAM)
+		#noinspection PyArgumentEqualDefault
+		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 		# Set a timeout so the socket does not block indefinitely
 		sock.settimeout(0.6)
@@ -236,15 +237,15 @@ class PlexGdm(object):
 		returnData = []
 		try:
 			# Send data to the multicast group
-			printl("Sending discovery messages: %s" % self.discover_message, self, "D")
+			printl("Sending discovery messages: %s" % str(self.discover_message), self, "D")
 			sock.sendto(self.discover_message, self.discover_group)
 
 			# Look for responses from all recipients
 			while True:
 				try:
 					data, server = sock.recvfrom(1024)
-					printl("Received data from %s" % server, self, "D")
-					printl("Data received is:\n %s" % data, self, "D")
+					printl("Received data from %s" % str(server), self, "D")
+					printl("Data received is:\n %s" % str(data), self, "D")
 					returnData.append({'from': server,
 					                   'data': data})
 				except socket.timeout:
@@ -294,9 +295,9 @@ class PlexGdm(object):
 		if not self.server_list:
 			printl("No servers have been discovered", self, "D")
 		else:
-			printl("Number of servers Discovered: %s" % len(self.server_list), self, "D")
+			printl("Number of servers Discovered: %s" % str(len(self.server_list)), self, "D")
 			for items in self.server_list:
-				printl("Server Discovered: %s" % items['serverName'], self, "D")
+				printl("Server Discovered: %s" % str(items['serverName']), self, "D")
 
 		printl("", self, "C")
 
