@@ -74,15 +74,18 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session):
+	def __init__(self, session, allowOverride=True):
 		printl("", self, "S")
 		Screen.__init__(self, session)
+		self.selectionOverride = None
+		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
+		self.session = session
 		
 		self["title"] = StaticText()
 		self["welcomemessage"] = StaticText()
 		
 		# get all our servers as list
-		self.getServerList()
+		self.getServerList(allowOverride)
 		
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -129,6 +132,7 @@ class DPS_MainMenu(Screen):
 	def checkSelectionOverride(self):
 		printl("", self, "S")
 		printl("self.selectionOverride: " + str(self.selectionOverride), self, "D")
+
 		if self.selectionOverride is not None:
 			self.okbuttonClick(self.selectionOverride)
 
@@ -142,11 +146,6 @@ class DPS_MainMenu(Screen):
 
 		self.session.openWithCallback(self.executeWakeOnLan, MessageBox, _("Plexserver seems to be offline. Start with Wake on Lan settings? \n\nPlease note: \nIf you press yes the spinner will run for " + str(self.g_woldelay) + " seconds. \nAccording to your settings."), MessageBox.TYPE_YESNO)
 
-		if not self.secondRun:
-			self.selectionOverride = None
-			self.secondRun = True # now that the screen is shown the onShown will not trigger our message so we use this param to force it
-			self.onShown.remove(self.showOfflineMessage)
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -155,18 +154,23 @@ class DPS_MainMenu(Screen):
 	def showOfflineMessage(self):
 		printl("", self, "S")
 
-		self.session.openWithCallback(self.setMainMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!"), MessageBox.TYPE_INFO)
-
-		if not self.secondRun:
-			self.selectionOverride = None
-			self.secondRun = True # now that the screen is shown the onShown will not trigger our message so we use this param to force it
-			self.onShown.remove(self.showOfflineMessage)
+		self.session.openWithCallback(self.setMainMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
 
 		printl("", self, "C")
 
-	def setMainMenu(self):
-		self["menu"].setList(self.menu_main_list)
+	#===========================================================================
+	#
+	#===========================================================================
+	def setMainMenu(self, answer):
+		printl("", self, "S")
+		printl("answer: " + str(answer), self, "D")
 
+		if answer:
+			self.checkServerState()
+		else:
+			self.session.open(DPS_MainMenu,allowOverride=False)
+
+		printl("", self, "C")
 #===============================================================================
 # KEYSTROKES
 #===============================================================================
@@ -176,7 +180,7 @@ class DPS_MainMenu(Screen):
 	#===============================================================
 	def okbuttonClick(self, selectionOverride = None):
 		printl("", self, "S")
-		
+
 		# this is used to step in directly into a server when there is only one entry in the serverlist
 		if selectionOverride is not None:
 			selection = selectionOverride
@@ -499,15 +503,10 @@ class DPS_MainMenu(Screen):
 		printl("Plexserver State: " + str(stateText), self, "I")
 		if not isOnline:
 			if self.g_wolon == True and connectionType == "0":
-				if self.secondRun:
-					self.showWakeMessage()
-				else:
-					self.onShown.append(self.showWakeMessage)
+				self.showWakeMessage()
+
 			else:
-				if self.secondRun:
-					self.showOfflineMessage()
-				else:
-					self.onShown.append(self.showOfflineMessage)
+				self.showOfflineMessage()
 		else:
 			self.getServerData()
 		
@@ -640,7 +639,7 @@ class DPS_MainMenu(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def getServerList(self):
+	def getServerList(self, allowOverride=True):
 			printl("", self, "S")
 			
 			self.mainMenuList = []
@@ -655,7 +654,8 @@ class DPS_MainMenu(Screen):
 					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
 					
 					# automatically enter the server if wanted
-					if serverConfig.autostart.value:
+					if serverConfig.autostart.value and allowOverride:
+						printl("here", self, "D")
 						self.selectionOverride = [serverName, Plugin.MENU_SERVER, serverConfig]
 		
 			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
