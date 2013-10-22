@@ -1865,15 +1865,13 @@ class DP_View(Screen, NumericalTextInput):
 				if choice[1].supportStillPicture:
 					self.session.open(choice[1].start, selection[1])
 				else:
-					if self.has_key("backdrop"):
-						self["backdrop"].finishStillPicture()
 					self.session.openWithCallback(self.pluginCallback, choice[1].start, selection[1])
 					
 			elif choice[1].fnc:
+				printl("here", self, "D")
+				choice[1].fnc()
 				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
-					self["backdrop"].finishStillPicture()
-				choice[1].fnc(self.session, selection[1])
-				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
+					printl("there", self, "D")
 					self.refresh()
 		
 		printl("", self, "C")
