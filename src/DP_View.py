@@ -2014,12 +2014,12 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["thumb"]
-		download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
-		printl( "download url " + download_url, self, "D")
+		if download_url:
+			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
+			printl( "download url " + download_url, self, "D")
 		
-		if download_url == "":
+		if not download_url:
 			printl("no pic data available", self, "D")
-		
 		else:
 			printl("starting download", self, "D")
 			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)).addCallback(lambda _: self.showPoster(forceShow = True))
@@ -2033,12 +2033,12 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
-		download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
-		printl( "download url " + download_url, self, "D")	
+		if download_url:
+			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
+			printl( "download url " + download_url, self, "D")	
 		
-		if download_url == "":
+		if not download_url:
 			printl("no pic data available", self, "D")
-			
 		else:
 			printl("starting download", self, "D")	
 			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop(forceShow = True))
