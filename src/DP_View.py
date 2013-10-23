@@ -137,6 +137,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("libraryName: " + str(libraryName), self, "D")
 
 		self.skinName = self.myParams["screen"]#viewName[2]
+		printl("self.skinName: " + str(self.skinName), self, "D")
 		self.select = select
 		self.cache = cache
 		self.onFirstExecSort = sort
@@ -1052,6 +1053,8 @@ class DP_View(Screen, NumericalTextInput):
 			
 			#details
 			viewMode	= details['viewMode']
+			self.viewMode = self.details ["viewMode"]
+
 			server		= details['server']
 			printl("viewMode: " +str(viewMode), self, "D")
 			printl("server: " +str(server), self, "D")
@@ -1343,7 +1346,7 @@ class DP_View(Screen, NumericalTextInput):
 		# show content for selected list item
 		selection = self["listview"].getCurrent()
 		viewMode = selection[1]['viewMode']
-		
+
 		self.isDirectory = False
 		if viewMode == "directory":
 			self.isDirectory = True
@@ -2066,7 +2069,19 @@ class DP_View(Screen, NumericalTextInput):
 		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
 		
 		self.resetGuiElementsInFastScrollMode()
-		
+
+		if "runtimePos" in self.myParams:
+			printl("jajajajajaj", self, "D")
+			value = self.myParams["runtimePos"]
+			coordinates = value.split(",")
+			printl("coordinates x: " + str(coordinates[0]), self , "D")
+			printl("coordinates y: " + str(coordinates[1]), self , "D")
+
+			self["runtime"].setPosition(coordinates[0], coordinates[1])
+			postion = self["runtime"].getPosition()
+
+			printl("postion: " + str(postion), self , "D")
+
 		printl("", self, "C")
 
 	#===========================================================================

@@ -83,11 +83,19 @@ def getViewsFromSkinParams(myType):
 	for view in tree.findall(myType):
 		name = str(view.get('name'))
 		currentParams = {}
-		
+
+		# check if there are special settings for subViews like Seasons or Episodes
+		useMe, subViewParams = getSubViewParams(view, defaultParams)
+
+		# use them only if we found something
+		if useMe:
+			currentParams["subViews"] = subViewParams
+
 		for param in defaultParams:
 			#check if there are params that we have to override
 			value = view.get(param, None)
 			printl("value: " + str(value), __name__, "D")
+
 			# check if this value is mandatory
 			# if we are mandatory we stop here
 			if defaultParams[param] == "mandatory" and value is None:
@@ -117,6 +125,31 @@ def getViewsFromSkinParams(myType):
 	printl("availableViewList: " + str(availableViewList), __name__, "D")
 	printl("", __name__, "C")
 	return availableViewList
+
+#===========================================================================
+#
+#===========================================================================
+def getSubViewParams(tree, defaultParams):
+	printl("", __name__, "S")
+
+	useMe = False
+	myDict = {}
+
+	for view in tree.findall("subView"):
+		useMe = True
+		name = view.get("name", None)
+		myDictParams = {}
+		for param in defaultParams:
+			value = view.get(param, None)
+			printl("value: " + str(value), __name__, "D")
+
+			if value is not None:
+				myDictParams[param] = value
+
+		myDict[name] = myDictParams
+
+	printl("", __name__, "C")
+	return useMe, myDict
 
 #===========================================================================
 # 

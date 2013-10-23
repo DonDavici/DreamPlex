@@ -37,6 +37,10 @@
 		defaults["poster_postfix"]		= "_poster.jpg"
 		defaults["current"]				= True
 		defaults["total"]				= True
+
+		# these elements can also be repositioned
+		# if you want to do that just do the following:
+		# e.g. audio="True/300,300"
 		defaults["functionsContainer"]	= True
 		defaults["showBackdrop"]		= True
 		defaults["showPoster"]			= True
@@ -64,7 +68,10 @@
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
+	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList">
+		<subView name="ShowEpisodes" runtime="True/300,300" />
+		<subView name="ShowSeasons" runtime="True/400,400" />
+	</showView>
 	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
 
