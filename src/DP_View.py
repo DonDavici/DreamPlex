@@ -1448,11 +1448,17 @@ class DP_View(Screen, NumericalTextInput):
 
 				# now lets switch images
 				if self.changePoster == True and self.myParams["showPoster"] == True:
-					self.showPoster()
+					try:
+						self.showPoster()
+					except Exception, e:
+						printl("Error: something went wrong with the poster ... " + str(e), self, "D")
 
 				if self.fastScroll == False or self.showMedia == True:
 					if self.changeBackdrop == True and self.myParams["showBackdrop"] == True:
-						self.showBackdrop()
+						try:
+							self.showBackdrop()
+						except Exception, e:
+							printl("Error: something went wrong with the poster ... " + str(e), self, "D")
 
 				self.showFunctions(False)
 
