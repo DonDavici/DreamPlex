@@ -136,6 +136,7 @@ class PlexLibrary(Screen):
 	g_serverVersion=None
 	g_myplex_accessTokenDict = {}
 	g_sectionCache = None
+	g_multiUser = False # this is only true if we use myPlex Connection and we have a plexPlass Account active on the server
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -1998,7 +1999,8 @@ class PlexLibrary(Screen):
 		
 		multiUserServer = False
 		# multiuser works only if the server is compatible
-		if self.getServerVersion() >= "0.9.8.0":
+		self.getServerData()
+		if self.g_serverVersion >= "0.9.8.0" and self.g_multiUser:
 			multiUserServer = True
 		
 		printl("multiUserServer (version): " + str(multiUserServer),self,"I")
@@ -2851,28 +2853,32 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getServerVersion(self):
+	def getServerData(self):
 		printl("", self, "S")
 
 		if self.g_address is None:
 			self.g_serverVersion = self.g_myplex_accessTokenDict[self.g_currentServer]["serverVersion"].split('-')[0]
 			
 		if self.g_serverVersion is None:
-			url = self.g_address + "/servers"
+			url = self.g_address
 			xml = self.doRequest(url)
+
+			printl("xml: " + str(xml), self, "D")
 			
-			tree = etree.fromstring(xml).findall("Server")
+			tree = etree.fromstring(xml).findall("MediaContainer")
 
 			# this should be only one run. maybe i find a way to read directly without the for :-)
-			for server in tree:
-				version = server.get("version").split('-')[0]
-
-				self.g_serverVersion = str(version)
+			for entry in tree:
+				self.g_serverVersion = str(entry.get("version").split('-')[0])
+				if str(entry.get("version")) == "1":
+					self.g_multiUser = True
+				else:
+					self.g_multiUser = False
 			
 		printl("self.g_serverVersion: " + str(self.g_serverVersion), self, "D")
+		printl("self.g_multiUser: " + str(self.g_multiUser), self, "D")
 
 		printl("", self, "C")
-		return self.g_serverVersion
 
 	#===========================================================================
 	# 
