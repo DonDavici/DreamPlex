@@ -1762,16 +1762,6 @@ class PlexLibrary(Screen):
 			
 		tags=tree.getiterator('Stream')
 		
-		
-		audio = {	'id': -1,
-						'index': 		-1,
-						'language':	 	"None",
-						'languageCode': "NA",
-						'format': 		"None",
-						'partid' : 	partitem[0]
-					}
-			   
-		audioList.append(audio)
 		for bits in tags:
 			stream=dict(bits.items())
 			if stream['streamType'] == '2': #audio
