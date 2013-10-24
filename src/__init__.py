@@ -148,7 +148,7 @@ def printGlobalSettings():
 #===============================================================================
 # 
 #===============================================================================
-def initServerEntryConfig(data = None):
+def initServerEntryConfig():
 	printl("", "__init__::initServerEntryConfig", "S")
 
 	config.plugins.dreamplex.Entries.append(ConfigSubsection())
@@ -157,12 +157,6 @@ def initServerEntryConfig(data = None):
 	defaultName = "PlexServer"
 	defaultIp = [192,168,0,1]
 	defaultPort = 32400
-
-	if data is not None:
-		ipBlocks = data.get("server").split(".")
-		defaultName = data.get("serverName")
-		defaultIp = [int(ipBlocks[0]),int(ipBlocks[1]),int(ipBlocks[2]),int(ipBlocks[3])]
-		defaultPort = int(data.get("port"))
 
 	# SERVER SETTINGS
 	config.plugins.dreamplex.Entries[i].id				= ConfigInteger(i)
