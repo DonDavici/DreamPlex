@@ -2020,6 +2020,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["thumb"]
+
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 			printl( "download url " + download_url, self, "D")
@@ -2039,6 +2040,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		download_url = self.extraData["fanart_image"]
+		printl("download_url:" + str(download_url), self, "D")
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 			printl( "download url " + download_url, self, "D")	

@@ -2552,7 +2552,8 @@ class PlexLibrary(Screen):
 		@ return formatted URL
 		"""
 		printl("", self, "S")
-		
+		printl("myType: " + str(myType), self, "D")
+
 		image = data.get(myType,'').split('?t')[0]
 
 		if image == '':
@@ -2578,7 +2579,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def photoTranscode(self, server, url, width=None, height=None):
+	def photoTranscode(self, server, url, width=999, height=999):
 		printl("", self, "S")
 
 		transcode_url = None
