@@ -509,7 +509,13 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		if entry is None:
 			self.newmode = 1
-			self.current = initServerEntryConfig(data)
+			self.current = initServerEntryConfig()
+			if data is not None:
+				ipBlocks = data.get("server").split(".")
+				self.current.name.value = data.get("serverName")
+				self.current.ip.value = [int(ipBlocks[0]),int(ipBlocks[1]),int(ipBlocks[2]),int(ipBlocks[3])]
+				self.current.port.value = int(data.get("port"))
+				self.keySave(True)
 
 		else:
 			self.newmode = 0
@@ -661,16 +667,19 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def keySave(self):
+	def keySave(self, stayOpen = False):
 		printl("", self, "S")
 		
 		if self.newmode == 1:
 			config.plugins.dreamplex.entriescount.value += 1
 			config.plugins.dreamplex.entriescount.save()
-		ConfigListScreen.keySave(self)
+		config.plugins.dreamplex.entriescount.save()
+		config.plugins.dreamplex.Entries.save()
 		config.plugins.dreamplex.save()
 		configfile.save()
-		self.close()
+
+		if not stayOpen:
+			self.close()
 		
 		printl("", self, "C")
 
