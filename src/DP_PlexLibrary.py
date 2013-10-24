@@ -1999,7 +1999,7 @@ class PlexLibrary(Screen):
 		
 		multiUserServer = False
 		# multiuser works only if the server is compatible
-		self.getServerData()
+		self.setServerDetails(playurl)
 		if self.g_serverVersion >= "0.9.8.0" and self.g_multiUser:
 			multiUserServer = True
 		
@@ -2853,27 +2853,20 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getServerData(self):
+	def setServerDetails(self, playurl):
 		printl("", self, "S")
 
-		if self.g_address is None:
-			self.g_serverVersion = self.g_myplex_accessTokenDict[self.g_currentServer]["serverVersion"].split('-')[0]
-			
-		if self.g_serverVersion is None:
-			url = self.g_address
-			xml = self.doRequest(url)
+		url = self.getServerFromURL(playurl)
+		xml = self.doRequest(url)
 
-			printl("xml: " + str(xml), self, "D")
-			
-			tree = etree.fromstring(xml).findall("MediaContainer")
+		printl("xml: " + str(xml), self, "D")
 
-			# this should be only one run. maybe i find a way to read directly without the for :-)
-			for entry in tree:
-				self.g_serverVersion = str(entry.get("version").split('-')[0])
-				if str(entry.get("version")) == "1":
-					self.g_multiUser = True
-				else:
-					self.g_multiUser = False
+		tree = etree.fromstring(xml)
+		self.g_serverVersion = str(tree.get("version").split('-')[0])
+		if str(tree.get("multiuser")) == "1":
+			self.g_multiUser = True
+		else:
+			self.g_multiUser = False
 			
 		printl("self.g_serverVersion: " + str(self.g_serverVersion), self, "D")
 		printl("self.g_multiUser: " + str(self.g_multiUser), self, "D")
