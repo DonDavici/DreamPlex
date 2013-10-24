@@ -1887,8 +1887,8 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("choice" + str(choice), self, "D")
 		
-		Singleton().getPlexInstance().setAudioById(choice[4], choice[3], choice[2], choice[5])
-		
+		Singleton().getPlexInstance().setAudioById(choice[4], choice[3], choice[5])
+
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -1902,7 +1902,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("choice" + str(choice), self, "D")
 
-		Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2], choice[5])
+		Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[5])
 		
 		printl("", self, "C")
 	

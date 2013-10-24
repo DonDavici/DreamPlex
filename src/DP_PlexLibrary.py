@@ -894,7 +894,7 @@ class PlexLibrary(Screen):
 	#============================================================================
 	def doRequest(self, url, myType="GET" ):
 		printl("", self, "S")
-
+		printl("url: " + str(url), self, "D")
 		server = self.getServerFromURL(url)
 		urlPath = self.getUrlPathFormURL(url)
 		self.urlPath = urlPath
