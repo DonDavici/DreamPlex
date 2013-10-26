@@ -1999,7 +1999,7 @@ class PlexLibrary(Screen):
 		
 		multiUserServer = False
 		# multiuser works only if the server is compatible
-		self.setServerDetails(playurl)
+		self.setServerDetails()
 		if self.g_serverVersion >= "0.9.8.0" and self.g_multiUser:
 			multiUserServer = True
 		
@@ -2854,10 +2854,10 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setServerDetails(self, playurl):
+	def setServerDetails(self):
 		printl("", self, "S")
 
-		url = self.getServerFromURL(playurl)
+		url = self.getServerFromURL(self.g_currentServer)
 		xml = self.doRequest(url)
 
 		printl("xml: " + str(xml), self, "D")
