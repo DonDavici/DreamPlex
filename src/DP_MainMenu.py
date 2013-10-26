@@ -355,7 +355,7 @@ class DPS_MainMenu(Screen):
 		elif self.selectedEntry.fnc is not None:
 			self.selectedEntry.fnc(self.session)
 		
-		self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
+		#self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
 		
 		printl("", self, "C")
 	
