@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 DreamPlex Plugin by DonDavici, 2012
  
@@ -18,6 +19,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
+
 """
 #===============================================================================
 # IMPORT
@@ -159,7 +161,10 @@ class DP_Player(MoviePlayer):
 		self.service = sref
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
-		self["bufferslider"].setValue(1)
+		if self.playbackType == "2":
+			self["bufferslider"].setValue(100)
+		else:
+			self["bufferslider"].setValue(1)
 		self["mediaTitle"] = StaticText(self.title)
 		self["label_update"] = StaticText()
 		self.bufferSeconds = 0
@@ -197,7 +202,7 @@ class DP_Player(MoviePlayer):
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
 
-		if self.multiUserServer == True and self.connectionType == "2" and self.playbackType == "1":
+		if self.multiUserServer == True and self.connectionType == "2":
 			self.multiUser = True
 			
 		if self.multiUser:
@@ -217,6 +222,8 @@ class DP_Player(MoviePlayer):
 			iPlayableService.evEOF: self.__evEOF,
 		})
 
+		if self.playbackType == "2":
+			self.bufferFull()
 		printl("", self, "C")
 	
 	#===========================================================================
@@ -263,6 +270,9 @@ class DP_Player(MoviePlayer):
 	def bufferInfo(self):
 		#printl("", self, "S")
 		
+		if self.playbackType == "2":
+			self.bufferFull() # redundant
+			return
 		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
 		
 		self.bufferPercent = bufferInfo[0]
