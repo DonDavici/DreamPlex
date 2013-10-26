@@ -1187,10 +1187,12 @@ class DP_View(Screen, NumericalTextInput):
 		self.newList = []
 		for listView in self.listViewList:
 			#printl("seenVisu location: " + str(listView[4]), self, "D")
-			seenVisu = loadPicture(listView[4])
-			#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
-			content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
-			self.newList.append(content)
+			seenVisu = None
+			if listView is not None:
+				seenVisu = loadPicture(listView[4])
+				#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
+				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
+				self.newList.append(content)
 		
 		self.listViewList = self.newList
 		self.origListViewList = self.newList
@@ -1342,11 +1344,14 @@ class DP_View(Screen, NumericalTextInput):
 		
 		# show content for selected list item
 		selection = self["listview"].getCurrent()
-		viewMode = selection[1]['viewMode']
+
+		if selection is not None:
+			printl("selection: " + str(selection), self, "D")
+			viewMode = selection[1]['viewMode']
 		
-		self.isDirectory = False
-		if viewMode == "directory":
-			self.isDirectory = True
+			self.isDirectory = False
+			if viewMode == "directory":
+				self.isDirectory = True
 		
 		self._refresh(selection)
 		

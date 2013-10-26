@@ -1313,6 +1313,8 @@ class PlexLibrary(Screen):
 			extraData = {}
 			extraData['type']				= "video"
 			extraData['ratingKey']			= str(show.get('ratingKey', 0)) # primary key in plex
+			extraData['parentRatingKey']    = show.get('parentRatingKey', None) # might be tv show
+			extraData['grandparentRatingKey']= show.get('grandparentRatingKey', None) # might be seaon of show
 			extraData['seenEpisodes']		= watched
 			extraData['unseenEpisodes']		= details['episode'] - watched
 			extraData['thumb']				= self.getImage(show, server, myType = "thumb")
@@ -1441,6 +1443,8 @@ class PlexLibrary(Screen):
 			extraData = {}
 			extraData['type']				= "video"
 			extraData['ratingKey']			= str(season.get('ratingKey', 0)) # primary key in plex
+			extraData['parentRatingKey']    = season.get('parentRatingKey', None) # might be tv show
+			extraData['grandparentRatingKey']= season.get('grandparentRatingKey', None) # might be seaon of show
 			extraData['seenEpisodes']		= watched
 			extraData['unseenEpisodes']		= details['episode'] - watched
 			extraData['thumb']				= self.getImage(season, server, myType = "thumb")
@@ -1575,6 +1579,8 @@ class PlexLibrary(Screen):
 			extraData = {}
 			extraData['type']					= "Video"
 			extraData['ratingKey']				= str(episode.get('ratingKey', 0)) # primary key in plex
+			extraData['parentRatingKey']    = episode.get('parentRatingKey', None) # might be tv show
+			extraData['grandparentRatingKey']= episode.get('grandparentRatingKey', None) # might be seaon of show
 			extraData['thumb']					= self.getImage(episode, server, myType = "grandparentThumb")
 			extraData['fanart_image']	 		= self.getImage(episode, server, myType = "thumb") #because this is a episode we have to use thumb
 			extraData['token']					= self.g_myplex_accessToken
@@ -2490,6 +2496,8 @@ class PlexLibrary(Screen):
 		extraData = {}
 		extraData['type']			= "Video"
 		extraData['ratingKey']		= str(movie.get('ratingKey', 0)) # primary key in plex
+		extraData['parentRatingKey']    = movie.get('parentRatingKey', None) # might be tv show
+		extraData['grandparentRatingKey']= movie.get('grandparentRatingKey', None) # might be seaon of show
 		extraData['thumb']			= self.getImage(movie, server, myType = "thumb")
 		extraData['fanart_image']	= self.getImage(movie, server, myType = "art")
 		extraData['token']			= self.g_myplex_accessToken

@@ -689,6 +689,9 @@ def convertSize(size):
 def loadPicture(filename):
 	printl2("", "__common__::loadPicture", "S")
 	ptr = None
+	if filename is None:
+		printl2("", "__common__::loadPicture", "C")
+		return ptr
 
 	if filename[-4:] == ".png":
 		ptr = loadPNG(filename)

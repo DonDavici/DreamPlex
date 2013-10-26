@@ -42,6 +42,8 @@ def getViewClass():
 #===============================================================================
 class DPS_ViewShows(DP_View):
 
+	parentSeasonId = None
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -85,7 +87,7 @@ class DPS_ViewShows(DP_View):
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
 			printl( "is ShowEpisodes special season",self, "D")
 			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]			
+			self.parentSeasonNr = self.details["ratingKey"]
 			bname = self.parentSeasonId
 			pname = self.details["ratingKey"]
 			self.startPlaybackNow = False
@@ -100,7 +102,11 @@ class DPS_ViewShows(DP_View):
 			self.startPlaybackNow = False
 
 			printl( "is episode",self, "D")
-			pname = self.parentSeasonId
+
+			if self.parentSeasonId is not None:
+				pname = self.parentSeasonId
+			else:
+				pname = self.extraData["parentRatingKey"]
 			# we dont want to have the same poster downloaded and used for each episode
 			self.changePoster = False
 			self.changeBackdrop = True
