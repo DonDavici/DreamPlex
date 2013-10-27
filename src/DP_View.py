@@ -121,6 +121,8 @@ class DP_View(Screen, NumericalTextInput):
 	changePoster                    = True
 	changeBackdrop                  = True
 	resetGuiElements                = False
+	viewStep                        = 0 # we use this to know the steps we did to store the changes form subviews
+	viewChangeStorage               = {} # we use this to save changed value if we have subViews
 
 	#===========================================================================
 	#
@@ -1347,7 +1349,7 @@ class DP_View(Screen, NumericalTextInput):
 	def _refresh(self, selection):
 		printl("", self, "S")
 		#printl("selection: " + str(selection), self, "D")
-
+		printl("ajajaja " + str(self.viewStep), self, "D")
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		printl("self.myParams: " + str(self.myParams), self, "D")
 
@@ -2081,18 +2083,25 @@ class DP_View(Screen, NumericalTextInput):
 			subViewParams = self.myParams["subViews"][myType]
 			printl("subViewParams: " + str(subViewParams), self, "D")
 
+			self.viewChangeStorage[self.viewStep] = {}
 			for element in subViewParams:
 				printl("element: " + str(element), self, "D")
+				self.viewChangeStorage[self.viewStep][element] = {}
 				params = subViewParams[element]
 				if "visible" in params:
 					visibility = params.get("visible")
+					self.viewChangeStorage[self.viewStep][element]["visible"] = not visibility
 					self.alterGuiElementVisibility(element, visibility)
 
 				if "xCoord" in params and "yCoord" in params:
 					xCoord = params.get("xCoord")
 					yCoord = params.get("yCoord")
+					position = self[element].getPosition()
+					self.viewChangeStorage[self.viewStep][element]["xCoord"] = position[0]
+					self.viewChangeStorage[self.viewStep][element]["yCoord"] = position[1]
 					self.alterGuiElementPosition(element,xCoord, yCoord)
 
+			printl("viewChangeStorage:" + str(self.viewChangeStorage), self, "D")
 		# it not we use the params form the main view
 		else:
 			pass

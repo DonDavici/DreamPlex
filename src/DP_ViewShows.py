@@ -120,12 +120,25 @@ class DPS_ViewShows(DP_ViewCine):
 	#===========================================================================
 	def onEnter(self):
 		printl("", self, "S")
-
+		self.viewStep += 1
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewShows,self).onEnter()
 
 		# this is the part we extend
 		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes":
 			self.processGuiElements(self.viewMode)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onLeave(self):
+		printl("", self, "S")
+		self.viewStep -= 1
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewShows,self).onLeave()
+
+
 
 		printl("", self, "C")
