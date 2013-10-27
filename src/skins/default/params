@@ -53,7 +53,7 @@
 		defaults["tag"] 				= True
 		defaults["shortDescription"] 	= True
 		defaults["subtitles"] 			= True
-		defaults["selectedAudio"] 		= True
+		defaults["audio"] 		= True
 		defaults["genre"] 				= True
 		defaults["year"] 				= True
 		defaults["runtime"] 			= True
@@ -69,8 +69,14 @@
 
 	<!-- SHOW VIEWS -->
 	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList">
-		<subView name="ShowEpisodes" runtime="True/300,300" />
-		<subView name="ShowSeasons" runtime="True/400,400" />
+		<subView name="ShowSeasons">
+			<element name="audio" visible="True" xCoord="300" yCoord="300"/>
+			<element name="genre" visible="False"/>
+		</subView>
+		<subView name="ShowEpisodes">
+			<element name="genre" visible="True" xCoord="300" yCoord="300"/>
+			<element name="audio" visible="False"/>
+		</subView>
 	</showView>
 	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>

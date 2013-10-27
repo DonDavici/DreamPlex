@@ -258,22 +258,26 @@
                         
         <widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#5C5C5C"  backgroundColor="#000000"/>
         <widget name="rated" position="50,650" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-not-fs8.png" />
-        <eLabel text="GENRE:" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-        <eLabel text="RUNTIME:" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-        <eLabel text="YEAR:" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-        <eLabel text="SUBTITLES:" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-		<eLabel text="AUDIO:" transparent="1" zPosition="4" halign="left" position="545,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
-        
-        <widget name="selectedAudio" transparent="1" zPosition="4" halign="left" valign="top"  position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top"  position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
-        
+
+        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top"  position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="545,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00"  backgroundColor="#000000"/>
+        <widget name="audio" transparent="1" zPosition="4" halign="left" valign="top"  position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend" />
         <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
-        <widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
+        <widget name="backdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
         <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
         <widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#000000" />
@@ -365,7 +369,7 @@
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend" />
         <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
-        <widget name="mybackdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
+        <widget name="backdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend" />
         <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
         <widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#000000" />
@@ -539,7 +543,7 @@
         <widget name="poster" transparent="1" zPosition="49" position="528,220" size="195,268" alphatest="blend" />
         <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
-        <widget name="mybackdrop" transparent="0" zPosition="-2" position="0,0" size="1280,720" alphatest="blend" />
+        <widget name="backdrop" transparent="0" zPosition="-2" position="0,0" size="1280,720" alphatest="blend" />
         <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
         <widget name="functionsContainer" transparent="0" zPosition="46" position="550,510" size="720,203" backgroundColor="#000000" />
@@ -627,7 +631,7 @@
         <widget name="poster" transparent="1" zPosition="49" position="528,220" size="195,268" alphatest="blend" />
         <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
-        <widget name="mybackdrop" transparent="0" zPosition="-2" position="0,0" size="1280,720" alphatest="blend" />
+        <widget name="backdrop" transparent="0" zPosition="-2" position="0,0" size="1280,720" alphatest="blend" />
         <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
         
         <widget name="functionsContainer" transparent="0" zPosition="46" position="550,510" size="720,203" backgroundColor="#000000" />

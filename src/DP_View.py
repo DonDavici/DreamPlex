@@ -136,7 +136,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("myParams: " + str(viewName[3]), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
-		self.skinName = self.myParams["screen"]#viewName[2]
+		self.skinName = self.myParams["settings"]["screen"]#viewName[2]
 		printl("self.skinName: " + str(self.skinName), self, "D")
 		self.select = select
 		self.cache = cache
@@ -212,15 +212,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("myParams: " + str(viewName[3]), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
-
-		self.myParams = viewName[3]
 		printl("cache: " + str(cache), self, "D")
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
 
 		# set image names to use
-		self.poster_postfix = self.myParams["poster_postfix"]
-		self.backdrop_postfix = self.myParams["backdrop_postfix"]
+		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
+		self.backdrop_postfix = self.myParams["elements"]["poster"]["postfix"]
 
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -259,84 +257,72 @@ class DP_View(Screen, NumericalTextInput):
 		self["txt_menu"] = Label()
 		self["txt_menu"].setText("show media functions")
 
-		if self.myParams["showPoster"]:
-			self["poster"] = Pixmap()
-			self.posterHeight = self.myParams["posterHeight"]
-			self.posterWidth = self.myParams["posterWidth"]
+		self["poster"] = Pixmap()
+		self.posterHeight = self.myParams["elements"]["poster"]["height"]
+		self.posterWidth = self.myParams["elements"]["poster"]["width"]
 
-		if self.myParams["showBackdrop"]:
-			self["mybackdrop"] = Pixmap()
-			self.backdropHeight = self.myParams["backdropHeight"]
-			self.backdropWidth = self.myParams["backdropWidth"]
+		self["backdrop"] = Pixmap()
+		self.backdropHeight = self.myParams["elements"]["poster"]["height"]
+		self.backdropWidth = self.myParams["elements"]["poster"]["width"]
 
-		if self.myParams["audio"]:
-			self["audio"] = MultiPixmap()
+		self["audio"] = MultiPixmap()
 
-		if self.myParams["resolution"]:
-			self["resolution"] = MultiPixmap()
+		self["resolution"] = MultiPixmap()
 
-		if self.myParams["aspect"]:
-			self["aspect"] = MultiPixmap()
+		self["aspect"] = MultiPixmap()
 
-		if self.myParams["codec"]:
-			self["codec"] = MultiPixmap()
+		self["codec"] = MultiPixmap()
 
-		if self.myParams["rated"]:
-			self["rated"] = MultiPixmap()
+		self["rated"] = MultiPixmap()
 
-		if self.myParams["title"]:
-			self["title"] = Label()
+		self["title"] = Label()
 
-		if self.myParams["tag"]:
-			self["tag"] = Label()
+		self["tag"] = Label()
 
-		if self.myParams["shortDescription"]:
-			self["shortDescription"] = ScrollLabel()
+		self["shortDescription"] = ScrollLabel()
 
-		if self.myParams["subtitles"]:
-			self["subtitles"] = Label()
+		self["subtitles"] = Label()
+		self["subtitlesLabel"] = Label()
+		self["subtitlesLabel"].setText("Subtitles:")
 
-		if self.myParams["selectedAudio"]:
-			self["selectedAudio"] = Label()
+		self["audio"] = Label()
+		self["audioLabel"] = Label()
+		self["audioLabel"].setText("Audio:")
 
-		if self.myParams["genre"]:
-			self["genre"] = Label()
+		self["genre"] = Label()
+		self["genreLabel"] = Label()
+		self["genreLabel"].setText("Genre:")
 
-		if self.myParams["year"]:
-			self["year"] = Label()
+		self["year"] = Label()
+		self["yearLabel"] = Label()
+		self["yearLabel"].setText("Year:")
 
-		if self.myParams["runtime"]:
-			self["runtime"] = Label()
+		self["runtime"] = Label()
+		self["runtimeLabel"] = Label()
+		self["runtimeLabel"].setText("Runtime:")
 
-		if self.myParams["total"]:
-			self["total"] = Label()
+		self["total"] = Label()
 
-		if self.myParams["current"]:
-			self["current"] = Label()
+		self["current"] = Label()
 
-		if self.myParams["backdroptext"]:
-			self["backdroptext"] = Label()
+		self["backdroptext"] = Label()
 
-		if self.myParams["postertext"]:
-			self["postertext"] = Label()
+		self["postertext"] = Label()
 
-		if self.myParams["rating_stars"]:
-			self["rating_stars"] = ProgressBar()
+		self["rating_stars"] = ProgressBar()
 
-		printl("skinName: " + str(self.skinName), self, "C")
-		self.skinName = self.myParams["screen"]
-
-		if self.myParams["showPoster"] == True or self.myParams["showBackdrop"] == True:
+		if self.myParams["elements"]["poster"]["visible"] == True or self.myParams["elements"]["backdrop"]["visible"] == True:
 			self.EXscale = (AVSwitch().getFramebufferScale())
 
-			if self.myParams["showPoster"]:
+			if self.myParams["elements"]["poster"]["visible"]:
 				self.EXpicloadPoster = ePicLoad()
 
-			if self.myParams["showBackdrop"]:
+			if self.myParams["elements"]["backdrop"]["visible"]:
 				self.EXpicloadBackdrop = ePicLoad()
 
+			self.onLayoutFinish.append(self.processGuiElements)
 			self.onLayoutFinish.append(self.setPara)
-		
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -376,7 +362,7 @@ class DP_View(Screen, NumericalTextInput):
 	
 		if multiView:
 			params = viewName[3]
-			self.itemsPerPage = int(params['itemsPerPage'])
+			self.itemsPerPage = int(params["settings"]['itemsPerPage'])
 		else:
 			tree = Singleton().getSkinParamsInstance()
 			for view in tree.findall('view'):
@@ -1363,11 +1349,13 @@ class DP_View(Screen, NumericalTextInput):
 		#printl("selection: " + str(selection), self, "D")
 
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
+		printl("self.myParams: " + str(self.myParams), self, "D")
+
 
 		if self.resetGuiElements:
 			self.resetGuiElementsInFastScrollMode()
 
-		if self.myParams["showBackdrop"] or self.myParams["showPoster"]:
+		if self.myParams["elements"]["backdrop"]["visible"] or self.myParams["elements"]["poster"]["visible"]:
 			self.resetCurrentImages()
 
 		printl("showMedia: " + str(self.showMedia), self, "D")
@@ -1384,7 +1372,7 @@ class DP_View(Screen, NumericalTextInput):
 			else:
 				# lets get all data we need to show the needed pictures
 				# we also check if we want to play
-				if self.myParams["showBackdrop"] == True or self.myParams["showPoster"] == True:
+				if self.myParams["elements"]["backdrop"]["visible"] == True or self.myParams["elements"]["poster"]["visible"] == True:
 					self.getPictureInformationToLoad()
 
 				# lets set the urls for context functions of the selected entry
@@ -1402,59 +1390,59 @@ class DP_View(Screen, NumericalTextInput):
 					if self.startPlaybackNow:
 						self.startThemePlayback()
 
-				if self.myParams["title"]:
+				if self.myParams["elements"]["title"]["visible"]:
 					self.setText("title", self.details.get("title", " "))
 
-				if self.myParams["tag"]:
+				if self.myParams["elements"]["tag"]["visible"]:
 					self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 
-				if self.myParams["year"]:
+				if self.myParams["elements"]["year"]["visible"]:
 					self.setText("year", str(self.details.get("year", " - ")))
 
-				if self.myParams["genre"]:
+				if self.myParams["elements"]["genre"]["visible"]:
 					self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
 
-				if self.myParams["subtitles"]:
+				if self.myParams["elements"]["subtitles"]["visible"]:
 					self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
 
-				if self.myParams["selectedAudio"]:
-					self.setText("selectedAudio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
+				if self.myParams["elements"]["audio"]["visible"]:
+					self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
 
-				if self.myParams["runtime"]:
+				if self.myParams["elements"]["runtime"]["visible"]:
 					self.setText("runtime", str(self.details.get("runtime", " - ")))
 
-				if self.myParams["shortDescription"]:
+				if self.myParams["elements"]["shortDescription"]["visible"]:
 					self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
 
 				if self.fastScroll == False or self.showMedia == True:
 					# handle all pixmaps
-					if self.myParams["rating_stars"]:
+					if self.myParams["elements"]["rating_stars"]["visible"]:
 						self.handlePopularityPixmaps()
 
-					if self.myParams["codec"]:
+					if self.myParams["elements"]["codec"]["visible"]:
 						self.handleCodecPixmaps()
 
-					if self.myParams["aspect"]:
+					if self.myParams["elements"]["aspect"]["visible"]:
 						self.handleAspectPixmaps()
 
-					if self.myParams["resolution"]:
+					if self.myParams["elements"]["resolution"]["visible"]:
 						self.handleResolutionPixmaps()
 
-					if self.myParams["rated"]:
+					if self.myParams["elements"]["rated"]["visible"]:
 						self.handleRatedPixmaps()
 
-					if self.myParams["audio"]:
+					if self.myParams["elements"]["audio"]["visible"]:
 						self.handleSoundPixmaps()
 
 				# navigation
 				self.handleNavigationData()
 
 				# now lets switch images
-				if self.changePoster == True and self.myParams["showPoster"] == True:
+				if self.changePoster == True and self.myParams["elements"]["poster"]["visible"] == True:
 					self.showPoster()
 
 				if self.fastScroll == False or self.showMedia == True:
-					if self.changeBackdrop == True and self.myParams["showBackdrop"] == True:
+					if self.changeBackdrop == True and self.myParams["elements"]["backdrop"]["visible"] == True:
 						self.showBackdrop()
 
 				self.showFunctions(False)
@@ -1972,7 +1960,7 @@ class DP_View(Screen, NumericalTextInput):
 				ptr = self.EXpicloadBackdrop.getData()
 				
 				if ptr is not None:
-					self["mybackdrop"].instance.setPixmap(ptr)
+					self["backdrop"].instance.setPixmap(ptr)
 		
 		elif self.usePicCache :
 			if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)):
@@ -1982,7 +1970,7 @@ class DP_View(Screen, NumericalTextInput):
 					ptr = self.EXpicloadBackdrop.getData()
 					
 					if ptr is not None:
-						self["mybackdrop"].instance.setPixmap(ptr)
+						self["backdrop"].instance.setPixmap(ptr)
 	
 			else:
 				self.downloadBackdrop()
@@ -2000,13 +1988,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 		
-		if self.myParams["showPoster"]:
+		if self.myParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
 				self["poster"].instance.setPixmapFromFile(ptr)
 		
-		if self.myParams["showBackdrop"]:
+		if self.myParams["elements"]["backdrop"]["visible"]:
 			if self.resetBackdrop:
-				self["mybackdrop"].instance.setPixmapFromFile(ptr)
+				self["backdrop"].instance.setPixmapFromFile(ptr)
 		
 		printl("", self, "C")
 		
@@ -2054,12 +2042,21 @@ class DP_View(Screen, NumericalTextInput):
 	def setPara(self):
 		printl("", self, "S")
 		
-		if self.myParams["showPoster"]:
+		if self.myParams["elements"]["poster"]["visible"]:
 			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 		
-		if self.myParams["showBackdrop"]:
-			self.EXpicloadBackdrop.setPara([self["mybackdrop"].instance.size().width(), self["mybackdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		
+		if self.myParams["elements"]["backdrop"]["visible"]:
+			self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def processGuiElements(self, myType=None):
+		printl("", self, "S")
+
+		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
@@ -2067,23 +2064,99 @@ class DP_View(Screen, NumericalTextInput):
 		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
 		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
 		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
-		
+
+		# if we are in fastScrollMode we remove some gui elements
 		self.resetGuiElementsInFastScrollMode()
 
-		if "runtimePos" in self.myParams:
-			printl("jajajajajaj", self, "D")
-			value = self.myParams["runtimePos"]
-			coordinates = value.split(",")
-			printl("coordinates x: " + str(coordinates[0]), self , "D")
-			printl("coordinates y: " + str(coordinates[1]), self , "D")
+		# this is always the case when the view starts the first time
+		# in this case no need for look for subviews
+		if myType is None:
+			for element in self.myParams["elements"]:
+				printl("element:" + str(element), self, "D")
+				visibility = self.myParams["elements"][element]["visible"]
+				self.alterGuiElementVisibility(element, visibility)
 
-			self["runtime"].setPosition(coordinates[0], coordinates[1])
-			postion = self["runtime"].getPosition()
+		# now we check if we are in a special subView with its own params
+		elif myType in self.myParams["subViews"]:
+			subViewParams = self.myParams["subViews"][myType]
+			printl("subViewParams: " + str(subViewParams), self, "D")
 
-			printl("postion: " + str(postion), self , "D")
+			for element in subViewParams:
+				printl("element: " + str(element), self, "D")
+				params = subViewParams[element]
+				if "visible" in params:
+					visibility = params.get("visible")
+					self.alterGuiElementVisibility(element, visibility)
+
+				if "xCoord" in params and "yCoord" in params:
+					xCoord = params.get("xCoord")
+					yCoord = params.get("yCoord")
+					self.alterGuiElementPosition(element,xCoord, yCoord)
+
+		# it not we use the params form the main view
+		else:
+			pass
 
 		printl("", self, "C")
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def alterGuiElementVisibility(self, element, visibility):
+		printl("", self, "C")
+		printl("element: " + str(element), self, "D")
+		printl("visibility: " + str(visibility), self, "D")
+		if visibility:
+			self[element].show()
+			try:
+				self[element+"Label"].show()
+			except Exception:
+				pass
+		else:
+			self[element].hide()
+			try:
+				self[element+"Label"].hide()
+			except Exception:
+				pass
+
+		printl("", self, "C")
+
+#===========================================================================
+	#
+	#===========================================================================
+	def alterGuiElementPosition(self, element, xCoord, yCoord):
+		printl("", self, "C")
+
+		elementPostion = self[element].getPosition()
+		xElement = elementPostion[0]
+		yElement = elementPostion[1]
+		calculateLabel = False
+		try:
+			labelPosition = self[element+"Label"].getPosition()
+			xLabel = labelPosition[0]
+			yLabel = labelPosition[1]
+			xDiff = int(xLabel) - int(xElement)
+			yDiff = int(yLabel) - int(yElement)
+			printl("xDiff: " + str(xDiff), self, "D")
+			printl("yDiff: " + str(yDiff), self, "D")
+			calculateLabel = True
+		except Exception, e:
+			printl("error: " + str(e), self, "D")
+
+		printl("element: " + str(element), self, "D")
+		printl("xCoord: " + str(xCoord), self, "D")
+		printl("yCoord: " + str(yCoord), self, "D")
+
+		self[element].setPosition(xCoord, yCoord)
+
+		if calculateLabel:
+			newX = int(xCoord) - (int(xDiff)*-1)
+			newY = int(yCoord) - (int(yDiff)*-1)
+			printl("newX: " + str(newX), self, "D")
+			printl("newY: " + str(newY), self, "D")
+			self[element+"Label"].setPosition(newX, newY)
+
+		printl("", self, "C")
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -2091,27 +2164,27 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		
 		# lets hide them so that fastScroll does not show up old information
-		if self.myParams["rating_stars"]:
+		if self.myParams["elements"]["rating_stars"]["visible"]:
 			self["rating_stars"].hide()
 		
-		if self.myParams["codec"]:
+		if self.myParams["elements"]["codec"]["visible"]:
 			self["codec"].hide()
 		
-		if self.myParams["aspect"]:
+		if self.myParams["elements"]["aspect"]["visible"]:
 			self["aspect"].hide()
 		
-		if self.myParams["resolution"]:
+		if self.myParams["elements"]["resolution"]["visible"]:
 			self["resolution"].hide()
 		
-		if self.myParams["rated"]:
+		if self.myParams["elements"]["rated"]["visible"]:
 			self["rated"].hide()
 		
-		if self.myParams["audio"]:
+		if self.myParams["elements"]["audio"]["visible"]:
 			self["audio"].hide()
 		
-		if self.myParams["showBackdrop"]:
+		if self.myParams["elements"]["backdrop"]["visible"]:
 			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
-			self["mybackdrop"].instance.setPixmapFromFile(ptr)
+			self["backdrop"].instance.setPixmapFromFile(ptr)
 				
 		printl("", self, "C")
 

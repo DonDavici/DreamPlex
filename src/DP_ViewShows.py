@@ -126,17 +126,6 @@ class DPS_ViewShows(DP_ViewCine):
 
 		# this is the part we extend
 		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes":
-			self.alterGuiElements(self.viewMode)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def alterGuiElements(self, myType):
-		printl("", self, "S")
-
-		if myType in self.myParams["subViews"]:
-			printl("ohjdjhaksdfr", self, "D")
+			self.processGuiElements(self.viewMode)
 
 		printl("", self, "C")
