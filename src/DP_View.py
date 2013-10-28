@@ -220,7 +220,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		# set image names to use
 		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
-		self.backdrop_postfix = self.myParams["elements"]["poster"]["postfix"]
+		self.backdrop_postfix = self.myParams["elements"]["backdrop"]["postfix"]
 
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -264,8 +264,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.posterWidth = self.myParams["elements"]["poster"]["width"]
 
 		self["backdrop"] = Pixmap()
-		self.backdropHeight = self.myParams["elements"]["poster"]["height"]
-		self.backdropWidth = self.myParams["elements"]["poster"]["width"]
+		self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
+		self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
 
 		self["sound"] = MultiPixmap()
 
@@ -1446,14 +1446,14 @@ class DP_View(Screen, NumericalTextInput):
 				self.handleNavigationData()
 
 				# now lets switch images
-				if self.changePoster == True and self.myParams["elements"]["poster"]["visible"] == True:
+				if self.changePoster and self.myParams["elements"]["poster"]["visible"]:
 					try:
 						self.showPoster()
 					except Exception, e:
 						printl("Error: something went wrong with the poster ... " + str(e), self, "D")
 
-				if self.fastScroll == False or self.showMedia == True:
-					if self.changeBackdrop == True and self.myParams["elements"]["backdrop"]["visible"] == True:
+				if not self.fastScroll or self.showMedia:
+					if self.changeBackdrop and self.myParams["elements"]["backdrop"]["visible"]:
 						try:
 							self.showBackdrop()
 						except Exception, e:
@@ -2017,6 +2017,10 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def downloadPoster(self):
 		printl("", self, "S")
+		printl("self.posterWidth:" + str(self.posterWidth), self, "D")
+		printl("self.posterHeight:" + str(self.posterHeight), self, "D")
+		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
+		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 		
 		download_url = self.extraData["thumb"]
 		if download_url:
@@ -2036,7 +2040,11 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def downloadBackdrop(self):
 		printl("", self, "S")
-		
+		printl("self.backdropWidth:" + str(self.backdropWidth), self, "D")
+		printl("self.backdropHeight:" + str(self.backdropHeight), self, "D")
+		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
+		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
+
 		download_url = self.extraData["fanart_image"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)

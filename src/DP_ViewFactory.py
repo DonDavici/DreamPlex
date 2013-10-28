@@ -132,17 +132,18 @@ def getViewsFromSkinParams(myType):
 			else:
 				currentParams["settings"][setting] = value
 
-		elements = defaultParams["elements"]
+		# override params
+		for element in view.iter("element"):
+			name = element.get("name")
 
-		for element in elements:
-			#check if there are params that we have to override
-			value = view.get(element, None)
-			printl("value: " + str(value), __name__, "D")
+			params = element.attrib
+			printl("params: " + str(params), __name__, "D")
 
-			# if there is one we overwrite the default value
-			if value is not None:
+			for key, value in params.items():
 				translatedValue = translateValues(value)
-				currentParams["elements"][element]["visible"] = translatedValue
+
+				if key != "name":
+					currentParams["elements"][name][key] = translatedValue
 
 		view = (_(name), myFile, myClass, currentParams)
 		
