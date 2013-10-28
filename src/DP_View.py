@@ -322,8 +322,10 @@ class DP_View(Screen, NumericalTextInput):
 			if self.myParams["elements"]["backdrop"]["visible"]:
 				self.EXpicloadBackdrop = ePicLoad()
 
-			self.onLayoutFinish.append(self.processGuiElements)
 			self.onLayoutFinish.append(self.setPara)
+
+		self.onLayoutFinish.append(self.finishLayout)
+		self.onLayoutFinish.append(self.processGuiElements)
 
 		printl("", self, "C")
 
@@ -2042,6 +2044,9 @@ class DP_View(Screen, NumericalTextInput):
 	# 
 	#==============================================================================
 	def setPara(self):
+		"""
+		set params for poster and backdrop via ePicLoad object
+		"""
 		printl("", self, "S")
 		
 		if self.myParams["elements"]["poster"]["visible"]:
@@ -2052,10 +2057,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("", self, "C")
 
-	#===========================================================================
+	#==============================================================================
 	#
-	#===========================================================================
-	def processGuiElements(self, myType=None):
+	#==============================================================================
+	def finishLayout(self):
+		"""
+		adds buttons pics from xml and handles fastScrollMode function
+		"""
 		printl("", self, "S")
 
 		# first we set the pics for buttons
@@ -2070,13 +2078,24 @@ class DP_View(Screen, NumericalTextInput):
 		# if we are in fastScrollMode we remove some gui elements
 		self.resetGuiElementsInFastScrollMode()
 
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def processGuiElements(self, myType=None):
+		printl("", self, "S")
+
 		# this is always the case when the view starts the first time
 		# in this case no need for look for subviews
 		if myType is None:
 			for element in self.myParams["elements"]:
 				printl("element:" + str(element), self, "D")
 				visibility = self.myParams["elements"][element]["visible"]
+
 				self.alterGuiElementVisibility(element, visibility)
+
+				# we do not alter positions here because this should be done in the skin.xml because we are the first view
 
 		# now we check if we are in a special subView with its own params
 		elif myType in self.myParams["subViews"]:
@@ -2111,6 +2130,33 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
+	def restoreElementsInViewStep (self):
+		"""
+		restores gui elements according to the self.viewChangeStorage dict and self.viewStep
+		"""
+		printl("", self, "S")
+		printl("viewChangeStorage:" + str(self.viewChangeStorage), self, "D")
+
+		# +1 is the correction for viewStep
+		subViewParams = self.viewChangeStorage[int(self.viewStep)+1]
+		for element in subViewParams:
+			printl("element: " + str(element), self, "D")
+			params = subViewParams[element]
+			if "visible" in params:
+				visibility = params.get("visible")
+				self.alterGuiElementVisibility(element, visibility)
+
+			if "xCoord" in params and "yCoord" in params:
+				xCoord = params.get("xCoord")
+				yCoord = params.get("yCoord")
+
+				self.alterGuiElementPosition(element,xCoord, yCoord)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def alterGuiElementVisibility(self, element, visibility):
 		printl("", self, "C")
 		printl("element: " + str(element), self, "D")
@@ -2139,7 +2185,7 @@ class DP_View(Screen, NumericalTextInput):
 		elementPostion = self[element].getPosition()
 		xElement = elementPostion[0]
 		yElement = elementPostion[1]
-		calculateLabel = False
+
 		try:
 			labelPosition = self[element+"Label"].getPosition()
 			xLabel = labelPosition[0]
@@ -2148,7 +2194,11 @@ class DP_View(Screen, NumericalTextInput):
 			yDiff = int(yLabel) - int(yElement)
 			printl("xDiff: " + str(xDiff), self, "D")
 			printl("yDiff: " + str(yDiff), self, "D")
-			calculateLabel = True
+			newX = int(xCoord) - (int(xDiff)*-1)
+			newY = int(yCoord) - (int(yDiff)*-1)
+			printl("newX: " + str(newX), self, "D")
+			printl("newY: " + str(newY), self, "D")
+			self[element+"Label"].setPosition(newX, newY)
 		except Exception, e:
 			printl("error: " + str(e), self, "D")
 
@@ -2157,13 +2207,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("yCoord: " + str(yCoord), self, "D")
 
 		self[element].setPosition(xCoord, yCoord)
-
-		if calculateLabel:
-			newX = int(xCoord) - (int(xDiff)*-1)
-			newY = int(yCoord) - (int(yDiff)*-1)
-			printl("newX: " + str(newX), self, "D")
-			printl("newY: " + str(newY), self, "D")
-			self[element+"Label"].setPosition(newX, newY)
 
 		printl("", self, "C")
 	#===========================================================================

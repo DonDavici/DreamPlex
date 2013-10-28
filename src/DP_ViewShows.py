@@ -139,6 +139,6 @@ class DPS_ViewShows(DP_ViewCine):
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewShows,self).onLeave()
 
-
+		self.restoreElementsInViewStep()
 
 		printl("", self, "C")
