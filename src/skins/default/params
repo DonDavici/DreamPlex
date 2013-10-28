@@ -22,16 +22,35 @@
 	
 	<!-- VIEWS -->
 
+	<!-- HOW TO ...
+
+		elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution",
+	                    "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
+	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
+
+
+		settingsList = ["itemsPerPage", "apiLevel", "screen"]
+
+		Check default values here => /src/DP_ViewFactory.py
+
+		Please note that if you want that a Label of an information should move aswell it has to be named like this in skin.xml
+		for example : "sound" if sound has a Label it must be a widget and the name "soundLabel"
+	-->
+
 	<!-- MOVIE VIEWS -->
-	<movieView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
+	<movieView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList">
+	</movieView>
+
 	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong">
 		<element name="backdrop" visible="False"/>
 	</movieView>
+
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" >
 		<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
 	</movieView>
 
 	<!-- SHOW VIEWS -->
+
 	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList">
 		<subView name="ShowSeasons">
 			<element name="audio" visible="True" xCoord="300" yCoord="300"/>
@@ -42,9 +61,12 @@
 			<element name="audio" visible="False"/>
 		</subView>
 	</showView>
+
 	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false">
 		<element name="backdrop" visible="False"/>
 	</showView>
-	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
+
+	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg">
+	</showView>
 
 </xml>
