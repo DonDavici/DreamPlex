@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 from Components.config import config
 
-from DP_View import DP_View
+from DP_ViewCine import DP_ViewCine
 
 from __common__ import printl2 as printl
 
@@ -40,7 +40,7 @@ def getViewClass():
 #===============================================================================
 # 
 #===============================================================================
-class DPS_ViewShows(DP_View):
+class DPS_ViewShows(DP_ViewCine):
 
 	parentSeasonId = None
 
@@ -51,7 +51,7 @@ class DPS_ViewShows(DP_View):
 		printl("", self , "S")
 
 		self.session = session
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
+		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 
 		printl("", self, "C")
 
@@ -119,4 +119,32 @@ class DPS_ViewShows(DP_View):
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onEnter(self):
+		printl("", self, "S")
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewShows,self).onEnter()
+
+		# this is the part we extend
+		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes":
+			self.processGuiElements(self.viewMode)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onLeave(self):
+		printl("", self, "S")
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewShows,self).onLeave()
+
+		self.restoreElementsInViewStep()
+
 		printl("", self, "C")

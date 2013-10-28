@@ -21,50 +21,25 @@
 	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/key_9.png" />
 	
 	<!-- VIEWS -->
-		<!-- all params here can be changed by adding them to the cineView if they are not added the default values are taken -->
-		<!-- you can add as much as cineViews you want. just as long you have defined a screen in the skin.xml :-) -->
-		<!-- CURRENT DEFAULTS
-		# mandatory items have to be defined or a assert error will come
-		defaults["itemsPerPage"]		= "mandatory"
-		defaults["apiLevel"]			= "mandatory"
-		defaults["screen"]				= "mandatory"
-		
-		defaults["backdropHeight"]		= "315"
-		defaults["backdropWidth"]		= "560"
-		defaults["posterHeight"]		= "268"
-		defaults["posterWidth"]			= "195"
-		defaults["backdrop_postfix"]	= "_backdrop.jpg"
-		defaults["poster_postfix"]		= "_poster.jpg"
-		defaults["current"]				= True
-		defaults["total"]				= True
-		defaults["functionsContainer"]	= True
-		defaults["showBackdrop"]		= True
-		defaults["showPoster"]			= True
-		defaults["audio"] 				= True
-		defaults["resolution"] 			= True
-		defaults["aspect"] 				= True
-		defaults["codec"] 				= True
-		defaults["rated"] 				= True
-		defaults["title"] 				= True
-		defaults["tag"] 				= True
-		defaults["shortDescription"] 	= True
-		defaults["subtitles"] 			= True
-		defaults["selectedAudio"] 		= True
-		defaults["genre"] 				= True
-		defaults["year"] 				= True
-		defaults["runtime"] 			= True
-		defaults["backdroptext"]		= True
-		defaults["postertext"]			= True
-		defaults["rating_stars"] 		= True
-		-->
-	
+
 	<!-- MOVIE VIEWS -->
 	<movieView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
 	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
-	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
+	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" >
+		<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+	</movieView>
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList"/>
+	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList">
+		<subView name="ShowSeasons">
+			<element name="audio" visible="True" xCoord="300" yCoord="300"/>
+			<element name="genre" visible="False"/>
+		</subView>
+		<subView name="ShowEpisodes">
+			<element name="genre" visible="True" xCoord="300" yCoord="300"/>
+			<element name="audio" visible="False"/>
+		</subView>
+	</showView>
 	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="false" />
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg"/>
 

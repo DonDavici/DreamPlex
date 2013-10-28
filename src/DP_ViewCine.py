@@ -22,9 +22,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from Components.config import config
-
-from DP_ViewCine import DP_ViewCine
+from DP_View import DP_View
 
 from __common__ import printl2 as printl
 
@@ -32,48 +30,27 @@ from __common__ import printl2 as printl
 # 
 #===============================================================================
 def getViewClass():
-	printl("",__name__ , "S")
+	"""
+	@param: none
+	@return: DP_View Class 
+	"""
+	printl("", __name__, "S")
 	
-	printl("",__name__ , "C")
-	return DPS_ViewMovies
+	printl("", __name__, "C")
+	return DP_ViewCine
 
-#===============================================================================
-# 
-#===============================================================================
-class DPS_ViewMovies(DP_ViewCine):
+#===========================================================================
+#
+#===========================================================================
+class DP_ViewCine(DP_View):
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
 		printl("", self , "S")
 
 		self.session = session
-		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPictureInformationToLoad(self):
-		printl("", self, "S")
-
-		printl( "is playable content",self, "D")
-		bname = self.details["ratingKey"]
-		self.startPlaybackNow = False
-
-		printl( "is movie",self, "D")
-		self.changeBackdrop = True
-		self.changePoster = True
-		pname = self.details["ratingKey"]
-		
-		if not self.usePicCache:
-			pname = "temp"
-			bname = "temp"
-			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-		
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
-		
 		printl("", self, "C")

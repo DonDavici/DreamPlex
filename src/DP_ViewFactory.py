@@ -22,10 +22,37 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
+import copy
+
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
+
+
+#===========================================================================
+#
+#===========================================================================
+def getDefaultCineElementsList():
+	printl("", __name__, "S")
+
+	elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution",
+	                "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
+	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
+
+	printl("", __name__, "C")
+	return elementsList
+
+#===========================================================================
+#
+#===========================================================================
+def getDefaultSettingsList():
+	printl("", __name__, "S")
+
+	settingsList = ["itemsPerPage", "apiLevel", "screen"]
+
+	printl("", __name__, "C")
+	return settingsList
 
 #===============================================================================
 # 
@@ -58,8 +85,7 @@ def getViewsFromSkinParams(myType):
 	printl("", __name__, "S")
 	
 	tree = Singleton().getSkinParamsInstance()
-	#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
-	
+
 	availableViewList = []
 	
 	if myType == "movieView":
@@ -79,37 +105,45 @@ def getViewsFromSkinParams(myType):
 		
 	else:
 		raise Exception()
-	
+
 	for view in tree.findall(myType):
-		name = str(view.get('name'))
-		currentParams = {}
-		
-		for param in defaultParams:
+		# lets copy params to new alterable variable
+		currentParams =  copy.deepcopy(defaultParams)
+
+		useMe, subViewDict = getSubViewParams(view)
+		if useMe:
+			currentParams["subViews"] = subViewDict
+
+		name = str(view.get("name"))
+		printl("viewMe:" + str(view), __name__, "D")
+
+		# settings
+		settings = defaultParams["settings"]
+		for setting in settings:
+			printl("setting:" + str(setting), __name__, "D")
 			#check if there are params that we have to override
-			value = view.get(param, None)
+			value = view.get(setting, None)
 			printl("value: " + str(value), __name__, "D")
+
 			# check if this value is mandatory
 			# if we are mandatory we stop here
-			if defaultParams[param] == "mandatory" and value is None:
+			if defaultParams["settings"][setting] == "mandatory" and value is None:
 				raise Exception
-				
+			else:
+				currentParams["settings"][setting] = value
+
+		elements = defaultParams["elements"]
+
+		for element in elements:
+			#check if there are params that we have to override
+			value = view.get(element, None)
+			printl("value: " + str(value), __name__, "D")
+
 			# if there is one we overwrite the default value
 			if value is not None:
-				
-				# translate xml value to real true or false
-				if value == "true" or value == "True":
-					value = True
-				
-				if value == "false" or value == "False":
-					value = False
-				
-			else:
-				# fill not existing params with default values
-				value = defaultParams[param]
-				
-			currentParams[param] = value
-		
-		printl("currentParams: " + str(currentParams),__name__, "D")
+				translatedValue = translateValues(value)
+				currentParams["elements"][element]["visible"] = translatedValue
+
 		view = (_(name), myFile, myClass, currentParams)
 		
 		availableViewList.append(view)
@@ -119,125 +153,132 @@ def getViewsFromSkinParams(myType):
 	return availableViewList
 
 #===========================================================================
+#
+#===========================================================================
+def getSubViewParams(tree):
+	printl("", __name__, "S")
+
+	useMe = False
+	myDict = {}
+
+	for view in tree.findall("subView"):
+		useMe = True
+		subViewName = view.get("name", None)
+		myDictParams = {}
+
+		for element in view.iter("element"):
+			name = element.get("name")
+			myDictParams[name] = {}
+
+			params = element.attrib
+			printl("params: " + str(params), __name__, "D")
+
+			for key, value in params.items():
+				translatedValue = translateValues(value)
+
+				if key != "name":
+					myDictParams[name][key] = translatedValue
+
+		myDict[subViewName] = myDictParams
+
+	printl("", __name__, "C")
+	return useMe, myDict
+
+#===========================================================================
 # 
 #===========================================================================
 def getMovieViewDefaults():
 	printl("", __name__, "S")
-	
-	defaults = {}
-	# mandatory items have to be defined or a assert error will come
-	defaults["itemsPerPage"]		= "mandatory"
-	defaults["apiLevel"]			= "mandatory"
-	defaults["screen"]				= "mandatory"
-	
-	defaults["backdropHeight"]		= "315"
-	defaults["backdropWidth"]		= "560"
-	defaults["posterHeight"]		= "268"
-	defaults["posterWidth"]			= "195"
-	defaults["backdrop_postfix"]	= "_backdrop.jpg"
-	defaults["poster_postfix"]		= "_poster.jpg"
-	defaults["current"]				= True
-	defaults["total"]				= True
-	defaults["functionsContainer"]	= True
-	defaults["showBackdrop"]		= True
-	defaults["showPoster"]			= True
-	defaults["audio"] 				= True
-	defaults["resolution"] 			= True
-	defaults["aspect"] 				= True
-	defaults["codec"] 				= True
-	defaults["rated"] 				= True
-	defaults["title"] 				= True
-	defaults["tag"] 				= True
-	defaults["shortDescription"] 	= True
-	defaults["subtitles"] 			= True
-	defaults["selectedAudio"] 		= True
-	defaults["genre"] 				= True
-	defaults["year"] 				= True
-	defaults["runtime"] 			= True
-	defaults["backdroptext"]		= True
-	defaults["postertext"]			= True
-	defaults["rating_stars"] 		= True
-	
-	printl("", __name__, "C")
-	return defaults
+	params = {}
 
+	params["settings"] = {}
+	settingsList = getDefaultSettingsList()
+	# mandatory items have to be defined or a assert error will come
+	for setting in settingsList:
+		params["settings"][setting] = "mandatory"
+
+	params["elements"] = {}
+	elementsList = getDefaultCineElementsList()
+
+	# init elements
+	for element in elementsList:
+		params["elements"][element] = {}
+		params["elements"][element]["visible"] = True
+
+	# override default True
+
+	# add addional params in elements
+	params["elements"]["backdrop"]["height"]                       = "315"
+	params["elements"]["backdrop"]["width"]                        = "560"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+
+	params["elements"]["poster"]["height"]                         = "268"
+	params["elements"]["poster"]["width"]                          = "195"
+	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
+
+	printl("", __name__, "C")
+	return params
 #===========================================================================
 #
 #===========================================================================
 def getShowViewDefaults():
 	printl("", __name__, "S")
+	params = {}
 
-	defaults = {}
+	params["settings"] = {}
+	settingsList = getDefaultSettingsList()
 	# mandatory items have to be defined or a assert error will come
-	defaults["itemsPerPage"]		= "mandatory"
-	defaults["apiLevel"]			= "mandatory"
-	defaults["screen"]				= "mandatory"
+	for setting in settingsList:
+		params["settings"][setting] = "mandatory"
 
-	defaults["backdropHeight"]		= "315"
-	defaults["backdropWidth"]		= "560"
-	defaults["posterHeight"]		= "268"
-	defaults["posterWidth"]			= "195"
-	defaults["backdrop_postfix"]	= "_backdrop.jpg"
-	defaults["poster_postfix"]		= "_poster.jpg"
-	defaults["current"]				= True
-	defaults["total"]				= True
-	defaults["functionsContainer"]	= True
-	defaults["showBackdrop"]		= True
-	defaults["showPoster"]			= True
-	defaults["audio"] 				= True
-	defaults["resolution"] 			= True
-	defaults["aspect"] 				= True
-	defaults["codec"] 				= True
-	defaults["rated"] 				= True
-	defaults["title"] 				= True
-	defaults["tag"] 				= True
-	defaults["shortDescription"] 	= True
-	defaults["subtitles"] 			= True
-	defaults["selectedAudio"] 		= True
-	defaults["genre"] 				= True
-	defaults["year"] 				= True
-	defaults["runtime"] 			= True
-	defaults["backdroptext"]		= True
-	defaults["postertext"]			= True
-	defaults["rating_stars"] 		= True
+	params["elements"] = {}
+	elementsList = getDefaultCineElementsList()
+
+	# init elements
+	for element in elementsList:
+		params["elements"][element] = {}
+		params["elements"][element]["visible"] = True
+
+	# override default True
+	params["elements"]["subtitles"]["visible"]                     = False
+	params["elements"]["audio"]["visible"]                         = False
+	params["elements"]["year"]["visible"]                          = False
+	params["elements"]["runtime"]["visible"]                       = False
+
+	# add addional params in elements
+	params["elements"]["backdrop"]["height"]                       = "315"
+	params["elements"]["backdrop"]["width"]                        = "560"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+
+	params["elements"]["poster"]["height"]                         = "268"
+	params["elements"]["poster"]["width"]                          = "195"
+	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
 
 	printl("", __name__, "C")
-	return defaults
+	return params
 
 #===========================================================================
 # 
 #===========================================================================
 def getMusicViewDefaults():
 	printl("", __name__, "S")
-	
-	defaults = {}
-	# mandatory items have to be defined or a assert error will come
-	defaults["itemsPerPage"]		= "mandatory"
-	defaults["apiLevel"]			= "mandatory"
-	defaults["screen"]				= "mandatory"
+	params = {}
 
-	defaults["current"]				= True
-	defaults["total"]				= True
-	defaults["functionsContainer"]	= True
-	defaults["showBackdrop"]		= True
-	defaults["showPoster"]			= True
-	defaults["audio"] 				= True
-	defaults["resolution"] 			= True
-	defaults["aspect"] 				= True
-	defaults["codec"] 				= True
-	defaults["rated"] 				= True
-	defaults["title"] 				= True
-	defaults["tag"] 				= True
-	defaults["shortDescription"] 	= True
-	defaults["subtitles"] 			= True
-	defaults["selectedAudio"] 		= True
-	defaults["genre"] 				= True
-	defaults["year"] 				= True
-	defaults["runtime"] 			= True
-	defaults["backdroptext"]		= True
-	defaults["postertext"]			= True
-	defaults["rating_stars"] 		= True
-	
 	printl("", __name__, "C")
-	return defaults
-	
+	return params
+
+#===========================================================================
+#
+#===========================================================================
+def translateValues(value):
+	printl("", __name__, "S")
+
+	# translate xml value to real true or false
+	if value == "true" or value == "True":
+		value = True
+
+	if value == "false" or value == "False":
+		value = False
+
+	printl("", __name__, "C")
+	return value
