@@ -267,7 +267,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.backdropHeight = self.myParams["elements"]["poster"]["height"]
 		self.backdropWidth = self.myParams["elements"]["poster"]["width"]
 
-		self["audio"] = MultiPixmap()
+		self["sound"] = MultiPixmap()
 
 		self["resolution"] = MultiPixmap()
 
@@ -1033,7 +1033,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onEnter(self):
 		printl("", self, "S")
-		
+		self.viewStep += 1
 		selection = self["listview"].getCurrent()
 				
 		if selection is not None:
@@ -1119,6 +1119,8 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onLeave(self):
 		printl("", self, "S")
+
+		self.viewStep -= 1
 		
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
 		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
@@ -1435,7 +1437,7 @@ class DP_View(Screen, NumericalTextInput):
 					if self.myParams["elements"]["rated"]["visible"]:
 						self.handleRatedPixmaps()
 
-					if self.myParams["elements"]["audio"]["visible"]:
+					if self.myParams["elements"]["sound"]["visible"]:
 						self.handleSoundPixmaps()
 
 				# navigation
@@ -2298,19 +2300,19 @@ class DP_View(Screen, NumericalTextInput):
 
 		if audio == "DCA":
 			found = True
-			self["audio"].setPixmapNum(0)
+			self["sound"].setPixmapNum(0)
 
 		elif audio == "AC3":
 			found = True
-			self["audio"].setPixmapNum(1)
+			self["sound"].setPixmapNum(1)
 
 		elif audio == "MP2":
 			found = True
-			self["audio"].setPixmapNum(2)
+			self["sound"].setPixmapNum(2)
 
 		elif audio == "MP3":
 			found = True
-			self["audio"].setPixmapNum(3)
+			self["sound"].setPixmapNum(3)
 
 		elif audio == "UNKNOWN" or audio == "":
 			found = False
@@ -2320,9 +2322,9 @@ class DP_View(Screen, NumericalTextInput):
 			found = False
 
 		if found:
-			self["audio"].show()
+			self["sound"].show()
 		else:
-			self["audio"].hide()
+			self["sound"].hide()
 
 		printl("", self, "C")
 

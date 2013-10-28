@@ -120,7 +120,7 @@ class DPS_ViewShows(DP_ViewCine):
 	#===========================================================================
 	def onEnter(self):
 		printl("", self, "S")
-		self.viewStep += 1
+
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewShows,self).onEnter()
 
@@ -135,7 +135,7 @@ class DPS_ViewShows(DP_ViewCine):
 	#===========================================================================
 	def onLeave(self):
 		printl("", self, "S")
-		self.viewStep -= 1
+
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewShows,self).onLeave()
 

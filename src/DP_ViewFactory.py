@@ -38,7 +38,7 @@ def getDefaultCineElementsList():
 
 	elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution",
 	                "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
-	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars"]
+	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
 
 	printl("", __name__, "C")
 	return elementsList
@@ -190,6 +190,31 @@ def getSubViewParams(tree):
 def getMovieViewDefaults():
 	printl("", __name__, "S")
 	params = {}
+
+	params["settings"] = {}
+	settingsList = getDefaultSettingsList()
+	# mandatory items have to be defined or a assert error will come
+	for setting in settingsList:
+		params["settings"][setting] = "mandatory"
+
+	params["elements"] = {}
+	elementsList = getDefaultCineElementsList()
+
+	# init elements
+	for element in elementsList:
+		params["elements"][element] = {}
+		params["elements"][element]["visible"] = True
+
+	# override default True
+
+	# add addional params in elements
+	params["elements"]["backdrop"]["height"]                       = "315"
+	params["elements"]["backdrop"]["width"]                        = "560"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+
+	params["elements"]["poster"]["height"]                         = "268"
+	params["elements"]["poster"]["width"]                          = "195"
+	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
 
 	printl("", __name__, "C")
 	return params
