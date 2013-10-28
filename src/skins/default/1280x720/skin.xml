@@ -351,7 +351,7 @@
 
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="570,110" size="550,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
 
-        <widget name="genreLabel:" transparent="1" zPosition="4" halign="right" position="820,400" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="genreLabel" transparent="1" zPosition="4" halign="right" position="820,400" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="950,400" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="runtimeLabel" transparent="1" zPosition="4" halign="right" position="820,430" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
