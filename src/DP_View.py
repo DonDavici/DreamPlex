@@ -1187,7 +1187,6 @@ class DP_View(Screen, NumericalTextInput):
 		self.newList = []
 		for listView in self.listViewList:
 			#printl("seenVisu location: " + str(listView[4]), self, "D")
-			seenVisu = None
 			if listView is not None:
 				seenVisu = loadPicture(listView[4])
 				#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
