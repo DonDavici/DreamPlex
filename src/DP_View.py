@@ -1087,7 +1087,7 @@ class DP_View(Screen, NumericalTextInput):
 			elif viewMode == "directory":
 				printl("viewMode -> directory", self, "I")
 				
-				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+				params = {"viewMode": viewMode, "id": url_path}
 
 				self.currentMovieParams = params
 				self.currentMovieIndex = self["listview"].getIndex()

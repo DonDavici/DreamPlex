@@ -114,8 +114,8 @@ class DP_LibMovies(DP_LibMain):
 				library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
 		else:
 			printl ("viewMode is Directory", self, "D")
-			url = params["url"]
-			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)
+			myId = params["id"]
+			library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url + "/" + myId)
 			
 			printl ("", self, "C")
 			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, myFilter
