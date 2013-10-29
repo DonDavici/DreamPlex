@@ -2156,19 +2156,24 @@ class DP_View(Screen, NumericalTextInput):
 		printl("viewChangeStorage:" + str(self.viewChangeStorage), self, "D")
 
 		# +1 is the correction for viewStep
-		subViewParams = self.viewChangeStorage[int(self.viewStep)+1]
-		for element in subViewParams:
-			printl("element: " + str(element), self, "D")
-			params = subViewParams[element]
-			if "visible" in params:
-				visibility = params.get("visible")
-				self.alterGuiElementVisibility(element, visibility)
+		key = int(self.viewStep)+1
+		printl("key:" + str(key), self, "D")
 
-			if "xCoord" in params and "yCoord" in params:
-				xCoord = params.get("xCoord")
-				yCoord = params.get("yCoord")
+		# key 0 is when we leave the view there will never be data to change ;-)
+		if key != 0:
+			subViewParams = self.viewChangeStorage[key]
+			for element in subViewParams:
+				printl("element: " + str(element), self, "D")
+				params = subViewParams[element]
+				if "visible" in params:
+					visibility = params.get("visible")
+					self.alterGuiElementVisibility(element, visibility)
 
-				self.alterGuiElementPosition(element,xCoord, yCoord)
+				if "xCoord" in params and "yCoord" in params:
+					xCoord = params.get("xCoord")
+					yCoord = params.get("yCoord")
+
+					self.alterGuiElementPosition(element,xCoord, yCoord)
 
 		printl("", self, "C")
 
