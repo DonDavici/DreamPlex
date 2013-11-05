@@ -48,6 +48,7 @@ from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, ge
 version = "0.1"
 source = "feed" # other option is "ipk"
 
+
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultSkinsFolderPath	= resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/skins")
 defaultLogFolderPath    = "/tmp/"
