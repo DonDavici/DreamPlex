@@ -1,4 +1,16 @@
 <keymap>
+    <!--
+    m = make -> Normal key press
+    l = long -> Long key press
+    b = break -> Key released
+    r = repeat -> Key locked (pressed continuously)
+
+    "m" arrives once, as soon as the key is pressed
+    "r" arrives after "m", when the key is pressed continuously until the key is released
+    "l" arrives after 5 repeats, but then only once (repeat still arrives)
+    "b" arrives as soon as the key is released.
+    They can also be combine, eg. flags="mr"
+    -->
 	<map context="DP_MainMenuActions">
 		<key id="KEY_OK" mapto="ok" flags="m" />
 		<key id="KEY_EXIT" mapto="cancel" flags="m" />
