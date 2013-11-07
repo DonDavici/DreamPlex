@@ -57,7 +57,8 @@ class Showiframe(object):
 		printl("", self , "S")
 
 		# we append here to have ctype.so also for sh4 boxes
-		sys.path.append(config.plugins.pvmc.pluginfolderpath.value + "prebuild")
+		libsFolder = config.plugins.dreamplex.pluginfolderpath.value + "libs"
+		sys.path.append(libsFolder)
 
 		try:
 			self.ctypes = __import__("_ctypes")
@@ -72,8 +73,8 @@ class Showiframe(object):
 		libname = "libshowiframe.so.0.0.0"
 		self.finishShowSinglePic = None
 
-		printl("LIB_PATH=" + str(config.plugins.pvmc.pluginfolderpath.value) + libname, self, "I")
-		self.showiframe = self.ctypes.dlopen(config.plugins.pvmc.pluginfolderpath.value + libname)
+		printl("LIB_PATH=" + str(libsFolder) + "/" + libname, self, "I")
+		self.showiframe = self.ctypes.dlopen(libsFolder + "/" + libname)
 
 		try:
 			self.showSinglePic = self.ctypes.dlsym(self.showiframe, "showSinglePic")
