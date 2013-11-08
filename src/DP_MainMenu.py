@@ -627,10 +627,10 @@ class DPS_MainMenu(Screen):
 		
 		mainMenuList = []
 
-		mainMenuList.append((_("Settings"), "DPS_Settings"))
-		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
-		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
-		mainMenuList.append((_("Help"), "DPS_Help"))
+		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
+		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "settingsEntry"))
+		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
+		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
 		self.nextExitIsQuit = False
 		
