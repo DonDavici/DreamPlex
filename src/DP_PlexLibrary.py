@@ -414,14 +414,14 @@ class PlexLibrary(Screen):
 					printl( "_MODE_TVSHOWS detected", self, "D")
 					if myFilter is not None and myFilter != "tvshow":
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showEntry", params))
 						
 				elif section.get('type') == 'movie':
 					
 					printl( "_MODE_MOVIES detected", self, "D")
 					if (myFilter is not None) and (myFilter != "movies"):
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "movieEntry", params))
 	
 				elif section.get('type') == 'artist':
 					printl( "_MODE_ARTISTS detected", self, "D")
@@ -429,7 +429,7 @@ class PlexLibrary(Screen):
 						continue
 					extend = False # SWITCH
 					if extend:
-						mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, params))
+						mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "musicEntry", params))
 						
 				elif section.get('type') == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "D")
