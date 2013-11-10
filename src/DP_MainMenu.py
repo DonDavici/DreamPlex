@@ -657,7 +657,7 @@ class DPS_MainMenu(Screen):
 					# automatically enter the server if wanted
 					if serverConfig.autostart.value and allowOverride:
 						printl("here", self, "D")
-						self.selectionOverride = [serverName, Plugin.MENU_SERVER, serverConfig]
+						self.selectionOverride = [serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig]
 		
 			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "systemEntry"))
 			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
