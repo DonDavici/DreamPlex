@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 import math
 import time
+import os
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
@@ -52,6 +53,7 @@ from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
 from DPH_Arts import getPictureData
+from DPH_StillPicture import Showiframe
 
 from __common__ import printl2 as printl, convertSize, loadPicture
 from __plugin__ import getPlugins, Plugin
@@ -132,6 +134,16 @@ class DP_View(Screen, NumericalTextInput):
 		Screen.__init__(self, session)
 		self.myParams = viewName[3]
 		NumericalTextInput.__init__(self)
+
+
+		self.showiframe = Showiframe()
+
+		try:
+			from DPH_StillPicture import StillPicture
+			self["backdrop"] = StillPicture(session)
+			self.ShowStillPicture = True
+		except Exception, ex:
+			printl("Exception: " + str(ex), self)
 
 		printl("cache: " + str(cache), self, "D")
 		printl("viewName: "+ str(viewName), self, "I")
@@ -1357,6 +1369,25 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		#printl("selection: " + str(selection), self, "D")
 
+		changeBackdrop = True
+		printl("here", self, "D")
+		if self.ShowStillPicture is True:
+			printl("there", self, "D")
+			if changeBackdrop is True:
+				printl("here", self, "D")
+				try: # Note: We add here a try instead of a if cause its most of the time true
+					#backdrop = config.plugins.pvmc.mediafolderpath.value + element["ArtBackdropId"] + "_backdrop.m1v"
+					backdrop = config.plugins.dreamplex.mediafolderpath.value + "/bild.m1v"
+					printl("there", self, "D")
+					if os.access(backdrop, os.F_OK):
+						printl("yes", self, "D")
+						self["backdrop"].setStillPicture(backdrop)
+					else:
+						printl("no", self, "D")
+						self["backdrop"].setStillPictureToDefault()
+				except:
+					pass
+
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		printl("self.myParams: " + str(self.myParams), self, "D")
 
@@ -1483,6 +1514,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
 		
 		self.selectMedia(self.count, self.options, self.server)
+
+		self.showiframe.finishStillPicture()
 		
 		printl("", self, "C")
 		
@@ -1648,7 +1681,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("", self, "C")
 
-	
+
 	#===========================================================================
 	# 
 	#===========================================================================
