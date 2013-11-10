@@ -1033,7 +1033,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onEnter(self):
 		printl("", self, "S")
-		self.viewStep += 1
 		selection = self["listview"].getCurrent()
 				
 		if selection is not None:
@@ -1054,6 +1053,7 @@ class DP_View(Screen, NumericalTextInput):
 			printl("url_path: " +str(url_path), self, "D")
 		
 			if viewMode == "ShowSeasons":
+				self.viewStep += 1
 				printl("viewMode -> ShowSeasons", self, "I")
 
 				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
@@ -1064,6 +1064,7 @@ class DP_View(Screen, NumericalTextInput):
 				self._load(params)
 
 			elif viewMode == "ShowEpisodes":
+				self.viewStep += 1
 				printl("viewMode -> ShowEpisodes", self, "I")
 
 				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
