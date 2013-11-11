@@ -60,21 +60,26 @@ class Showiframe(object):
 		libsFolder = config.plugins.dreamplex.pluginfolderpath.value + "libs"
 		sys.path.append(libsFolder)
 
-		try:
-			self.ctypes = __import__("_ctypes")
-		except Exception, ex:
-			printl("self.ctypes import failed", self, "E")
-			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
-			self.ctypes = None
+		#try:
+			#self.ctypes = __import__("_ctypes")
+			#printl("self.ctypes import worked", self, "D")
+		#except Exception, ex:
+			#printl("self.ctypes import failed", self, "E")
+			#printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
+			#self.ctypes = None
 
-			printl("", self, "C")
-			return False
-
-		libname = "libshowiframe.so.0.0.0"
+			#printl("", self, "C")
+			#return False
+		import _ctypes
+		self.ctypes = _ctypes
+		libname = "libshowiframe.so.0.0.oe20"
 		self.finishShowSinglePic = None
 
-		printl("LIB_PATH=" + str(libsFolder) + "/" + libname, self, "I")
-		self.showiframe = self.ctypes.dlopen(libsFolder + "/" + libname)
+
+		libsi = libsFolder + "/" + libname
+		printl("LIB_PATH=" + str(libsi), self, "I")
+		self.showiframe = self.ctypes.dlopen(libsi)
+		printl("showiframe" + str(self.showiframe), self, "D")
 
 		try:
 			self.showSinglePic = self.ctypes.dlsym(self.showiframe, "showSinglePic")
@@ -302,7 +307,7 @@ class StillPicture(Renderer, InfoBarBase):
 		printl("", self , "S")
 
 		if default is True:
-			self.stillpictureDefault = value
+			self.stillpictureDefault = config.plugins.dreamplex.mediafolderpath.value + "/bootlogo.m1v"
 
 		if self.stillpicture != value:
 			self.stillpicture = value

@@ -49,7 +49,7 @@ def getDefaultCineElementsList():
 def getDefaultSettingsList():
 	printl("", __name__, "S")
 
-	settingsList = ["itemsPerPage", "apiLevel", "screen"]
+	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos"]
 
 	printl("", __name__, "C")
 	return settingsList

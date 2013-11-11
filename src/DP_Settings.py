@@ -113,6 +113,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Picture Cache"), config.plugins.dreamplex.usePicCache, _("Use this if you do not have enough space on your box e.g. no hdd drive just flash.")))
+		self.cfglist.append(getConfigListEntry(_("> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Infobar when buffer drained"), config.plugins.dreamplex.showInfobarOnBuffer, _(" ")))
 		
