@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 import math
 import time
+import os
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
@@ -123,6 +124,8 @@ class DP_View(Screen, NumericalTextInput):
 	resetGuiElements                = False
 	viewStep                        = 0 # we use this to know the steps we did to store the changes form subviews
 	viewChangeStorage               = {} # we use this to save changed value if we have subViews
+	loadedStillPictureLib           = False # until we do not know if we can load the libs it will be false
+	showStillPicture                = False
 
 	#===========================================================================
 	#
@@ -138,8 +141,9 @@ class DP_View(Screen, NumericalTextInput):
 		printl("myParams: " + str(viewName[3]), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
-		self.skinName = self.myParams["settings"]["screen"]#viewName[2]
+		self.skinName = self.myParams["settings"]["screen"]
 		printl("self.skinName: " + str(self.skinName), self, "D")
+		self.useBackdropVideos = self.myParams["settings"]["backdropVideos"]
 		self.select = select
 		self.cache = cache
 		self.onFirstExecSort = sort
@@ -259,14 +263,6 @@ class DP_View(Screen, NumericalTextInput):
 		self["txt_menu"] = Label()
 		self["txt_menu"].setText("show media functions")
 
-		self["poster"] = Pixmap()
-		self.posterHeight = self.myParams["elements"]["poster"]["height"]
-		self.posterWidth = self.myParams["elements"]["poster"]["width"]
-
-		self["backdrop"] = Pixmap()
-		self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
-		self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
-
 		self["sound"] = MultiPixmap()
 
 		self["resolution"] = MultiPixmap()
@@ -307,8 +303,10 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["current"] = Label()
 
+		self["backdrop"] = Pixmap()
 		self["backdroptext"] = Label()
 
+		self["poster"] = Pixmap()
 		self["postertext"] = Label()
 
 		self["rating_stars"] = ProgressBar()
@@ -317,10 +315,24 @@ class DP_View(Screen, NumericalTextInput):
 			self.EXscale = (AVSwitch().getFramebufferScale())
 
 			if self.myParams["elements"]["poster"]["visible"]:
+				self.posterHeight = self.myParams["elements"]["poster"]["height"]
+				self.posterWidth = self.myParams["elements"]["poster"]["width"]
 				self.EXpicloadPoster = ePicLoad()
 
 			if self.myParams["elements"]["backdrop"]["visible"]:
+				self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
+				self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
 				self.EXpicloadBackdrop = ePicLoad()
+
+				# now we try to enable stillPictureSupport
+				if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
+					try:
+						from DPH_StillPicture import StillPicture
+						self["backdropVideo"] = StillPicture(session)
+						self.loadedStillPictureLib = True
+					except Exception, ex:
+						printl("Exception: " + str(ex), self, "D")
+						printl("was not able to import lib for stillpictures", self, "D")
 
 			self.onLayoutFinish.append(self.setPara)
 
@@ -1356,7 +1368,8 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def _refresh(self, selection):
 		printl("", self, "S")
-		#printl("selection: " + str(selection), self, "D")
+
+		self.showStillPicture = True
 
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		printl("self.myParams: " + str(self.myParams), self, "D")
@@ -1375,6 +1388,22 @@ class DP_View(Screen, NumericalTextInput):
 			self.details 		= selection[1]
 			self.extraData 		= selection[2]
 			self.context		= selection[3]
+
+			if self.loadedStillPictureLib:
+				printl("there", self, "D")
+				backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + ".m1v"
+				printl("backdrop: " + str(backdrop), self, "D")
+
+				if os.access(backdrop, os.F_OK):
+					printl("yes", self, "D")
+					self["backdropVideo"].setStillPicture(backdrop)
+					self["backdrop"].hide()
+				else:
+					printl("no", self, "D")
+					self["backdropVideo"].hide()
+					self.showStillPicture = False
+			else:
+				self.showStillPicture = False
 
 			if self.isDirectory:
 				pass
@@ -1454,11 +1483,13 @@ class DP_View(Screen, NumericalTextInput):
 						printl("Error: something went wrong with the poster ... " + str(e), self, "D")
 
 				if not self.fastScroll or self.showMedia:
-					if self.changeBackdrop and self.myParams["elements"]["backdrop"]["visible"]:
+					if self.changeBackdrop and self.myParams["elements"]["backdrop"]["visible"] and not self.showStillPicture:
+						printl("Been there ", self, "D")
 						try:
+							printl("Done that", self, "D")
 							self.showBackdrop()
 						except Exception, e:
-							printl("Error: something went wrong with the poster ... " + str(e), self, "D")
+							printl("Error: something went wrong with the backdrop ... " + str(e), self, "D")
 
 				self.showFunctions(False)
 
@@ -1484,6 +1515,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
 		
 		self.selectMedia(self.count, self.options, self.server)
+
+		self["backdrop"].finishStillPicture()
 		
 		printl("", self, "C")
 		
@@ -1649,7 +1682,7 @@ class DP_View(Screen, NumericalTextInput):
 		
 		printl("", self, "C")
 
-	
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -1968,7 +2001,10 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
-		
+
+		self["backdropVideo"].hide()
+		self["backdrop"].show()
+
 		if forceShow:
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
@@ -2007,7 +2043,7 @@ class DP_View(Screen, NumericalTextInput):
 			if self.resetPoster:
 				self["poster"].instance.setPixmapFromFile(ptr)
 		
-		if self.myParams["elements"]["backdrop"]["visible"]:
+		if self.myParams["elements"]["backdrop"]["visible"] and not self.showStillPicture:
 			if self.resetBackdrop:
 				self["backdrop"].instance.setPixmapFromFile(ptr)
 		
@@ -2070,7 +2106,8 @@ class DP_View(Screen, NumericalTextInput):
 		
 		if self.myParams["elements"]["poster"]["visible"]:
 			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-		
+
+
 		if self.myParams["elements"]["backdrop"]["visible"]:
 			self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
@@ -2189,14 +2226,23 @@ class DP_View(Screen, NumericalTextInput):
 			self[element].show()
 			try:
 				self[element+"Label"].show()
-			except Exception:
-				pass
+
+				# additional changes
+				if element == "backdrop":
+					self[element+"Video"].show()
+
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
 		else:
 			self[element].hide()
 			try:
 				self[element+"Label"].hide()
-			except Exception:
-				pass
+
+				# additional changes
+				if element == "backdrop":
+					self[element+"Video"].hide()
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
 
 		printl("", self, "C")
 
@@ -2258,7 +2304,7 @@ class DP_View(Screen, NumericalTextInput):
 		if self.myParams["elements"]["audio"]["visible"]:
 			self["audio"].hide()
 		
-		if self.myParams["elements"]["backdrop"]["visible"]:
+		if self.myParams["elements"]["backdrop"]["visible"] and not self.showStillPicture:
 			ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 			self["backdrop"].instance.setPixmapFromFile(ptr)
 				
