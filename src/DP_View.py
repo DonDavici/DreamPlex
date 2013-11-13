@@ -26,6 +26,8 @@ import math
 import time
 import os
 
+from thread import start_new_thread
+
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Label import Label
@@ -1484,9 +1486,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				if not self.fastScroll or self.showMedia:
 					if self.changeBackdrop and self.myParams["elements"]["backdrop"]["visible"] and not self.showStillPicture:
-						printl("Been there ", self, "D")
 						try:
-							printl("Done that", self, "D")
 							self.showBackdrop()
 						except Exception, e:
 							printl("Error: something went wrong with the backdrop ... " + str(e), self, "D")

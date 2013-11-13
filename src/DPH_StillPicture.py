@@ -45,12 +45,12 @@ class Showiframe(object):
 	def __init__(self):
 		printl("", self , "S")
 
+		self.boxInformation = getBoxInformation()
+
 		try:
 			self.load()
 		except Exception, ex:
 			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
-
-		self.boxInformation = getBoxInformation()
 
 		printl("", self , "C")
 
