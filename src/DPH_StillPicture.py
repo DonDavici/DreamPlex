@@ -37,6 +37,8 @@ from __common__ import printl2 as printl, getBoxInformation
 #===============================================================================
 class Showiframe(object):
 
+	boxInformation = None
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -48,6 +50,8 @@ class Showiframe(object):
 		except Exception, ex:
 			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
 
+		self.boxInformation = getBoxInformation()
+
 		printl("", self , "C")
 
 	#===========================================================================
@@ -58,23 +62,32 @@ class Showiframe(object):
 
 		# we append here to have ctype.so also for sh4 boxes
 		libsFolder = config.plugins.dreamplex.pluginfolderpath.value + "libs"
-		sys.path.append(libsFolder)
+		libname = None
 
-		#try:
-			#self.ctypes = __import__("_ctypes")
-			#printl("self.ctypes import worked", self, "D")
-		#except Exception, ex:
-			#printl("self.ctypes import failed", self, "E")
-			#printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
-			#self.ctypes = None
+		if self.boxInformation[2] == "sh4":
+			sys.path.append(libsFolder)
 
-			#printl("", self, "C")
-			#return False
-		import _ctypes
-		self.ctypes = _ctypes
-		libname = "libshowiframe.so.0.0.oe20"
+			try:
+				self.ctypes = __import__("_ctypes")
+				printl("self.ctypes import worked", self, "D")
+				libname = "libshowiframe.so.0.0.sh4"
+
+			except Exception, ex:
+				printl("self.ctypes import failed", self, "E")
+				printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
+				self.ctypes = None
+
+		else:
+			import _ctypes
+			self.ctypes = _ctypes
+			if self.boxInformation[3] == "oe16":
+				libname = "libshowiframe.so.0.0.oe16"
+
+			elif self.boxInformation[3] == "oe20":
+				libname = "libshowiframe.so.0.0.oe20"
+
+		printl("libname: " + str(libname), self , "D")
 		self.finishShowSinglePic = None
-
 
 		libsi = libsFolder + "/" + libname
 		printl("LIB_PATH=" + str(libsi), self, "I")
@@ -262,9 +275,7 @@ class StillPicture(Renderer, InfoBarBase):
 		if self.session is not None and self.session.nav is not None:
 			service = self.session.nav.getCurrentService()
 
-			boxInformation = getBoxInformation()
-
-			if boxInformation[0] != "sh4" and service and service.seek():
+			if self.boxInformation[2] != "sh4" and service and service.seek():
 				service.seek().seekTo(0)
 			else:
 				self.session.nav.playService(eServiceReference(4097, 0, self.getStillpicture()), forceRestart=True)

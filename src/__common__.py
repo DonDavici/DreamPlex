@@ -393,6 +393,9 @@ def getServerFromURL(url): # CHECKED
 # 
 #===============================================================================
 def getBoxInformation():
+	"""
+	@return: manu, model, arch, version
+	"""
 	printl2("", "__common__::getBoxtype", "C")
 	global gBoxType
 
