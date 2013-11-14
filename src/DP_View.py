@@ -693,6 +693,8 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onKeyLeft(self):
 		printl("", self, "S")
+
+		self.onPreviousPage()
 		
 		printl("", self, "C")
 	
@@ -701,6 +703,8 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onKeyRight(self):
 		printl("", self, "S")
+
+		self.onNextPage()
 		
 		printl("", self, "C")
 
