@@ -622,11 +622,21 @@ class PlexLibrary(Screen):
 		try:
 			tree = etree.fromstring(html)
 		except Exception:
-			self._showErrorOnTv("no xml as response", html)
-		
-		directories = tree.getiterator("Directory")
-		viewGroup = str(tree.get("viewGroup"))
-		
+			self._showErrorOnTv(_("no xml as response - tree"), html)
+
+		directories = ""
+		viewGroup = ""
+
+		try:
+			directories = tree.getiterator("Directory")
+		except Exception:
+			self._showErrorOnTv(_("no xml as response - directory"), html)
+
+		try:
+			viewGroup = str(tree.get("viewGroup"))
+		except Exception:
+			self._showErrorOnTv(_("no xml as response - viewGroup"), html)
+
 		printl("directories: " + str(directories), self, "D")
 		printl("viewGroup: " + str(viewGroup),self, "D")
 
