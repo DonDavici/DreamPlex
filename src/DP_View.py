@@ -1516,8 +1516,6 @@ class DP_View(Screen, NumericalTextInput):
 		
 		self.selectMedia(self.count, self.options, self.server)
 
-		self["backdrop"].finishStillPicture()
-		
 		printl("", self, "C")
 		
 	#===========================================================
