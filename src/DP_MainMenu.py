@@ -203,7 +203,7 @@ class DPS_MainMenu(Screen):
 			
 				elif self.selectedEntry == Plugin.MENU_SERVER:
 					printl("found Plugin.MENU_SERVER", self, "D")
-					self.g_serverConfig = selection[2]
+					self.g_serverConfig = selection[3]
 					
 					# now that we know the server we establish global plexInstance
 					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
@@ -224,7 +224,7 @@ class DPS_MainMenu(Screen):
 					
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
-					params = selection[2]
+					params = selection[3]
 					printl("params: " + str(params), self, "D")
 					
 					self.s_url = params.get('t_url', "notSet")
@@ -264,7 +264,7 @@ class DPS_MainMenu(Screen):
 					
 			else:
 				printl("selected entry is executable", self, "D")
-				params = selection[2]
+				params = selection[3]
 				printl("params: " + str(params), self, "D")
 				self.s_url = params.get('t_url', "notSet")
 				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
@@ -294,13 +294,13 @@ class DPS_MainMenu(Screen):
 		params = copy.deepcopy(selection[3])
 		url = params['t_url']
 		params['t_url'] = url + "?type=8"
-		mainMenuList.append((_("by Artists"), plugin, params))
+		mainMenuList.append((_("by Artists"), plugin, "artistsEntry", params))
 		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
 		
 		#ALBUMS
 		params = copy.deepcopy(selection[3])
 		params['t_url'] = url + "?type=9"
-		mainMenuList.append((_("by Albums"), plugin, params))
+		mainMenuList.append((_("by Albums"), plugin, "albumsEntry", params))
 		printl("mainMenuList 2: " + str(mainMenuList), self, "D")
 		
 		self["menu"].setList(mainMenuList)
@@ -354,8 +354,9 @@ class DPS_MainMenu(Screen):
 					
 		elif self.selectedEntry.fnc is not None:
 			self.selectedEntry.fnc(self.session)
-		
-		#self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
+
+		if config.plugins.dreamplex.showFilter.value:
+			self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
 		
 		printl("", self, "C")
 	
@@ -591,15 +592,15 @@ class DPS_MainMenu(Screen):
 		
 		mainMenuList = []
 		params = {} 
-		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, params))
-		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, params))
+		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", params))
+		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,params))
 		
 		extend = False # SWITCH
 		
 		if extend:
-			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, params))
-			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, params))
-			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, params))
+			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", params))
+			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", params))
+			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", params))
 		
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
@@ -626,10 +627,10 @@ class DPS_MainMenu(Screen):
 		
 		mainMenuList = []
 
-		mainMenuList.append((_("Settings"), "DPS_Settings"))
-		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen"))
-		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck"))
-		mainMenuList.append((_("Help"), "DPS_Help"))
+		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
+		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "settingsEntry"))
+		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
+		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
 		self.nextExitIsQuit = False
 		
@@ -651,15 +652,15 @@ class DPS_MainMenu(Screen):
 				if serverConfig.state.value:
 					serverName = serverConfig.name.value
 				
-					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, serverConfig))
+					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig))
 					
 					# automatically enter the server if wanted
 					if serverConfig.autostart.value and allowOverride:
 						printl("here", self, "D")
-						self.selectionOverride = [serverName, Plugin.MENU_SERVER, serverConfig]
+						self.selectionOverride = [serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig]
 		
-			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM))
-			self.mainMenuList.append((_("About"), "DPS_About"))
+			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "systemEntry"))
+			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
 			
 			printl("", self, "C")
 		

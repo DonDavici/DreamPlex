@@ -121,11 +121,14 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			self.cfglist.append(getConfigListEntry(_("> Updatetype"), config.plugins.dreamplex.updateType, _("Use Beta only if you really want to help with testing")))
 
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
+		# also backdrops as video needs to turn of live tv
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
 			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
+			self.cfglist.append(getConfigListEntry(_("> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
 			config.plugins.dreamplex.playTheme.value = False
+			config.plugins.dreamplex.useBackdropVideos.value = False
 		
 		# USERINTERFACE SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Userinterface Settings") + separator, config.plugins.dreamplex.about, _(" ")))
