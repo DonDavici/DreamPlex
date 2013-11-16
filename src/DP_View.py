@@ -26,6 +26,9 @@ import math
 import time
 import os
 
+#noinspection PyUnresolvedReferences
+from enigma import eTimer
+
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Label import Label
@@ -126,6 +129,8 @@ class DP_View(Screen, NumericalTextInput):
 	viewChangeStorage               = {} # we use this to save changed value if we have subViews
 	loadedStillPictureLib           = False # until we do not know if we can load the libs it will be false
 	showStillPicture                = False
+	refreshTimer                    = None # initial value to stay agile in list of media
+	selection                       = None # this stores the current list entry of list
 
 	#===========================================================================
 	#
@@ -1346,28 +1351,33 @@ class DP_View(Screen, NumericalTextInput):
 	def refresh(self):
 		printl("", self, "S")
 
-		# update the list to sync list with content
-		#self.updateList()
+		# we kill a former timer to start a new one
+		if self.refreshTimer is not None:
+			self.refreshTimer.stop()
 
 		# show content for selected list item
-		selection = self["listview"].getCurrent()
+		self.selection = self["listview"].getCurrent()
 
-		if selection is not None:
-			printl("selection: " + str(selection), self, "D")
-			viewMode = selection[1]['viewMode']
+		if self.selection is not None:
+			printl("selection: " + str(self.selection), self, "D")
+			viewMode = self.selection[1]['viewMode']
+			self.selection = self.selection
 
 			self.isDirectory = False
 			if viewMode == "directory":
 				self.isDirectory = True
 
-		self._refresh(selection)
+		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
+		self.refreshTimer = eTimer()
+		self.refreshTimer.callback.append(self._refresh)
+		self.refreshTimer.start(1000, True)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def _refresh(self, selection):
+	def _refresh(self):
 		printl("", self, "S")
 
 		self.showStillPicture = True
@@ -1385,10 +1395,10 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("isDirectory: " + str(self.isDirectory), self, "D")
 
-		if selection is not None:
-			self.details 		= selection[1]
-			self.extraData 		= selection[2]
-			self.context		= selection[3]
+		if self.selection is not None:
+			self.details 		= self.selection[1]
+			self.extraData 		= self.selection[2]
+			self.context		= self.selection[3]
 
 			if self.loadedStillPictureLib:
 				printl("there", self, "D")
