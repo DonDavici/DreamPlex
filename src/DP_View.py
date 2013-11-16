@@ -2177,29 +2177,30 @@ class DP_View(Screen, NumericalTextInput):
 				# we do not alter positions here because this should be done in the skin.xml because we are the first view
 
 		# now we check if we are in a special subView with its own params
-		elif myType in self.myParams["subViews"]:
-			subViewParams = self.myParams["subViews"][myType]
-			printl("subViewParams: " + str(subViewParams), self, "D")
+		elif "subViews" in self.myParams:
+			if myType in self.myParams["subViews"]:
+				subViewParams = self.myParams["subViews"][myType]
+				printl("subViewParams: " + str(subViewParams), self, "D")
 
-			self.viewChangeStorage[self.viewStep] = {}
-			for element in subViewParams:
-				printl("element: " + str(element), self, "D")
-				self.viewChangeStorage[self.viewStep][element] = {}
-				params = subViewParams[element]
-				if "visible" in params:
-					visibility = params.get("visible")
-					self.viewChangeStorage[self.viewStep][element]["visible"] = not visibility
-					self.alterGuiElementVisibility(element, visibility)
+				self.viewChangeStorage[self.viewStep] = {}
+				for element in subViewParams:
+					printl("element: " + str(element), self, "D")
+					self.viewChangeStorage[self.viewStep][element] = {}
+					params = subViewParams[element]
+					if "visible" in params:
+						visibility = params.get("visible")
+						self.viewChangeStorage[self.viewStep][element]["visible"] = not visibility
+						self.alterGuiElementVisibility(element, visibility)
 
-				if "xCoord" in params and "yCoord" in params:
-					xCoord = params.get("xCoord")
-					yCoord = params.get("yCoord")
-					position = self[element].getPosition()
-					self.viewChangeStorage[self.viewStep][element]["xCoord"] = position[0]
-					self.viewChangeStorage[self.viewStep][element]["yCoord"] = position[1]
-					self.alterGuiElementPosition(element,xCoord, yCoord)
+					if "xCoord" in params and "yCoord" in params:
+						xCoord = params.get("xCoord")
+						yCoord = params.get("yCoord")
+						position = self[element].getPosition()
+						self.viewChangeStorage[self.viewStep][element]["xCoord"] = position[0]
+						self.viewChangeStorage[self.viewStep][element]["yCoord"] = position[1]
+						self.alterGuiElementPosition(element,xCoord, yCoord)
 
-			printl("viewChangeStorage:" + str(self.viewChangeStorage), self, "D")
+				printl("viewChangeStorage:" + str(self.viewChangeStorage), self, "D")
 		# it not we use the params form the main view
 		else:
 			pass
