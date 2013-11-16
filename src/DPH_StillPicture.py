@@ -29,6 +29,7 @@ from enigma import eWidget, eServiceReference, iPlayableService, eTimer
 from Components.Renderer.Renderer import Renderer
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from Components.config import config
+import _ctypes
 
 from __common__ import printl2 as printl, getBoxInformation
 
@@ -60,55 +61,15 @@ class Showiframe(object):
 	def load(self):
 		printl("", self , "S")
 
-		# we append here to have ctype.so also for sh4 boxes
-		libsFolder = config.plugins.dreamplex.pluginfolderpath.value + "libs"
-		libname = None
-
-		if self.boxInformation[2] == "sh4":
-			sys.path.append(libsFolder)
-
-			try:
-				self.ctypes = __import__("_ctypes")
-				printl("self.ctypes import worked", self, "D")
-				libname = "libshowiframe.so.0.0.sh4"
-
-			except Exception, ex:
-				printl("self.ctypes import failed", self, "E")
-				printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "E")
-				self.ctypes = None
-
-		else:
-			import _ctypes
-			self.ctypes = _ctypes
-			if self.boxInformation[3] == "oe16":
-				libname = "libshowiframe.so.0.0.oe16"
-
-			elif self.boxInformation[3] == "oe20":
-				libname = "libshowiframe.so.0.0.oe20"
-
-		printl("libname: " + str(libname), self , "D")
-		self.finishShowSinglePic = None
-
-		libsi = libsFolder + "/" + libname
-		printl("LIB_PATH=" + str(libsi), self, "I")
-		self.showiframe = self.ctypes.dlopen(libsi)
-		printl("showiframe" + str(self.showiframe), self, "D")
-
+		lib="/usr/lib/"
+		if fileExists(lib + "libshowiframe.so.0.0.0"):
+			self.showiframe = _ctypes.dlopen(lib + "libshowiframe.so.0.0.0")
 		try:
-			self.showSinglePic = self.ctypes.dlsym(self.showiframe, "showSinglePic")
-			self.finishShowSinglePic = self.ctypes.dlsym(self.showiframe, "finishShowSinglePic")
-		except Exception, ex:
-			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "W")
-			printl("self.ctypes.dlsym - FAILED!!! trying next ...", self, "W")
-			try:
-				self.showSinglePic = self.ctypes.dlsym(self.showiframe, "_Z13showSinglePicPKc")
-				self.finishShowSinglePic = self.ctypes.dlsym(self.showiframe, "_Z19finishShowSinglePicv")
-			except Exception, ex2:
-				printl("Exception(" + str(type(ex2)) + "): " + str(ex2), self, "E")
-				printl("self.ctypes.dlsym - FAILED AGAIN !!!", self, "E")
-
-				printl("", self, "C")
-				return False
+			self.showSinglePic = _ctypes.dlsym(self.showiframe, "showSinglePic")
+			self.finishShowSinglePic = _ctypes.dlsym(self.showiframe, "finishShowSinglePic")
+		except OSError, e: 
+			self.showSinglePic = _ctypes.dlsym(self.showiframe, "_Z13showSinglePicPKc")
+			self.finishShowSinglePic = _ctypes.dlsym(self.showiframe, "_Z19finishShowSinglePicv")
 
 		printl("", self, "C")
 		return True

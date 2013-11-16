@@ -306,15 +306,12 @@ def loadPlexPlugins():
 #===============================================================================
 # 
 #===============================================================================
+PluginLanguageDomain = "DreamPlex"
+PluginLanguagePath = "Extensions/DreamPlex/locale"
+
 def localeInit():
 	printl("", "__init__::localeInit", "S")
-
-	lang = language.getLanguage()
-	os.environ["LANGUAGE"] = lang[:2]
-	gettext.bindtextdomain("enigma2", resolveFilename(SCOPE_LANGUAGE))
-	gettext.textdomain("enigma2")
-	gettext.bindtextdomain("DreamPlex", "%s%s" % (resolveFilename(SCOPE_PLUGINS), "Extensions/DreamPlex/locale/"))
-
+	gettext.bindtextdomain(PluginLanguageDomain, resolveFilename(SCOPE_PLUGINS, PluginLanguagePath))
 	printl("", "__init__::localeInit", "C")
 
 #===============================================================================
@@ -362,17 +359,11 @@ def getInstalledSkins():
 #===============================================================================
 def _(txt):
 	#printl("", "__init__::_(txt)", "S")
-
-	if len(txt) == 0:
-		return ""
-	text = gettext.dgettext("DreamPlex", txt)
-	if text == txt:
-		text = gettext.gettext(txt)
-
-	printl("text = " + str(text), "__init__::_(txt)", "D")
-
-	#printl("", "__init__::_(txt)", "C")
-	return text
+	if gettext.dgettext(PluginLanguageDomain, txt):
+		return gettext.dgettext(PluginLanguageDomain, txt)
+	else:
+		#printl("", "__init__::_(txt)", "C")
+		print "[" + PluginLanguageDomain + "] fallback to default translation for " + txt
 
 #===============================================================================
 # EXECUTE ON STARTUP
