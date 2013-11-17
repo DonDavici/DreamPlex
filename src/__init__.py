@@ -75,7 +75,7 @@ config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo()
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
-config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo(default = True)
+config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 
 if source == "feed":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
