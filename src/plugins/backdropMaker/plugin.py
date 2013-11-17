@@ -105,17 +105,16 @@ class dreamplexMovieMakerInfo(object):
 	#===========================================================================
 	#
 	#===========================================================================
-	def start(self, type):
+	def start(self):
 		printl("", self, "D")
 		try:
 			if self.inProgress:
 				return False
 			self.reset()
 
-			isFinished = False
 			self.inProgress = True
 			self.setOutput(None)
-			self.thread = backdropMaker(self.setOutput, self.setProgress, self.setRange, self.setInfo, self.finished, type)
+			self.thread = backdropMaker(self.setOutput, self.setProgress, self.setRange, self.setInfo, self.finished)
 			self.thread.start()
 			for outputInstance in self.outputInstance:
 				outputInstance.notifyStatus()
