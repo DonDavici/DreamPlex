@@ -130,7 +130,7 @@ def getViewsFromSkinParams(myType):
 			if defaultParams["settings"][setting] == "mandatory" and value is None:
 				raise Exception
 			else:
-				currentParams["settings"][setting] = value
+				currentParams["settings"][setting] = translateValues(value)
 
 		# override params
 		for element in view.iter("element"):
