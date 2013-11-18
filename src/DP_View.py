@@ -309,6 +309,7 @@ class DP_View(Screen, NumericalTextInput):
 		self["current"] = Label()
 
 		self["backdrop"] = Pixmap()
+		self["backdropVideo"] = Pixmap() # this is just to avoid greenscreen, maybe we find a better way
 		self["backdroptext"] = Label()
 
 		self["poster"] = Pixmap()
@@ -1516,7 +1517,7 @@ class DP_View(Screen, NumericalTextInput):
 		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
 		self.refreshTimer = eTimer()
 		self.refreshTimer.callback.append(self.showBackdrop)
-		self.refreshTimer.start(500, True)
+		self.refreshTimer.start(1000, True)
 
 		printl("", self, "C")
 
@@ -2057,7 +2058,6 @@ class DP_View(Screen, NumericalTextInput):
 			self.downloadBackdrop()
 
 		printl("", self, "C")
-		return
 
 	#===========================================================================
 	#
