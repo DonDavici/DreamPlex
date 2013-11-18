@@ -323,10 +323,12 @@ class DP_View(Screen, NumericalTextInput):
 			if self.myParams["elements"]["poster"]["visible"]:
 				self.posterHeight = self.myParams["elements"]["poster"]["height"]
 				self.posterWidth = self.myParams["elements"]["poster"]["width"]
+				self.EXpicloadPoster = ePicLoad()
 
 			if self.myParams["elements"]["backdrop"]["visible"]:
 				self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
 				self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
+				self.EXpicloadBackdrop = ePicLoad()
 
 				# now we try to enable stillPictureSupport
 				if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
@@ -337,6 +339,8 @@ class DP_View(Screen, NumericalTextInput):
 					except Exception, ex:
 						printl("Exception: " + str(ex), self, "D")
 						printl("was not able to import lib for stillpictures", self, "D")
+
+			self.onLayoutFinish.append(self.setPara)
 
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onLayoutFinish.append(self.processGuiElements)
@@ -350,6 +354,24 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self.setTitle(_(self.libraryName))
+
+		printl("", self, "C")
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def setPara(self):
+		"""
+		set params for poster and backdrop via ePicLoad object
+		"""
+		printl("", self, "S")
+
+		if self.myParams["elements"]["poster"]["visible"]:
+			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+
+
+		if self.myParams["elements"]["backdrop"]["visible"]:
+			self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
 		printl("", self, "C")
 
@@ -1464,6 +1486,8 @@ class DP_View(Screen, NumericalTextInput):
 
 				# now lets switch images
 				if self.changePoster and self.myParams["elements"]["poster"]["visible"]:
+					printl("poster visible: " + str(self.myParams["elements"]["poster"]["visible"]), self, "D")
+					printl("poster visible: " + str(type(self.myParams["elements"]["poster"]["visible"])), self, "D")
 					self.showPoster()
 
 				if not self.fastScroll or self.showMedia:
@@ -1986,13 +2010,13 @@ class DP_View(Screen, NumericalTextInput):
 	def showPoster(self, forceShow = False):
 		printl("", self, "S")
 
-		try:
-			del self.EXpicloadPoster
-		except Exception:
-			pass
-		finally:
-			self.EXpicloadPoster = ePicLoad()
-			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		#try:
+		#	del self.EXpicloadPoster
+		#except Exception:
+		#	pass
+		#finally:
+		#	self.EXpicloadPoster = ePicLoad()
+		#	self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
 		if forceShow:
 			if self.whatPoster is not None:
@@ -2026,13 +2050,13 @@ class DP_View(Screen, NumericalTextInput):
 	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
 
-		try:
-			del self.EXpicloadBackdrop
-		except Exception:
-			pass
-		finally:
-			self.EXpicloadBackdrop = ePicLoad()
-			self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		#try:
+		#	del self.EXpicloadBackdrop
+		#except Exception:
+		#	pass
+		#finally:
+		#	self.EXpicloadBackdrop = ePicLoad()
+		#	self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
 		if forceShow:
 			if self.whatBackdrop is not None:
@@ -2069,11 +2093,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		if self.myParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
-				self["poster"].instance.setPixmapFromFile(ptr)
+				pass
+				#self["poster"].instance.setPixmapFromFile(ptr)
 
 		if self.myParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
 			if self.resetBackdrop:
-				self.resetBackdropImage()
+				pass
+				#self.resetBackdropImage()
 
 		printl("", self, "C")
 

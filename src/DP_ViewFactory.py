@@ -87,7 +87,7 @@ def getViewsFromSkinParams(myType):
 	tree = Singleton().getSkinParamsInstance()
 
 	availableViewList = []
-	
+
 	if myType == "movieView":
 		myFile = "DP_ViewMovies"
 		myClass = "DPS_ViewMovies"
@@ -109,6 +109,7 @@ def getViewsFromSkinParams(myType):
 	for view in tree.findall(myType):
 		# lets copy params to new alterable variable
 		currentParams =  copy.deepcopy(defaultParams)
+		printl("currentParams: " + str(currentParams), __name__, "D")
 
 		useMe, subViewDict = getSubViewParams(view)
 		if useMe:
@@ -135,6 +136,7 @@ def getViewsFromSkinParams(myType):
 		# override params
 		for element in view.iter("element"):
 			name = element.get("name")
+			printl("name: " + str(name), __name__, "D")
 
 			params = element.attrib
 			printl("params: " + str(params), __name__, "D")
