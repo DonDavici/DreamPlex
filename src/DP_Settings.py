@@ -120,7 +120,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		# also backdrops as video needs to turn of live tv
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
 			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
-			self.cfglist.append(getConfigListEntry(_("> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
+			self.cfglist.append(getConfigListEntry(_(">> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
 			config.plugins.dreamplex.playTheme.value = False
