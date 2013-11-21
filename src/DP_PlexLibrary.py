@@ -1441,6 +1441,18 @@ class PlexLibrary(Screen):
 			details['summary']				= season.get('summary','')
 			details['season']				= season.get('index','0')
 			details['title']				= season.get('title','').encode('utf-8')
+
+			# we try to fetch from tree
+			parentTitle = tree.get('parentTitle',None)
+
+			if parentTitle is None:
+				# next we try to fetch from season
+				parentTitle = season.get('parentTitle', None)
+			if parentTitle is None:
+				# if still no result we set to blank
+				parentTitle = " "
+
+			details['grandparentTitle']	    = parentTitle
 			details['episode']				= int(season.get('leafCount',0))
 			details['rating']				= season.get('rating', 0)
 			details['studio']				= season.get('studio','')
@@ -1552,7 +1564,18 @@ class PlexLibrary(Screen):
 			details['summary']				= episode.get('summary','')
 			details['episode']				= int(episode.get('index',0))
 			details['title']				= str(details['episode']).zfill(2) + ". " + details['title']
-			details['tvshowtitle']			= episode.get('grandparentTitle',tree.get('grandparentTitle','')).encode('utf-8')
+
+			# we try to fetch from tree
+			parentTitle = tree.get('grandparentTitle',None)
+
+			if parentTitle is None:
+				# next we try to fetch from season
+				parentTitle = episode.get('grandparentTitle', None)
+			if parentTitle is None:
+				# if still no result we set to blank
+				parentTitle = " "
+			details['grandparentTitle']		= parentTitle
+
 			details['season']				= episode.get('parentIndex',tree.get('parentIndex',0))
 			details['viewCount']			= episode.get('viewCount', 0)
 			details['rating']				= episode.get('rating', 0)

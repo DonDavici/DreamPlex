@@ -37,7 +37,7 @@ def getDefaultCineElementsList():
 	printl("", __name__, "S")
 
 	elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution",
-	                "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
+	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "audio",
 	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
 
 	printl("", __name__, "C")
@@ -209,6 +209,7 @@ def getMovieViewDefaults():
 		params["elements"][element]["visible"] = True
 
 	# override default True
+	params["elements"]["grandparentTitle"]["visible"]              = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -247,6 +248,7 @@ def getShowViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["runtime"]["visible"]                       = False
+	params["elements"]["grandparentTitle"]["visible"]              = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

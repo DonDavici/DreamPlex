@@ -279,6 +279,8 @@ class DP_View(Screen, NumericalTextInput):
 		self["rated"] = MultiPixmap()
 
 		self["title"] = Label()
+		self["grandparentTitle"] = Label()
+		self["grandparentTitle"].setText("huraa")
 
 		self["tag"] = Label()
 
@@ -1444,6 +1446,9 @@ class DP_View(Screen, NumericalTextInput):
 				if self.myParams["elements"]["title"]["visible"]:
 					self.setText("title", self.details.get("title", " "))
 
+				if self.myParams["elements"]["grandparentTitle"]["visible"]:
+					self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
+
 				if self.myParams["elements"]["tag"]["visible"]:
 					self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 
@@ -2097,13 +2102,11 @@ class DP_View(Screen, NumericalTextInput):
 
 		if self.myParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
-				pass
-				#self["poster"].instance.setPixmapFromFile(ptr)
+				self["poster"].instance.setPixmapFromFile(ptr)
 
 		if self.myParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
 			if self.resetBackdrop:
-				pass
-				#self.resetBackdropImage()
+				self.resetBackdropImage()
 
 		printl("", self, "C")
 
