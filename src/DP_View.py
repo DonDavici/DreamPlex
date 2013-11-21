@@ -2239,7 +2239,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("key:" + str(key), self, "D")
 
 		# key 0 is when we leave the view there will never be data to change ;-)
-		if key != 0:
+		if key != 0 and key in self.viewChangeStorage:
 			subViewParams = self.viewChangeStorage[key]
 			for element in subViewParams:
 				printl("element: " + str(element), self, "D")
@@ -2253,6 +2253,8 @@ class DP_View(Screen, NumericalTextInput):
 					yCoord = params.get("yCoord")
 
 					self.alterGuiElementPosition(element,xCoord, yCoord)
+		else:
+			printl("key is 0 or not in storage ...", self, "D")
 
 		printl("", self, "C")
 
