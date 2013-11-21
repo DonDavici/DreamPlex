@@ -53,20 +53,30 @@
 
 	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
 		<subView name="ShowSeasons">
-			<element name="audio" visible="True" xCoord="300" yCoord="300"/>
-			<element name="genre" visible="False"/>
+			<element name="grandparentTitle" xCoord="515" yCoord="252" visible="True"/>
 		</subView>
+
 		<subView name="ShowEpisodes">
-			<element name="genre" visible="True" xCoord="300" yCoord="300"/>
-			<element name="audio" visible="False"/>
 		</subView>
 	</showView>
 
-	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="False" backdropVideos="False">
+	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
 		<element name="backdrop" visible="False"/>
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" visible="True"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+		</subView>
 	</showView>
 
-	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg" backdropVideos="True">
+	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" visible="True"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+		</subView>
 	</showView>
 
 </xml>
