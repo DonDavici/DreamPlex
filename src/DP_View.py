@@ -221,15 +221,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.getGuiElements()
 
-		printl("myParams: " + str(viewName[3]), self, "D")
-		printl("libraryName: " + str(libraryName), self, "D")
-		printl("cache: " + str(cache), self, "D")
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
-
-		# set image names to use
-		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
-		self.backdrop_postfix = self.myParams["elements"]["backdrop"]["postfix"]
 
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
@@ -319,31 +312,30 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["rating_stars"] = ProgressBar()
 
-		if self.myParams["elements"]["poster"]["visible"] == True or self.myParams["elements"]["backdrop"]["visible"] == True:
-			self.EXscale = (AVSwitch().getFramebufferScale())
+		# Poster
+		self.EXpicloadPoster = ePicLoad()
+		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
+		self.posterHeight = self.myParams["elements"]["poster"]["height"]
+		self.posterWidth = self.myParams["elements"]["poster"]["width"]
 
-			if self.myParams["elements"]["poster"]["visible"]:
-				self.posterHeight = self.myParams["elements"]["poster"]["height"]
-				self.posterWidth = self.myParams["elements"]["poster"]["width"]
-				self.EXpicloadPoster = ePicLoad()
+		# Backdrops
+		self.EXpicloadBackdrop = ePicLoad()
+		self.backdrop_postfix = self.myParams["elements"]["backdrop"]["postfix"]
+		self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
+		self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
 
-			if self.myParams["elements"]["backdrop"]["visible"]:
-				self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
-				self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
-				self.EXpicloadBackdrop = ePicLoad()
+		# now we try to enable stillPictureSupport
+		if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
+			try:
+				from DPH_StillPicture import StillPicture
+				self["backdropVideo"] = StillPicture(session)
+				self.loadedStillPictureLib = True
+			except Exception, ex:
+				printl("Exception: " + str(ex), self, "D")
+				printl("was not able to import lib for stillpictures", self, "D")
 
-				# now we try to enable stillPictureSupport
-				if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
-					try:
-						from DPH_StillPicture import StillPicture
-						self["backdropVideo"] = StillPicture(session)
-						self.loadedStillPictureLib = True
-					except Exception, ex:
-						printl("Exception: " + str(ex), self, "D")
-						printl("was not able to import lib for stillpictures", self, "D")
-
-			self.onLayoutFinish.append(self.setPara)
-
+		# on layout finish we have to do some stuff
+		self.onLayoutFinish.append(self.setPara)
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onLayoutFinish.append(self.processGuiElements)
 
@@ -368,12 +360,10 @@ class DP_View(Screen, NumericalTextInput):
 		"""
 		printl("", self, "S")
 
-		if self.myParams["elements"]["poster"]["visible"]:
-			self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXscale = (AVSwitch().getFramebufferScale())
 
-
-		if self.myParams["elements"]["backdrop"]["visible"]:
-			self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+		self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
 		printl("", self, "C")
 
@@ -804,6 +794,7 @@ class DP_View(Screen, NumericalTextInput):
 		else:
 			self.fastScroll = True
 			self["txt_yellow"].setText("fastScroll = On")
+			self.resetGuiElements = True
 
 		printl("", self, "C")
 
@@ -1087,7 +1078,7 @@ class DP_View(Screen, NumericalTextInput):
 			self.viewMode = self.details ["viewMode"]
 
 			server		= details['server']
-			printl("viewMode: " +str(viewMode), self, "D")
+			printl("currentViewMode: " +str(viewMode), self, "D")
 			printl("server: " +str(server), self, "D")
 
 			#extraData
@@ -1408,8 +1399,7 @@ class DP_View(Screen, NumericalTextInput):
 		if self.resetGuiElements:
 			self.resetGuiElementsInFastScrollMode()
 
-		if self.myParams["elements"]["backdrop"]["visible"] or self.myParams["elements"]["poster"]["visible"]:
-			self.resetCurrentImages()
+		self.resetCurrentImages()
 
 		printl("showMedia: " + str(self.showMedia), self, "D")
 
@@ -1425,8 +1415,7 @@ class DP_View(Screen, NumericalTextInput):
 			else:
 				# lets get all data we need to show the needed pictures
 				# we also check if we want to play
-				if self.myParams["elements"]["backdrop"]["visible"] == True or self.myParams["elements"]["poster"]["visible"] == True:
-					self.getPictureInformationToLoad()
+				self.getPictureInformationToLoad()
 
 				# lets set the urls for context functions of the selected entry
 				self.seenUrl = self.context.get("watchedURL", None)
@@ -1443,65 +1432,34 @@ class DP_View(Screen, NumericalTextInput):
 					if self.startPlaybackNow:
 						self.startThemePlayback()
 
-				if self.myParams["elements"]["title"]["visible"]:
-					self.setText("title", self.details.get("title", " "))
-
-				if self.myParams["elements"]["grandparentTitle"]["visible"]:
-					self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
-
-				if self.myParams["elements"]["tag"]["visible"]:
-					self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
-
-				if self.myParams["elements"]["year"]["visible"]:
-					self.setText("year", str(self.details.get("year", " - ")))
-
-				if self.myParams["elements"]["genre"]["visible"]:
-					self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-
-				if self.myParams["elements"]["subtitles"]["visible"]:
-					self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-
-				if self.myParams["elements"]["audio"]["visible"]:
-					self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
-
-				if self.myParams["elements"]["runtime"]["visible"]:
-					self.setText("runtime", str(self.details.get("runtime", " - ")))
-
-				if self.myParams["elements"]["shortDescription"]["visible"]:
-					self["shortDescription"].setText(self.details.get("summary", " ").encode('utf8'))
+				self.setText("title", self.details.get("title", " "))
+				self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
+				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
+				self.setText("year", str(self.details.get("year", " - ")))
+				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+				self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
+				self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
+				self.setText("runtime", str(self.details.get("runtime", " - ")))
+				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
 
 				if self.fastScroll == False or self.showMedia == True:
 					# handle all pixmaps
-					if self.myParams["elements"]["rating_stars"]["visible"]:
-						self.handlePopularityPixmaps()
-
-					if self.myParams["elements"]["codec"]["visible"]:
-						self.handleCodecPixmaps()
-
-					if self.myParams["elements"]["aspect"]["visible"]:
-						self.handleAspectPixmaps()
-
-					if self.myParams["elements"]["resolution"]["visible"]:
-						self.handleResolutionPixmaps()
-
-					if self.myParams["elements"]["rated"]["visible"]:
-						self.handleRatedPixmaps()
-
-					if self.myParams["elements"]["sound"]["visible"]:
-						self.handleSoundPixmaps()
+					self.handlePopularityPixmaps()
+					self.handleCodecPixmaps()
+					self.handleAspectPixmaps()
+					self.handleResolutionPixmaps()
+					self.handleRatedPixmaps()
+					self.handleSoundPixmaps()
 
 				# navigation
 				self.handleNavigationData()
 
 				# now lets switch images
-				if self.changePoster and self.myParams["elements"]["poster"]["visible"]:
-					printl("poster visible: " + str(self.myParams["elements"]["poster"]["visible"]), self, "D")
-					printl("poster visible: " + str(type(self.myParams["elements"]["poster"]["visible"])), self, "D")
+				if self.changePoster:
 					self.showPoster()
 
 				if not self.fastScroll or self.showMedia:
-					if self.changeBackdrop and self.myParams["elements"]["backdrop"]["visible"]:
-
+					if self.changeBackdrop:
 						# check if showiframe lib loaded ...
 						if self.loadedStillPictureLib:
 							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
@@ -2332,25 +2290,14 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		# lets hide them so that fastScroll does not show up old information
-		if self.myParams["elements"]["rating_stars"]["visible"]:
-			self["rating_stars"].hide()
+		self["rating_stars"].hide()
+		self["codec"].hide()
+		self["aspect"].hide()
+		self["resolution"].hide()
+		self["rated"].hide()
+		self["sound"].hide()
 
-		if self.myParams["elements"]["codec"]["visible"]:
-			self["codec"].hide()
-
-		if self.myParams["elements"]["aspect"]["visible"]:
-			self["aspect"].hide()
-
-		if self.myParams["elements"]["resolution"]["visible"]:
-			self["resolution"].hide()
-
-		if self.myParams["elements"]["rated"]["visible"]:
-			self["rated"].hide()
-
-		if self.myParams["elements"]["audio"]["visible"]:
-			self["audio"].hide()
-
-		if self.myParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
+		if not self.usedStillPicture:
 			self.resetBackdropImage()
 
 		printl("", self, "C")

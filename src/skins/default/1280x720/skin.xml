@@ -258,8 +258,8 @@
         <widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
         <widget name="rated" position="50,650" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-not-fs8.png"/>
 
-        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top" position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -267,8 +267,8 @@
         <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top" position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="545,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="audio" transparent="1" zPosition="4" halign="left" valign="top" position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>

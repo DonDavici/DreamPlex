@@ -108,7 +108,7 @@ def getViewsFromSkinParams(myType):
 
 	for view in tree.findall(myType):
 		# lets copy params to new alterable variable
-		currentParams =  copy.deepcopy(defaultParams)
+		currentParams = copy.deepcopy(defaultParams)
 		printl("currentParams: " + str(currentParams), __name__, "D")
 
 		useMe, subViewDict = getSubViewParams(view)
@@ -133,10 +133,10 @@ def getViewsFromSkinParams(myType):
 			else:
 				currentParams["settings"][setting] = translateValues(value)
 
-		# override params
-		for element in view.iter("element"):
+		# override params in the main first = main screen
+		for element in view.iter("main"):
 			name = element.get("name")
-			printl("name: " + str(name), __name__, "D")
+			printl("name2: " + str(name), __name__, "D")
 
 			params = element.attrib
 			printl("params: " + str(params), __name__, "D")
