@@ -318,7 +318,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		playbackList = []
 		playbackList.append( (entry["Path"], entry["title"], entry, ))
 		
@@ -346,7 +345,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		args = self.buildInfoPlaybackArgs(entry)
 		args["status"]  = "playing"
 		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
@@ -366,7 +364,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		args = {}
 		args["status"] = "stopped"
 		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
@@ -386,7 +383,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		self.notifyEntryStopped(flags)
 		self.notifyEntryPlaying(entry, flags)
 		
