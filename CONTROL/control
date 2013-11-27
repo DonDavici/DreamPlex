@@ -1,0 +1,10 @@
+Package: DreamPlex
+Version: enter Version number here
+Description: Plex Client for Enigma2
+Section: extra
+Priority: optional
+Maintainer: DonDavici <dondavici@gmail.com>
+Architecture: all
+OE: enter Version number here
+Homepage: http://https://github.com/DonDavici/DreamPlex
+Source:  http://https://github.com/DonDavici/DreamPlex

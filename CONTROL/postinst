@@ -1,0 +1,7 @@
+#!/bin/sh
+echo -e '\n'
+echo '############################'
+echo '# Have fun using DreamPlex #'
+echo '############################'
+echo -e '\n'
+exit 0
