@@ -85,7 +85,7 @@ class DP_LibMovies(DP_LibMain):
 				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
 				if "cache" in params:
-					if not params['cache']:
+					if params['cache'] is not None:
 						self.g_source = "plex"
 	 
 				if self.g_source == "cache" or params['cache'] == True:

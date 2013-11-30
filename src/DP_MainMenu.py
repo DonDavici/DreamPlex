@@ -230,7 +230,9 @@ class DPS_MainMenu(Screen):
 					self.s_url = params.get('t_url', "notSet")
 					self.s_mode = params.get('t_mode', "notSet")
 					self.s_final = params.get('t_final', "notSet")
-					
+					self.s_source = params.get('t_source', "notSet")
+					self.s_uuid = params.get('t_uuid', "notSet")
+
 					self.getFilterData()
 				
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
@@ -575,7 +577,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	def getFilterData(self):
 		printl("", self, "S")
-		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
+		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_source, self.s_uuid )
 		
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed

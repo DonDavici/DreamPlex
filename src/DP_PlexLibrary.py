@@ -398,12 +398,10 @@ class PlexLibrary(Screen):
 			if self.g_secondary == "false":
 				path += '/all'
 
-			source = str(section.get('source'))
-			
 			params = {} 
 			params['t_url'] = self.getSectionUrl(address, path)
 			params['t_mode'] = str(section.get('type'))
-			params['t_source'] = source
+			params['t_source'] = str(section.get('source'))
 			params['t_uuid'] = str(section.get('uuid'))
 			params['t_serverVersion'] = str(section.get('serverVersion'))
 			params['t_sourceTitle'] = str(section.get('sourceTitle'))
@@ -604,11 +602,13 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	# 
 	#=============================================================================
-	def getSectionFilter(self, p_url, p_mode, p_final): 
+	def getSectionFilter(self, p_url, p_mode, p_final, p_source, p_uuid):
 		printl("", self, "S")
 		printl("p_url: " + str(p_url), self, "I")
 		printl("p_mode: " + str(p_mode), self, "I")
 		printl("p_final: " + str(p_final), self, "I")
+		printl("p_source: " + str(p_source), self, "I")
+		printl("p_uuid: " + str(p_uuid), self, "I")
 		
 		#===>
 		mainMenuList = []
@@ -683,12 +683,16 @@ class PlexLibrary(Screen):
 			printl("t_url: " + str(t_url), self, "D")
 			printl("t_mode: " + str(t_mode),self, "D")
 			printl("isSearchFilter: " + str(isSearchFilter), self, "D")  
-			
+			printl("t_source: " + str(p_source), self, "D")
+			printl("t_uuid: " + str(p_uuid), self, "D")
+
 			params = {}
 			params["t_url"] = t_url
 			params["t_mode"] = str(p_mode)
 			params["isSearchFilter"] =isSearchFilter
-			
+			params["t_source"] = p_source
+			params["t_uuid"] = p_uuid
+
 			if t_mode != "secondary": #means that the next answer is again a filter cirteria
 				
 				if t_mode == 'show' or t_mode == 'episode':
