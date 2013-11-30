@@ -179,7 +179,8 @@ class DP_Player(MoviePlayer):
 		"stop": self.leavePlayer,
 		"leavePlayer": self.hide,
 		"next": self.seekManual,
-		"previous": self.seekManual
+		"previous": self.seekManual,
+		"showRunningRecords": self.leavePlayer
 		}, -2)
 		
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
