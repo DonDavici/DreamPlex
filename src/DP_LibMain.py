@@ -55,7 +55,7 @@ class DP_LibMain(Screen):
 		self._views = getViews(libraryName)
 		self.currentViewIndex = 0
 		
-		self.defaultPickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, libraryName, )
+		self.defaultPickle = "%s%s_view_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, config.plugins.dreamplex.skins.value, libraryName, )
 		self.onFirstExecBegin.append(self.showDefaultView)
 		
 		printl("", self, "C")
@@ -318,6 +318,7 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
+
 		playbackList = []
 		playbackList.append( (entry["Path"], entry["title"], entry, ))
 		
