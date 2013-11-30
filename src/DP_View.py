@@ -174,6 +174,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.seenPng = None
 		self.unseenPng = None
+		self.startedPng = None
 
 		self["actions"] = HelpableActionMap(self, "DP_View",
 		{

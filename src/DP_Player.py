@@ -517,7 +517,6 @@ class DP_Player(MoviePlayer):
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 		progress = currentTime / (totalTime/100)
-		#progress = 0
 		printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		
 		instance = Singleton()
