@@ -562,10 +562,10 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _(" ")))
 			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
 		elif self.current.connectionType.value == "2": # MYPLEX
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need curl installed for this feature! Please check in System ...")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need curl installed for this feature! Please check in System ...")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need curl installed for this feature! Please check in System ...")))
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _("You need curl installed for this feature! Please check in System ...")))
 		
 		##
 		self.cfglist.append(getConfigListEntry(_("Playback Settings") + separator, config.plugins.dreamplex.about, _(" ")))
@@ -577,12 +577,12 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
-			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			if not self.current.universalTranscoder.value:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _(" ")))
-				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			else:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			
 		elif self.current.playbackType.value == "2":
 			printl("i am here", self, "D")
