@@ -1596,7 +1596,7 @@ class PlexLibrary(Screen):
 				details['viewState'] = "seen"
 				seenVisu = self.seenPic
 			
-			elif details['viewCount'] > 0 and details['viewOffset'] > 0:
+			elif details['viewCount'] >= 0 and details['viewOffset'] > 0:
 				details['viewState']		= "started"
 				seenVisu = self.startedPic
 			
