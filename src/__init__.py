@@ -76,6 +76,8 @@ config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo()
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
+config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
+config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 
 if source == "feed":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()

@@ -406,20 +406,29 @@ class PlexLibrary(Screen):
 			params['t_serverVersion'] = str(section.get('serverVersion'))
 			params['t_sourceTitle'] = str(section.get('sourceTitle'))
 			params['t_machineIdentifier'] = str(section.get('machineIdentifier'))
-			
+
+			# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
+			if config.plugins.dreamplex.showDetailsInList.value and self.g_connectionType == "2":
+				if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
+					detail = " ( " + params['t_sourceTitle'] + ")"
+				elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
+					detail = " (" + str(section.get('remoteServer')) + ")"
+				else:
+					detail = " "
+
 			if self.g_secondary == "true":	  
 				if section.get('type') == 'show':
 					printl( "_MODE_TVSHOWS detected", self, "D")
 					if myFilter is not None and myFilter != "tvshow":
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showEntry", params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')) + detail, Plugin.MENU_FILTER, "showEntry", params))
 						
 				elif section.get('type') == 'movie':
 					
 					printl( "_MODE_MOVIES detected", self, "D")
 					if (myFilter is not None) and (myFilter != "movies"):
 						continue
-					mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "movieEntry", params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')) + detail, Plugin.MENU_FILTER, "movieEntry", params))
 	
 				elif section.get('type') == 'artist':
 					printl( "_MODE_ARTISTS detected", self, "D")
@@ -427,7 +436,7 @@ class PlexLibrary(Screen):
 						continue
 					extend = False # SWITCH
 					if extend:
-						mainMenuList.append((_(section.get('title').encode('utf-8')), Plugin.MENU_FILTER, "musicEntry", params))
+						mainMenuList.append((_(section.get('title').encode('utf-8')) + detail, Plugin.MENU_FILTER, "musicEntry", params))
 						
 				elif section.get('type') == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "D")
@@ -571,6 +580,7 @@ class PlexLibrary(Screen):
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': self.g_host + ":" + self.g_port,
 								   'serverName' : self.g_name.encode(),
+			                       'remoteServer' : sections.get('serverName',"") ,
 								   'uuid' : myUuid ,
 								   'serverVersion' : sections.get('serverVersion',None) ,
 								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
@@ -586,6 +596,7 @@ class PlexLibrary(Screen):
 			self.g_sections.append({'title':sections.get('title','Unknown').encode('utf-8'), 
 								   'address': sections.get('address') + ":" + sections.get('port'),
 								   'serverName' : self.g_name.encode(),
+			                       'remoteServer' : sections.get('serverName',"") ,
 								   'uuid' : myUuid,
 								   'serverVersion' : sections.get('serverVersion',None) ,
 								   'machineIdentifier' : sections.get('machineIdentifier',None) ,
