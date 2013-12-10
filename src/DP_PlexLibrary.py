@@ -407,14 +407,14 @@ class PlexLibrary(Screen):
 			params['t_sourceTitle'] = str(section.get('sourceTitle'))
 			params['t_machineIdentifier'] = str(section.get('machineIdentifier'))
 
+			detail = ""
+
 			# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
 			if config.plugins.dreamplex.showDetailsInList.value and self.g_connectionType == "2":
 				if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
 					detail = " ( " + params['t_sourceTitle'] + ")"
 				elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
 					detail = " (" + str(section.get('remoteServer')) + ")"
-				else:
-					detail = " "
 
 			if self.g_secondary == "true":	  
 				if section.get('type') == 'show':
