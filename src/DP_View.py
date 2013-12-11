@@ -1215,10 +1215,18 @@ class DP_View(Screen, NumericalTextInput):
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		# so we implement it here
 		self.newList = []
+		seenicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png')
+		unseenicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png')
+		startedicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png')
 		for listView in self.listViewList:
 			#printl("seenVisu location: " + str(listView[4]), self, "D")
 			if listView is not None:
-				seenVisu = loadPicture(listView[4])
+				if '/seen-fs8.png' in str(listView[4]):
+					seenVisu = seenicon
+				elif '/unseen-fs8.png' in str(listView[4]):
+					seenVisu = unseenicon
+				elif '/started-fs8.png' in str(listView[4]):
+					seenVisu = startedicon
 				#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
 				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
 				self.newList.append(content)
