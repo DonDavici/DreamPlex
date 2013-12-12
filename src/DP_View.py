@@ -1169,11 +1169,11 @@ class DP_View(Screen, NumericalTextInput):
 			self["listview"].setIndex(self.currentSeasonIndex)
 
 		elif selectKeyValuePair == "backToShows":
-			self._load()
+			self._load(ignoreSort=True)
 			self["listview"].setIndex(self.currentShowIndex)
 
 		elif selectKeyValuePair == "backToMovies":
-			self._load()
+			self._load(ignoreSort=True)
 			self["listview"].setIndex(self.currentMovieIndex)
 
 		else:
