@@ -274,7 +274,6 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["title"] = Label()
 		self["grandparentTitle"] = Label()
-		self["grandparentTitle"].setText("huraa")
 
 		self["tag"] = Label()
 

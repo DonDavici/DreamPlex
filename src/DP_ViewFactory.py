@@ -248,7 +248,6 @@ def getShowViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["runtime"]["visible"]                       = False
-	params["elements"]["grandparentTitle"]["visible"]              = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
