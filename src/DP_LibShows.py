@@ -47,10 +47,14 @@ class DP_LibShows(DP_LibMain):
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		"""
 		printl ("", self, "S")
-		
-		DP_LibMain.__init__(self, session, "tvshows")
-		self.g_url = url
+
 		self.showEpisodesDirectly = showEpisodesDirectly
+		if self.showEpisodesDirectly:
+			DP_LibMain.__init__(self, session, "episodes")
+		else:
+			DP_LibMain.__init__(self, session, "tvshows")
+
+		self.g_url = url
 		self.g_uuid = uuid
 		self.g_source = source
 		
@@ -64,11 +68,11 @@ class DP_LibShows(DP_LibMain):
 		printl("params: " + str(params), self, "D")
 		
 		if self.showEpisodesDirectly:
-			printl("show episodes in OnDeck ...", self, "I")
+			printl("show episodes directly ...", self, "I")
 			
 			url = self.g_url
 			
-			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
 			sort = [("by title", None, False), ]
 			

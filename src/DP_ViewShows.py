@@ -60,14 +60,15 @@ class DPS_ViewShows(DP_ViewCine):
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
+		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
 
 		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
 			self.isTvShow = True
 			self.startPlaybackNow = True
-			bname = self.details["ratingKey"]
-			pname = self.details["ratingKey"]
+			self.bname = self.details["ratingKey"]
+			self.pname = self.details["ratingKey"]
 			self.changeBackdrop = True
 			self.changePoster = True
 			self.resetPoster = True
@@ -76,8 +77,8 @@ class DPS_ViewShows(DP_ViewCine):
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
 			self.isTvShow = True
-			bname = self.parentSeasonId
-			pname = self.parentSeasonId
+			self.bname = self.parentSeasonId
+			self.pname = self.parentSeasonId
 			self.startPlaybackNow = False
 			self.changeBackdrop = True
 			self.changePoster = True
@@ -88,37 +89,51 @@ class DPS_ViewShows(DP_ViewCine):
 			printl( "is ShowEpisodes special season",self, "D")
 			self.isTvShow = True
 			self.parentSeasonNr = self.details["ratingKey"]
-			bname = self.parentSeasonId
-			pname = self.details["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 			self.changeBackdrop = False
 			self.changePoster = True
 			self.resetPoster = False
 			self.resetBackdrop = False
-		
+
+		elif self.details ["viewMode"] == "directMode":
+			printl( "is directMode",self, "D")
+			self.startPlaybackNow = True
+			self.isTvShow = True
+			self.bname = self.details["ratingKey"]
+			self.pname = self.extraData["grandparentRatingKey"]
+			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]
+			self.changePoster = self.myParams["elements"]["poster"]["visible"]
+			self.resetPoster = True
+			self.resetBackdrop = True
+
 		else:
 			printl( "is playable content",self, "D")
-			bname = self.details["ratingKey"]
+			self.bname = self.details["ratingKey"]
 			self.startPlaybackNow = False
 
-			printl( "is episode",self, "D")
-
 			if self.parentSeasonId is not None:
-				pname = self.parentSeasonId
+				self.pname = self.parentSeasonId
 			else:
-				pname = self.extraData["parentRatingKey"]
+				self.pname = self.extraData["parentRatingKey"]
 			# we dont want to have the same poster downloaded and used for each episode
 			self.changePoster = False
 			self.changeBackdrop = True
 
 		if not self.usePicCache:
-			pname = "temp"
-			bname = "temp"
+			self.pname = "temp"
+			self.bname = "temp"
 			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-		
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
-		
+
+		printl("bname: " + str(self.bname), self, "D")
+		printl("pname: " + str(self.pname), self, "D")
+		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
+		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
+
+		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
+		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
+
 		printl("", self, "C")
 
 	#===========================================================================

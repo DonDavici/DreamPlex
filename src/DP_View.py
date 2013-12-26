@@ -55,7 +55,7 @@ from DP_ViewFactory import getViews
 from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
-from DPH_Arts import getPictureData
+#from DPH_Arts import getPictureData
 
 from __common__ import printl2 as printl, convertSize, loadPicture
 from __plugin__ import getPlugins, Plugin
@@ -2002,7 +2002,7 @@ class DP_View(Screen, NumericalTextInput):
 					self["poster"].instance.setPixmap(ptr)
 
 		elif self.usePicCache:
-			if fileExists(getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)):
+			if fileExists(self.whatPoster):
 
 				if self.whatPoster is not None:
 					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
@@ -2042,7 +2042,7 @@ class DP_View(Screen, NumericalTextInput):
 					self["backdrop"].instance.setPixmap(ptr)
 
 		elif self.usePicCache :
-			if fileExists(getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)):
+			if fileExists(self.whatBackdrop):
 
 				if self.whatBackdrop is not None:
 					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
@@ -2095,7 +2095,7 @@ class DP_View(Screen, NumericalTextInput):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), getPictureData(self.details, self.image_prefix, self.poster_postfix, self.usePicCache)).addCallback(lambda _: self.showPoster(forceShow = True))
+			downloadPage(str(download_url), self.whatPoster).addCallback(lambda _: self.showPoster(forceShow = True))
 
 		printl("", self, "C")
 
@@ -2118,7 +2118,7 @@ class DP_View(Screen, NumericalTextInput):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			downloadPage(download_url, getPictureData(self.details, self.image_prefix, self.backdrop_postfix, self.usePicCache)).addCallback(lambda _: self.showBackdrop(forceShow = True))
+			downloadPage(download_url, self.whatBackdrop).addCallback(lambda _: self.showBackdrop(forceShow = True))
 
 		printl("", self, "C")
 

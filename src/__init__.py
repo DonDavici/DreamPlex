@@ -290,7 +290,7 @@ def loadPlexPlugins():
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
 
-	printl("registering ... tvhshows", "__init__::loadPlexPlugins", "D")
+	printl("registering ... tvshows", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
 
 	printl("registering ... music", "__init__::loadPlexPlugins", "D")

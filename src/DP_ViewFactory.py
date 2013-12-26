@@ -69,6 +69,9 @@ def getViews(libraryName):
 	elif libraryName == "tvshows":
 		availableViewList = getViewsFromSkinParams("showView")
 
+	elif libraryName == "episodes":
+		availableViewList = getViewsFromSkinParams("episodeView")
+
 	elif libraryName == "music":
 		availableViewList = getViewsFromSkinParams("musicView")
 	
@@ -97,6 +100,11 @@ def getViewsFromSkinParams(myType):
 		myFile = "DP_ViewShows"
 		myClass = "DPS_ViewShows"
 		defaultParams = getShowViewDefaults()
+
+	elif myType == "episodeView":
+		myFile = "DP_ViewShows"
+		myClass = "DPS_ViewEpisodes"
+		defaultParams = getEpisodesViewDefaults()
 
 	elif myType == "musicView":
 		myFile = "DP_ViewMusic"
@@ -222,6 +230,7 @@ def getMovieViewDefaults():
 
 	printl("", __name__, "C")
 	return params
+
 #===========================================================================
 #
 #===========================================================================
@@ -248,6 +257,44 @@ def getShowViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["runtime"]["visible"]                       = False
+
+	# add addional params in elements
+	params["elements"]["backdrop"]["height"]                       = "315"
+	params["elements"]["backdrop"]["width"]                        = "560"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+
+	params["elements"]["poster"]["height"]                         = "268"
+	params["elements"]["poster"]["width"]                          = "195"
+	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
+
+	printl("", __name__, "C")
+	return params
+
+#===========================================================================
+#
+#===========================================================================
+def getEpisodesViewDefaults():
+	printl("", __name__, "S")
+	params = {}
+
+	params["settings"] = {}
+	settingsList = getDefaultSettingsList()
+	# mandatory items have to be defined or a assert error will come
+	for setting in settingsList:
+		params["settings"][setting] = "mandatory"
+
+	params["elements"] = {}
+	elementsList = getDefaultCineElementsList()
+
+	# init elements
+	for element in elementsList:
+		params["elements"][element] = {}
+		params["elements"][element]["visible"] = True
+
+	# override default True
+	params["elements"]["audio"]["visible"]                         = False
+	params["elements"]["genre"]["visible"]                         = False
+	params["elements"]["subtitles"]["visible"]                     = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

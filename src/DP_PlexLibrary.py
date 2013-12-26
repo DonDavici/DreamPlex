@@ -710,6 +710,7 @@ class PlexLibrary(Screen):
 					printl( "_MODE_TVSHOWS detected", self, "X")
 					if str(sections.get('key')) == "onDeck" or str(sections.get('key')) == "recentlyViewed" or str(sections.get('key')) == "newest" or str(sections.get('key')) == "recentlyAdded":
 						params["t_showEpisodesDirectly"] = True
+
 					mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", params))
 						
 				elif t_mode == 'movie':
@@ -1523,7 +1524,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def getEpisodesOfSeason(self, url, tree=None ): 	
+	def getEpisodesOfSeason(self, url, tree=None, directMode=False):
 		printl("", self, "S")
 		
 		server=self.getServerFromURL(url)
@@ -1573,7 +1574,10 @@ class PlexLibrary(Screen):
 					 
 			#Required listItem entries for XBMC
 			details = {}
-			details["viewMode"]				= "play"
+			if not directMode:
+				details["viewMode"]				= "play"
+			else:
+				details["viewMode"]				= "directMode"
 			details['ratingKey']			= str(episode.get('ratingKey', 0)) # primary key in plex
 			details['title']				= episode.get('title','Unknown').encode('utf-8')
 			details['summary']				= episode.get('summary','')

@@ -53,7 +53,6 @@
 	</movieView>
 
 	<!-- SHOW VIEWS -->
-
 	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
@@ -94,5 +93,10 @@
 			<element name="runtime" visible="True" />
 		</subView>
 	</showView>
+
+	<!-- EPISODE VIEWS -->
+	<episodeView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+
+	</episodeView>
 
 </xml>
