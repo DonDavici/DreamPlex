@@ -134,11 +134,11 @@ def getViewsFromSkinParams(myType):
 				currentParams["settings"][setting] = translateValues(value)
 
 		# override params in the main first = main screen
-		for element in view.iter("main"):
-			name = element.get("name")
-			printl("name2: " + str(name), __name__, "D")
+		for main in view.findall("main"):
+			name = main.get("name")
+			printl("name: " + str(name), __name__, "D")
 
-			params = element.attrib
+			params = main.attrib
 			printl("params: " + str(params), __name__, "D")
 
 			for key, value in params.items():
