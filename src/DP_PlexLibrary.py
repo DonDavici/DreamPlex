@@ -672,8 +672,7 @@ class PlexLibrary(Screen):
 						 "firstCharacter":"secondary"
 					  }
 
-		for sections in directories:   
-			
+		for sections in directories:
 			isSearchFilter = False
 			#sample = <Directory prompt="Search Movies - Teens" search="1" key="search?type=1" title="Search..." />
 			prompt = str(sections.get('prompt', 'noSearch')) 
@@ -688,18 +687,21 @@ class PlexLibrary(Screen):
 			
 			else:
 				t_mode = viewGroupTypes[sections.get('key')]
-			
+
+			t_viewGroup = sections.get('key', "not set")
 			t_url = p_url + "/" + str(sections.get('key'))
-			
+
 			printl("t_url: " + str(t_url), self, "D")
 			printl("t_mode: " + str(t_mode),self, "D")
-			printl("isSearchFilter: " + str(isSearchFilter), self, "D")  
+			printl("t_viewGroup: " + str(t_viewGroup),self, "D")
+			printl("isSearchFilter: " + str(isSearchFilter), self, "D")
 			printl("t_source: " + str(p_source), self, "D")
 			printl("t_uuid: " + str(p_uuid), self, "D")
 
 			params = {}
 			params["t_url"] = t_url
 			params["t_mode"] = str(p_mode)
+			params["t_viewGroup"] = str(t_viewGroup)
 			params["isSearchFilter"] =isSearchFilter
 			params["t_source"] = p_source
 			params["t_uuid"] = p_uuid

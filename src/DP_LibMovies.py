@@ -42,7 +42,7 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, uuid=None, source=None):
+	def __init__(self, session, url=None, uuid=None, source=None, viewGroup=None):
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "movies")
@@ -50,6 +50,7 @@ class DP_LibMovies(DP_LibMain):
 		self.g_url = url
 		self.g_uuid = uuid
 		self.g_source = source
+		self.g_viewGroup = viewGroup
 		
 		printl ("", self, "C")
 
@@ -58,6 +59,8 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	def loadLibrary(self, params):
 		printl ("", self, "S")
+
+		# coming from DP_View _load()
 		printl("params for me: " + str(params), self, "D")
 
 		url = self.g_url
@@ -80,7 +83,7 @@ class DP_LibMovies(DP_LibMain):
 			printl ("viewMode = None", self, "D")
 			if config.plugins.dreamplex.useCache.value:
 				#noinspection PyAttributeOutsideInit
-				self.moviePickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid,)
+				self.moviePickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid, self.g_viewGroup)
 
 				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
@@ -100,6 +103,7 @@ class DP_LibMovies(DP_LibMain):
 
 						fd.close()
 						printl("from pickle", self, "D")
+						printl("viewGroup: " + str(self.g_viewGroup),self, "D")
 					except:
 						printl("movie cache not found ... saving", self, "D")
 						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getMoviesFromSection(url)

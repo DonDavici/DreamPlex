@@ -272,7 +272,8 @@ class DPS_MainMenu(Screen):
 				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
 				self.uuid = params.get('t_uuid', "notSet")
 				self.source = params.get('t_source', "notSet")
-				
+				self.viewGroup = params.get('t_viewGroup', "notSet")
+
 				isSearchFilter = params.get('isSearchFilter', "notSet")
 				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
 				if isSearchFilter == "True" or isSearchFilter and isSearchFilter != "notSet":
@@ -340,14 +341,14 @@ class DPS_MainMenu(Screen):
 		printl("", self, "C")	
 	
 	#===========================================================================
-	# 
+	# this function starts DP_Lib...
 	#===========================================================================
 	def executeSelectedEntry(self):
 		printl("", self, "S")
 		printl("self.s_url: " + str(self.s_url), self, "D")
 		
 		if self.selectedEntry.start is not None:
-			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source}
+			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source , "viewGroup": self.viewGroup}
 			
 			if self.showEpisodesDirectly != "notSet":
 				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly

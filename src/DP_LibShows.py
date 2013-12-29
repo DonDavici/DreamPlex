@@ -42,7 +42,7 @@ class DP_LibShows(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None):
+	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None, viewGroup=None):
 		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		"""
@@ -57,6 +57,7 @@ class DP_LibShows(DP_LibMain):
 		self.g_url = url
 		self.g_uuid = uuid
 		self.g_source = source
+		self.g_viewGroup = viewGroup
 		
 		printl ("", self, "C")
 
@@ -92,7 +93,7 @@ class DP_LibShows(DP_LibMain):
 				
 				if config.plugins.dreamplex.useCache.value:
 					#noinspection PyAttributeOutsideInit
-					self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
+					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid, self.g_viewGroup)
 					
 					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
