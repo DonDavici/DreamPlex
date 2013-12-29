@@ -99,10 +99,10 @@ class DPS_ViewShows(DP_ViewCine):
 			self.resetPoster = False
 			self.resetBackdrop = False
 
-		elif self.details ["viewMode"] == "directMode":
+		elif self.details["viewMode"] == "directMode":
 			printl( "is directMode",self, "D")
 			self.startPlaybackNow = True
-			self.isTvShow = True
+			#self.isTvShow = True
 			self.bname = self.details["ratingKey"]
 			self.pname = self.extraData["grandparentRatingKey"]
 			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]

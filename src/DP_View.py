@@ -964,7 +964,7 @@ class DP_View(Screen, NumericalTextInput):
 			params = {}
 			printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
 			for key in self.onEnterPrimaryKeys:
-				if key != "play":
+				if key != "play" or key != "directMode":
 					params[key] = selection[1][key]
 			select = (self.currentKeyValuePair, params)
 
@@ -1004,7 +1004,7 @@ class DP_View(Screen, NumericalTextInput):
 				params = {}
 				printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
 				for key in self.onEnterPrimaryKeys:
-					if key != "play":
+					if key != "play" or key != "directMode":
 						params[key] = selection[1][key]
 				select = (self.currentKeyValuePair, params)
 			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter, choice[1]))
@@ -1107,7 +1107,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				self._load(params)
 
-			elif viewMode == "play":
+			elif viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
 
@@ -1142,7 +1142,7 @@ class DP_View(Screen, NumericalTextInput):
 			#details
 			viewMode		= details['viewMode']
 
-			if viewMode == "play":
+			if viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
 				self.playEntry(selection)
 
@@ -1680,7 +1680,7 @@ class DP_View(Screen, NumericalTextInput):
 			primaryKeyValuePair = {}
 			printl( "self.onEnterPrimaryKeys: " + str(self.onEnterPrimaryKeys), self, "D")
 			for key in self.onEnterPrimaryKeys:
-				if key != "play":
+				if key != "play" or key != "directMode":
 					primaryKeyValuePair[key] = selection[1][key]
 			select = (self.currentKeyValuePair, primaryKeyValuePair)
 		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, select, self.activeSort, self.activeFilter))
