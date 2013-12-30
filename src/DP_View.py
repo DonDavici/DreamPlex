@@ -1226,6 +1226,8 @@ class DP_View(Screen, NumericalTextInput):
 					seenVisu = unseenicon
 				elif '/started-fs8.png' in str(listView[4]):
 					seenVisu = startedicon
+				else:
+					seenVisu = unseenicon
 				#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
 				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
 				self.newList.append(content)
