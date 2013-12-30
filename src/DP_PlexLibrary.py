@@ -2736,7 +2736,7 @@ class PlexLibrary(Screen):
 	def _showErrorOnTv(self, text, content):
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + ("\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")   
 

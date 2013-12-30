@@ -711,7 +711,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			serverID = self.currentId
 			self.session.open(DPS_Mappings, serverID)
 		else:
-			self.session.open(MessageBox,_("myPlex Token:\n%s \nfor the user:\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 
@@ -801,3 +801,39 @@ class DPS_ServerEntryList(MenuList):
 		self.moveToIndex(0)
 				
 		printl("", self, "C")
+
+#===============================================================================
+# fictive setting for translation of returned strings from PlexServer
+#===============================================================================
+def _StringsForTransalation():
+	a = _("All")
+	a = _("All Movies")
+	a = _("All Filmy")
+	a = _("All Shows")
+	a = _("All episodes")
+	a = _("By Genre")
+	a = _("By Folder")
+	a = _("By First Letter")
+	a = _("By Resolution")
+	a = _("By Rating")
+	a = _("By Country")
+	a = _("By Director")
+	a = _("By Decade")
+	a = _("By Year")
+	a = _("By Collection")
+	a = _("By Content Rating")
+	a = _("By Starring Actor")
+	a = _("Recently Aired")
+	a = _("Recently Added")
+	a = _("Recently Released")
+	a = _("Recently Viewed")
+	a = _("Recently Viewed Episodes")
+	a = _("Recently Viewed Shows")
+	a = _("Unwatched")
+	a = _("On Deck")
+	a = _("Search...")
+	a = _("Search Shows...")
+	a = _("Search Episodes...")
+	a = _("Movies")
+	a = _("Shows")
+	a = _("Series")
