@@ -254,6 +254,7 @@
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
         <widget name="rated" position="50,650" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-not-fs8.png"/>
@@ -350,6 +351,7 @@
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="570,110" size="550,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
 
@@ -435,6 +437,7 @@
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="750,290" size="520,30" font="Saint;24" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="750,250" size="520,30" font="Saint;24" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="750,270" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="770,320" size="500,26" font="Saint; 20" foregroundColor="#CCCCCC" backgroundColor="#000000"/>
 

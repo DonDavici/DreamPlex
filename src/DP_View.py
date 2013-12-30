@@ -274,6 +274,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["title"] = Label()
 		self["grandparentTitle"] = Label()
+		self["season"] = Label()
 
 		self["tag"] = Label()
 
@@ -1442,6 +1443,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				self.setText("title", self.details.get("title", " "))
 				self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
+				self.setText("season", "Season " + self.details.get("season", " "))
 				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 				self.setText("year", str(self.details.get("year", " - ")))
 				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))

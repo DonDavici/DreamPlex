@@ -99,4 +99,12 @@
 
 	</episodeView>
 
+	<episodeView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
+
+	</episodeView>
+
+	<episodeView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+
+	</episodeView>
+
 </xml>
