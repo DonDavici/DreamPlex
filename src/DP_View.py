@@ -1223,8 +1223,6 @@ class DP_View(Screen, NumericalTextInput):
 			if listView is not None:
 				if '/seen-fs8.png' in str(listView[4]):
 					seenVisu = seenicon
-				elif '/unseen-fs8.png' in str(listView[4]):
-					seenVisu = unseenicon
 				elif '/started-fs8.png' in str(listView[4]):
 					seenVisu = startedicon
 				else:
