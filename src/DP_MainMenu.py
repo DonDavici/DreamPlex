@@ -618,7 +618,7 @@ class DPS_MainMenu(Screen):
 	def Error(self, error):
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s") % error, MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + ("\n%s") % error, MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 		

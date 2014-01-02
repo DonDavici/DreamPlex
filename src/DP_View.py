@@ -248,19 +248,19 @@ class DP_View(Screen, NumericalTextInput):
 		self["txt_filter"]		= Label()
 		self["txt_yellow"]		= Label()
 		self["txt_blue"]		= Label()
-		self["txt_blue"].setText(_("toogle View ") + _("(current 'Default')"))
+		self["txt_blue"].setText(_("toggle View ") + _("(current 'Default')"))
 
 
 		if self.fastScroll:
-			self["txt_yellow"].setText("fastScroll = On")
+			self["txt_yellow"].setText(_("fastScroll = On"))
 		else:
-			self["txt_yellow"].setText("fastScroll = Off")
+			self["txt_yellow"].setText(_("fastScroll = Off"))
 
 		self["txt_pvr"] = Label()
-		self["txt_pvr"].setText("load additional data")
+		self["txt_pvr"].setText(_("load additional data"))
 
 		self["txt_menu"] = Label()
-		self["txt_menu"].setText("show media functions")
+		self["txt_menu"].setText(_("show media functions"))
 
 		self["sound"] = MultiPixmap()
 
@@ -282,23 +282,23 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["subtitles"] = Label()
 		self["subtitlesLabel"] = Label()
-		self["subtitlesLabel"].setText("Subtitles:")
+		self["subtitlesLabel"].setText(_("Subtitles:"))
 
 		self["audio"] = Label()
 		self["audioLabel"] = Label()
-		self["audioLabel"].setText("Audio:")
+		self["audioLabel"].setText(_("Audio:"))
 
 		self["genre"] = Label()
 		self["genreLabel"] = Label()
-		self["genreLabel"].setText("Genre:")
+		self["genreLabel"].setText(_("Genre:"))
 
 		self["year"] = Label()
 		self["yearLabel"] = Label()
-		self["yearLabel"].setText("Year:")
+		self["yearLabel"].setText(_("Year:"))
 
 		self["runtime"] = Label()
 		self["runtimeLabel"] = Label()
-		self["runtimeLabel"].setText("Runtime:")
+		self["runtimeLabel"].setText(_("Runtime:"))
 
 		self["total"] = Label()
 
@@ -1321,9 +1321,9 @@ class DP_View(Screen, NumericalTextInput):
 		printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
 
 		if len(self.activeFilter[2]) > 0:
-			text = "set Filter (set to '%s')" % (_(self.activeFilter[2]))
+			text = _("set Filter (set to '%s')") % (_(self.activeFilter[2]))
 		else:
-			text = "set Filter (set to '%s')" % (_(self.activeFilter[0]))
+			text = _("set Filter (set to '%s')") % (_(self.activeFilter[0]))
 
 		self["txt_filter"].setText(text)
 
@@ -1611,11 +1611,11 @@ class DP_View(Screen, NumericalTextInput):
 			self.showDetail = False
 		else:
 			if self.playerData['fallback']:
-				message = "Sorry I didn't find the file on the provided locations"
-				locations = "Location:\n " + self.playerData['locations']
-				suggestion = "Please verify you direct local settings"
-				fallback = "I will now try to play the file via transcode."
-				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+				message = _("Sorry I didn't find the file on the provided locations")
+				locations = _("Location:") + "\n " + self.playerData['locations']
+				suggestion = _("Please verify you direct local settings")
+				fallback = _("I will now try to play the file via transcode.")
+				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + ("\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
 			else:
 				self.checkResume(resumeStamp)
 
