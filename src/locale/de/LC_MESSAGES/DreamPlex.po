@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-02 12:54+0100\n"
-"PO-Revision-Date: 2014-01-02 12:54+0100\n"
+"PO-Revision-Date: 2014-01-05 20:26+0100\n"
 "Last-Translator: DonDavici <dondavici@gmail.com>\n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: \n"
@@ -24,23 +24,23 @@ msgstr "mipsel (OE 2.0) gefunden => Suche nach gst-plugin-bad-fragmented"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:77
 msgid "Check for 'gst-plugin-fragmented if you are using OE16."
-msgstr ""
+msgstr "Auf gst-plugin-fragemented prüfen bei O16."
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:78
 msgid "Check for 'gst-plugins-bad-fragmented if you are using OE20."
-msgstr ""
+msgstr "Auf gst-plugin-fragemented prüfen bei O20."
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:80
 msgid "Check curl installation data."
-msgstr ""
+msgstr "curl Installationsdaten überprüfen?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:81
 msgid "Check DreamPlex installation data."
-msgstr ""
+msgstr "DreamPlex Installationsdaten überprüfen?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:84
 msgid "Check for update."
-msgstr ""
+msgstr "Auf Update prüfen?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:88
 msgid "Exit"
@@ -111,125 +111,125 @@ msgstr "Direct Local"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "64kbps, 128p, 3fps"
-msgstr ""
+msgstr "64kbps, 128p, 3fps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "96kbps, 128p, 12fps"
-msgstr ""
+msgstr "96kbps, 128p, 12fps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "208kbps, 160p, 15fps"
-msgstr ""
+msgstr "208kbps, 160p, 15fps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "320kbps, 240p"
-msgstr ""
+msgstr "320kbps, 240p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "720kbps, 320p"
-msgstr ""
+msgstr "720kbps, 320p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "1.5Mbps, 480p"
-msgstr ""
+msgstr "1.5Mbps, 480p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "2Mbps, 720p"
-msgstr ""
+msgstr "2Mbps, 720p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "3Mbps, 720p"
-msgstr ""
+msgstr "3Mbps, 720p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "4Mbps, 720p"
-msgstr ""
+msgstr "4Mbps, 720p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "8Mbps, 1080p"
-msgstr ""
+msgstr "8Mbps, 1080p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "10Mbps, 1080p"
-msgstr ""
+msgstr "10Mbps, 1080p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "12Mbps, 1080p"
-msgstr ""
+msgstr "12Mbps, 1080p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:211
 msgid "20Mbps, 1080p"
-msgstr ""
+msgstr "20Mbps, 1080p"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "420x240, 320kbps"
-msgstr ""
+msgstr "420x240, 320kbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "576x320, 720 kbps"
-msgstr ""
+msgstr "576x320, 720 kbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "720x480, 1,5mbps"
-msgstr ""
+msgstr "720x480, 1,5mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1024x768, 2mbps"
-msgstr ""
+msgstr "1024x768, 2mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1280x720, 3mbps"
-msgstr ""
+msgstr "1280x720, 3mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1280x720, 4mbps"
-msgstr ""
+msgstr "1280x720, 4mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1920x1080, 8mbps"
-msgstr ""
+msgstr "1920x1080, 8mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1920x1080, 10mbps"
-msgstr ""
+msgstr "1920x1080, 10mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1920x1080, 12mbps"
-msgstr ""
+msgstr "1920x1080, 12mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:215
 msgid "1920x1080, 20mbps"
-msgstr ""
+msgstr "1920x1080, 20mbps"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:291
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:598
 msgid "Movies"
-msgstr ""
+msgstr "Filme"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:294
 msgid "TV Shows"
-msgstr ""
+msgstr "Serien"
 
 #: /hdd/workspaces/DreamPlex/src/__init__.py:297
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:604
 msgid "Music"
-msgstr ""
+msgstr "Musik"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:343
 msgid "Press exit to return"
-msgstr ""
+msgstr "Exit drücken für Zurück"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:344
 msgid "If you are using myPlex"
-msgstr ""
+msgstr "Wenn myPlex verwendet wird"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:345
 msgid "please check if curl is installed."
-msgstr ""
+msgstr "überprüfen Sie Ihre curl-Installation."
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:346
 msgid "You can use Systemcheck in the menu."
-msgstr ""
+msgstr "Verwenden Sie dazu den Systemcheck im Hauptmenü."
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:510
 #, python-format
@@ -238,6 +238,9 @@ msgid ""
 "Check Username and Password.\n"
 "%s"
 msgstr ""
+"myPlex Token Fehler:\n"
+"Überprüfen Sie Benutzernamen und Kennwort.\n"
+"%s"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:517
 #, python-format
@@ -246,56 +249,59 @@ msgid ""
 "This is the answer from the request ...\n"
 "%s"
 msgstr ""
+"Unerwarteter Fehler:\n"
+"Der Request lieferte folgende Antwort ...\n"
+"%s"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:636
 msgid "no xml as response - tree"
-msgstr ""
+msgstr "kein xml als Antwort - tree"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:644
 msgid "no xml as response - directory"
-msgstr ""
+msgstr "kein xml als Antwort - directory"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:649
 msgid "no xml as response - viewGroup"
-msgstr ""
+msgstr "kein xml als Antwort - viewGroup"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:2739
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:621
 msgid "UNEXPECTED ERROR:"
-msgstr ""
+msgstr "UNERWARTETER FEHLER:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:66
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:67
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:157
 msgid "Invalid Location"
-msgstr ""
+msgstr "ungültiger Ort"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:84
 msgid "Delete Entry"
-msgstr ""
+msgstr "Eintrag löschen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:85
 msgid "Add Entry"
-msgstr ""
+msgstr "Eintrag hinzufügen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:131
 msgid "Enter your remote path segment here:"
-msgstr ""
+msgstr "Tragen Sie den Remotepfad Teil hier ein:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:133
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:148
 msgid "Adding new mapping was not completed"
-msgstr ""
+msgstr "Hinzüfügen des neuen Mappings ist fehlgeschlagen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:125
 msgid "DreamPlex"
-msgstr ""
+msgstr "DreamPlex"
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:147
 msgid ""
