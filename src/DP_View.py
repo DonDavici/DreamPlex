@@ -1933,7 +1933,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "C")
 
 	#===========================================================================
-	#
+	# choice = name, media_id, languageCode, sub_id, server, part_id, selected
 	#===========================================================================
 	def displayAudioMenuCallback(self, choice):
 		printl("", self, "S")
@@ -1943,12 +1943,12 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("choice" + str(choice), self, "D")
 
-		Singleton().getPlexInstance().setAudioById(choice[4], choice[3], choice[2], choice[5])
+		Singleton().getPlexInstance().setAudioById(choice[4], choice[2], choice[5])
 
 		printl("", self, "C")
 
 	#===========================================================================
-	#
+	# choice = name, media_id, languageCode, sub_id, server, part_id, selected
 	#===========================================================================
 	def displaySubtitleMenuCallback(self, choice):
 		printl("", self, "S")
@@ -1958,7 +1958,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("choice" + str(choice), self, "D")
 
-		Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[2], choice[5])
+		Singleton().getPlexInstance().setSubtitleById(choice[4], choice[3], choice[5])
 
 		printl("", self, "C")
 
