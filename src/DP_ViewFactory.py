@@ -177,18 +177,19 @@ def getSubViewParams(tree):
 		subViewName = view.get("name", None)
 		myDictParams = {}
 
-		for element in view.iter("element"):
-			name = element.get("name")
-			myDictParams[name] = {}
+		if subViewName is not None: # we do this for compatibility with oe16 with python 2.7
+			for element in view.iter("element"):
+				name = element.get("name")
+				myDictParams[name] = {}
 
-			params = element.attrib
-			printl("params: " + str(params), __name__, "D")
+				params = element.attrib
+				printl("params: " + str(params), __name__, "D")
 
-			for key, value in params.items():
-				translatedValue = translateValues(value)
+				for key, value in params.items():
+					translatedValue = translateValues(value)
 
-				if key != "name":
-					myDictParams[name][key] = translatedValue
+					if key != "name":
+						myDictParams[name][key] = translatedValue
 
 		myDict[subViewName] = myDictParams
 
