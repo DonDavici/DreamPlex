@@ -79,7 +79,7 @@ config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 
-if source == "feed":
+if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
 else:
 	config.plugins.dreamplex.showUpdateFunction	    = ConfigYesNo(default = True)

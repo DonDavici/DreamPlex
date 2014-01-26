@@ -118,7 +118,7 @@ class DPS_SystemCheck(Screen):
 	def checkForUpdate(self):
 		printl("", self, "S")
 		
-		if testInetConnectivity():
+		if testInetConnectivity() and self.checkCurlInstallation(True):
 			printl( "Starting request", self, "D")
 			curl_string = 'curl -s -k "%s"' % "https://api.github.com/repos/DonDavici/DreamPlex/tags"
 			
@@ -148,7 +148,7 @@ class DPS_SystemCheck(Screen):
 				self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
 
 		else:
-			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available!"), MessageBox.TYPE_INFO)
+			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available or curl is not installed!"), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 
@@ -184,13 +184,13 @@ class DPS_SystemCheck(Screen):
 			end = starter + 50
 			closer = self.response.find('",', starter, end)
 			printl("closer: " + str(closer), self, "D")
-			start = closer - 11
-			latestStabel = self.response[start:closer] # is a bit dirty but better than forcing users to install simplejson
+			# is a bit dirty but better than forcing users to install simplejson
+			start = (self.response.find('": "', starter, end)) + 4 # we correct the string here right away => : "1.09-beta.9 becomes 1.09.beta.9
+			latestStabel = self.response[start:closer]
 			printl("found version: " + str(latestStabel), self, "D")
 			isBeta = self.checkIfBetaVersion(latestStabel)
 			if not isBeta:
 				isStable = True
-				latestStabel = latestStabel[-4:]
 			else:
 				leftLimiter = closer
 		
@@ -288,15 +288,15 @@ fi""" % str(remoteUrl)
 		printl("", self, "C")
 	
 	#===========================================================================
-	# 
+	# override is used to get bool as answer and not the plugin information
 	#===========================================================================
-	def checkCurlInstallation(self):
+	def checkCurlInstallation(self, override=False):
 		printl("", self, "S")
 		
 		command = "opkg status curl"
 		
 		self.check = "curl"
-		self.executeCommand(command)
+		self.executeCommand(command, override)
 		
 		printl("", self, "C")
 		
@@ -341,7 +341,7 @@ fi""" % str(remoteUrl)
 	#===============================================================================
 	# 
 	#===============================================================================
-	def executeCommand(self, command):
+	def executeCommand(self, command, override=False):
 		printl("", self, "S")
 		
 		pipe = popen(command)
@@ -350,9 +350,13 @@ fi""" % str(remoteUrl)
 			data = pipe.read(8192)
 			pipe.close()
 			if data is not None and data != "":
+				if override:
+					return True
 				# plugin is installed
 				self.session.open(MessageBox, _("Information:\n") + data, MessageBox.TYPE_INFO)
 			else:
+				if override is False:
+					return False
 				# plugin is not install
 				if self.check == "gst":
 					self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
