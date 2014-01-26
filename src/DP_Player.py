@@ -516,8 +516,12 @@ class DP_Player(MoviePlayer):
 		
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
-		progress = currentTime / (totalTime/100)
-		printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+
+		if currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+			progress = currentTime / (totalTime/100)
+			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+		else:
+			progress = 100;
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
