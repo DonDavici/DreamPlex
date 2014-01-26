@@ -458,10 +458,10 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-				self.session.nav.playService(self.currentService)
-		self.close((True,) )	#===============================================================================
-	# 
-	#===============================================================================
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(self.currentService)
+
+		self.close((True,) )
 		
 		printl("", self, "C")
 		
