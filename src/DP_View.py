@@ -337,8 +337,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		# on layout finish we have to do some stuff
 		self.onLayoutFinish.append(self.setPara)
-		self.onLayoutFinish.append(self.finishLayout)
 		self.onLayoutFinish.append(self.processGuiElements)
+		self.onLayoutFinish.append(self.finishLayout)
 
 		printl("", self, "C")
 
