@@ -55,7 +55,6 @@ from DP_ViewFactory import getViews
 from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
-#from DPH_Arts import getPictureData
 
 from __common__ import printl2 as printl, convertSize, loadPicture
 from __plugin__ import getPlugins, Plugin
@@ -1221,19 +1220,23 @@ class DP_View(Screen, NumericalTextInput):
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		# so we implement it here
 		self.newList = []
-		seenicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png')
-		unseenicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png')
-		startedicon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png')
+		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
+
 		for listView in self.listViewList:
-			#printl("seenVisu location: " + str(listView[4]), self, "D")
+			printl("seenVisu location: " + str(listView[4]), self, "D")
 			if listView is not None:
-				if '/seen-fs8.png' in str(listView[4]):
-					seenVisu = seenicon
-				elif '/started-fs8.png' in str(listView[4]):
-					seenVisu = startedicon
+				if 'seen-fs8.png' in str(listView[4]):
+					seenVisu = self.seenPic
+
+				elif 'started-fs8.png' in str(listView[4]):
+					seenVisu = self.startedPic
+
+				elif 'unseen-fs8.png' in str(listView[4]):
+					seenVisu = self.unseenPic
+
 				else:
-					seenVisu = unseenicon
-				#printl("loading seenVisu ... (" + str(seenVisu) + ")" , self, "D")
+					seenVisu = undefinedIcon
+
 				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
 				self.newList.append(content)
 
@@ -2166,8 +2169,32 @@ class DP_View(Screen, NumericalTextInput):
 		# if we are in fastScrollMode we remove some gui elements
 		self.resetGuiElementsInFastScrollMode()
 
+		self.getSeenVisus()
+
 		printl("", self, "C")
 
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getSeenVisus(self):
+		printl("", self, "S")
+
+		tree = Singleton().getSkinParamsInstance()
+
+		for seenPic in tree.findall('seenPic'):
+			self.seenPic = loadPicture(str(seenPic.get('path')))
+			printl("self.seenPic: " + str(self.seenPic), self, "D")
+
+		for startedPic in tree.findall('startedPic'):
+			self.startedPic = loadPicture(str(startedPic.get('path')))
+			printl("self.startedPic: " + str(self.startedPic), self, "D")
+
+		for unseenPic in tree.findall('unseenPic'):
+			self.unseenPic = loadPicture(str(unseenPic.get('path')))
+			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
+
+		printl("", self, "C")
 	#===========================================================================
 	#
 	#===========================================================================

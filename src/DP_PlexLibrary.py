@@ -138,6 +138,9 @@ class PlexLibrary(Screen):
 	g_sectionCache = None
 	g_multiUser = False # this is only true if we use myPlex Connection and we have a plexPlass Account active on the server
 	g_currentError = ""
+	seenPic = "seen-fs8.png"
+	unseenPic = "unseen-fs8.png"
+	startedPic = "started-fs8.png"
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -251,8 +254,6 @@ class PlexLibrary(Screen):
 			#Fill serverdata to global g_serverDict
 			self.prepareServerDict()
 		
-		self.getSeenVisus()
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -2855,28 +2856,6 @@ class PlexLibrary(Screen):
 			printl("Plex Client Capability = " + self.g_capability, self, "I")
 			
 			printl("", self, "C")   
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def getSeenVisus(self):
-		printl("", self, "S")
-
-		tree = Singleton().getSkinParamsInstance()
-
-		for seenPic in tree.findall('seenPic'):
-			self.seenPic = str(seenPic.get('path'))
-			printl("self.seenPic: " + str(self.seenPic), self, "D")
-
-		for startedPic in tree.findall('startedPic'):
-			self.startedPic = str(startedPic.get('path'))
-			printl("self.startedPic: " + str(self.startedPic), self, "D")
-
-		for unseenPic in tree.findall('unseenPic'):
-			self.unseenPic = str(unseenPic.get('path'))
-			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
-
-		printl("", self, "C")
 
 	#===========================================================================
 	# 
