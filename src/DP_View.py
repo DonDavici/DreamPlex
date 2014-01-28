@@ -959,6 +959,9 @@ class DP_View(Screen, NumericalTextInput):
 	def onToggleView(self, forceUpdate=False):
 		printl("", self, "S")
 
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
+
 		select = None
 		selection = self["listview"].getCurrent()
 		if selection is not None:
@@ -1159,6 +1162,9 @@ class DP_View(Screen, NumericalTextInput):
 
 		selectKeyValuePair = self.onLeaveSelectKeyValuePair
 		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
+
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
 
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
@@ -1528,12 +1534,27 @@ class DP_View(Screen, NumericalTextInput):
 	def playEntry(self, selection):
 		printl("", self, "S")
 
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
+
 		self.media_id = selection[1]['ratingKey']
 		server = selection[1]['server']
 
 		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
 
 		self.selectMedia(self.count, self.options, self.server)
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def stopBackdropVideo(self):
+		printl("", self, "S")
+
+		if self.loadedStillPictureLib and self.usedStillPicture:
+			# stop the m1v playback to avoid blocking the playback of the movie
+			self["backdropVideo"].finishStillPicture()
 
 		printl("", self, "C")
 
