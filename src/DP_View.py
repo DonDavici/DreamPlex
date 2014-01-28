@@ -1615,7 +1615,7 @@ class DP_View(Screen, NumericalTextInput):
 				locations = _("Location:") + "\n " + self.playerData['locations']
 				suggestion = _("Please verify you direct local settings")
 				fallback = _("I will now try to play the file via transcode.")
-				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + ("\n%s\n\n%s\n\n%s\n\n%s") % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
 			else:
 				self.checkResume(resumeStamp)
 

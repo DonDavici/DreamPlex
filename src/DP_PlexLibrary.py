@@ -950,7 +950,7 @@ class PlexLibrary(Screen):
 				error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
 				printl( error, self, "I")
 				printl("", self, "C")
-				return False
+				return error
 			
 			else:   
 				link=data.read()
