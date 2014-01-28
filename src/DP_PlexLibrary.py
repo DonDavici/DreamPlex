@@ -514,7 +514,7 @@ class PlexLibrary(Screen):
 					printl("myPlexUrlwithSection: " + str(html),self, "D")
 				
 			if html is False or html is None:
-				self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % html, MessageBox.TYPE_INFO)
+				self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % self.currentError, MessageBox.TYPE_INFO)
 				continue
 
 			tree = None
@@ -950,7 +950,8 @@ class PlexLibrary(Screen):
 				error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
 				printl( error, self, "I")
 				printl("", self, "C")
-				return error
+				self.currentError = error
+				return False
 			
 			else:   
 				link=data.read()
