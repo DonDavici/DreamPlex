@@ -137,6 +137,7 @@ class PlexLibrary(Screen):
 	g_myplex_accessTokenDict = {}
 	g_sectionCache = None
 	g_multiUser = False # this is only true if we use myPlex Connection and we have a plexPlass Account active on the server
+	g_currentError = ""
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -514,7 +515,7 @@ class PlexLibrary(Screen):
 					printl("myPlexUrlwithSection: " + str(html),self, "D")
 				
 			if html is False or html is None:
-				self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % self.currentError, MessageBox.TYPE_INFO)
+				self.session.open(MessageBox,_("UNEXPECTED ERROR:\nThis is the answer from the request ...\n%s") % self.g_currentError, MessageBox.TYPE_INFO)
 				continue
 
 			tree = None
@@ -950,7 +951,7 @@ class PlexLibrary(Screen):
 				error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
 				printl( error, self, "I")
 				printl("", self, "C")
-				self.currentError = error
+				self.g_currentError = error
 				return False
 			
 			else:   
