@@ -1225,13 +1225,13 @@ class DP_View(Screen, NumericalTextInput):
 		for listView in self.listViewList:
 			printl("seenVisu location: " + str(listView[4]), self, "D")
 			if listView is not None:
-				if 'seen-fs8.png' in str(listView[4]):
+				if 'seen-fs8.png' == str(listView[4]):
 					seenVisu = self.seenPic
 
-				elif 'started-fs8.png' in str(listView[4]):
+				elif 'started-fs8.png' == str(listView[4]):
 					seenVisu = self.startedPic
 
-				elif 'unseen-fs8.png' in str(listView[4]):
+				elif 'unseen-fs8.png' == str(listView[4]):
 					seenVisu = self.unseenPic
 
 				else:
