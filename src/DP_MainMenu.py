@@ -538,7 +538,7 @@ class DPS_MainMenu(Screen):
 			self.sleepNow()
 		else:
 			# User said 'no'
-			self.getServerData() 
+			self.refreshMenu(0)
 	
 		printl("", self, "C")
 		
