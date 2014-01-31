@@ -55,7 +55,7 @@ class DP_LibMain(Screen):
 		self._views = getViews(libraryName)
 		self.currentViewIndex = 0
 		
-		self.defaultPickle = "%sdefault_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, libraryName, )
+		self.defaultPickle = "%s%s_view_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, config.plugins.dreamplex.skins.value, libraryName, )
 		self.onFirstExecBegin.append(self.showDefaultView)
 		
 		printl("", self, "C")
@@ -318,7 +318,7 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
+
 		playbackList = []
 		playbackList.append( (entry["Path"], entry["title"], entry, ))
 		
@@ -346,7 +346,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		args = self.buildInfoPlaybackArgs(entry)
 		args["status"]  = "playing"
 		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
@@ -366,7 +365,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		args = {}
 		args["status"] = "stopped"
 		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
@@ -386,7 +384,6 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		
-		printl("", self, "D")
 		self.notifyEntryStopped(flags)
 		self.notifyEntryPlaying(entry, flags)
 		

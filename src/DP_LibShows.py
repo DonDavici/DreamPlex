@@ -42,17 +42,22 @@ class DP_LibShows(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None):
+	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None, viewGroup=None):
 		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		"""
 		printl ("", self, "S")
-		
-		DP_LibMain.__init__(self, session, "tvshows")
-		self.g_url = url
+
 		self.showEpisodesDirectly = showEpisodesDirectly
+		if self.showEpisodesDirectly:
+			DP_LibMain.__init__(self, session, "episodes")
+		else:
+			DP_LibMain.__init__(self, session, "tvshows")
+
+		self.g_url = url
 		self.g_uuid = uuid
 		self.g_source = source
+		self.g_viewGroup = viewGroup
 		
 		printl ("", self, "C")
 
@@ -64,11 +69,11 @@ class DP_LibShows(DP_LibMain):
 		printl("params: " + str(params), self, "D")
 		
 		if self.showEpisodesDirectly:
-			printl("show episodes in OnDeck ...", self, "I")
+			printl("show episodes directly ...", self, "I")
 			
 			url = self.g_url
 			
-			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
 			sort = [("by title", None, False), ]
 			
@@ -88,7 +93,7 @@ class DP_LibShows(DP_LibMain):
 				
 				if config.plugins.dreamplex.useCache.value:
 					#noinspection PyAttributeOutsideInit
-					self.tvShowPickle = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid,)
+					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid, self.g_viewGroup)
 					
 					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
@@ -142,7 +147,7 @@ class DP_LibShows(DP_LibMain):
 	
 				library = Singleton().getPlexInstance().getSeasonsOfShow(url)
 				
-				sort = (("by season", "season", False), )
+				sort = (("by season", True, False), )
 				
 				myFilter = [("All", (None, False), ("", )), ]
 				

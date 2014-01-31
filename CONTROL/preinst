@@ -1,0 +1,15 @@
+#!/bin/sh
+echo -e '\n'
+echo Checking for an older version of DreamPlex in the system...
+if [ -d /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex ]
+then
+rm -rf /usr/lib/enigma2/python/Plugins/Extensions/DreamPlex > /dev/null 2>&1
+echo An older version of DreamPlex was found and removed
+echo Proceeding to installation...
+else
+echo DreamPlex was not found in the system
+echo Proceeding to installation...
+fi
+echo Deleting presets like default view ...
+rm /hdd/dreamplex/*.bin > /dev/null 2>&1
+exit 0

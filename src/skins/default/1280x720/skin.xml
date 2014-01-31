@@ -253,12 +253,14 @@
         <widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="61,325" size="190,30" font="Saint;22" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="center" valign="center" noWrap="1" position="35,673" size="340,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
         <widget name="rated" position="50,650" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/rated-not-fs8.png"/>
 
-        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="850,270" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top" position="950,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="850,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -266,8 +268,8 @@
         <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1050,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="1115,298" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" valign="top" position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="545,270" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="700,270" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="545,298" size="160,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="audio" transparent="1" zPosition="4" halign="left" valign="top" position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -348,6 +350,8 @@
         <widget name="current" transparent="1" zPosition="5" halign="left" valign="center" position="70,645" size="190,30" font="Saint;22" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="570,110" size="550,26" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
 
@@ -432,6 +436,8 @@
         <widget name="current" transparent="1" zPosition="5" halign="right" valign="center" position="280,675" size="190,30" font="Saint;20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="title" transparent="1" zPosition="5" halign="left" position="750,290" size="520,30" font="Saint;24" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="750,250" size="520,30" font="Saint;24" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="750,270" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="770,320" size="500,26" font="Saint; 20" foregroundColor="#CCCCCC" backgroundColor="#000000"/>
 

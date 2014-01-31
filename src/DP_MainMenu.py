@@ -230,7 +230,9 @@ class DPS_MainMenu(Screen):
 					self.s_url = params.get('t_url', "notSet")
 					self.s_mode = params.get('t_mode', "notSet")
 					self.s_final = params.get('t_final', "notSet")
-					
+					self.s_source = params.get('t_source', "notSet")
+					self.s_uuid = params.get('t_uuid', "notSet")
+
 					self.getFilterData()
 				
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
@@ -270,7 +272,8 @@ class DPS_MainMenu(Screen):
 				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
 				self.uuid = params.get('t_uuid', "notSet")
 				self.source = params.get('t_source', "notSet")
-				
+				self.viewGroup = params.get('t_viewGroup', "notSet")
+
 				isSearchFilter = params.get('isSearchFilter', "notSet")
 				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
 				if isSearchFilter == "True" or isSearchFilter and isSearchFilter != "notSet":
@@ -338,14 +341,14 @@ class DPS_MainMenu(Screen):
 		printl("", self, "C")	
 	
 	#===========================================================================
-	# 
+	# this function starts DP_Lib...
 	#===========================================================================
 	def executeSelectedEntry(self):
 		printl("", self, "S")
 		printl("self.s_url: " + str(self.s_url), self, "D")
 		
 		if self.selectedEntry.start is not None:
-			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source}
+			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source , "viewGroup": self.viewGroup}
 			
 			if self.showEpisodesDirectly != "notSet":
 				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
@@ -455,10 +458,10 @@ class DPS_MainMenu(Screen):
 		printl("", self, "S")
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-				self.session.nav.playService(self.currentService)
-		self.close((True,) )	#===============================================================================
-	# 
-	#===============================================================================
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(self.currentService)
+
+		self.close((True,) )
 		
 		printl("", self, "C")
 		
@@ -535,7 +538,7 @@ class DPS_MainMenu(Screen):
 			self.sleepNow()
 		else:
 			# User said 'no'
-			self.getServerData() 
+			self.refreshMenu(0)
 	
 		printl("", self, "C")
 		
@@ -575,7 +578,7 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	def getFilterData(self):
 		printl("", self, "S")
-		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final)
+		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_source, self.s_uuid )
 		
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
@@ -615,7 +618,7 @@ class DPS_MainMenu(Screen):
 	def Error(self, error):
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:\n%s") % error, MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s" % error, MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 		

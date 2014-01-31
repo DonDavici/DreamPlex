@@ -75,9 +75,11 @@ config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo()
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
-config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo(default = True)
+config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
+config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
+config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 
-if source == "feed":
+if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
 else:
 	config.plugins.dreamplex.showUpdateFunction	    = ConfigYesNo(default = True)
@@ -170,6 +172,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].dns				= ConfigText(default = "my.dns.url", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default = defaultPort, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
+	config.plugins.dreamplex.Entries[i].localAuth	    = ConfigYesNo()
 
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
@@ -288,7 +291,7 @@ def loadPlexPlugins():
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="movies", name=_("Movies"), start=DP_LibMovies, where=Plugin.MENU_MOVIES))
 
-	printl("registering ... tvhshows", "__init__::loadPlexPlugins", "D")
+	printl("registering ... tvshows", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="tvshows", name=_("TV Shows"), start=DP_LibShows, where=Plugin.MENU_TVSHOWS))
 
 	printl("registering ... music", "__init__::loadPlexPlugins", "D")

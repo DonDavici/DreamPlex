@@ -27,7 +27,7 @@ from Components.config import config
 from __common__ import printl2 as printl
 
 #===============================================================================
-# 
+# DEPRECATED FOR NOW
 #===============================================================================
 def getPictureData(details, prefix, postfix, usePicCache):
 	printl("", __name__, "S")

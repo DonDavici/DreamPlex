@@ -219,15 +219,15 @@ def testInetConnectivity(target="http://www.google.com"):
 			socket.setdefaulttimeout(2)
 			page = opener.open(target)
 		if page is not None:
-
+			printl2("success, returning TRUE", "__common__::testInetConnectivity", "D")
 			printl2("", "__common__::testInetConnectivity", "C")
 			return True
 		else:
-
+			printl2("failure, returning FALSE", "__common__::testInetConnectivity", "D")
 			printl2("", "__common__::testInetConnectivity", "C")
 			return False
 	except:
-
+		printl2("exception, returning FALSE", "__common__::testInetConnectivity", "D")
 		printl2("", "__common__::testInetConnectivity", "C")
 		return False
 

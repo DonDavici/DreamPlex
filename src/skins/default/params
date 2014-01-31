@@ -39,34 +39,72 @@
 
 	<!-- MOVIE VIEWS -->
 	<movieView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+		<main name="subtitles" visible="False"/>
 	</movieView>
 
 	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
-		<element name="backdrop" visible="False"/>
+		<main name="backdrop" visible="False"/>
+		<main name="subtitles" visible="False"/>
 	</movieView>
 
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
-		<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+		<main name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+		<main name="subtitles" visible="False"/>
 	</movieView>
 
 	<!-- SHOW VIEWS -->
-
 	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
 		<subView name="ShowSeasons">
-			<element name="audio" visible="True" xCoord="300" yCoord="300"/>
-			<element name="genre" visible="False"/>
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
 		</subView>
+
 		<subView name="ShowEpisodes">
-			<element name="genre" visible="True" xCoord="300" yCoord="300"/>
-			<element name="audio" visible="False"/>
+		<element name="shortDescription" visible="True"/>
+		<element name="runtime" visible="True" xCoord="650" yCoord="270" />
 		</subView>
 	</showView>
 
-	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" showBackdrop="False" backdropVideos="False">
-		<element name="backdrop" visible="False"/>
+	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
+		<main name="backdrop" visible="False"/>
+
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+			<element name="shortDescription" visible="True"/>
+			<element name="runtime" visible="True" />
+		</subView>
 	</showView>
 
-	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropHeight="720" backdropWidth="1280" backdrop_postfix="_backdrop_1280x720.jpg" backdropVideos="True">
+	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+			<element name="shortDescription" visible="True"/>
+			<element name="runtime" visible="True" />
+		</subView>
 	</showView>
+
+	<!-- EPISODE VIEWS -->
+	<episodeView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+
+	</episodeView>
+
+	<episodeView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
+
+	</episodeView>
+
+	<episodeView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+
+	</episodeView>
 
 </xml>

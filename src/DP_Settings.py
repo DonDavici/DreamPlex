@@ -113,30 +113,37 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Picture Cache"), config.plugins.dreamplex.usePicCache, _("Use this if you do not have enough space on your box e.g. no hdd drive just flash.")))
-		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Infobar when buffer drained"), config.plugins.dreamplex.showInfobarOnBuffer, _(" ")))
 		
-		if config.plugins.dreamplex.showUpdateFunction.value:
-			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
-			self.cfglist.append(getConfigListEntry(_("> Updatetype"), config.plugins.dreamplex.updateType, _("Use Beta only if you really want to help with testing")))
-
+		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
 		# also backdrops as video needs to turn of live tv
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
-			self.cfglist.append(getConfigListEntry(_("> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
+			self.cfglist.append(getConfigListEntry(_(">> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
+
+			# if backdrop videos are active we have to turn off theme playback
+			if config.plugins.dreamplex.useBackdropVideos.value:
+				config.plugins.dreamplex.playTheme.value = False
+			else:
+				self.cfglist.append(getConfigListEntry(_(">> Play Themes in TV Shows"), config.plugins.dreamplex.playTheme, _(" ")))
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
 			config.plugins.dreamplex.playTheme.value = False
 			config.plugins.dreamplex.useBackdropVideos.value = False
-		
+
+		if config.plugins.dreamplex.showUpdateFunction.value:
+			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
+			self.cfglist.append(getConfigListEntry(_("> Updatetype"), config.plugins.dreamplex.updateType, _("Use Beta only if you really want to help with testing")))
 		# USERINTERFACE SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Userinterface Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Summerize Sections"), config.plugins.dreamplex.summerizeSections, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Filter for Section"), config.plugins.dreamplex.showFilter, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Seen/Unseen count in TvShows"), config.plugins.dreamplex.showUnSeenCounts, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use fastScroll as default"), config.plugins.dreamplex.fastScroll, _(" ")))
-		
+		self.cfglist.append(getConfigListEntry(_("> Show additional data for myPlex sections"), config.plugins.dreamplex.showDetailsInList, _(" ")))
+		if config.plugins.dreamplex.showDetailsInList.value:
+			self.cfglist.append(getConfigListEntry(_("> Detail type for additional data"), config.plugins.dreamplex.showDetailsInListDetailType, _(" ")))
+
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		
@@ -557,17 +564,18 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
 		
 		if self.current.connectionType.value == "0": # IP
-			self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _("Toggle state to on/off")))
+			self.addIpSettings()
+			if self.current.localAuth.value:
+				self.addMyPlexSettings()
+
 		elif self.current.connectionType.value == "1": # DNS
 			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _(" ")))
 			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
+
 		elif self.current.connectionType.value == "2": # MYPLEX
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _(" ")))
-		
+			self.addMyPlexSettings()
+
 		##
 		self.cfglist.append(getConfigListEntry(_("Playback Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
@@ -578,12 +586,12 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			
 		elif self.current.playbackType.value == "1":
 			self.useMappings = False
-			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Use universal Transcoder"), self.current.universalTranscoder, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			if not self.current.universalTranscoder.value:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _(" ")))
-				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.quality, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Segmentsize in seconds"), self.current.segments, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			else:
-				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 			
 		elif self.current.playbackType.value == "2":
 			printl("i am here", self, "D")
@@ -619,7 +627,31 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		self.setKeyNames()
 			
 		printl("", self, "C")
-	
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def addIpSettings(self):
+		printl("", self, "S")
+
+		self.cfglist.append(getConfigListEntry(_(" >> IP"), self.current.ip, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def addMyPlexSettings(self):
+		printl("", self, "S")
+
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need curl installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need curl installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need curl installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _("You need curl installed for this feature! Please check in System ...")))
+
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -709,7 +741,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 			serverID = self.currentId
 			self.session.open(DPS_Mappings, serverID)
 		else:
-			self.session.open(MessageBox,_("myPlex Token:\n%s \nfor the user:\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")
 
@@ -799,3 +831,39 @@ class DPS_ServerEntryList(MenuList):
 		self.moveToIndex(0)
 				
 		printl("", self, "C")
+
+#===============================================================================
+# fictive setting for translation of returned strings from PlexServer
+#===============================================================================
+def _StringsForTransalation():
+	a = _("All")
+	a = _("All Movies")
+	a = _("All Filmy")
+	a = _("All Shows")
+	a = _("All episodes")
+	a = _("By Genre")
+	a = _("By Folder")
+	a = _("By First Letter")
+	a = _("By Resolution")
+	a = _("By Rating")
+	a = _("By Country")
+	a = _("By Director")
+	a = _("By Decade")
+	a = _("By Year")
+	a = _("By Collection")
+	a = _("By Content Rating")
+	a = _("By Starring Actor")
+	a = _("Recently Aired")
+	a = _("Recently Added")
+	a = _("Recently Released")
+	a = _("Recently Viewed")
+	a = _("Recently Viewed Episodes")
+	a = _("Recently Viewed Shows")
+	a = _("Unwatched")
+	a = _("On Deck")
+	a = _("Search...")
+	a = _("Search Shows...")
+	a = _("Search Episodes...")
+	a = _("Movies")
+	a = _("Shows")
+	a = _("Series")

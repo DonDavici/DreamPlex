@@ -109,6 +109,7 @@ class DP_Player(MoviePlayer):
 		self.playbackType = str(playerData['playbackType'])
 		self.connectionType = str(playerData['connectionType'])
 		self.universalTranscoder = playerData['universalTranscoder']
+		self.localAuth = playerData['localAuth']
 		
 		# lets prepare all additional data for a better experience :-)
 		self.title = str(self.videoData['title'])
@@ -179,7 +180,8 @@ class DP_Player(MoviePlayer):
 		"stop": self.leavePlayer,
 		"leavePlayer": self.hide,
 		"next": self.seekManual,
-		"previous": self.seekManual
+		"previous": self.seekManual,
+		"stopRunningRecords": self.leavePlayer
 		}, -2)
 		
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
@@ -200,8 +202,11 @@ class DP_Player(MoviePlayer):
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
 
-		if self.multiUserServer == True and self.connectionType == "2":
-			self.multiUser = True
+		if self.multiUserServer:
+			printl("we are a multiuser server", self, "D")
+			if self.connectionType == "2" or (self.connectionType == "0" and self.localAuth):
+				printl("we are configured for multiuser", self, "D")
+				self.multiUser = True
 			
 		if self.multiUser:
 			self.timelinewatcherthread_stop = threading.Event()
@@ -515,9 +520,12 @@ class DP_Player(MoviePlayer):
 		
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
-		progress = currentTime / (totalTime/100)
-		#progress = 0
-		printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+
+		if currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+			progress = currentTime / (totalTime/100)
+			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+		else:
+			progress = 100;
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
