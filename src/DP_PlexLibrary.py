@@ -2110,6 +2110,7 @@ class PlexLibrary(Screen):
 		playerData["multiUserServer"] = multiUserServer
 		playerData["playbackType"] = self.g_playbackType
 		playerData["connectionType"] = self.g_connectionType
+		playerData["localAuth"] = self.g_localAuth
 		playerData["transcodingSession"] = self.g_sessionID
 		playerData["videoData"] = self.streams['videoData']
 		playerData["mediaData"] = self.streams['mediaData']

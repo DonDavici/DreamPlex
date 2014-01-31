@@ -109,6 +109,7 @@ class DP_Player(MoviePlayer):
 		self.playbackType = str(playerData['playbackType'])
 		self.connectionType = str(playerData['connectionType'])
 		self.universalTranscoder = playerData['universalTranscoder']
+		self.localAuth = playerData['localAuth']
 		
 		# lets prepare all additional data for a better experience :-)
 		self.title = str(self.videoData['title'])
@@ -201,8 +202,11 @@ class DP_Player(MoviePlayer):
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
 
-		if self.multiUserServer == True and self.connectionType == "2":
-			self.multiUser = True
+		if self.multiUserServer:
+			printl("we are a multiuser server", self, "D")
+			if self.connectionType == "2" or (self.connectionType == "0" and self.localAuth):
+				printl("we are configured for multiuser", self, "D")
+				self.multiUser = True
 			
 		if self.multiUser:
 			self.timelinewatcherthread_stop = threading.Event()
