@@ -548,6 +548,10 @@ class DP_Player(MoviePlayer):
 				printl( "Movie marked as watched. Over 95% complete", self, "I")
 				plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
+		if self.multiUser and self.timelinewatcherThread.isAlive():
+			self.timelinewatcherthread_wait.set()
+			self.timelinewatcherthread_stop.set()
+
 		printl("", self, "C")	   
 
 	#===========================================================================
