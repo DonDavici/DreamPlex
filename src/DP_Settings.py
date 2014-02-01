@@ -645,7 +645,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 	def addMyPlexSettings(self):
 		printl("", self, "S")
 
-		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need curl installed for this feature! Please check in System ...")))
+		#self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need curl installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need curl installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need curl installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX renew myPlex token"), self.current.renewMyplexToken, _("You need curl installed for this feature! Please check in System ...")))
