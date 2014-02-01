@@ -495,7 +495,10 @@ class DP_Player(MoviePlayer):
 		printl("", self, "S")
 		
 		if answer:
-			self.handleProgress()
+			if answer != 'EOF':
+				self.handleProgress()
+			else:
+				self.handleProgress(True)
 			if self.playbackType == "1":
 				self.stopTranscoding()
 			self.close()
@@ -508,24 +511,25 @@ class DP_Player(MoviePlayer):
 	def doEofInternal(self, playing):
 		printl("", self, "S")
 		
-		self.leavePlayerConfirmed(True)
+		self.leavePlayerConfirmed('EOF')
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def handleProgress(self):
+	def handleProgress(self, EOF=False):
 		printl("", self, "S")
 		
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 
-		if currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
 			progress = currentTime / (totalTime/100)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
 			progress = 100;
+			printl( "End of file reached", self, "I" )
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
