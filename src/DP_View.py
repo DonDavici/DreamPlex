@@ -1223,8 +1223,8 @@ class DP_View(Screen, NumericalTextInput):
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
 		for listView in self.listViewList:
-			printl("seenVisu location: " + str(listView[4]), self, "D")
 			if listView is not None:
+				printl("seenVisu location: " + str(listView[4]), self, "D")
 				if 'seen-fs8.png' == str(listView[4]):
 					seenVisu = self.seenPic
 
