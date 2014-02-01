@@ -929,9 +929,16 @@ class PlexLibrary(Screen):
 			token = etree.fromstring(response).findtext('authentication-token')
 		except Exception:
 			self._showErrorOnTv("no xml as response", response)
-			 
+
 		if token is None:
-			self._showErrorOnTv("", response)
+			try:
+				error = etree.fromstring(response).findtext('error')
+				if error:
+					self._showErrorOnTv("", error.replace('email, ',''))
+				else:
+					self._showErrorOnTv("", response)
+			except:
+				self._showErrorOnTv("", response)
 			
 			printl("", self, "C")
 			return False
@@ -2770,7 +2777,7 @@ class PlexLibrary(Screen):
 	def _showErrorOnTv(self, text, content):
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + ("\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + ("\n%s\n%s") % (text, content), MessageBox.TYPE_ERROR, timeout=15)
 		
 		printl("", self, "C")   
 
