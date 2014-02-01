@@ -257,6 +257,10 @@ class DPS_MainMenu(Screen):
 
 				elif selection[1] == "DPS_Help":
 					self.session.open(DPS_Help)
+
+				elif selection[1] == "DPS_Sync":
+					from DPH_Syncer import DPS_Syncer
+					self.session.open(DPS_Syncer)
 				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
@@ -633,6 +637,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "settingsEntry"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
+		mainMenuList.append((_("Syncer"), "DPS_Sync", "settingsEntry"))
 		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
 		self.nextExitIsQuit = False

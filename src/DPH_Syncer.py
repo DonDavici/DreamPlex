@@ -40,8 +40,8 @@ from Components.Sources.StaticText import StaticText
 from Screens.Screen import Screen
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS
 
-from Plugins.Extensions.DreamPlex.__common__ import printl2 as printl
-from Plugins.Extensions.DreamPlex.DPH_BackdropMaker import backdropMaker
+from __common__ import printl2 as printl
+from DPH_BackdropMaker import backdropMaker
 #===============================================================================
 # IMPORT
 #===============================================================================
@@ -359,7 +359,7 @@ class ProjectValerieSyncFinished(Screen):
 #===========================================================================
 #
 #===========================================================================
-class ProjectValerieSync(Screen):
+class DPS_Syncer(Screen):
 	skinDeprecated = """
 		<screen position="center,center" size="620,476" title="ProjectValerieSync" >
 			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
@@ -400,21 +400,7 @@ class ProjectValerieSync(Screen):
 		printl("Session: " + str(self.session), self, "H")
 		printl("AutoSync: " + str(self.autoSync), self, "H")
 
-		self.APILevel = getAPILevel(self)
-		printl("APILevel=" + str(self.APILevel), self)
-		if self.APILevel >= 2:
-			self["API"] = DataElement()
-
-		if self.APILevel >= 2:
-			try:
-				from Plugins.Extensions.ProjectValerie.StillPicture import StillPicture
-				self["showiframe"] = StillPicture(session)
-				self.ShowStillPicture = True
-			except Exception, ex:
-				printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "W")
-
-		if self.APILevel == 1:
-			self.skin = self.skinDeprecated
+		self.skin = self.skinDeprecated
 
 		self["key_red"] = StaticText(_("Manage"))
 		self["key_green"] = StaticText(_("Complete Sync"))
@@ -459,8 +445,6 @@ class ProjectValerieSync(Screen):
 		self.notifyStatus()
 
 		printl("syncInfo.inProgress: " + str(syncInfo.inProgress), self)
-		if syncInfo.inProgress is False:
-			self.checkDefaults()
 
 		if self.autoSync:
 			self.delayedTimer = eTimer()
@@ -472,9 +456,6 @@ class ProjectValerieSync(Screen):
 		self.delayedTimer.stop()
 		self.gofast()
 		printl("<-", self, "H")
-
-	def checkDefaults(self):
-		SyncCheckDefaults()
 
 	def close(self):
 		unregisterOutputInstance(self)
