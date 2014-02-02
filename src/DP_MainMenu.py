@@ -259,7 +259,7 @@ class DPS_MainMenu(Screen):
 					self.session.open(DPS_Help)
 
 				elif selection[1] == "DPS_Sync":
-					from DPH_Syncer import DPS_Syncer
+					from DP_Syncer import DPS_Syncer
 					self.session.open(DPS_Syncer)
 				
 				elif selection[1] == "DPS_Exit":
