@@ -377,6 +377,10 @@ def _(txt):
 	#printl("", "__init__::_(txt)", "C")
 	return text
 
+def registerSyncObject():
+	from DP_Syncer import MediaSyncerInfo
+	Singleton().getMediaSyncInstance(MediaSyncerInfo.instance)
+
 #===============================================================================
 # EXECUTE ON STARTUP
 #===============================================================================
@@ -391,4 +395,5 @@ def prepareEnvironment():
 	registerPlexFonts()
 	loadPlexSkin()
 	loadPlexPlugins()
+	registerSyncObject()
 

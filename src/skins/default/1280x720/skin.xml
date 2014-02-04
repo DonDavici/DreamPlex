@@ -109,7 +109,7 @@
             </convert>
         </widget>
 
-        <widget name="console" zPosition="5" position="125,250" size="430,400" transparent="1" font="Modern;18" backgroundColor="#00000000" foregroundColor="#00404040"/>
+        <widget name="output" zPosition="5" position="125,500" size="430,400" transparent="1" font="Modern;18" backgroundColor="#00000000" foregroundColor="#00404040"/>
 
         <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" valign="top">
             <convert type="ClockToText">Default</convert>

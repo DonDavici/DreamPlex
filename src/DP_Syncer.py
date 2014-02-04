@@ -22,20 +22,17 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import Components
-import os
-
 #noinspection PyUnresolvedReferences
-from enigma import eTimer
+from enigma import eTimer, ePythonMessagePump
+
 from threading import Thread
+from threading import Lock
 
 from Components.Label import Label
-from Components.Pixmap import Pixmap
 from Components.Sources.List import List
 from Components.ActionMap import ActionMap
 from Components.config import config
 from Components.ScrollLabel import ScrollLabel
-from Components.ProgressBar import ProgressBar
 
 from twisted.web.client import downloadPage
 
@@ -47,41 +44,10 @@ from __plugin__ import Plugin
 from DP_PlexLibrary import PlexLibrary
 from DPH_Singleton import Singleton
 from DP_ViewFactory import getMovieViewDefaults
+from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
-
-#===============================================================================
-# GLOBAL
-#===============================================================================
-gSyncInfo = None
-
-#===========================================================================
-#
-#===========================================================================
-def getSyncInfoInstance():
-	global gSyncInfo
-	if gSyncInfo is None:
-		gSyncInfo = MediaSyncerInfo()
-	return gSyncInfo
-
-#===========================================================================
-#
-#===========================================================================
-def registerOutputInstance(instance, session):
-	syncInfo = getSyncInfoInstance()
-	printl("registerOutputInstance::type(syncInfo): " + str(type(syncInfo)))
-	syncInfo.registerOutputInstance(instance, session)
-
-#===========================================================================
-#
-#===========================================================================
-def unregisterOutputInstance(instance):
-	syncInfo = getSyncInfoInstance()
-	printl("unregisterOutputInstance::type(syncInfo): " + str(type(syncInfo)))
-	syncInfo.unregisterOutputInstance(instance)
-
-
 
 #===========================================================================
 #
@@ -94,8 +60,12 @@ class DPS_Syncer(Screen):
 	def __init__(self, session):
 		Screen.__init__(self, session)
 
+		self.mediaSyncerInfo = Singleton().getMediaSyncInstance() #MediaSyncerInfo().instance
+		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
+		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
+
 		self._session = session
-		self["console"] = ScrollLabel()
+		self["output"] = ScrollLabel()
 
 		self["txt_red"] = Label()
 		self["txt_green"] = Label()
@@ -109,7 +79,6 @@ class DPS_Syncer(Screen):
 			"bouquet_up": self.keyBouquetUp,
 			"bouquet_down": self.keyBouquetDown,
 			"ok": self.okbuttonClick,
-			"cancel": self.keyCancel,
 		}, -2)
 
 		self.getServerList()
@@ -118,16 +87,23 @@ class DPS_Syncer(Screen):
 
 		self.onFirstExecBegin.append(self.startup)
 		self.onLayoutFinish.append(self.readyToRun)
+		self.onClose.append(self.__onClose)
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def __onClose(self):
+		printl("", self, "S")
+
+		self.mediaSyncerInfo.setCallbacks(None, None)
+
+		printl("", self, "C")
 
 	#===============================================================================
 	#
 	#===============================================================================
 	def startup(self):
 		printl("", self, "S")
-
-		registerOutputInstance(self, self._session)
-
-		self.notifyStatus()
 
 		printl("", self, "C")
 
@@ -137,7 +113,7 @@ class DPS_Syncer(Screen):
 	def readyToRun(self):
 		printl("", self, "S")
 
-		self["console"].setText("test")
+		self["output"].setText("Starting ...")
 
 		printl("", self, "C")
 
@@ -183,33 +159,13 @@ class DPS_Syncer(Screen):
 
 		printl("", self, "C")
 
-	#===============================================================================
-	#
-	#===============================================================================
-	def notifyStatus(self):
-		printl("", self, "S")
-
-		syncInfo = getSyncInfoInstance()
-		printl("inProgress:" + str(syncInfo.inProgress), self, "D")
-
-		if syncInfo.inProgress is True:
-			pass
-			#self["key_red"].setText(_("Hide"))
-			#self["key_green"].setText(_("Abort"))
-			#self["key_yellow"].setText("")
-		else:
-			pass
-			#self["key_red"].setText(_("Manage"))
-			#self["key_green"].setText(_("Complete Sync"))
-			#self["key_yellow"].setText(_("Normal Sync"))
-
-		printl("", self, "C")
-
 	#===========================================================================
 	#
 	#===========================================================================
 	def keyRed(self):
 		printl("", self, "S")
+
+		self.cancel()
 
 		printl("", self, "C")
 
@@ -226,6 +182,11 @@ class DPS_Syncer(Screen):
 	#===========================================================================
 	def keyBlue(self):
 		printl("", self, "S")
+
+		if self.mediaSyncerInfo.isRunning():
+			self.close(1)
+		else:
+			self.close(0)
 
 		printl("", self, "C")
 
@@ -246,7 +207,7 @@ class DPS_Syncer(Screen):
 	def keyBouquetUp(self):
 		printl("", self, "S")
 
-		self["console"].pageUp()
+		self["output"].pageUp()
 
 		printl("", self, "C")
 
@@ -256,7 +217,7 @@ class DPS_Syncer(Screen):
 	def keyBouquetDown(self):
 		printl("", self, "S")
 
-		self["console"].pageDown ()
+		self["output"].pageDown ()
 
 		printl("", self, "C")
 
@@ -266,332 +227,225 @@ class DPS_Syncer(Screen):
 	def doMediaSync(self):
 		printl("", self, "S")
 
-		syncInfo = getSyncInfoInstance()
-
-		if syncInfo.inProgress is False:
-			syncInfo.start(MediaSyncer)
-		else:
-			syncInfo.abort()
+		self.mediaSyncerInfo.startSyncing()
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def clearLog(self):
+	def callback_infos(self, info):
 		printl("", self, "S")
 
-		self["console"].setText("")
-		self["console"].lastPage()
+		self["output"].setText(info)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def appendLog(self, text):
+	def callback_finished(self):
 		printl("", self, "S")
 
-		self["console"].appendText(text + "\n")
-		self["console"].lastPage()
+		self["output"].setText(_("Finished"))
+		self["txt_green"].setText(_("Close"))
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setProgress(self, value):
+	def cancel(self):
 		printl("", self, "S")
 
-		self["progress"].setValue(value)
+		self.mediaSyncerInfo.cancel()
+		self["output"].setText(_("Cancelled!"))
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setRange(self, value):
-		printl("", self, "S")
-
-		self["progress"].range = (0, value)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def keyCancel(self):
-		printl("", self, "S")
-
-		self.close()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def close(self):
-		printl("", self, "S")
-
-		unregisterOutputInstance(self)
-
-		Screen.close(self)
-
-		printl("", self, "C")
-
 
 #===========================================================================
 #
 #===========================================================================
 class MediaSyncerInfo(object):
-	outputInstance = []
+	instance = None
 
-	progress = 0
-	range = 0
-	log = []
-	loglinesize = 40
-
-	poster = None
-	name = None
-	year = None
-
-	inProgress = False
-	isFinished = False
-
-	session = None
-
-	thread = None
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def start(self, myType):
+	def __init__(self):
 		printl("", self, "S")
 
-		try:
-			if self.inProgress:
-				return False
-			self.reset()
+		assert not MediaSyncerInfo.instance, "only one MediaSyncerInfo instance is allowed!"
+		MediaSyncerInfo.instance = self # set instance
+		self.syncer = None
+		self.running = False
+		self.backgroundMediaSyncer = None
 
-			self.isFinished = False
-			self.inProgress = True
-			self.setOutput(None)
-			self.thread = MediaSyncer(self.setOutput, self.setProgress, self.setRange, self.setInfo, self.finished, myType)
-			self.thread.start()
-			for outputInstance in self.outputInstance:
-				outputInstance.notifyStatus()
-
-			printl("", self, "C")
-			return True
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-			printl("", self, "C")
-			return False
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def abort(self):
-		printl("", self, "S")
-
-		if not self.inProgress:
-
-			printl("", self, "C")
-			return False
-
-		self.thread.abort()
+		self.callback_infos = None
+		self.callback_finished = None
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def registerOutputInstance(self, instance, session):
+	def startSyncing(self, arg = None):
 		printl("", self, "S")
 
-		try:
-			if instance:
-				self.outputInstance.append(instance)
-			if session:
-				self.session = session
+		if not self.running:
+			self.backgroundMediaSyncer = BackgroundMediaSyncer()
+			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
 
-			if self.inProgress:
-				self.setRange(self.range)
-				self.setProgress(self.progress)
-				self.setInfo(self.poster, self.name, self.year)
+			if arg:
+				self.backgroundMediaSyncer.setArg(arg)
 
-				for outputInstance in self.outputInstance:
-					outputInstance.clearLog()
+			self.backgroundMediaSyncer.startSyncing()
+			self.running = True
 
-				if len(self.log) > 0:
-					for text in self.log:
-						for outputInstance in self.outputInstance:
-							outputInstance.appendLog(text)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
+		printl("", self, "C")
+
+	#===========================================================================
+	# msg as second params is needed -. do not remove even if it is not used
+	# form outside!!!!
+	#===========================================================================
+	# noinspection PyUnusedLocal
+	def gotThreadMsg(self, msg):
+		printl("", self, "S")
+
+		msg = self.backgroundMediaSyncer.Message.pop()
+		self.infoCallBack(msg[1])
+
+		if msg[0] == THREAD_FINISHED:
+			# clean up
+			self.backgroundMediaSyncer.MessagePump.recv_msg.get().remove(self.gotThreadMsg)
+			self.callback = None
+			self.backgroundMediaSyncer = None
+			self.running = False
+			self.done()
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def unregisterOutputInstance(self, instance):
+	def setCallbacks(self, callback_infos, callback_finished):
 		printl("", self, "S")
 
-		try:
-			if instance:
-				self.outputInstance.remove(instance)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
+		self.callback_infos = callback_infos
+		self.callback_finished = callback_finished
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setOutput(self, text):
+	def isRunning(self):
 		printl("", self, "S")
 
-		try:
-			if text is None:
-				del self.log[:]
-				for outputInstance in self.outputInstance:
-					outputInstance.clearLog()
-			else :
-				if len(self.log) >= self.loglinesize:
-					del self.log[:]
-					for outputInstance in self.outputInstance:
-						outputInstance.clearLog()
-						outputInstance.appendLog(text)
-				else:
-					for outputInstance in self.outputInstance:
-						#pass
-						outputInstance.appendLog(text)
-				self.log.append(text)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
+		printl("", self, "C")
+		return self.running
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def infoCallBack(self,text):
+		printl("", self, "S")
+
+		printl("text: " + str(text), self, "D")
+		if text and self.callback_infos:
+			self.callback_infos(text)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setRange(self, value):
+	def done(self):
 		printl("", self, "S")
 
-		try:
-			self.range = value
-			for outputInstance in self.outputInstance:
-				outputInstance.setRange(self.range)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
+		if self.callback_finished:
+			self.callback_finished()
+
+		self.running = False
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setProgress(self, value):
+	def cancel(self):
 		printl("", self, "S")
 
-		try:
-			self.progress = value
-			for outputInstance in self.outputInstance:
-				outputInstance.setProgress(self.progress)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setInfo(self, poster, name, year):
-		printl("", self, "S")
-
-		try:
-			self.poster = poster
-			self.name = name
-			self.year = year
-			for outputInstance in self.outputInstance:
-				outputInstance.setPoster(self.poster)
-				outputInstance.setName(self.name)
-				outputInstance.setYear(self.year)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def finished(self):
-		printl("", self, "S")
-
-		try:
-			self.inProgress = False
-			self.isFinished = True
-			for outputInstance in self.outputInstance:
-				outputInstance.notifyStatus()
-			if len(self.outputInstance) == 0:
-				pass
-				#todo add screen after we are finished
-				#self.session.open(ProjectValerieSyncFinished)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def reset(self):
-		printl("", self, "S")
-
-		try:
-			self.linecount = 40
-			self.progress = 0
-			self.range = 0
-			del self.log[:]
-
-			self.poster = None
-			self.name = None
-			self.year = None
-
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
+		if self.backgroundMediaSyncer and self.running:
+			self.backgroundMediaSyncer.Cancel()
 
 		printl("", self, "C")
 
 #===========================================================================
 #
 #===========================================================================
-class MediaSyncer(Thread):
+class BackgroundMediaSyncer(Thread):
 
-	#===========================================================================
-	#
-	#===========================================================================
-	def __init__ (self, output, progress, myRange, info, finished, mode):
+	def __init__ (self):
 		Thread.__init__(self)
-		self.output = output
-		self.progress = progress
-		self.myRange = myRange
-		self.info = info
-		self.finished = finished
-		self.mode = mode
-		self.output(_("Thread running"))
-		self.doAbort = False
+		self.cancel = False
+		self.arg = None
+		self.messages = ThreadQueue()
+		self.messagePump = ePythonMessagePump()
+		self.running = False
+
 		self.plexInstance = Singleton().getPlexInstance()
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def abort(self):
+	def getMessagePump(self):
 		printl("", self, "S")
 
-		self.doAbort = True
-		self.output("Aborting sync! Saving and cleaning up!")
+		printl("", self, "C")
+		return self.messagePump
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMessageQueue(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.messages
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setArg(self, arg):
+		printl("", self, "S")
+
+		self.arg = arg
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def Cancel(self):
+		printl("", self, "S")
+
+		self.cancel = True
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#PROPERTIES
+	#===========================================================================
+	MessagePump = property(getMessagePump)
+	Message = property(getMessageQueue)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startSyncing(self):
+		printl("", self, "S")
+
+		# Once a thread object is created, its activity must be started by calling the thread’s start() method.
+		# This invokes the run() method in a separate thread of control.
+		self.start()
 
 		printl("", self, "C")
 
@@ -601,7 +455,14 @@ class MediaSyncer(Thread):
 	def run(self):
 		printl("", self, "S")
 
-		self.doAbort = False
+		mp = self.messagePump
+
+		self.running = True
+		self.cancel = False
+
+		msg_text = _("some text here")
+		self.messages.push((THREAD_WORKING, msg_text))
+		mp.send(0)
 
 		# get sections from server
 		self.sectionList = self.plexInstance.displaySections()
@@ -629,65 +490,100 @@ class MediaSyncer(Thread):
 		backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
 		posterVariants = [[p_height, p_width, p_postfix]]
 
-		self.output("Reading section of the server ...")
-		for section in self.sectionList:
-			if section[2] == "movieEntry":
-				printl("movie", self, "D")
-				url = section[3]["t_url"] + "/all"
-				self.output("got movie url: " + str(url))
-				printl("url: " + str(url), self, "D")
-				library, tmpAbc, tmpGenres = self.plexInstance.getMoviesFromSection(url)
-				for movie in library:
-					import time
-					time.sleep(5)
-					for variant in backdropVariants:
-						t_height = variant[0]
-						t_width = variant[1]
-						t_postfix = variant[2]
+		try:
+			msg_text = _("Reading section of the server ...")
+			self.messages.push((THREAD_WORKING, msg_text))
+			mp.send(0)
 
-						# location string
-						location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
+			for section in self.sectionList:
+				# interupt if needed
+				if self.cancel:
+					break
 
-						# check if backdrop exists
-						if fileExists(location):
-							self.output("backdrop exists under the location " + str(location))
-							continue
-						else:
-							self.output("file does not exist ... start downloading")
-							#download backdrop
-							self.downloadMedia(movie[2]["fanart_image"], location, t_height, t_width)
+				if section[2] == "movieEntry":
+					printl("movie", self, "D")
+					url = section[3]["t_url"] + "/all"
 
-					for variant in posterVariants:
-						t_height = variant[0]
-						t_width = variant[1]
-						t_postfix = variant[2]
+					msg_text = _("got movie url: " + str(url))
+					self.messages.push((THREAD_WORKING, msg_text))
+					mp.send(0)
 
-						# location string
-						location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
+					printl("url: " + str(url), self, "D")
+					library, tmpAbc, tmpGenres = self.plexInstance.getMoviesFromSection(url)
+					for movie in library:
+						import time
+						time.sleep(5)
+						# interupt if needed
+						if self.cancel:
+							break
 
-						# check if poster exists
-						if fileExists(location):
-							self.output("poster exists under the location " + str(location))
-							continue
-						else:
-							self.downloadMedia(movie[2]["thumb"], location, t_height, t_width)
+						for variant in backdropVariants:
+							# interupt if needed
+							if self.cancel:
+								break
 
-					movies[movie[0]] = (movie[2]["fanart_image"], movie[2]["thumb"])
-				printl("movies: " + str(library), self, "D")
+							t_height = variant[0]
+							t_width = variant[1]
+							t_postfix = variant[2]
 
-			#if section[2] == "showEntry":
-			#	printl("tvshow", self, "D")
-			#	url = section[3]["t_url"]
-			#	printl("url: " + str(url), self, "D")
-			#	shows = self.plexInstance.getShowsFromSection(url)
-			#	printl("shows: " + str(shows), self, "D")
+							# location string
+							location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
 
+							# check if backdrop exists
+							if fileExists(location):
+								msg_text = _("backdrop exists under the location " + str(location))
+								self.messages.push((THREAD_WORKING, msg_text))
+								mp.send(0)
+								continue
+							else:
+								msg_text = _("file does not exist ... start downloading")
+								self.messages.push((THREAD_WORKING, msg_text))
+								mp.send(0)
+								#download backdrop
+								self.downloadMedia(movie[2]["fanart_image"], location, t_height, t_width)
 
-		self.finished()
+						for variant in posterVariants:
+							# interupt if needed
+							if self.cancel:
+								break
 
-		self.output(_("Done"))
-		self.output("---------------------------------------------------")
-		self.output(_("Press Exit / Back"))
+							t_height = variant[0]
+							t_width = variant[1]
+							t_postfix = variant[2]
+
+							# location string
+							location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
+
+							# check if poster exists
+							if fileExists(location):
+								msg_text = _("poster exists under the location " + str(location))
+								self.messages.push((THREAD_WORKING, msg_text))
+								mp.send(0)
+								continue
+							else:
+								self.downloadMedia(movie[2]["thumb"], location, t_height, t_width)
+
+						movies[movie[0]] = (movie[2]["fanart_image"], movie[2]["thumb"])
+					printl("movies: " + str(library), self, "D")
+
+				#if section[2] == "showEntry":
+				#	printl("tvshow", self, "D")
+				#	url = section[3]["t_url"]
+				#	printl("url: " + str(url), self, "D")
+				#	shows = self.plexInstance.getShowsFromSection(url)
+				#	printl("shows: " + str(shows), self, "D")
+
+			if self.cancel:
+				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
+			else:
+				self.messages.push((THREAD_FINISHED, _("We did it :-)")))
+
+		except Exception, e:
+			self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
+		finally:
+			mp.send(0)
+
+		self.running = False
 
 		printl("", self, "C")
 
@@ -710,3 +606,35 @@ class MediaSyncer(Thread):
 		return True
 
 		printl("", self, "C")
+
+
+
+THREAD_WORKING = 1
+THREAD_FINISHED = 2
+THREAD_ERROR = 3
+#===========================================================================
+#
+#===========================================================================
+class ThreadQueue:
+	def __init__(self):
+		self.__list = [ ]
+		self.__lock = Lock()
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def push(self, val):
+		lock = self.__lock
+		lock.acquire()
+		self.__list.append(val)
+		lock.release()
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def pop(self):
+		lock = self.__lock
+		lock.acquire()
+		ret = self.__list.pop()
+		lock.release()
+		return ret
