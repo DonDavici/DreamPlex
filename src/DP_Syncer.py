@@ -29,10 +29,10 @@ from threading import Thread
 from threading import Lock
 
 from Components.Label import Label
-from Components.Sources.List import List
 from Components.ActionMap import ActionMap
 from Components.config import config
 from Components.ScrollLabel import ScrollLabel
+from Components.Pixmap import Pixmap
 
 from twisted.web.client import downloadPage
 
@@ -40,9 +40,7 @@ from Screens.Screen import Screen
 
 from Tools.Directories import fileExists
 
-from __plugin__ import Plugin
 from DP_PlexLibrary import PlexLibrary
-from DPH_Singleton import Singleton
 from DP_ViewFactory import getMovieViewDefaults
 from DPH_Singleton import Singleton
 
@@ -55,20 +53,31 @@ from __init__ import _ # _ is translation
 class DPS_Syncer(Screen):
 
 	_session = None
-	_serverSet = False
 
-	def __init__(self, session):
+	def __init__(self, session, serverConfig):
 		Screen.__init__(self, session)
 
-		self.mediaSyncerInfo = Singleton().getMediaSyncInstance() #MediaSyncerInfo().instance
+		# now that we know the server we establish global plexInstance
+		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))
+
+		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
+		self.mediaSyncerInfo = g_mediaSyncerInfo.instance
 		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
 		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
 
 		self._session = session
 		self["output"] = ScrollLabel()
 
-		self["txt_red"] = Label()
 		self["txt_green"] = Label()
+		self["txt_green"].setText("Start Sync")
+		self["btn_green"] = Pixmap()
+
+		self["txt_blue"] = Label()
+		self["btn_blue"] = Pixmap()
+
+		self["txt_red"] = Label()
+		self["txt_red"].setText("Abort Sync")
+		self["btn_red"] = Pixmap()
 
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
@@ -78,12 +87,7 @@ class DPS_Syncer(Screen):
 			"green": self.keyGreen,
 			"bouquet_up": self.keyBouquetUp,
 			"bouquet_down": self.keyBouquetDown,
-			"ok": self.okbuttonClick,
 		}, -2)
-
-		self.getServerList()
-
-		self["menu"]= List(self.mainMenuList, True)
 
 		self.onFirstExecBegin.append(self.startup)
 		self.onLayoutFinish.append(self.readyToRun)
@@ -113,49 +117,16 @@ class DPS_Syncer(Screen):
 	def readyToRun(self):
 		printl("", self, "S")
 
-		self["output"].setText("Starting ...")
+		if self.mediaSyncerInfo.isRunning():
+			self["txt_green"].hide()
+			self["btn_green"].hide()
 
-		printl("", self, "C")
+			self["txt_blue"].setText("Background")
+		else:
+			self["txt_red"].hide()
+			self["btn_red"].hide()
 
-	#===============================================================================
-	#
-	#===============================================================================
-	def getServerList(self):
-		printl("", self, "S")
-
-		self.mainMenuList = []
-
-		# add servers to list
-		for serverConfig in config.plugins.dreamplex.Entries:
-
-			# only add the server if state is active
-			if serverConfig.state.value:
-				serverName = serverConfig.name.value
-
-				self.mainMenuList.append((serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def okbuttonClick(self):
-		printl("", self, "S")
-
-		selection = self["menu"].getCurrent()
-
-		if selection is not None:
-			self.selectedEntry = selection[1]
-			printl("selected entry " + str(self.selectedEntry), self, "D")
-
-			if self.selectedEntry == Plugin.MENU_SERVER:
-				printl("found Plugin.MENU_SERVER", self, "D")
-				self.g_serverConfig = selection[3]
-
-				# now that we know the server we establish global plexInstance
-				self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, self.g_serverConfig))
-
-				self._serverSet = True
+			self["txt_blue"].setText("Close")
 
 		printl("", self, "C")
 
@@ -165,7 +136,12 @@ class DPS_Syncer(Screen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		self.cancel()
+		if self.mediaSyncerInfo.isRunning():
+			self.cancel()
+			self["txt_green"].show()
+			self["btn_green"].show()
+			self["txt_blue"].setText("Close")
+			self["btn_red"].hide()
 
 		printl("", self, "C")
 
@@ -196,8 +172,13 @@ class DPS_Syncer(Screen):
 	def keyGreen(self):
 		printl("", self, "S")
 
-		if self._serverSet:
+		if not self.mediaSyncerInfo.isRunning():
 			self.doMediaSync()
+			self["txt_blue"].setText("Background")
+			self["btn_red"].show()
+			self["txt_red"].show()
+			self["btn_green"].hide()
+			self["txt_green"].hide()
 
 		printl("", self, "C")
 
@@ -248,7 +229,8 @@ class DPS_Syncer(Screen):
 		printl("", self, "S")
 
 		self["output"].setText(_("Finished"))
-		self["txt_green"].setText(_("Close"))
+		self["txt_blue"].setText(_("Close"))
+		self["txt_red"].hide()
 
 		printl("", self, "C")
 
@@ -377,6 +359,11 @@ class MediaSyncerInfo(object):
 			self.backgroundMediaSyncer.Cancel()
 
 		printl("", self, "C")
+
+# !!! important !!!!
+# this is a singleton implementation so that there is only one instance of this class
+# it can be also imported from other classes with from file import g_mediaSyncerInfo
+g_mediaSyncerInfo = MediaSyncerInfo()
 
 #===========================================================================
 #
@@ -511,8 +498,7 @@ class BackgroundMediaSyncer(Thread):
 					printl("url: " + str(url), self, "D")
 					library, tmpAbc, tmpGenres = self.plexInstance.getMoviesFromSection(url)
 					for movie in library:
-						import time
-						time.sleep(5)
+
 						# interupt if needed
 						if self.cancel:
 							break

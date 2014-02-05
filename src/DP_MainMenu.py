@@ -31,6 +31,7 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 
+from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.InputBox import InputBox
@@ -99,6 +100,7 @@ class DPS_MainMenu(Screen):
 				"up":		(self.up, ""),
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
+			    "menu":		(self.onKeyMenu, ""),
 			}, -2)
 		
 		self.onFirstExecBegin.append(self.onExec)
@@ -420,11 +422,41 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	def exit(self):
 		printl("", self, "S")
-		
+
 		self.Exit()
-		
+
 		printl("", self, "C")
-		
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyMenu(self):
+		printl("", self, "S")
+
+		functionList = []
+
+		functionList.append((_("Sync medias from this server."), "sync"))
+
+		self.session.openWithCallback(self.onKeyMenuCallback, ChoiceBox, title=_("Server Functions"), list=functionList)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyMenuCallback(self, choice):
+		printl("", self, "S")
+		printl("choice: " +str(choice), self, "D")
+
+		if choice[1] == "sync":
+			from DP_Syncer import DPS_Syncer
+
+			self.session.open(DPS_Syncer, self.g_serverConfig)
+
+
+		printl("", self, "C")
+
+
 	#===========================================================================
 	# 
 	#===========================================================================

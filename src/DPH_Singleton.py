@@ -35,7 +35,6 @@ class Singleton(object):
 	__plexInstance = ""
 	__logFileInstance = ""
 	__skinParamsInstance = ""
-	__mediaSyncInstance = ""
 
 	def __init__(self):
 		#implement the borg patter (we are one)
@@ -73,14 +72,3 @@ class Singleton(object):
 			pass
 
 		return self.__skinParamsInstance
-
-	def getMediaSyncInstance(self, value=None):
-		"""with value you can set the singleton content"""
-		if value:
-			#printl("generating skinParam instance ...", self, "D")
-			self.__mediaSyncInstance = value
-		else:
-			#printl("reusing skinParam instance ...", self, "D")
-			pass
-
-		return self.__mediaSyncInstance
