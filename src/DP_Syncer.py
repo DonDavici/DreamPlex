@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 #noinspection PyUnresolvedReferences
-from enigma import eTimer, ePythonMessagePump
+from enigma import eTimer, ePythonMessagePump, eConsoleAppContainer
 
 from threading import Thread
 from threading import Lock
@@ -53,17 +53,22 @@ from __init__ import _ # _ is translation
 class DPS_Syncer(Screen):
 
 	_session = None
+	_mode = None
 
-	def __init__(self, session, serverConfig):
+	def __init__(self, session, serverConfig, mode):
 		Screen.__init__(self, session)
 
 		# now that we know the server we establish global plexInstance
 		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))
 
+		# we are "sync" or "render"
+		self._mode = mode
+
 		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 		self.mediaSyncerInfo = g_mediaSyncerInfo.instance
 		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
 		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
+		self.mediaSyncerInfo.setMode(self._mode)
 
 		self._session = session
 		self["output"] = ScrollLabel()
@@ -231,6 +236,7 @@ class DPS_Syncer(Screen):
 		self["output"].setText(_("Finished"))
 		self["txt_blue"].setText(_("Close"))
 		self["txt_red"].hide()
+		self["btn_red"].hide()
 
 		printl("", self, "C")
 
@@ -262,21 +268,20 @@ class MediaSyncerInfo(object):
 
 		self.callback_infos = None
 		self.callback_finished = None
+		self.mode = None
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def startSyncing(self, arg = None):
+	def startSyncing(self):
 		printl("", self, "S")
 
 		if not self.running:
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
 			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
-
-			if arg:
-				self.backgroundMediaSyncer.setArg(arg)
+			self.backgroundMediaSyncer.setMode(self.mode)
 
 			self.backgroundMediaSyncer.startSyncing()
 			self.running = True
@@ -312,6 +317,16 @@ class MediaSyncerInfo(object):
 
 		self.callback_infos = callback_infos
 		self.callback_finished = callback_finished
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setMode(self, mode):
+		printl("", self, "S")
+
+		self.mode = mode
 
 		printl("", self, "C")
 
@@ -401,10 +416,10 @@ class BackgroundMediaSyncer(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def setArg(self, arg):
+	def setMode(self, mode):
 		printl("", self, "S")
 
-		self.arg = arg
+		self.mode = mode
 
 		printl("", self, "C")
 
@@ -433,6 +448,7 @@ class BackgroundMediaSyncer(Thread):
 		# Once a thread object is created, its activity must be started by calling the thread’s start() method.
 		# This invokes the run() method in a separate thread of control.
 		self.start()
+		printl("mode: " + str(self.mode), self, "D")
 
 		printl("", self, "C")
 
@@ -442,11 +458,71 @@ class BackgroundMediaSyncer(Thread):
 	def run(self):
 		printl("", self, "S")
 
+		if self.mode == "render":
+			self.renderBackdrops()
+
+		elif self.mode == "sync":
+			self.syncMedia()
+
+		else:
+			pass
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def renderBackdrops(self):
+
+		printl("", self, "S")
+
 		mp = self.messagePump
 
 		self.running = True
 		self.cancel = False
+		msg_text = _("some text here")
+		self.messages.push((THREAD_WORKING, msg_text))
+		mp.send(0)
 
+		try:
+
+			import os
+			for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
+				if "1280" in myFile:
+					printl("myFile: " + str(myFile),self, "D")
+					cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 13 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + ".m1v"
+					printl("cmd: " + str(cmd), self, "D")
+					self.container = eConsoleAppContainer()
+					self.container.execute(cmd)
+
+			if self.cancel:
+				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
+			else:
+				self.messages.push((THREAD_FINISHED, _("We did it :-)")))
+
+		except Exception, e:
+			self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
+		finally:
+			mp.send(0)
+
+		self.running = False
+
+		printl("", self, "C")
+
+	def finishedRendering(self):
+		msg_text = _("rendered one")
+		self.messages.push((THREAD_WORKING, msg_text))
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def syncMedia(self):
+		printl("", self, "S")
+
+		mp = self.messagePump
+
+		self.running = True
+		self.cancel = False
 		msg_text = _("some text here")
 		self.messages.push((THREAD_WORKING, msg_text))
 		mp.send(0)
@@ -470,8 +546,8 @@ class BackgroundMediaSyncer(Thread):
 		p_width = params["elements"]["poster"]["width"]
 		p_postfix = params["elements"]["poster"]["postfix"]
 
-		l_height = "720"
-		l_width = "1280"
+		l_height = "1280"
+		l_width = "720"
 		l_postfix = "_backdrop_1280x720.jpg"
 
 		backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]

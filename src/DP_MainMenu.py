@@ -436,6 +436,7 @@ class DPS_MainMenu(Screen):
 		functionList = []
 
 		functionList.append((_("Sync medias from this server."), "sync"))
+		functionList.append((_("Render fullsize backdrops to m1v."), "render"))
 
 		self.session.openWithCallback(self.onKeyMenuCallback, ChoiceBox, title=_("Server Functions"), list=functionList)
 
@@ -447,15 +448,11 @@ class DPS_MainMenu(Screen):
 	def onKeyMenuCallback(self, choice):
 		printl("", self, "S")
 		printl("choice: " +str(choice), self, "D")
+		from DP_Syncer import DPS_Syncer
 
-		if choice[1] == "sync":
-			from DP_Syncer import DPS_Syncer
-
-			self.session.open(DPS_Syncer, self.g_serverConfig)
-
+		self.session.open(DPS_Syncer, self.g_serverConfig, choice[1])
 
 		printl("", self, "C")
-
 
 	#===========================================================================
 	# 
