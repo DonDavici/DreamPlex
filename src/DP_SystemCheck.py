@@ -80,6 +80,7 @@ class DPS_SystemCheck(Screen):
 			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 
 		vlist.append((_("Check curl installation data."), "check_Curl"))
+		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
 		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
@@ -108,6 +109,9 @@ class DPS_SystemCheck(Screen):
 
 		if selection[1] == "check_Curl":
 			self.checkCurlInstallation()
+
+		if selection[1] == "check_jpegTools":
+			self.checkJpegToolsInstallation()
 
 		if selection[1] == "check_Update":
 			self.checkForUpdate()
@@ -282,6 +286,20 @@ class DPS_SystemCheck(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
+	def checkJpegToolsInstallation(self):
+		printl("", self, "S")
+
+		command = "opkg status mjpegtools"
+
+		self.check = "mjpegtools"
+		state = self.executeCommand(command)
+
+		printl("", self, "C")
+		return state
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def checkDreamPlexInstallation(self):
 		printl("", self, "S")
 
@@ -343,6 +361,9 @@ class DPS_SystemCheck(Screen):
 				elif self.check == "curl":
 					self.session.openWithCallback(self.installCurlLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
+				elif self.check == "jpegTools":
+					self.session.openWithCallback(self.installJpegToolsLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+
 				elif self.check == "dreamplex":
 					# for now we do nothing at this point
 					pass
@@ -368,6 +389,48 @@ class DPS_SystemCheck(Screen):
 
 			elif self.oeVersion == "mips32el":
 				command = "opkg update; opkg install curl"
+
+			else:
+				printl("something went wrong finding out the oe-version", self, "W")
+
+			if not system(command):
+				# Successfully installed
+				#defaultServer = plexServerConfig.getDefaultServer()
+				#self.openSectionlist(defaultServer)
+				pass
+			else:
+				# Fail, try again and report the output...
+				pipe = popen(command)
+				if pipe is not None:
+					data = pipe.read(8192)
+					if data is None:
+						data = "Unknown Error"
+					pipe.close()
+					self.session.open(MessageBox, _("Could not install "+ command + ":\n") + data, MessageBox.TYPE_ERROR)
+				# Failed to install
+				self.cancel()
+		else:
+			# User said 'no'
+			self.cancel()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def installJpegToolsLibs(self, confirm):
+		printl("", self, "S")
+
+		command = ""
+
+		if confirm:
+			# User said 'Yes'
+
+			if self.oeVersion == "mipsel":
+				command = "opkg update; opkg install mjpegtools"
+
+			elif self.oeVersion == "mips32el":
+				command = "opkg update; opkg install mjpegtools"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")

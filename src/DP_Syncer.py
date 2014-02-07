@@ -483,17 +483,29 @@ class BackgroundMediaSyncer(Thread):
 		msg_text = _("some text here")
 		self.messages.push((THREAD_WORKING, msg_text))
 		mp.send(0)
-
+		import os
 		try:
-
-			import os
 			for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
-				if "1280" in myFile:
-					printl("myFile: " + str(myFile),self, "D")
+				if self.cancel:
+					break
+
+				if "1280x720" in myFile:
+					msg_text = _("started rendering myFile: " + str(myFile))
+					self.messages.push((THREAD_WORKING, msg_text))
+					mp.send(0)
+
+					printl("started rendering myFile: " + str(myFile),self, "D")
+
 					cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 13 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + ".m1v"
 					printl("cmd: " + str(cmd), self, "D")
-					self.container = eConsoleAppContainer()
-					self.container.execute(cmd)
+
+					os.system(cmd)
+
+					msg_text = _("finished rendering myFile: " + str(myFile))
+					self.messages.push((THREAD_WORKING, msg_text))
+					mp.send(0)
+
+					printl("finished rendering myFile: " + str(myFile),self, "D")
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
@@ -509,34 +521,12 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "C")
 
-	def finishedRendering(self):
-		msg_text = _("rendered one")
-		self.messages.push((THREAD_WORKING, msg_text))
-
 	#===========================================================================
 	#
 	#===========================================================================
-	def syncMedia(self):
-		printl("", self, "S")
-
-		mp = self.messagePump
-
-		self.running = True
-		self.cancel = False
-		msg_text = _("some text here")
-		self.messages.push((THREAD_WORKING, msg_text))
-		mp.send(0)
-
-		# get sections from server
-		self.sectionList = self.plexInstance.displaySections()
-		printl("sectionList: "+ str(self.sectionList),self, "D")
-		movies = {}
-
+	def prepareMediaVariants(self):
 		# get params
 		params = getMovieViewDefaults()
-
-		# get servername
-		prefix = Singleton().getPlexInstance().getServerName().lower()
 
 		b_height = params["elements"]["backdrop"]["height"]
 		b_width = params["elements"]["backdrop"]["width"]
@@ -550,13 +540,35 @@ class BackgroundMediaSyncer(Thread):
 		l_width = "720"
 		l_postfix = "_backdrop_1280x720.jpg"
 
-		backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
-		posterVariants = [[p_height, p_width, p_postfix]]
+		self.backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
+		self.posterVariants = [[p_height, p_width, p_postfix]]
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def syncMedia(self):
+		printl("", self, "S")
+
+		self.running = True
+		self.cancel = False
+		msg_text = _("some text here")
+		self.messages.push((THREAD_WORKING, msg_text))
+		self.messagePump.send(0)
+
+		# get sections from server
+		self.sectionList = self.plexInstance.displaySections()
+		printl("sectionList: "+ str(self.sectionList),self, "D")
+
+		# get servername
+		self.prefix = Singleton().getPlexInstance().getServerName().lower()
+
+		# prepare variants
+		self.prepareMediaVariants()
 
 		try:
 			msg_text = _("Reading section of the server ...")
 			self.messages.push((THREAD_WORKING, msg_text))
-			mp.send(0)
+			self.messagePump.send(0)
 
 			for section in self.sectionList:
 				# interupt if needed
@@ -569,71 +581,26 @@ class BackgroundMediaSyncer(Thread):
 
 					msg_text = _("got movie url: " + str(url))
 					self.messages.push((THREAD_WORKING, msg_text))
-					mp.send(0)
+					self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
 					library, tmpAbc, tmpGenres = self.plexInstance.getMoviesFromSection(url)
-					for movie in library:
 
-						# interupt if needed
-						if self.cancel:
-							break
+					self.syncThrougMediaLibrary(library)
 
-						for variant in backdropVariants:
-							# interupt if needed
-							if self.cancel:
-								break
 
-							t_height = variant[0]
-							t_width = variant[1]
-							t_postfix = variant[2]
+				if section[2] == "showEntry":
+					printl("tvshow", self, "D")
+					url = section[3]["t_url"] + "/all"
 
-							# location string
-							location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
+					msg_text = _("got show url: " + str(url))
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
 
-							# check if backdrop exists
-							if fileExists(location):
-								msg_text = _("backdrop exists under the location " + str(location))
-								self.messages.push((THREAD_WORKING, msg_text))
-								mp.send(0)
-								continue
-							else:
-								msg_text = _("file does not exist ... start downloading")
-								self.messages.push((THREAD_WORKING, msg_text))
-								mp.send(0)
-								#download backdrop
-								self.downloadMedia(movie[2]["fanart_image"], location, t_height, t_width)
+					printl("url: " + str(url), self, "D")
+					library, tmpAbc, tmpGenres = self.plexInstance.getShowsFromSection(url)
 
-						for variant in posterVariants:
-							# interupt if needed
-							if self.cancel:
-								break
-
-							t_height = variant[0]
-							t_width = variant[1]
-							t_postfix = variant[2]
-
-							# location string
-							location = config.plugins.dreamplex.mediafolderpath.value + str(prefix) + "_" +  str(movie[1]["ratingKey"]) + str(t_postfix)
-
-							# check if poster exists
-							if fileExists(location):
-								msg_text = _("poster exists under the location " + str(location))
-								self.messages.push((THREAD_WORKING, msg_text))
-								mp.send(0)
-								continue
-							else:
-								self.downloadMedia(movie[2]["thumb"], location, t_height, t_width)
-
-						movies[movie[0]] = (movie[2]["fanart_image"], movie[2]["thumb"])
-					printl("movies: " + str(library), self, "D")
-
-				#if section[2] == "showEntry":
-				#	printl("tvshow", self, "D")
-				#	url = section[3]["t_url"]
-				#	printl("url: " + str(url), self, "D")
-				#	shows = self.plexInstance.getShowsFromSection(url)
-				#	printl("shows: " + str(shows), self, "D")
+					self.syncThrougMediaLibrary(library)
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
@@ -643,9 +610,69 @@ class BackgroundMediaSyncer(Thread):
 		except Exception, e:
 			self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
 		finally:
-			mp.send(0)
+			self.messagePump.send(0)
 
 		self.running = False
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def syncThrougMediaLibrary(self, library):
+		printl("", self, "S")
+
+		for media in library:
+
+			# interupt if needed
+			if self.cancel:
+				break
+
+			for variant in self.backdropVariants:
+				# interupt if needed
+				if self.cancel:
+					break
+
+				t_height = variant[0]
+				t_width = variant[1]
+				t_postfix = variant[2]
+
+				# location string
+				location = config.plugins.dreamplex.mediafolderpath.value + str(self.prefix) + "_" +  str(media[1]["ratingKey"]) + str(t_postfix)
+
+				# check if backdrop exists
+				if fileExists(location):
+					msg_text = _("backdrop exists under the location " + str(location))
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
+					continue
+				else:
+					msg_text = _("file does not exist ... start downloading")
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
+					#download backdrop
+					self.downloadMedia(media[2]["fanart_image"], location, t_height, t_width)
+
+			for variant in self.posterVariants:
+				# interupt if needed
+				if self.cancel:
+					break
+
+				t_height = variant[0]
+				t_width = variant[1]
+				t_postfix = variant[2]
+
+				# location string
+				location = config.plugins.dreamplex.mediafolderpath.value + str(self.prefix) + "_" +  str(media[1]["ratingKey"]) + str(t_postfix)
+
+				# check if poster exists
+				if fileExists(location):
+					msg_text = _("poster exists under the location " + str(location))
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
+					continue
+				else:
+					self.downloadMedia(media[2]["thumb"], location, t_height, t_width)
 
 		printl("", self, "C")
 

@@ -63,6 +63,7 @@ class DPS_MainMenu(Screen):
 	s_url = None
 	s_mode = None
 	s_final = False
+	g_serverConfig = None
 	
 	g_serverDataMenu = None
 	g_filterDataMenu = None
@@ -260,10 +261,6 @@ class DPS_MainMenu(Screen):
 				elif selection[1] == "DPS_Help":
 					self.session.open(DPS_Help)
 
-				elif selection[1] == "DPS_Sync":
-					from DP_Syncer import DPS_Syncer
-					self.session.open(DPS_Syncer)
-				
 				elif selection[1] == "DPS_Exit":
 					self.exit()
 				
@@ -433,12 +430,13 @@ class DPS_MainMenu(Screen):
 	def onKeyMenu(self):
 		printl("", self, "S")
 
-		functionList = []
+		if self.g_serverConfig:
+			functionList = []
 
-		functionList.append((_("Sync medias from this server."), "sync"))
-		functionList.append((_("Render fullsize backdrops to m1v."), "render"))
+			functionList.append((_("Sync medias from this server."), "sync"))
+			functionList.append((_("Render fullsize backdrops to m1v."), "render"))
 
-		self.session.openWithCallback(self.onKeyMenuCallback, ChoiceBox, title=_("Server Functions"), list=functionList)
+			self.session.openWithCallback(self.onKeyMenuCallback, ChoiceBox, title=_("Server Functions"), list=functionList)
 
 		printl("", self, "C")
 
@@ -448,9 +446,11 @@ class DPS_MainMenu(Screen):
 	def onKeyMenuCallback(self, choice):
 		printl("", self, "S")
 		printl("choice: " +str(choice), self, "D")
-		from DP_Syncer import DPS_Syncer
 
-		self.session.open(DPS_Syncer, self.g_serverConfig, choice[1])
+		if choice:
+			from DP_Syncer import DPS_Syncer
+
+			self.session.open(DPS_Syncer, self.g_serverConfig, choice[1])
 
 		printl("", self, "C")
 
@@ -666,7 +666,6 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
 		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "settingsEntry"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
-		mainMenuList.append((_("Syncer"), "DPS_Sync", "settingsEntry"))
 		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
 		self.nextExitIsQuit = False
