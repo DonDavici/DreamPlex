@@ -476,34 +476,45 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "S")
 
-		mp = self.messagePump
-
 		self.running = True
 		self.cancel = False
 		msg_text = _("some text here")
 		self.messages.push((THREAD_WORKING, msg_text))
-		mp.send(0)
+		self.messagePump.send(0)
 		import os
 		try:
 			for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
 				if self.cancel:
 					break
 
-				if "1280x720" in myFile:
-					msg_text = _("started rendering myFile: " + str(myFile))
-					self.messages.push((THREAD_WORKING, msg_text))
-					mp.send(0)
+				# firt we check for images in the right size
+				if "1280x720.jpg" in myFile:
+					# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
+					myFileWoExtension = myFile[:-4]
 
-					printl("started rendering myFile: " + str(myFile),self, "D")
+					# location string
+					location = config.plugins.dreamplex.mediafolderpath.value + myFileWoExtension + ".m1v"
+					# check if backdrop video exists
+					if fileExists(location):
+						msg_text = _("backdrop video exists under the location " + str(location))
+						self.messages.push((THREAD_WORKING, msg_text))
+						self.messagePump.send(0)
+						continue
+					else:
+						msg_text = _("started rendering backdrop video: " + str(location))
+						self.messages.push((THREAD_WORKING, msg_text))
+						self.messagePump.send(0)
 
-					cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 13 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + ".m1v"
-					printl("cmd: " + str(cmd), self, "D")
+						printl("started rendering myFile: " + str(location),self, "D")
 
-					os.system(cmd)
+						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 13 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + location
+						printl("cmd: " + str(cmd), self, "D")
 
-					msg_text = _("finished rendering myFile: " + str(myFile))
-					self.messages.push((THREAD_WORKING, msg_text))
-					mp.send(0)
+						os.system(cmd)
+
+						msg_text = _("finished rendering myFile: " + str(myFile))
+						self.messages.push((THREAD_WORKING, msg_text))
+						self.messagePump.send(0)
 
 					printl("finished rendering myFile: " + str(myFile),self, "D")
 
@@ -515,7 +526,7 @@ class BackgroundMediaSyncer(Thread):
 		except Exception, e:
 			self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
 		finally:
-			mp.send(0)
+			self.messagePump.send(0)
 
 		self.running = False
 
@@ -577,7 +588,10 @@ class BackgroundMediaSyncer(Thread):
 
 				if section[2] == "movieEntry":
 					printl("movie", self, "D")
-					url = section[3]["t_url"] + "/all"
+					url = section[3]["t_url"]
+
+					if str(config.plugins.dreamplex.showFilter.value).lower() == "true":
+						url += "/all"
 
 					msg_text = _("got movie url: " + str(url))
 					self.messages.push((THREAD_WORKING, msg_text))
