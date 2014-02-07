@@ -125,7 +125,7 @@ class DPS_MainMenu(Screen):
 	def setCustomTitle(self):
 		printl("", self, "S")
 		
-		self.setTitle(_("DreamPlex"))
+		self.setTitle(_("Main Menu"))
 
 		printl("", self, "C")
 
@@ -241,6 +241,7 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
+					self.setTitle(_("System"))
 					self.refreshMenu(0)
 				
 			elif type(self.selectedEntry) is str:
@@ -477,6 +478,7 @@ class DPS_MainMenu(Screen):
 		
 		else:
 			printl("coming from ELSEWHERE", self, "D")
+			self.setTitle(_("Main Menu"))
 			printl("selectedEntry " +  str(self.selectedEntry), self, "D")
 			self.getServerList()
 			self["menu"].setList(self.menu_main_list)

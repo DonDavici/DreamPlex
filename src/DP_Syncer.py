@@ -507,7 +507,7 @@ class BackgroundMediaSyncer(Thread):
 
 						printl("started rendering myFile: " + str(location),self, "D")
 
-						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 13 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + location
+						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + location
 						printl("cmd: " + str(cmd), self, "D")
 
 						os.system(cmd)
