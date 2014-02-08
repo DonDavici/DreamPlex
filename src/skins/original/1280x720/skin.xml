@@ -18,13 +18,13 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/menu_frame-fs8.png" position="20,280" zPosition="7" size="1280,720" transparent="0"/>
 
         <!-- moving targets -->
-        <widget name="-3" transparent="1" zPosition="8" position="0,250" size="20,50" font="Saint; 22" halign="center" />
-        <widget name="-2" transparent="1" zPosition="8" position="20,295" size="200,50" font="Saint; 22" halign="center" />
-        <widget name="-1" transparent="1" zPosition="8" position="270,295" size="200,50" font="Saint; 22" halign="center" />
-        <widget name="0" transparent="1" zPosition="8" position="520,295" size="200,50" font="Saint; 22" halign="center" />
-        <widget name="+1" transparent="1" zPosition="8" position="770,295" size="200,50" font="Saint; 22" halign="center" />
-        <widget name="+2" transparent="1" zPosition="8" position="1020,295" size="200,50" font="Saint; 22" halign="center" />
-        <widget name="+3" transparent="1" zPosition="8" position="1030,250" size="20,50" font="Saint; 22" halign="center" />
+        <widget name="-3" transparent="1" zPosition="1" position="0,295" size="1,1" font="Saint; 22" halign="center" />
+        <widget name="-2" transparent="1" zPosition="8" position="4,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="-1" transparent="1" zPosition="8" position="252,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="0" transparent="1" zPosition="8" position="500,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+1" transparent="1" zPosition="8" position="748,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+2" transparent="1" zPosition="8" position="996,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+3" transparent="1" zPosition="1" position="1280,295" size="1,50" font="Saint; 22" halign="center" />
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/dreamplex.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
@@ -59,9 +59,6 @@
         <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
             <convert type="ClockToText">Date</convert>
         </widget>
-
-        <!-- buttons -->
-
     </screen>
 
     <!-- DPS_Settings -->
@@ -86,31 +83,36 @@
         <!-- hintbox -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/hintbox-fs8.png" position="20,550" zPosition="1" size="1233,113" transparent="0"/>
         <widget source="help" render="Label" position="40,565" size="1025,100" font="Saint; 18" foregroundColor="#5C5C5C" zPosition="30" transparent="1"/>
-
-        <!-- buttons -->
-
     </screen>
 
     <!-- DPS_About -->
     <screen name="DPS_About" position="0,0" size="1280,720" title=" " backgroundColor="#70000000" flags="wfNoBorder">
-        <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="110,22" size="190,30" font="Saint; 24" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
+        <!-- background -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
 
-        <!-- visu -->
-        <eLabel position="0,0" size="1280,720" zPosition="1" backgroundColor="#70000000" transparent="1"/>
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/settings-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+        <!-- title -->
+        <widget source="Title" text="System - Settings" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
 
-        <widget name="about" zPosition="3" position="125,205" size="1025,450" transparent="1" font="Modern;18" backgroundColor="#00000000" foregroundColor="#00404040"/>
+        <!-- left content -->
+        <widget name="about" zPosition="3" position="125,205" size="1025,450" transparent="1" font="Saint;18" backgroundColor="#00000000" foregroundColor="#ffffff"/>
 
-        <widget source="global.CurrentTime" render="Label" position="1170,25" size="169,40" zPosition="4" font="Saint; 22" halign="left" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" valign="top">
+        <!-- splitter -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/vert_splitter-fs8.png" position="600,80" zPosition="1" size="12,568" transparent="1"/>
+
+        <!-- right content -->
+
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
             <convert type="ClockToText">Default</convert>
         </widget>
-        <widget source="global.CurrentTime" render="Label" position="750,25" size="390,40" zPosition="4" font="Saint; 22" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
+        <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
             <convert type="ClockToText">Date</convert>
         </widget>
 
         <!-- buttons -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/red-fs8.png" zPosition="6" position="845,640" size="32,32" alphatest="blend"/>
-        <widget source="key_red" render="Label" position="885,635" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/red-fs8.png" zPosition="6" position="100,666" size="32,32" alphatest="blend"/>
+        <widget source="key_red" render="Label" position="100,675" zPosition="9" size="231,37" font="Saint;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
     </screen>
 

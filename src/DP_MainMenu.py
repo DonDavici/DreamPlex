@@ -248,6 +248,8 @@ class DPS_MainMenu(Screen):
 					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 					
 					self.checkServerState()
+					if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
@@ -273,6 +275,9 @@ class DPS_MainMenu(Screen):
 					self.s_uuid = params.get('t_uuid', "notSet")
 
 					self.getFilterData()
+
+					if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
 				
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
@@ -511,12 +516,16 @@ class DPS_MainMenu(Screen):
 			self["menu"].setList(self.g_serverDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
 			self.nextExitIsQuit = False
+			if self.g_horizontal_menu:
+				self.refreshOrientationHorMenu(0)
 			
 		elif self.selectedEntry == Plugin.MENU_TVSHOWS or self.selectedEntry == Plugin.MENU_MOVIES:
 			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
 			self["menu"].setList(self.g_sectionDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
 			self.nextExitIsQuit = False
+			if self.g_horizontal_menu:
+				self.refreshOrientationHorMenu(0)
 		
 		elif self.nextExitIsQuit:
 			self.exit()
