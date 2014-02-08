@@ -80,7 +80,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			"bouquet_up":	self.keyBouquetUp,
 			"bouquet_down":	self.keyBouquetDown,
 		}, -2)
-		
+
 		self.createSetup()
 		
 		self["config"].onSelectionChanged.append(self.updateHelp)
@@ -103,7 +103,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	def createSetup(self):
 		printl("", self, "S")
 		
-		separator = "".ljust(90,"_")
+		separator = "".ljust(120,"_")
 		
 		self.cfglist = []
 		
@@ -189,7 +189,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		cur = self["config"].getCurrent()
 		printl("cur: " + str(cur), self, "D")
-		self["help"].text = cur and cur[2] or ""
+		self["help"].text = cur and cur[2] or "empty"
 		
 		printl("", self, "C")
 		
@@ -660,7 +660,7 @@ class DPS_ServerEntryConfigScreen(ConfigListScreen, Screen):
 		
 		cur = self["config"].getCurrent()
 		printl("cur: " + str(cur), self, "D")
-		self["help"].text = cur and cur[2] or ""
+		self["help"].setText(cur[2])# = cur and cur[2] or ""
 		
 		printl("", self, "C")
 

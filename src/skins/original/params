@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <xml>
+
+	<!-- MAIN MENU ORIENTATION -->
+	<orientation name="main_menu" type="horizontal" />
+
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/mayatypeuitvg.ttf" size="100" name="Modern" />
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/goodtime.ttf" size="100"  name="Named" /> 
