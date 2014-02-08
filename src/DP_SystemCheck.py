@@ -34,6 +34,7 @@ from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
 from Components.config import config
+from Components.Label import Label
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -69,15 +70,15 @@ class DPS_SystemCheck(Screen):
 		self.oeVersion = self.getBoxArch()
 
 		if self.oeVersion == "mipsel":
-			vlist.append((_("found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"), "oe16"))
+			vlist.append((_("Check for gst-plugin-fragmented"), "oe16"))
 
 		elif self.oeVersion == "mips32el":
-			vlist.append((_("found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"), "oe20"))
+			vlist.append((_("Check for gst-plugins-bad-fragmented"), "oe20"))
 
 		else:
 			printl("unknown oe version", self, "W")
-			vlist.append((_("Check for 'gst-plugin-fragmented if you are using OE16."), "oe16"))
-			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
+			vlist.append((_("Check for gst-plugin-fragmented if you are using OE16."), "oe16"))
+			vlist.append((_("Check for gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 
 		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
@@ -86,12 +87,25 @@ class DPS_SystemCheck(Screen):
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
 
+		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
 		self["key_red"] = StaticText(_("Exit"))
 
+
+		self.onLayoutFinish.append(self.finishLayout)
+
 		printl("", self, "C")
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self["header"].setText(_("Functions List:"))
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#

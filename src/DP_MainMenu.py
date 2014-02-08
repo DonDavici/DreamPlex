@@ -44,7 +44,7 @@ from __init__ import _ # _ is translation
 from DP_PlexLibrary import PlexLibrary
 from DP_SystemCheck import DPS_SystemCheck
 from DP_Settings import DPS_Settings
-from DP_Settings import DPS_ServerEntriesListConfigScreen
+from DP_Server import DPS_Server
 from DP_Help import DPS_Help
 from DP_About import DPS_About
 
@@ -294,8 +294,8 @@ class DPS_MainMenu(Screen):
 				if selection[1] == "DPS_Settings":
 					self.session.open(DPS_Settings)
 					
-				elif selection[1] == "DPS_ServerEntriesListConfigScreen":
-					self.session.open(DPS_ServerEntriesListConfigScreen)
+				elif selection[1] == "DPS_Server":
+					self.session.open(DPS_Server)
 					
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
@@ -723,7 +723,7 @@ class DPS_MainMenu(Screen):
 		mainMenuList = []
 
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
-		mainMenuList.append((_("Server"), "DPS_ServerEntriesListConfigScreen", "settingsEntry"))
+		mainMenuList.append((_("Server"), "DPS_Server", "settingsEntry"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
 		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
