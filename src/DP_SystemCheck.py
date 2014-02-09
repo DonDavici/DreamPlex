@@ -32,7 +32,7 @@ from enigma import eConsoleAppContainer
 
 from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Sources.StaticText import StaticText
+from Components.Pixmap import Pixmap
 from Components.config import config
 from Components.Label import Label
 
@@ -90,8 +90,8 @@ class DPS_SystemCheck(Screen):
 		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
-		self["key_red"] = StaticText(_("Exit"))
-
+		self["txt_red"] = Label()
+		self["btn_red"] = Pixmap()
 
 		self.onLayoutFinish.append(self.finishLayout)
 
@@ -103,7 +103,11 @@ class DPS_SystemCheck(Screen):
 	def finishLayout(self):
 		printl("", self, "S")
 
+		self.setTitle(_("System - Systemcheck"))
+
 		self["header"].setText(_("Functions List:"))
+
+		self["txt_red"].setText(_("Exit"))
 
 		printl("", self, "C")
 

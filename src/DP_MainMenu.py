@@ -45,7 +45,6 @@ from DP_PlexLibrary import PlexLibrary
 from DP_SystemCheck import DPS_SystemCheck
 from DP_Settings import DPS_Settings
 from DP_Server import DPS_Server
-from DP_Help import DPS_Help
 from DP_About import DPS_About
 
 from DPH_WOL import wake_on_lan
@@ -303,9 +302,6 @@ class DPS_MainMenu(Screen):
 				elif selection[1] == "DPS_About":
 					self.session.open(DPS_About)
 
-				elif selection[1] == "DPS_Help":
-					self.session.open(DPS_Help)
-
 				elif selection[1] == "DPS_Exit":
 					self.exit()
 				
@@ -416,8 +412,11 @@ class DPS_MainMenu(Screen):
 	#==========================================================================
 	def up(self):
 		printl("", self, "S")
-		
-		self["menu"].selectPrevious()
+
+		if self.g_horizontal_menu:
+			self.left()
+		else:
+			self["menu"].selectPrevious()
 		
 		printl("", self, "C")	
 	
@@ -426,8 +425,11 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	def down(self):
 		printl("", self, "S")
-		
-		self["menu"].selectNext()
+
+		if self.g_horizontal_menu:
+			self.right()
+		else:
+			self["menu"].selectNext()
 		
 		printl("", self, "C")
 	
@@ -725,7 +727,6 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
 		mainMenuList.append((_("Server"), "DPS_Server", "settingsEntry"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
-		mainMenuList.append((_("Help"), "DPS_Help", "settingsEntry"))
 
 		self.nextExitIsQuit = False
 		

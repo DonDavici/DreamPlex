@@ -24,7 +24,6 @@ You should have received a copy of the GNU General Public License
 #=================================
 from Components.ActionMap import ActionMap
 from Components.Label import Label
-from Components.Sources.StaticText import StaticText
 
 from Screens.Screen import Screen
 
@@ -47,30 +46,33 @@ class DPS_About(Screen):
 		
 		self._session = session
 		
-		self["about"] = Label()
-		
-		
-		self["key_red"] = StaticText(_("Close"))
-		
+		self["leftText"] = Label()
+		self["rightText"] = Label()
+
+		self["txt_exit"] = Label()
+
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
-			"red": self.keyCancel,
 			"cancel": self.keyCancel,
 		}, -2)
 		
-		self.onLayoutFinish.append(self.setContent)
-		
+		self.onLayoutFinish.append(self.finishLayout)
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setContent(self):
+	def finishLayout(self):
 		printl("", self, "S")
-		
+
 		self.setTitle(_("About"))
-		self["about"].setText(self.getText())
+		
+		self["txt_exit"].setText(_("Exit"))
+
+		self["leftText"].setText(self.getLeftText())
+		self["rightText"].setText(self.getRightText())
+
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -86,7 +88,7 @@ class DPS_About(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getText(self):
+	def getLeftText(self):
 		printl("", self, "S")
 		
 		content = ""
@@ -101,5 +103,25 @@ class DPS_About(Screen):
 		content += "Skinner: \t IPMAN\n"
 		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
 		
+		printl("", self, "C")
+		return content
+
+		#===========================================================================
+	#
+	#===========================================================================
+	def getRightText(self):
+		printl("", self, "S")
+
+		content = "Visit the DreamPlex Wiki!"
+		content += "\n\n   https://github.com/DonDavici/DreamPlex/wiki"
+		content += "\n\n\nGet support in one of the following forums!"
+		content += "\n\n   http://www.i-have-a-dreambox.com"
+		content += "\n\n   http://www.vuplus-support.org/wbb3"
+		content += "\n\n\nFind the git repository here!"
+		content += "\n\n   https://github.com/DonDavici/DreamPlex"
+		content += "\n\n\nDownload Dreamplex here!"
+		content += "\n\n   https://bintray.com/dondavici/Dreambox"
+
+
 		printl("", self, "C")
 		return content

@@ -28,6 +28,7 @@ from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.Sources.StaticText import StaticText
 from Components.Label import Label
+from Components.Pixmap import Pixmap
 from Components.config import config, getConfigListEntry, configfile
 
 from Screens.MessageBox import MessageBox
@@ -55,10 +56,18 @@ class DPS_Server(Screen):
 		self["header"] = Label()
 		self["columnHeader"] = Label()
 
-		self["key_red"] = StaticText(_("Discover"))
-		self["key_green"] = StaticText(_("Add"))
-		self["key_yellow"] = StaticText(_("Edit"))
-		self["key_blue"] = StaticText(_("Delete"))
+		self["txt_red"] = Label()
+		self["btn_red"] = Pixmap()
+
+		self["txt_green"] = Label()
+		self["btn_green"] = Pixmap()
+
+		self["txt_yellow"] = Label()
+		self["btn_yellow"] = Pixmap()
+
+		self["txt_blue"] = Label()
+		self["btn_blue"] = Pixmap()
+
 
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
@@ -83,6 +92,11 @@ class DPS_Server(Screen):
 
 		self["header"].setText(_("Server List:"))
 		self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
+
+		self["key_red"].setText(_("Discover"))
+		self["key_green"].setText(_("Add"))
+		self["key_yellow"].setText(_("Edit"))
+		self["key_blue"].setText(_("Delete"))
 
 		printl("", self, "C")
 

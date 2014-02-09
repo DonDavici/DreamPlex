@@ -29,6 +29,8 @@ from Components.ConfigList import ConfigListScreen
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
 from Components.config import config, getConfigListEntry
+from Components.Label import Label
+from Components.Pixmap import Pixmap
 
 from Screens.Screen import Screen
 from Screens.HelpMenu import HelpableScreen
@@ -59,8 +61,12 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self._session = session
 		self._hasChanged = False
 
-		self["key_red"] = StaticText(_("Cancel"))
-		self["key_green"] = StaticText(_("Save"))
+		self["txt_red"] = Label()
+		self["btn_red"] = Pixmap()
+
+		self["txt_green"] = Label()
+		self["btn_green"] = Pixmap()
+
 		self["help"] = StaticText()
 		
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions", "DPS_Settings"],
@@ -78,16 +84,20 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.createSetup()
 		
 		self["config"].onSelectionChanged.append(self.updateHelp)
-		
+		self.onLayoutFinish.append(self.finishLayout)
+
 		printl("", self, "C")
 		
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setCustomTitle(self):
+	def finishLayout(self):
 		printl("", self, "S")
-		
-		self.setTitle(_("Settings"))
+
+		self["txt_red"].setText(_("Exit"))
+
+		self["txt_green"].hide()
+		self["btn_green"].hide()
 
 		printl("", self, "C")
 
@@ -172,6 +182,11 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		printl("", self, "S")
 		
 		self._hasChanged = True
+		self["txt_red"].setText(_("Cancel"))
+
+		self["txt_green"].show()
+		self["txt_green"].setText(_("Save"))
+		self["btn_green"].show()
 
 		printl("", self, "C")
 
