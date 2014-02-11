@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 DreamPlex Plugin by DonDavici, 2012
- 
+
 https://github.com/DonDavici/DreamPlex
 
 Some of the code is from other plugins:
@@ -54,20 +54,20 @@ from DPH_MovingLabel import DPH_MovingLabel
 
 #===============================================================================
 #
-#===============================================================================	
+#===============================================================================
 class DPS_MainMenu(Screen):
 
 	g_horizontal_menu = False
 	g_wolon = False
 	g_wakeserver = "00-11-32-12-C5-F9"
 	g_woldelay = 10
-	
+
 	selectedEntry = None
 	s_url = None
 	s_mode = None
 	s_final = False
 	g_serverConfig = None
-	
+
 	g_serverDataMenu = None
 	g_filterDataMenu = None
 	nextExitIsQuit = True
@@ -75,9 +75,9 @@ class DPS_MainMenu(Screen):
 	plexInstance = None
 	selectionOverride = None
 	secondRun = False
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def __init__(self, session, allowOverride=True):
 		printl("", self, "S")
@@ -95,18 +95,18 @@ class DPS_MainMenu(Screen):
 				myType = str(orientation.get('type'))
 				if myType == "horizontal":
 					self.g_horizontal_menu = True
-		
+
 		self["title"] = StaticText()
 		self["welcomemessage"] = StaticText()
-		
+
 		# get all our servers as list
 		self.getServerList(allowOverride)
-		
+
 		self["menu"]= List(self.mainMenuList, True)
-		
+
 		self.menu_main_list = self["menu"].list
 
-		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions", 
+		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions",
 			{
 				"ok":		(self.okbuttonClick, ""),
 				"left":		(self.left, ""),
@@ -116,10 +116,10 @@ class DPS_MainMenu(Screen):
 				"cancel":	(self.cancel, ""),
 			    "menu":		(self.onKeyMenu, ""),
 			}, -2)
-		
+
 		self.onFirstExecBegin.append(self.onExec)
 		self.onFirstExecBegin.append(self.onExecRunDev)
-		
+
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
 			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 			self.session.nav.stopService()
@@ -159,11 +159,11 @@ class DPS_MainMenu(Screen):
 		self.translatePositionToName(+2, "+2")
 
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def finishLayout(self):
 		printl("", self, "S")
-		
+
 		self.setTitle(_("Main Menu"))
 
 		self["txt_exit"].setText(_("Exit"))
@@ -227,7 +227,7 @@ class DPS_MainMenu(Screen):
 #===============================================================================
 
 	#===============================================================
-	# 
+	#
 	#===============================================================
 	def okbuttonClick(self, selectionOverride = None):
 		printl("", self, "S")
@@ -239,29 +239,29 @@ class DPS_MainMenu(Screen):
 			selection = selectionOverride
 		else:
 			selection = self["menu"].getCurrent()
-		
+
 		printl("selection = " + str(selection), self, "D")
 		self.nextExitIsQuit = False
 		if selection is not None:
-			
+
 			self.selectedEntry = selection[1]
 			printl("selected entry " + str(self.selectedEntry), self, "D")
-			
+
 			if type(self.selectedEntry) is int:
 				printl("selected entry is int", self, "D")
-				
+
 				if self.selectedEntry == Plugin.MENU_MAIN:
 					printl("found Plugin.MENU_MAIN", self, "D")
 					self["menu"].setList(self.menu_main_list)
-			
+
 				elif self.selectedEntry == Plugin.MENU_SERVER:
 					printl("found Plugin.MENU_SERVER", self, "D")
 					self.showTaskbar()
 					self.g_serverConfig = selection[3]
-					
+
 					# now that we know the server we establish global plexInstance
 					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-					
+
 					self.checkServerState()
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
@@ -269,11 +269,11 @@ class DPS_MainMenu(Screen):
 				elif self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
-					
+
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
-				
+
 				elif self.selectedEntry == Plugin.MENU_MUSIC:
 					printl("found Plugin.MENU_MUSIC", self, "D")
 					self.getServerData("music")
@@ -283,7 +283,7 @@ class DPS_MainMenu(Screen):
 					self.showTaskbar()
 					params = selection[3]
 					printl("params: " + str(params), self, "D")
-					
+
 					self.s_url = params.get('t_url', "notSet")
 					self.s_mode = params.get('t_mode', "notSet")
 					self.s_final = params.get('t_final', "notSet")
@@ -294,7 +294,7 @@ class DPS_MainMenu(Screen):
 
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
-				
+
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
@@ -303,28 +303,28 @@ class DPS_MainMenu(Screen):
 
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
-				
+
 			elif type(self.selectedEntry) is str:
 				printl("selected entry is string", self, "D")
 
 				if selection[1] == "DPS_Settings":
 					self.session.open(DPS_Settings)
-					
+
 				elif selection[1] == "DPS_Server":
 					self.session.open(DPS_Server)
-					
+
 				elif selection[1] == "DPS_SystemCheck":
 					self.session.open(DPS_SystemCheck)
-				
+
 				elif selection[1] == "DPS_About":
 					self.session.open(DPS_About)
 
 				elif selection[1] == "DPS_Exit":
 					self.exit()
-				
+
 				elif selection[1] == "getMusicSections":
 					self.getMusicSections(selection)
-					
+
 			else:
 				printl("selected entry is executable", self, "D")
 				params = selection[3]
@@ -342,7 +342,7 @@ class DPS_MainMenu(Screen):
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()
-					
+
 			printl("", self, "C")
 
 	#===========================================================================
@@ -372,61 +372,61 @@ class DPS_MainMenu(Screen):
 		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def getMusicSections(self, selection):
 		printl("", self, "S")
-		
+
 		mainMenuList = []
 		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
-		
+
 		# ARTISTS
 		params = copy.deepcopy(selection[3])
 		url = params['t_url']
 		params['t_url'] = url + "?type=8"
 		mainMenuList.append((_("by Artists"), plugin, "artistsEntry", params))
 		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
-		
+
 		#ALBUMS
 		params = copy.deepcopy(selection[3])
 		params['t_url'] = url + "?type=9"
 		mainMenuList.append((_("by Albums"), plugin, "albumsEntry", params))
 		printl("mainMenuList 2: " + str(mainMenuList), self, "D")
-		
+
 		self["menu"].setList(mainMenuList)
 		self.refreshMenu(0)
-		
+
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
-		
+
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def getSettingsMenuList(self):
 		printl("", self, "S")
-		
+
 		self.nextExitIsQuit = False
 		self["menu"].setList(self.getSettingsMenu())
 		self.refreshMenu(0)
 
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def addSearchString(self, searchString):
 		printl("", self, "S")
 		# sample: http://192.168.45.190:32400/search?type=1&query=fringe
 		serverUrl = self.plexInstance.getServerFromURL(self.s_url)
-		
+
 		if searchString is not "" and searchString is not None:
 			self.s_url = serverUrl + "/search?type=1&query=" + searchString
 
 		self.executeSelectedEntry()
-		
-		printl("", self, "C")	
-	
+
+		printl("", self, "C")
+
 	#===========================================================================
 	# this function starts DP_Lib...
 	#===========================================================================
@@ -436,22 +436,22 @@ class DPS_MainMenu(Screen):
 
 		if self.selectedEntry.start is not None:
 			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source , "viewGroup": self.viewGroup}
-			
+
 			if self.showEpisodesDirectly != "notSet":
 				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
 
 			self.session.open(self.selectedEntry.start, **kwargs)
-					
+
 		elif self.selectedEntry.fnc is not None:
 			self.selectedEntry.fnc(self.session)
 
 		if config.plugins.dreamplex.showFilter.value:
 			self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
-		
+
 		printl("", self, "C")
-	
+
 	#==========================================================================
-	# 
+	#
 	#==========================================================================
 	def up(self):
 		printl("", self, "S")
@@ -460,11 +460,11 @@ class DPS_MainMenu(Screen):
 			self.left()
 		else:
 			self["menu"].selectPrevious()
-		
-		printl("", self, "C")	
-	
+
+		printl("", self, "C")
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def down(self):
 		printl("", self, "S")
@@ -473,15 +473,15 @@ class DPS_MainMenu(Screen):
 			self.right()
 		else:
 			self["menu"].selectNext()
-		
+
 		printl("", self, "C")
-	
+
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def right(self):
 		printl("", self, "S")
-				
+
 		try:
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(+1)
@@ -490,15 +490,15 @@ class DPS_MainMenu(Screen):
 		except Exception, ex:
 			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "W")
 			self["menu"].selectNext()
-		
+
 		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def left(self):
 		printl("", self, "S")
-		
+
 		try:
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(-1)
@@ -507,11 +507,11 @@ class DPS_MainMenu(Screen):
 		except Exception, ex:
 			printl("Exception(" + str(type(ex)) + "): " + str(ex), self, "W")
 			self["menu"].selectPrevious()
-		
+
 		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def exit(self):
 		printl("", self, "S")
@@ -551,7 +551,7 @@ class DPS_MainMenu(Screen):
 		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def cancel(self):
 		printl("", self, "S")
@@ -565,7 +565,7 @@ class DPS_MainMenu(Screen):
 			self.nextExitIsQuit = False
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(0)
-			
+
 		elif self.selectedEntry == Plugin.MENU_TVSHOWS or self.selectedEntry == Plugin.MENU_MOVIES:
 			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
 			self["menu"].setList(self.g_sectionDataMenu)
@@ -573,10 +573,10 @@ class DPS_MainMenu(Screen):
 			self.nextExitIsQuit = False
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(0)
-		
+
 		elif self.nextExitIsQuit:
 			self.exit()
-		
+
 		else:
 			printl("coming from ELSEWHERE", self, "D")
 			self.setTitle(_("Main Menu"))
@@ -589,36 +589,36 @@ class DPS_MainMenu(Screen):
 				self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def Exit(self):
 		printl("", self, "S")
-		
+
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
 			printl("restoring liveTv", self, "D")
 			self.session.nav.playService(self.currentService)
 
 		self.close((True,) )
-		
+
 		printl("", self, "C")
-		
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def refreshMenu(self, value):
 		printl("", self, "S")
-		
+
 		if value == 1:
 			self["menu"].selectNext()
 		elif value == -1:
 			self["menu"].selectPrevious()
 
 		printl("", self, "C")
-		
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def checkServerState(self):
 		printl("", self, "S")
@@ -631,18 +631,18 @@ class DPS_MainMenu(Screen):
 			ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
 			port =  int(self.g_serverConfig.port.value)
 			isOnline = testPlexConnectivity(ip, port)
-			
+
 		elif connectionType == "2":
 			#state = testInetConnectivity("http://my.plexapp.com")
 			isOnline = True
 		else:
 			isOnline = testInetConnectivity()
-		
+
 		if isOnline:
 			stateText = "Online"
 		else:
 			stateText = "Offline"
-		
+
 		printl("Plexserver State: " + str(stateText), self, "I")
 		if not isOnline:
 			if self.g_wolon == True and connectionType == "0":
@@ -652,19 +652,19 @@ class DPS_MainMenu(Screen):
 				self.showOfflineMessage()
 		else:
 			self.getServerData()
-		
+
 		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def executeWakeOnLan(self, confirm):
 		printl("", self, "S")
-		
+
 		if confirm:
-			# User said 'yes'		
+			# User said 'yes'
 			printl("Wake On LAN: " + str(self.g_wolon), self, "I")
-			
+
 			for i in range(1,12):
 				if not self.g_wakeserver == "":
 					try:
@@ -678,47 +678,47 @@ class DPS_MainMenu(Screen):
 		else:
 			# User said 'no'
 			self.refreshMenu(0)
-	
+
 		printl("", self, "C")
-		
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def sleepNow (self):
 		printl("", self, "S")
-			
+
 		time.sleep(int(self.g_woldelay))
 		self.getServerData()
-		
+
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def getServerData(self, filterBy=None):
 		printl("", self, "S")
-		
+
 		summerize = config.plugins.dreamplex.summerizeSections.value
-		
+
 		if summerize == True and filterBy is None:
 			serverData = self.getSectionTypes()
 			self.g_sectionDataMenu = serverData
 		else:
 			serverData = self.plexInstance.displaySections(filterBy)
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
-		
+
 		self["menu"].setList(serverData)
 		self.refreshMenu(0)
-		
+
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def getFilterData(self):
 		printl("", self, "S")
 		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_source, self.s_uuid )
-		
+
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
 		self.refreshMenu(0)
@@ -727,46 +727,46 @@ class DPS_MainMenu(Screen):
 
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def getSectionTypes(self):
 		printl("", self, "S")
-		
+
 		mainMenuList = []
-		params = {} 
+		params = {}
 		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", params))
 		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,params))
-		
+
 		extend = False # SWITCH
-		
+
 		if extend:
 			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", params))
 			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", params))
 			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", params))
-		
+
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return mainMenuList
 #===============================================================================
 # HELPER
 #===============================================================================
-		
+
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def Error(self, error):
 		printl("", self, "S")
-		
+
 		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s" % error, MessageBox.TYPE_INFO)
-		
+
 		printl("", self, "C")
-		
+
 	#=======================================================================
-	# 
+	#
 	#=======================================================================
 	def getSettingsMenu (self):
 		printl("", self, "S")
-		
+
 		mainMenuList = []
 
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
@@ -774,63 +774,63 @@ class DPS_MainMenu(Screen):
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
 
 		self.nextExitIsQuit = False
-		
+
 		printl("", self, "C")
 		return mainMenuList
-	
+
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def getServerList(self, allowOverride=True):
 			printl("", self, "S")
-			
+
 			self.mainMenuList = []
-			
-			# add servers to list 
+
+			# add servers to list
 			for serverConfig in config.plugins.dreamplex.Entries:
-				
+
 				# only add the server if state is active
 				if serverConfig.state.value:
 					serverName = serverConfig.name.value
-				
+
 					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig))
-					
+
 					# automatically enter the server if wanted
 					if serverConfig.autostart.value and allowOverride:
 						printl("here", self, "D")
 						self.selectionOverride = [serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig]
-		
+
 			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "systemEntry"))
 			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
-			
+
 			printl("", self, "C")
-		
+
 #===============================================================================
 # ADDITIONAL STARTUPS
 #===============================================================================
-	
+
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def onExecRunDev(self):
 		printl("", self, "S")
-		
+
 		printl("", self, "C")
-	
+
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def onExec(self):
 		printl("", self, "S")
-		
+
 		# activate this to develop plex player via ios or android app
 		# state server is starting
 		# test over: 127.0.0.1:8000/version
 		# registration on plex server is working - player is showing up in handy app
-		# next step is to find out what should happen if a button is pressed. 
+		# next step is to find out what should happen if a button is pressed.
 		# for now we do not see any incoming traffic from the app :-(
 		#HttpDeamon().startDeamon()
-		
+
 		if config.plugins.dreamplex.checkForUpdateOnStartup.value:
 			DPS_SystemCheck(self.session).checkForUpdate()
 

@@ -68,6 +68,7 @@ class DPS_Server(Screen):
 		self["txt_blue"] = Label()
 		self["btn_blue"] = Pixmap()
 
+		self["txt_exit"] = Label()
 
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
@@ -76,7 +77,7 @@ class DPS_Server(Screen):
 			 "red"	:	self.keyRed,
 			 "yellow":	self.keyYellow,
 			 "green":	self.keyGreen,
-			 "blue":	self.keyDelete,
+			 "blue":	self.keyBlue,
 			 }, -1)
 		self.what = what
 
@@ -93,10 +94,12 @@ class DPS_Server(Screen):
 		self["header"].setText(_("Server List:"))
 		self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
 
-		self["key_red"].setText(_("Discover"))
-		self["key_green"].setText(_("Add"))
-		self["key_yellow"].setText(_("Edit"))
-		self["key_blue"].setText(_("Delete"))
+		self["txt_red"].setText(_("Delete"))
+		self["txt_green"].setText(_("Add"))
+		self["txt_yellow"].setText(_("Edit"))
+		self["txt_blue"].setText(_("Discover"))
+
+		self["txt_exit"].setText(_("Exit"))
 
 		printl("", self, "C")
 
@@ -162,29 +165,17 @@ class DPS_Server(Screen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		client = PlexGdm(debug=3)
-		version = str(getVersion())
-		gBoxType = getBoxInformation()
-		clientBox = gBoxType[1]
-		printl("clientBox: " + str(gBoxType), self, "D")
-		client.clientDetails(clientBox, "DreamPlex Client", "3003", "DreamPlex", version)
+		try:
+			sel = self["entryList"].getCurrent()[4]
 
-		client.start_discovery()
-		while not client.discovery_complete:
-			print "Waiting for results"
-			time.sleep(1)
+		except Exception, ex:
+			printl("Exception: " + str(ex), self, "W")
+			sel = None
 
-		client.stop_discovery()
-		serverList = client.getServerList()
-		printl("serverList: " + str(serverList),self, "D")
+		if sel is None:
+			return
 
-		menu = []
-		for server in serverList:
-			printl("server: " + str(server), self, "D")
-			menu.append((str(server.get("serverName")) + " (" + str(server.get("server")) + ":" + str(server.get("port")) + ")", server,))
-
-		printl("menu: " + str(menu), self, "D")
-		self.session.openWithCallback(self.useSelectedServerData, ChoiceBox, title=_("Select server"), list=menu)
+		self.session.openWithCallback(self.deleteConfirm, MessageBox, _("Really delete this Server Entry?"))
 
 		printl("", self, "C")
 
@@ -240,20 +231,32 @@ class DPS_Server(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def keyDelete(self):
+	def keyBlue(self):
 		printl("", self, "S")
 
-		try:
-			sel = self["entryList"].getCurrent()[4]
+		client = PlexGdm(debug=3)
+		version = str(getVersion())
+		gBoxType = getBoxInformation()
+		clientBox = gBoxType[1]
+		printl("clientBox: " + str(gBoxType), self, "D")
+		client.clientDetails(clientBox, "DreamPlex Client", "3003", "DreamPlex", version)
 
-		except Exception, ex:
-			printl("Exception: " + str(ex), self, "W")
-			sel = None
+		client.start_discovery()
+		while not client.discovery_complete:
+			print "Waiting for results"
+			time.sleep(1)
 
-		if sel is None:
-			return
+		client.stop_discovery()
+		serverList = client.getServerList()
+		printl("serverList: " + str(serverList),self, "D")
 
-		self.session.openWithCallback(self.deleteConfirm, MessageBox, _("Really delete this Server Entry?"))
+		menu = []
+		for server in serverList:
+			printl("server: " + str(server), self, "D")
+			menu.append((str(server.get("serverName")) + " (" + str(server.get("server")) + ":" + str(server.get("port")) + ")", server,))
+
+		printl("menu: " + str(menu), self, "D")
+		self.session.openWithCallback(self.useSelectedServerData, ChoiceBox, title=_("Select server"), list=menu)
 
 		printl("", self, "C")
 
@@ -293,19 +296,20 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
 			"green": self.keySave,
-			"red": self.keyCancel,
-			"blue": self.keyDelete,
 			"cancel": self.keyCancel,
 			"yellow": self.keyYellow,
 			"left": self.keyLeft,
 			"right": self.keyRight,
 		}, -2)
 
-		self["key_red"] = StaticText(_("Cancel"))
-		self["key_green"] = StaticText(_("OK"))
-		self["key_blue"] = StaticText(_("Delete"))
-		self["key_yellow"] = StaticText(_("mappings"))
 		self["help"] = StaticText()
+		self["txt_exit"] = Label()
+
+		self["txt_green"] = Label()
+		self["btn_green"] = Pixmap()
+
+		self["txt_yellow"] = Label()
+		self["btn_yellow"] = Pixmap()
 
 		if entry is None:
 			self.newmode = 1
@@ -329,6 +333,22 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		self.createSetup()
 
 		self["config"].onSelectionChanged.append(self.updateHelp)
+
+		self.onLayoutFinish.append(self.finishLayout)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self["txt_exit"].setText(_("Exit"))
+
+		self["txt_green"].setText(_("Save"))
+
+		self.setKeyNames()
 
 		printl("", self, "C")
 
@@ -461,9 +481,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		printl("", self, "S")
 
 		if self.useMappings:
-			self["key_yellow"].setText(_("Mappings"))
+			self["txt_yellow"].setText(_("Mappings"))
 		else:
-			self["key_yellow"].setText(_("check myPlex Token"))
+			self["txt_yellow"].setText(_("check myPlex Token"))
 
 		printl("", self, "C")
 
@@ -498,6 +518,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		if self.newmode == 1:
 			config.plugins.dreamplex.entriescount.value += 1
 			config.plugins.dreamplex.entriescount.save()
+
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.save()
 		config.plugins.dreamplex.save()
@@ -532,37 +553,5 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 			self.session.open(DPS_Mappings, serverID)
 		else:
 			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def keyDelete(self):
-		printl("", self, "S")
-
-		if self.newmode == 1:
-			self.keyCancel()
-		else:
-			self.session.openWithCallback(self.deleteConfirm, MessageBox, _("Really delete this Server Entry?"))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def deleteConfirm(self, result):
-		printl("", self, "S")
-
-		if not result:
-			return
-
-		config.plugins.dreamplex.entriescount.value -= 1
-		config.plugins.dreamplex.entriescount.save()
-		config.plugins.dreamplex.Entries.remove(self.current)
-		config.plugins.dreamplex.Entries.save()
-		config.plugins.dreamplex.save()
-		configfile.save()
-		self.close()
 
 		printl("", self, "C")

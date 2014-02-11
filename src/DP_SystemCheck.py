@@ -90,8 +90,8 @@ class DPS_SystemCheck(Screen):
 		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
-		self["txt_red"] = Label()
-		self["btn_red"] = Pixmap()
+		self["txt_exit"] = Label()
+		self["txt_ok"] = Label()
 
 		self.onLayoutFinish.append(self.finishLayout)
 
@@ -107,7 +107,9 @@ class DPS_SystemCheck(Screen):
 
 		self["header"].setText(_("Functions List:"))
 
-		self["txt_red"].setText(_("Exit"))
+		self["txt_exit"].setText(_("Exit"))
+
+		self["txt_ok"].setText(_("Ok"))
 
 		printl("", self, "C")
 

@@ -61,11 +61,10 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self._session = session
 		self._hasChanged = False
 
-		self["txt_red"] = Label()
-		self["btn_red"] = Pixmap()
-
 		self["txt_green"] = Label()
 		self["btn_green"] = Pixmap()
+
+		self["txt_exit"] = Label()
 
 		self["help"] = StaticText()
 		
@@ -94,7 +93,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	def finishLayout(self):
 		printl("", self, "S")
 
-		self["txt_red"].setText(_("Exit"))
+		self["txt_exit"].setText(_("Exit"))
 
 		self["txt_green"].hide()
 		self["btn_green"].hide()
@@ -182,7 +181,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		printl("", self, "S")
 		
 		self._hasChanged = True
-		self["txt_red"].setText(_("Cancel"))
 
 		self["txt_green"].show()
 		self["txt_green"].setText(_("Save"))
