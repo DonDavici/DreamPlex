@@ -42,20 +42,14 @@ from __common__ import printl2 as printl, testPlexConnectivity, testInetConnecti
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
-from DP_PlexLibrary import PlexLibrary
-from DP_SystemCheck import DPS_SystemCheck
-from DP_Settings import DPS_Settings
-from DP_Server import DPS_Server
-from DP_About import DPS_About
-
 from DPH_WOL import wake_on_lan
 from DPH_Singleton import Singleton
-from DPH_MovingLabel import DPH_MovingLabel
-
+from DPH_MovingLabel import DPH_HorizontalMenu
+#from DP_MainMenu import DPS_MainMenu
 #===============================================================================
 #
 #===============================================================================
-class DPS_MainMenu(Screen):
+class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 	g_horizontal_menu = False
 	g_wolon = False
@@ -70,7 +64,6 @@ class DPS_MainMenu(Screen):
 
 	g_serverDataMenu = None
 	g_filterDataMenu = None
-	nextExitIsQuit = True
 	currentService = None
 	plexInstance = None
 	selectionOverride = None
@@ -79,30 +72,28 @@ class DPS_MainMenu(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, allowOverride=True):
+	def __init__(self, session, g_serverConfig ):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
 		self.session = session
 
+		self.g_serverConfig = g_serverConfig
+		self.plexInstance = Singleton().getPlexInstance()
 
-		tree = Singleton().getSkinParamsInstance()
-
-		for orientation in tree.findall('orientation'):
-			name = str(orientation.get('name'))
-			if name == "main_menu":
-				myType = str(orientation.get('type'))
-				if myType == "horizontal":
-					self.g_horizontal_menu = True
-
+		self.setMenuType("server_menu")
+		if self.g_horizontal_menu:
+			self.setHorMenuElements()
+			self.translateNames()
 		self["title"] = StaticText()
-		self["welcomemessage"] = StaticText()
+		self["left_splitter"] = Pixmap()
+		self["right_cross"] = Pixmap()
+		self["txt_exit"] = Label()
+		self["txt_menu"] = Label()
+		self["menu"]= List()
 
-		# get all our servers as list
-		self.getServerList(allowOverride)
-
-		self["menu"]= List(self.mainMenuList, True)
+		self.checkServerState()
 
 		self.menu_main_list = self["menu"].list
 
@@ -117,46 +108,12 @@ class DPS_MainMenu(Screen):
 			    "menu":		(self.onKeyMenu, ""),
 			}, -2)
 
-		self.onFirstExecBegin.append(self.onExec)
-		self.onFirstExecBegin.append(self.onExecRunDev)
 
-		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
-			self.session.nav.stopService()
-
-		self["-2"] = DPH_MovingLabel()
-		self["-1"] = DPH_MovingLabel(self["-2"].getTimer())
-		self["0"]  = DPH_MovingLabel(self["-2"].getTimer())
-		self["+1"] = DPH_MovingLabel(self["-2"].getTimer())
-		self["+2"] = DPH_MovingLabel(self["-2"].getTimer())
-
-		self["-3"] = Label()
-		self["+3"] = Label()
-
-		self["left_splitter"] = Pixmap()
-		self["right_cross"] = Pixmap()
-
-		self["txt_exit"] = Label()
-		self["txt_menu"] = Label()
-
-		if self.g_horizontal_menu:
-			self.translateNames()
 
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onShown.append(self.checkSelectionOverride)
 
 		printl("", self, "C")
-
-#===============================================================================
-# SCREEN FUNCTIONS
-#===============================================================================
-
-	def translateNames(self):
-		self.translatePositionToName(-2, "-2")
-		self.translatePositionToName(-1, "-1")
-		self.translatePositionToName( 0, "0")
-		self.translatePositionToName(+1, "+1")
-		self.translatePositionToName(+2, "+2")
 
 	#===============================================================================
 	#
@@ -164,12 +121,10 @@ class DPS_MainMenu(Screen):
 	def finishLayout(self):
 		printl("", self, "S")
 
-		self.setTitle(_("Main Menu"))
+		self.setTitle(_("Server Menu"))
 
 		self["txt_exit"].setText(_("Exit"))
 		self["txt_menu"].setText(_("Menu"))
-
-		self.hideTaskbar()
 
 		if self.g_horizontal_menu:
 			# init horizontal menu
@@ -232,8 +187,6 @@ class DPS_MainMenu(Screen):
 	def okbuttonClick(self, selectionOverride = None):
 		printl("", self, "S")
 
-		#self.hideTaskbar()
-
 		# this is used to step in directly into a server when there is only one entry in the serverlist
 		if selectionOverride is not None:
 			selection = selectionOverride
@@ -241,7 +194,7 @@ class DPS_MainMenu(Screen):
 			selection = self["menu"].getCurrent()
 
 		printl("selection = " + str(selection), self, "D")
-		self.nextExitIsQuit = False
+
 		if selection is not None:
 
 			self.selectedEntry = selection[1]
@@ -250,37 +203,26 @@ class DPS_MainMenu(Screen):
 			if type(self.selectedEntry) is int:
 				printl("selected entry is int", self, "D")
 
-				if self.selectedEntry == Plugin.MENU_MAIN:
-					printl("found Plugin.MENU_MAIN", self, "D")
-					self["menu"].setList(self.menu_main_list)
-
-				elif self.selectedEntry == Plugin.MENU_SERVER:
-					printl("found Plugin.MENU_SERVER", self, "D")
-					self.showTaskbar()
-					self.g_serverConfig = selection[3]
-
-					# now that we know the server we establish global plexInstance
-					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-
-					self.checkServerState()
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
-
-				elif self.selectedEntry == Plugin.MENU_MOVIES:
+				if self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
+					if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
+					if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_MUSIC:
 					printl("found Plugin.MENU_MUSIC", self, "D")
 					self.getServerData("music")
+					if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
-					self.showTaskbar()
 					params = selection[3]
 					printl("params: " + str(params), self, "D")
 
@@ -294,36 +236,6 @@ class DPS_MainMenu(Screen):
 
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
-
-				elif self.selectedEntry == Plugin.MENU_SYSTEM:
-					printl("found Plugin.MENU_SYSTEM", self, "D")
-					self["menu"].setList(self.getSettingsMenu())
-					self.setTitle(_("System"))
-					self.refreshMenu(0)
-
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
-
-			elif type(self.selectedEntry) is str:
-				printl("selected entry is string", self, "D")
-
-				if selection[1] == "DPS_Settings":
-					self.session.open(DPS_Settings)
-
-				elif selection[1] == "DPS_Server":
-					self.session.open(DPS_Server)
-
-				elif selection[1] == "DPS_SystemCheck":
-					self.session.open(DPS_SystemCheck)
-
-				elif selection[1] == "DPS_About":
-					self.session.open(DPS_About)
-
-				elif selection[1] == "DPS_Exit":
-					self.exit()
-
-				elif selection[1] == "getMusicSections":
-					self.getMusicSections(selection)
 
 			else:
 				printl("selected entry is executable", self, "D")
@@ -344,32 +256,6 @@ class DPS_MainMenu(Screen):
 					self.executeSelectedEntry()
 
 			printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def showTaskbar(self):
-		printl("", self, "S")
-
-		self["left_splitter"].show()
-		self["right_cross"].show()
-		self["txt_exit"].show()
-		self["txt_menu"].show()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def hideTaskbar(self):
-		printl("", self, "S")
-
-		self["left_splitter"].hide()
-		self["right_cross"].hide()
-		self["txt_exit"].hide()
-		self["txt_menu"].hide()
-
-		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -397,18 +283,6 @@ class DPS_MainMenu(Screen):
 		self.refreshMenu(0)
 
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getSettingsMenuList(self):
-		printl("", self, "S")
-
-		self.nextExitIsQuit = False
-		self["menu"].setList(self.getSettingsMenu())
-		self.refreshMenu(0)
 
 		printl("", self, "C")
 
@@ -516,7 +390,7 @@ class DPS_MainMenu(Screen):
 	def exit(self):
 		printl("", self, "S")
 
-		self.Exit()
+		self.close((True,) )
 
 		printl("", self, "C")
 
@@ -556,13 +430,11 @@ class DPS_MainMenu(Screen):
 	def cancel(self):
 		printl("", self, "S")
 
-		self.hideTaskbar()
-
 		if self.selectedEntry == Plugin.MENU_FILTER:
 			printl("coming from MENU_FILTER", self, "D")
 			self["menu"].setList(self.g_serverDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
-			self.nextExitIsQuit = False
+
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(0)
 
@@ -570,37 +442,12 @@ class DPS_MainMenu(Screen):
 			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
 			self["menu"].setList(self.g_sectionDataMenu)
 			self.selectedEntry = Plugin.MENU_SERVER
-			self.nextExitIsQuit = False
+
 			if self.g_horizontal_menu:
 				self.refreshOrientationHorMenu(0)
-
-		elif self.nextExitIsQuit:
-			self.exit()
 
 		else:
-			printl("coming from ELSEWHERE", self, "D")
-			self.setTitle(_("Main Menu"))
-			printl("selectedEntry " +  str(self.selectedEntry), self, "D")
-			self.getServerList()
-			self["menu"].setList(self.menu_main_list)
-			self.nextExitIsQuit = True
-
-			if self.g_horizontal_menu:
-				self.refreshOrientationHorMenu(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def Exit(self):
-		printl("", self, "S")
-
-		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			printl("restoring liveTv", self, "D")
-			self.session.nav.playService(self.currentService)
-
-		self.close((True,) )
+			self.exit()
 
 		printl("", self, "C")
 
@@ -710,6 +557,8 @@ class DPS_MainMenu(Screen):
 		self["menu"].setList(serverData)
 		self.refreshMenu(0)
 
+
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -760,193 +609,3 @@ class DPS_MainMenu(Screen):
 		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s" % error, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
-
-	#=======================================================================
-	#
-	#=======================================================================
-	def getSettingsMenu (self):
-		printl("", self, "S")
-
-		mainMenuList = []
-
-		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
-		mainMenuList.append((_("Server"), "DPS_Server", "settingsEntry"))
-		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
-
-		self.nextExitIsQuit = False
-
-		printl("", self, "C")
-		return mainMenuList
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def getServerList(self, allowOverride=True):
-			printl("", self, "S")
-
-			self.mainMenuList = []
-
-			# add servers to list
-			for serverConfig in config.plugins.dreamplex.Entries:
-
-				# only add the server if state is active
-				if serverConfig.state.value:
-					serverName = serverConfig.name.value
-
-					self.mainMenuList.append((serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig))
-
-					# automatically enter the server if wanted
-					if serverConfig.autostart.value and allowOverride:
-						printl("here", self, "D")
-						self.selectionOverride = [serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig]
-
-			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "systemEntry"))
-			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
-
-			printl("", self, "C")
-
-#===============================================================================
-# ADDITIONAL STARTUPS
-#===============================================================================
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def onExecRunDev(self):
-		printl("", self, "S")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onExec(self):
-		printl("", self, "S")
-
-		# activate this to develop plex player via ios or android app
-		# state server is starting
-		# test over: 127.0.0.1:8000/version
-		# registration on plex server is working - player is showing up in handy app
-		# next step is to find out what should happen if a button is pressed.
-		# for now we do not see any incoming traffic from the app :-(
-		#HttpDeamon().startDeamon()
-
-		if config.plugins.dreamplex.checkForUpdateOnStartup.value:
-			DPS_SystemCheck(self.session).checkForUpdate()
-
-		printl("", self, "C")
-
-	_translatePositionToName = {}
-	def translatePositionToName(self, name, value=None):
-
-		printl("->", self, "S")
-		if value is None:
-			return self._translatePositionToName[name]
-		else:
-			self._translatePositionToName[name] = value
-
-	def refreshOrientationHorMenu(self, value):
-		printl("->", self, "S")
-		if self["-2"].moving is True or self["+2"].moving is True:
-				printl("returning", self, "D")
-				return False
-
-		self.refreshMenu(value)
-		currentIndex = self["menu"].index
-		content = self["menu"].list
-		count = len(content)
-
-		print currentIndex
-		print count
-
-		howManySteps = 1
-		doStepEveryXMs = 100
-
-		if value == 0:
-			printl("so soll es sein", self, "D")
-			self[self.translatePositionToName(0)].setText(content[currentIndex][0])
-			for i in range(1,3): # 1, 2
-				targetIndex = currentIndex + i
-				if targetIndex < count:
-					self[self.translatePositionToName(+i)].setText(content[targetIndex][0])
-				else:
-					self[self.translatePositionToName(+i)].setText(content[targetIndex - count][0])
-
-				targetIndex = currentIndex - i
-				if targetIndex >= 0:
-					self[self.translatePositionToName(-i)].setText(content[targetIndex][0])
-				else:
-					self[self.translatePositionToName(-i)].setText(content[count + targetIndex][0])
-
-
-		elif value == 1:
-			self[self.translatePositionToName(-1)].moveTo(self[self.translatePositionToName(-2)].getPosition(), howManySteps)
-			self[self.translatePositionToName( 0)].moveTo(self[self.translatePositionToName(-1)].getPosition(), howManySteps)
-			self[self.translatePositionToName(+1)].moveTo(self[self.translatePositionToName( 0)].getPosition(), howManySteps)
-			self[self.translatePositionToName(+2)].moveTo(self[self.translatePositionToName(+1)].getPosition(), howManySteps)
-
-			# He has to jump | This works but leaves us with an ugly jump
-			pos = self["+3"].getPosition()
-			self[self.translatePositionToName(-2)].move(pos[0], pos[1])
-			#self[self.translatePositionToName(-2)].moveTo(pos, 1)
-			self[self.translatePositionToName(-2)].moveTo(self[self.translatePositionToName(+2)].getPosition(), howManySteps)
-
-			# We have to change the conten of the most right
-			i = 2
-			targetIndex = currentIndex + i
-			if targetIndex < count:
-				self[self.translatePositionToName(-2)].setText(content[targetIndex][0])
-			else:
-				self[self.translatePositionToName(-2)].setText(content[targetIndex - count][0])
-
-			rM2 = self.translatePositionToName(-2)
-			self.translatePositionToName(-2, self.translatePositionToName(-1))
-			self.translatePositionToName(-1, self.translatePositionToName( 0))
-			self.translatePositionToName( 0, self.translatePositionToName(+1))
-			self.translatePositionToName(+1, self.translatePositionToName(+2))
-			self.translatePositionToName(+2, rM2)
-
-			self["-1"].startMoving(doStepEveryXMs)
-			self["0"].startMoving(doStepEveryXMs)
-			self["+1"].startMoving(doStepEveryXMs)
-			self["+2"].startMoving(doStepEveryXMs)
-
-			# GroupTimer
-			self["-2"].startMoving(doStepEveryXMs)
-
-		elif value == -1:
-			self[self.translatePositionToName(+1)].moveTo(self[self.translatePositionToName(+2)].getPosition(), howManySteps)
-			self[self.translatePositionToName( 0)].moveTo(self[self.translatePositionToName(+1)].getPosition(), howManySteps)
-			self[self.translatePositionToName(-1)].moveTo(self[self.translatePositionToName( 0)].getPosition(), howManySteps)
-			self[self.translatePositionToName(-2)].moveTo(self[self.translatePositionToName(-1)].getPosition(), howManySteps)
-
-			# He has to jump | This works but leaves us with an ugly jump
-			pos = self["-3"].getPosition()
-			self[self.translatePositionToName(+2)].move(pos[0], pos[1])
-			#self[self.translatePositionToName(+2)].moveTo(pos, 1)
-			self[self.translatePositionToName(+2)].moveTo(self[self.translatePositionToName(-2)].getPosition(), howManySteps)
-
-			# We have to change the conten of the most left
-			i = -2
-			targetIndex = currentIndex + i
-			if targetIndex >= 0:
-				self[self.translatePositionToName(+2)].setText(content[targetIndex][0])
-			else:
-				self[self.translatePositionToName(+2)].setText(content[count + targetIndex][0])
-
-			rP2 = self.translatePositionToName(+2)
-			self.translatePositionToName(+2, self.translatePositionToName(+1))
-			self.translatePositionToName(+1, self.translatePositionToName( 0))
-			self.translatePositionToName( 0, self.translatePositionToName(-1))
-			self.translatePositionToName(-1, self.translatePositionToName(-2))
-			self.translatePositionToName(-2, rP2)
-
-			self["-1"].startMoving(doStepEveryXMs)
-			self["0"].startMoving(doStepEveryXMs)
-			self["+1"].startMoving(doStepEveryXMs)
-			self["+2"].startMoving(doStepEveryXMs)
-
-			# GroupTimer
-			self["-2"].startMoving(doStepEveryXMs)
-
-		return True

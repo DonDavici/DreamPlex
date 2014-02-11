@@ -72,17 +72,21 @@ class DPS_Syncer(Screen):
 
 		self._session = session
 		self["output"] = ScrollLabel()
+		self["output"].setText(_("HURRA"))
 
 		self["txt_green"] = Label()
 		self["txt_green"].setText("Start Sync")
 		self["btn_green"] = Pixmap()
 
 		self["txt_blue"] = Label()
+		self["txt_blue"].setText("run in Background")
 		self["btn_blue"] = Pixmap()
 
 		self["txt_red"] = Label()
 		self["txt_red"].setText("Abort Sync")
 		self["btn_red"] = Pixmap()
+
+		self["txt_exit"] = Label()
 
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
@@ -92,11 +96,37 @@ class DPS_Syncer(Screen):
 			"green": self.keyGreen,
 			"bouquet_up": self.keyBouquetUp,
 			"bouquet_down": self.keyBouquetDown,
+			"cancel": self.exit,
 		}, -2)
 
 		self.onFirstExecBegin.append(self.startup)
-		self.onLayoutFinish.append(self.readyToRun)
+		self.onLayoutFinish.append(self.finishLayout)
 		self.onClose.append(self.__onClose)
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self.setTitle("Server - Syncer")
+
+		if self.mediaSyncerInfo.isRunning():
+			self["txt_green"].hide()
+			self["btn_green"].hide()
+			self["txt_exit"].hide()
+
+		else:
+			self["txt_exit"].setText(_("Exit"))
+
+			self["txt_red"].hide()
+			self["btn_red"].hide()
+
+			self["txt_blue"].hide()
+			self["btn_blue"].hide()
+
+
+		printl("", self, "C")
 
 	#===============================================================================
 	#
@@ -116,25 +146,6 @@ class DPS_Syncer(Screen):
 
 		printl("", self, "C")
 
-	#===============================================================================
-	#
-	#===============================================================================
-	def readyToRun(self):
-		printl("", self, "S")
-
-		if self.mediaSyncerInfo.isRunning():
-			self["txt_green"].hide()
-			self["btn_green"].hide()
-
-			self["txt_blue"].setText("Background")
-		else:
-			self["txt_red"].hide()
-			self["btn_red"].hide()
-
-			self["txt_blue"].setText("Close")
-
-		printl("", self, "C")
-
 	#===========================================================================
 	#
 	#===========================================================================
@@ -145,8 +156,15 @@ class DPS_Syncer(Screen):
 			self.cancel()
 			self["txt_green"].show()
 			self["btn_green"].show()
-			self["txt_blue"].setText("Close")
+
+			self["txt_blue"].hide()
+			self["btn_blue"].hide()
+
+			self["txt_red"].hide()
 			self["btn_red"].hide()
+
+			self["txt_exit"].show()
+
 
 		printl("", self, "C")
 
@@ -179,11 +197,13 @@ class DPS_Syncer(Screen):
 
 		if not self.mediaSyncerInfo.isRunning():
 			self.doMediaSync()
-			self["txt_blue"].setText("Background")
+			self["txt_blue"].show()
+			self["btn_blue"].show()
 			self["btn_red"].show()
 			self["txt_red"].show()
 			self["btn_green"].hide()
 			self["txt_green"].hide()
+			self["txt_exit"].hide()
 
 		printl("", self, "C")
 
@@ -234,7 +254,11 @@ class DPS_Syncer(Screen):
 		printl("", self, "S")
 
 		self["output"].setText(_("Finished"))
-		self["txt_blue"].setText(_("Close"))
+		self["txt_blue"].hide()
+		self["btn_blue"].hide()
+
+		self["txt_exit"].show()
+
 		self["txt_red"].hide()
 		self["btn_red"].hide()
 
@@ -248,6 +272,17 @@ class DPS_Syncer(Screen):
 
 		self.mediaSyncerInfo.cancel()
 		self["output"].setText(_("Cancelled!"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def exit(self):
+		printl("", self, "S")
+
+		if not self.mediaSyncerInfo.isRunning():
+			self.close(0)
 
 		printl("", self, "C")
 

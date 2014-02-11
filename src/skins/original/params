@@ -3,6 +3,7 @@
 
 	<!-- MAIN MENU ORIENTATION -->
 	<orientation name="main_menu" type="horizontal" />
+	<orientation name="server_menu" type="horizontal" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/mayatypeuitvg.ttf" size="100" name="Modern" />

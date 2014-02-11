@@ -43,14 +43,6 @@
             <convert type="MenuEntryCompare">systemEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/menu_movies.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
-            <convert type="MenuEntryCompare">movieEntry</convert>
-            <convert type="ConditionalShowHide" />
-        </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/menu_shows.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
-            <convert type="MenuEntryCompare">showEntry</convert>
-            <convert type="ConditionalShowHide" />
-        </widget>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -62,10 +54,6 @@
 
         <!-- taskbar -->
         <widget name="left_splitter" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/left_splitter-fs8.png" position="50,673" zPosition="5" size="11,46" transparent="0"/>
-        <widget name="right_cross" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/right_cross-fs8.png" position="1150,675" zPosition="5" size="1151,43" transparent="0"/>
-
-        <!-- functions -->
-        <widget name="txt_menu" position="1220,666" zPosition="9" size="50,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
 
         <!-- exit -->
         <widget name="txt_exit" position="15,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
@@ -159,7 +147,7 @@
         <widget name="header" zPosition="3" position="40,80" size="1220,20" transparent="1" font="Saint;18"/>
 
         <!-- content -->
-        <widget name="content" zPosition="3" position="40,120" size="1220,450" transparent="1" itemHeight="30" font="Saint; 18" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/sel_bg-fs8.png"/>
+        <widget name="content" zPosition="3" position="40,120" size="1220,450" transparent="1" itemHeight="30" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/sel_bg-fs8.png"/>
 
         <!-- taskbar -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/left_splitter-fs8.png" position="50,673" zPosition="5" size="11,46" transparent="0"/>
@@ -299,7 +287,7 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
 
         <!-- title -->
-        <widget source="Title" text="System - Help" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
+        <widget source="Title" text="Server - Syncer" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -309,17 +297,81 @@
             <convert type="ClockToText">Date</convert>
         </widget>
 
-        <!-- buttons -->
-        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/green-fs8.png" zPosition="6" position="160,640" size="32,32" alphatest="blend"/>
-        <widget name="txt_green" position="210,635" zPosition="9" size="231,37" font="Saint;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <!-- settings -->
+        <widget name="output" zPosition="10" position="40,80" size="1220,450" font="Saint; 18" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1" />
 
-        <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/red-fs8.png" zPosition="6" position="460,640" size="32,32" alphatest="blend"/>
-        <widget name="txt_red" position="510,635" zPosition="9" size="231,37" font="Saint;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <!-- taskbar -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/left_splitter-fs8.png" position="50,673" zPosition="5" size="11,46" transparent="0"/>
 
-        <widget name="btn_blue" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/blue-fs8.png" zPosition="3" position="860,640" size="32,32" alphatest="blend" />
-        <widget name="txt_blue" position="910,635" zPosition="4" size="331,37" font="Saint;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1" />
+        <!-- functions -->
+        <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/btn_red-fs8.png" zPosition="6" position="100,687" size="14,14" alphatest="blend"/>
+        <widget name="txt_red" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#FF0000" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/btn_green-fs8.png" zPosition="6" position="400,687" size="14,14" alphatest="blend"/>
+        <widget name="txt_green" position="420,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#00FF00" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_blue" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/btn_blue-fs8.png" zPosition="6" position="1000,687" size="14,14" alphatest="blend"/>
+        <widget name="txt_blue" position="1020,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#0000FF" backgroundColor="#000000" transparent="1"/>
+
+        <!-- exit -->
+        <widget name="txt_exit" position="15,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
+    <!--DPS_ServerMenu -->
+    <screen name="DPS_ServerMenu" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
+        <!-- background -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+
+        <!-- title -->
+        <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
+
+        <!-- menu frame -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/menu_frame-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
+
+        <!-- menu -->
+        <widget source="menu" render="Listbox" position="10,232" size="400,400" zPosition="0">
+            <convert type="TemplatedMultiContent">
+                {"template": [ MultiContentEntryText(pos = (10, 14), size = (390, 40), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 26)], "itemHeight": 50 }
+            </convert>
+        </widget>
+
+        <!-- moving targets -->
+        <widget name="-3" transparent="1" zPosition="1" position="0,295" size="1,1" font="Saint; 22" halign="center" />
+        <widget name="-2" transparent="1" zPosition="8" position="4,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="-1" transparent="1" zPosition="8" position="252,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="0" transparent="1" zPosition="8" position="500,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+1" transparent="1" zPosition="8" position="748,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+2" transparent="1" zPosition="8" position="996,295" size="250,50" font="Saint; 22" halign="center" />
+        <widget name="+3" transparent="1" zPosition="1" position="1280,295" size="1,50" font="Saint; 22" halign="center" />
+
+        <!-- picons -->
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/menu_movies.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
+            <convert type="MenuEntryCompare">movieEntry</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/menu_shows.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
+            <convert type="MenuEntryCompare">showEntry</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
+            <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
+            <convert type="ClockToText">Date</convert>
+        </widget>
+
+        <!-- taskbar -->
+        <widget name="left_splitter" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/left_splitter-fs8.png" position="50,673" zPosition="5" size="11,46" transparent="0"/>
+        <widget name="right_cross" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/right_cross-fs8.png" position="1150,675" zPosition="5" size="1151,43" transparent="0"/>
+
+        <!-- functions -->
+        <widget name="txt_menu" position="1220,666" zPosition="9" size="50,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
+
+        <!-- exit -->
+        <widget name="txt_exit" position="15,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
+    </screen>
     <!-- DPS_ViewList -->
     <screen name="DPS_ViewList" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
         <eLabel text="Movies" transparent="1" zPosition="4" valign="center" position="106,24" size="190,30" font="Saint; 22" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
