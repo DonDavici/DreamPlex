@@ -45,7 +45,7 @@ from __init__ import _ # _ is translation
 from DPH_WOL import wake_on_lan
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
-#from DP_MainMenu import DPS_MainMenu
+
 #===============================================================================
 #
 #===============================================================================
@@ -83,9 +83,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self.plexInstance = Singleton().getPlexInstance()
 
 		self.setMenuType("server_menu")
+
 		if self.g_horizontal_menu:
 			self.setHorMenuElements()
 			self.translateNames()
+
 		self["title"] = StaticText()
 		self["left_splitter"] = Pixmap()
 		self["right_cross"] = Pixmap()
@@ -107,8 +109,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				"cancel":	(self.cancel, ""),
 			    "menu":		(self.onKeyMenu, ""),
 			}, -2)
-
-
 
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onShown.append(self.checkSelectionOverride)
