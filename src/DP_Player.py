@@ -525,7 +525,7 @@ class DP_Player(MoviePlayer):
 		totalTime = self.getPlayLength()[1] / 90000
 
 		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
-			progress = currentTime / (totalTime/100)
+			progress = currentTime / float(totalTime/100.0)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
 			progress = 100;
