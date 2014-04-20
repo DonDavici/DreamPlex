@@ -9,6 +9,7 @@
 
         <!-- menu frame -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/menu_frame-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/moving_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- menu -->
         <widget source="menu" render="Listbox" position="10,232" size="400,400" zPosition="0">
@@ -321,6 +322,7 @@
     <screen name="DPS_ServerMenu" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
         <!-- background -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/moving_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- title -->
         <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
