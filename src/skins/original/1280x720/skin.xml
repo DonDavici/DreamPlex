@@ -8,7 +8,6 @@
         <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
 
         <!-- menu frame -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/menu_frame-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/moving_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- menu -->
@@ -19,13 +18,11 @@
         </widget>
 
         <!-- moving targets -->
-        <widget name="-3" transparent="1" zPosition="1" position="0,295" size="1,1" font="Saint; 22" halign="center" />
         <widget name="-2" transparent="1" zPosition="8" position="4,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="-1" transparent="1" zPosition="8" position="252,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="0" transparent="1" zPosition="8" position="500,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="+1" transparent="1" zPosition="8" position="748,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="+2" transparent="1" zPosition="8" position="996,295" size="250,50" font="Saint; 22" halign="center" />
-        <widget name="+3" transparent="1" zPosition="1" position="1280,295" size="1,50" font="Saint; 22" halign="center" />
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/dreamplex.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
@@ -322,13 +319,12 @@
     <screen name="DPS_ServerMenu" position="0,0" size="1280,720" title=" " backgroundColor="#ffffffff" flags="wfNoBorder">
         <!-- background -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/back_main-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/moving_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- title -->
         <widget source="Title" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
 
         <!-- menu frame -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/menu_frame-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/images/moving_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- menu -->
         <widget source="menu" render="Listbox" position="10,232" size="400,400" zPosition="0">
@@ -338,13 +334,11 @@
         </widget>
 
         <!-- moving targets -->
-        <widget name="-3" transparent="1" zPosition="1" position="0,295" size="1,1" font="Saint; 22" halign="center" />
         <widget name="-2" transparent="1" zPosition="8" position="4,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="-1" transparent="1" zPosition="8" position="252,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="0" transparent="1" zPosition="8" position="500,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="+1" transparent="1" zPosition="8" position="748,295" size="250,50" font="Saint; 22" halign="center" />
         <widget name="+2" transparent="1" zPosition="8" position="996,295" size="250,50" font="Saint; 22" halign="center" />
-        <widget name="+3" transparent="1" zPosition="1" position="1280,295" size="1,50" font="Saint; 22" halign="center" />
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/picons/menu_movies.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
@@ -374,6 +368,7 @@
         <!-- exit -->
         <widget name="txt_exit" position="15,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
+
     <!-- DPS_ViewList -->
     <screen name="DPS_ViewList" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
         <eLabel text="Movies" transparent="1" zPosition="4" valign="center" position="106,24" size="190,30" font="Saint; 22" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>

@@ -93,7 +93,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self["right_cross"] = Pixmap()
 		self["txt_exit"] = Label()
 		self["txt_menu"] = Label()
-		self["menu"]= List()
+		self["menu"]= List(enableWrapAround=True)
 
 		self.checkServerState()
 
@@ -160,14 +160,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	def showOfflineMessage(self):
 		printl("", self, "S")
 
-		self.session.openWithCallback(self.setServerMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
+		self.session.openWithCallback(self.setSeverMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setServerMenu(self, answer):
+	def setMainMenu(self, answer):
 		printl("", self, "S")
 		printl("answer: " + str(answer), self, "D")
 
@@ -206,6 +206,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				if self.selectedEntry == Plugin.MENU_MOVIES:
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
+
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
 
@@ -254,7 +255,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()
-
+			self.refreshMenu(0)
 			printl("", self, "C")
 
 	#===========================================================================
@@ -556,8 +557,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 		self["menu"].setList(serverData)
 		self.refreshMenu(0)
-
-
 
 		printl("", self, "C")
 
