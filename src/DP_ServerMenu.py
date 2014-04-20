@@ -160,21 +160,21 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	def showOfflineMessage(self):
 		printl("", self, "S")
 
-		self.session.openWithCallback(self.setMainMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
+		self.session.openWithCallback(self.setServerMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setMainMenu(self, answer):
+	def setServerMenu(self, answer):
 		printl("", self, "S")
 		printl("answer: " + str(answer), self, "D")
 
 		if answer:
 			self.checkServerState()
 		else:
-			self.session.open(DPS_MainMenu,allowOverride=False)
+			self.session.open(DPS_ServerMenu,allowOverride=False)
 
 		printl("", self, "C")
 #===============================================================================
