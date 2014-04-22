@@ -582,11 +582,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		params = {}
 		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", params))
 		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,params))
+		mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", params))
 
 		extend = False # SWITCH
 
 		if extend:
-			mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", params))
 			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", params))
 			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", params))
 
