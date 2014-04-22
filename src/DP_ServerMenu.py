@@ -89,8 +89,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 			self.translateNames()
 
 		self["title"] = StaticText()
-		self["left_splitter"] = Pixmap()
-		self["right_cross"] = Pixmap()
 		self["txt_exit"] = Label()
 		self["txt_menu"] = Label()
 		self["menu"]= List(enableWrapAround=True)

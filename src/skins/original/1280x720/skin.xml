@@ -406,10 +406,10 @@
         <widget name="audio" transparent="1" zPosition="4" halign="left" valign="top" position="700,298" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
-        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Saint;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="backdrop" transparent="0" zPosition="45" position="525,355" size="560,315" alphatest="blend"/>
-        <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Saint;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="functionsContainer" transparent="0" zPosition="46" position="525,355" size="560,315" backgroundColor="#000000"/>
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
@@ -496,7 +496,7 @@
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="950,460" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="poster" transparent="1" zPosition="4" position="601,399" size="195,268" alphatest="blend"/>
-        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Saint;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="functionsContainer" transparent="0" zPosition="85" position="570,390" size="660,300" backgroundColor="#000000"/>
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
@@ -582,11 +582,11 @@
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="center" position="860,420" size="160,30" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="poster" transparent="1" zPosition="49" position="528,220" size="195,268" alphatest="blend"/>
-        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="postertext" transparent="1" zPosition="4" halign="left" position="150,500" size="200,40" font="Saint;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="backdrop" transparent="0" zPosition="-2" position="0,0" size="1280,720" alphatest="blend"/>
         <widget name="backdropVideo" transparent="0" zPosition="-3" position="0,0" size="1280,720"/>
-        <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Modern;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Saint;22" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="functionsContainer" transparent="0" zPosition="46" position="550,510" size="720,203" backgroundColor="#000000"/>
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
@@ -618,7 +618,7 @@
         <ePixmap zPosition="-1" position="625,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress_grey.png"/>
         <ePixmap zPosition="-1" position="15,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress_grey.png"/>
 
-        <eLabel text="DreamPlex" position="15, 5" size="260,28" font="Regular;26" valign="top" noWrap="1" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1"/>
+        <eLabel text="DreamPlex" position="15, 5" size="260,28" font="Saint;26" valign="top" noWrap="1" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1"/>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -636,20 +636,20 @@
             <convert type="ServicePosition">Gauge</convert>
         </widget>
 
-        <widget source="session.CurrentService" render="Label" position=" 15,48" size="120,28" font="Regular;24" halign="left" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+        <widget source="session.CurrentService" render="Label" position=" 15,48" size="120,28" font="Saint;24" halign="left" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
             <convert type="ServicePosition">Position</convert>
         </widget>
 
-        <widget source="session.CurrentService" render="Label" position="395,48" size="120,28" font="Regular;24" halign="right" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+        <widget source="session.CurrentService" render="Label" position="395,48" size="120,28" font="Saint;24" halign="right" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
             <convert type="ServicePosition">Remaining</convert>
         </widget>
 
-        <widget source="session.CurrentService" render="Label" position=" 200,48" size="135,24" font="Regular;22" halign="center" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
+        <widget source="session.CurrentService" render="Label" position=" 200,48" size="135,24" font="Saint;22" halign="center" foregroundColor="#00404040" backgroundColor="#00000000" transparent="1">
             <convert type="ServicePosition">Length</convert>
         </widget>
 
         <widget name="bufferslider" position="625,40" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress.png"/>
-        <widget source="mediaTitle" transparent="1" render="Label" zPosition="3" position="625,5" size="350,28" font="Regular;23" backgroundColor="#00000000" foregroundColor="#00404040"/>
+        <widget source="mediaTitle" transparent="1" render="Label" zPosition="3" position="625,5" size="350,28" font="Saint;23" backgroundColor="#00000000" foregroundColor="#00404040"/>
     </screen>
 
     <!-- DPS_PathSelector -->
@@ -658,9 +658,9 @@
         <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
         <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
         <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <widget name="target" position="0,60" size="540,22" valign="center" font="Regular;22"/>
+        <widget name="target" position="0,60" size="540,22" valign="center" font="Saint;22"/>
         <widget name="filelist" position="0,100" zPosition="1" size="560,220" scrollbarMode="showOnDemand"/>
-        <widget render="Label" source="key_red" position="0,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Regular;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
-        <widget render="Label" source="key_green" position="140,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Regular;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
+        <widget render="Label" source="key_red" position="0,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Saint;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
+        <widget render="Label" source="key_green" position="140,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Saint;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
     </screen>
 </skins>

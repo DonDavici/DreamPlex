@@ -71,7 +71,6 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 		self.setMenuType("main_menu")
 
 		self["title"] = StaticText()
-		self["left_splitter"] = Pixmap()
 		self["txt_exit"] = Label()
 
 		# get all our servers as list

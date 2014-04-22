@@ -6,24 +6,22 @@
 	<orientation name="server_menu" type="horizontal" />
 
 	<!-- FONTS SECTION -->
-	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/mayatypeuitvg.ttf" size="100" name="Modern" />
-	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/goodtime.ttf" size="100"  name="Named" /> 
-	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/saint.ttf" size="100" name="Saint" />
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/HandelGotD.ttf" size="100" name="Saint" />
 	
 	<!-- SEEN/UNSEEN VISUS -->
-	<seenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
-	<startedPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png" />
-	<unseenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png" />
+	<seenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/seen-fs8.png" />
+	<startedPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/started-fs8.png" />
+	<unseenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/unseen-fs8.png" />
 	
 	<!-- GUI ELEMENTS -->
-	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/red.png" />
-	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/green.png" />
-	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/blue.png" />
-	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/1280x720/buttons/yellow.png"/>
-	<guiElement name="key_pvr" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/pvr.png" />
-	<guiElement name="key_menu" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/menu.png" />
-	<guiElement name="key_zero" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/key_0.png" />
-	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/key_9.png" />
+	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/red.png" />
+	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/green.png" />
+	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/blue.png" />
+	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/yellow.png"/>
+	<guiElement name="key_pvr" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/pvr.png" />
+	<guiElement name="key_menu" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/menu.png" />
+	<guiElement name="key_zero" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/key_0.png" />
+	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/key_9.png" />
 	
 	<!-- VIEWS -->
 
