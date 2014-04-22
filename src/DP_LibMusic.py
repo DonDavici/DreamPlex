@@ -22,6 +22,10 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
+import cPickle as pickle
+
+from Components.config import config
+
 from DP_LibMain import DP_LibMain
 
 from DPH_Singleton import Singleton
@@ -38,98 +42,151 @@ class DP_LibMusic(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False):
+	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None, viewGroup=None):
 		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		"""
 		printl ("", self, "S")
-		
-		DP_LibMain.__init__(self, session, "music")
-		self.g_url = url
+
 		self.showEpisodesDirectly = showEpisodesDirectly
-		
+		if self.showEpisodesDirectly:
+			DP_LibMain.__init__(self, session, "episodes")
+		else:
+			DP_LibMain.__init__(self, session, "tvshows")
+
+		self.g_url = url
+		self.g_uuid = uuid
+		self.g_source = source
+		self.g_viewGroup = viewGroup
+
 		printl ("", self, "C")
 
 	#===============================================================================
-	# 
+	#
 	#===============================================================================
 	def loadLibrary(self, params):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
-		
+
 		if self.showEpisodesDirectly:
-			printl("show episodes in OnDeck ...", self, "I")
-			
+			printl("show episodes directly ...", self, "I")
+
 			url = self.g_url
-			
-			library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+
+			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
 			sort = [("by title", None, False), ]
-			
+
 			myFilter = [("All", (None, False), ("", )), ]
-			
+
 			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
-			
+
 			printl ("", self, "C")
 			return library, ("viewMode", "ratingKey", ), None, "None", sort, myFilter
 		else:
 			# Diplay all TVShows
-			if params is None:
+			if params["viewMode"] is None:
 				printl("show TV shows ...", self, "I")
-	
+
 				url = self.g_url
-				
-				library = Singleton().getPlexInstance().albums(url)
-	
+				printl("url: " + str(url), self, "D")
+
+				if config.plugins.dreamplex.useCache.value:
+					#noinspection PyAttributeOutsideInit
+					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid, self.g_viewGroup)
+
+					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
+					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
+					if "cache" in params:
+						if not params['cache']:
+							self.g_source = "plex"
+
+					if self.g_source == "cache" or params['cache'] == True:
+						try:
+							fd = open(self.tvShowPickle, "rb")
+							pickleData = pickle.load(fd)
+							library = pickleData[0]
+
+							# todo we have to check if we will need this in future or not
+							#tmpAbc = pickleData[1]
+							#tmpGenres = pickleData [2]
+
+							fd.close()
+							printl("from pickle", self, "D")
+						except:
+							printl("movie cache not found ... saving", self, "D")
+							library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+							reason = "cache file does not exists, recreating ..."
+							self.generatingCacheForTvShowSection(reason,library, tmpAbc, tmpGenres)
+							printl("fallback to: from server", self, "D")
+					else:
+						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+						reason = "generating cache first time, creating ..."
+						self.generatingCacheForTvShowSection(reason, library, tmpAbc, tmpGenres)
+				else:
+					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+
 				# sort
 				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
-				
+
 				myFilter = [("All", (None, False), ("", )), ]
-				
+
 				#if len(tmpGenres) > 0:
 					#tmpGenres.sort()
 					#filter.append(("Genre", ("Genres", True), tmpGenres))
-				
+
 				printl ("", self, "C")
 				return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-	
-			
+
 			# Display the Seasons Menu
 			elif params["viewMode"] == "ShowSeasons":
 				printl("show seasons of TV show ...", self, "I")
-				
+
 				url = params["url"]
-				printl("URL: " + str(url), self, "D")
-	
-				library = Singleton().getPlexInstance().tracks(url)
-				
-				sort = (("by season", "season", False), )
-				
+
+				library = Singleton().getPlexInstance().getSeasonsOfShow(url)
+
+				sort = (("by season", True, False), )
+
 				myFilter = [("All", (None, False), ("", )), ]
-				
+
 				printl ("", self, "C")
 				return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-	
-		
+
+
 			# Display the Episodes Menu
 			elif params["viewMode"] == "ShowEpisodes":
 				printl("show episodes of season ...", self, "I")
-				
+
 				url = params["url"]
-				
-				library = Singleton().getPlexInstance().tracks(url)
-	
+
+				library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+
 				sort = [("by title", None, False), ]
-				
+
 				myFilter = [("All", (None, False), ("", )), ]
 
 				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
-				
+
 				printl ("", self, "C")
 				return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+
+		printl ("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def generatingCacheForTvShowSection(self, reason, library, tmpAbc, tmpGenres):
+		printl ("", self, "S")
+
+		printl ("reason: " + str(reason), self, "S")
+		pickleData = library, tmpAbc, tmpGenres
+		fd = open(self.tvShowPickle, "wb")
+		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
 
 		printl ("", self, "C")
 

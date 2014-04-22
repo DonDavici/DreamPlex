@@ -236,6 +236,12 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
 
+			elif selection[1] == "getMusicSections":
+				self.getMusicSections(selection)
+
+				if self.g_horizontal_menu:
+						self.refreshOrientationHorMenu(0)
+
 			else:
 				printl("selected entry is executable", self, "D")
 				params = selection[3]
@@ -266,14 +272,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
 
 		# ARTISTS
-		params = copy.deepcopy(selection[3])
+		params = copy.deepcopy(selection[4])
 		url = params['t_url']
 		params['t_url'] = url + "?type=8"
 		mainMenuList.append((_("by Artists"), plugin, "artistsEntry", params))
 		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
 
 		#ALBUMS
-		params = copy.deepcopy(selection[3])
+		params = copy.deepcopy(selection[4])
 		params['t_url'] = url + "?type=9"
 		mainMenuList.append((_("by Albums"), plugin, "albumsEntry", params))
 		printl("mainMenuList 2: " + str(mainMenuList), self, "D")

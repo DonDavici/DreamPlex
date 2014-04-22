@@ -495,8 +495,7 @@ class PlexLibrary(Screen):
 					if (myFilter is not None) and (myFilter != "music"):
 						continue
 					#mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), params))
-					#not sure why there is getMusicSections mainMenuList.append((_(section.get('title').encode('utf-8')), "getMusicSections", getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", params))
-					mainMenuList.append((_(section.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", params))
+					mainMenuList.append((_(section.get('title').encode('utf-8')), "getMusicSections", getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", params))
 
 				elif section.get('type') == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "D")
