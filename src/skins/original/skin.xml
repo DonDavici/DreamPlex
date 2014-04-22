@@ -412,7 +412,7 @@
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 
         <widget name="txt_red" transparent="1" zPosition="50" halign="left" valign="top" position="700,384" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
-        <widget name="btn_red" transparent="0" zPosition="50" position="645,380" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/red.png"/>
+        <widget name="btn_red" transparent="0" zPosition="50" position="645,380" size="32,32" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_red-fs8.png"/>
 
         <widget name="txt_blue" transparent="1" zPosition="50" halign="left" valign="top" position="700,424" size="400,32" font="Saint; 20" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
         <widget name="btn_blue" transparent="0" zPosition="50" position="645,420" size="32,32"/>
@@ -651,10 +651,10 @@
 
     <!-- DPS_PathSelector -->
     <screen name="DPS_PathSelector" position="center,center" size="560,320" title="Select path ...">
-        <ePixmap pixmap="skin_default/buttons/red.png" position="0,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/green.png" position="140,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
+        <ePixmap pixmap="skin_default/buttons/btn_red-fs8.png" position="0,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
+        <ePixmap pixmap="skin_default/buttons/btn_green-fs8.png" position="140,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
+        <ePixmap pixmap="skin_default/buttons/btn_yellow-fs8.png" position="280,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
+        <ePixmap pixmap="skin_default/buttons/btn_blue-fs8.png" position="420,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
         <widget name="target" position="0,60" size="540,22" valign="center" font="Saint;22"/>
         <widget name="filelist" position="0,100" zPosition="1" size="560,220" scrollbarMode="showOnDemand"/>
         <widget render="Label" source="key_red" position="0,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Saint;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>

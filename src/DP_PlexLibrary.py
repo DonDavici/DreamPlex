@@ -1905,7 +1905,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getAudioSubtitlesMedia(self, server, myId ):
+	def getAudioSubtitlesMedia(self, server, myId, myType ):
 		"""
 		Cycle through the Parts sections to find all "selected" audio and subtitle streams
 		If a stream is marked as selected=1 then we will record it in the dict
@@ -1930,7 +1930,7 @@ class PlexLibrary(Screen):
 		selectedSubOffset=-1
 		selectedAudioOffset=-1
 		
-		fromVideo = tree.find('Video')
+		fromVideo = tree.find(myType) # Track or Video
 	
 		videoData['title'] = fromVideo.get('title', "")
 		videoData['tagline'] = fromVideo.get('tagline', "")
@@ -1959,47 +1959,51 @@ class PlexLibrary(Screen):
 				parts.append(bits)
 				partsCount += 1
 			except: pass
-			
-		if self.g_streamControl == "1" or self.g_streamControl == "2":
-	
-			contents="all"
-			fromStream = tree.getiterator('Stream')
-			printl("fromStream: " + str(fromStream), self, "D")
-			#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle) 
-			
-			for bits in fromStream:
-				printl("bits.attrib: " + str(bits.attrib), self, "D")
-				stream=dict(bits.items())
-				printl("stream: " + str(stream), self, "D")
-				if stream['streamType'] == '2': #audio
-					audioCount += 1
-					audioOffset += 1
-					try:
-						if stream['selected'] == "1":
-							printl("Found preferred audio id: " + str(stream['id']), self, "I" ) 
-							audio=stream
-							selectedAudioOffset=audioOffset
-					except: pass
-						 
-				elif stream['streamType'] == '3': #subtitle
-					subOffset += 1
-					try:
-						if stream['key']:
-							printl( "Found external subtitles id : " + str(stream['id']),self, "I")
-							external=stream
-							external['key']='http://'+server+external['key']
-					except: 
-						#Otherwise it's probably embedded
+
+		selectedSubOffset = None
+		selectedAudioOffset = None
+
+		if myType == "Video":
+			if self.g_streamControl == "1" or self.g_streamControl == "2":
+
+				contents="all"
+				fromStream = tree.getiterator('Stream')
+				printl("fromStream: " + str(fromStream), self, "D")
+				#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
+
+				for bits in fromStream:
+					printl("bits.attrib: " + str(bits.attrib), self, "D")
+					stream=dict(bits.items())
+					printl("stream: " + str(stream), self, "D")
+					if stream['streamType'] == '2': #audio
+						audioCount += 1
+						audioOffset += 1
 						try:
 							if stream['selected'] == "1":
-								printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
-								subCount += 1
-								subtitle=stream
-								selectedSubOffset=subOffset
+								printl("Found preferred audio id: " + str(stream['id']), self, "I" )
+								audio=stream
+								selectedAudioOffset=audioOffset
 						except: pass
 
-		else:
-				printl( "Stream selection is set OFF", self, "I")
+					elif stream['streamType'] == '3': #subtitle
+						subOffset += 1
+						try:
+							if stream['key']:
+								printl( "Found external subtitles id : " + str(stream['id']),self, "I")
+								external=stream
+								external['key']='http://'+server+external['key']
+						except:
+							#Otherwise it's probably embedded
+							try:
+								if stream['selected'] == "1":
+									printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
+									subCount += 1
+									subtitle=stream
+									selectedSubOffset=subOffset
+							except: pass
+
+			else:
+					printl( "Stream selection is set OFF", self, "I")
 				  
 		
 		streamData={'contents'   : contents,
@@ -2022,12 +2026,12 @@ class PlexLibrary(Screen):
 	#========================================================================
 	# 
 	#========================================================================
-	def getMediaOptionsToPlay(self, myId, vids, override=False ):
+	def getMediaOptionsToPlay(self, myId, vids, override=False, myType="Video" ):
 		printl("", self, "S")
 		
 		self.getTranscodeSettings(override)
 		self.server = self.getServerFromURL(vids)
-		self.streams=self.getAudioSubtitlesMedia(self.server,myId)
+		self.streams=self.getAudioSubtitlesMedia(self.server,myId, myType)
 		
 		printl("partsCount: " + str(self.streams['partsCount']), self, "D")
 		printl("parts: " + str(self.streams['parts']), self, "D")
@@ -2482,8 +2486,8 @@ class PlexLibrary(Screen):
 				 'artist'	  : track.get('grandparentTitle', tree.get('grandparentTitle','')) ,
 				 'duration'	: int(track.get('duration',0))/1000 }
 
-		details["viewMode"]				 = "ShowSeasons"
-		details["ratingKey"]				 = "1"
+		details["viewMode"]				 = "play"
+		details["ratingKey"]				 = track.get('ratingKey','')
 		details['server']				   = str(server)
 
 		extraData={'type'		 : "Music" ,
@@ -2499,6 +2503,7 @@ class PlexLibrary(Screen):
 			extraData['fanart_image']=self.getImage(tree, server, myType="art")
 
 		extraData['theme']="1"
+		extraData['key'] = track.get('key','')
 		context = {}
 		context["watchedURL"]	 = "1"
 		seenVisu = None

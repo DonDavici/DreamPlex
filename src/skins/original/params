@@ -110,4 +110,46 @@
 
 	</episodeView>
 
+	<!-- MUSIC VIEWS -->
+	<musicView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+		<element name="shortDescription" visible="True"/>
+		<element name="runtime" visible="True" xCoord="650" yCoord="270" />
+		</subView>
+	</musicView>
+
+	<musicView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
+		<main name="backdrop" visible="False"/>
+
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+			<element name="shortDescription" visible="True"/>
+			<element name="runtime" visible="True" />
+		</subView>
+	</musicView>
+
+	<musicView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+		<subView name="ShowSeasons">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
+		<subView name="ShowEpisodes">
+			<element name="shortDescription" visible="True"/>
+			<element name="runtime" visible="True" />
+		</subView>
+	</musicView>
+
 </xml>

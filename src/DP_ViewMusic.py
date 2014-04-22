@@ -26,6 +26,8 @@ from Components.config import config
 
 from DP_View import DP_View
 
+from DPH_Singleton import Singleton
+
 from __common__ import printl2 as printl
 
 #===============================================================================
@@ -112,5 +114,23 @@ class DPS_ViewMusic(DP_View):
 
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def playEntry(self, selection):
+		printl("", self, "S")
+
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
+
+		self.media_id = selection[1]['ratingKey']
+		server = selection[1]['server']
+
+		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType="Track")
+
+		self.selectMedia(self.count, self.options, self.server)
 
 		printl("", self, "C")

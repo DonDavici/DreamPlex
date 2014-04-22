@@ -50,9 +50,9 @@ class DP_LibMusic(DP_LibMain):
 
 		self.showEpisodesDirectly = showEpisodesDirectly
 		if self.showEpisodesDirectly:
-			DP_LibMain.__init__(self, session, "episodes")
+			DP_LibMain.__init__(self, session, "music") # we will need there something else
 		else:
-			DP_LibMain.__init__(self, session, "tvshows")
+			DP_LibMain.__init__(self, session, "music")
 
 		self.g_url = url
 		self.g_uuid = uuid
@@ -162,7 +162,7 @@ class DP_LibMusic(DP_LibMain):
 
 				url = params["url"]
 
-				library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+				library = Singleton().getPlexInstance().tracks(url)
 
 				sort = [("by title", None, False), ]
 
