@@ -1960,9 +1960,6 @@ class PlexLibrary(Screen):
 				partsCount += 1
 			except: pass
 
-		selectedSubOffset = None
-		selectedAudioOffset = None
-
 		if myType == "Video":
 			if self.g_streamControl == "1" or self.g_streamControl == "2":
 

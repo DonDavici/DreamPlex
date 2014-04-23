@@ -158,7 +158,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.viewName = viewName
 		self._playEntry = playEntry
 
-		self.playerData = None
+		self.playerData = {} # dict
+		self.currentQueuePosition = 0
 
 		self.setListViewElementsCount(viewName)
 
@@ -1112,7 +1113,18 @@ class DP_View(Screen, NumericalTextInput):
 
 			elif viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
-				self.playEntry(selection)
+
+				playAll = True
+
+				if playAll:
+					myList = iter(self.listViewList)
+					for listEntry in myList:
+						self.playEntry(listEntry)
+						self.currentQueuePosition += 1
+				else:
+					self.playEntry(selection)
+
+				self.playSelectedMedia()
 
 			elif viewMode == "directory":
 				printl("viewMode -> directory", self, "I")
@@ -1613,9 +1625,19 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
 
-		self.playSelectedMedia()
+		self.buildPlayerData()
 
 		printl("We have selected media at " + self.mediaFileUrl, self, "I")
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def buildPlayerData(self):
+		printl("", self, "S")
+
+		self.playerData[self.currentQueuePosition] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
+
 		printl("", self, "C")
 
 	#===============================================================================
@@ -1624,19 +1646,17 @@ class DP_View(Screen, NumericalTextInput):
 	def playSelectedMedia(self):
 		printl("", self, "S")
 
-		self.playerData = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
-
-		resumeStamp = self.playerData['resumeStamp']
+		resumeStamp = self.playerData[0]['resumeStamp']
 		printl("resumeStamp: " + str(resumeStamp), self, "I")
 
 		if self.showDetail:
-			currentFile = "Location:\n " + str(self.playerData['currentFile'])
+			currentFile = "Location:\n " + str(self.playerData[0]['currentFile'])
 			self.session.open(MessageBox,_("%s") % currentFile, MessageBox.TYPE_INFO)
 			self.showDetail = False
 		else:
-			if self.playerData['fallback']:
+			if self.playerData[0]['fallback']:
 				message = _("Sorry I didn't find the file on the provided locations")
-				locations = _("Location:") + "\n " + self.playerData['locations']
+				locations = _("Location:") + "\n " + self.playerData[0]['locations']
 				suggestion = _("Please verify you direct local settings")
 				fallback = _("I will now try to play the file via transcode.")
 				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)

@@ -94,50 +94,33 @@ class DP_Player(MoviePlayer):
 		printl("", self, "S")
 		
 		self.session = session
-				
-		self.videoData = playerData['videoData']
-		self.mediaData = playerData['mediaData']
-		
-		# go through the data out of the function call
+		self.playerData = playerData
 		self.resume = resume
-		self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
-		self.server = str(playerData['server'])
-		self.id = str(playerData['id'])
-		self.multiUserServer = playerData['multiUserServer']
-		self.url = str(playerData['playUrl'])
-		self.transcodingSession = str(playerData['transcodingSession'])
-		self.playbackType = str(playerData['playbackType'])
-		self.connectionType = str(playerData['connectionType'])
-		self.universalTranscoder = playerData['universalTranscoder']
-		self.localAuth = playerData['localAuth']
-		
-		# lets prepare all additional data for a better experience :-)
-		self.title = str(self.videoData['title'])
-		self.tagline = str(self.videoData['tagline'])
-		self.summary = str(self.videoData['summary'])
-		self.year = str(self.videoData['year'])
-		self.studio = str(self.videoData['studio'])
-		self.duration = str(self.videoData['duration'])
-		self.contentRating = str(self.videoData['contentRating'])
-		
-		self.audioCodec = str(self.mediaData['audioCodec'])
-		self.videoCodec = str(self.mediaData['videoCodec'])
-		self.videoResolution = str(self.mediaData['videoResolution'])
-		self.videoFrameRate = str(self.mediaData['videoFrameRate'])
+		self.currentQueuePosition = 0
+
+
+
+		self.startPlayback()
+
+	def startPlayback(self):
+
+		self.setPlayerData()
+
+	def playNow(self):
 
 		# check for playable services
 		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
-		
+
 		# lets built the sref for the movieplayer out of the gathered information
 		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-		
+
 		elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
-			
+
 		elif self.url[-5:] == ".m2ts":
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
-		
+
 		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
 			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
 				printl("we are able to stream over 4097", self, "I")
@@ -146,17 +129,17 @@ class DP_Player(MoviePlayer):
 				# todo add errorhandler
 				raise Exception
 
-		
+
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
-		
+
 		sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
 		sref.setName(self.title)
-		
+
 		# lets call the movieplayer
-		MoviePlayer.__init__(self, session, sref)
-		
+		MoviePlayer.__init__(self, self.session, sref)
+
 		self.skinName = "DPS_PlexPlayer"
-		
+
 		self.service = sref
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
@@ -183,11 +166,11 @@ class DP_Player(MoviePlayer):
 		"previous": self.seekManual,
 		"stopRunningRecords": self.leavePlayer
 		}, -2)
-		
+
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
 		if self.has_key('MovieListActions'):
 			self["MovieListActions"].setEnabled(False)
-		
+
 		service1 = self.session.nav.getCurrentService()
 		self.seek = service1 and service1.seek()
 
@@ -197,7 +180,7 @@ class DP_Player(MoviePlayer):
 		#	printl("rLen: " + str(rLen), self, "I")
 		#	printl("rPos: " + str(rPos), self, "I")
 		#=======================================================================
-			
+
 		if self.resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
@@ -207,7 +190,7 @@ class DP_Player(MoviePlayer):
 			if self.connectionType == "2" or (self.connectionType == "0" and self.localAuth):
 				printl("we are configured for multiuser", self, "D")
 				self.multiUser = True
-			
+
 		if self.multiUser:
 			self.timelinewatcherthread_stop = threading.Event()
 			self.timelinewatcherthread_wait = threading.Event()
@@ -227,8 +210,52 @@ class DP_Player(MoviePlayer):
 
 		if self.playbackType == "2":
 			self.bufferFull()
+
+
+		
+
 		printl("", self, "C")
-	
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setPlayerData(self):
+		printl("", self, "S")
+
+		self.playbackData = self.playerData[self.currentQueuePosition]
+		self.videoData = self.playerData[self.currentQueuePosition]['videoData']
+		self.mediaData = self.playerData[self.currentQueuePosition]['mediaData']
+
+		# go through the data out of the function call
+		self.resumeStamp = int(self.playbackData['resumeStamp']) / 1000 # plex stores seconds * 1000
+		self.server = str(self.playbackData['server'])
+		self.id = str(self.playbackData['id'])
+		self.multiUserServer = self.playbackData['multiUserServer']
+		self.url = str(self.playbackData['playUrl'])
+		self.transcodingSession = str(self.playbackData['transcodingSession'])
+		self.playbackType = str(self.playbackData['playbackType'])
+		self.connectionType = str(self.playbackData['connectionType'])
+		self.universalTranscoder = self.playbackData['universalTranscoder']
+		self.localAuth = self.playbackData['localAuth']
+
+		# lets prepare all additional data for a better experience :-)
+		self.title = str(self.videoData['title'])
+		self.tagline = str(self.videoData['tagline'])
+		self.summary = str(self.videoData['summary'])
+		self.year = str(self.videoData['year'])
+		self.studio = str(self.videoData['studio'])
+		self.duration = str(self.videoData['duration'])
+		self.contentRating = str(self.videoData['contentRating'])
+
+		self.audioCodec = str(self.mediaData['audioCodec'])
+		self.videoCodec = str(self.mediaData['videoCodec'])
+		self.videoResolution = str(self.mediaData['videoResolution'])
+		self.videoFrameRate = str(self.mediaData['videoFrameRate'])
+
+		self.playNow()
+
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -507,10 +534,30 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def doEofInternal(self, playing):
 		printl("", self, "S")
-		
-		self.leavePlayerConfirmed(True)
+
+		if not self.nextPlaylistEntryAvailable():
+			self.leavePlayerConfirmed(True)
+		else:
+			#start next file
+			self.currentQueuePosition += 1
+			self.startPlayback()
 		
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def nextPlaylistEntryAvailable(self):
+		printl("", self, "S")
+
+		if len(self.playerData) > 1:
+			if (self.currentQueuePosition + 1) < len(self.playerData):
+
+				printl("", self, "C")
+				return True
+
+		printl("", self, "C")
+		return False
 
 	#===========================================================================
 	# 
