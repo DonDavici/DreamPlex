@@ -158,9 +158,6 @@ class DP_View(Screen, NumericalTextInput):
 		self.viewName = viewName
 		self._playEntry = playEntry
 
-		self.playerData = {} # dict
-		self.currentQueuePosition = 0
-
 		self.setListViewElementsCount(viewName)
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
@@ -1114,6 +1111,10 @@ class DP_View(Screen, NumericalTextInput):
 			elif viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
 
+				# init those variable for new run
+				self.playerData = {}
+				self.currentQueuePosition = 0
+
 				playAll = True
 
 				if playAll:
@@ -1123,6 +1124,11 @@ class DP_View(Screen, NumericalTextInput):
 						self.currentQueuePosition += 1
 				else:
 					self.playEntry(selection)
+
+				# get index to start from the selected media
+				self.playerData["currentIndex"] = self["listview"].getIndex()
+				self.playerData["myParams"] = self.myParams
+				self.playerData["whatPoster"] = self.whatPoster
 
 				self.playSelectedMedia()
 

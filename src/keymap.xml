@@ -69,4 +69,11 @@
 		<key id="KEY_9" mapto="9" flags="m"/>
 		<key id="KEY_0" mapto="0" flags="m"/>
 	</map>
+
+    <map context="DPS_Player">
+		<key id="KEY_BLUE" mapto="seekManual" flags="m" />
+		<key id="KEY_RED" mapto="seekManual" flags="m" />
+        <key id="KEY_PREVIOUS" mapto="playPrevious" flags="m" />
+        <key id="KEY_NEXT" mapto="playNext" flags="m" />
+	</map>
 </keymap>

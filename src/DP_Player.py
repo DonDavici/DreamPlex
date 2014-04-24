@@ -26,6 +26,8 @@ import threading
 
 from time import sleep
 
+from enigma import ePicLoad
+
 from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
@@ -35,7 +37,9 @@ from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eT
 
 from Tools import Notifications
 
+from Components.AVSwitch import AVSwitch
 from Components.config import config
+from Components.Pixmap import Pixmap
 from Components.ActionMap import ActionMap
 from Components.Slider import Slider
 from Components.Language import language
@@ -96,76 +100,57 @@ class DP_Player(MoviePlayer):
 		self.session = session
 		self.playerData = playerData
 		self.resume = resume
-		self.currentQueuePosition = 0
 
+		self.currentQueuePosition = playerData["currentIndex"]
+		self.myParams = playerData["myParams"]
+		self.whatPoster = playerData["whatPoster"]
 
+		self["mediaTitle"] = StaticText(self.title)
 
-		self.startPlayback()
+		# populate self.sref
+		self.setServiceReferenceData()
 
-	def startPlayback(self):
-
+		# populate additional data
 		self.setPlayerData()
 
-	def playNow(self):
-
-		# check for playable services
-		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
-
-		# lets built the sref for the movieplayer out of the gathered information
-		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-
-		elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
-
-		elif self.url[-5:] == ".m2ts":
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
-
-		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
-			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
-				printl("we are able to stream over 4097", self, "I")
-				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-			else:
-				# todo add errorhandler
-				raise Exception
-
-
-		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
-
-		sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
-		sref.setName(self.title)
-
-		# lets call the movieplayer
-		MoviePlayer.__init__(self, self.session, sref)
+		# int movie player
+		MoviePlayer.__init__(self, self.session, self.sref)
 
 		self.skinName = "DPS_PlexPlayer"
 
-		self.service = sref
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
 		else:
 			self["bufferslider"].setValue(1)
-		self["mediaTitle"] = StaticText(self.title)
-		self["label_update"] = StaticText()
+
 		self.bufferSeconds = 0
 		self.bufferPercent = 0
 		self.bufferSecondsLeft = 0
 		self.bitrate = 0
 		self.endReached = False
 
-		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
+		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "DPS_Player"],
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
 		"keyTV": self.leavePlayer,
 		"stop": self.leavePlayer,
 		"leavePlayer": self.hide,
-		"next": self.seekManual,
-		"previous": self.seekManual,
+		"seekManual": self.seekManual,
+		"playNext": self.playNextEntry,
+		"playPrevious": self.playPreviousEntry,
 		"stopRunningRecords": self.leavePlayer
 		}, -2)
+
+		self["poster"] = Pixmap()
+
+		# Poster
+		self.EXpicloadPoster = ePicLoad()
+		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
+		self.posterHeight = self.myParams["elements"]["poster"]["height"]
+		self.posterWidth = self.myParams["elements"]["poster"]["width"]
 
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
 		if self.has_key('MovieListActions'):
@@ -173,13 +158,6 @@ class DP_Player(MoviePlayer):
 
 		service1 = self.session.nav.getCurrentService()
 		self.seek = service1 and service1.seek()
-
-		# if self.seek != None:
-		#	rLen = self.getPlayLength()
-		#	rPos = self.getPlayPosition()
-		#	printl("rLen: " + str(rLen), self, "I")
-		#	printl("rPos: " + str(rPos), self, "I")
-		#=======================================================================
 
 		if self.resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
@@ -211,10 +189,147 @@ class DP_Player(MoviePlayer):
 		if self.playbackType == "2":
 			self.bufferFull()
 
+		# on layout finish we have to do some stuff
+		self.onLayoutFinish.append(self.setPoster)
 
-		
+	#==============================================================================
+	#
+	#==============================================================================
+	def setPoster(self):
+		"""
+		set params for poster via ePicLoad object
+		"""
+		printl("", self, "S")
+
+		self.EXscale = (AVSwitch().getFramebufferScale())
+
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+
+		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		ptr = self.EXpicloadPoster.getData()
+
+		self["poster"].instance.setPixmap(ptr)
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setServiceReferenceData(self):
+		printl("", self, "S")
+
+		entryUrl = self.getEntryUrl()
+		title = self.getTitle()
+
+		self["mediaTitle"].setText(title)
+
+		self.setEnigmaServiceId(entryUrl)
+
+		self.sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, entryUrl)
+		self.sref.setName(title)
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setEnigmaServiceId(self, entryUrl):
+		printl("", self, "S")
+
+		# check for playable services
+		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
+
+		# lets built the sref for the movieplayer out of the gathered information
+		if entryUrl[:4] == "http": #this means we are in streaming mode so we will use sref 4097
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+
+		elif entryUrl[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
+
+		elif entryUrl[-5:] == ".m2ts":
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
+
+		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
+			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
+				printl("we are able to stream over 4097", self, "I")
+				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+			else:
+				# todo add errorhandler
+				raise Exception
+
+		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def playNextEntry(self):
+		printl("", self, "S")
+
+		# increase position
+		self.currentQueuePosition += 1
+
+		# check if we are at the end of the list we start all over
+		if self.currentQueuePosition > len(self.playerData):
+			self.currentQueuePosition = 0
+
+		# play
+		self.play()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def playPreviousEntry(self):
+		printl("", self, "S")
+
+		self.currentQueuePosition -= 1
+
+		# check if we are at the begining of the list we start at the end
+		if self.currentQueuePosition < 0:
+			self.currentQueuePosition = max(self.playerData)
+
+		# play
+		self.play()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def play(self):
+		printl("", self, "S")
+
+		# populate self.sref with new data
+		self.setServiceReferenceData()
+
+		# populate addional data
+		self.setPlayerData()
+
+		# start playback
+		self.session.nav.playService(self.sref)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getTitle(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return str(self.playerData[self.currentQueuePosition]['videoData']['title'])
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getEntryUrl(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return str(self.playerData[self.currentQueuePosition]['playUrl'])
 
 	#===========================================================================
 	#
@@ -251,8 +366,6 @@ class DP_Player(MoviePlayer):
 		self.videoCodec = str(self.mediaData['videoCodec'])
 		self.videoResolution = str(self.mediaData['videoResolution'])
 		self.videoFrameRate = str(self.mediaData['videoFrameRate'])
-
-		self.playNow()
 
 		printl("", self, "C")
 
@@ -539,8 +652,7 @@ class DP_Player(MoviePlayer):
 			self.leavePlayerConfirmed(True)
 		else:
 			#start next file
-			self.currentQueuePosition += 1
-			self.startPlayback()
+			self.playNextEntry()
 		
 		printl("", self, "C")
 
