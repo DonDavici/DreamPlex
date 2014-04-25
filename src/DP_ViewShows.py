@@ -27,6 +27,7 @@ from Components.config import config
 from DP_ViewCine import DP_ViewCine
 
 from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
@@ -53,6 +54,8 @@ class DPS_ViewShows(DP_ViewCine):
 		self.session = session
 		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 
+		self.setTitle(_("Shows"))
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -61,6 +64,8 @@ class DPS_ViewShows(DP_ViewCine):
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
 		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
+
+		self.setTitle("Shows")
 
 		# TODO change backdrop and poster usage via self.myParams["elements"]["backdrop"]["visible"]
 

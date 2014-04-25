@@ -27,6 +27,7 @@ from Components.config import config
 from DP_ViewCine import DP_ViewCine
 
 from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 # 
@@ -58,6 +59,8 @@ class DPS_ViewMovies(DP_ViewCine):
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
+
+		self.setTitle("Movies")
 
 		printl( "is playable content",self, "D")
 		bname = self.details["ratingKey"]

@@ -29,6 +29,7 @@ from DP_View import DP_View
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -53,6 +54,8 @@ class DPS_ViewMusic(DP_View):
 		self.session = session
 		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
 
+		self.setTitle(_("Music"))
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -60,6 +63,8 @@ class DPS_ViewMusic(DP_View):
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
+
+		self.setTitle("Music")
 
 		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")

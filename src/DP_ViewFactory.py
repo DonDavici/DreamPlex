@@ -36,7 +36,7 @@ from __init__ import _ # _ is translation
 def getDefaultCineElementsList():
 	printl("", __name__, "S")
 
-	elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution", "season",
+	elementsList = ["pagination", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution", "season",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "audio",
 	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
 

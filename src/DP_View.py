@@ -233,6 +233,9 @@ class DP_View(Screen, NumericalTextInput):
 		# init skin elements
 		self["functionsContainer"]  = Label()
 
+		self["txt_functions"] = Label()
+		self["txt_exit"] = Label()
+
 		self["btn_red"]			= Pixmap()
 		self["btn_blue"]		= Pixmap()
 		self["btn_yellow"]		= Pixmap()
@@ -247,9 +250,10 @@ class DP_View(Screen, NumericalTextInput):
 		self["txt_blue"]		= Label()
 		self["txt_blue"].setText(_("toggle View ") + _("(current 'Default')"))
 
-
+		self.fastScrollTxt = ""
 		if self.fastScroll:
 			self["txt_yellow"].setText(_("fastScroll = On"))
+			self.fastScrollTxt = "Video | "
 		else:
 			self["txt_yellow"].setText(_("fastScroll = Off"))
 
@@ -299,7 +303,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["total"] = Label()
 
-		self["current"] = Label()
+		self["pagination"] = Label()
 
 		self["backdrop"] = Pixmap()
 		self["backdropVideo"] = Pixmap() # this is just to avoid greenscreen, maybe we find a better way
@@ -1716,7 +1720,7 @@ class DP_View(Screen, NumericalTextInput):
 		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
 
 		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
+		self.setText("pagination", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
 
 		printl("", self, "C")
 
@@ -2191,6 +2195,9 @@ class DP_View(Screen, NumericalTextInput):
 		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
 		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
 		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
+
+		self["txt_functions"].setText("Menu | Info | " + self.fastScrollTxt + "0-9")
+		self["txt_exit"].setText("Exit")
 
 		# if we are in fastScrollMode we remove some gui elements
 		self.resetGuiElementsInFastScrollMode()
