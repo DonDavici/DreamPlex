@@ -51,7 +51,7 @@ from enigma import ePicLoad
 from urllib import quote_plus
 from twisted.web.client import downloadPage
 
-from DP_ViewFactory import getViews
+from DP_ViewFactory import getViews, getGuiElements
 from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
@@ -84,7 +84,7 @@ class DP_View(Screen, NumericalTextInput):
 
 	onNumberKeyLastChar             = "#"
 	activeSort                      = ("Default", None, False)
-	activeFilter                    = ("All", (None, False), "")
+	activeFilter                    = ("None", (None, False), "")
 	onEnterPrimaryKeys              = None
 	onLeavePrimaryKeyValuePair      = None
 	onLeaveSelectKeyValuePair       = None
@@ -134,18 +134,19 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewData, select=None, sort=None, myFilter=None, cache=None):
 		printl("", self, "S")
 		Screen.__init__(self, session)
-		self.myParams = viewName[3]
+		self.myParams = viewData[3]
 		NumericalTextInput.__init__(self)
 
 		printl("cache: " + str(cache), self, "D")
-		printl("viewName: "+ str(viewName), self, "I")
-		printl("myParams: " + str(viewName[3]), self, "D")
+		printl("viewData: "+ str(viewData), self, "I")
+		printl("myParams: " + str(self.myParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
 		self.skinName = self.myParams["settings"]["screen"]
+		self.currentViewName = str(self.myParams["settings"]["name"])
 		printl("self.skinName: " + str(self.skinName), self, "D")
 		self.useBackdropVideos = self.myParams["settings"]["backdropVideos"]
 		self.select = select
@@ -155,10 +156,10 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.libraryName = libraryName
 		self.loadLibrary = loadLibrary
-		self.viewName = viewName
+		self.viewData = viewData
 		self._playEntry = playEntry
 
-		self.setListViewElementsCount(viewName)
+		self.setListViewElementsCount(viewData)
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 
@@ -191,8 +192,8 @@ class DP_View(Screen, NumericalTextInput):
 			"blue":			(self.onKeyBlue, ""),
 			"text":			(self.onKeyText, ""),
 			"red_long":		(self.onKeyRedLong, ""),
-			#"green_long":	(self.onKeyGreenLong, ""),
-			#"yellow_long":	(self.onKeyYellowLong, ""),
+			"green_long":	(self.onKeyGreenLong, ""),
+			"yellow_long":	(self.onKeyYellowLong, ""),
 			"blue_long":	(self.onKeyBlueLong, ""),
 
 			"bouquet_up":	(self.bouquetUp, ""),
@@ -217,7 +218,7 @@ class DP_View(Screen, NumericalTextInput):
 		self.onLayoutFinish.append(self.setCustomTitle)
 		self.onFirstExecBegin.append(self.onFirstExec)
 
-		self.getGuiElements()
+		self.guiElements = getGuiElements()
 
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
@@ -231,37 +232,22 @@ class DP_View(Screen, NumericalTextInput):
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
 
 		# init skin elements
-		self["functionsContainer"]  = Label()
-
 		self["txt_functions"] = Label()
 		self["txt_exit"] = Label()
-
+		self["txt_filter"]		= Label()
+		self["txt_filter"].setText("Filter: None")
 		self["btn_red"]			= Pixmap()
-		self["btn_blue"]		= Pixmap()
+		self["btn_green"]		= Pixmap()
 		self["btn_yellow"]		= Pixmap()
-		self["btn_zero"]		= Pixmap()
-		self["btn_nine"]		= Pixmap()
-		self["btn_pvr"]			= Pixmap()
-		self["btn_menu"]		= Pixmap()
+		self["btn_blue"]		= Pixmap()
 
 		self["txt_red"]			= Label()
-		self["txt_filter"]		= Label()
+		self["txt_green"]		= Label()
 		self["txt_yellow"]		= Label()
 		self["txt_blue"]		= Label()
-		self["txt_blue"].setText(_("toggle View ") + _("(current 'Default')"))
 
-		self.fastScrollTxt = ""
-		if self.fastScroll:
-			self["txt_yellow"].setText(_("fastScroll = On"))
-			self.fastScrollTxt = "Video | "
-		else:
-			self["txt_yellow"].setText(_("fastScroll = Off"))
-
-		self["txt_pvr"] = Label()
-		self["txt_pvr"].setText(_("load additional data"))
-
-		self["txt_menu"] = Label()
-		self["txt_menu"].setText(_("show media functions"))
+		self["txt_red"].setText(_("toggle 'View' = ") + str(self.currentViewName))
+		self["txt_green"].setText("toggle 'Sorting' = default")
 
 		self["sound"] = MultiPixmap()
 
@@ -372,35 +358,18 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getGuiElements(self):
-		printl("", self, "S")
-
-		tree = Singleton().getSkinParamsInstance()
-
-		self.guiElements = {}
-		for guiElement in tree.findall('guiElement'):
-			name = str(guiElement.get('name'))
-			path = str(guiElement.get('path'))
-			self.guiElements[name] = path
-
-		printl("guiElements: " + str(self.guiElements), self, "D")
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setListViewElementsCount(self, viewName):
+	def setListViewElementsCount(self, viewData):
 		printl("", self, "S")
 
 		multiView = True
 
 		if multiView:
-			params = viewName[3]
+			params = viewData[3]
 			self.itemsPerPage = int(params["settings"]['itemsPerPage'])
 		else:
 			tree = Singleton().getSkinParamsInstance()
 			for view in tree.findall('view'):
-				if view.get('name') == str(viewName[1]):
+				if view.get('name') == str(viewData[1]):
 					self.itemsPerPage = int(view.get('itemsPerPage'))
 
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
@@ -621,7 +590,7 @@ class DP_View(Screen, NumericalTextInput):
 		if self.onNumberKeyLastChar != ' ':
 			self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
 		else:
-			self.activeFilter = ("All", (None, False), ("All", ))
+			self.activeFilter = ("None", (None, False), ("None", ))
 		self.sort()
 		self.filter()
 
@@ -658,7 +627,9 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyInfo(self):
 		printl("", self, "S")
 
-		self.showFunctions(not self.areFunctionsHidden)
+		self.showMedia = True
+		self.resetGuiElements = True
+		self.refresh()
 
 		printl("", self, "C")
 
@@ -678,9 +649,8 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyVideo(self):
 		printl("", self, "S")
 
-		self.showMedia = True
-		self.resetGuiElements = True
-		self.refresh()
+		pass
+		#self.showFunctions(not self.areFunctionsHidden)
 
 		printl("", self, "C")
 
@@ -750,7 +720,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyRed(self):
 		printl("", self, "S")
 
-		self.onToggleSort()
+		self.onToggleView()
 
 		printl("", self, "C")
 
@@ -760,7 +730,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyRedLong(self):
 		printl("", self, "S")
 
-		self.onChooseSort()
+		self.displayViewMenu()
 
 		printl("", self, "C")
 
@@ -770,7 +740,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyGreen(self):
 		printl("", self, "S")
 
-		self.onToggleFilter()
+		self.onToggleSort()
 
 		printl("", self, "C")
 
@@ -780,7 +750,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyGreenLong(self):
 		printl("", self, "S")
 
-		self.onChooseFilter()
+		self.onChooseSort()
 
 		printl("", self, "C")
 
@@ -790,13 +760,17 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyYellow(self):
 		printl("", self, "S")
 
-		if self.fastScroll:
-			self.fastScroll = False
-			self["txt_yellow"].setText("fastScroll = Off")
-		else:
-			self.fastScroll = True
-			self["txt_yellow"].setText("fastScroll = On")
-			self.resetGuiElements = True
+		self.onToggleFilter()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyYellowLong(self):
+		printl("", self, "S")
+
+		self.onChooseFilter()
 
 		printl("", self, "C")
 
@@ -806,7 +780,38 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		self.onToggleView()
+		self.toggleFastScroll()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFastScroll(self):
+		printl("", self, "S")
+
+		self.fastScrollTxt = ""
+
+		if self.fastScroll:
+			self.fastScroll = False
+			self["txt_blue"].setText("fastScroll = Off")
+		else:
+			self.fastScroll = True
+			self["txt_blue"].setText("fastScroll = On")
+			self.resetGuiElements = True
+			self.fastScrollTxt = "Info | "
+
+		self.setFunctionsText()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setFunctionsText(self):
+		printl("", self, "S")
+
+		self["txt_functions"].setText("Menu | " + self.fastScrollTxt + "0-9")
 
 		printl("", self, "C")
 
@@ -815,8 +820,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onKeyBlueLong(self):
 		printl("", self, "S")
-
-		self.displayViewMenu()
 
 		printl("", self, "C")
 
@@ -989,7 +992,7 @@ class DP_View(Screen, NumericalTextInput):
 		menu = getViews(self.libraryName)
 		selection = 0
 		for i in range(len(menu)):
-			if self.viewName[1] == menu[i][1]:
+			if self.viewData[1] == menu[i][1]:
 				selection = i
 				break
 		self.session.openWithCallback(self.onChooseViewCallback, ChoiceBox, title=_("Select view"), list=menu, selection=selection)
@@ -1325,8 +1328,8 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		#printl("listViewList: " + str(self.listViewList), self, "D")
 
-		text = "toogle Sorting (sorted %s)" % (_(self.activeSort[0]))
-		self["txt_red"].setText(text)
+		text = "toggle 'Sorting' = %s" % (_(self.activeSort[0]))
+		self["txt_green"].setText(text)
 		self.areFunctionsHidden = True
 
 		try:
@@ -1352,11 +1355,12 @@ class DP_View(Screen, NumericalTextInput):
 		printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
 
 		if len(self.activeFilter[2]) > 0:
-			text = _("set Filter (set to '%s')") % (_(self.activeFilter[2]))
+			text = _("Filter: %s") % (_(self.activeFilter[2]))
 		else:
-			text = _("set Filter (set to '%s')") % (_(self.activeFilter[0]))
+			text = _("Filter: %s") % (_(self.activeFilter[0]))
 
 		self["txt_filter"].setText(text)
+		self["txt_filter"].show()
 
 		if self.activeFilter[1][0] is None:
 			listViewList = self.origListViewList
@@ -1523,9 +1527,6 @@ class DP_View(Screen, NumericalTextInput):
 						else:
 							# if not handle as normal backdrop
 							self.handleBackdrop()
-
-				# toggle visible state of function box
-				self.showFunctions(False)
 
 				# we need those for fastScroll
 				# this prevents backdrop load on next item
@@ -2187,21 +2188,22 @@ class DP_View(Screen, NumericalTextInput):
 		"""
 		printl("", self, "S")
 
+		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
+
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
-		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
-		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
-		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
-		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
-		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
+		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
 
-		self["txt_functions"].setText("Menu | Info | " + self.fastScrollTxt + "0-9")
+		self.toggleFastScroll()
+
 		self["txt_exit"].setText("Exit")
 
 		# if we are in fastScrollMode we remove some gui elements
 		self.resetGuiElementsInFastScrollMode()
 
+		# now we set seen/unseen pictures
 		self.getSeenVisus()
 
 		printl("", self, "C")
@@ -2213,19 +2215,14 @@ class DP_View(Screen, NumericalTextInput):
 	def getSeenVisus(self):
 		printl("", self, "S")
 
-		tree = Singleton().getSkinParamsInstance()
+		self.seenPic = loadPicture(str(self.guiElements["seenPic"]))
+		printl("self.seenPic: " + str(self.seenPic), self, "D")
 
-		for seenPic in tree.findall('seenPic'):
-			self.seenPic = loadPicture(str(seenPic.get('path')))
-			printl("self.seenPic: " + str(self.seenPic), self, "D")
+		self.startedPic = loadPicture(str(self.guiElements["startedPic"]))
+		printl("self.startedPic: " + str(self.startedPic), self, "D")
 
-		for startedPic in tree.findall('startedPic'):
-			self.startedPic = loadPicture(str(startedPic.get('path')))
-			printl("self.startedPic: " + str(self.startedPic), self, "D")
-
-		for unseenPic in tree.findall('unseenPic'):
-			self.unseenPic = loadPicture(str(unseenPic.get('path')))
-			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
+		self.unseenPic = loadPicture(str(self.guiElements["unseenPic"]))
+		printl("self.unseenPic: " + str(self.unseenPic), self, "D")
 
 		printl("", self, "C")
 	#===========================================================================
@@ -2631,36 +2628,5 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self.areFunctionsHidden = visible
-
-		if visible:
-			self["functionsContainer"].show()
-			self["btn_red"].show()
-			self["btn_blue"].show()
-			self["btn_yellow"].show()
-			self["txt_red"].show()
-			self["txt_filter"].show()
-			self["txt_blue"].show()
-			self["txt_yellow"].show()
-			self["btn_zero"].show()
-			self["btn_nine"].show()
-			self["btn_pvr"].show()
-			self["txt_pvr"].show()
-			self["btn_menu"].show()
-			self["txt_menu"].show()
-		else:
-			self["functionsContainer"].hide()
-			self["btn_red"].hide()
-			self["btn_blue"].hide()
-			self["btn_yellow"].hide()
-			self["txt_red"].hide()
-			self["txt_filter"].hide()
-			self["txt_blue"].hide()
-			self["txt_yellow"].hide()
-			self["btn_zero"].hide()
-			self["btn_nine"].hide()
-			self["btn_pvr"].hide()
-			self["txt_pvr"].hide()
-			self["btn_menu"].hide()
-			self["txt_menu"].hide()
 
 		printl("", self, "C")

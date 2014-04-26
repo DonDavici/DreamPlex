@@ -93,8 +93,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self["txt_menu"] = Label()
 		self["menu"]= List(enableWrapAround=True)
 
-		self.checkServerState()
-
 		self.menu_main_list = self["menu"].list
 
 		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions",
@@ -124,9 +122,13 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self["txt_exit"].setText(_("Exit"))
 		self["txt_menu"].setText(_("Menu"))
 
+		self.checkServerState()
+
 		if self.g_horizontal_menu:
 			# init horizontal menu
 			self.refreshOrientationHorMenu(0)
+
+
 
 		printl("", self, "C")
 

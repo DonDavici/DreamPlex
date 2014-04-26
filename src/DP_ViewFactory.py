@@ -36,9 +36,9 @@ from __init__ import _ # _ is translation
 def getDefaultCineElementsList():
 	printl("", __name__, "S")
 
-	elementsList = ["pagination", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution", "season",
+	elementsList = ["pagination", "total", "backdrop", "poster", "audio", "resolution", "season",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "audio",
-	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
+	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "txt_filter"]
 
 	printl("", __name__, "C")
 	return elementsList
@@ -49,7 +49,7 @@ def getDefaultCineElementsList():
 def getDefaultSettingsList():
 	printl("", __name__, "S")
 
-	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos"]
+	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name"]
 
 	printl("", __name__, "C")
 	return settingsList
@@ -366,3 +366,21 @@ def translateValues(value):
 
 	printl("", __name__, "C")
 	return value
+
+#===========================================================================
+#
+#===========================================================================
+def getGuiElements():
+	printl("", __name__, "S")
+
+	tree = Singleton().getSkinParamsInstance()
+
+	guiElements = {}
+	for guiElement in tree.findall('guiElement'):
+		name = str(guiElement.get('name'))
+		path = str(guiElement.get('path'))
+		guiElements[name] = path
+
+	printl("guiElements: " + str(guiElements), __name__, "D")
+	printl("", __name__, "C")
+	return guiElements

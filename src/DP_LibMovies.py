@@ -69,7 +69,7 @@ class DP_LibMovies(DP_LibMain):
 		# sort
 		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
 		
-		myFilter = [("All", (None, False), ("", )), ]
+		myFilter = [("None", (None, False), ("", )), ]
 		
 		# filter seen unseen
 		#filter.append(("Seen", ("viewState", "seen", ), ("", )))

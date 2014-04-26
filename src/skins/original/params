@@ -8,28 +8,23 @@
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/HandelGotD.ttf" size="100" name="Saint" />
 	
-	<!-- SEEN/UNSEEN VISUS -->
-	<seenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/seen-fs8.png" />
-	<startedPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/started-fs8.png" />
-	<unseenPic path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/unseen-fs8.png" />
-	
 	<!-- GUI ELEMENTS -->
-	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/red.png" />
-	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/green.png" />
-	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/blue.png" />
-	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/1280x720/buttons/yellow.png"/>
-	<guiElement name="key_pvr" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/pvr.png" />
-	<guiElement name="key_menu" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/menu.png" />
-	<guiElement name="key_zero" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/key_0.png" />
-	<guiElement name="key_nine" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/key_9.png" />
-	
+	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/seen-fs8.png" />
+	<guiElement name="startedPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/started-fs8.png" />
+	<guiElement name="unseenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/unseen-fs8.png" />
+
+	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_red-fs8.png" />
+	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" />
+	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_blue-fs8.png" />
+	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_yellow-fs8.png"/>
+
 	<!-- VIEWS -->
 
 	<!-- HOW TO ...
 
-		elementsList = ["current", "total", "functionsContainer", "backdrop", "poster", "audio", "resolution",
+		elementsList = ["current", "total", "backdrop", "poster", "audio", "resolution",
 	                    "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
-	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound"]
+	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "txt_filter"]
 
 
 		settingsList = ["itemsPerPage", "apiLevel", "screen"]
