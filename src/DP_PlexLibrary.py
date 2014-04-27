@@ -235,6 +235,12 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 
+
+	def getServerConfig(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.g_serverConfig
 	#===========================================================================
 	#
 	#===========================================================================

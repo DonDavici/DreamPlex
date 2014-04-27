@@ -131,6 +131,10 @@ class DP_View(Screen, NumericalTextInput):
 	refreshTimer                    = None # initial value to stay agile in list of media
 	selection                       = None # this stores the current list entry of list
 
+	playerData                      = {} # inital playerData dict
+	currentQueuePosition            = 0 # this is the current selection id
+	detailsPaneVisible              = True # is shortDescription or details visible
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -231,11 +235,26 @@ class DP_View(Screen, NumericalTextInput):
 		# get data from plex library
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
 
+		# get server config
+		self.serverConfig = Singleton().getPlexInstance().getServerConfig()
+
 		# init skin elements
 		self["txt_functions"] = Label()
 		self["txt_exit"] = Label()
-		self["txt_filter"]		= Label()
-		self["txt_filter"].setText("Filter: None")
+
+		self["totalLabel"] = Label()
+		self["totalLabel"].setText(_("Total:"))
+		self["total"] = Label()
+
+		self["paginationLabel"] = Label()
+		self["paginationLabel"].setText(_("Pages:"))
+		self["pagination"] = Label()
+
+		self["filterLabel"] = Label()
+		self["filterLabel"].setText(_("Filter:"))
+		self["filter"]		= Label()
+		self["filter"].setText(_("press '0-9'"))
+
 		self["btn_red"]			= Pixmap()
 		self["btn_green"]		= Pixmap()
 		self["btn_yellow"]		= Pixmap()
@@ -248,6 +267,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["txt_red"].setText(_("toggle 'View' = ") + str(self.currentViewName))
 		self["txt_green"].setText("toggle 'Sorting' = default")
+
+		self["txt_yellow"].setText(_("show 'Details'"))
 
 		self["sound"] = MultiPixmap()
 
@@ -265,15 +286,29 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["tag"] = Label()
 
+		self["cast"] = Label()
+		self["castLabel"] = Label()
+		self["castLabel"].setText(_("Cast:"))
+
 		self["shortDescription"] = ScrollLabel()
 
 		self["subtitles"] = Label()
+		self["subtitles"].setText(_("press 'Text'"))
 		self["subtitlesLabel"] = Label()
 		self["subtitlesLabel"].setText(_("Subtitles:"))
 
 		self["audio"] = Label()
+		self["audio"].setText(_("press 'Audio'"))
 		self["audioLabel"] = Label()
 		self["audioLabel"].setText(_("Audio:"))
+
+		self["director"] = Label()
+		self["directorLabel"] = Label()
+		self["directorLabel"].setText(_("Director:"))
+
+		self["writer"] = Label()
+		self["writerLabel"] = Label()
+		self["writerLabel"].setText(_("Writer:"))
 
 		self["genre"] = Label()
 		self["genreLabel"] = Label()
@@ -286,10 +321,6 @@ class DP_View(Screen, NumericalTextInput):
 		self["runtime"] = Label()
 		self["runtimeLabel"] = Label()
 		self["runtimeLabel"].setText(_("Runtime:"))
-
-		self["total"] = Label()
-
-		self["pagination"] = Label()
 
 		self["backdrop"] = Pixmap()
 		self["backdropVideo"] = Pixmap() # this is just to avoid greenscreen, maybe we find a better way
@@ -559,21 +590,20 @@ class DP_View(Screen, NumericalTextInput):
 			keyvalue = key.encode("utf-8")
 			if len(keyvalue) == 1:
 				self.onNumberKeyLastChar = keyvalue[0].upper()
-				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
+				self.onNumberKeyPopup(self.onNumberKeyLastChar)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def onNumberKeyPopup(self, value, visible):
+	def onNumberKeyPopup(self, value):
 		printl("", self, "S")
 
-		if visible:
-			self["number_key_popup"].setText(value)
-			self["number_key_popup"].show()
+		if value != " ":
+			self["filter"].setText(value)
 		else:
-			self["number_key_popup"].hide()
+			self["filter"].setText(_("press '0-9'"))
 
 		printl("", self, "C")
 
@@ -596,7 +626,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.refresh()
 
-		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
+		self.onNumberKeyPopup(self.onNumberKeyLastChar)
 		NumericalTextInput.timeout(self)
 
 		printl("", self, "C")
@@ -760,7 +790,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyYellow(self):
 		printl("", self, "S")
 
-		self.onToggleFilter()
+		self.toggleDetails()
 
 		printl("", self, "C")
 
@@ -769,8 +799,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def onKeyYellowLong(self):
 		printl("", self, "S")
-
-		self.onChooseFilter()
 
 		printl("", self, "C")
 
@@ -799,7 +827,7 @@ class DP_View(Screen, NumericalTextInput):
 			self.fastScroll = True
 			self["txt_blue"].setText("fastScroll = On")
 			self.resetGuiElements = True
-			self.fastScrollTxt = "Info | "
+			self.fastScrollTxt = "Info"
 
 		self.setFunctionsText()
 
@@ -811,7 +839,7 @@ class DP_View(Screen, NumericalTextInput):
 	def setFunctionsText(self):
 		printl("", self, "S")
 
-		self["txt_functions"].setText("Menu | " + self.fastScrollTxt + "0-9")
+		self["txt_functions"].setText("Menu | " + self.fastScrollTxt)
 
 		printl("", self, "C")
 
@@ -878,88 +906,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onToggleFilter(self):
-		printl("", self, "S")
-
-		for i in range(len(self.onFilterKeyValuePair)):
-			if self.activeFilter[1][0] == self.onFilterKeyValuePair[i][1][0]:
-				# Genres == Genres
-
-				# Try to select the next genres subelement
-				found = False
-				y = None
-				subelements = self.onFilterKeyValuePair[i][2]
-				for j in range(len(subelements)):
-					if self.activeFilter[2] == subelements[j]:
-						# Action == Action
-						if (j+1) < len(subelements):
-							y = subelements[j + 1]
-							found = True
-							break
-
-				if found:
-					x = self.onFilterKeyValuePair[i]
-					self.activeFilter = (x[0], x[1], y, )
-				else:
-					# If we are at the end of all genres subelements select the next one
-					if (i+1) < len(self.onFilterKeyValuePair):
-						x = self.onFilterKeyValuePair[i + 1]
-					else:
-						x = self.onFilterKeyValuePair[0]
-					self.activeFilter = (x[0], x[1], x[2][0], )
-
-				break
-
-		self.sort()
-		self.filter()
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseFilterCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			self.activeFilter = choice[1]
-			self.sort()
-			self.filter()
-			self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseFilter(self):
-		printl("", self, "S")
-
-		menu = []
-
-		selection = 0
-		counter = 0
-
-		for i in range(len(self.onFilterKeyValuePair)):
-			x = self.onFilterKeyValuePair[i]
-			subelements = self.onFilterKeyValuePair[i][2]
-			for j in range(len(subelements)):
-				y = subelements[j]
-				text = "%s: %s" % (_(x[0]), _(y))
-				menu.append((text, (x[0], x[1], y, )))
-				if self.activeFilter[1][0] == self.onFilterKeyValuePair[i][1][0]:
-					if self.activeFilter[2] == subelements[j]:
-						selection = counter
-				counter += 1
-
-		self.session.openWithCallback(self.onChooseFilterCallback, ChoiceBox, title=_("Select filter"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def onToggleView(self, forceUpdate=False):
 		printl("", self, "S")
 
@@ -980,42 +926,6 @@ class DP_View(Screen, NumericalTextInput):
 			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, select, self.activeSort, self.activeFilter))
 		else:
 			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseView(self):
-		printl("", self, "S")
-
-		menu = getViews(self.libraryName)
-		selection = 0
-		for i in range(len(menu)):
-			if self.viewData[1] == menu[i][1]:
-				selection = i
-				break
-		self.session.openWithCallback(self.onChooseViewCallback, ChoiceBox, title=_("Select view"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseViewCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			select = None
-			selection = self["listview"].getCurrent()
-			if selection is not None:
-				params = {}
-				printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
-				for key in self.onEnterPrimaryKeys:
-					if key != "play" or key != "directMode":
-						params[key] = selection[1][key]
-				select = (self.currentKeyValuePair, params)
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter, choice[1]))
 
 		printl("", self, "C")
 
@@ -1159,22 +1069,37 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def showMediaDetail(self):
+	def toggleDetails(self):
 		printl("", self, "S")
-		self.showDetail = True
-		selection = self["listview"].getCurrent()
 
-		if selection is not None:
-			details			= selection[1]
-
-			#details
-			viewMode		= details['viewMode']
-
-			if viewMode == "play" or viewMode == "directMode":
-				printl("viewMode -> play", self, "I")
-				self.playEntry(selection)
+		if self.detailsPaneVisible:
+			self.detailsPaneVisible = False
+			self["shortDescription"].hide()
+			self["txt_yellow"].setText(_("show 'Description'"))
+			self.toggleElementVisibilityWithLabel("writer")
+			self.toggleElementVisibilityWithLabel("director")
+			self.toggleElementVisibilityWithLabel("cast")
+		else:
+			self.detailsPaneVisible = True
+			self["shortDescription"].show()
+			self["txt_yellow"].setText(_("show 'Details'"))
+			self.toggleElementVisibilityWithLabel("writer", "hide")
+			self.toggleElementVisibilityWithLabel("director", "hide")
+			self.toggleElementVisibilityWithLabel("cast", "hide")
 
 		printl("", self, "C")
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleElementVisibilityWithLabel(self, elementName, action="show"):
+
+		if action == "show":
+			self[elementName].show()
+			self[elementName+ "Label"].show()
+		elif action == "hide":
+			self[elementName].hide()
+			self[elementName+ "Label"].hide()
+
 
 	#===========================================================================
 	#
@@ -1352,15 +1277,7 @@ class DP_View(Screen, NumericalTextInput):
 	def filter(self):
 		printl("", self, "S")
 
-		printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
-
-		if len(self.activeFilter[2]) > 0:
-			text = _("Filter: %s") % (_(self.activeFilter[2]))
-		else:
-			text = _("Filter: %s") % (_(self.activeFilter[0]))
-
-		self["txt_filter"].setText(text)
-		self["txt_filter"].show()
+		printl( "self.activeFilter: " + str(self.activeFilter[0]), self, "D")
 
 		if self.activeFilter[1][0] is None:
 			listViewList = self.origListViewList
@@ -1387,8 +1304,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def setText(self, name, value, ignore=False, what=None):
 		#printl("", self, "S")
-		#printl("setting text for " + str(name) + " with value " + str(value), self, "D")
-		# todo lets check this. seems to be some kind of too much
+
 		try:
 			if self[name]:
 				if len(value) > 0:
@@ -1482,10 +1398,14 @@ class DP_View(Screen, NumericalTextInput):
 				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 				self.setText("year", str(self.details.get("year", " - ")))
 				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-				self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-				self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
+				#self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
+				#self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
 				self.setText("runtime", str(self.details.get("runtime", " - ")))
 				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
+				self.setText("cast", str(self.details.get("cast", " ")))
+				self.setText("writer", str(self.details.get("writer", " ").encode('utf8')))
+				self.setText("director", str(self.details.get("director", " ").encode('utf8')))
+
 
 				if self.fastScroll == False or self.showMedia == True:
 					# handle all pixmaps
@@ -1720,8 +1640,8 @@ class DP_View(Screen, NumericalTextInput):
 		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
 		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
 
-		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("pagination", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
+		self.setText("total", _(str(itemsTotal)))
+		self.setText("pagination", _(str(pageCurrent) + "/" + str(pageTotal)))
 
 		printl("", self, "C")
 
@@ -1766,7 +1686,6 @@ class DP_View(Screen, NumericalTextInput):
 		functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
 		functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
 		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
-		functionList.append((_("Show media details"), Plugin("View", fnc=self.showMediaDetail), ))
 		functionList.append((_("Refresh this section"), Plugin("View", fnc=self.refreshSection), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 
@@ -2206,8 +2125,12 @@ class DP_View(Screen, NumericalTextInput):
 		# now we set seen/unseen pictures
 		self.getSeenVisus()
 
-		printl("", self, "C")
+		# enable audio and subtitles information if we have transcoding active
+		if self.serverConfig.playbackType.value == "1":
+			self.toggleElementVisibilityWithLabel("audio")
+			self.toggleElementVisibilityWithLabel("subtitles")
 
+		printl("", self, "C")
 
 	#===============================================================================
 	#

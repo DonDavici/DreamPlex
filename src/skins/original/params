@@ -24,7 +24,7 @@
 
 		elementsList = ["current", "total", "backdrop", "poster", "audio", "resolution",
 	                    "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
-	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "txt_filter"]
+	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total"]
 
 
 		settingsList = ["itemsPerPage", "apiLevel", "screen"]
@@ -37,7 +37,11 @@
 
 	<!-- MOVIE VIEWS -->
 	<movieView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="False">
+		<main name="audio" visible="False"/>
 		<main name="subtitles" visible="False"/>
+		<main name="writer" visible="False"/>
+		<main name="director" visible="False"/>
+		<main name="cast" visible="False"/>
 	</movieView>
 
 	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
