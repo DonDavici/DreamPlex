@@ -36,9 +36,10 @@ from __init__ import _ # _ is translation
 def getDefaultCineElementsList():
 	printl("", __name__, "S")
 
-	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio",
+	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
-	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total"]
+	                "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total",
+	                "btn_red", "btn_green", "btn_yellow", "btn_blue"]
 
 	printl("", __name__, "C")
 	return elementsList
@@ -257,7 +258,6 @@ def getShowViewDefaults():
 	# override default True
 	params["elements"]["subtitles"]["visible"]                     = False
 	params["elements"]["audio"]["visible"]                         = False
-	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["runtime"]["visible"]                       = False
 	params["elements"]["season"]["visible"]                        = False
 

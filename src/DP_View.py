@@ -260,15 +260,15 @@ class DP_View(Screen, NumericalTextInput):
 		self["btn_yellow"]		= Pixmap()
 		self["btn_blue"]		= Pixmap()
 
-		self["txt_red"]			= Label()
-		self["txt_green"]		= Label()
-		self["txt_yellow"]		= Label()
-		self["txt_blue"]		= Label()
+		self["btn_redText"]			= Label()
+		self["btn_greenText"]		= Label()
+		self["btn_yellowText"]		= Label()
+		self["btn_blueText"]		= Label()
 
-		self["txt_red"].setText(_("toggle 'View' = ") + str(self.currentViewName))
-		self["txt_green"].setText("toggle 'Sorting' = default")
+		self["btn_redText"].setText(_("View '") + str(self.currentViewName) + "'")
+		self["btn_greenText"].setText("Sorting 'default'")
 
-		self["txt_yellow"].setText(_("show 'Details'"))
+		self["btn_yellowText"].setText(_("show 'Details'"))
 
 		self["sound"] = MultiPixmap()
 
@@ -823,17 +823,18 @@ class DP_View(Screen, NumericalTextInput):
 	def toggleFastScroll(self):
 		printl("", self, "S")
 
-		if self.fastScroll:
-			self.fastScroll = False
-			self["txt_blue"].setText("fastScroll = Off")
-			self["info"].hide()
-			self["infoLabel"].hide()
-		else:
-			self.fastScroll = True
-			self["txt_blue"].setText("fastScroll = On")
-			self.resetGuiElements = True
-			self["info"].show()
-			self["infoLabel"].show()
+		if self.myParams["elements"]["info"]["visible"]:
+			if self.fastScroll:
+				self.fastScroll = False
+				self["btn_blueText"].setText("fastScroll 'Off'")
+				self["info"].hide()
+				self["infoLabel"].hide()
+			else:
+				self.fastScroll = True
+				self["btn_blueText"].setText("fastScroll 'On'")
+				self.resetGuiElements = True
+				self["info"].show()
+				self["infoLabel"].show()
 
 		self.setFunctionsText()
 
@@ -1081,14 +1082,14 @@ class DP_View(Screen, NumericalTextInput):
 		if self.detailsPaneVisible:
 			self.detailsPaneVisible = False
 			self["shortDescription"].hide()
-			self["txt_yellow"].setText(_("show 'Description'"))
+			self["btn_yellowText"].setText(_("show 'Description'"))
 			self.toggleElementVisibilityWithLabel("writer")
 			self.toggleElementVisibilityWithLabel("director")
 			self.toggleElementVisibilityWithLabel("cast")
 		else:
 			self.detailsPaneVisible = True
 			self["shortDescription"].show()
-			self["txt_yellow"].setText(_("show 'Details'"))
+			self["btn_yellowText"].setText(_("show 'Details'"))
 			self.toggleElementVisibilityWithLabel("writer", "hide")
 			self.toggleElementVisibilityWithLabel("director", "hide")
 			self.toggleElementVisibilityWithLabel("cast", "hide")
@@ -1259,8 +1260,8 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 		#printl("listViewList: " + str(self.listViewList), self, "D")
 
-		text = "toggle 'Sorting' = %s" % (_(self.activeSort[0]))
-		self["txt_green"].setText(text)
+		text = "Sorting '%s'" % (_(self.activeSort[0]))
+		self["btn_greenText"].setText(text)
 		self.areFunctionsHidden = True
 
 		try:
@@ -1404,8 +1405,6 @@ class DP_View(Screen, NumericalTextInput):
 				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 				self.setText("year", str(self.details.get("year", " - ")))
 				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-				#self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-				#self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
 				self.setText("runtime", str(self.details.get("runtime", " - ")))
 				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
 				self.setText("cast", str(self.details.get("cast", " ")))
@@ -2133,8 +2132,16 @@ class DP_View(Screen, NumericalTextInput):
 
 		# enable audio and subtitles information if we have transcoding active
 		if self.serverConfig.playbackType.value == "1":
-			self.toggleElementVisibilityWithLabel("audio")
-			self.toggleElementVisibilityWithLabel("subtitles")
+			printl("audio: " + str(self.myParams["elements"]["audio"]),self, "D")
+			if self.myParams["elements"]["audio"]["visible"]:
+				self.toggleElementVisibilityWithLabel("audio")
+			else:
+				self.toggleElementVisibilityWithLabel("audio", "hide")
+
+			if self.myParams["elements"]["subtitles"]["visible"]:
+				self.toggleElementVisibilityWithLabel("subtitles")
+			else:
+				self.toggleElementVisibilityWithLabel("subtitles", "hide")
 
 		printl("", self, "C")
 
@@ -2254,6 +2261,13 @@ class DP_View(Screen, NumericalTextInput):
 
 			except Exception, e:
 				printl("Exception: " + str(e), self, "D")
+
+			try:
+				if element == "btn_red" or element == "green" or element == "btn_yellow" or element == "btn_blue":
+					self[element + "Text"].show()
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
+
 		else:
 			self[element].hide()
 			try:
@@ -2262,6 +2276,12 @@ class DP_View(Screen, NumericalTextInput):
 				# additional changes
 				if element == "backdrop":
 					self[element+"Video"].hide()
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
+
+			try:
+				if element == "btn_red" or element == "green" or element == "btn_yellow" or element == "btn_blue":
+					self[element + "Text"].hide()
 			except Exception, e:
 				printl("Exception: " + str(e), self, "D")
 

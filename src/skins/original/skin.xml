@@ -393,11 +393,11 @@
         <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="545,165" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="cast" transparent="1" zPosition="4" halign="left"  position="620,165" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="870,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="runtime" transparent="1" zPosition="4" halign="left" position="970,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="year" transparent="1" zPosition="4" halign="left" position="970,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="year" transparent="1" zPosition="4" halign="left"  position="1135,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="runtime" transparent="1" zPosition="4" halign="left"  position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/cover-fs8.png" zPosition="50" position="100,370" size="240,292" alphatest="blend" transparent="0"/>
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
@@ -412,8 +412,8 @@
         <widget name="info" transparent="1" zPosition="4" halign="left" position="920,470" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <!-- tv show specific -->
-        <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="season" transparent="1" zPosition="5" halign="left" position="545,50" size="680,36" font="Saint;18" foregroundColor="#5C5C5C" backgroundColor="#000000"/>
 
         <!-- movie and tv show specific -->
         <widget name="resolution" position="705,630" size="102,38" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/resolution-1080-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/resolution-720-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/resolution-sd-fs8.png"/>
@@ -424,12 +424,12 @@
         <widget name="rating_stars" zPosition="84" position="918,633" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/five_stars_bright-fs8.png"/>
 
         <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="545,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="genre" transparent="1" zPosition="4" halign="left" position="620,340" size="400,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="genre" transparent="1" zPosition="4" halign="left" position="620,340" size="300,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="545,360" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="audio" transparent="1" zPosition="4" halign="left" position="620,360" size="400,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="870,360" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="890,360" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="subtitles" transparent="1" zPosition="4" halign="left" position="970,360" size="200,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <!-- music specific -->
@@ -440,19 +440,19 @@
 
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_red" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_green"  zPosition="6" position="340,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_green" position="360,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_greenText" position="360,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_yellow" position="660,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_blue"  zPosition="6" position="940,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_blue" position="960,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_blueText" position="960,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <!-- functions -->
-        <widget name="txt_functions" position="1100,677" zPosition="9" size="200,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
+        <widget name="txt_functions" position="1110,677" zPosition="9" size="200,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
         <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
 
     </screen>
