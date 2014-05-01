@@ -2166,6 +2166,8 @@ class DP_View(Screen, NumericalTextInput):
 	def processGuiElements(self, myType=None):
 		printl("", self, "S")
 
+		printl("myType: " +  str(myType), self, "D")
+
 		# this is always the case when the view starts the first time
 		# in this case no need for look for subviews
 		if myType is None:
@@ -2175,7 +2177,13 @@ class DP_View(Screen, NumericalTextInput):
 
 				self.alterGuiElementVisibility(element, visibility)
 
-				# we do not alter positions here because this should be done in the skin.xml because we are the first view
+				# we do not alter positions here because this should be done in the skin.xml because we are the first view except ...
+				if str(self.libraryName) == "episodes":
+					params = self.myParams["elements"][element]
+					if "xCoord" in params and "yCoord" in params:
+						xCoord = params.get("xCoord")
+						yCoord = params.get("yCoord")
+						self.alterGuiElementPosition(element,xCoord, yCoord)
 
 		# now we check if we are in a special subView with its own params
 		elif "subViews" in self.myParams:

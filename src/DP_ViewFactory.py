@@ -221,6 +221,9 @@ def getMovieViewDefaults():
 	# override default True
 	params["elements"]["grandparentTitle"]["visible"]              = False
 	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["director"]["visible"]                      = False
+	params["elements"]["cast"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -306,7 +309,7 @@ def getEpisodesViewDefaults():
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
 	params["elements"]["writer"]["visible"]                        = False
-	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["title"]["visible"]                         = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

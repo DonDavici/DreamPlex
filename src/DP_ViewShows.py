@@ -153,7 +153,7 @@ class DPS_ViewShows(DP_ViewCine):
 		super(DPS_ViewShows,self).onEnter()
 
 		# this is the part we extend
-		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes":
+		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes" or self.viewMode == "directMode":
 			self.processGuiElements(self.viewMode)
 
 		printl("", self, "C")
