@@ -260,6 +260,10 @@ def getShowViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["runtime"]["visible"]                       = False
 	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["director"]["visible"]                      = False
+	params["elements"]["cast"]["visible"]                          = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["season"]["visible"]                        = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -298,6 +302,11 @@ def getEpisodesViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["genre"]["visible"]                         = False
 	params["elements"]["subtitles"]["visible"]                     = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["director"]["visible"]                      = False
+	params["elements"]["cast"]["visible"]                          = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["season"]["visible"]                        = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -338,6 +347,10 @@ def getMusicViewDefaults():
 	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["runtime"]["visible"]                       = False
 	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["director"]["visible"]                      = False
+	params["elements"]["cast"]["visible"]                          = False
+	params["elements"]["btn_yellow"]["visible"]                    = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

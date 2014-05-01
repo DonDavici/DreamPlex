@@ -1396,7 +1396,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme:
-					if self.startPlaybackNow:
+					if self.startPlaybackNow: # only if we are a show
 						self.startThemePlayback()
 
 				self.setText("title", self.details.get("title", " "))
@@ -1411,8 +1411,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.setText("writer", str(self.details.get("writer", " ").encode('utf8')))
 				self.setText("director", str(self.details.get("director", " ").encode('utf8')))
 
-
-				if self.fastScroll == False or self.showMedia == True:
+				if self.fastScroll == False or self.showMedia == True and self.details ["viewMode"] == "play":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
 					self.handleCodecPixmaps()
