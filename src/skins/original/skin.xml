@@ -362,11 +362,11 @@
         <widget name="totalLabel" transparent="1" zPosition="4" halign="left" position="35,340" size="60,30" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="total" transparent="1" zPosition="4" halign="left" position="105,340" size="150,30" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="paginationLabel" transparent="1" zPosition="5" halign="left" position="185,340" size="60,30" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="pagination" transparent="1" zPosition="5" halign="left" position="255,340" size="150,30" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="filterLabel" transparent="1" zPosition="5" halign="left" position="165,340" size="60,30" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="filter" transparent="1" zPosition="5" halign="left" position="235,340" size="150,30" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="filterLabel" transparent="1" zPosition="50" halign="left" position="335,340" size="60,32" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="filter" transparent="1" zPosition="50" halign="left" position="405,340" size="150,32" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="paginationLabel" transparent="1" zPosition="50" halign="left" position="355,340" size="60,32" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="pagination" transparent="1" zPosition="50" halign="left" position="425,340" size="150,32" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <!-- content -->
         <widget source="listview" render="Listbox" zPosition="8" position="25,75" size="500,253" scrollbarMode="showNever" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" backgroundColor="#000000" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/focus_list-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/sel_bg-fs8.png">
@@ -407,6 +407,9 @@
 
         <widget name="backdrop" transparent="0" zPosition="45" position="750,400" size="400,225" alphatest="blend"/>
         <widget name="backdroptext" transparent="1" zPosition="4" halign="left" position="700,500" size="200,40" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="infoLabel" transparent="1" zPosition="4" halign="left" position="820,470" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="info" transparent="1" zPosition="4" halign="left" position="920,470" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <!-- tv show specific -->
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="545,15" size="680,36" font="Saint;25" foregroundColor="#FF8C00" backgroundColor="#000000"/>

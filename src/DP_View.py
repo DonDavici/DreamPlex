@@ -302,6 +302,11 @@ class DP_View(Screen, NumericalTextInput):
 		self["audioLabel"] = Label()
 		self["audioLabel"].setText(_("Audio:"))
 
+		self["info"] = Label()
+		self["info"].setText(_("press 'Info'"))
+		self["infoLabel"] = Label()
+		self["infoLabel"].setText(_("Info:"))
+
 		self["director"] = Label()
 		self["directorLabel"] = Label()
 		self["directorLabel"].setText(_("Director:"))
@@ -818,16 +823,17 @@ class DP_View(Screen, NumericalTextInput):
 	def toggleFastScroll(self):
 		printl("", self, "S")
 
-		self.fastScrollTxt = ""
-
 		if self.fastScroll:
 			self.fastScroll = False
 			self["txt_blue"].setText("fastScroll = Off")
+			self["info"].hide()
+			self["infoLabel"].hide()
 		else:
 			self.fastScroll = True
 			self["txt_blue"].setText("fastScroll = On")
 			self.resetGuiElements = True
-			self.fastScrollTxt = "Info"
+			self["info"].show()
+			self["infoLabel"].show()
 
 		self.setFunctionsText()
 
@@ -839,7 +845,7 @@ class DP_View(Screen, NumericalTextInput):
 	def setFunctionsText(self):
 		printl("", self, "S")
 
-		self["txt_functions"].setText("Menu | " + self.fastScrollTxt)
+		self["txt_functions"].setText("Menu")
 
 		printl("", self, "C")
 
