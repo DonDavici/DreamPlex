@@ -1010,11 +1010,17 @@ class DP_View(Screen, NumericalTextInput):
 			url_path	= extraData['key']
 			printl("url_path: " +str(url_path), self, "D")
 
+			separator = ""
+
 			if viewMode == "ShowSeasons":
 				self.viewStep += 1
 				printl("viewMode -> ShowSeasons", self, "I")
 
-				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+
+				if url_path[0:1] != "/":
+					separator = "/"
+
+				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
 
 				self.currentSeasonsParams = params
 				self.currentShowIndex = self["listview"].getIndex()
@@ -1025,7 +1031,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.viewStep += 1
 				printl("viewMode -> ShowEpisodes", self, "I")
 
-				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
+				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
 
 				self.currentEpisodesParams = params
 				self.currentSeasonIndex = self["listview"].getIndex()

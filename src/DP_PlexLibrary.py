@@ -325,7 +325,7 @@ class PlexLibrary(Screen):
 			
 			# we need this for token headers as well
 			self.g_currentServer = self.g_address
-			printl("currentServer: " + str(self.g_currentServer), self, "D")
+			printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 			
 			# we have to set self.g_myplex_accessTokenDict here
 			# because none will trigger empty tokens that are needed when we do not use myPlex
@@ -662,7 +662,8 @@ class PlexLibrary(Screen):
 		#===>
 		server=self.getServerFromURL(p_url)
 		self.g_currentServer = server
-		
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
+
 		html = self.doRequest(p_url)  
 
 		tree = None
@@ -757,7 +758,7 @@ class PlexLibrary(Screen):
 	
 				elif t_mode == 'artist':
 					printl( "_MODE_ARTISTS detected", self, "D")
-					mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", params))
+					mainMenuList.append((_(sections.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", params))
 						
 				elif t_mode == 'photo':
 					printl( "_MODE_PHOTOS detected", self, "DW")
@@ -778,6 +779,8 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def addGUIItem(self, url, details, extraData, context, seenVisu, folder=True ):
 		printl("", self, "S")
+
+		printl("url: " + str(url), self, "D")
 
 		if details.get('title','') == '':
 			printl('leaving now because title is empty', self, "I")
@@ -1259,7 +1262,8 @@ class PlexLibrary(Screen):
 		self.tmpGenres = []
 		
 		server=self.getServerFromURL(url)
-		self.g_currentServer = server		
+		self.g_currentServer = server
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 		
 		#get the server name from the URL, which was passed via the on screen listing..
 		if tree is None:
@@ -1305,6 +1309,7 @@ class PlexLibrary(Screen):
 		
 		server=self.getServerFromURL(url)
 		self.g_currentServer = server
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 		
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:
@@ -1435,9 +1440,9 @@ class PlexLibrary(Screen):
 			#Create URL based on whether we are going to flatten the season view
 			if self.g_flatten == "2":
 				printl("Flattening all shows", self, "I")
-				u='http://%s%s'  % ( server, extraData['key'].replace("children","allLeaves"))
+				u='http://%s/%s'  % ( server, extraData['key'].replace("children","allLeaves"))
 			else:
-				u='http://%s%s'  % ( server, extraData['key'])
+				u='http://%s/%s'  % ( server, extraData['key'])
 				
 			#Right, add that link...and loop around for another entry
 			content = self.addGUIItem(u,details,extraData, context, seenVisu)
@@ -1455,6 +1460,7 @@ class PlexLibrary(Screen):
 
 		server=self.getServerFromURL(url)
 		self.g_currentServer = server
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 		
 		if tree is None:
 			html=self.doRequest(url)
@@ -1568,8 +1574,8 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		
 		server=self.getServerFromURL(url)
-		
-		self.g_currentServer = server	
+		self.g_currentServer = server
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 		
 		if tree is None:
 			#Get URL, XML and Parse
@@ -1713,6 +1719,7 @@ class PlexLibrary(Screen):
 		suburl="http://"+server+"/library/metadata/"+myId
 		
 		self.g_currentServer = server
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 		
 		html=self.doRequest(suburl)
 		#printl("retrived html: " + str(html), self, "D")
@@ -2221,8 +2228,7 @@ class PlexLibrary(Screen):
 
 		content = self.addGUIItem(url, details, extraData, context, seenVisu)
 		mainMenuList.append(content)
-		
-		
+
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
 				
 		printl("", self, "C")
@@ -2900,6 +2906,8 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def get_hTokenForServer(self):
 		printl("", self, "S")
+
+		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 
 		printl("", self, "C")
 		return self.g_myplex_accessTokenDict[self.g_currentServer]["hToken"]

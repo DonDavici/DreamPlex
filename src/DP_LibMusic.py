@@ -86,14 +86,14 @@ class DP_LibMusic(DP_LibMain):
 		else:
 			# Diplay all TVShows
 			if params["viewMode"] is None:
-				printl("show TV shows ...", self, "I")
+				printl("show music ...", self, "I")
 
 				url = self.g_url
 				printl("url: " + str(url), self, "D")
 
 				if config.plugins.dreamplex.useCache.value:
 					#noinspection PyAttributeOutsideInit
-					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "tvShowSection", self.g_uuid, self.g_viewGroup)
+					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "musicSection", self.g_uuid, self.g_viewGroup)
 
 					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
@@ -114,7 +114,7 @@ class DP_LibMusic(DP_LibMain):
 							fd.close()
 							printl("from pickle", self, "D")
 						except:
-							printl("movie cache not found ... saving", self, "D")
+							printl("music cache not found ... saving", self, "D")
 							library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
 							reason = "cache file does not exists, recreating ..."
 							self.generatingCacheForTvShowSection(reason,library, tmpAbc, tmpGenres)
@@ -158,7 +158,7 @@ class DP_LibMusic(DP_LibMain):
 
 			# Display the Episodes Menu
 			elif params["viewMode"] == "ShowEpisodes":
-				printl("show episodes of season ...", self, "I")
+				printl("show tracks ...", self, "I")
 
 				url = params["url"]
 
