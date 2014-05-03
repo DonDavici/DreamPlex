@@ -75,7 +75,7 @@ class DPS_ViewMusic(DP_View):
 		# TODO change backdrop and poster usage via self.myParams["elements"]["backdrop"]["visible"]
 
 		if self.details ["viewMode"] == "ShowAlbums":
-			printl( "is ShowSeasons", self, "D")
+			printl( "is ShowAlbums", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
 			self.isTvShow = True
 			self.bname = self.details["ratingKey"]

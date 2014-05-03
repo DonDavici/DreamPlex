@@ -1018,7 +1018,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				self._load(params)
 
-			elif viewMode == "ShowEpisodes" or viewMode == "ShowTracks":
+			elif viewMode == "ShowEpisodes":
 				self.viewStep += 1
 				printl("viewMode -> ShowEpisodes", self, "I")
 
@@ -1026,6 +1026,28 @@ class DP_View(Screen, NumericalTextInput):
 
 				self.currentEpisodesParams = params
 				self.currentSeasonIndex = self["listview"].getIndex()
+
+				self._load(params)
+
+			elif viewMode == "ShowAlbums":
+				self.viewStep += 1
+				printl("viewMode -> ShowAlbums", self, "I")
+
+				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+
+				self.currentEpisodesParams = params
+				self.currentArtistsIndex = self["listview"].getIndex()
+
+				self._load(params)
+
+			elif viewMode == "ShowTracks":
+				self.viewStep += 1
+				printl("viewMode -> ShowTracks", self, "I")
+
+				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+
+				self.currentEpisodesParams = params
+				self.currentAlbumsIndex = self["listview"].getIndex()
 
 				self._load(params)
 
@@ -1135,11 +1157,20 @@ class DP_View(Screen, NumericalTextInput):
 			self._load(ignoreSort=True)
 			self["listview"].setIndex(self.currentMovieIndex)
 
+		elif selectKeyValuePair == "backToArtists":
+			self._load(ignoreSort=True)
+			self["listview"].setIndex(self.currentArtistIndex)
+
+		elif selectKeyValuePair == "backToAlbums":
+			self._load(ignoreSort=True)
+			self["listview"].setIndex(self.currentAlbumIndex)
+
 		else:
 			self.close()
 			printl("", self, "C")
 			return
 
+		self["listview"].setIndex(1)
 		self.refresh()
 
 		printl("", self, "C")

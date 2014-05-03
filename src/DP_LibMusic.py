@@ -36,7 +36,7 @@ class DP_LibMusic(DP_LibMain):
 	g_url = None
 	
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
 	def __init__(self, session, url=None, uuid=None, source=None, viewGroup=None, librarySteps=None):
 		printl ("", self, "S")
@@ -60,11 +60,11 @@ class DP_LibMusic(DP_LibMain):
 		if self.g_librarySteps == 2:
 			if params["viewMode"] is None:
 				params["viewMode"] = "ShowAlbums"
-			library = self.loadTwoStepLibrary(params)
 		else:
 			if params["viewMode"] is None:
 				params["viewMode"] = "ShowArtists"
-			library = self.loadThreeStepLibrary(params)
+
+		library = self._loadLibrary(params)
 
 		printl("libary:" + str(library[0]), self, "D")
 		printl ("", self, "C")
@@ -73,43 +73,7 @@ class DP_LibMusic(DP_LibMain):
 	#===============================================================================
 	#
 	#===============================================================================
-	def loadTwoStepLibrary(self, params):
-		printl ("", self, "S")
-		printl("params: " + str(params), self, "D")
-
-		if params["viewMode"] == "ShowAlbums":
-			printl("show albums ...", self, "D")
-
-			library = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
-
-			sort = (("by albums", True, False), )
-
-			myFilter = [("All", (None, False), ("", )), ]
-			printl("library: " + str(library),self, "D")
-			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
-
-		elif params["viewMode"] == "ShowTracks":
-			printl("show tracks ...", self, "I")
-
-			url = params["url"]
-
-			library = Singleton().getPlexInstance().getMusicTracks(url)
-
-			sort = [("by title", None, False), ]
-
-			myFilter = [("All", (None, False), ("", )), ]
-
-			printl ("", self, "C")
-			printl("library: " + str(library),self, "D")
-			return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
-
-		printl ("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def loadThreeStepLibrary(self, params):
+	def  _loadLibrary(self, params):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 
@@ -123,7 +87,7 @@ class DP_LibMusic(DP_LibMain):
 			myFilter = [("All", (None, False), ("", )), ]
 
 			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
+			return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 
 		elif params["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
@@ -138,8 +102,14 @@ class DP_LibMusic(DP_LibMain):
 
 			myFilter = [("All", (None, False), ("", )), ]
 			printl("library: " + str(library),self, "D")
+
+			if self.g_librarySteps == 2:
+				returnTo = None
+			else:
+				returnTo = "backToArtists"
+
 			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
+			return library, ("viewMode", "ratingKey", ), None, returnTo, sort, myFilter
 
 		elif params["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
@@ -154,7 +124,7 @@ class DP_LibMusic(DP_LibMain):
 
 			printl ("", self, "C")
 			printl("library: " + str(library),self, "D")
-			return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
+			return library, ("viewMode", "ratingKey", ), None, "backToAlbums", sort, myFilter
 
 		printl ("", self, "C")
 
