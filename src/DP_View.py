@@ -419,15 +419,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		if self.select is None: # Initial Start of View, select first entry in list
-			#sort = False
-			#if self.onFirstExecSort is not None:
-			#	self.activeSort = self.onFirstExecSort
-			#	sort = True
-			#myFilter = False
-			#if self.onFirstExecFilter is not None:
-			#	self.activeFilter = self.onFirstExecFilter
-			#	myFilter = True
-			# lets override this
 			myFilter = True
 			sort = True
 
@@ -1027,7 +1018,7 @@ class DP_View(Screen, NumericalTextInput):
 
 				self._load(params)
 
-			elif viewMode == "ShowEpisodes":
+			elif viewMode == "ShowEpisodes" or viewMode == "ShowTracks":
 				self.viewStep += 1
 				printl("viewMode -> ShowEpisodes", self, "I")
 
@@ -1175,6 +1166,7 @@ class DP_View(Screen, NumericalTextInput):
 		params["cache"] = self.cache
 
 		library = self.loadLibrary(params)
+		printl("library: " + str(library), self, "D")
 		#library for e.g. = return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
 		# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 

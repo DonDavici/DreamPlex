@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 import time
-import copy
 
 from Components.ActionMap import HelpableActionMap
 from Components.Input import Input
@@ -31,7 +30,6 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Label import Label
-from Components.Pixmap import Pixmap
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
@@ -213,12 +211,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
+
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_MUSIC:
 					printl("found Plugin.MENU_MUSIC", self, "D")
 					self.getServerData("music")
+
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
 
@@ -239,20 +239,40 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 						self.refreshOrientationHorMenu(0)
 
 			elif selection[1] == "getMusicSections":
-				self.getMusicSections(selection)
+				mainMenuList = self.plexInstance.getMusicSections(selection)
+
+				self["menu"].setList(mainMenuList)
+				self.refreshMenu(0)
 
 				if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
 
 			else:
 				printl("selected entry is executable", self, "D")
+				self.mediaType = selection[2]
+				printl("mediaType: " + str(self.mediaType), self, "D")
+
 				params = selection[3]
 				printl("params: " + str(params), self, "D")
+
+				# set main data
 				self.s_url = params.get('t_url', "notSet")
-				self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
 				self.uuid = params.get('t_uuid', "notSet")
 				self.source = params.get('t_source', "notSet")
 				self.viewGroup = params.get('t_viewGroup', "notSet")
+
+				# set additional data mediaType specific
+				if self.mediaType == "musicEntry":
+					if selection[0] == "All Artists":
+						self.librarySteps = 3
+					else:
+						self.librarySteps = 2
+
+				elif self.mediaType == "showEntry":
+					self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
+
+				elif self.mediaType == "movieEntry":
+					pass
 
 				isSearchFilter = params.get('isSearchFilter', "notSet")
 				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
@@ -261,37 +281,9 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
 					self.executeSelectedEntry()
+
 			self.refreshMenu(0)
 			printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getMusicSections(self, selection):
-		printl("", self, "S")
-
-		mainMenuList = []
-		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
-
-		# ARTISTS
-		params = copy.deepcopy(selection[4])
-		url = params['t_url']
-		params['t_url'] = url + "?type=8"
-		mainMenuList.append((_("by Artists"), plugin, "artistsEntry", params))
-		printl("mainMenuList 1: " + str(mainMenuList), self, "D")
-
-		#ALBUMS
-		params = copy.deepcopy(selection[4])
-		params['t_url'] = url + "?type=9"
-		mainMenuList.append((_("by Albums"), plugin, "albumsEntry", params))
-		printl("mainMenuList 2: " + str(mainMenuList), self, "D")
-
-		self["menu"].setList(mainMenuList)
-		self.refreshMenu(0)
-
-		printl("mainMenuList: " + str(mainMenuList), self, "D")
-
-		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -318,8 +310,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		if self.selectedEntry.start is not None:
 			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source , "viewGroup": self.viewGroup}
 
-			if self.showEpisodesDirectly != "notSet":
+			if self.mediaType == "musicEntry":
+				kwargs["librarySteps"] = self.librarySteps
+
+			elif self.mediaType == "showEntry":
 				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
+
+			elif self.mediaType == "movieEntry":
+				pass
 
 			self.session.open(self.selectedEntry.start, **kwargs)
 

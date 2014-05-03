@@ -33,6 +33,8 @@ from DP_ViewFactory import getViews
 from DP_Player import DP_Player
 from DP_View import DP_View
 
+from DPH_Singleton import Singleton
+
 from __common__ import printl2 as printl
 from __plugin__ import getPlugins, Plugin
 
@@ -388,3 +390,86 @@ class DP_LibMain(Screen):
 		self.notifyEntryPlaying(entry, flags)
 		
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getLibraryData(self, params, url, myType, uuid, viewGroup, source):
+		printl ("", self, "S")
+
+		if config.plugins.dreamplex.useCache.value:
+			#noinspection PyAttributeOutsideInit
+			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, viewGroup)
+
+			# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
+			# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
+			if "cache" in params:
+				if not params['cache']:
+					source = "plex"
+
+			if source == "cache" or params['cache'] == True:
+				try:
+					library = self.getLibraryDataFromPickle()
+					printl("from pickle", self, "D")
+				except:
+					printl("music cache not found ... saving", self, "D")
+					library = self.getLibraryDataFromPlex(url, myType)
+					reason = "cache file does not exists, recreating ..."
+					self.generateCacheForSection(reason, library)
+					printl("fallback to: from server", self, "D")
+			else:
+				library = self.getLibraryDataFromPlex(url, myType)
+				reason = "generating cache first time, creating ..."
+				self.generateCacheForSection(reason, library)
+		else:
+			library = self.getLibraryDataFromPlex(url, myType)
+
+		printl ("", self, "C")
+		return library
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getLibraryDataFromPickle(self):
+		printl ("", self, "S")
+
+		fd = open(self.pickleName, "rb")
+		pickleData = pickle.load(fd)
+		fd.close()
+
+		printl ("", self, "C")
+		return pickleData
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getLibraryDataFromPlex(self, url, myType):
+		printl ("", self, "S")
+
+		printl("myType: " + str(myType), self, "D")
+
+		if myType == "ShowAlbums":
+			library = Singleton().getPlexInstance().getMusicByAlbum(url)
+
+		elif myType == "ShowArtists":
+			library = Singleton().getPlexInstance().getMusicByArtist(url)
+
+		elif myType == "ShowTracks":
+			library = Singleton().getPlexInstance().getMusicTracks(url)
+
+		printl ("", self, "C")
+		return library
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def generateCacheForSection(self, reason, library):
+		printl ("", self, "S")
+
+		printl ("reason: " + str(reason), self, "S")
+		pickleData = library
+		fd = open(self.pickleName, "wb")
+		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
+
+		printl ("", self, "C")

@@ -32,6 +32,7 @@ import base64
 import hmac
 import uuid
 import cPickle as pickle
+import copy
 
 from time import time
 from urllib import quote_plus
@@ -454,7 +455,7 @@ class PlexLibrary(Screen):
 				elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
 					detail = " (" + str(section.get('remoteServer')) + ")"
 
-			if self.g_secondary == "true":	  
+			if self.g_secondary == "true":
 				if section.get('type') == 'show':
 					printl( "_MODE_TVSHOWS detected", self, "D")
 					if myFilter is not None and myFilter != "tvshow":
@@ -2201,153 +2202,42 @@ class PlexLibrary(Screen):
 		return False
 
 	#===========================================================================
-	# 
+	# This function is used if we do not use filters of plex
+	# config.plugins.dreamplex.showFilter.value == False
 	#===========================================================================
-	def getMusicTypes(self, url):
+	def getMusicSections(self, selection):
 		printl("", self, "S")
+
 		mainMenuList = []
-		server=self.getServerFromURL(url)
-		details = {'title'	   : "by Album" }
-		details["viewMode"]				 = "ShowSeasons"
-		details["ratingKey"]				 = "1"
-		details['server']				   = str(server)
-		extraData = {}
-		extraData['theme']="1"
-		extraData['key'] = "1"
-		context = {}
-		context["watchedURL"]				 = "1"
-		seenVisu = None
-		content = self.addGUIItem(url, details, extraData, context, seenVisu)
-		mainMenuList.append(content)
-		
-		details = {'title'	   : "by Artists" }
-		details["viewMode"]				 = "ShowSeasons"
-		details["ratingKey"]				 = "1"
-		details['server']				   = str(server)
+		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
 
+		# ARTISTS
+		params = copy.deepcopy(selection[4])
+		url = params['t_url']
+		params['t_url'] = url + "?type=8"
+		mainMenuList.append((_("by Artists"), plugin, "artistsEntry", params))
 
-		content = self.addGUIItem(url, details, extraData, context, seenVisu)
-		mainMenuList.append(content)
+		#ALBUMS
+		params = copy.deepcopy(selection[4])
+		params['t_url'] = url + "?type=9"
+		mainMenuList.append((_("by Albums"), plugin, "albumsEntry", params))
 
 		printl("mainMenuList: " + str(mainMenuList), self, "D")
-				
+
 		printl("", self, "C")
-		return mainMenuList  
+		return mainMenuList
 
-	#============================================================================
-	# 
-	#============================================================================
-	def music(self, url, tree=None ): 
-		printl("", self, "S")
-		
-		fullList = []
-		
-		server=self.getServerFromURL(url)
-		
-		if tree is None:
-			html=self.doRequest(url)
-		
-			if html is False:
-				printl("", self, "C")
-				return
-
-			try:
-				tree = etree.fromstring(html)
-			except Exception:
-				self._showErrorOnTv("no xml as response", html)
-
-		for grapes in tree:
-		   
-			if grapes.get('key',None) is None:
-				continue
-	
-			details={'genre'	   : grapes.get('genre','') ,
-					 'artist'	  : grapes.get('artist','') ,
-					 'year'		: int(grapes.get('year',0)) ,
-					 'album'	   : grapes.get('album','') ,
-					 'tracknumber' : int(grapes.get('index',0)) ,
-					 'title'	   : "Unknown" }
-	
-			
-			extraData={'type'		: "Music" ,						  
-					   'thumb'	   : self.getImage(grapes, server, myType="thumb") ,
-					   'fanart_image': self.getImage(grapes, server, myType="art") }
-	
-			if extraData['fanart_image'] == "":
-				extraData['fanart_image']=self.getImage(tree, server, myType="art")
-				
-			
-			details["viewMode"]				 = "ShowSeasons"
-			details["ratingKey"]				 = "1"
-			details['server']				   = str(server)
-
-			extraData['theme']="1"
-			extraData['key'] = "1"
-			context = {}
-			context["watchedURL"]				 = "1"
-	
-			u=self.getLinkURL(url, grapes, server)
-			
-			if grapes.tag == "Track":
-				printl("Track Tag", self, "I")
-				
-				details['title']=grapes.get('track','Unknown').encode('utf-8')
-				details['duration']=int(grapes.get('totalTime',0)/1000)
-		
-				#context = None
-				seenVisu = None
-	
-				content = self.addGUIItem(u, details, extraData, context, seenVisu)
-				fullList.append(content)
-	
-			else: 
-			
-				if grapes.tag == "Artist":
-					printl("Artist Tag", self, "I")
-
-					details['title']=grapes.get('artist','Unknown')
-
-				elif grapes.tag == "Album":
-					printl("Album Tag", self, "I")
-
-					details['title']=grapes.get('album','Unknown')
-	
-				elif grapes.tag == "Genre":
-					details['title']=grapes.get('genre','Unknown')
-				
-				else:
-					printl("Generic Tag: " + grapes.tag, self, "I")
-					details['title']=grapes.get('title','Unknown')
-					
-				details["viewMode"]				 = "ShowSeasons"
-				details["ratingKey"]				 = "1"
-				details['server']				   = str(server)
-	
-				extraData['theme']="1"
-				extraData['key'] = "1"
-				context = {}
-				context["watchedURL"]				 = "1"
-				#context = None
-				seenVisu = None
-	
-				content = self.addGUIItem(u, details, extraData, context, seenVisu)
-				fullList.append(content)
-		
-		#printl ("fullList = " + fullList, self, "D")
-		printl("", self, "C")
-		return fullList
-	
 	#===============================================================================
 	# 
 	#===============================================================================
-	def artist(self, url, tree=None ): 
+	def getMusicByArtist(self, url, tree=None ):
 		"""
 		Process artist XML and display data
 		@input: url of XML page, or existing tree of XML page
 		@return: nothing
 		"""
 		printl("", self, "S")
-
+		fullList = []
 		#Get the URL and server name.  Get the XML and parse
 		if tree is None:	  
 			html=self.doRequest(url)
@@ -2365,30 +2255,82 @@ class PlexLibrary(Screen):
 		ArtistTag=tree.findall('Directory')
 
 		for artist in ArtistTag:
-		
-			details={'plot'	: artist.get('summary','') ,
-					 'artist'  : artist.get('title','').encode('utf-8') }
-			
-			details['title']=details['artist']
-			  
-			extraData={'type'		 : "Music" ,
-					   'thumb'		: self.getImage(artist, server, myType="thumb") ,
-					   'fanart_image' : self.getImage(artist, server, myType="art") ,
-					   'ratingKey'	: artist.get('title','') ,
-					   'key'		  : artist.get('key','') }
-	
-			url = 'http://%s%s' % (server, extraData['key'])
+			tempgenre=[]
+			tempcast=[]
+			tempdir=[]
+			tempwriter=[]
 
-			context = {}
+			#Lets grab all the info we can quickly through either a dictionary, or assignment to a list
+			#We'll process it later
+			for child in artist:
+				if child.tag == "Media":
+					# todo we have to check if we need this
+					mediaArguments = dict(child.items())
+					printl("mediaArguments: " + str(mediaArguments), self, "D")
+
+				elif child.tag == "Writer"  and self.g_skipmetadata == "false":
+					tempwriter.append(child.get('tag'))
+
+				elif child.tag == "Director"  and self.g_skipmetadata == "false":
+					tempdir.append(child.get('tag'))
+
+				elif child.tag == "Role"  and self.g_skipmetadata == "false":
+					tempcast.append(child.get('tag'))
+
+			details = {}
+			details["viewMode"]				= "ShowAlbums"
+			details['ratingKey']			= str(artist.get('ratingKey', 0)) # primary key in plex
+			details['summary']				= artist.get('summary','')
+			details['title']				= artist.get('title','').encode('utf-8')
+			details['rating']				= artist.get('rating', 0)
+			details['studio']				= artist.get('studio','')
+			details['year']					= artist.get('year', 0)
+			details['tagline']				= artist.get('tagline','')
+			details['server']				= str(server)
+			details['genre']				= " / ".join(tempgenre)
+
+			#Extended Metadata
+			if self.g_skipmetadata == "false":
+				details['cast']	 = tempcast
+				details['writer']   = " / ".join(tempwriter)
+
+			extraData = {}
+			extraData['type']				= "artists"
+			extraData['ratingKey']			= str(artist.get('ratingKey', 0)) # primary key in plex
+			extraData['parentRatingKey']    = artist.get('parentRatingKey', None) # might be tv show
+			extraData['grandparentRatingKey']= artist.get('grandparentRatingKey', None) # might be seaon of show
+			extraData['thumb']				= self.getImage(artist, server, myType = "thumb")
+			extraData['fanart_image']		= self.getImage(artist, server, myType = "art")
+			extraData['token']				= self.g_myplex_accessToken
+			extraData['key']				= artist.get('key','')
+
+			if artist.get('banner',None) is not None:
+				extraData['banner']='http://'+server+artist.get('banner').split('?')[0]+"/banner.jpg"
+
+			#Add extra media flag data
+			if self.g_skipmediaflags == "false":
+				extraData['contentRating']	  = artist.get('contentRating', '')
+
+			#Build any specific context menu entries
+			if self.g_skipcontext == "false":
+				context=self.buildContextMenu(url, extraData)
+			else:
+				context=None
+
+			u='http://%s/%s'  % ( server, extraData['key'])
 			seenVisu = None
+			#Right, add that link...and loop around for another entry
+			content = self.addGUIItem(u,details,extraData, context, seenVisu)
 
-			self.addGUIItem(url, details, extraData, context, seenVisu)
-			printl("", self, "C")   
+			fullList.append(content)
+
+		printl("", self, "C")
+		return fullList
 
 	#===============================================================================
 	# 
 	#===============================================================================
-	def albums(self, url, tree=None ): 
+	def getMusicByAlbum(self, url, tree=None ):
 		printl("", self, "S")
 
 		fullList = []
@@ -2415,7 +2357,7 @@ class PlexLibrary(Screen):
 					 'artist'  : tree.get('parentTitle', album.get('parentTitle','')) ,
 					 'plot'	: album.get('summary','') }
 			
-			details["viewMode"]				 = "ShowSeasons"
+			details["viewMode"]				 = "ShowTracks"
 			details["ratingKey"]				 = "1"
 			details['server']				   = str(server)
 			
@@ -2430,6 +2372,7 @@ class PlexLibrary(Screen):
 				extraData['fanart_image']=sectionart
 			
 			extraData['theme']="1"
+			extraData['parentRatingKey']    = album.get('parentRatingKey', None) # might be tv show
 			context = {}
 			context["watchedURL"]				 = "1"
 										
@@ -2448,7 +2391,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def tracks(self, url,tree=None ): 
+	def getMusicTracks(self, url,tree=None ):
 		printl("", self, "S")
 
 		fullList = []

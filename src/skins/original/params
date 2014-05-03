@@ -48,7 +48,7 @@
 	</movieView>
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="False">
 
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>
@@ -125,7 +125,7 @@
 	</episodeView>
 
 	<!-- MUSIC VIEWS -->
-	<musicView name="List" apiLevel="1" itemsPerPage="6" screen="DPS_ViewList" backdropVideos="False">
+	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="False">
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
 			<element name="genre" visible="False" />

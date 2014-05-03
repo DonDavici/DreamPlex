@@ -22,10 +22,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import cPickle as pickle
-
-from Components.config import config
-
 from DP_LibMain import DP_LibMain
 
 from DPH_Singleton import Singleton
@@ -42,22 +38,16 @@ class DP_LibMusic(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None, viewGroup=None):
-		"""
-		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
-		"""
+	def __init__(self, session, url=None, uuid=None, source=None, viewGroup=None, librarySteps=None):
 		printl ("", self, "S")
 
-		self.showEpisodesDirectly = showEpisodesDirectly
-		if self.showEpisodesDirectly:
-			DP_LibMain.__init__(self, session, "music") # we will need there something else
-		else:
-			DP_LibMain.__init__(self, session, "music")
+		DP_LibMain.__init__(self, session, "music")
 
 		self.g_url = url
 		self.g_uuid = uuid
 		self.g_source = source
 		self.g_viewGroup = viewGroup
+		self.g_librarySteps = librarySteps
 
 		printl ("", self, "C")
 
@@ -66,127 +56,105 @@ class DP_LibMusic(DP_LibMain):
 	#===============================================================================
 	def loadLibrary(self, params):
 		printl ("", self, "S")
+
+		if self.g_librarySteps == 2:
+			if params["viewMode"] is None:
+				params["viewMode"] = "ShowAlbums"
+			library = self.loadTwoStepLibrary(params)
+		else:
+			if params["viewMode"] is None:
+				params["viewMode"] = "ShowArtists"
+			library = self.loadThreeStepLibrary(params)
+
+		printl("libary:" + str(library[0]), self, "D")
+		printl ("", self, "C")
+		return library
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def loadTwoStepLibrary(self, params):
+		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 
-		if self.showEpisodesDirectly:
-			printl("show episodes directly ...", self, "I")
+		if params["viewMode"] == "ShowAlbums":
+			printl("show albums ...", self, "D")
 
-			url = self.g_url
+			library = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
-			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
+			sort = (("by albums", True, False), )
+
+			myFilter = [("All", (None, False), ("", )), ]
+			printl("library: " + str(library),self, "D")
+			printl ("", self, "C")
+			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
+
+		elif params["viewMode"] == "ShowTracks":
+			printl("show tracks ...", self, "I")
+
+			url = params["url"]
+
+			library = Singleton().getPlexInstance().getMusicTracks(url)
 
 			sort = [("by title", None, False), ]
 
 			myFilter = [("All", (None, False), ("", )), ]
 
-			#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
-
 			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "None", sort, myFilter
-		else:
-			# Diplay all TVShows
-			if params["viewMode"] is None:
-				printl("show music ...", self, "I")
-
-				url = self.g_url
-				printl("url: " + str(url), self, "D")
-
-				if config.plugins.dreamplex.useCache.value:
-					#noinspection PyAttributeOutsideInit
-					self.tvShowPickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "musicSection", self.g_uuid, self.g_viewGroup)
-
-					# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
-					# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
-					if "cache" in params:
-						if not params['cache']:
-							self.g_source = "plex"
-
-					if self.g_source == "cache" or params['cache'] == True:
-						try:
-							fd = open(self.tvShowPickle, "rb")
-							pickleData = pickle.load(fd)
-							library = pickleData[0]
-
-							# todo we have to check if we will need this in future or not
-							#tmpAbc = pickleData[1]
-							#tmpGenres = pickleData [2]
-
-							fd.close()
-							printl("from pickle", self, "D")
-						except:
-							printl("music cache not found ... saving", self, "D")
-							library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
-							reason = "cache file does not exists, recreating ..."
-							self.generatingCacheForTvShowSection(reason,library, tmpAbc, tmpGenres)
-							printl("fallback to: from server", self, "D")
-					else:
-						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
-						reason = "generating cache first time, creating ..."
-						self.generatingCacheForTvShowSection(reason, library, tmpAbc, tmpGenres)
-				else:
-					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
-
-				# sort
-				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
-
-				myFilter = [("All", (None, False), ("", )), ]
-
-				#if len(tmpGenres) > 0:
-					#tmpGenres.sort()
-					#filter.append(("Genre", ("Genres", True), tmpGenres))
-
-				printl ("", self, "C")
-				return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
-				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-
-			# Display the Seasons Menu
-			elif params["viewMode"] == "ShowSeasons":
-				printl("show seasons of TV show ...", self, "I")
-
-				url = params["url"]
-
-				library = Singleton().getPlexInstance().getSeasonsOfShow(url)
-
-				sort = (("by season", True, False), )
-
-				myFilter = [("All", (None, False), ("", )), ]
-
-				printl ("", self, "C")
-				return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
-				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
-
-
-			# Display the Episodes Menu
-			elif params["viewMode"] == "ShowEpisodes":
-				printl("show tracks ...", self, "I")
-
-				url = params["url"]
-
-				library = Singleton().getPlexInstance().tracks(url)
-
-				sort = [("by title", None, False), ]
-
-				myFilter = [("All", (None, False), ("", )), ]
-
-				#filter.append(("Seen", ("Seen", False, 1), ("Seen", "Unseen", )))
-
-				printl ("", self, "C")
-				return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
-				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+			printl("library: " + str(library),self, "D")
+			return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
 
 		printl ("", self, "C")
 
-	#===========================================================================
+	#===============================================================================
 	#
-	#===========================================================================
-	def generatingCacheForTvShowSection(self, reason, library, tmpAbc, tmpGenres):
+	#===============================================================================
+	def loadThreeStepLibrary(self, params):
 		printl ("", self, "S")
+		printl("params: " + str(params), self, "D")
 
-		printl ("reason: " + str(reason), self, "S")
-		pickleData = library, tmpAbc, tmpGenres
-		fd = open(self.tvShowPickle, "wb")
-		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
-		fd.close()
+		if params["viewMode"] == "ShowArtists":
+			printl("show artists ...", self, "D")
+
+			library = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+
+			sort = (("by artists", True, False), )
+
+			myFilter = [("All", (None, False), ("", )), ]
+
+			printl ("", self, "C")
+			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
+
+		elif params["viewMode"] == "ShowAlbums":
+			printl("show albums ...", self, "D")
+
+			# workaroudn
+			params["url"] = self.g_url
+			params["viewMode"] = "ShowAlbums"
+			# end
+			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+
+			sort = (("by albums", True, False), )
+
+			myFilter = [("All", (None, False), ("", )), ]
+			printl("library: " + str(library),self, "D")
+			printl ("", self, "C")
+			return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
+
+		elif params["viewMode"] == "ShowTracks":
+			printl("show tracks ...", self, "I")
+
+			url = params["url"]
+
+			library = Singleton().getPlexInstance().getMusicTracks(url)
+
+			sort = [("by title", None, False), ]
+
+			myFilter = [("All", (None, False), ("", )), ]
+
+			printl ("", self, "C")
+			printl("library: " + str(library),self, "D")
+			return library, ("viewMode", "ratingKey", ), None, "backToSeasons", sort, myFilter
 
 		printl ("", self, "C")
 
