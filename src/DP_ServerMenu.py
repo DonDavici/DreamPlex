@@ -269,7 +269,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 						self.librarySteps = 2
 
 				elif self.mediaType == "showEntry":
-					self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', "notSet")
+					self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', False)
 
 				elif self.mediaType == "movieEntry":
 					pass

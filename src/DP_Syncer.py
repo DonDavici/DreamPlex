@@ -633,7 +633,7 @@ class BackgroundMediaSyncer(Thread):
 					self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
-					library, tmpAbc, tmpGenres = self.plexInstance.getMoviesFromSection(url)
+					library, tmpAbc = self.plexInstance.getMoviesFromSection(url)
 
 					self.syncThrougMediaLibrary(library)
 

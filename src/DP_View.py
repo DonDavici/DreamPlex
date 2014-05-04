@@ -1036,7 +1036,7 @@ class DP_View(Screen, NumericalTextInput):
 				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
 
 				self.currentEpisodesParams = params
-				self.currentArtistsIndex = self["listview"].getIndex()
+				self.currentArtistIndex = self["listview"].getIndex()
 
 				self._load(params)
 
@@ -1047,7 +1047,7 @@ class DP_View(Screen, NumericalTextInput):
 				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
 
 				self.currentEpisodesParams = params
-				self.currentAlbumsIndex = self["listview"].getIndex()
+				self.currentAlbumIndex = self["listview"].getIndex()
 
 				self._load(params)
 
@@ -1211,13 +1211,13 @@ class DP_View(Screen, NumericalTextInput):
 		for listView in self.listViewList:
 			printl("seenVisu location: " + str(listView[4]), self, "D")
 			if listView is not None:
-				if 'seen-fs8.png' == str(listView[4]):
+				if 'seen' == str(listView[4]):
 					seenVisu = self.seenPic
 
-				elif 'started-fs8.png' == str(listView[4]):
+				elif 'started' == str(listView[4]):
 					seenVisu = self.startedPic
 
-				elif 'unseen-fs8.png' == str(listView[4]):
+				elif 'unseen' == str(listView[4]):
 					seenVisu = self.unseenPic
 
 				else:

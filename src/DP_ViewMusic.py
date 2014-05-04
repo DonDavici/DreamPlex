@@ -183,7 +183,7 @@ class DPS_ViewMusic(DP_View):
 
 		if self.details ["viewMode"] == "play":
 			printl("duration: " + str(self.details["duration"]),self, "D")
-			duration = str(datetime.timedelta(seconds=self.details["duration"]))
+			duration = str(datetime.timedelta(seconds=int(self.details["duration"])))
 			self["runtime"].setText(str(duration))
 
 		printl("", self, "C")

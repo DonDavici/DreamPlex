@@ -92,10 +92,9 @@ class DP_LibMusic(DP_LibMain):
 		elif params["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
 
-			# workaroudn
-			params["url"] = self.g_url
-			params["viewMode"] = "ShowAlbums"
-			# end
+			if self.g_librarySteps == 2:
+				params["url"] = self.g_url
+
 			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 			sort = (("by albums", True, False), )
@@ -114,9 +113,7 @@ class DP_LibMusic(DP_LibMain):
 		elif params["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
 
-			url = params["url"]
-
-			library = Singleton().getPlexInstance().getMusicTracks(url)
+			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 			sort = [("by title", None, False), ]
 

@@ -101,7 +101,6 @@ class PlexLibrary(Screen):
 	g_flatten = "0" # 0 = show seasons, 1 = show all
 	g_playtheme = "false"
 	g_forcedvd = "false"
-	g_skipcontext = "false" # best understanding when looking getMoviesfromsection
 	g_skipmetadata = "false" # best understanding when looking getMoviesfromsection
 	g_skipmediaflags = "false" # best understanding when looking getMoviesfromsection
 	g_skipimages = "false"
@@ -236,12 +235,227 @@ class PlexLibrary(Screen):
 		
 		printl("", self, "C")
 
+#===============================================================================
+# LIBRARY ACCESS
+#===============================================================================
 
-	def getServerConfig(self):
+#===========================================================================
+	#
+	#===========================================================================
+	def getMoviesFromSection(self, url):
 		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		fullList=[]
+
+		# fill for sorting within dreamPlex
+		self.tmpAbc = []
+
+		#server=self.getServerFromURL(url)
+		#self.g_currentServer = server
+		#printl("g_currentServer: " + str(self.g_currentServer), self, "D")
+
+		# get xml from url
+		tree, server = self.getXmlFromUrl(url)
+
+		# find coressponding tags in xml
+		entries = tree.findall('Video')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			#extraData['type']			    = "Video" # todo: not sure if we need this
+			entryData["viewMode"]			= "play"
+			entryData['server']			    = str(server)
+			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
+			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
+			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
+			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
+
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['token']			    = self.g_myplex_accessToken
+
+			# add part and media data to main data element
+			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
+
+			entryData["partDataArr"] = partDataArr
+			entryData["mediaDataArr"] = mediaDataArr
+
+			# write global xml data to entryData
+			globalData = (dict(tree.items()))
+			printl("globalData: " + str(globalData), self, "D")
+			entryData['globalData'] = globalData
+
+			# todo: check if we will use filter in Dreamplex or not
+			# fill title filter
+			if entryData["title"].upper() not in self.tmpAbc:
+				self.tmpAbc.append(entryData["title"].upper())
+
+			# set seen state for picture handling in view
+			seenVisu = self.getVisualisationFromCount(entryData)
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		# used for filter like director, decade, ...
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("directoryData: " + str(entryData), self, "D")
+
+			entryData['server'] 	 = str(server)
+			entryData['viewMode']    = "directory"
+			entryData['type']	     = "directory"
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, isFilter = True))
 
 		printl("", self, "C")
-		return self.g_serverConfig
+		return fullList, self.tmpAbc
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getMusicByArtist(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+		fullList = []
+
+		# get xml from url
+		tree, server = self.getXmlFromUrl(url)
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			entryData["viewMode"]		= "ShowAlbums"
+			entryData['server']			= server
+			entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['thumb']			= self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	= self.getImage(entry, server, myType = "art")
+			entryData['token']          = self.g_myplex_accessToken
+
+			# write global xml data to entryData
+			globalData = (dict(tree.items()))
+			printl("globalData: " + str(globalData), self, "D")
+			entryData['globalData'] = globalData
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url))
+
+		printl("", self, "C")
+		return fullList
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getMusicByAlbum(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+		fullList = []
+
+		# get xml from url
+		tree, server = self.getXmlFromUrl(url)
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			entryData["viewMode"]				    = "ShowTracks"
+			entryData['server']				        = server
+			entryData['genre']				        = " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['thumb']				        = self.getImage(entry, server, myType = "thumb")
+			entryData['parentThumb']		        = self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']		        = self.getImage(entry, server, myType = "art")
+			entryData['token']                      = self.g_myplex_accessToken
+
+			# write global xml data to entryData
+			globalData = (dict(tree.items()))
+			printl("globalData: " + str(globalData), self, "D")
+			entryData['globalData'] = globalData
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url))
+
+		printl("", self, "C")
+		return fullList
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMusicTracks(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+		fullList = []
+
+		# get xml from url
+		tree, server = self.getXmlFromUrl(url)
+
+		# improveMe
+		# get global data - not needed now maybe later
+		# globalData = (dict(tree.items()))
+		# printl("globalData: " + str(globalData), self, "D")
+
+		# find coressponding tags in xml
+		entries = tree.findall('Track')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("trackData: " + str(entryData), self, "D")
+
+			# extend trackData with additional information that are not in etree
+			entryData["viewMode"]		= "play"
+			entryData['server']			= server
+			entryData['thumb']			= self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	= self.getImage(entry, server, myType = "art")
+			entryData['token']          = self.g_myplex_accessToken
+
+			# add part and media data to main data element
+			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
+
+			entryData["partDataArr"] = partDataArr
+			entryData["mediaDataArr"] = mediaDataArr
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url))
+
+		printl("", self, "C")
+		return fullList
+
+	#===========================================================================
+	#
+	#===========================================================================s
+	def getPartAndMediaDataFromEntry(self, entry):
+		printl("", self, "S")
+
+		for child in entry:
+			mediaDataArr = []
+			if child.tag == "Media":
+				mediaData = (dict(child.items()))
+				printl("mediaData: " + str(mediaData), self, "D")
+				mediaDataArr.append(mediaData)
+
+			for babies in child:
+				partDataArr = []
+				if babies.tag == "Part":
+					partData = (dict(babies.items()))
+					printl( "partData:" + str(partData), self, "D")
+					partDataArr.append(partData)
+
+		printl("", self, "C")
+		return mediaDataArr, partDataArr
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -778,31 +992,24 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def addGUIItem(self, url, details, extraData, context, seenVisu=None, folder=True ):
+	def buildListEntry(self, origUrl, details, extraData, context, seenVisu=None, folder=True ):
 		printl("", self, "S")
 
-		printl("url: " + str(url), self, "D")
+		printl("url: " + str(origUrl), self, "D")
 
-		if details.get('title','') == '':
-			printl('leaving now because title is empty', self, "I")
-			printl("", self, "C")
-			return
-			  
-		if (extraData.get('token',None) is None) and self.g_myplex_accessToken:
-			printl("no token found .. using g_myplex_accessToken", self, "D")
-			extraData['token']=self.g_myplex_accessToken
+		# extend data with token
+		extraData['token']=self.g_myplex_accessToken
 
-		#Create the URL to pass to the item
+		# create the URL to pass to the item
 		if ( not folder) and ( extraData['type'] =="Picture" ):
-			newUrl = str(url) + self.get_aTokenForServer()
+			newUrl = str(origUrl) + self.get_aTokenForServer()
 		else:
-			newUrl= str(url) + self.get_uTokenForServer()
+			newUrl= str(origUrl) + self.get_uTokenForServer()
 
 		printl("URL to use for listing: " + newUrl, self, "D")
 
 		content = (details.get('title',''), details, extraData, context, seenVisu, newUrl)
 
-		#printl("content = " + str(content), self, "D")
 		printl("", self, "C")
 		return content
 
@@ -1250,53 +1457,6 @@ class PlexLibrary(Screen):
 			self.locations += str(myFile) + "\n"
 			printl("", self, "C")
 			return False
-			
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getMoviesFromSection(self, url, tree=None ): 
-		printl("", self, "S")
-		printl("url: " + str(url), self, "D")
-		
-		fullList=[]
-		self.tmpAbc = []
-		self.tmpGenres = []
-		
-		server=self.getServerFromURL(url)
-		self.g_currentServer = server
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-		
-		#get the server name from the URL, which was passed via the on screen listing..
-		if tree is None:
-			#Get some XML and parse it
-			html=self.doRequest(url)
-			
-			if html is False:
-				printl("", self, "C")
-				return
-	
-			try:
-				tree = etree.fromstring(html)
-			except Exception:
-				self._showErrorOnTv("no xml as response", html)
-
-		#Find all the video tags, as they contain the data we need to link to a file.
-		movies=tree.findall('Video')
-		
-		for movie in movies:
-			#Right, add that link...and loop around for another entry
-			content = self.movieTag(url, server, movie)
-			fullList.append(content)
-		
-		directories = tree.findall('Directory')
-		
-		for directory in directories:
-			#Right, add that link...and loop around for another entry
-			content = self.directoryTag(url, server, directory)
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList, self.tmpAbc , self.tmpGenres
 
 	#=======================================================================
 	# 
@@ -1425,11 +1585,8 @@ class PlexLibrary(Screen):
 				details['viewState']		= "unseen"
 		
 			#Build any specific context menu entries
-			if self.g_skipcontext == "false":
-				context=self.buildContextMenu(url, extraData['ratingKey'], server)
-			else:
-				context=None
-			
+			contextMenu=self.buildContextMenu(url, extraData['ratingKey'], server)
+
 			# fill genre filter
 			if details['genre'] not in self.tmpGenres:
 				self.tmpGenres.append(details['genre'])
@@ -1446,7 +1603,7 @@ class PlexLibrary(Screen):
 				u='http://%s/%s'  % ( server, extraData['key'])
 				
 			#Right, add that link...and loop around for another entry
-			content = self.addGUIItem(u,details,extraData, context, seenVisu)
+			content = self.buildListEntry(u,details,extraData, contextMenu, seenVisu)
 
 			fullList.append(content)
 			
@@ -1556,12 +1713,9 @@ class PlexLibrary(Screen):
 	
 			url='http://%s%s' % ( server , extraData['key'])
 
-			if self.g_skipcontext == "false":
-				context=self.buildContextMenu(url, details['ratingKey'], server)
-			else:
-				context=None
-				
-			content = self.addGUIItem(url, details, extraData, context, seenVisu)
+			contextMenu=self.buildContextMenu(url, details['ratingKey'], server)
+
+			content = self.buildListEntry(url, details, extraData, contextMenu, seenVisu)
 
 			fullList.append(content)
 
@@ -1695,12 +1849,9 @@ class PlexLibrary(Screen):
 				extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
 		
 			#Build any specific context menu entries
-			if self.g_skipcontext == "false":
-				context=self.buildContextMenu(url, extraData['ratingKey'], server)
-			else:
-				context=None
-			
-			content = self.addGUIItem(url, details, extraData, context, seenVisu)
+			contextMenu = self.buildContextMenu(url, extraData['ratingKey'], server)
+
+			content = self.buildListEntry(url, details, extraData, contextMenu, seenVisu)
 
 			fullList.append(content)
 		
@@ -2230,7 +2381,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getTreeXmLTreeFromUrl(self, url):
+	def getXmlFromUrl(self, url):
 		printl("", self, "S")
 		#Get the URL and server name.  Get the XML and parse
 
@@ -2252,180 +2403,16 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getGenreList(self, entry):
+	def getListFromTag(self, entry, tagName):
 		printl("", self, "S")
-		tempGenre=[]
+		tempList = []
 
-		#Lets grab all the info we can quickly through either a dictionary, or assignment to a list
-		#We'll process it later
 		for child in entry:
-			if child.tag == "Genre" and self.g_skipmetadata == "false":
-				genreTag = child.get('tag')
-				tempGenre.append(genreTag)
+			if child.tag == tagName:
+				tempList.append(child.get('tag'))
 
 		printl("", self, "C")
-		return tempGenre
-
-	#===============================================================================
-	# 
-	#===============================================================================
-	def getMusicByArtist(self, url):
-		"""
-		Process artist XML and display data
-		@input: url of XML page, or existing tree of XML page
-		@return: List
-		"""
-		printl("", self, "S")
-		fullList = []
-
-		tree, server = self.getTreeXmLTreeFromUrl(url)
-
-		entries = tree.findall('Directory')
-
-		for entry in entries:
-			details = {}
-			details["viewMode"]			    = "ShowAlbums"
-			details['ratingKey']			= str(entry.get('ratingKey', '-')) # ok
-			details['summary']				= entry.get('summary','') # ok
-			details['title']				= entry.get('title','') # ok
-			details['index']				= entry.get('title','') # ok
-			details['server']				= server
-			details['genre']				= " / ".join(self.getGenreList(entry))
-
-			extraData = {}
-			extraData['type']				= entry.get('type','') # ok
-			extraData['thumb']				= self.getImage(entry, server, myType = "thumb") # ok
-			extraData['fanart_image']		= self.getImage(entry, server, myType = "art") # ok
-			extraData['key']				= entry.get('key','') # ok
-			extraData['addedAt']            = entry.get('addedAt','') # ok
-			extraData['updatedAt']          = entry.get('updatedAt','') # ok
-			extraData['lastViewedAt']       = entry.get('lastViewedAt','') # ok
-			extraData['token']				= self.g_myplex_accessToken
-
-			#Build any specific context menu entries
-			if self.g_skipcontext == "false":
-				context = self.buildContextMenu(url, details['ratingKey'], server)
-			else:
-				context = None
-
-			newUrl = 'http://%s/%s'  % ( server, extraData['key'])
-
-			content = self.addGUIItem(newUrl, details, extraData, context)
-
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList
-
-	#===============================================================================
-	# 
-	#===============================================================================
-	def getMusicByAlbum(self, url):
-		printl("", self, "S")
-		fullList = []
-
-		tree, server = self.getTreeXmLTreeFromUrl(url)
-
-		entries = tree.findall('Directory')
-
-		for entry in entries:
-			details = {}
-			details["viewMode"]				        = "ShowTracks"
-			details['ratingKey']			        = str(entry.get('ratingKey', '0')) # ok
-			details['allowSync']			        = entry.get('allowSync', '-') # ok
-			details['librarySectionID']		        = entry.get('librarySectionID', '-') # ok
-			details['summary']				        = entry.get('summary','-') # ok
-			details['title']				        = entry.get('title','-').encode('utf-8') # ok
-			details['parentTitle']			        = entry.get('title','-').encode('utf-8') # ok
-			details['year']					        = entry.get('year', '-') # ok
-			details['index']				        = entry.get('index','-') # ok
-			details['server']				        = server # ok
-			details['genre']				        = " / ".join(self.getGenreList(entry)) # ok
-
-			extraData = {}
-			extraData['type']				        = entry.get('type','-') # ok
-			extraData['parentRatingKey']	        = entry.get('parentRatingKey','-') # ok
-			extraData['thumb']				        = self.getImage(entry, server, myType = "thumb") # ok
-			extraData['parentThumb']		        = self.getImage(entry, server, myType = "thumb") # ok
-			extraData['fanart_image']		        = self.getImage(entry, server, myType = "art") # ok
-			extraData['key']				        = entry.get('key','-') # ok
-			extraData['parentKey']			        = entry.get('parentKey','-') # ok
-			extraData['leafCount']			        = entry.get('leafCount','-') # ok
-			extraData['originallyAvailableAt']      = entry.get('originallyAvailableAt','-') # ok
-			extraData['addedAt']                    = entry.get('addedAt','-') # ok
-			extraData['updatedAt']                  = entry.get('updatedAt','-') # ok
-			extraData['lastViewedAt']               = entry.get('lastViewedAt','-') # ok
-			extraData['token']				        = self.g_myplex_accessToken
-
-			#Build any specific context menu entries
-			if self.g_skipcontext == "false":
-				context = self.buildContextMenu(url, details['ratingKey'], server)
-			else:
-				context = None
-
-			newUrl = 'http://%s/%s'  % ( server, extraData['key'])
-
-			content = self.addGUIItem(newUrl, details, extraData, context)
-
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getMusicTracks(self, url ):
-		printl("", self, "S")
-
-		fullList = []
-					
-		tree, server = self.getTreeXmLTreeFromUrl(url)
-
-		entries = tree.findall('Track')
-
-		for entry in entries:
-			partDetails = None
-			for child in entry:
-				for babies in child:
-					if babies.tag == "Part":
-						partDetails=(dict(babies.items()))
-			printl( "Part is " + str(partDetails), self, "I")
-
-			details = {}
-			details["viewMode"]			    = "play"
-			details['ratingKey']			= str(entry.get('ratingKey', 0)) # ok
-			details['summary']				= entry.get('summary','') # ok
-			details['title']				= entry.get('title','') # ok
-			details['index']				= entry.get('title','') # ok
-			details['server']				= server
-			details['genre']				= " / ".join(self.getGenreList(entry))
-
-			extraData = {}
-			extraData['type']				= entry.get('type','') # ok
-			extraData['thumb']				= self.getImage(entry, server, myType = "thumb") # ok
-			extraData['fanart_image']		= self.getImage(entry, server, myType = "art") # ok
-			extraData['key']				= entry.get('key','') # ok
-			extraData['addedAt']            = entry.get('addedAt','') # ok
-			extraData['updatedAt']          = entry.get('updatedAt','') # ok
-			extraData['lastViewedAt']       = entry.get('lastViewedAt','') # ok
-			extraData['token']				= self.g_myplex_accessToken
-
-			#Build any specific context menu entries
-			if self.g_skipcontext == "false":
-				context = self.buildContextMenu(url, details['ratingKey'], server)
-			else:
-				context = None
-
-			#If we are streaming, then get the virtual location
-			url=self.mediaType(partDetails, server)
-
-			content = self.addGUIItem(url, details, extraData, context)
-
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList
+		return tempList
 
 	#===============================================================================
 	# 
@@ -2517,16 +2504,13 @@ class PlexLibrary(Screen):
 			extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
 	
 		#Build any specific context menu entries
-		if self.g_skipcontext == "false":
-			context=self.buildContextMenu(url, extraData['ratingKey'], server)
-		else:
-			context=None
-		
+		contextMenu=self.buildContextMenu(url, extraData['ratingKey'], server)
+
 		# fill title filter
 		if details["title"].upper() not in self.tmpAbc:
 			self.tmpAbc.append(details["title"].upper())
 			
-		guiItem = self.addGUIItem(url, details, extraData, context, seenVisu, folder=False)
+		guiItem = self.buildListEntry(url, details, extraData, contextMenu, seenVisu, folder=False)
 		
 		printl("", self, "C")   
 		return guiItem
@@ -2547,7 +2531,7 @@ class PlexLibrary(Screen):
 		extraData['key']	= directory.get('key','')
 		extraData['type']	= "directory"
 
-		guiItem = self.addGUIItem(url, details, extraData, context = None, seenVisu = None, folder=False)
+		guiItem = self.buildListEntry(url, details, extraData, context = None, seenVisu = None, folder=False)
 		
 		printl("", self, "C")   
 		return guiItem
@@ -3027,3 +3011,67 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return fullURL
+
+#===============================================================================
+# HELPER
+#===============================================================================
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getFullListEntry(self, entryData, url, seenVisu = None, isFilter = False):
+		printl("", self, "S")
+
+		if not isFilter:
+			# build specific context menu entries
+			contextMenu = self.buildContextMenu(url, entryData['ratingKey'], entryData['server'])
+		else:
+			contextMenu = None
+
+		# build url for playable content
+		tmpUrl = 'http://%s/%s'  % ( entryData['server'], entryData['key'])
+
+		# enhance url for further usage e.g. myPlex
+		if entryData['type'] =="Picture":
+			newUrl = str(tmpUrl) + self.get_aTokenForServer()
+		else:
+			newUrl = str(tmpUrl) + self.get_uTokenForServer()
+		printl("newUrl: " + str(newUrl), self, "D")
+
+		# we send trackData twice due to compatibility for now. later it will be removed
+		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, seenVisu, newUrl)
+
+		printl("", self, "C")
+		return content
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getVisualisationFromCount(self, entryData):
+		printl("", self, "S")
+
+		# because it could be that this tags are not existing we write them via get to set them to zero if they dont
+		viewCount = int(entryData.get('viewCount', 0))
+		viewOffset = int(entryData.get('viewOffset', 0))
+
+		# improveMe: this should be done outside maybe in DP_View
+		if viewCount > 0:
+			seenVisu = "seen"
+
+		elif viewCount >= 0 and viewOffset > 0:
+			seenVisu = "started"
+
+		else:
+			seenVisu = "unseen"
+
+		printl("", self, "C")
+		return seenVisu
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getServerConfig(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.g_serverConfig
