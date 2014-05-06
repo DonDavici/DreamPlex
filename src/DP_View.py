@@ -988,6 +988,7 @@ class DP_View(Screen, NumericalTextInput):
 			details		= selection[1]
 			extraData	= selection[2]
 			#image		= selection[3]
+			urlTest = selection[5]
 
 			#details
 			viewMode	= details['viewMode']
@@ -1011,7 +1012,7 @@ class DP_View(Screen, NumericalTextInput):
 				if url_path[0:1] != "/":
 					separator = "/"
 
-				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentSeasonsParams = params
 				self.currentShowIndex = self["listview"].getIndex()
@@ -1022,7 +1023,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.viewStep += 1
 				printl("viewMode -> ShowEpisodes", self, "I")
 
-				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentEpisodesParams = params
 				self.currentSeasonIndex = self["listview"].getIndex()
@@ -1033,7 +1034,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.viewStep += 1
 				printl("viewMode -> ShowAlbums", self, "I")
 
-				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentEpisodesParams = params
 				self.currentArtistIndex = self["listview"].getIndex()
@@ -1044,7 +1045,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.viewStep += 1
 				printl("viewMode -> ShowTracks", self, "I")
 
-				params = {"viewMode": viewMode, "url": "http://" + server + separator + url_path}
+				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentEpisodesParams = params
 				self.currentAlbumIndex = self["listview"].getIndex()
@@ -1075,10 +1076,10 @@ class DP_View(Screen, NumericalTextInput):
 
 				self.playSelectedMedia()
 
-			elif viewMode == "directory":
-				printl("viewMode -> directory", self, "I")
+			elif viewMode == "ShowDirectory":
+				printl("viewMode -> ShowDirectory", self, "I")
 
-				params = {"viewMode": viewMode, "id": url_path}
+				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentMovieParams = params
 				self.currentMovieIndex = self["listview"].getIndex()
@@ -1372,11 +1373,10 @@ class DP_View(Screen, NumericalTextInput):
 
 		if self.selection is not None:
 			printl("selection: " + str(self.selection), self, "D")
-			viewMode = self.selection[1]['viewMode']
-			self.selection = self.selection
+			tagType = self.selection[1]['tagType']
 
 			self.isDirectory = False
-			if viewMode == "directory":
+			if tagType == "Directory":
 				self.isDirectory = True
 
 		self._refresh()

@@ -224,16 +224,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
-					params = selection[3]
-					printl("params: " + str(params), self, "D")
-
-					self.s_url = params.get('t_url', "notSet")
-					self.s_mode = params.get('t_mode', "notSet")
-					self.s_final = params.get('t_final', "notSet")
-					self.s_source = params.get('t_source', "notSet")
-					self.s_uuid = params.get('t_uuid', "notSet")
-
-					self.getFilterData()
+					self.getFilterData(selection[3])
 
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
@@ -552,11 +543,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 		summerize = config.plugins.dreamplex.summerizeSections.value
 
-		if summerize == True and filterBy is None:
+		if summerize and filterBy is None:
 			serverData = self.getSectionTypes()
 			self.g_sectionDataMenu = serverData
 		else:
-			serverData = self.plexInstance.displaySections(filterBy)
+			serverData = self.plexInstance.getAllSections(filterBy)
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
 		self["menu"].setList(serverData)
@@ -567,9 +558,9 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getFilterData(self):
+	def getFilterData(self, entryData):
 		printl("", self, "S")
-		menuData = self.plexInstance.getSectionFilter(self.s_url, self.s_mode, self.s_final, self.s_source, self.s_uuid )
+		menuData = self.plexInstance.getSectionFilter(entryData)
 
 		self["menu"].setList(menuData)
 		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
@@ -584,21 +575,21 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	def getSectionTypes(self):
 		printl("", self, "S")
 
-		mainMenuList = []
-		params = {}
-		mainMenuList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", params))
-		mainMenuList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,params))
-		mainMenuList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", params))
+		fullList = []
+		entryData = {}
+		fullList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", entryData))
+		fullList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,entryData))
+		fullList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", entryData))
 
 		extend = False # SWITCH
 
 		if extend:
-			mainMenuList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", params))
-			mainMenuList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", params))
+			fullList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", entryData))
+			fullList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", entryData))
 
-		printl("mainMenuList: " + str(mainMenuList), self, "D")
+		printl("mainMenuList: " + str(fullList), self, "D")
 		printl("", self, "C")
-		return mainMenuList
+		return fullList
 #===============================================================================
 # HELPER
 #===============================================================================

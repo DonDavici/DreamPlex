@@ -602,7 +602,7 @@ class BackgroundMediaSyncer(Thread):
 		self.messagePump.send(0)
 
 		# get sections from server
-		self.sectionList = self.plexInstance.displaySections()
+		self.sectionList = self.plexInstance.getAllSections()
 		printl("sectionList: "+ str(self.sectionList),self, "D")
 
 		# get servername
