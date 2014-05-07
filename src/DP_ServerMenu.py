@@ -243,35 +243,29 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				self.mediaType = selection[2]
 				printl("mediaType: " + str(self.mediaType), self, "D")
 
-				params = selection[3]
-				printl("params: " + str(params), self, "D")
-
-				# set main data
-				self.s_url = params.get('t_url', "notSet")
-				self.uuid = params.get('t_uuid', "notSet")
-				self.source = params.get('t_source', "notSet")
-				self.viewGroup = params.get('t_viewGroup', "notSet")
+				entryData = selection[3]
+				printl("entryData: " + str(entryData), self, "D")
 
 				# set additional data mediaType specific
 				if self.mediaType == "musicEntry":
 					if selection[0] == "All Artists":
-						self.librarySteps = 3
+						entryData["librarySteps"] = 3
 					else:
-						self.librarySteps = 2
+						entryData["librarySteps"] = 2
 
 				elif self.mediaType == "showEntry":
-					self.showEpisodesDirectly = params.get('t_showEpisodesDirectly', False)
+					self.showEpisodesDirectly = entryData.get('t_showEpisodesDirectly', False)
 
 				elif self.mediaType == "movieEntry":
 					pass
 
-				isSearchFilter = params.get('isSearchFilter', "notSet")
+				isSearchFilter = entryData.get('isSearchFilter', "notSet")
 				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
 				if isSearchFilter == "True" or isSearchFilter and isSearchFilter != "notSet":
 						printl("i am here: " + str(isSearchFilter), self, "D")
 						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
 				else:
-					self.executeSelectedEntry()
+					self.executeSelectedEntry(entryData)
 
 			self.refreshMenu(0)
 			printl("", self, "C")
@@ -294,25 +288,16 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	#===========================================================================
 	# this function starts DP_Lib...
 	#===========================================================================
-	def executeSelectedEntry(self):
+	def executeSelectedEntry(self, entryData):
 		printl("", self, "S")
 		printl("self.s_url: " + str(self.s_url), self, "D")
 
 		if self.selectedEntry.start is not None:
-			kwargs = {"url": self.s_url, "uuid": self.uuid, "source": self.source , "viewGroup": self.viewGroup}
-
-			if self.mediaType == "musicEntry":
-				kwargs["librarySteps"] = self.librarySteps
-
-			elif self.mediaType == "showEntry":
-				kwargs["showEpisodesDirectly"] = self.showEpisodesDirectly
-
-			elif self.mediaType == "movieEntry":
-				pass
-
-			self.session.open(self.selectedEntry.start, **kwargs)
+			printl("we are startable ...", self, "D")
+			self.session.open(self.selectedEntry.start, entryData)
 
 		elif self.selectedEntry.fnc is not None:
+			printl("we are a function ...", self, "D")
 			self.selectedEntry.fnc(self.session)
 
 		if config.plugins.dreamplex.showFilter.value:

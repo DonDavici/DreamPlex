@@ -269,7 +269,7 @@ class PlexLibrary(Screen):
 
 			# add specific data to entryData if needed
 			if self.serverConfig_connectionType == "2": # MYPLEX
-				entryData["address"] = entryData.get('address') + ":" + entryData.get('port'),
+				entryData["address"] = entryData['address'] + ":" + entryData['port']
 
 				# we have to do this because via myPlex there could be diffrent servers with other tokens
 				if str(entryData.get('address')) not in self.g_myplex_accessToken:
@@ -285,7 +285,7 @@ class PlexLibrary(Screen):
 			if not self.g_useFilterSections:
 				entryData["path"] += '/all'
 
-			entryData["address"] = self.serverConfig_Name.encode()
+			entryData["serverName"] = self.serverConfig_Name.encode()
 			entryData["sectionUrl"] = self.getSectionUrl(entryData['address'], entryData['path']) # former t_url
 
 			# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
@@ -345,6 +345,57 @@ class PlexLibrary(Screen):
 			self.saveSectionCache()
 
 		printl("fullList: " + str(fullList), self, "D")
+		printl("", self, "C")
+		return fullList
+
+	#=============================================================================
+	#
+	#=============================================================================
+	def getSectionFilter(self, incomingEntryData):
+		printl("", self, "S")
+		printl("incomingEntryData: " + str(incomingEntryData), self, "D")
+
+		fullList = []
+		# get xml from url
+		tree = self.getXmlTreeFromUrl(incomingEntryData["sectionUrl"])
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			entryData["hasSecondaryTag"] = entryData.get("secondary", False)
+			entryData["hasPromptTag"] = entryData.get("prompt", False)
+
+
+			if not entryData["hasSecondaryTag"]: #means that the next answer is a filter
+				entryData["contentUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
+
+				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
+					if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
+						entryData["showEpisodesDirectly"] = True
+
+					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+
+				elif incomingEntryData["type"] == 'movie':
+					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
+
+				elif incomingEntryData["type"] == 'artist':
+					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", entryData))
+
+				# elif incomingEntryData["type"] == 'photo':
+				# 	printl( "_MODE_PHOTOS detected", self, "D")
+
+				else:
+					raise Exception("we should not be here")
+			else:
+				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
+				entryData["type"] = incomingEntryData["type"]
+				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
+
+		#printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return fullList
 
@@ -770,132 +821,7 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return tree
 
-	#=============================================================================
-	#
-	#=============================================================================
-	def getSectionFilter(self, entryData):
-		printl("", self, "S")
-		printl("p_url: " + str(p_url), self, "I")
-		printl("p_mode: " + str(p_mode), self, "I")
-		printl("p_final: " + str(p_final), self, "I")
-		printl("p_source: " + str(p_source), self, "I")
-		printl("p_uuid: " + str(p_uuid), self, "I")
 
-		fullList = []
-
-		server=self.getServerFromURL(p_url)
-		self.g_currentServer = server
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-
-		tree = self.getXmlTreeFromUrl(entryData["sectionUrl"])
-
-		tree = None
-		try:
-			tree = etree.fromstring(html)
-		except Exception:
-			self._showErrorOnTv(_("no xml as response - tree"), html)
-
-		directories = ""
-		viewGroup = ""
-
-		try:
-			directories = tree.getiterator("Directory")
-		except Exception:
-			self._showErrorOnTv(_("no xml as response - directory"), html)
-
-		try:
-			viewGroup = str(tree.get("viewGroup"))
-		except Exception:
-			self._showErrorOnTv(_("no xml as response - viewGroup"), html)
-
-		printl("directories: " + str(directories), self, "D")
-		printl("viewGroup: " + str(viewGroup),self, "D")
-
-		viewGroupTypes = { "all":p_mode,
-						 "unwatched":p_mode,
-						 "newest":p_mode,
-						 "recentlyAdded":p_mode,
-						 "recentlyViewed":p_mode,
-						 "onDeck":p_mode,
-						 "folder":p_mode,
-						 "recentlyViewedShows":p_mode,
-						 "collection": "secondary",
-						 "genre":"secondary",
-						 "year":"secondary",
-						 "decade":"secondary",
-						 "director":"secondary",
-						 "actor":"secondary",
-						 "country":"secondary",
-						 "contentRating":"secondary",
-						 "rating":"secondary",
-						 "resolution":"secondary",
-						 "firstCharacter":"secondary"
-					  }
-
-		for sections in directories:
-			isSearchFilter = False
-			#sample = <Directory prompt="Search Movies - Teens" search="1" key="search?type=1" title="Search..." />
-			prompt = str(sections.get('prompt', 'noSearch'))
-
-			if prompt != "noSearch": # prompt for search string
-				isSearchFilter = True
-				t_mode = str(p_mode)
-
-			elif p_final:
-				printl("final", self, "D" )
-				t_mode = p_mode
-
-			else:
-				t_mode = viewGroupTypes[sections.get('key')]
-
-			t_viewGroup = sections.get('key', "not set")
-			t_url = p_url + "/" + str(sections.get('key'))
-
-			printl("t_url: " + str(t_url), self, "D")
-			printl("t_mode: " + str(t_mode),self, "D")
-			printl("t_viewGroup: " + str(t_viewGroup),self, "D")
-			printl("isSearchFilter: " + str(isSearchFilter), self, "D")
-			printl("t_source: " + str(p_source), self, "D")
-			printl("t_uuid: " + str(p_uuid), self, "D")
-
-			params = {}
-			params["t_url"] = t_url
-			params["t_mode"] = str(p_mode)
-			params["t_viewGroup"] = str(t_viewGroup)
-			params["isSearchFilter"] =isSearchFilter
-			params["t_source"] = p_source
-			params["t_uuid"] = p_uuid
-
-			if t_mode != "secondary": #means that the next answer is again a filter cirteria
-
-				if t_mode == 'show' or t_mode == 'episode':
-					printl( "_MODE_TVSHOWS detected", self, "D")
-					if str(sections.get('key')) == "onDeck" or str(sections.get('key')) == "recentlyViewed" or str(sections.get('key')) == "newest" or str(sections.get('key')) == "recentlyAdded":
-						params["t_showEpisodesDirectly"] = True
-
-					fullList.append((_(sections.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", params))
-
-				elif t_mode == 'movie':
-					printl( "_MODE_MOVIES detected", self, "D")
-					fullList.append((_(sections.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", params))
-
-				elif t_mode == 'artist':
-					printl( "_MODE_ARTISTS detected", self, "D")
-					fullList.append((_(sections.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", params))
-
-				elif t_mode == 'photo':
-					printl( "_MODE_PHOTOS detected", self, "DW")
-
-				else:
-					printl("Ignoring section " + str(sections.get('title').encode('utf-8')) + " of type " + str(sections.get('type')) + " as unable to process", self, "I")
-					continue
-			else:
-				params["t_final"] = True
-				fullList.append((_(sections.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", params))
-
-		#printl("mainMenuList: " + str(mainMenuList), self, "D")
-		printl("", self, "C")
-		return fullList
 
 	#===============================================================================
 	#

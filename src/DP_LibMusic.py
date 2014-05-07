@@ -38,16 +38,12 @@ class DP_LibMusic(DP_LibMain):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, url=None, uuid=None, source=None, viewGroup=None, librarySteps=None):
+	def __init__(self, session, entryData):
 		printl ("", self, "S")
 
 		DP_LibMain.__init__(self, session, "music")
 
-		self.g_url = url
-		self.g_uuid = uuid
-		self.g_source = source
-		self.g_viewGroup = viewGroup
-		self.g_librarySteps = librarySteps
+		self.entryData = entryData
 
 		printl ("", self, "C")
 

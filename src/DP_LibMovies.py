@@ -42,16 +42,13 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, uuid=None, source=None, viewGroup=None):
+	def __init__(self, session, entryData):
 		printl ("", self, "S")
 		
 		DP_LibMain.__init__(self, session, "movies")
-		
-		self.g_url = url
-		self.g_uuid = uuid
-		self.g_source = source
-		self.g_viewGroup = viewGroup
-		
+
+		self.entryData = entryData
+
 		printl ("", self, "C")
 
 	#===========================================================================
@@ -63,7 +60,7 @@ class DP_LibMovies(DP_LibMain):
 		# coming from DP_View _load()
 		printl("params for me: " + str(params), self, "D")
 
-		url = self.g_url
+		url = self.entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
 		
 		# sort
