@@ -54,6 +54,34 @@
         <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
+        <!-- DPS_InputBox -->
+    <screen name="DPS_InputBox" position="0,0" size="1280,720" title=" " backgroundColor="#70000000" flags="wfNoBorder">
+        <!-- background -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/background-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+
+        <!-- title -->
+        <widget source="Title" text="" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
+
+        <!-- menu frame -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/main_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
+
+        <widget name="text" zPosition="10" position="100,295" transparent="1" size="580,30" font="Saint; 18"  halign="left"/>
+        <widget name="input" zPosition="10" position="400,295" transparent="1" size="580,25" font="Saint; 18"/>
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
+            <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
+            <convert type="ClockToText">Date</convert>
+        </widget>
+
+        <!-- functions -->
+
+        <!-- exit -->
+        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
+    </screen>
+
     <!-- DPS_About -->
     <screen name="DPS_About" position="0,0" size="1280,720" title=" " backgroundColor="#70000000" flags="wfNoBorder">
         <!-- background -->
@@ -77,7 +105,7 @@
         </widget>
 
         <!-- functions -->
-
+        
         <!-- exit -->
         <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
@@ -320,6 +348,10 @@
         </widget>
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/picons/menu_shows.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
             <convert type="MenuEntryCompare">showEntry</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
+                <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/picons/menu_music.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
+            <convert type="MenuEntryCompare">musicEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
 

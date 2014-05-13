@@ -74,12 +74,18 @@ class DPH_HorizontalMenu(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def refreshOrientationHorMenu(self, value):
+	def refreshOrientationHorMenu(self, value=None):
 		printl("", self, "S")
+		printl("value: " + str(value), self, "D")
 
-		self.refreshMenu(value)
+		if value == 1:
+			self["menu"].selectNext()
+		elif value == -1:
+			self["menu"].selectPrevious()
+
 		currentIndex = self["menu"].index
 		content = self["menu"].list
+		printl("content " + str(content), self, "D")
 		count = len(content)
 
 		self[self.translatePositionToName(0)].setText(content[currentIndex][0])
@@ -89,13 +95,20 @@ class DPH_HorizontalMenu(object):
 			if targetIndex < count:
 				self[self.translatePositionToName(+i)].setText(content[targetIndex][0])
 			else:
-				self[self.translatePositionToName(+i)].setText(content[targetIndex - count][0])
+				firstResult = targetIndex - count
+				printl("firstResult: " + str(firstResult), self, "D")
+				if firstResult >= count:
+					firstResult = currentIndex
+
+				self[self.translatePositionToName(+i)].setText(content[firstResult][0])
 
 			targetIndex = currentIndex - i
 			if targetIndex >= 0:
 				self[self.translatePositionToName(-i)].setText(content[targetIndex][0])
 			else:
-				self[self.translatePositionToName(-i)].setText(content[count + targetIndex][0])
+				secondResult = count + targetIndex
+				printl("secondResult: " + str(secondResult), self, "D")
+				self[self.translatePositionToName(-i)].setText(content[secondResult][0])
 
 		printl("", self, "C")
 		return True

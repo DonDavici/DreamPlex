@@ -34,7 +34,6 @@ from Components.Label import Label
 from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-from Screens.InputBox import InputBox
 
 from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from __plugin__ import Plugin
@@ -43,6 +42,7 @@ from __init__ import _ # _ is translation
 from DPH_WOL import wake_on_lan
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
+from DP_HelperScreens import DPS_InputBox
 
 #===============================================================================
 #
@@ -205,38 +205,23 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 					printl("found Plugin.MENU_MOVIES", self, "D")
 					self.getServerData("movies")
 
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
-
 				elif self.selectedEntry == Plugin.MENU_TVSHOWS:
 					printl("found Plugin.MENU_TVSHOWS", self, "D")
 					self.getServerData("tvshow")
-
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
 
 				elif self.selectedEntry == Plugin.MENU_MUSIC:
 					printl("found Plugin.MENU_MUSIC", self, "D")
 					self.getServerData("music")
 
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
-
 				elif self.selectedEntry == Plugin.MENU_FILTER:
 					printl("found Plugin.MENU_FILTER", self, "D")
 					self.getFilterData(selection[3])
 
-					if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
-
-			elif selection[1] == "getMusicSections":
-				mainMenuList = self.plexInstance.getMusicSections(selection)
-
-				self["menu"].setList(mainMenuList)
-				self.refreshMenu(0)
-
-				if self.g_horizontal_menu:
-						self.refreshOrientationHorMenu(0)
+				# elif self.selectedEntry == Plugin.MENU_FILTER_VERT:
+				# 	printl("found Plugin.MENU_FILTER_VERT", self, "D")
+				# 	self.getFilterData(selection[3])
+				#
+				# 	self.session.open(DPS_ServerMenu, self.g_serverConfig)
 
 			else:
 				printl("selected entry is executable", self, "D")
@@ -259,29 +244,29 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				elif self.mediaType == "movieEntry":
 					pass
 
-				isSearchFilter = entryData.get('isSearchFilter', "notSet")
-				printl("isSearchFilter: " + str(isSearchFilter), self, "D")
-				if isSearchFilter == "True" or isSearchFilter and isSearchFilter != "notSet":
-						printl("i am here: " + str(isSearchFilter), self, "D")
-						self.session.openWithCallback(self.addSearchString, InputBox, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT)
+				hasPromptTag = entryData.get('hasPromptTag', False)
+				printl("hasPromptTag: " + str(hasPromptTag), self, "D")
+				if hasPromptTag:
+					self.session.openWithCallback(self.addSearchString, DPS_InputBox, entryData, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT )
 				else:
 					self.executeSelectedEntry(entryData)
 
-			self.refreshMenu(0)
+			self.refreshMenu()
 			printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def addSearchString(self, searchString):
+	def addSearchString(self, entryData, searchString = None):
 		printl("", self, "S")
-		# sample: http://192.168.45.190:32400/search?type=1&query=fringe
-		serverUrl = self.plexInstance.getServerFromURL(self.s_url)
+		printl("entryData: " + str(entryData), self, "D")
+		if searchString is not None:
+			searchUrl = entryData[0]["contentUrl"] + "&query=" + searchString
+			printl("searchUrl: " + str(searchUrl), self, "D")
 
-		if searchString is not "" and searchString is not None:
-			self.s_url = serverUrl + "/search?type=1&query=" + searchString
+			entryData[0]["contentUrl"] = searchUrl
 
-		self.executeSelectedEntry()
+		self.executeSelectedEntry(entryData[0])
 
 		printl("", self, "C")
 
@@ -435,13 +420,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	#===========================================================================
 	#
 	#===========================================================================
-	def refreshMenu(self, value):
+	def refreshMenu(self):
 		printl("", self, "S")
 
-		if value == 1:
-			self["menu"].selectNext()
-		elif value == -1:
-			self["menu"].selectPrevious()
+		if self.g_horizontal_menu:
+			self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
 
@@ -505,7 +488,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 			self.sleepNow()
 		else:
 			# User said 'no'
-			self.refreshMenu(0)
+			self.refreshMenu()
 
 		printl("", self, "C")
 
@@ -536,7 +519,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
 		self["menu"].setList(serverData)
-		self.refreshMenu(0)
+		self.refreshMenu()
 
 		printl("", self, "C")
 
@@ -547,12 +530,15 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		printl("", self, "S")
 		menuData = self.plexInstance.getSectionFilter(entryData)
 
-		self["menu"].setList(menuData)
-		self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
-		self.refreshMenu(0)
+		if not menuData:
+			text = "You have no data in this section!"
+			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+		else:
+			self["menu"].setList(menuData)
+			self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
+			self.refreshMenu()
 
 		printl("", self, "S")
-
 
 	#===========================================================================
 	#
@@ -575,16 +561,3 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		printl("mainMenuList: " + str(fullList), self, "D")
 		printl("", self, "C")
 		return fullList
-#===============================================================================
-# HELPER
-#===============================================================================
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def Error(self, error):
-		printl("", self, "S")
-
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s" % error, MessageBox.TYPE_INFO)
-
-		printl("", self, "C")

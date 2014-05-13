@@ -368,9 +368,21 @@ class PlexLibrary(Screen):
 
 			entryData["hasSecondaryTag"] = entryData.get("secondary", False)
 			entryData["hasPromptTag"] = entryData.get("prompt", False)
+			#entryData: {'search': '1', 'prompt': 'Search Movies - Blockbuster', 'key': 'search?type=1', 'title': 'Search...'}
 
+			if entryData["hasSecondaryTag"]: #means that the next answer is a filter
+				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
+				entryData["type"] = incomingEntryData["type"]
 
-			if not entryData["hasSecondaryTag"]: #means that the next answer is a filter
+				# if entryData["key"] == "Director":
+				# 	function = Plugin.MENU_FILTER_VERT
+				# else:
+				# 	function = Plugin.MENU_FILTER
+				function = Plugin.MENU_FILTER
+
+				fullList.append((_(entryData.get('title').encode('utf-8')), function, "showFilter", entryData))
+
+			else:
 				entryData["contentUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
 
 				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
@@ -390,12 +402,7 @@ class PlexLibrary(Screen):
 
 				else:
 					raise Exception("we should not be here")
-			else:
-				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
-				entryData["type"] = incomingEntryData["type"]
-				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
 
-		#printl("mainMenuList: " + str(mainMenuList), self, "D")
 		printl("", self, "C")
 		return fullList
 
@@ -2190,32 +2197,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")   
 		return False
 
-	#===========================================================================
-	# This function is used if we do not use filters of plex
-	# config.plugins.dreamplex.showFilter.value == False
-	#===========================================================================
-	def getMusicSections(self, selection):
-		printl("", self, "S")
-
-		mainMenuList = []
-		plugin = selection[2] #e.g. Plugin.MENU_MOVIES
-
-		# ARTISTS
-		params = copy.deepcopy(selection[4])
-		url = params['t_url']
-		params['t_url'] = url + "?type=8"
-		mainMenuList.append((_("by Artists"), plugin, "musicEntry", params))
-
-		#ALBUMS
-		params = copy.deepcopy(selection[4])
-		params['t_url'] = url + "?type=9"
-		mainMenuList.append((_("by Albums"), plugin, "musicEntry", params))
-
-		printl("mainMenuList: " + str(mainMenuList), self, "D")
-
-		printl("", self, "C")
-		return mainMenuList
-
 	#===============================================================================
 	#
 	#===============================================================================
@@ -2861,15 +2842,14 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 
 		if not isDirectory:
-			# build url for playable content
-			tmpUrl = 'http://%s/%s'  % ( entryData['server'], entryData['key'])
-
 			# build specific context menu entries
 			contextMenu = self.buildContextMenu(url, entryData['ratingKey'], entryData['server'])
 		else:
-			tmpUrl = url + '/%s' % (entryData['key'])
-
+			# directories have no contextMenu
 			contextMenu = None
+
+		# build url for playable content
+		tmpUrl = 'http://%s%s'  % ( entryData['server'], entryData['key'])
 
 		# enhance url for further usage e.g. myPlex
 		if entryData['tagType'] == "Picture":
@@ -2878,7 +2858,7 @@ class PlexLibrary(Screen):
 			newUrl = str(tmpUrl) + self.get_uTokenForServer()
 		printl("newUrl: " + str(newUrl), self, "D")
 
-		# we send trackData twice due to compatibility for now. later it will be removed
+		# we send entryData twice due to compatibility for now. later it will be removed
 		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, seenVisu, newUrl)
 
 		printl("", self, "C")

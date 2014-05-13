@@ -1002,16 +1002,18 @@ class DP_View(Screen, NumericalTextInput):
 			url_path	= extraData['key']
 			printl("url_path: " +str(url_path), self, "D")
 
-			separator = ""
+			if self.isDirectory:
+				printl("isDirectory: " + str(self.isDirectory), self, "D")
+				self.currentMovieIndex = self.listViewList
+				self.onLeaveSelectKeyValuePair = "backToMovies"
+				library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(self.selection[5])
+				printl("library: " + str(library), self, "D")
+				self.listViewList = library
+				self.updateList()
 
-			if viewMode == "ShowSeasons":
+			elif viewMode == "ShowSeasons":
 				self.viewStep += 1
 				printl("viewMode -> ShowSeasons", self, "I")
-
-
-				if url_path[0:1] != "/":
-					separator = "/"
-
 				params = {"viewMode": viewMode, "url": urlTest}
 
 				self.currentSeasonsParams = params
@@ -1155,8 +1157,10 @@ class DP_View(Screen, NumericalTextInput):
 			self["listview"].setIndex(self.currentShowIndex)
 
 		elif selectKeyValuePair == "backToMovies":
-			self._load(ignoreSort=True)
-			self["listview"].setIndex(self.currentMovieIndex)
+			# todo seems to be dirty here at all
+			self.listViewList = self.currentMovieIndex
+			self.updateList()
+			self.onLeaveSelectKeyValuePair = None
 
 		elif selectKeyValuePair == "backToArtists":
 			self._load(ignoreSort=True)
@@ -1407,6 +1411,8 @@ class DP_View(Screen, NumericalTextInput):
 			self.context		= self.selection[3]
 
 			if self.isDirectory:
+				# because we are a dirctory we have to do nothing here
+				# processing the normal way would lead to greenscreen
 				pass
 			else:
 				# lets get all data we need to show the needed pictures
