@@ -956,21 +956,21 @@ class DP_View(Screen, NumericalTextInput):
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
 		for listViewEntry in listViewList:
-			printl("seenVisu location: " + str(listViewEntry[4]), self, "D")
+			printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 			if listViewEntry is not None:
-				if 'seen' == str(listViewEntry[4]):
+				if 'seen' == str(listViewEntry[3]):
 					viewState = self.seenPic
 
-				elif 'started' == str(listViewEntry[4]):
+				elif 'started' == str(listViewEntry[3]):
 					viewState = self.startedPic
 
-				elif 'unseen' == str(listViewEntry[4]):
+				elif 'unseen' == str(listViewEntry[3]):
 					viewState = self.unseenPic
 
 				else:
 					viewState = undefinedIcon
 
-				content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], listViewEntry[3], viewState ,listViewEntry[5])
+				content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], viewState ,listViewEntry[4])
 				newList.append(content)
 
 		printl("", self, "C")

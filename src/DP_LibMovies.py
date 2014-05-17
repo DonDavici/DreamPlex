@@ -70,6 +70,7 @@ class DP_LibMovies(DP_LibMain):
 			returnTo = "backToMovies"
 
 		library = Singleton().getPlexInstance().getMoviesFromSection(url)
+
 		printl ("", self, "C")
 		return library, returnTo
 
