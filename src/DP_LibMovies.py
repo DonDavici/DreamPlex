@@ -59,101 +59,18 @@ class DP_LibMovies(DP_LibMain):
 
 		# coming from DP_View _load()
 		printl("params for me: " + str(params), self, "D")
-
+		returnTo = None
 		url = self.entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
-		
-		# sort
-		sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
-		
-		myFilter = [("None", (None, False), ("", )), ]
-		
-		# filter seen unseen
-		#filter.append(("Seen", ("viewState", "seen", ), ("", )))
-		
-		# filter genres
-		#if len(tmpGenres) > 0:
-			#tmpGenres.sort()
-			#filter.append(("Genre", ("genre", True), tmpGenres))
-		
+
 		if params["viewMode"] is None:
 			printl ("viewMode = None", self, "D")
-			if config.plugins.dreamplex.useCache.value:
-				#noinspection PyAttributeOutsideInit
-				self.moviePickle = "%s%s_%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "movieSection", self.g_uuid, self.g_viewGroup)
-
-				# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
-				# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
-				if "cache" in params:
-					if params['cache'] is not None:
-						self.g_source = "plex"
-	 
-				if self.g_source == "cache" or params['cache'] == True:
-					try:
-						fd = open(self.moviePickle, "rb")
-						pickleData = pickle.load(fd)
-						library = pickleData[0]
-
-						# todo we have to check if we will need this in future or not
-						#tmpAbc = pickleData[1]
-						#tmpGenres = pickleData [2]
-
-						fd.close()
-						printl("from pickle", self, "D")
-						printl("viewGroup: " + str(self.g_viewGroup),self, "D")
-					except:
-						printl("movie cache not found ... saving", self, "D")
-						library = Singleton().getPlexInstance().getMoviesFromSection(url)
-						reason = "cache file does not exists, recreating ..."
-						self.generatingCacheForMovieSection(reason,library)
-						printl("fallback to: from server", self, "D")
-				else:
-					library = Singleton().getPlexInstance().getMoviesFromSection(url)
-					reason = "generating cache first time, creating ..."
-					self.generatingCacheForMovieSection(reason, library)
-			else:
-				library = Singleton().getPlexInstance().getMoviesFromSection(url)
 		else:
 			printl ("viewMode is Directory", self, "D")
-			#myId = params["id"]
-			#library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url + "/" + myId)
-			library = Singleton().getPlexInstance().getMoviesFromSection(url)
+			returnTo = "backToMovies"
 
-			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, myFilter
-		
+		library = Singleton().getPlexInstance().getMoviesFromSection(url)
 		printl ("", self, "C")
-		return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def generatingCacheForMovieSection(self, reason, library, tmpAbc, tmpGenres):
-		printl ("", self, "S")
-		
-		printl ("reason: " + str(reason), self, "S")
-		pickleData = library, tmpAbc, tmpGenres
-		fd = open(self.moviePickle, "wb")
-		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
-		fd.close()
-		
-		printl ("", self, "C")
-	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def buildInfoPlaybackArgs(self, entry):
-		printl ("", self, "S")
-		
-		args = {}
-		args["id"]      = entry["ratingKey"]
-		args["title"]   = entry["title"]
-		args["year"]    = entry["year"]
-		args["type"]    = "movie"
-		
-		printl ("args = " + str(args), self, "D")
-		
-		printl ("", self, "C")
-		return args
+		return library, returnTo
 
 

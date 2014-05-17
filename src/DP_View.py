@@ -51,7 +51,7 @@ from enigma import ePicLoad
 from urllib import quote_plus
 from twisted.web.client import downloadPage
 
-from DP_ViewFactory import getViews, getGuiElements
+from DP_ViewFactory import getGuiElements
 from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
@@ -87,7 +87,7 @@ class DP_View(Screen, NumericalTextInput):
 	activeFilter                    = ("None", (None, False), "")
 	onEnterPrimaryKeys              = None
 	onLeavePrimaryKeyValuePair      = None
-	onLeaveSelectKeyValuePair       = None
+	returnTo       = None
 	currentKeyValuePair             = None
 
 	currentShowIndex                = None
@@ -171,9 +171,6 @@ class DP_View(Screen, NumericalTextInput):
 		myList = []
 		self["listview"] = List(myList, True)
 
-		self["number_key_popup"] = Label()
-		self["number_key_popup"].hide()
-
 		self.seenPng = None
 		self.unseenPng = None
 		self.startedPng = None
@@ -191,33 +188,17 @@ class DP_View(Screen, NumericalTextInput):
 			"video":		(self.onKeyVideo, ""),
 			"audio":		(self.onKeyAudio, ""),
 			"red":			(self.onKeyRed, ""),
-			"green":	  	(self.onKeyGreen, ""),
 			"yellow":		(self.onKeyYellow, ""),
 			"blue":			(self.onKeyBlue, ""),
+			"green":		(self.onKeyGreen, ""),
 			"text":			(self.onKeyText, ""),
 			"red_long":		(self.onKeyRedLong, ""),
-			"green_long":	(self.onKeyGreenLong, ""),
 			"yellow_long":	(self.onKeyYellowLong, ""),
 			"blue_long":	(self.onKeyBlueLong, ""),
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),
-
-			"1":			(self.onKey1, ""),
-			"2":			(self.onKey2, ""),
-			"3":			(self.onKey3, ""),
-			"4":			(self.onKey4, ""),
-			"5":			(self.onKey5, ""),
-			"6":			(self.onKey6, ""),
-			"7":			(self.onKey7, ""),
-			"8":			(self.onKey8, ""),
-			"9":			(self.onKey9, ""),
-			"0":			(self.onKey0, ""),
-
 		}, -2)
-
-		# For number key input
-		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
 
 		self.onLayoutFinish.append(self.setCustomTitle)
 		self.onFirstExecBegin.append(self.onFirstExec)
@@ -256,17 +237,16 @@ class DP_View(Screen, NumericalTextInput):
 		self["filter"].setText(_("press '0-9'"))
 
 		self["btn_red"]			= Pixmap()
-		self["btn_green"]		= Pixmap()
 		self["btn_yellow"]		= Pixmap()
 		self["btn_blue"]		= Pixmap()
+		self["btn_green"]		= Pixmap()
 
 		self["btn_redText"]			= Label()
-		self["btn_greenText"]		= Label()
 		self["btn_yellowText"]		= Label()
 		self["btn_blueText"]		= Label()
+		self["btn_greenText"]		= Label()
 
 		self["btn_redText"].setText(_("View '") + str(self.currentViewName) + "'")
-		self["btn_greenText"].setText("Sorting 'default'")
 
 		self["btn_yellowText"].setText(_("show 'Details'"))
 
@@ -419,35 +399,12 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		if self.select is None: # Initial Start of View, select first entry in list
-			myFilter = True
-			sort = True
-
-			self._load(ignoreSort=sort, ignoreFilter=myFilter)
+			self._load()
 			self.refresh()
+
 		else: # changed views, reselect selected entry
 			printl("self.select: " +  str(self.select), self, "D")
-			sort = False
-			if self.onFirstExecSort is not None:
-				self.activeSort = self.onFirstExecSort
-				sort = True
-			myFilter = False
-			if self.onFirstExecFilter is not None:
-				self.activeFilter = self.onFirstExecFilter
-				myFilter = True
-
-			self._load(self.select[0], ignoreSort=sort, ignoreFilter=myFilter)
-			keys = self.select[1].keys()
-			listViewList = self["listview"].list
-			for i in range(len(listViewList)):
-				entry = listViewList[i]
-				found = True
-				for key in keys:
-					if entry[1][key] != self.select[1][key]:
-						found = False
-						break
-				if found:
-					self["listview"].setIndex(i)
-					break
+			self._load(self.select[0])
 			self.refresh()
 
 		printl("", self, "C")
@@ -469,161 +426,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self["shortDescription"].pageDown()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey1(self):
-		printl("", self, "S")
-
-		self.onNumberKey(1)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey2(self):
-		printl("", self, "S")
-
-		self.onNumberKey(2)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey3(self):
-		printl("", self, "S")
-
-		self.onNumberKey(3)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey4(self):
-		printl("", self, "S")
-
-		self.onNumberKey(4)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey5(self):
-		printl("", self, "S")
-
-		self.onNumberKey(5)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey6(self):
-		printl("", self, "S")
-
-		self.onNumberKey(6)
-
-		printl("", self, "C")
-
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey7(self):
-		printl("", self, "S")
-
-		self.onNumberKey(7)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey8(self):
-		printl("", self, "S")
-
-		self.onNumberKey(8)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey9(self):
-		printl("", self, "S")
-
-		self.onNumberKey(9)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey0(self):
-		printl("", self, "S")
-
-		self.onNumberKey(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKey(self, number):
-		printl("", self, "S")
-
-		printl(str(number), self, "I")
-
-		key = self.getKey(number)
-		if key is not None:
-			keyvalue = key.encode("utf-8")
-			if len(keyvalue) == 1:
-				self.onNumberKeyLastChar = keyvalue[0].upper()
-				self.onNumberKeyPopup(self.onNumberKeyLastChar)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKeyPopup(self, value):
-		printl("", self, "S")
-
-		if value != " ":
-			self["filter"].setText(value)
-		else:
-			self["filter"].setText(_("press '0-9'"))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def timeout(self):
-		"""
-		onNumberKeyTimeout
-		"""
-		printl("", self, "S")
-
-		printl(self.onNumberKeyLastChar, self, "I")
-		if self.onNumberKeyLastChar != ' ':
-			self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
-		else:
-			self.activeFilter = ("None", (None, False), ("None", ))
-		self.sort()
-		self.filter()
-
-		self.refresh()
-
-		self.onNumberKeyPopup(self.onNumberKeyLastChar)
-		NumericalTextInput.timeout(self)
 
 		printl("", self, "C")
 
@@ -763,26 +565,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onKeyGreen(self):
-		printl("", self, "S")
-
-		self.onToggleSort()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKeyGreenLong(self):
-		printl("", self, "S")
-
-		self.onChooseSort()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def onKeyYellow(self):
 		printl("", self, "S")
 
@@ -805,6 +587,14 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self.toggleFastScroll()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyGreen(self):
+		printl("", self, "S")
 
 		printl("", self, "C")
 
@@ -852,78 +642,16 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onToggleSort(self):
-		printl("", self, "S")
-
-		for i in range(len(self.onSortKeyValuePair)):
-			if self.activeSort[1] == self.onSortKeyValuePair[i][1]:
-				if (i+1) < len(self.onSortKeyValuePair):
-					self.activeSort = self.onSortKeyValuePair[i + 1]
-				else:
-					self.activeSort = self.onSortKeyValuePair[0]
-				break
-
-		self.sort()
-		self.filter()
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseSortCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			self.activeSort = choice[1]
-			self.sort()
-			self.filter()
-			self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseSort(self):
-		printl("", self, "S")
-
-		menu = []
-		for e in self.onSortKeyValuePair:
-			menu.append((_(e[0]), e, ))
-		selection = 0
-		for i in range(len(self.onSortKeyValuePair)):
-			if self.activeSort[1] == self.onSortKeyValuePair[i][1]:
-				selection = i
-				break
-		self.session.openWithCallback(self.onChooseSortCallback, ChoiceBox, title=_("Select sort"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def onToggleView(self, forceUpdate=False):
 		printl("", self, "S")
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
 
-		select = None
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			params = {}
-			printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
-			for key in self.onEnterPrimaryKeys:
-				if key != "play" or key != "directMode":
-					params[key] = selection[1][key]
-			select = (self.currentKeyValuePair, params)
-
 		if forceUpdate:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, select, self.activeSort, self.activeFilter))
+			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, ))
 		else:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter))
+			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, ))
 
 		printl("", self, "C")
 
@@ -1005,7 +733,7 @@ class DP_View(Screen, NumericalTextInput):
 			if self.isDirectory:
 				printl("isDirectory: " + str(self.isDirectory), self, "D")
 				self.currentMovieIndex = self.listViewList
-				self.onLeaveSelectKeyValuePair = "backToMovies"
+				self.returnTo = "backToMovies"
 				library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(self.selection[5])
 				printl("library: " + str(library), self, "D")
 				self.listViewList = library
@@ -1138,7 +866,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.viewStep -= 1
 
-		selectKeyValuePair = self.onLeaveSelectKeyValuePair
+		selectKeyValuePair = self.returnTo
 		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
@@ -1153,21 +881,21 @@ class DP_View(Screen, NumericalTextInput):
 			self["listview"].setIndex(self.currentSeasonIndex)
 
 		elif selectKeyValuePair == "backToShows":
-			self._load(ignoreSort=True)
+			self._load()
 			self["listview"].setIndex(self.currentShowIndex)
 
 		elif selectKeyValuePair == "backToMovies":
 			# todo seems to be dirty here at all
 			self.listViewList = self.currentMovieIndex
 			self.updateList()
-			self.onLeaveSelectKeyValuePair = None
+			self.returnTo = None
 
 		elif selectKeyValuePair == "backToArtists":
-			self._load(ignoreSort=True)
+			self._load()
 			self["listview"].setIndex(self.currentArtistIndex)
 
 		elif selectKeyValuePair == "backToAlbums":
-			self._load(ignoreSort=True)
+			self._load()
 			self["listview"].setIndex(self.currentAlbumIndex)
 
 		else:
@@ -1183,7 +911,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def _load(self, params=None, ignoreSort=False, ignoreFilter=False):
+	def _load(self, params=None):
 		"""
 			e.g.
 			params = {}
@@ -1202,71 +930,51 @@ class DP_View(Screen, NumericalTextInput):
 		params["cache"] = self.cache
 
 		library = self.loadLibrary(params)
-		printl("library: " + str(library), self, "D")
-		#library for e.g. = return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
-		# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
 
-		self.listViewList = library[0]
+		self.returnTo = library[1]
+		printl("library: " + str(library[0]), self, "D")
+		printl("returnTo: " + str(library[1]), self, "D")
 
-		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
-		# so we implement it here
-		self.newList = []
-		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
+		newList = self.alterViewStateInList(library[0])
 
-		for listView in self.listViewList:
-			printl("seenVisu location: " + str(listView[4]), self, "D")
-			if listView is not None:
-				if 'seen' == str(listView[4]):
-					seenVisu = self.seenPic
-
-				elif 'started' == str(listView[4]):
-					seenVisu = self.startedPic
-
-				elif 'unseen' == str(listView[4]):
-					seenVisu = self.unseenPic
-
-				else:
-					seenVisu = undefinedIcon
-
-				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
-				self.newList.append(content)
-
-		self.listViewList = self.newList
-		self.origListViewList = self.newList
-
-		self.onEnterPrimaryKeys = library[1]
-		printl("onEnterPrimaryKeys: " + str(library[1]), self, "D")
-
-		self.onLeavePrimaryKeyValuePair = library[2]
-		printl("onLeavePrimaryKeyValuePair: " + str(library[2]), self, "D")
-
-		self.onLeaveSelectKeyValuePair = library[3]
-		printl("onLeaveSelectKeyValuePair: " + str(library[3]), self, "D")
-
-		self.onSortKeyValuePair = library[4]
-		printl("onSortKeyValuePair: " + str(library[4]), self, "D")
-
-		self.onFilterKeyValuePair = library[5]
-		printl("onFilterKeyValuePair: " + str(library[5]), self, "D")
-
-		if len(library) >= 7:
-			self.libraryFlags = library[6]
-		else:
-			self.libraryFlags = {}
-
-		if ignoreSort is False:
-			# After changing the lsit always return to the default sort
-			self.activeSort = self.onSortKeyValuePair[0]
-			self.sort()
-
-		if ignoreFilter is False:
-			# After changing the lsit always return to the default filter
-			x = self.onFilterKeyValuePair[0]
-			self.activeFilter = (x[0], x[1], x[2][0], )
-			#self.listViewList = self.filter()
+		self.listViewList = newList
+		self.origListViewList = newList
 
 		self.updateList()
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def alterViewStateInList(self, listViewList):
+		printl("", self, "S")
+		printl("listViewList: " + str(listViewList), self, "S")
+
+		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
+		# so we implement it here
+		newList = []
+		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
+
+		for listViewEntry in listViewList:
+			printl("seenVisu location: " + str(listViewEntry[4]), self, "D")
+			if listViewEntry is not None:
+				if 'seen' == str(listViewEntry[4]):
+					viewState = self.seenPic
+
+				elif 'started' == str(listViewEntry[4]):
+					viewState = self.startedPic
+
+				elif 'unseen' == str(listViewEntry[4]):
+					viewState = self.unseenPic
+
+				else:
+					viewState = undefinedIcon
+
+				content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], listViewEntry[3], viewState ,listViewEntry[5])
+				newList.append(content)
+
+		printl("", self, "C")
+		return newList
 
 	#===========================================================================
 	#
@@ -1285,58 +993,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self.listViewList = self.origListViewList
-
-		printl("", self, "C")
-	#===========================================================================
-	#
-	#===========================================================================
-	def sort(self):
-		printl("", self, "S")
-		#printl("listViewList: " + str(self.listViewList), self, "D")
-
-		text = "Sorting '%s'" % (_(self.activeSort[0]))
-		self["btn_greenText"].setText(text)
-		self.areFunctionsHidden = True
-
-		try:
-			if self.activeSort[1] is None:
-				printl("sorting by default", self, "D")
-				self.listViewList.sort(key=lambda x: x[0], reverse=self.activeSort[2])
-				self.resetList()
-				self.updateList()
-			else:
-				printl("sorting by value in selection: " + str(self.activeSort[1]), self, "D")
-				self.listViewList.sort(key=lambda x: x[1][self.activeSort[1]], reverse=self.activeSort[2])
-		except Exception, ex:
-			printl("Exception(" + str(ex) + ")", self, "E")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def filter(self):
-		printl("", self, "S")
-
-		printl( "self.activeFilter: " + str(self.activeFilter[0]), self, "D")
-
-		if self.activeFilter[1][0] is None:
-			listViewList = self.origListViewList
-		else:
-
-			testLength = None
-			if len(self.activeFilter[1]) >= 3:
-				testLength = self.activeFilter[1][2]
-
-			if self.activeFilter[1][1]:
-				listViewList = [x for x in self.origListViewList if self.activeFilter[2] in x[1][self.activeFilter[1][0]]]
-			else:
-				if testLength is None:
-					listViewList = [x for x in self.origListViewList if x[1][self.activeFilter[1][0]] == self.activeFilter[2]]
-				else:
-					listViewList = [x for x in self.origListViewList if x[1][self.activeFilter[1][0]].strip()[:testLength] == self.activeFilter[2].strip()[:testLength]]
-		self.listViewList = listViewList
-		self.updateList()
 
 		printl("", self, "C")
 
@@ -1700,7 +1356,7 @@ class DP_View(Screen, NumericalTextInput):
 				if key != "play" or key != "directMode":
 					primaryKeyValuePair[key] = selection[1][key]
 			select = (self.currentKeyValuePair, primaryKeyValuePair)
-		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, select, self.activeSort, self.activeFilter))
+		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, ))
 
 		printl("", self, "C")
 

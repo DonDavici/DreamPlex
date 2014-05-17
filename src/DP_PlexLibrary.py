@@ -523,6 +523,7 @@ class PlexLibrary(Screen):
 			entryData['token']			    = self.g_myplex_accessToken
 
 			viewState = self.getViewStateForShowEntry(entryData)
+			printl("viewState: " + str(viewState), self, "D")
 
 			if self.g_showUnSeenCounts:
 				entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"

@@ -394,9 +394,6 @@
         <widget name="totalLabel" transparent="1" zPosition="4" halign="left" position="35,340" size="60,30" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="total" transparent="1" zPosition="4" halign="left" position="105,340" size="150,30" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="filterLabel" transparent="1" zPosition="5" halign="left" position="165,340" size="60,30" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="filter" transparent="1" zPosition="5" halign="left" position="235,340" size="150,30" font="Saint;18" foregroundColor="#ffffff" backgroundColor="#000000"/>
-
         <widget name="paginationLabel" transparent="1" zPosition="50" halign="left" position="355,340" size="60,32" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="pagination" transparent="1" zPosition="50" halign="left" position="425,340" size="150,32" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
@@ -466,16 +463,9 @@
 
         <!-- music specific -->
 
-
-        <!-- filter -->
-        <widget name="number_key_popup" zPosition="51" halign="center" valign="center" position="436,560" size="75,80" font="Saint;70" foregroundColor="#FF8C00" />
-
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
         <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <widget name="btn_green"  zPosition="6" position="340,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_greenText" position="360,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
         <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>

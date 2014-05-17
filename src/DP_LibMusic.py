@@ -73,17 +73,12 @@ class DP_LibMusic(DP_LibMain):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 
+		returnTo = None
+
 		if params["viewMode"] == "ShowArtists":
 			printl("show artists ...", self, "D")
 
 			library = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
-
-			sort = (("by artists", True, False), )
-
-			myFilter = [("All", (None, False), ("", )), ]
-
-			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, None, sort, myFilter
 
 		elif params["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
@@ -93,86 +88,15 @@ class DP_LibMusic(DP_LibMain):
 
 			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
-			sort = (("by albums", True, False), )
-
-			myFilter = [("All", (None, False), ("", )), ]
-			printl("library: " + str(library),self, "D")
-
 			if self.g_librarySteps == 2:
 				returnTo = None
 			else:
 				returnTo = "backToArtists"
-
-			printl ("", self, "C")
-			return library, ("viewMode", "ratingKey", ), None, returnTo, sort, myFilter
 
 		elif params["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
 
 			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
-			sort = [("by title", None, False), ]
-
-			myFilter = [("All", (None, False), ("", )), ]
-
-			printl ("", self, "C")
-			printl("library: " + str(library),self, "D")
-			return library, ("viewMode", "ratingKey", ), None, "backToAlbums", sort, myFilter
-
 		printl ("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPlaybackList(self, entry):
-		printl ("", self, "S")
-		
-		playbackList = []
-		
-		params = {}
-		params["Id"] = entry["TVShowId"]
-		params["Season"] = entry["Season"]
-		params["ViewMode"] = "ShowEpisodes"
-		library = self.loadLibrary(params)[0]
-		
-		playbackList.append( (entry["Path"], entry["Title"], entry, ))
-		if entry["Episode"] is None:
-			nextEpisode = 0
-		else:	
-			nextEpisode = entry["Episode"] + 1
-		
-		found = True
-		while found is True:
-			found = False
-			for episode in library:
-				episodeDict = episode[1]
-				if episodeDict["Episode"] == nextEpisode:
-					playbackList.append( (episodeDict["Path"], episodeDict["Title"], episodeDict, ))
-					nextEpisode += 1
-					found = True
-					break
-		
-		printl ("playbacklist = " + str(playbackList), self, "D")
-		
-		printl ("", self, "C")
-		return playbackList
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def buildInfoPlaybackArgs(self, entry):
-		printl ("", self, "S")
-		
-		args = {}
-		args["id"] 	= entry["Id"]
-		args["title"]   = entry["Title"]
-		args["year"]    = entry["Year"]
-		args["thetvdb"] = entry["TheTvDbId"]
-		args["season"]  = entry["Season"]
-		args["episode"] = entry["Episode"]
-		args["type"]    = "tvshow"
-		
-		printl ("args = " + str(args), self, "D")
-		
-		printl ("", self, "C")
-		return args
+		return library, returnTo
