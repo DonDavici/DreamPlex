@@ -78,7 +78,7 @@ class DP_LibMusic(DP_LibMain):
 		if params["viewMode"] == "ShowArtists":
 			printl("show artists ...", self, "D")
 
-			library = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+			library, mediaContainer = self.getLibraryData(params, self.g_url, params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 		elif params["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
@@ -86,7 +86,7 @@ class DP_LibMusic(DP_LibMain):
 			if self.g_librarySteps == 2:
 				params["url"] = self.g_url
 
-			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+			library, mediaContainer = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 			if self.g_librarySteps == 2:
 				returnTo = None
@@ -96,7 +96,7 @@ class DP_LibMusic(DP_LibMain):
 		elif params["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
 
-			library = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+			library, mediaContainer = self.getLibraryData(params, params["url"], params["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 		printl ("", self, "C")
 		return library, returnTo

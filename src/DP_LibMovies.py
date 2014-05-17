@@ -69,9 +69,9 @@ class DP_LibMovies(DP_LibMain):
 			printl ("viewMode is Directory", self, "D")
 			returnTo = "backToMovies"
 
-		library = Singleton().getPlexInstance().getMoviesFromSection(url)
+		movies, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 		printl ("", self, "C")
-		return library, returnTo
+		return movies, returnTo, mediaContainer
 
 

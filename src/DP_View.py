@@ -714,9 +714,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		if selection is not None:
 			details		= selection[1]
-			extraData	= selection[2]
-			#image		= selection[3]
-			urlTest = selection[5]
+			context		= selection[2]
+			urlTest = selection[4]
 
 			#details
 			viewMode	= details['viewMode']
@@ -726,15 +725,11 @@ class DP_View(Screen, NumericalTextInput):
 			printl("currentViewMode: " +str(viewMode), self, "D")
 			printl("server: " +str(server), self, "D")
 
-			#extraData
-			url_path	= extraData['key']
-			printl("url_path: " +str(url_path), self, "D")
-
 			if self.isDirectory:
 				printl("isDirectory: " + str(self.isDirectory), self, "D")
 				self.currentMovieIndex = self.listViewList
 				self.returnTo = "backToMovies"
-				library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(self.selection[5])
+				library = Singleton().getPlexInstance().getMoviesFromSection(self.selection[4])
 				printl("library: " + str(library), self, "D")
 				self.listViewList = library
 				self.updateList()
@@ -929,13 +924,17 @@ class DP_View(Screen, NumericalTextInput):
 
 		params["cache"] = self.cache
 
-		library = self.loadLibrary(params)
+		libraryDataArr = self.loadLibrary(params)
 
-		self.returnTo = library[1]
-		printl("library: " + str(library[0]), self, "D")
-		printl("returnTo: " + str(library[1]), self, "D")
+		self.libraryData = libraryDataArr[0]
+		self.returnTo = libraryDataArr[1]
+		self.mediaContainer = libraryDataArr[2]
 
-		newList = self.alterViewStateInList(library[0])
+		printl("libraryData: " + str(self.libraryData), self, "D")
+		printl("returnTo: " + str(self.returnTo), self, "D")
+		printl("mediaContainer: " + str(self.mediaContainer), self, "D")
+
+		newList = self.alterViewStateInList(self.libraryData)
 
 		self.listViewList = newList
 		self.origListViewList = newList
@@ -1062,9 +1061,8 @@ class DP_View(Screen, NumericalTextInput):
 		printl("isDirectory: " + str(self.isDirectory), self, "D")
 
 		if self.selection is not None:
-			self.details 		= self.selection[1]
-			self.extraData 		= self.selection[2]
-			self.context		= self.selection[3]
+			self.details 	= self.selection[1]
+			self.context	= self.selection[2]
 
 			if self.isDirectory:
 				# because we are a dirctory we have to do nothing here
@@ -1106,11 +1104,11 @@ class DP_View(Screen, NumericalTextInput):
 				if self.fastScroll == False or self.showMedia == True and self.details ["viewMode"] == "play":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
-					self.handleCodecPixmaps()
-					self.handleAspectPixmaps()
-					self.handleResolutionPixmaps()
-					self.handleRatedPixmaps()
-					self.handleSoundPixmaps()
+					#self.handleCodecPixmaps()
+					#self.handleAspectPixmaps()
+					#self.handleResolutionPixmaps()
+					#self.handleRatedPixmaps()
+					#self.handleSoundPixmaps()
 
 				# navigation
 				self.handleNavigationData()

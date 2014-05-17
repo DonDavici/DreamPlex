@@ -409,65 +409,8 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 
-		fullList=[]
-
-		# get xml from url
-		tree = self.getXmlTreeFromUrl(url)
-		server = str(self.getServerFromURL(url))
-		# find coressponding tags in xml
-		entries = tree.findall('Video')
-
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
-
-			entryData["viewMode"]			= "play"
-			entryData['server']			    = server
-			entryData['tagType']            = "Video"
-			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
-			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
-			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
-			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
-			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
-
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
-			entryData['token']			    = self.g_myplex_accessToken
-
-			# add part and media data to main data element
-			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
-
-			entryData["partDataArr"] = partDataArr
-			entryData["mediaDataArr"] = mediaDataArr
-
-			# write global xml data to entryData
-			globalData = (dict(tree.items()))
-			printl("globalData: " + str(globalData), self, "D")
-			entryData['globalData'] = globalData
-
-			# set seen state for picture handling in view
-			seenVisu = self.getViewStatefromViewCount(entryData)
-
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
-
-		# find coressponding tags in xml
-		entries = tree.findall('Directory')
-
-		# used for filter like director, decade, ...
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("directoryData: " + str(entryData), self, "D")
-
-			entryData['server'] 	= str(server)
-			entryData['tagType']    = "Directory"
-			entryData["viewMode"]	= "ShowDirectory"
-
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
-
 		printl("", self, "C")
-		return fullList
+		return self.getMediaData(url, tagType = "Video", viewMode = "play")
 
 	#===============================================================================
 	#
@@ -477,7 +420,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getDirectoryData(url, nextViewMode="ShowAlbums")
+		return self.getDirectoryData(url, nextViewMode = "ShowAlbums")
 
 	#===============================================================================
 	#
@@ -487,7 +430,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getDirectoryData(url, nextViewMode="ShowTracks")
+		return self.getDirectoryData(url, nextViewMode = "ShowTracks")
 
 	#=======================================================================
 	#
@@ -504,6 +447,10 @@ class PlexLibrary(Screen):
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
 
+		# write global xml data to entryData
+		mediaContainer  = (dict(tree.items()))
+		printl("mediaContainer: " + str(mediaContainer), self, "D")
+
 		for entry in entries:
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
@@ -511,11 +458,6 @@ class PlexLibrary(Screen):
 			entryData["viewMode"]			= "ShowSeasons"
 			entryData['server']			    = server
 			entryData['tagType']            = "Show"
-			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
-			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
-			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
-			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
-			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
@@ -539,26 +481,7 @@ class PlexLibrary(Screen):
 			fullList.append(self.getFullListEntry(entryData, url, viewState))
 
 		printl("", self, "C")
-		return fullList
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getViewStateForShowEntry(self, entryData):
-		printl("", self, "S")
-
-		# lets add this for another filter
-		if int(entryData["viewedLeafCount"]) == int(entryData["leafCount"]):
-			viewState = "seen"
-
-		elif int(entryData["viewedLeafCount"]) > 0:
-			viewState = "started"
-
-		else:
-			viewState = "unseen"
-
-		printl("", self, "C")
-		return viewState
+		return fullList, mediaContainer
 
 	#===========================================================================
 	#
@@ -576,6 +499,10 @@ class PlexLibrary(Screen):
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
 		printl("entries: " + str(entries), self, "D")
+
+		# write global xml data to entryData
+		mediaContainer  = (dict(tree.items()))
+		printl("mediaContainer: " + str(mediaContainer), self, "D")
 
 		for entry in entries:
 			entryData = (dict(entry.items()))
@@ -596,10 +523,7 @@ class PlexLibrary(Screen):
 
 			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer
 			if "ratingKey" not in entryData:
-				# write global xml data to entryData
-				globalData = (dict(tree.items()))
-				printl("globalData: " + str(globalData), self, "D")
-				entryData["ratingKey"] = globalData["key"]
+				entryData["ratingKey"] = mediaContainer["key"]
 
 			seenVisu = self.getViewStateForShowEntry(entryData)
 
@@ -610,7 +534,7 @@ class PlexLibrary(Screen):
 
 		printl("fullList: " + str(fullList), self, "C")
 		printl("", self, "C")
-		return fullList
+		return fullList, mediaContainer
 
 	#===============================================================================
 	#
@@ -618,25 +542,47 @@ class PlexLibrary(Screen):
 	def getEpisodesOfSeason(self, url, directMode=False):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
+		if not directMode:
+			viewMode    = "play"
+		else:
+			viewMode	= "directMode"
 
+		return self.getMediaData(url, tagType = "Video", viewMode = viewMode)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMusicTracks(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		printl("", self, "C")
+		return self.getMediaData(url, tagType = "Track", viewMode = "play")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMediaData(self, url, tagType, viewMode):
+		printl("", self, "S")
 		fullList=[]
 
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
 		# find coressponding tags in xml
-		entries = tree.findall('Video')
+		entries = tree.findall(tagType)
+
+		# write global xml data to entryData
+		mediaContainer  = (dict(tree.items()))
+		printl("mediaContainer: " + str(mediaContainer), self, "D")
 
 		for entry in entries:
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
 
-			if not directMode:
-				entryData["viewMode"]				= "play"
-			else:
-				entryData["viewMode"]				= "directMode"
+			entryData["viewMode"]			= viewMode
 			entryData['server']			    = server
-			entryData['tagType']            = "Video"
+			entryData['tagType']            = tagType
 			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
 			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
 			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
@@ -653,21 +599,15 @@ class PlexLibrary(Screen):
 			entryData["partDataArr"] = partDataArr
 			entryData["mediaDataArr"] = mediaDataArr
 
-			# write global xml data to entryData
-			globalData = (dict(tree.items()))
-			printl("globalData: " + str(globalData), self, "D")
-			entryData['globalData'] = globalData
-
 			# set seen state for picture handling in view
-			viewState = self.getViewStatefromViewCount(entryData)
+			seenVisu = self.getViewStatefromViewCount(entryData)
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState))
+			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
 
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
 
-		# used for filter like director, decade, ...
 		for entry in entries:
 			entryData = (dict(entry.items()))
 			printl("directoryData: " + str(entryData), self, "D")
@@ -680,7 +620,7 @@ class PlexLibrary(Screen):
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
 
 		printl("", self, "C")
-		return fullList
+		return fullList, mediaContainer
 
 	#===============================================================================
 	#
@@ -695,6 +635,10 @@ class PlexLibrary(Screen):
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
 
+		# write global xml data to entryData
+		mediaContainer  = (dict(tree.items()))
+		printl("mediaContainer: " + str(mediaContainer), self, "D")
+
 		for entry in entries:
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
@@ -703,59 +647,11 @@ class PlexLibrary(Screen):
 			entryData['tagType']                    = "Directory"
 			entryData["viewMode"]				    = nextViewMode
 
-			# write global xml data to entryData
-			globalData = (dict(tree.items()))
-			printl("globalData: " + str(globalData), self, "D")
-			entryData['globalData'] = globalData
-
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
 
 		printl("", self, "C")
-		return fullList
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getMusicTracks(self, url):
-		printl("", self, "S")
-		printl("url: " + str(url), self, "D")
-		fullList = []
-
-		# get xml from url
-		tree = self.getXmlTreeFromUrl(url)
-		server = str(self.getServerFromURL(url))
-		# improveMe
-		# get global data - not needed now maybe later
-		# globalData = (dict(tree.items()))
-		# printl("globalData: " + str(globalData), self, "D")
-
-		# find coressponding tags in xml
-		entries = tree.findall('Track')
-
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("trackData: " + str(entryData), self, "D")
-
-			# extend trackData with additional information that are not in etree
-			entryData["viewMode"]		= "play"
-			entryData['server']			= server
-			entryData['tagType']        = "Track"
-			entryData['thumb']			= self.getImage(entry, server, myType = "thumb")
-			entryData['fanart_image']	= self.getImage(entry, server, myType = "art")
-			entryData['token']          = self.g_myplex_accessToken
-
-			# add part and media data to main data element
-			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
-
-			entryData["partDataArr"] = partDataArr
-			entryData["mediaDataArr"] = mediaDataArr
-
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url))
-
-		printl("", self, "C")
-		return fullList
+		return fullList, mediaContainer
 
 	#===========================================================================
 	#
@@ -1074,38 +970,6 @@ class PlexLibrary(Screen):
 			else:
 				printl("", self, "C")
 				return {}
-
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def getXmlTreeFromPlex(self, url_path):
-		"""
-		Connect to the my.plexapp.com service and get an XML pages
-		A seperate function is required as interfacing into myplex
-		is slightly different than getting a standard URL
-		@input: url to get, whether we need a new token, whether to display on screen err
-		@return: an xml page as string or false
-		"""
-		printl("", self, "S")
-		printl("url = " + MYPLEX_SERVER + url_path, self, "D")
-
-		tree = None
-
-		printl( "Starting request", self, "D")
-		curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url_path + "?X-Plex-Token=" + str(self.serverConfig_myplexToken))
-
-		printl("curl_string: " + str(curl_string), self, "D", True, 10)
-		response = os.popen(curl_string).read()
-
-		try:
-			tree = etree.fromstring(response)
-		except Exception:
-			self._showErrorOnTv("no xml as response", response)
-
-
-		printl("", self, "C")
-		return tree
 
 	#=============================================================================
 	#
@@ -1979,6 +1843,36 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
+	def getXmlTreeFromPlex(self, url):
+		"""
+		Connect to the my.plexapp.com service and get an XML pages
+		A seperate function is required as interfacing into myplex
+		is slightly different than getting a standard URL
+		@input: url to get, whether we need a new token, whether to display on screen err
+		@return: an xml page as string or false
+		"""
+		printl("", self, "S")
+		printl("url = " + MYPLEX_SERVER + url, self, "D")
+
+		tree = None
+
+		printl( "Starting request", self, "D")
+		curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url + "?X-Plex-Token=" + str(self.serverConfig_myplexToken))
+
+		printl("curl_string: " + str(curl_string), self, "D", True, 10)
+		response = os.popen(curl_string).read()
+
+		try:
+			tree = etree.fromstring(response)
+		except Exception:
+			self._showErrorOnTv("no xml as response", response)
+
+		printl("", self, "C")
+		return tree
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def getXmlTreeFromUrl(self, url):
 		printl("", self, "S")
 		#Get the URL and server name. Get the XML and parse
@@ -2012,129 +1906,7 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return tempList
-
-	#===============================================================================
-	# 
-	#===============================================================================
-	def movieTag(self, url, server, movie):
-		printl("", self, "S")
-
-		tempgenre=[]
-		tempcast=[]
-		tempdir=[]
-		tempwriter=[]
-		mediaarguments = None
-
-		#Lets grab all the info we can quickly through either a dictionary, or assignment to a list
-		#We'll process it later
-		for child in movie:
-			if child.tag == "Media":
-				mediaarguments = dict(child.items())
-			elif child.tag == "Genre" and self.g_skipmetadata == "false":
-				genreTag = child.get('tag')
-				tempgenre.append(genreTag)
-				# fill genre filter
-				if genreTag not in self.tmpGenres:
-					self.tmpGenres.append(genreTag)
-			elif child.tag == "Writer"  and self.g_skipmetadata == "false":
-				tempwriter.append(child.get('tag'))
-			elif child.tag == "Director"  and self.g_skipmetadata == "false":
-				tempdir.append(child.get('tag'))
-			elif child.tag == "Role"  and self.g_skipmetadata == "false":
-				tempcast.append(child.get('tag'))
-
-		#Gather some data 
-		duration = int(mediaarguments.get('duration',movie.get('duration',0)))/1000
-				 
-		#Required listItem entries for XBMC
-		details = {}
-		details["viewMode"]			 = "play"
-		details['ratingKey']			= str(movie.get('ratingKey', 0)) # primary key in plex
-		details['summary']			  = movie.get('summary','')
-		details['title']				= movie.get('title','').encode('utf-8')
-		details['viewCount']			= int(movie.get('viewCount', 0))
-		details['rating']			   = movie.get('rating', 0)
-		details['studio']			   = movie.get('studio','')
-		details['year']				 = movie.get('year', 0)
-		details['tagline']			  = movie.get('tagline','')
-		details['runtime']			  = str(datetime.timedelta(seconds=duration))
-		details['server']			   = str(server)
-		details['genre']				= " / ".join(tempgenre)
-		details['viewOffset']		   = int(movie.get('viewOffset',0))
-		details['director']			 = " / ".join(tempdir)
-		
-		# lets add this for another filter
-		if details['viewCount'] > 0:
-			details['viewState'] = "seen"
-			seenVisu = self.seenPic
-		
-		elif details['viewCount'] >= 0 and details['viewOffset'] > 0:
-			details['viewState']		= "started"
-			seenVisu = self.startedPic
-		
-		else:
-			details['viewState'] = "unseen"
-			seenVisu = self.unseenPic
-		
-		#Extended Metadata
-		if self.g_skipmetadata == "false":
-			details['cast']	 = tempcast
-			details['writer']   = " / ".join(tempwriter)
-		
-		extraData = {}
-		extraData['type']			= "Video"
-		extraData['ratingKey']		= str(movie.get('ratingKey', 0)) # primary key in plex
-		extraData['parentRatingKey']    = movie.get('parentRatingKey', None) # might be tv show
-		extraData['grandparentRatingKey']= movie.get('grandparentRatingKey', None) # might be seaon of show
-		extraData['thumb']			= self.getImage(movie, server, myType = "thumb")
-		extraData['fanart_image']	= self.getImage(movie, server, myType = "art")
-		extraData['token']			= self.g_myplex_accessToken
-		extraData['key']			= movie.get('key','')
-		
-		extraData['selectedAudio']	= ""
-
-		#Add extra media flag data
-		if self.g_skipmediaflags == "false":
-			extraData['contentRating']		= movie.get('contentRating', '')
-			extraData['videoResolution']	= mediaarguments.get('videoResolution', '')
-			extraData['videoCodec']			= mediaarguments.get('videoCodec', '')
-			extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
-			extraData['aspectRatio']		= mediaarguments.get('aspectRatio', '')
-			extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
 	
-		#Build any specific context menu entries
-		contextMenu=self.buildContextMenu(url, extraData['ratingKey'], server)
-
-		# fill title filter
-		if details["title"].upper() not in self.tmpAbc:
-			self.tmpAbc.append(details["title"].upper())
-			
-		guiItem = self.buildListEntry(url, details, extraData, contextMenu, seenVisu, folder=False)
-		
-		printl("", self, "C")   
-		return guiItem
-	
-	#===============================================================================
-	# 
-	#===============================================================================
-	def directoryTag(self, url, server, directory):
-		printl("", self, "S")
-
-		#Required listItem entries for XBMC
-		details = {}
-		details['title']	= directory.get('title','').encode('utf-8')
-		details['server'] 	= str(server)
-		details['viewMode'] = "directory"
-
-		extraData = {}
-		extraData['key']	= directory.get('key','')
-		extraData['type']	= "directory"
-
-		guiItem = self.buildListEntry(url, details, extraData, context = None, seenVisu = None, folder=False)
-		
-		printl("", self, "C")   
-		return guiItem
-
 	#=============================================================================
 	# 
 	#=============================================================================
@@ -2625,6 +2397,25 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return content
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getViewStateForShowEntry(self, entryData):
+		printl("", self, "S")
+
+		# lets add this for another filter
+		if int(entryData["viewedLeafCount"]) == int(entryData["leafCount"]):
+			viewState = "seen"
+
+		elif int(entryData["viewedLeafCount"]) > 0:
+			viewState = "started"
+
+		else:
+			viewState = "unseen"
+
+		printl("", self, "C")
+		return viewState
 
 	#===============================================================================
 	#

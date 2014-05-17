@@ -72,7 +72,7 @@ class DP_LibShows(DP_LibMain):
 			url = self.entryData["contentUrl"]
 			printl("url: " + str(url), self, "D")
 			
-			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
+			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
 		else:
 			# Diplay all TVShows
@@ -81,14 +81,14 @@ class DP_LibShows(DP_LibMain):
 
 				url = self.entryData["contentUrl"]
 				printl("url: " + str(url), self, "D")
-				library = Singleton().getPlexInstance().getShowsFromSection(url)
+				library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
 
 			# Display the Seasons Menu
 			elif params["viewMode"] == "ShowSeasons":
 				printl("show seasons of TV show ...", self, "D")
 				
 				url = params["url"]
-				library = Singleton().getPlexInstance().getSeasonsOfShow(url)
+				library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
 				returnTo = "backToShows"
 
 			# Display the Episodes Menu
@@ -96,9 +96,8 @@ class DP_LibShows(DP_LibMain):
 				printl("show episodes of season ...", self, "D")
 				
 				url = params["url"]
-				library = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+				library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 				returnTo = "backToSeasons"
 
-
 		printl ("", self, "C")
-		return library, returnTo
+		return library, returnTo, mediaContainer

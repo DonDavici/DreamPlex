@@ -449,16 +449,16 @@ class DP_LibMain(Screen):
 		printl("myType: " + str(myType), self, "D")
 
 		if myType == "ShowAlbums":
-			library = Singleton().getPlexInstance().getMusicByAlbum(url)
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
 
 		elif myType == "ShowArtists":
-			library = Singleton().getPlexInstance().getMusicByArtist(url)
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
 
 		elif myType == "ShowTracks":
-			library = Singleton().getPlexInstance().getMusicTracks(url)
+			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
 
 		printl ("", self, "C")
-		return library
+		return library, mediaContainer
 
 	#===========================================================================
 	#
