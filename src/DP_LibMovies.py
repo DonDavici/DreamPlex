@@ -22,10 +22,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import cPickle as pickle
-
-from Components.config import config
-
 from DP_LibMain import DP_LibMain
 
 from DPH_Singleton import Singleton
@@ -58,8 +54,9 @@ class DP_LibMovies(DP_LibMain):
 		printl ("", self, "S")
 
 		# coming from DP_View _load()
-		printl("params for me: " + str(params), self, "D")
+		printl("paramss: " + str(params), self, "D")
 		returnTo = None
+
 		url = self.entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
 

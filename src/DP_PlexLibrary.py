@@ -410,7 +410,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Video", viewMode = "play")
+		return self.getMediaData(url, tagType = "Video", nextViewMode = "play")
 
 	#===============================================================================
 	#
@@ -547,7 +547,7 @@ class PlexLibrary(Screen):
 		else:
 			viewMode	= "directMode"
 
-		return self.getMediaData(url, tagType = "Video", viewMode = viewMode)
+		return self.getMediaData(url, tagType = "Video", nextViewMode = viewMode)
 
 	#===========================================================================
 	#
@@ -557,12 +557,12 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Track", viewMode = "play")
+		return self.getMediaData(url, tagType = "Track", nextViewMode = "play")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMediaData(self, url, tagType, viewMode):
+	def getMediaData(self, url, tagType, nextViewMode):
 		printl("", self, "S")
 		fullList=[]
 
@@ -580,7 +580,7 @@ class PlexLibrary(Screen):
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
 
-			entryData["viewMode"]			= viewMode
+			entryData["viewMode"]			= nextViewMode
 			entryData['server']			    = server
 			entryData['tagType']            = tagType
 			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
@@ -904,32 +904,6 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return tree
 
-
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def buildListEntry(self, origUrl, details, extraData, context, seenVisu=None, folder=True ):
-		printl("", self, "S")
-
-		printl("url: " + str(origUrl), self, "D")
-
-		# extend data with token
-		extraData['token']=self.g_myplex_accessToken
-
-		# create the URL to pass to the item
-		if ( not folder) and ( extraData['type'] =="Picture" ):
-			newUrl = str(origUrl) + self.get_aTokenForServer()
-		else:
-			newUrl= str(origUrl) + self.get_uTokenForServer()
-
-		printl("URL to use for listing: " + newUrl, self, "D")
-
-		content = (details.get('title',''), details, extraData, context, seenVisu, newUrl)
-
-		printl("", self, "C")
-		return content
-
 	#===============================================================================
 	#
 	#===============================================================================
@@ -1135,7 +1109,6 @@ class PlexLibrary(Screen):
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
 
-			#accessToken = self.getAuthDetails({'token':self.g_myplex_accessToken})
 			urlPath += self.get_uTokenForServer()
 
 			if self.g_sessionID is None:

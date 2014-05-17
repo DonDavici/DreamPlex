@@ -715,7 +715,10 @@ class DP_View(Screen, NumericalTextInput):
 		if selection is not None:
 			details		= selection[1]
 			context		= selection[2]
-			urlTest = selection[4]
+			nextContentUrl = selection[4]
+
+			# we extend details for provide the next data location
+			details["contentUrl"] = nextContentUrl
 
 			#details
 			viewMode	= details['viewMode']
@@ -729,53 +732,46 @@ class DP_View(Screen, NumericalTextInput):
 				printl("isDirectory: " + str(self.isDirectory), self, "D")
 				self.currentMovieIndex = self.listViewList
 				self.returnTo = "backToMovies"
-				library = Singleton().getPlexInstance().getMoviesFromSection(self.selection[4])
+				library = Singleton().getPlexInstance().getMoviesFromSection(nextContentUrl)
 				printl("library: " + str(library), self, "D")
 				self.listViewList = library
 				self.updateList()
 
 			elif viewMode == "ShowSeasons":
-				self.viewStep += 1
-				printl("viewMode -> ShowSeasons", self, "I")
-				params = {"viewMode": viewMode, "url": urlTest}
+				printl("viewMode: ShowSeasons", self, "D")
 
-				self.currentSeasonsParams = params
+				self.currentSeasonsParams = details
 				self.currentShowIndex = self["listview"].getIndex()
 
-				self._load(params)
+				self.viewStep += 1
+				self._load(details)
 
 			elif viewMode == "ShowEpisodes":
-				self.viewStep += 1
-				printl("viewMode -> ShowEpisodes", self, "I")
+				printl("viewMode: ShowEpisodes", self, "I")
 
-				params = {"viewMode": viewMode, "url": urlTest}
-
-				self.currentEpisodesParams = params
+				self.currentEpisodesParams = details
 				self.currentSeasonIndex = self["listview"].getIndex()
 
-				self._load(params)
+				self.viewStep += 1
+				self._load(details)
 
 			elif viewMode == "ShowAlbums":
-				self.viewStep += 1
-				printl("viewMode -> ShowAlbums", self, "I")
+				printl("viewMode: ShowAlbums", self, "I")
 
-				params = {"viewMode": viewMode, "url": urlTest}
-
-				self.currentEpisodesParams = params
+				self.currentEpisodesParams = details
 				self.currentArtistIndex = self["listview"].getIndex()
 
-				self._load(params)
+				self.viewStep += 1
+				self._load(details)
 
 			elif viewMode == "ShowTracks":
-				self.viewStep += 1
-				printl("viewMode -> ShowTracks", self, "I")
+				printl("viewMode: ShowTracks", self, "I")
 
-				params = {"viewMode": viewMode, "url": urlTest}
-
-				self.currentEpisodesParams = params
+				self.currentEpisodesParams = details
 				self.currentAlbumIndex = self["listview"].getIndex()
 
-				self._load(params)
+				self.viewStep += 1
+				self._load(details)
 
 			elif viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
@@ -804,7 +800,7 @@ class DP_View(Screen, NumericalTextInput):
 			elif viewMode == "ShowDirectory":
 				printl("viewMode -> ShowDirectory", self, "I")
 
-				params = {"viewMode": viewMode, "url": urlTest}
+				params = {"viewMode": viewMode, "url": nextContentUrl}
 
 				self.currentMovieParams = params
 				self.currentMovieIndex = self["listview"].getIndex()
@@ -924,37 +920,42 @@ class DP_View(Screen, NumericalTextInput):
 
 		params["cache"] = self.cache
 
+		# loadLibrary is a function in each class that inherits from DP_LibMain (DP_LibMovies, DP_LibSHows, DP_LibMusic)
 		libraryDataArr = self.loadLibrary(params)
 
+		# this is the content for the list (must be list not dict)
 		self.libraryData = libraryDataArr[0]
-		self.returnTo = libraryDataArr[1]
-		self.mediaContainer = libraryDataArr[2]
-
 		printl("libraryData: " + str(self.libraryData), self, "D")
+
+		# string that shows where to go when exiting
+		self.returnTo = libraryDataArr[1]
 		printl("returnTo: " + str(self.returnTo), self, "D")
+
+		# mediaContainer on top of xml
+		self.mediaContainer = libraryDataArr[2]
 		printl("mediaContainer: " + str(self.mediaContainer), self, "D")
 
-		newList = self.alterViewStateInList(self.libraryData)
+		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
+		self.listViewList = self.alterViewStateInList(self.libraryData)
 
-		self.listViewList = newList
-		self.origListViewList = newList
+		# we save the list to be able to restore
+		self.origListViewList = self.listViewList
 
+		# now just refresh list
 		self.updateList()
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def alterViewStateInList(self, listViewList):
+	def alterViewStateInList(self, listViewArr):
 		printl("", self, "S")
-		printl("listViewList: " + str(listViewList), self, "S")
+		printl("listViewArr: " + str(listViewArr), self, "S")
 
-		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
-		# so we implement it here
 		newList = []
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
-		for listViewEntry in listViewList:
+		for listViewEntry in listViewArr:
 			printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 			if listViewEntry is not None:
 				if 'seen' == str(listViewEntry[3]):

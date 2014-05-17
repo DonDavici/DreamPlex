@@ -63,6 +63,7 @@ class DP_LibShows(DP_LibMain):
 	def loadLibrary(self, params):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
+		printl("entryData: " + str(self.entryData), self, "D")
 
 		returnTo = None
 
@@ -87,7 +88,7 @@ class DP_LibShows(DP_LibMain):
 			elif params["viewMode"] == "ShowSeasons":
 				printl("show seasons of TV show ...", self, "D")
 				
-				url = params["url"]
+				url = params["contentUrl"]
 				library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
 				returnTo = "backToShows"
 
@@ -95,7 +96,7 @@ class DP_LibShows(DP_LibMain):
 			elif params["viewMode"] == "ShowEpisodes":
 				printl("show episodes of season ...", self, "D")
 				
-				url = params["url"]
+				url = params["contentUrl"]
 				library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 				returnTo = "backToSeasons"
 
