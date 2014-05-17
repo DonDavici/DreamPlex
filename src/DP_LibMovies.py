@@ -50,17 +50,17 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self, params):
+	def loadLibrary(self, entryData):
 		printl ("", self, "S")
 
 		# coming from DP_View _load()
-		printl("paramss: " + str(params), self, "D")
+		printl("paramss: " + str(entryData), self, "D")
 		returnTo = None
 
 		url = self.entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
 
-		if params["viewMode"] is None:
+		if entryData["viewMode"] is None:
 			printl ("viewMode = None", self, "D")
 		else:
 			printl ("viewMode is Directory", self, "D")

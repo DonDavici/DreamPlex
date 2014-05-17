@@ -48,9 +48,10 @@ class DP_LibShows(DP_LibMain):
 		"""
 		printl ("", self, "S")
 
-		self.entryData = entryData
+		self.initialData = entryData
+		printl("initialData: " + str(self.initialData), self, "D")
 
-		if self.entryData["showEpisodesDirectly"]:
+		if self.initialData["showEpisodesDirectly"]:
 			DP_LibMain.__init__(self, session, "episodes")
 		else:
 			DP_LibMain.__init__(self, session, "tvshows")
@@ -60,43 +61,42 @@ class DP_LibShows(DP_LibMain):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def loadLibrary(self, params):
+	def loadLibrary(self, entryData):
 		printl ("", self, "S")
-		printl("params: " + str(params), self, "D")
-		printl("entryData: " + str(self.entryData), self, "D")
+		printl("entryData: " + str(entryData), self, "D")
 
 		returnTo = None
 
-		if self.entryData["showEpisodesDirectly"]:
+		if self.initialData["showEpisodesDirectly"]:
 			printl("show episodes directly ...", self, "D")
 			
-			url = self.entryData["contentUrl"]
+			url = self.initialData["contentUrl"]
 			printl("url: " + str(url), self, "D")
 			
 			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
 		else:
 			# Diplay all TVShows
-			if params["viewMode"] is None:
+			if entryData["viewMode"] is None:
 				printl("show TV shows ...", self, "D")
 
-				url = self.entryData["contentUrl"]
+				url = self.initialData["contentUrl"]
 				printl("url: " + str(url), self, "D")
 				library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
 
 			# Display the Seasons Menu
-			elif params["viewMode"] == "ShowSeasons":
+			elif entryData["viewMode"] == "ShowSeasons":
 				printl("show seasons of TV show ...", self, "D")
 				
-				url = params["contentUrl"]
+				url = entryData["contentUrl"]
 				library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
 				returnTo = "backToShows"
 
 			# Display the Episodes Menu
-			elif params["viewMode"] == "ShowEpisodes":
+			elif entryData["viewMode"] == "ShowEpisodes":
 				printl("show episodes of season ...", self, "D")
 				
-				url = params["contentUrl"]
+				url = entryData["contentUrl"]
 				library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 				returnTo = "backToSeasons"
 
