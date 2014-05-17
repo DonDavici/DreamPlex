@@ -103,21 +103,21 @@ class DP_LibMovies(DP_LibMain):
 						printl("viewGroup: " + str(self.g_viewGroup),self, "D")
 					except:
 						printl("movie cache not found ... saving", self, "D")
-						library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url)
+						library = Singleton().getPlexInstance().getMoviesFromSection(url)
 						reason = "cache file does not exists, recreating ..."
-						self.generatingCacheForMovieSection(reason,library, tmpAbc)
+						self.generatingCacheForMovieSection(reason,library)
 						printl("fallback to: from server", self, "D")
 				else:
-					library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url)
+					library = Singleton().getPlexInstance().getMoviesFromSection(url)
 					reason = "generating cache first time, creating ..."
-					self.generatingCacheForMovieSection(reason, library, tmpAbc)
+					self.generatingCacheForMovieSection(reason, library)
 			else:
-				library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url)
+				library = Singleton().getPlexInstance().getMoviesFromSection(url)
 		else:
 			printl ("viewMode is Directory", self, "D")
 			#myId = params["id"]
 			#library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url + "/" + myId)
-			library, tmpAbc = Singleton().getPlexInstance().getMoviesFromSection(url)
+			library = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 			printl ("", self, "C")
 			return library, ("viewMode", "ratingKey", ), None, "backToMovies", sort, myFilter

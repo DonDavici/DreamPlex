@@ -411,9 +411,6 @@ class PlexLibrary(Screen):
 
 		fullList=[]
 
-		# fill for sorting within dreamPlex
-		self.tmpAbc = []
-
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
@@ -448,13 +445,8 @@ class PlexLibrary(Screen):
 			printl("globalData: " + str(globalData), self, "D")
 			entryData['globalData'] = globalData
 
-			# todo: check if we will use filter in Dreamplex or not
-			# fill title filter
-			if entryData["title"].upper() not in self.tmpAbc:
-				self.tmpAbc.append(entryData["title"].upper())
-
 			# set seen state for picture handling in view
-			seenVisu = self.getVisualisationFromCount(entryData)
+			seenVisu = self.getViewStatefromViewCount(entryData)
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
@@ -475,7 +467,7 @@ class PlexLibrary(Screen):
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
 
 		printl("", self, "C")
-		return fullList, self.tmpAbc
+		return fullList
 
 	#===============================================================================
 	#
@@ -506,9 +498,6 @@ class PlexLibrary(Screen):
 
 		fullList=[]
 
-		# fill for sorting within dreamPlex
-		self.tmpAbc = []
-
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
@@ -533,7 +522,7 @@ class PlexLibrary(Screen):
 			entryData['banner']             = self.getImage(entry, server, myType = "banner")
 			entryData['token']			    = self.g_myplex_accessToken
 
-			seenVisu = self.getSeenVisuForShowEntry(entryData)
+			viewState = self.getViewStateForShowEntry(entryData)
 
 			if self.g_showUnSeenCounts:
 				entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
@@ -546,32 +535,29 @@ class PlexLibrary(Screen):
 				url = 'http://%s/%s'  % ( server, entryData['key'])
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+			fullList.append(self.getFullListEntry(entryData, url, viewState))
 
 		printl("", self, "C")
-		return fullList, self.tmpAbc
+		return fullList
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getSeenVisuForShowEntry(self, entryData):
+	def getViewStateForShowEntry(self, entryData):
 		printl("", self, "S")
 
 		# lets add this for another filter
 		if int(entryData["viewedLeafCount"]) == int(entryData["leafCount"]):
-			entryData['viewState'] = "seen"
-			seenVisu = self.seenPic
+			viewState = "seen"
 
 		elif int(entryData["viewedLeafCount"]) > 0:
-			entryData['viewState'] = "started"
-			seenVisu = self.startedPic
+			viewState = "started"
 
 		else:
-			entryData['viewState'] = "unseen"
-			seenVisu = self.unseenPic
+			viewState = "unseen"
 
 		printl("", self, "C")
-		return seenVisu
+		return viewState
 
 	#===========================================================================
 	#
@@ -614,7 +600,7 @@ class PlexLibrary(Screen):
 				printl("globalData: " + str(globalData), self, "D")
 				entryData["ratingKey"] = globalData["key"]
 
-			seenVisu = self.getSeenVisuForShowEntry(entryData)
+			seenVisu = self.getViewStateForShowEntry(entryData)
 
 			url = 'http://%s/%s'  % ( server, entryData['key'])
 
@@ -633,9 +619,6 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		fullList=[]
-
-		# fill for sorting within dreamPlex
-		self.tmpAbc = []
 
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
@@ -674,16 +657,11 @@ class PlexLibrary(Screen):
 			printl("globalData: " + str(globalData), self, "D")
 			entryData['globalData'] = globalData
 
-			# todo: check if we will use filter in Dreamplex or not
-			# fill title filter
-			if entryData["title"].upper() not in self.tmpAbc:
-				self.tmpAbc.append(entryData["title"].upper())
-
 			# set seen state for picture handling in view
-			seenVisu = self.getVisualisationFromCount(entryData)
+			viewState = self.getViewStatefromViewCount(entryData)
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+			fullList.append(self.getFullListEntry(entryData, url, viewState))
 
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
@@ -2628,7 +2606,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getFullListEntry(self, entryData, url, seenVisu = None, isDirectory = False):
+	def getFullListEntry(self, entryData, url, viewState = None, isDirectory = False):
 		printl("", self, "S")
 
 		if not isDirectory:
@@ -2642,7 +2620,7 @@ class PlexLibrary(Screen):
 		nextUrl = 'http://%s%s'  % ( entryData['server'], entryData['key'])
 
 		# we send entryData twice due to compatibility for now. later it will be removed
-		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, seenVisu, nextUrl)
+		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, viewState, nextUrl)
 
 		printl("", self, "C")
 		return content
@@ -2650,7 +2628,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getVisualisationFromCount(self, entryData):
+	def getViewStatefromViewCount(self, entryData):
 		printl("", self, "S")
 
 		# because it could be that this tags are not existing we write them via get to set them to zero if they dont
@@ -2659,16 +2637,16 @@ class PlexLibrary(Screen):
 
 		# improveMe: this should be done outside maybe in DP_View
 		if viewCount > 0:
-			seenVisu = "seen"
+			viewState = "seen"
 
 		elif viewCount >= 0 and viewOffset > 0:
-			seenVisu = "started"
+			viewState = "started"
 
 		else:
-			seenVisu = "unseen"
+			viewState = "unseen"
 
 		printl("", self, "C")
-		return seenVisu
+		return viewState
 
 	#===============================================================================
 	#
