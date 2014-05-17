@@ -80,7 +80,19 @@ class DPS_ViewShows(DP_ViewCine):
 			self.changePoster = True
 			self.resetPoster = True
 			self.resetBackdrop = True
-	
+
+		elif self.details ["viewMode"] == "ShowEpisodes":
+			printl( "is ShowEpisodes specific season",self, "D")
+			self.isTvShow = True
+			self.parentSeasonNr = self.details["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.details["ratingKey"]
+			self.startPlaybackNow = False
+			self.changeBackdrop = False
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
 		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
 			self.isTvShow = True
@@ -88,18 +100,6 @@ class DPS_ViewShows(DP_ViewCine):
 			self.pname = self.parentSeasonId
 			self.startPlaybackNow = False
 			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
-			
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
-			printl( "is ShowEpisodes special season",self, "D")
-			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
 			self.changePoster = True
 			self.resetPoster = False
 			self.resetBackdrop = False

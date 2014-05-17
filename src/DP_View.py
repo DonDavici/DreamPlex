@@ -1419,15 +1419,16 @@ class DP_View(Screen, NumericalTextInput):
 				# we also check if we want to play
 				self.getPictureInformationToLoad()
 
-				# lets set the urls for context functions of the selected entry
-				self.seenUrl = self.context.get("watchedURL", None)
-				self.unseenUrl = self.context.get("unwatchURL", None)
-				self.deleteUrl = self.context.get("deleteURL", None)
-				self.refreshUrl = self.context.get("libraryRefreshURL", None)
-				printl("seenUrl: " + str(self.seenUrl),self, "D")
-				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+				# todo reactivate this
+				# # lets set the urls for context functions of the selected entry
+				# self.seenUrl = self.context.get("watchedURL", None)
+				# self.unseenUrl = self.context.get("unwatchURL", None)
+				# self.deleteUrl = self.context.get("deleteURL", None)
+				# self.refreshUrl = self.context.get("libraryRefreshURL", None)
+				# printl("seenUrl: " + str(self.seenUrl),self, "D")
+				# printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+				# printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+				# printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme:

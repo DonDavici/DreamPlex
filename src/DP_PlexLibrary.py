@@ -96,7 +96,7 @@ class PlexLibrary(Screen):
 	g_useFilterSections = "true" # show filter for media
 	g_streamControl = "1" # 1 unknown, 2 = unknown, 3 = All subs disabled
 	g_channelview = "false" # unknown
-	g_flatten = "0" # 0 = show seasons, 1 = show all
+	g_flattenShow = False # False = show seasons, True = show all
 	g_playtheme = "false"
 	g_forcedvd = "false"
 	g_skipmetadata = "false" # best understanding when looking getMoviesfromsection
@@ -274,7 +274,7 @@ class PlexLibrary(Screen):
 				# we have to do this because via myPlex there could be diffrent servers with other tokens
 				if str(entryData.get('address')) not in self.g_myplex_accessToken:
 					printl("section address" + str(entryData.get('address')), self, "D")
-					self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('token', None))
+					self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
 
 				# finally we set AccessTokenHeader
 				self.setAccessTokenHeader(str(entryData.get('serverVersion')))
@@ -374,13 +374,7 @@ class PlexLibrary(Screen):
 				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
 				entryData["type"] = incomingEntryData["type"]
 
-				# if entryData["key"] == "Director":
-				# 	function = Plugin.MENU_FILTER_VERT
-				# else:
-				# 	function = Plugin.MENU_FILTER
-				function = Plugin.MENU_FILTER
-
-				fullList.append((_(entryData.get('title').encode('utf-8')), function, "showFilter", entryData))
+				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
 
 			else:
 				entryData["contentUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
@@ -388,6 +382,8 @@ class PlexLibrary(Screen):
 				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
 					if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
 						entryData["showEpisodesDirectly"] = True
+					else:
+						entryData["showEpisodesDirectly"] = False
 
 					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
 
@@ -428,7 +424,6 @@ class PlexLibrary(Screen):
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
 
-			#extraData['type']			    = "Video" # todo: not sure if we need this
 			entryData["viewMode"]			= "play"
 			entryData['server']			    = server
 			entryData['tagType']            = "Video"
@@ -501,6 +496,212 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return self.getDirectoryData(url, nextViewMode="ShowTracks")
+
+	#=======================================================================
+	#
+	#=======================================================================
+	def getShowsFromSection(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		fullList=[]
+
+		# fill for sorting within dreamPlex
+		self.tmpAbc = []
+
+		# get xml from url
+		tree = self.getXmlTreeFromUrl(url)
+		server = str(self.getServerFromURL(url))
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			entryData["viewMode"]			= "ShowSeasons"
+			entryData['server']			    = server
+			entryData['tagType']            = "Show"
+			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
+			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
+			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
+			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
+
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['banner']             = self.getImage(entry, server, myType = "banner")
+			entryData['token']			    = self.g_myplex_accessToken
+
+			seenVisu = self.getSeenVisuForShowEntry(entryData)
+
+			if self.g_showUnSeenCounts:
+				entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
+
+			#Create URL based on whether we are going to flatten the season view
+			if self.g_flattenShow:
+				printl("Flattening all shows", self, "I")
+				url = 'http://%s/%s'  % ( server, entryData['key'].replace("children","allLeaves"))
+			else:
+				url = 'http://%s/%s'  % ( server, entryData['key'])
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+
+		printl("", self, "C")
+		return fullList, self.tmpAbc
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSeenVisuForShowEntry(self, entryData):
+		printl("", self, "S")
+
+		# lets add this for another filter
+		if int(entryData["viewedLeafCount"]) == int(entryData["leafCount"]):
+			entryData['viewState'] = "seen"
+			seenVisu = self.seenPic
+
+		elif int(entryData["viewedLeafCount"]) > 0:
+			entryData['viewState'] = "started"
+			seenVisu = self.startedPic
+
+		else:
+			entryData['viewState'] = "unseen"
+			seenVisu = self.unseenPic
+
+		printl("", self, "C")
+		return seenVisu
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSeasonsOfShow(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		fullList=[]
+
+		# get xml from url
+		tree = self.getXmlTreeFromUrl(url)
+		server = str(self.getServerFromURL(url))
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+		printl("entries: " + str(entries), self, "D")
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			if self.g_flattenShow:
+				url='http://' + server + entryData["key"]
+				self.getEpisodesOfSeason(url)
+				return
+
+			entryData["viewMode"]			= "ShowEpisodes"
+			entryData['server']			    = server
+			entryData['tagType']            = "Episodes"
+
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['token']			    = self.g_myplex_accessToken
+
+			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer
+			if "ratingKey" not in entryData:
+				# write global xml data to entryData
+				globalData = (dict(tree.items()))
+				printl("globalData: " + str(globalData), self, "D")
+				entryData["ratingKey"] = globalData["key"]
+
+			seenVisu = self.getSeenVisuForShowEntry(entryData)
+
+			url = 'http://%s/%s'  % ( server, entryData['key'])
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, seenVisu, isDirectory=True))
+
+		printl("fullList: " + str(fullList), self, "C")
+		printl("", self, "C")
+		return fullList
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getEpisodesOfSeason(self, url, directMode=False):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		fullList=[]
+
+		# fill for sorting within dreamPlex
+		self.tmpAbc = []
+
+		# get xml from url
+		tree = self.getXmlTreeFromUrl(url)
+		server = str(self.getServerFromURL(url))
+		# find coressponding tags in xml
+		entries = tree.findall('Video')
+
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("entryData: " + str(entryData), self, "D")
+
+			if not directMode:
+				entryData["viewMode"]				= "play"
+			else:
+				entryData["viewMode"]				= "directMode"
+			entryData['server']			    = server
+			entryData['tagType']            = "Video"
+			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
+			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
+			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
+			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
+
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['token']			    = self.g_myplex_accessToken
+
+			# add part and media data to main data element
+			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
+
+			entryData["partDataArr"] = partDataArr
+			entryData["mediaDataArr"] = mediaDataArr
+
+			# write global xml data to entryData
+			globalData = (dict(tree.items()))
+			printl("globalData: " + str(globalData), self, "D")
+			entryData['globalData'] = globalData
+
+			# todo: check if we will use filter in Dreamplex or not
+			# fill title filter
+			if entryData["title"].upper() not in self.tmpAbc:
+				self.tmpAbc.append(entryData["title"].upper())
+
+			# set seen state for picture handling in view
+			seenVisu = self.getVisualisationFromCount(entryData)
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+
+		# find coressponding tags in xml
+		entries = tree.findall('Directory')
+
+		# used for filter like director, decade, ...
+		for entry in entries:
+			entryData = (dict(entry.items()))
+			printl("directoryData: " + str(entryData), self, "D")
+
+			entryData['server'] 	= str(server)
+			entryData['tagType']    = "Directory"
+			entryData["viewMode"]	= "ShowDirectory"
+
+			# add to fullList
+			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
+
+		printl("", self, "C")
+		return fullList
 
 	#===============================================================================
 	#
@@ -1024,8 +1225,8 @@ class PlexLibrary(Screen):
 		try:
 			conn = httplib.HTTPConnection(server)
 
-			authHeader = self.get_hTokenForServer()
-			printl("header: " + str(authHeader), self, "D", True, 8)
+			authHeader = self.get_hTokenForServer(server)
+			printl("header: " + str(authHeader), self, "D")
 			conn.request(myType, urlPath, headers=authHeader)
 
 			data = conn.getresponse()
@@ -1302,407 +1503,6 @@ class PlexLibrary(Screen):
 			self.locations += str(myFile) + "\n"
 			printl("", self, "C")
 			return False
-
-	#=======================================================================
-	#
-	#=======================================================================
-	def getShowsFromSection(self, url, tree=None ):
-		printl("", self, "S")
-
-		fullList=[]
-		self.tmpAbc = []
-		self.tmpGenres = []
-
-		server=self.getServerFromURL(url)
-		self.g_currentServer = server
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-
-		#Get the URL and server name.  Get the XML and parse
-		if tree is None:
-			html=self.doRequest(url)
-
-			if html is False:
-				printl("", self, "C")
-				return
-
-			try:
-				tree = etree.fromstring(html)
-			except Exception:
-				self._showErrorOnTv("no xml as response", html)
-
-		#For each directory tag we find
-		ShowTags=tree.findall('Directory')
-
-		for show in ShowTags:
-			tempgenre=[]
-			tempcast=[]
-			tempdir=[]
-			tempwriter=[]
-
-			#Lets grab all the info we can quickly through either a dictionary, or assignment to a list
-			#We'll process it later
-			for child in show:
-				if child.tag == "Media":
-					# todo we have to check if we need this
-					mediaArguments = dict(child.items())
-					printl("mediaArguments: " + str(mediaArguments), self, "D")
-
-				elif child.tag == "Genre" and self.g_skipmetadata == "false":
-					genreTag = child.get('tag')
-					tempgenre.append(genreTag)
-
-					# fill genre filter
-					if genreTag not in self.tmpGenres:
-						self.tmpGenres.append(genreTag)
-
-				elif child.tag == "Writer"  and self.g_skipmetadata == "false":
-					tempwriter.append(child.get('tag'))
-
-				elif child.tag == "Director"  and self.g_skipmetadata == "false":
-					tempdir.append(child.get('tag'))
-
-				elif child.tag == "Role"  and self.g_skipmetadata == "false":
-					tempcast.append(child.get('tag'))
-
-			details = {}
-			details["viewMode"]				= "ShowSeasons"
-			details['ratingKey']			= str(show.get('ratingKey', 0)) # primary key in plex
-			details['summary']				= show.get('summary','')
-			details['title']				= show.get('title','').encode('utf-8')
-			details['episode']				= int(show.get('leafCount',0))
-			details['rating']				= show.get('rating', 0)
-			details['studio']				= show.get('studio','')
-			details['year']					= show.get('year', 0)
-			details['tagline']				= show.get('tagline','')
-			details['server']				= str(server)
-			details['genre']				= " / ".join(tempgenre)
-			details['viewOffset']			= show.get('viewOffset',0)
-			details['director']				= " / ".join(tempdir)
-			details['originallyAvailableAt']= show.get('originallyAvailableAt','')
-
-			#Extended Metadata
-			if self.g_skipmetadata == "false":
-				details['cast']	 = tempcast
-				details['writer']   = " / ".join(tempwriter)
-
-			watched = int(show.get('viewedLeafCount',0))
-
-			extraData = {}
-			extraData['type']				= "video"
-			extraData['ratingKey']			= str(show.get('ratingKey', 0)) # primary key in plex
-			extraData['parentRatingKey']    = show.get('parentRatingKey', None) # might be tv show
-			extraData['grandparentRatingKey']= show.get('grandparentRatingKey', None) # might be seaon of show
-			extraData['seenEpisodes']		= watched
-			extraData['unseenEpisodes']		= details['episode'] - watched
-			extraData['thumb']				= self.getImage(show, server, myType = "thumb")
-			extraData['fanart_image']		= self.getImage(show, server, myType = "art")
-			extraData['token']				= self.g_myplex_accessToken
-			extraData['theme']				= show.get('theme', '')
-			extraData['key']				= show.get('key','')
-
-			# lets add this for another filter
-			if int(extraData['seenEpisodes']) == int(details['episode']):
-				details['viewState'] = "seen"
-				seenVisu = self.seenPic
-
-			elif int(extraData['seenEpisodes']) > 0:
-				details['viewState']		= "started"
-				seenVisu = self.startedPic
-
-			else:
-				details['viewState'] = "unseen"
-				seenVisu = self.unseenPic
-
-			if self.g_showUnSeenCounts:
-				details['title'] = details['title'] + " ("+ str(details['episode']) + "/" + str(watched) + ")"
-
-			if show.get('banner',None) is not None:
-				extraData['banner']='http://'+server+show.get('banner').split('?')[0]+"/banner.jpg"
-
-			#Add extra media flag data
-			if self.g_skipmediaflags == "false":
-				extraData['contentRating']	  = show.get('contentRating', '')
-
-			# lets add this for another filter
-			if int(extraData['unseenEpisodes']) == 0:
-				details['viewState']		= "seen"
-			else:
-				details['viewState']		= "unseen"
-
-			#Build any specific context menu entries
-			contextMenu=self.buildContextMenu(url, extraData['ratingKey'], server)
-
-			# fill genre filter
-			if details['genre'] not in self.tmpGenres:
-				self.tmpGenres.append(details['genre'])
-
-			# fill title filter
-			if details["title"].upper() not in self.tmpAbc:
-				self.tmpAbc.append(details["title"].upper())
-
-			#Create URL based on whether we are going to flatten the season view
-			if self.g_flatten == "2":
-				printl("Flattening all shows", self, "I")
-				u='http://%s/%s'  % ( server, extraData['key'].replace("children","allLeaves"))
-			else:
-				u='http://%s/%s'  % ( server, extraData['key'])
-
-			#Right, add that link...and loop around for another entry
-			content = self.buildListEntry(u,details,extraData, contextMenu, seenVisu)
-
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList, self.tmpAbc , self.tmpGenres
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getSeasonsOfShow(self, url, tree=None):
-		printl("", self, "S")
-
-		server=self.getServerFromURL(url)
-		self.g_currentServer = server
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-
-		if tree is None:
-			html=self.doRequest(url)
-
-			if html is False:
-				printl("", self, "C")
-				return
-
-			try:
-				tree = etree.fromstring(html)
-			except Exception:
-				self._showErrorOnTv("no xml as response", html)
-
-		willFlatten=False
-		if self.g_flatten == "1" and int(tree.get('size', 0)) == 1:
-		#check for a single season
-			printl("Flattening single season show", self, "I")
-			willFlatten=True
-
-		sectionart=self.getImage(tree, server, myType="art")
-
-		#For all the directory tags
-		SeasonTags=tree.findall('Directory')
-
-		fullList=[]
-
-		for season in SeasonTags:
-			#printl("season: " + str(season),self, "D")
-
-			if willFlatten:
-				url='http://'+server+season.get('key')
-				self.getEpisodesOfSeason(url)
-				return
-
-			watched=int(season.get('viewedLeafCount',0))
-
-			details = {}
-			details["viewMode"]				= "ShowEpisodes"
-			details['ratingKey']			= str(season.get('ratingKey', 0)) # primary key in plex
-			details['summary']				= season.get('summary','')
-			details['season']				= season.get('index','0')
-			details['title']				= season.get('title','').encode('utf-8')
-
-			# we try to fetch from tree
-			parentTitle = tree.get('parentTitle',None)
-
-			if parentTitle is None:
-				# next we try to fetch from season
-				parentTitle = season.get('parentTitle', None)
-			if parentTitle is None:
-				# if still no result we set to blank
-				parentTitle = " "
-
-			details['grandparentTitle']	    = parentTitle
-			details['episode']				= int(season.get('leafCount',0))
-			details['rating']				= season.get('rating', 0)
-			details['studio']				= season.get('studio','')
-			details['year']					= season.get('year', 0)
-			details['tagline']				= season.get('tagline','')
-			details['server']				= str(server)
-			details['viewOffset']			= season.get('viewOffset',0)
-			details['originallyAvailableAt']= season.get('originallyAvailableAt','')
-
-			extraData = {}
-			extraData['type']				= "video"
-			extraData['ratingKey']			= str(season.get('ratingKey', '0')) # primary key in plex
-			extraData['parentRatingKey']    = season.get('parentRatingKey', None) # might be tv show
-			extraData['grandparentRatingKey']= season.get('grandparentRatingKey', None) # might be seaon of show
-			extraData['seenEpisodes']		= watched
-			extraData['unseenEpisodes']		= details['episode'] - watched
-			extraData['thumb']				= self.getImage(season, server, myType = "thumb")
-			extraData['fanart_image']		= self.getImage(season, server, myType = "art")
-			extraData['token']				= self.g_myplex_accessToken
-			extraData['theme']				= season.get('theme', '')
-			extraData['key']				= season.get('key','')
-
-			# lets add this for another filter
-			if int(extraData['seenEpisodes']) == int(details['episode']):
-				details['viewState'] = "seen"
-				seenVisu = self.seenPic
-
-			elif int(extraData['seenEpisodes']) > 0:
-				details['viewState']		= "started"
-				seenVisu = self.startedPic
-
-			else:
-				details['viewState'] = "unseen"
-				seenVisu = self.unseenPic
-
-			if extraData['fanart_image'] == "":
-				extraData['fanart_image'] = sectionart
-
-			url='http://%s%s' % ( server , extraData['key'])
-
-			contextMenu=self.buildContextMenu(url, details['ratingKey'], server)
-
-			content = self.buildListEntry(url, details, extraData, contextMenu, seenVisu)
-
-			fullList.append(content)
-
-		printl("", self, "C")
-		return fullList
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def getEpisodesOfSeason(self, url, tree=None, directMode=False):
-		printl("", self, "S")
-
-		server=self.getServerFromURL(url)
-		self.g_currentServer = server
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-
-		if tree is None:
-			#Get URL, XML and Parse
-			html=self.doRequest(url)
-
-			if html is False:
-				printl("", self, "C")
-				return
-
-			try:
-				tree = etree.fromstring(html)
-			except Exception:
-				self._showErrorOnTv("no xml as response", html)
-
-		ShowTags=tree.findall('Video')
-
-		fullList=[]
-
-		for episode in ShowTags:
-			tempgenre=[]
-			tempcast=[]
-			tempdir=[]
-			tempwriter=[]
-
-			#Lets grab all the info we can quickly through either a dictionary, or assignment to a list
-			#We'll process it later
-			for child in episode:
-				if child.tag == "Media":
-					mediaarguments = dict(child.items())
-				elif child.tag == "Genre" and self.g_skipmetadata == "false":
-					genreTag = child.get('tag')
-					tempgenre.append(genreTag)
-				elif child.tag == "Writer"  and self.g_skipmetadata == "false":
-					tempwriter.append(child.get('tag'))
-				elif child.tag == "Director"  and self.g_skipmetadata == "false":
-					tempdir.append(child.get('tag'))
-				elif child.tag == "Role"  and self.g_skipmetadata == "false":
-					tempcast.append(child.get('tag'))
-
-			#Gather some data
-			duration = int(mediaarguments.get('duration',episode.get('duration',0)))/1000
-
-			#Required listItem entries for XBMC
-			details = {}
-			if not directMode:
-				details["viewMode"]				= "play"
-			else:
-				details["viewMode"]				= "directMode"
-			details['ratingKey']			= str(episode.get('ratingKey', 0)) # primary key in plex
-			details['title']				= episode.get('title','Unknown').encode('utf-8')
-			details['summary']				= episode.get('summary','')
-			details['episode']				= int(episode.get('index',0))
-			details['title']				= str(details['episode']).zfill(2) + ". " + details['title']
-
-			# we try to fetch from tree
-			parentTitle = tree.get('grandparentTitle',None)
-
-			if parentTitle is None:
-				# next we try to fetch from season
-				parentTitle = episode.get('grandparentTitle', None)
-			if parentTitle is None:
-				# if still no result we set to blank
-				parentTitle = " "
-			details['grandparentTitle']		= parentTitle
-
-			details['season']				= episode.get('parentIndex',tree.get('parentIndex',0))
-			details['viewCount']			= episode.get('viewCount', 0)
-			details['rating']				= episode.get('rating', 0)
-			details['studio']				= episode.get('studio','')
-			details['year']					= episode.get('year', 0)
-			details['tagline']				= episode.get('tagline','')
-			details['runtime']				= str(datetime.timedelta(seconds=duration))
-			details['server']				= str(server)
-			details['genre']				= " / ".join(tempgenre)
-			details['viewOffset']			= episode.get('viewOffset',0)
-			details['director']				= " / ".join(tempdir)
-
-			if tree.get('mixedParents',0) == 1:
-				details['title'] = details['tvshowtitle'] + ": " + details['title']
-
-			# lets add this for another filter
-			if details['viewCount'] > 0:
-				details['viewState'] = "seen"
-				seenVisu = self.seenPic
-
-			elif details['viewCount'] >= 0 and details['viewOffset'] > 0:
-				details['viewState']		= "started"
-				seenVisu = self.startedPic
-
-			else:
-				details['viewState'] = "unseen"
-				seenVisu = self.unseenPic
-
-			#Extended Metadata
-			if self.g_skipmetadata == "false":
-				details['cast']	 = tempcast
-				details['writer']   = " / ".join(tempwriter)
-
-			extraData = {}
-			extraData['type']					= "Video"
-			extraData['ratingKey']				= str(episode.get('ratingKey', '-')) # primary key in plex
-			extraData['parentRatingKey']    = episode.get('parentRatingKey', None) # might be tv show
-			extraData['grandparentRatingKey']= episode.get('grandparentRatingKey', None) # might be seaon of show
-			extraData['thumb']					= self.getImage(episode, server, myType = "grandparentThumb")
-			extraData['fanart_image']	 		= self.getImage(episode, server, myType = "thumb") #because this is a episode we have to use thumb
-			extraData['token']					= self.g_myplex_accessToken
-			extraData['key']					= episode.get('key','')
-
-			#Add extra media flag data
-			if self.g_skipmediaflags == "false":
-				extraData['contentRating']		= episode.get('contentRating', '')
-				extraData['videoResolution']	= mediaarguments.get('videoResolution', '')
-				extraData['videoCodec']			= mediaarguments.get('videoCodec', '')
-				extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
-				extraData['aspectRatio']		= mediaarguments.get('aspectRatio', '')
-				extraData['audioCodec']			= mediaarguments.get('audioCodec', '')
-
-			#Build any specific context menu entries
-			contextMenu = self.buildContextMenu(url, extraData['ratingKey'], server)
-
-			content = self.buildListEntry(url, details, extraData, contextMenu, seenVisu)
-
-			fullList.append(content)
-
-		#printl ("fullList = " + fullList, self, "D")
-		printl("", self, "C")
-		return fullList
 
 	#===========================================================================
 	#
@@ -2207,6 +2007,7 @@ class PlexLibrary(Screen):
 		tree = None
 
 		html = self.doRequest(url)
+		printl("html: " + str(html), self, "D")
 		if html is False:
 			printl("", self, "C")
 			return
@@ -2398,7 +2199,7 @@ class PlexLibrary(Screen):
 		transcode_url = None
 
 		if width is not None and height is not None:
-			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s%s' % (server, urllib.quote_plus(url), width, height, self.get_uTokenForServer())
+			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s%s' % (server, urllib.quote_plus(url), width, height, self.get_uTokenForServer(server))
 			printl("transcode_url: " + str(transcode_url), self, "D")
 		else:
 			printl("unspecified width and height", self, "D")
@@ -2440,39 +2241,29 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	# 
 	#===============================================================================
-	def buildContextMenu(self, url, ratingKey, server ):
+	def buildContextMenu(self, url, ratingKey, server):
 		printl("", self, "S")
 
 		context={}
 
 		#Initiate Library refresh 
 		refreshURL=url.replace("/all", "/refresh")
-		libraryRefreshURL = refreshURL.split('?')[0]+self.get_aTokenForServer()
+		libraryRefreshURL = refreshURL.split('?')[0] # + self.get_aTokenForServer(server)
 		context['libraryRefreshURL'] = libraryRefreshURL
-		
+
 		#Mark media unwatched
-		unwatchedURL="http://"+server+"/:/unscrobble?key="+ratingKey+"&identifier=com.plexapp.plugins.library" + self.get_uTokenForServer()
+		unwatchedURL="http://"+server+"/:/unscrobble?key="+ratingKey+"&identifier=com.plexapp.plugins.library"# + self.get_uTokenForServer(server)
 		context['unwatchURL'] = unwatchedURL
-				
+
 		#Mark media watched
-		watchedURL="http://"+server+"/:/scrobble?key="+ratingKey+"&identifier=com.plexapp.plugins.library" + self.get_uTokenForServer()
+		watchedURL="http://"+server+"/:/scrobble?key="+ratingKey+"&identifier=com.plexapp.plugins.library"# + self.get_uTokenForServer(server)
 		context['watchedURL'] = watchedURL
 	
 		#Delete media from Library
-		deleteURL="http://"+server+"/library/metadata/"+ratingKey+self.get_uTokenForServer()
+		deleteURL="http://"+server+"/library/metadata/"+ratingKey # + self.get_uTokenForServer(server)
 		context['deleteURL'] = deleteURL
 	
-		#Display plugin setting menu
-		#settingDisplay=plugin_url+"setting)"
-		#context.append(('DreamPlex settings', settingDisplay , ))
-	
-		#Reload media section
-		#listingRefresh=plugin_url+"refresh)"
-		#context.append(('Reload Section', listingRefresh , ))
-	
-		#printl("Using context menus " + str(context), self, "I")
-		
-		printl("", self, "C")   
+		printl("", self, "C")
 		return context
 
 #===============================================================================
@@ -2485,7 +2276,7 @@ class PlexLibrary(Screen):
 	def _showErrorOnTv(self, text, content):
 		printl("", self, "S")
 		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + ("\n%s\n%s") % (text, content), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s\n%s" % (text, content), MessageBox.TYPE_INFO)
 		
 		printl("", self, "C")   
 
@@ -2512,6 +2303,7 @@ class PlexLibrary(Screen):
 		@ return: the URL server
 		"""
 		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
 
 		if url[0:4] == "http" or url[0:4] == "plex":
 			printl("", self, "C")
@@ -2606,31 +2398,29 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def get_hTokenForServer(self):
+	def get_hTokenForServer(self, server):
 		printl("", self, "S")
 
-		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
-
 		printl("", self, "C")
-		return self.g_myplex_accessTokenDict[self.g_currentServer]["hToken"]
+		return self.g_myplex_accessTokenDict[server]["hToken"]
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def get_aTokenForServer(self):
+	def get_aTokenForServer(self, server):
 		printl("", self, "S")
 
 		printl("", self, "C")
-		return self.g_myplex_accessTokenDict[self.g_currentServer]["aToken"]
+		return self.g_myplex_accessTokenDict[server]["aToken"]
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def get_uTokenForServer(self):
+	def get_uTokenForServer(self, server):
 		printl("", self, "S")
 
 		printl("", self, "C")   
-		return self.g_myplex_accessTokenDict[self.g_currentServer]["uToken"]
+		return self.g_myplex_accessTokenDict[server]["uToken"]
 
 	#===========================================================================
 	# 
@@ -2848,18 +2638,11 @@ class PlexLibrary(Screen):
 			# directories have no contextMenu
 			contextMenu = None
 
-		# build url for playable content
-		tmpUrl = 'http://%s%s'  % ( entryData['server'], entryData['key'])
-
-		# enhance url for further usage e.g. myPlex
-		if entryData['tagType'] == "Picture":
-			newUrl = str(tmpUrl) + self.get_aTokenForServer()
-		else:
-			newUrl = str(tmpUrl) + self.get_uTokenForServer()
-		printl("newUrl: " + str(newUrl), self, "D")
+		# build url for content
+		nextUrl = 'http://%s%s'  % ( entryData['server'], entryData['key'])
 
 		# we send entryData twice due to compatibility for now. later it will be removed
-		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, seenVisu, newUrl)
+		content = (entryData.get('title','no Title'), entryData, entryData, contextMenu, seenVisu, nextUrl)
 
 		printl("", self, "C")
 		return content

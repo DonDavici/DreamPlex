@@ -42,23 +42,19 @@ class DP_LibShows(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, url=None, showEpisodesDirectly=False, uuid=None, source=None, viewGroup=None):
+	def __init__(self, session, entryData):
 		"""
 		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
 		"""
 		printl ("", self, "S")
 
-		self.showEpisodesDirectly = showEpisodesDirectly
-		if self.showEpisodesDirectly:
+		self.entryData = entryData
+
+		if self.entryData["showEpisodesDirectly"]:
 			DP_LibMain.__init__(self, session, "episodes")
 		else:
 			DP_LibMain.__init__(self, session, "tvshows")
 
-		self.g_url = url
-		self.g_uuid = uuid
-		self.g_source = source
-		self.g_viewGroup = viewGroup
-		
 		printl ("", self, "C")
 
 	#===============================================================================
@@ -68,10 +64,11 @@ class DP_LibShows(DP_LibMain):
 		printl ("", self, "S")
 		printl("params: " + str(params), self, "D")
 		
-		if self.showEpisodesDirectly:
+		if self.entryData["showEpisodesDirectly"]:
 			printl("show episodes directly ...", self, "I")
 			
-			url = self.g_url
+			url = self.entryData["contentUrl"]
+			printl("url: " + str(url), self, "D")
 			
 			library = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
@@ -88,7 +85,7 @@ class DP_LibShows(DP_LibMain):
 			if params["viewMode"] is None:
 				printl("show TV shows ...", self, "I")
 	
-				url = self.g_url
+				url = self.entryData["contentUrl"]
 				printl("url: " + str(url), self, "D")
 				
 				if config.plugins.dreamplex.useCache.value:
@@ -115,16 +112,16 @@ class DP_LibShows(DP_LibMain):
 							printl("from pickle", self, "D")
 						except:
 							printl("movie cache not found ... saving", self, "D")
-							library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+							library, tmpAbc= Singleton().getPlexInstance().getShowsFromSection(url)
 							reason = "cache file does not exists, recreating ..."
-							self.generatingCacheForTvShowSection(reason,library, tmpAbc, tmpGenres)
+							self.generatingCacheForTvShowSection(reason,library, tmpAbc)
 							printl("fallback to: from server", self, "D")
 					else:
-						library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+						library, tmpAbc = Singleton().getPlexInstance().getShowsFromSection(url)
 						reason = "generating cache first time, creating ..."
-						self.generatingCacheForTvShowSection(reason, library, tmpAbc, tmpGenres)
+						self.generatingCacheForTvShowSection(reason, library, tmpAbc)
 				else:
-					library, tmpAbc, tmpGenres = Singleton().getPlexInstance().getShowsFromSection(url)
+					library, tmpAbc = Singleton().getPlexInstance().getShowsFromSection(url)
 	
 				# sort
 				sort = [("by title", None, False), ("by year", "year", True), ("by rating", "rating", True), ]
@@ -150,7 +147,8 @@ class DP_LibShows(DP_LibMain):
 				sort = (("by season", True, False), )
 				
 				myFilter = [("All", (None, False), ("", )), ]
-				
+
+				printl ("library2: " + str(library), self, "C")
 				printl ("", self, "C")
 				return library, ("viewMode", "ratingKey", ), None, "backToShows", sort, myFilter
 				# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
