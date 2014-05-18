@@ -50,7 +50,7 @@ def registerPlugin(plugin):
 #===============================================================================
 # 
 #===============================================================================
-def getPlugins(where=None):
+def getPlugins(where = None):
 	printl("", "__plugin__::getPlugins", "S")
 	
 	if where is None:
@@ -88,45 +88,30 @@ def getPlugin(pid, where):
 # 
 #===============================================================================
 class Plugin(object):
-	MENU_SERVER = 0
-	MENU_MAIN = 1
-	MENU_PICTURES = 2
-	MENU_MUSIC = 3
-	MENU_MOVIES = 4
-	MENU_TVSHOWS = 5
-	MENU_SYSTEM = 8
-	AUTOSTART = 9
+	# constants
+	MENU_SERVER = 1
+	MENU_MAIN = 2
+	MENU_PICTURES = 3
+	MENU_MUSIC = 4
+	MENU_MOVIES = 5
+	MENU_TVSHOWS = 6
+	MENU_SYSTEM = 7
+	MENU_FILTER = 8
 
-	SETTINGS = 10
-
-	MENU_MOVIES_PLUGINS = 11
-	AUTOSTART_E2 = 12
-	STOP_E2 = 13
-	MENU_DEV = 14
-
-	WAKEUP = 15
-	AUTOSTART_DELAYED = 16
-	MENU_FILTER = 17
-	MENU_FILTER_VERT = 18
-	MENU_HELP = 19
-	MENU_CHANNELS = 20
-
-	INFO_PLAYBACK = 100
-	#INFO_SEEN = 101
+	# todo this could not work - we have to fix
+	MENU_MOVIES_PLUGINS = 9
 
 	pid = None
 	name = None
 	desc = None
 	start = None
-	fnc = None
+	func = None
 	where = None
-	weight = 100
-	supportStillPicture = False
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, pid, name=None, desc=None, start=None, fnc=None, where=None, supportStillPicture=False, weight=100):
+	def __init__(self, pid, name=None, desc=None, start=None, where=None, func=None):
 		printl("", self, "S")
 
 		self.pid = pid
@@ -136,9 +121,7 @@ class Plugin(object):
 		else:
 			self.desc = desc
 		self.start = start
-		self.fnc = fnc
+		self.func = func
 		self.where = where
-		self.weight = weight
-		self.supportStillPicture = supportStillPicture
 
 		printl("", self, "C")

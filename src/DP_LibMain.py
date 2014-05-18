@@ -76,8 +76,6 @@ class DP_LibMain(Screen):
 			default = {
 			"view": self.currentViewIndex, 
 			"selection": None, 
-			"sort": None, 
-			"filter": None, 
 		}
 		
 		printl("", self, "C")
@@ -86,10 +84,10 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def setDefault(self, selection, sort, myFilter):
+	def setDefault(self, selection):
 		printl("", self, "S")
 		
-		if selection is None and sort is None and myFilter is None:
+		if selection is None:
 			try:
 				os.remove(self.defaultPickle)
 			except:
@@ -100,9 +98,7 @@ class DP_LibMain(Screen):
 		
 		default = {
 			"view": self.currentViewIndex, 
-			"selection": selection, 
-			"sort": sort, 
-			"filter": myFilter,
+			"selection": selection,
 		}
 		
 		fd = open(self.defaultPickle, "wb")
@@ -119,20 +115,20 @@ class DP_LibMain(Screen):
 		
 		default = self.getDefault()
 		self.currentViewIndex = default["view"]
-		self.showView(default["selection"], default["sort"], default["filter"])
+		self.showView(default["selection"])
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def showView(self, selection=None, sort=None, myFilter=None, cache=None):
+	def showView(self, selection=None, cache=None):
 		"""
 		Displays the selected View
 		"""
 		printl("", self, "S")
 		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [])
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, myFilter=myFilter, cache=cache)
+		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, cache=cache)
 		
 		printl("", self, "C")
 
@@ -145,24 +141,19 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		printl("cause: %s" % str(cause), self, "D")
+
 		if cause is not None:
 			if cause[0] == DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT:
 				selection = None
-				sort = None
-				myFilter = None
+
 				if len(cause) >= 2 and cause[1] is not None:
 					#self.currentViewIndex = cause[1]
 					selection = cause[1]
-				if len(cause) >= 3 and cause[2] is not None:
-					sort = cause[2]
-				if len(cause) >= 4 and cause[3] is not None:
-					myFilter = cause[3]
-				self.setDefault(selection, sort, myFilter)
+				self.setDefault(selection)
 				self.close()
+
 			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW or cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE:
 				selection = None
-				sort = None
-				myFilter = None
 				self.currentViewIndex += 1
 				if len(self._views) <= self.currentViewIndex:
 					self.currentViewIndex = 0
@@ -170,10 +161,7 @@ class DP_LibMain(Screen):
 				if len(cause) >= 2 and cause[1] is not None:
 					#self.currentViewIndex = cause[1]
 					selection = cause[1]
-				if len(cause) >= 3 and cause[2] is not None:
-					sort = cause[2]
-				if len(cause) >= 4 and cause[3] is not None:
-					myFilter = cause[3]
+
 				if len(cause) >= 5 and cause[4] is not None:
 					for i in range(len(self._views)):
 						if cause[4]== self._views[i][1]:
@@ -181,22 +169,24 @@ class DP_LibMain(Screen):
 							break
 				
 				if cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW:
-					self.showView(selection, sort, myFilter, cache=True)
+					self.showView(selection, cache=True)
 				else:
-					self.showView(selection, sort, myFilter, cache=False)
+					self.showView(selection, cache=False)
+
 			else:
+				printl("", self, "C")
 				self.close()
+
 		else:
+			printl("", self, "C")
 			self.close()
-		
-		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self, params):
+	def loadLibrary(self, entryData):
 		printl("", self, "S")
-		
+
 		printl("", self, "C")
 		return []
 

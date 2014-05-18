@@ -82,17 +82,9 @@ class DP_View(Screen, NumericalTextInput):
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
 	ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE = 3
 
-	onNumberKeyLastChar             = "#"
-	activeSort                      = ("Default", None, False)
-	activeFilter                    = ("None", (None, False), "")
-	onEnterPrimaryKeys              = None
-	onLeavePrimaryKeyValuePair      = None
 	returnTo                        = None
-	currentKeyValuePair             = None
-
-	currentShowIndex                = None
-	currentSeasonIndex              = None
-	currentMovieIndex               = None
+	currentEntryData                = None
+	currentIndex                    = None
 	showMedia                       = False
 	showDetail                      = False
 	isDirectory                     = False
@@ -138,7 +130,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewData, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewData, select=None, cache=None):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 		self.myParams = viewData[3]
@@ -154,9 +146,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("self.skinName: " + str(self.skinName), self, "D")
 		self.useBackdropVideos = self.myParams["settings"]["backdropVideos"]
 		self.select = select
-		self.cache = cache
-		self.onFirstExecSort = sort
-		self.onFirstExecFilter = myFilter
 
 		self.libraryName = libraryName
 		self.loadLibrary = loadLibrary
@@ -713,80 +702,21 @@ class DP_View(Screen, NumericalTextInput):
 		selection = self["listview"].getCurrent()
 
 		if selection is not None:
-			details		= selection[1]
+			entryData		= selection[1]
 			context		= selection[2]
 			nextContentUrl = selection[4]
 
 			# we extend details for provide the next data location
-			details["contentUrl"] = nextContentUrl
+			entryData["contentUrl"] = nextContentUrl
+			printl("entryData: " + str(entryData), self, "D")
 
-			#details
-			viewMode	= details['viewMode']
-			self.viewMode = self.details ["viewMode"]
+			viewMode	= entryData['viewMode']
+			printl("viewMode: " +str(viewMode), self, "D")
 
-			server		= details['server']
-			printl("currentViewMode: " +str(viewMode), self, "D")
-			printl("server: " +str(server), self, "D")
+			# we need this for onEnter-func in child lib
+			self.viewMode = viewMode
 
-			# if self.isDirectory:
-			# 	printl("isDirectory: " + str(self.isDirectory), self, "D")
-			# 	self.returnTo = "backToMovies"
-			# 	self.currentMovieIndex = self["listview"].getIndex()
-			# 	library, medaiContainer = Singleton().getPlexInstance().getMoviesFromSection(nextContentUrl)
-			# 	printl("library: " + str(library), self, "D")
-			# 	self.listViewList = library
-			# 	self.updateList()
-
-			if viewMode == "ShowDirectory":
-				printl("viewMode -> ShowDirectory", self, "I")
-
-				params = {"viewMode": viewMode, "url": nextContentUrl}
-
-				self.currentMovieParams = details
-				self.currentMovieIndex = self["listview"].getIndex()
-
-				printl("details: " + str(details), self, "D")
-
-				self.viewStep += 1
-				self._load(details)
-
-			elif viewMode == "ShowSeasons":
-				printl("viewMode: ShowSeasons", self, "D")
-
-				self.currentSeasonsParams = details
-				self.currentShowIndex = self["listview"].getIndex()
-
-				self.viewStep += 1
-				self._load(details)
-
-			elif viewMode == "ShowEpisodes":
-				printl("viewMode: ShowEpisodes", self, "I")
-
-				self.currentEpisodesParams = details
-				self.currentSeasonIndex = self["listview"].getIndex()
-
-				self.viewStep += 1
-				self._load(details)
-
-			elif viewMode == "ShowAlbums":
-				printl("viewMode: ShowAlbums", self, "I")
-
-				self.currentEpisodesParams = details
-				self.currentArtistIndex = self["listview"].getIndex()
-
-				self.viewStep += 1
-				self._load(details)
-
-			elif viewMode == "ShowTracks":
-				printl("viewMode: ShowTracks", self, "I")
-
-				self.currentEpisodesParams = details
-				self.currentAlbumIndex = self["listview"].getIndex()
-
-				self.viewStep += 1
-				self._load(details)
-
-			elif viewMode == "play" or viewMode == "directMode":
+			if viewMode == "play" or viewMode == "directMode":
 				printl("viewMode -> play", self, "I")
 
 				# init those variable for new run
@@ -809,8 +739,13 @@ class DP_View(Screen, NumericalTextInput):
 				self.playerData["whatPoster"] = self.whatPoster
 
 				self.playSelectedMedia()
+
 			else:
-				printl("SOMETHING WENT WRONG", self, "W")
+				self.currentEntryData = entryData
+				self.currentIndex = self["listview"].getIndex()
+
+				self.viewStep += 1
+				self._load(entryData)
 
 		self.refresh()
 
@@ -868,24 +803,24 @@ class DP_View(Screen, NumericalTextInput):
 			self.session.nav.stopService()
 
 		if self.returnTo == "backToSeasons":
-			self._load(self.currentSeasonsParams)
-			self["listview"].setIndex(self.currentSeasonIndex)
+			self._load(self.currentEntryData)
+			self["listview"].setIndex(self.currentIndex)
 
 		elif self.returnTo == "backToShows":
 			self._load()
-			self["listview"].setIndex(self.currentShowIndex)
+			self["listview"].setIndex(self.currentIndex)
 
 		elif self.returnTo == "backToMovies":
 			self._load()
-			self["listview"].setIndex(self.currentMovieIndex)
+			self["listview"].setIndex(self.currentIndex)
 
 		elif self.returnTo == "backToArtists":
 			self._load()
-			self["listview"].setIndex(self.currentArtistIndex)
+			self["listview"].setIndex(self.currentIndex)
 
 		elif self.returnTo == "backToAlbums":
 			self._load()
-			self["listview"].setIndex(self.currentAlbumIndex)
+			self["listview"].setIndex(self.currentIndex)
 
 		else:
 			printl("", self, "C")

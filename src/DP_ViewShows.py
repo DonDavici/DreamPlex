@@ -48,11 +48,10 @@ class DPS_ViewShows(DP_ViewCine):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
 		printl("", self , "S")
 
-		self.session = session
-		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
+		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
 
 		self.setTitle(_("Shows"))
 

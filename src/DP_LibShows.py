@@ -22,10 +22,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import cPickle as pickle
-
-from Components.config import config
-
 from DP_LibMain import DP_LibMain
 
 from DPH_Singleton import Singleton
@@ -37,19 +33,14 @@ from __common__ import printl2 as printl
 #===============================================================================
 class DP_LibShows(DP_LibMain):
 
-	g_url = None
-	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, entryData):
-		"""
-		we use showEpisodesDirectly for the onDeck functions that forces us to jump directly to episodes
-		"""
+	def __init__(self, session, initalEntryData):
 		printl ("", self, "S")
 
-		self.initalEntryData = entryData
-		printl("entryData: " + str(self.initalEntryData))
+		self.initalEntryData = initalEntryData
+		printl("initalEntryData: " + str(self.initalEntryData))
 
 		if self.initalEntryData["showEpisodesDirectly"]:
 			DP_LibMain.__init__(self, session, "episodes")
@@ -63,7 +54,6 @@ class DP_LibShows(DP_LibMain):
 	#===============================================================================
 	def loadLibrary(self, entryData = None):
 		printl ("", self, "S")
-		printl("initalEntryData: " + str(self.initalEntryData), self, "D")
 		printl("entryData: " + str(entryData), self, "D")
 
 		if entryData is None:

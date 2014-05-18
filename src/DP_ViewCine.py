@@ -47,10 +47,9 @@ class DP_ViewCine(DP_View):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
 		printl("", self , "S")
 
-		self.session = session
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
 
 		printl("", self, "C")

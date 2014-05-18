@@ -24,8 +24,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 from DP_LibMain import DP_LibMain
 
-from DPH_Singleton import Singleton
-
 from __common__ import printl2 as printl
 
 #===============================================================================
@@ -33,34 +31,39 @@ from __common__ import printl2 as printl
 #===============================================================================
 class DP_LibMusic(DP_LibMain):
 
-	g_url = None
-	
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, entryData):
+	def __init__(self, session, initalEntryData):
 		printl ("", self, "S")
 
 		DP_LibMain.__init__(self, session, "music")
 
-		self.entryData = entryData
+		self.initalEntryData = initalEntryData
+		printl("initalEntryData: " + str(self.initalEntryData))
 
 		printl ("", self, "C")
 
 	#===============================================================================
 	#
 	#===============================================================================
-	def loadLibrary(self, params):
+	def loadLibrary(self, entryData = None):
 		printl ("", self, "S")
+		printl("entryData: " + str(entryData), self, "D")
+
+		if entryData is None:
+			entryData = self.initalEntryData
+
+		returnTo = None
 
 		if self.g_librarySteps == 2:
-			if params["viewMode"] is None:
-				params["viewMode"] = "ShowAlbums"
+			if entryData["viewMode"] is None:
+				entryData["viewMode"] = "ShowAlbums"
 		else:
-			if params["viewMode"] is None:
-				params["viewMode"] = "ShowArtists"
+			if entryData["viewMode"] is None:
+				entryData["viewMode"] = "ShowArtists"
 
-		library = self._loadLibrary(params)
+		library = self._loadLibrary(entryData)
 
 		printl("libary:" + str(library[0]), self, "D")
 		printl ("", self, "C")
@@ -99,4 +102,4 @@ class DP_LibMusic(DP_LibMain):
 			library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
 		printl ("", self, "C")
-		return library, returnTo
+		return library, returnTo, mediaContainer

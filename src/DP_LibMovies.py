@@ -33,17 +33,16 @@ from __common__ import printl2 as printl
 #===============================================================================
 class DP_LibMovies(DP_LibMain):
 
-	g_url = None
-	
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, entryData):
+	def __init__(self, session, initalEntryData):
 		printl ("", self, "S")
+
+		self.initalEntryData = initalEntryData
+		printl("initalEntryData: " + str(self.initalEntryData))
 		
 		DP_LibMain.__init__(self, session, "movies")
-
-		self.entryData = entryData
 
 		printl ("", self, "C")
 
@@ -52,17 +51,15 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	def loadLibrary(self, entryData = None):
 		printl ("", self, "S")
+		printl("entryData: " + str(entryData), self, "D")
 
 		if entryData is None:
-			entryData = self.entryData
+			entryData = self.initalEntryData
 
-		# coming from DP_View _load()
-		printl("entryData: " + str(entryData), self, "D")
 		returnTo = None
 
 		url = entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
-
 
 		if "viewMode" in entryData:
 			printl ("viewMode: " + str(entryData["viewMode"]), self, "D")
