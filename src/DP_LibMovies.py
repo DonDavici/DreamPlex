@@ -51,10 +51,11 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	def loadLibrary(self, entryData = None):
 		printl ("", self, "S")
-		printl("entryData: " + str(entryData), self, "D")
 
 		if entryData is None:
 			entryData = self.initalEntryData
+
+		printl("entryData: " + str(entryData), self, "D")
 
 		url = entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")

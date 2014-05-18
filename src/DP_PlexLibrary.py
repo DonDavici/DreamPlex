@@ -286,7 +286,7 @@ class PlexLibrary(Screen):
 				entryData["path"] += '/all'
 
 			entryData["serverName"] = self.serverConfig_Name.encode()
-			entryData["sectionUrl"] = self.getSectionUrl(entryData['address'], entryData['path']) # former t_url
+			entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
 
 			# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
 			detail = ""
@@ -357,7 +357,7 @@ class PlexLibrary(Screen):
 
 		fullList = []
 		# get xml from url
-		tree = self.getXmlTreeFromUrl(incomingEntryData["sectionUrl"])
+		tree = self.getXmlTreeFromUrl(incomingEntryData["contentUrl"])
 
 		# find coressponding tags in xml
 		entries = tree.findall('Directory')
@@ -370,13 +370,13 @@ class PlexLibrary(Screen):
 			entryData["hasPromptTag"] = entryData.get("prompt", False)
 
 			if entryData["hasSecondaryTag"]: #means that the next answer is a filter
-				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
+				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
 				entryData["type"] = incomingEntryData["type"]
 
 				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
 
 			else:
-				entryData["contentUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]
+				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
 
 				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
 					if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
@@ -855,6 +855,7 @@ class PlexLibrary(Screen):
 		updatedAt = entryData.get('updatedAt', 'Unknown')
 		printl("uuid: " + str(myUuid), self, "D")
 		printl("updatedAt: " + str(updatedAt), self, "D")
+		source = "plex"
 
 		try:
 			if not self.sectionCacheLoaded:
@@ -906,14 +907,14 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getSectionUrl(self, address, path):
+	def getContentUrl(self, address, path):
 		printl("", self, "S")
 
-		sectionUrl = 'http://%s%s' % ( address, path)
+		contentUrl = 'http://%s%s' % ( address, path)
 
-		printl("sectionUrl = " + sectionUrl, self, "D")
+		printl("contentUrl = " + contentUrl, self, "D")
 		printl("", self, "C")
-		return sectionUrl
+		return contentUrl
 
 	#====================================================================
 	#
