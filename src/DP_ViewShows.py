@@ -109,7 +109,7 @@ class DPS_ViewShows(DP_ViewCine):
 			self.startPlaybackNow = True
 			#self.isTvShow = True
 			self.bname = self.details["ratingKey"]
-			self.pname = self.extraData["grandparentRatingKey"]
+			self.pname = self.details["grandparentRatingKey"]
 			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]
 			self.changePoster = self.myParams["elements"]["poster"]["visible"]
 			self.resetPoster = True
@@ -123,7 +123,7 @@ class DPS_ViewShows(DP_ViewCine):
 			if self.parentSeasonId is not None:
 				self.pname = self.parentSeasonId
 			else:
-				self.pname = self.extraData["parentRatingKey"]
+				self.pname = self.details["parentRatingKey"]
 			# we dont want to have the same poster downloaded and used for each episode
 			self.changePoster = False
 			self.changeBackdrop = True

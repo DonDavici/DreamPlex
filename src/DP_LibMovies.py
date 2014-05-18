@@ -50,21 +50,25 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self, entryData):
+	def loadLibrary(self, entryData = None):
 		printl ("", self, "S")
 
+		if entryData is None:
+			entryData = self.entryData
+
 		# coming from DP_View _load()
-		printl("paramss: " + str(entryData), self, "D")
+		printl("entryData: " + str(entryData), self, "D")
 		returnTo = None
 
-		url = self.entryData["contentUrl"]
+		url = entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
 
-		if entryData["viewMode"] is None:
-			printl ("viewMode = None", self, "D")
-		else:
-			printl ("viewMode is Directory", self, "D")
-			returnTo = "backToMovies"
+
+		if "viewMode" in entryData:
+			printl ("viewMode: " + str(entryData["viewMode"]), self, "D")
+
+			if entryData["viewMode"] == "ShowDirectory":
+				returnTo = "backToMovies"
 
 		movies, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
 

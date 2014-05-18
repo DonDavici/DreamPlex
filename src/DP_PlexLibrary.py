@@ -368,7 +368,6 @@ class PlexLibrary(Screen):
 
 			entryData["hasSecondaryTag"] = entryData.get("secondary", False)
 			entryData["hasPromptTag"] = entryData.get("prompt", False)
-			#entryData: {'search': '1', 'prompt': 'Search Movies - Blockbuster', 'key': 'search?type=1', 'title': 'Search...'}
 
 			if entryData["hasSecondaryTag"]: #means that the next answer is a filter
 				entryData["sectionUrl"] = incomingEntryData["sectionUrl"] + "/" + entryData["key"]

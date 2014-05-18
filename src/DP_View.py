@@ -87,7 +87,7 @@ class DP_View(Screen, NumericalTextInput):
 	activeFilter                    = ("None", (None, False), "")
 	onEnterPrimaryKeys              = None
 	onLeavePrimaryKeyValuePair      = None
-	returnTo       = None
+	returnTo                        = None
 	currentKeyValuePair             = None
 
 	currentShowIndex                = None
@@ -728,14 +728,27 @@ class DP_View(Screen, NumericalTextInput):
 			printl("currentViewMode: " +str(viewMode), self, "D")
 			printl("server: " +str(server), self, "D")
 
-			if self.isDirectory:
-				printl("isDirectory: " + str(self.isDirectory), self, "D")
-				self.currentMovieIndex = self.listViewList
-				self.returnTo = "backToMovies"
-				library = Singleton().getPlexInstance().getMoviesFromSection(nextContentUrl)
-				printl("library: " + str(library), self, "D")
-				self.listViewList = library
-				self.updateList()
+			# if self.isDirectory:
+			# 	printl("isDirectory: " + str(self.isDirectory), self, "D")
+			# 	self.returnTo = "backToMovies"
+			# 	self.currentMovieIndex = self["listview"].getIndex()
+			# 	library, medaiContainer = Singleton().getPlexInstance().getMoviesFromSection(nextContentUrl)
+			# 	printl("library: " + str(library), self, "D")
+			# 	self.listViewList = library
+			# 	self.updateList()
+
+			if viewMode == "ShowDirectory":
+				printl("viewMode -> ShowDirectory", self, "I")
+
+				params = {"viewMode": viewMode, "url": nextContentUrl}
+
+				self.currentMovieParams = details
+				self.currentMovieIndex = self["listview"].getIndex()
+
+				printl("details: " + str(details), self, "D")
+
+				self.viewStep += 1
+				self._load(details)
 
 			elif viewMode == "ShowSeasons":
 				printl("viewMode: ShowSeasons", self, "D")
@@ -796,17 +809,6 @@ class DP_View(Screen, NumericalTextInput):
 				self.playerData["whatPoster"] = self.whatPoster
 
 				self.playSelectedMedia()
-
-			elif viewMode == "ShowDirectory":
-				printl("viewMode -> ShowDirectory", self, "I")
-
-				params = {"viewMode": viewMode, "url": nextContentUrl}
-
-				self.currentMovieParams = params
-				self.currentMovieIndex = self["listview"].getIndex()
-
-				self._load(params)
-
 			else:
 				printl("SOMETHING WENT WRONG", self, "W")
 
@@ -848,7 +850,6 @@ class DP_View(Screen, NumericalTextInput):
 			self[elementName].hide()
 			self[elementName+ "Label"].hide()
 
-
 	#===========================================================================
 	#
 	#===========================================================================
@@ -857,8 +858,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.viewStep -= 1
 
-		selectKeyValuePair = self.returnTo
-		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
+		printl("returnTo: " + str(self.returnTo), self, "D")
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
@@ -867,34 +867,30 @@ class DP_View(Screen, NumericalTextInput):
 			printl("stoping theme playback", self, "D")
 			self.session.nav.stopService()
 
-		if selectKeyValuePair == "backToSeasons":
+		if self.returnTo == "backToSeasons":
 			self._load(self.currentSeasonsParams)
 			self["listview"].setIndex(self.currentSeasonIndex)
 
-		elif selectKeyValuePair == "backToShows":
+		elif self.returnTo == "backToShows":
 			self._load()
 			self["listview"].setIndex(self.currentShowIndex)
 
-		elif selectKeyValuePair == "backToMovies":
-			# todo seems to be dirty here at all
-			self.listViewList = self.currentMovieIndex
-			self.updateList()
-			self.returnTo = None
+		elif self.returnTo == "backToMovies":
+			self._load()
+			self["listview"].setIndex(self.currentMovieIndex)
 
-		elif selectKeyValuePair == "backToArtists":
+		elif self.returnTo == "backToArtists":
 			self._load()
 			self["listview"].setIndex(self.currentArtistIndex)
 
-		elif selectKeyValuePair == "backToAlbums":
+		elif self.returnTo == "backToAlbums":
 			self._load()
 			self["listview"].setIndex(self.currentAlbumIndex)
 
 		else:
-			self.close()
 			printl("", self, "C")
-			return
+			self.close()
 
-		self["listview"].setIndex(1)
 		self.refresh()
 
 		printl("", self, "C")
@@ -902,26 +898,12 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def _load(self, params=None):
-		"""
-			e.g.
-			params = {}
-			params["viewMode"] = viewMode
-			params["url"] = "http://" + server + url_path
-			params["index"] = int
-		"""
+	def _load(self, entryData = None):
 		printl("", self, "S")
-		printl("params: " + str(params), self, "D")
-		printl("cache: " + str(self.cache), self, "D")
-
-		if params is None:
-			params = {}
-			params["viewMode"] = None
-
-		params["cache"] = self.cache
+		printl("entryData: " + str(entryData), self, "D")
 
 		# loadLibrary is a function in each class that inherits from DP_LibMain (DP_LibMovies, DP_LibSHows, DP_LibMusic)
-		libraryDataArr = self.loadLibrary(params)
+		libraryDataArr = self.loadLibrary(entryData)
 
 		# this is the content for the list (must be list not dict)
 		self.libraryData = libraryDataArr[0]
@@ -1639,7 +1621,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("start pĺaying theme", self, "I")
 		accessToken = Singleton().getPlexInstance().get_aTokenForServer()#g_myplex_accessToken
-		theme = self.extraData["theme"]
+		theme = self.details["theme"]
 		server = self.details["server"]
 		printl("theme: " + str(theme), self, "D")
 		url = "http://" + str(server) + str(theme) + str(accessToken) #"?X-Plex-Token=" + str(accessToken)
@@ -1757,7 +1739,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.extraData["thumb"]
+		download_url = self.details["thumb"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 			printl( "download url " + download_url, self, "D")
@@ -1780,7 +1762,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.extraData["fanart_image"]
+		download_url = self.details["fanart_image"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 			printl( "download url " + download_url, self, "D")
@@ -2054,7 +2036,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleRatedPixmaps(self):
 		printl("", self, "S")
 
-		mpaa = self.extraData.get("contentRating", "unknown").upper()
+		mpaa = self.details.get("contentRating", "unknown").upper()
 		printl("contentRating: " + str(mpaa), self, "D")
 
 		if mpaa == "PG-13" or mpaa == "TV-14":
@@ -2101,7 +2083,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleSoundPixmaps(self):
 		printl("", self, "S")
 
-		audio = self.extraData.get("audioCodec", "unknown").upper()
+		audio = self.details.get("audioCodec", "unknown").upper()
 		printl("audioCodec: " + str(audio), self, "D")
 
 		if audio == "DCA":
@@ -2140,7 +2122,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleResolutionPixmaps(self):
 		printl("", self, "S")
 
-		resolution = self.extraData.get("videoResolution", "unknown").upper()
+		resolution = self.details.get("videoResolution", "unknown").upper()
 		printl("videoResolution: " + str(resolution), self, "D")
 
 		if resolution == "1080":
@@ -2175,7 +2157,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleAspectPixmaps(self):
 		printl("", self, "S")
 
-		aspect = self.extraData.get("aspectRatio", "unknown").upper()
+		aspect = self.details.get("aspectRatio", "unknown").upper()
 		printl("aspectRatio: " + str(aspect), self, "D")
 
 		if aspect == "1.33":
@@ -2210,7 +2192,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleCodecPixmaps(self):
 		printl("", self, "S")
 
-		codec = self.extraData.get("videoCodec", "unknown").upper()
+		codec = self.details.get("videoCodec", "unknown").upper()
 		printl("videoCodec: " + str(codec), self, "D")
 
 		if codec == "VC1":

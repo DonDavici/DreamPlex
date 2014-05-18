@@ -551,6 +551,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		fullList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", entryData))
 		fullList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,entryData))
 		fullList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", entryData))
+		#fullList.append((_("OnDeck"), Plugin.MENU_MOVIES, "movieEntry", entryData))
 
 		extend = False # SWITCH
 
