@@ -83,8 +83,8 @@ class DP_View(Screen, NumericalTextInput):
 	ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE = 3
 
 	returnTo                        = None
-	currentEntryData                = None
-	currentIndex                    = None
+	currentEntryDataDict            = {}
+	currentIndexDict                = {}
 	showMedia                       = False
 	showDetail                      = False
 	isDirectory                     = False
@@ -741,8 +741,9 @@ class DP_View(Screen, NumericalTextInput):
 				self.playSelectedMedia()
 
 			else:
-				self.currentEntryData = entryData
-				self.currentIndex = self["listview"].getIndex()
+				printl("viewStep: " + str(self.viewStep), self, "D")
+				self.currentEntryDataDict[self.viewStep] = entryData
+				self.currentIndexDict[self.viewStep] = self["listview"].getIndex()
 
 				self.viewStep += 1
 				self._load(entryData)
@@ -792,6 +793,8 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self.viewStep -= 1
+		if self.viewStep < 0:
+			self.viewStep = 0
 
 		printl("returnTo: " + str(self.returnTo), self, "D")
 
@@ -803,24 +806,24 @@ class DP_View(Screen, NumericalTextInput):
 			self.session.nav.stopService()
 
 		if self.returnTo == "backToSeasons":
-			self._load(self.currentEntryData)
-			self["listview"].setIndex(self.currentIndex)
+			self._load(self.currentEntryDataDict[self.viewStep-1])
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
 		elif self.returnTo == "backToShows":
 			self._load()
-			self["listview"].setIndex(self.currentIndex)
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
 		elif self.returnTo == "backToMovies":
 			self._load()
-			self["listview"].setIndex(self.currentIndex)
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
 		elif self.returnTo == "backToArtists":
 			self._load()
-			self["listview"].setIndex(self.currentIndex)
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
 		elif self.returnTo == "backToAlbums":
 			self._load()
-			self["listview"].setIndex(self.currentIndex)
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
 		else:
 			printl("", self, "C")
