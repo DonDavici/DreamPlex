@@ -741,8 +741,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.playSelectedMedia()
 
 			else:
-				printl("viewStep: " + str(self.viewStep), self, "D")
-				self.currentEntryDataDict[self.viewStep] = entryData
+				# save index here because user moved around for sure
 				self.currentIndexDict[self.viewStep] = self["listview"].getIndex()
 
 				self.viewStep += 1
@@ -792,9 +791,8 @@ class DP_View(Screen, NumericalTextInput):
 	def onLeave(self):
 		printl("", self, "S")
 
+		# first decrease by one
 		self.viewStep -= 1
-		if self.viewStep < 0:
-			self.viewStep = 0
 
 		printl("returnTo: " + str(self.returnTo), self, "D")
 
@@ -805,26 +803,9 @@ class DP_View(Screen, NumericalTextInput):
 			printl("stoping theme playback", self, "D")
 			self.session.nav.stopService()
 
-		if self.returnTo == "backToSeasons":
-			self._load(self.currentEntryDataDict[self.viewStep-1])
+		if self.viewStep >= 0:
+			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
-
-		elif self.returnTo == "backToShows":
-			self._load()
-			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
-
-		elif self.returnTo == "backToMovies":
-			self._load()
-			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
-
-		elif self.returnTo == "backToArtists":
-			self._load()
-			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
-
-		elif self.returnTo == "backToAlbums":
-			self._load()
-			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
-
 		else:
 			printl("", self, "C")
 			self.close()
@@ -843,23 +824,19 @@ class DP_View(Screen, NumericalTextInput):
 		# loadLibrary is a function in each class that inherits from DP_LibMain (DP_LibMovies, DP_LibSHows, DP_LibMusic)
 		libraryDataArr = self.loadLibrary(entryData)
 
-		# this is the content for the list (must be list not dict)
+		# this is the content for the list (must be tuple no dict)
 		self.libraryData = libraryDataArr[0]
 		printl("libraryData: " + str(self.libraryData), self, "D")
-
-		# string that shows where to go when exiting
-		self.returnTo = libraryDataArr[1]
-		printl("returnTo: " + str(self.returnTo), self, "D")
-
-		# mediaContainer on top of xml
-		self.mediaContainer = libraryDataArr[2]
-		printl("mediaContainer: " + str(self.mediaContainer), self, "D")
 
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		self.listViewList = self.alterViewStateInList(self.libraryData)
 
+		# mediaContainer on top of xml
+		self.mediaContainer = libraryDataArr[1]
+		printl("mediaContainer: " + str(self.mediaContainer), self, "D")
+
 		# we save the list to be able to restore
-		self.origListViewList = self.listViewList
+		self.currentEntryDataDict[self.viewStep] = self.listViewList
 
 		# now just refresh list
 		self.updateList()
@@ -868,30 +845,31 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def alterViewStateInList(self, listViewArr):
+	def alterViewStateInList(self, listViewList):
 		printl("", self, "S")
-		printl("listViewArr: " + str(listViewArr), self, "S")
-
+		printl("listViewList: " + str(listViewList), self, "S")
 		newList = []
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
-		for listViewEntry in listViewArr:
+		for listViewEntry in listViewList:
+			viewState = str(listViewEntry[3])
 			printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
+
 			if listViewEntry is not None:
-				if 'seen' == str(listViewEntry[3]):
+				if viewState == 'seen':
 					viewState = self.seenPic
 
-				elif 'started' == str(listViewEntry[3]):
+				elif viewState == 'started':
 					viewState = self.startedPic
 
-				elif 'unseen' == str(listViewEntry[3]):
+				elif viewState == 'unseen':
 					viewState = self.unseenPic
 
 				else:
 					viewState = undefinedIcon
 
-				content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], viewState ,listViewEntry[4])
-				newList.append(content)
+			content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], viewState ,listViewEntry[4])
+			newList.append(content)
 
 		printl("", self, "C")
 		return newList
@@ -901,18 +879,9 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def updateList(self):
 		printl("", self, "S")
+
 		self["listview"].setList(self.listViewList)
 		self["listview"].setIndex(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def resetList(self):
-		printl("", self, "S")
-
-		self.listViewList = self.origListViewList
 
 		printl("", self, "C")
 

@@ -56,20 +56,12 @@ class DP_LibMovies(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		returnTo = None
-
 		url = entryData["contentUrl"]
 		printl("url: " + str(url), self, "D")
-
-		if "viewMode" in entryData:
-			printl ("viewMode: " + str(entryData["viewMode"]), self, "D")
-
-			if entryData["viewMode"] == "ShowDirectory":
-				returnTo = "backToMovies"
 
 		movies, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 		printl ("", self, "C")
-		return movies, returnTo, mediaContainer
+		return movies, mediaContainer
 
 

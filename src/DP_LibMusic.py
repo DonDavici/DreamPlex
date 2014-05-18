@@ -54,8 +54,6 @@ class DP_LibMusic(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		returnTo = None
-
 		if self.g_librarySteps == 2:
 			if entryData["viewMode"] is None:
 				entryData["viewMode"] = "ShowAlbums"
@@ -76,12 +74,9 @@ class DP_LibMusic(DP_LibMain):
 		printl ("", self, "S")
 		printl("entryData: " + str(entryData), self, "D")
 
-		returnTo = None
-
 		if entryData["viewMode"] == "ShowArtists":
 			printl("show artists ...", self, "D")
-
-			library, mediaContainer = self.getLibraryData(entryData, self.g_url, entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+			entryData["url"] = self.g_url
 
 		elif entryData["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
@@ -89,17 +84,10 @@ class DP_LibMusic(DP_LibMain):
 			if self.g_librarySteps == 2:
 				entryData["url"] = self.g_url
 
-			library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
-
-			if self.g_librarySteps == 2:
-				returnTo = None
-			else:
-				returnTo = "backToArtists"
-
 		elif entryData["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
 
-			library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 
+		library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 		printl ("", self, "C")
-		return library, returnTo, mediaContainer
+		return library, mediaContainer

@@ -59,12 +59,11 @@ class DP_LibShows(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		returnTo = None
+		url = entryData["contentUrl"]
+		printl("url: " + str(url), self, "D")
 
 		# Diplay all TVShows
 		if "viewMode" not in entryData:
-			url = entryData["contentUrl"]
-			printl("url: " + str(url), self, "D")
 			showEpisodesDirectly = False
 
 			if "showEpisodesDirectly" in entryData:
@@ -81,18 +80,12 @@ class DP_LibShows(DP_LibMain):
 		# Display the Seasons Menu
 		elif entryData["viewMode"] == "ShowSeasons":
 			printl("show seasons of TV show ...", self, "D")
-
-			url = entryData["contentUrl"]
 			library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
-			returnTo = "backToShows"
 
 		# Display the Episodes Menu
 		elif entryData["viewMode"] == "ShowEpisodes":
 			printl("show episodes of season ...", self, "D")
-
-			url = entryData["contentUrl"]
 			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
-			returnTo = "backToSeasons"
 
 		printl ("", self, "C")
-		return library, returnTo, mediaContainer
+		return library, mediaContainer
