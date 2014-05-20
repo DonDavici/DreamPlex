@@ -2365,7 +2365,7 @@ class PlexLibrary(Screen):
 		# build url for content
 		nextUrl = 'http://%s%s'  % ( entryData['server'], entryData['key'])
 
-		content = entryData.get('title','no Title'), entryData, contextMenu, viewState, nextUrl
+		content = entryData.get('title','no Title').encode('utf-8'), entryData, contextMenu, viewState, nextUrl
 
 		printl("", self, "C")
 		return content

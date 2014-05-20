@@ -979,7 +979,7 @@ class DP_View(Screen, NumericalTextInput):
 					if self.startPlaybackNow: # only if we are a show
 						self.startThemePlayback()
 
-				self.setText("title", self.details.get("title", " "))
+				self.setText("title", self.details.get("title", " ").encode('utf-8'))
 				self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
 				self.setText("season", "Season " + self.details.get("season", " "))
 				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
