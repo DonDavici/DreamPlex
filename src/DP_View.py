@@ -190,7 +190,7 @@ class DP_View(Screen, NumericalTextInput):
 		}, -2)
 
 		self.onLayoutFinish.append(self.setCustomTitle)
-		self.onFirstExecBegin.append(self.onFirstExec)
+		self.onFirstExecBegin.append(self.getViewListData)
 
 		self.guiElements = getGuiElements()
 
@@ -384,8 +384,12 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onFirstExec(self):
+	def getViewListData(self):
 		printl("", self, "S")
+
+		self.viewStep = 0
+		self.currentEntryDataDict = {}
+		self.currentIndexDict = {}
 
 		if self.select is None: # Initial Start of View, select first entry in list
 			self._load()
@@ -960,15 +964,16 @@ class DP_View(Screen, NumericalTextInput):
 				# we also check if we want to play
 				self.getPictureInformationToLoad()
 
-				# lets set the urls for context functions of the selected entry
-				self.seenUrl = self.context.get("watchedURL", None)
-				self.unseenUrl = self.context.get("unwatchURL", None)
-				self.deleteUrl = self.context.get("deleteURL", None)
-				self.refreshUrl = self.context.get("libraryRefreshURL", None)
-				printl("seenUrl: " + str(self.seenUrl),self, "D")
-				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+				if self.context is not None:
+					# lets set the urls for context functions of the selected entry
+					self.seenUrl = self.context.get("watchedURL", None)
+					self.unseenUrl = self.context.get("unwatchURL", None)
+					self.deleteUrl = self.context.get("deleteURL", None)
+					self.refreshUrl = self.context.get("libraryRefreshURL", None)
+					printl("seenUrl: " + str(self.seenUrl),self, "D")
+					printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+					printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+					printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme:
@@ -1357,7 +1362,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.unseenUrl)
-		self.onFirstExec()
+		self.getViewListData()
 
 		printl("", self, "C")
 
@@ -1368,7 +1373,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.seenUrl)
-		self.onFirstExec()
+		self.getViewListData()
 
 		printl("", self, "C")
 
@@ -1379,7 +1384,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.refreshUrl)
-		self.onFirstExec()
+		self.getViewListData()
 
 		printl("", self, "C")
 
@@ -1401,7 +1406,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		if confirm:
 			Singleton().getPlexInstance().doRequest(self.deleteUrl)
-			self.onFirstExec()
+			self.getViewListData()
 		else:
 			self.session.open(MessageBox,_("Deleting aborted!"), MessageBox.TYPE_INFO)
 

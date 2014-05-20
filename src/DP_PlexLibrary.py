@@ -582,11 +582,11 @@ class PlexLibrary(Screen):
 			entryData["viewMode"]			= nextViewMode
 			entryData['server']			    = server
 			entryData['tagType']            = tagType
-			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre").encode("utf-8"))
-			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director").encode("utf-8"))
-			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role").encode("utf-8"))
-			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer").encode("utf-8"))
-			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country").encode("utf-8"))
+			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
+			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
+			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
+			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
+			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
@@ -1875,7 +1875,7 @@ class PlexLibrary(Screen):
 
 		for child in entry:
 			if child.tag == tagName:
-				tempList.append(child.get('tag'))
+				tempList.append(child.get('tag').encode("utf-8"))
 
 		printl("", self, "C")
 		return tempList
