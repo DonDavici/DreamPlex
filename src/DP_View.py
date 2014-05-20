@@ -963,16 +963,15 @@ class DP_View(Screen, NumericalTextInput):
 				# we also check if we want to play
 				self.getPictureInformationToLoad()
 
-				# todo reactivate this
-				# # lets set the urls for context functions of the selected entry
-				# self.seenUrl = self.context.get("watchedURL", None)
-				# self.unseenUrl = self.context.get("unwatchURL", None)
-				# self.deleteUrl = self.context.get("deleteURL", None)
-				# self.refreshUrl = self.context.get("libraryRefreshURL", None)
-				# printl("seenUrl: " + str(self.seenUrl),self, "D")
-				# printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-				# printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-				# printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+				# lets set the urls for context functions of the selected entry
+				self.seenUrl = self.context.get("watchedURL", None)
+				self.unseenUrl = self.context.get("unwatchURL", None)
+				self.deleteUrl = self.context.get("deleteURL", None)
+				self.refreshUrl = self.context.get("libraryRefreshURL", None)
+				printl("seenUrl: " + str(self.seenUrl),self, "D")
+				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
 
 				# if we are a show an if playtheme is enabled we start playback here
 				if self.playTheme:
@@ -1469,23 +1468,28 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def displayOptionsMenuCallback(self, choice):
 		printl("", self, "S")
+		printl("choice: " + str(choice), self, "D")
 
 		if choice is None or choice[1] is None:
 			return
 
 		selection = self["listview"].getCurrent()
 		if selection is not None:
+			printl("1", self, "D")
 			if choice[1].start:
+				printl("2", self, "D")
 				if choice[1].supportStillPicture:
+					printl("3", self, "D")
 					self.session.open(choice[1].start, selection[1])
 				else:
+					printl("4", self, "D")
 					self.session.openWithCallback(self.pluginCallback, choice[1].start, selection[1])
 
 			elif choice[1].fnc:
-				printl("here", self, "D")
+				printl("5", self, "D")
 				choice[1].fnc()
 				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
-					printl("there", self, "D")
+					printl("6", self, "D")
 					self.refresh()
 
 		printl("", self, "C")

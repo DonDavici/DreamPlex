@@ -105,13 +105,13 @@ class Plugin(object):
 	name = None
 	desc = None
 	start = None
-	func = None
+	fnc = None
 	where = None
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, pid, name=None, desc=None, start=None, where=None, func=None):
+	def __init__(self, pid, name=None, desc=None, start=None, where=None, fnc=None):
 		printl("", self, "S")
 
 		self.pid = pid
@@ -121,7 +121,7 @@ class Plugin(object):
 		else:
 			self.desc = desc
 		self.start = start
-		self.func = func
+		self.func = fnc
 		self.where = where
 
 		printl("", self, "C")
