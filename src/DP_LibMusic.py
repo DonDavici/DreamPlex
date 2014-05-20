@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 from DP_LibMain import DP_LibMain
+from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
 
@@ -54,40 +55,21 @@ class DP_LibMusic(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		if self.g_librarySteps == 2:
-			if entryData["viewMode"] is None:
-				entryData["viewMode"] = "ShowAlbums"
-		else:
-			if entryData["viewMode"] is None:
-				entryData["viewMode"] = "ShowArtists"
+		url = entryData["contentUrl"]
+		printl("url: " + str(url), self, "D")
 
-		library = self._loadLibrary(entryData)
-
-		printl("libary:" + str(library[0]), self, "D")
-		printl ("", self, "C")
-		return library
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def  _loadLibrary(self, entryData):
-		printl ("", self, "S")
-		printl("entryData: " + str(entryData), self, "D")
-
-		if entryData["viewMode"] == "ShowArtists":
+		if "viewMode" not in entryData:
 			printl("show artists ...", self, "D")
-			entryData["url"] = self.g_url
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
 
 		elif entryData["viewMode"] == "ShowAlbums":
 			printl("show albums ...", self, "D")
-
-			if self.g_librarySteps == 2:
-				entryData["url"] = self.g_url
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
 
 		elif entryData["viewMode"] == "ShowTracks":
 			printl("show tracks ...", self, "I")
+			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
 
-
-		library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
+		#library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 		printl ("", self, "C")
 		return library, mediaContainer

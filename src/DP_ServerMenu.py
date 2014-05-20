@@ -193,13 +193,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				entryData = selection[3]
 				printl("entryData: " + str(entryData), self, "D")
 
-				# set additional data mediaType specific
-				if self.mediaType == "musicEntry":
-					if selection[0] == "All Artists":
-						entryData["librarySteps"] = 3
-					else:
-						entryData["librarySteps"] = 2
-
 				hasPromptTag = entryData.get('hasPromptTag', False)
 				printl("hasPromptTag: " + str(hasPromptTag), self, "D")
 				if hasPromptTag:

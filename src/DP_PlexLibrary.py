@@ -323,10 +323,8 @@ class PlexLibrary(Screen):
 				if (myFilter is not None) and (myFilter != "music"):
 					continue
 
-				if self.g_useFilterSections:
-					fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
-				else:
-					fullList.append((_(entryData.get('title').encode('utf-8')), "getMusicSections", getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", entryData))
+				# in case of music we use always filters
+				fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
 
 			# improveMe
 			elif entryData.get('type') == 'photo':
