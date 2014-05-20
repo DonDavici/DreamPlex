@@ -22,8 +22,6 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
-import time
-
 from Components.ActionMap import HelpableActionMap
 from Components.Input import Input
 from Components.Sources.List import List
@@ -39,7 +37,6 @@ from __common__ import printl2 as printl
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
-from DPH_WOL import wake_on_lan
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
@@ -50,22 +47,18 @@ from DP_HelperScreens import DPS_InputBox
 class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 	g_horizontal_menu = False
-	g_wolon = False
-	g_wakeserver = "00-11-32-12-C5-F9"
-	g_woldelay = 10
 
 	selectedEntry = None
-	s_url = None
-	s_mode = None
-	s_final = False
 	g_serverConfig = None
 
 	g_serverDataMenu = None
-	g_filterDataMenu = None
 	currentService = None
 	plexInstance = None
 	selectionOverride = None
 	secondRun = False
+	menuStep = 0 # vaule how many steps we made to restore navigation data
+	currentMenuDataDict = {}
+	currentIndexDict = {}
 
 	#===========================================================================
 	#
@@ -150,6 +143,10 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	def okbuttonClick(self, selectionOverride = None):
 		printl("", self, "S")
 
+		self.currentMenuDataDict[self.menuStep] = self.g_serverDataMenu
+		self.currentIndexDict[self.menuStep] = self["menu"].getIndex()
+		self.menuStep += 1
+
 		# this is used to step in directly into a server when there is only one entry in the serverlist
 		if selectionOverride is not None:
 			selection = selectionOverride
@@ -214,6 +211,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				if hasPromptTag:
 					self.session.openWithCallback(self.addSearchString, DPS_InputBox, entryData, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT )
 				else:
+					self.menuStep -= 1
 					self.executeSelectedEntry(entryData)
 
 			self.refreshMenu()
@@ -240,7 +238,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	#===========================================================================
 	def executeSelectedEntry(self, entryData):
 		printl("", self, "S")
-		printl("self.s_url: " + str(self.s_url), self, "D")
 
 		if self.selectedEntry.start is not None:
 			printl("we are startable ...", self, "D")
@@ -360,22 +357,12 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 	#===========================================================================
 	def cancel(self):
 		printl("", self, "S")
+		self.menuStep -= 1
 
-		if self.selectedEntry == Plugin.MENU_FILTER:
-			printl("coming from MENU_FILTER", self, "D")
-			self["menu"].setList(self.g_serverDataMenu)
-			self.selectedEntry = Plugin.MENU_SERVER
-
-			if self.g_horizontal_menu:
-				self.refreshOrientationHorMenu(0)
-
-		elif self.selectedEntry == Plugin.MENU_TVSHOWS or self.selectedEntry == Plugin.MENU_MOVIES:
-			printl("coming from MENU_TVSHOWS or MENU_MOVIES", self, "D")
-			self["menu"].setList(self.g_sectionDataMenu)
-			self.selectedEntry = Plugin.MENU_SERVER
-
-			if self.g_horizontal_menu:
-				self.refreshOrientationHorMenu(0)
+		if self.menuStep >= 0:
+			self["menu"].setList(self.currentMenuDataDict[self.menuStep])
+			self["menu"].setIndex(self.currentIndexDict[self.menuStep])
+			self.refreshMenu()
 
 		else:
 			self.exit()
@@ -403,10 +390,10 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 
 		if summerize and filterBy is None:
 			serverData = self.getSectionTypes()
-			self.g_sectionDataMenu = serverData
 		else:
 			serverData = self.plexInstance.getAllSections(filterBy)
-			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
+
+		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
 		self["menu"].setList(serverData)
 		self.refreshMenu()
@@ -425,7 +412,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 		else:
 			self["menu"].setList(menuData)
-			self.g_filterDataMenu = menuData #lets save the menu to call it when cancel is pressed
+			self.g_serverDataMenu = menuData #lets save the menu to call it when cancel is pressed
 			self.refreshMenu()
 
 		printl("", self, "S")
