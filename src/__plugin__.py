@@ -121,7 +121,7 @@ class Plugin(object):
 		else:
 			self.desc = desc
 		self.start = start
-		self.func = fnc
+		self.fnc = fnc
 		self.where = where
 
 		printl("", self, "C")

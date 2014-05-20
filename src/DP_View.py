@@ -631,16 +631,13 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onToggleView(self, forceUpdate=False):
+	def onToggleView(self):
 		printl("", self, "S")
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
 
-		if forceUpdate:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, ))
-		else:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, ))
+		self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, ))
 
 		printl("", self, "C")
 
@@ -1266,25 +1263,15 @@ class DP_View(Screen, NumericalTextInput):
 
 		functionList = []
 
-		functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
-		functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
-		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
-		functionList.append((_("Refresh this section"), Plugin("View", fnc=self.refreshSection), ))
+		functionList.append((_("Mark media unwatched"), Plugin("View", fnc = self.markUnwatched), ))
+		functionList.append((_("Mark media watched"), Plugin("View", fnc = self.markWatched), ))
+		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc = self.initiateRefresh), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Media Functions"), list=functionList)
 
 		printl("", self, "C")
 
-	#===========================================================================
-	#
-	#===========================================================================
-	def refreshSection(self):
-		printl("", self, "S")
-
-		self.onToggleView(forceUpdate=True)
-
-		printl("", self, "C")
 	#===========================================================================
 	#
 	#===========================================================================
@@ -1370,7 +1357,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.unseenUrl)
-		self.showMessage()
+		self.onFirstExec()
 
 		printl("", self, "C")
 
@@ -1381,7 +1368,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.seenUrl)
-		self.showMessage()
+		self.onFirstExec()
 
 		printl("", self, "C")
 
@@ -1392,7 +1379,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().doRequest(self.refreshUrl)
-		self.showMessage()
+		self.onFirstExec()
 
 		printl("", self, "C")
 
@@ -1414,19 +1401,9 @@ class DP_View(Screen, NumericalTextInput):
 
 		if confirm:
 			Singleton().getPlexInstance().doRequest(self.deleteUrl)
-			self.showMessage()
+			self.onFirstExec()
 		else:
 			self.session.open(MessageBox,_("Deleting aborted!"), MessageBox.TYPE_INFO)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def showMessage(self):
-		printl("", self, "S")
-
-		self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO, timeout = 5)
 
 		printl("", self, "C")
 
@@ -1468,29 +1445,14 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def displayOptionsMenuCallback(self, choice):
 		printl("", self, "S")
-		printl("choice: " + str(choice), self, "D")
+		printl("choice: " + str(choice[1]), self, "D")
 
 		if choice is None or choice[1] is None:
 			return
 
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			printl("1", self, "D")
-			if choice[1].start:
-				printl("2", self, "D")
-				if choice[1].supportStillPicture:
-					printl("3", self, "D")
-					self.session.open(choice[1].start, selection[1])
-				else:
-					printl("4", self, "D")
-					self.session.openWithCallback(self.pluginCallback, choice[1].start, selection[1])
-
-			elif choice[1].fnc:
-				printl("5", self, "D")
-				choice[1].fnc()
-				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
-					printl("6", self, "D")
-					self.refresh()
+		if choice[1].fnc:
+			printl("5", self, "D")
+			choice[1].fnc()
 
 		printl("", self, "C")
 
