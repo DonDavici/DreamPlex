@@ -22,12 +22,13 @@ You should have received a copy of the GNU General Public License
 #=================================
 #IMPORT
 #=================================
+import time
+
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Label import Label
-from Components.Pixmap import Pixmap
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -41,8 +42,9 @@ from DP_ServerMenu import DPS_ServerMenu
 
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
+from DPH_WOL import wake_on_lan
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 #===============================================================================
@@ -155,7 +157,8 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 					# now that we know the server we establish global plexInstance
 					self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 
-					self.session.open(DPS_ServerMenu, self.g_serverConfig)
+					# check if server is reachable
+					self.checkServerState()
 
 				elif self.selectedEntry == Plugin.MENU_SYSTEM:
 					printl("found Plugin.MENU_SYSTEM", self, "D")
@@ -375,6 +378,115 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
 
 			printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkServerState(self):
+		printl("", self, "S")
+
+		self.g_wolon = self.g_serverConfig.wol.value
+		self.g_wakeserver = str(self.g_serverConfig.wol_mac.value)
+		self.g_woldelay = int(self.g_serverConfig.wol_delay.value)
+		connectionType = str(self.g_serverConfig.connectionType.value)
+		if connectionType == "0":
+			ip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
+			port =  int(self.g_serverConfig.port.value)
+			isOnline = testPlexConnectivity(ip, port)
+
+		elif connectionType == "2":
+			#state = testInetConnectivity("http://my.plexapp.com")
+			isOnline = True
+		else:
+			isOnline = testInetConnectivity()
+
+		if isOnline:
+			stateText = "Online"
+		else:
+			stateText = "Offline"
+
+		printl("Plexserver State: " + str(stateText), self, "I")
+		if not isOnline:
+			if self.g_wolon == True and connectionType == "0":
+				self.showWakeMessage()
+
+			else:
+				self.showOfflineMessage()
+		else:
+			self.session.open(DPS_ServerMenu, self.g_serverConfig)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startServerMenu(self, answer):
+		printl("", self, "S")
+		printl("answer: " + str(answer), self, "D")
+
+		if answer:
+			self.checkServerState()
+		else:
+			self.session.open(DPS_ServerMenu, self.g_serverConfig)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showWakeMessage(self):
+		printl("", self, "S")
+
+		self.session.openWithCallback(self.executeWakeOnLan, MessageBox, _("Plexserver seems to be offline. Start with Wake on Lan settings? \n\nPlease note: \nIf you press yes the spinner will run for " + str(self.g_woldelay) + " seconds. \nAccording to your settings."), MessageBox.TYPE_YESNO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showOfflineMessage(self):
+		printl("", self, "S")
+
+		self.session.openWithCallback(self.startServerMenu,MessageBox,_("Plexserver seems to be offline. Please check your your settings or connection!\n Retry?"), MessageBox.TYPE_YESNO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def executeWakeOnLan(self, confirm):
+		printl("", self, "S")
+
+		if confirm:
+			# User said 'yes'
+			printl("Wake On LAN: " + str(self.g_wolon), self, "D")
+
+			for i in range(1,12):
+				if not self.g_wakeserver == "":
+					try:
+						printl("Waking server " + str(i) + " with MAC: " + self.g_wakeserver, self, "D")
+						wake_on_lan(self.g_wakeserver)
+					except ValueError:
+						printl("Incorrect MAC address format for server " + str(i), self, "D")
+					except:
+						printl("Unknown wake on lan error", self, "D")
+			self.sleepNow()
+		else:
+			# User said 'no'
+			self.refreshMenu(0)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def sleepNow (self):
+		printl("", self, "S")
+
+		time.sleep(int(self.g_woldelay))
+		self.checkServerState()
+
+		printl("", self, "C")
 
 #===============================================================================
 # ADDITIONAL STARTUPS

@@ -31,7 +31,7 @@ from __common__ import printl2 as printl
 #===============================================================================
 def wake_on_lan(macaddress):
 	printl ("", "DPH_WOL::wake_on_lan", "S")
-	printl ("using this mac ... " + macaddress, "DPH_WOL::wake_on_lan", "i")
+	printl ("using this mac ... " + macaddress, "DPH_WOL::wake_on_lan", "D")
 	
 	# Check macaddress format and try to compensate.
 	if len(macaddress) == 12:
@@ -40,7 +40,7 @@ def wake_on_lan(macaddress):
 		sep = macaddress[2]
 		macaddress = macaddress.replace(sep, '')
 	else:
-		printl ("Incorrect MAC address format", "DPH_WOL::wake_on_lan", "W")
+		printl ("Incorrect MAC address format", "DPH_WOL::wake_on_lan", "D")
 		raise ValueError('Incorrect MAC address format')
 
 	# Pad the synchronization stream.
