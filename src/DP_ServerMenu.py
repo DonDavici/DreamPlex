@@ -200,12 +200,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 					else:
 						entryData["librarySteps"] = 2
 
-				elif self.mediaType == "showEntry":
-					self.showEpisodesDirectly = entryData.get('t_showEpisodesDirectly', False)
-
-				elif self.mediaType == "movieEntry":
-					pass
-
 				hasPromptTag = entryData.get('hasPromptTag', False)
 				printl("hasPromptTag: " + str(hasPromptTag), self, "D")
 				if hasPromptTag:

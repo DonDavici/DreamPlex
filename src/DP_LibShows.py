@@ -40,12 +40,9 @@ class DP_LibShows(DP_LibMain):
 		printl ("", self, "S")
 
 		self.initalEntryData = initalEntryData
-		printl("initalEntryData: " + str(self.initalEntryData))
+		printl("initalEntryData: " + str(self.initalEntryData), self, "D")
 
-		if self.initalEntryData["showEpisodesDirectly"]:
-			DP_LibMain.__init__(self, session, "episodes")
-		else:
-			DP_LibMain.__init__(self, session, "tvshows")
+		DP_LibMain.__init__(self, session, "tvshows")
 
 		printl ("", self, "C")
 
