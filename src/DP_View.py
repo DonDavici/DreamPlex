@@ -1450,10 +1450,12 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def displayOptionsMenuCallback(self, choice):
 		printl("", self, "S")
-		printl("choice: " + str(choice[1]), self, "D")
 
 		if choice is None or choice[1] is None:
+			printl("choice: None - we pressed exit", self, "D")
 			return
+
+		printl("choice: " + str(choice[1]), self, "D")
 
 		if choice[1].fnc:
 			printl("5", self, "D")
