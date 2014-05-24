@@ -1107,7 +1107,7 @@ class PlexLibrary(Screen):
 				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
 				return
 
-			urlPath += self.get_uTokenForServer()
+			urlPath += self.get_uTokenForServer(server)
 
 			if self.g_sessionID is None:
 				self.g_sessionID=str(uuid.uuid4())
@@ -1667,7 +1667,10 @@ class PlexLibrary(Screen):
 	def playLibraryMedia(self, myId, url):
 		printl("", self, "S")
 
-		printl("playLibraryMediaUrl: " + str(url), self, "I")
+		printl("playLibraryMediaUrl: " + str(url), self, "D")
+
+		server = self.getServerFromURL(url)
+		printl("server: " + str(server), self, "D")
 
 		if url is None:
 			return
@@ -1677,7 +1680,7 @@ class PlexLibrary(Screen):
 		# set standard playurl
 		playurl=url
 
-		token = self.get_aTokenForServer()
+		token = self.get_aTokenForServer(server)
 
 		#alter playurl if needed
 		if protocol == "file":
@@ -1710,9 +1713,6 @@ class PlexLibrary(Screen):
 
 			if not (self.g_transcode == "true" ):
 				self.setAudioSubtitles(self.streams)
-
-		server = self.getServerFromURL(url)
-		printl("server: " + str(server), self, "D")
 
 		multiUserServer = False
 		# multiuser works only if the server is compatible
@@ -2295,7 +2295,7 @@ class PlexLibrary(Screen):
 			transcode.append("X-Plex-Version=3.1.3")
 			timestamp = "@%d" % ts
 			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
-			streamParams += self.get_uTokenForServer()
+			streamParams += self.get_uTokenForServer(server)
 			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
 			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
 			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
