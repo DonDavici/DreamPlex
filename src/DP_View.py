@@ -56,7 +56,7 @@ from DP_Player import DP_Player
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl, convertSize, loadPicture
+from __common__ import printl2 as printl, loadPicture
 from __plugin__ import getPlugins, Plugin
 from __init__ import _ # _ is translation
 

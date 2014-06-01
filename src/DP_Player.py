@@ -28,7 +28,6 @@ from time import sleep
 
 from enigma import ePicLoad
 from Screens.Screen import Screen
-from Screens.InfoBar import MoviePlayer
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
 from Screens.ChoiceBox import ChoiceBox
@@ -51,7 +50,7 @@ from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
 	InfoBarServiceNotifications, InfoBarSimpleEventView, \
-	InfoBarTeletextPlugin, InfoBarExtensions, InfoBarNotifications, \
+	InfoBarExtensions, InfoBarNotifications, \
 	InfoBarSubtitleSupport, InfoBarPiP, InfoBarServiceErrorPopupSupport
 
 from DPH_Singleton import Singleton
@@ -65,8 +64,7 @@ from __init__ import _ # _ is translation
 class DP_Player(InfoBarBase, InfoBarShowHide, \
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
-		InfoBarSubtitleSupport, Screen, InfoBarTeletextPlugin,
-		InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, InfoBarPiP):
+		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, InfoBarPiP):
 
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -118,12 +116,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		self["mediaTitle"] = StaticText()
 		Screen.__init__(self, session)
 
-		for x in HelpableScreen, InfoBarShowHide, \
-				InfoBarBase, InfoBarSeek, \
+		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
 				InfoBarAudioSelection, InfoBarSimpleEventView, \
-				InfoBarServiceNotifications, \
-				InfoBarSubtitleSupport, \
-				InfoBarTeletextPlugin, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, \
+				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
+				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, \
 				InfoBarPiP:
 			printl("x: " + str(x), self, "D")
 			x.__init__(self)
@@ -187,7 +183,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		self.media_id = selection[1]['ratingKey']
 		server = selection[1]['server']
 
-		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType="Track")
+		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType=selection[1]['tagType'])
 
 		self.selectMedia(self.count, self.options, self.server)
 
@@ -394,7 +390,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		if self.currentIndex > len(self.listViewList):
 			self.currentIndex = 0
 
+		# stop current playback if exists
 		self.session.nav.stopService()
+
 		# play
 		self.playMedia()
 
@@ -412,7 +410,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		if self.currentIndex < 0:
 			self.currentIndex = max(self.listViewList)
 
+		# stop current playback if exists
 		self.session.nav.stopService()
+
 		# play
 		self.playMedia()
 
