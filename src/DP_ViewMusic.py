@@ -186,21 +186,3 @@ class DPS_ViewMusic(DP_View):
 			self["runtime"].setText(str(duration))
 
 		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def playEntry(self, selection):
-		printl("", self, "S")
-
-		if config.plugins.dreamplex.useBackdropVideos.value:
-			self.stopBackdropVideo()
-
-		self.media_id = selection[1]['ratingKey']
-		server = selection[1]['server']
-
-		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType="Track")
-
-		self.selectMedia(self.count, self.options, self.server)
-
-		printl("", self, "C")

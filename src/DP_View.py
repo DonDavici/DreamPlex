@@ -718,28 +718,13 @@ class DP_View(Screen, NumericalTextInput):
 			self.viewMode = viewMode
 
 			if viewMode == "play" or viewMode == "directMode":
-				printl("viewMode -> play", self, "I")
+				printl("viewMode -> play", self, "D")
 
-				# init those variable for new run
-				self.playerData = {}
-				self.currentQueuePosition = 0
+				if config.plugins.dreamplex.useBackdropVideos.value:
+					self.stopBackdropVideo()
 
-				playAll = True
-
-				if playAll:
-					myList = iter(self.listViewList)
-					for listEntry in myList:
-						self.playEntry(listEntry)
-						self.currentQueuePosition += 1
-				else:
-					self.playEntry(selection)
-
-				# get index to start from the selected media
-				self.playerData["currentIndex"] = self["listview"].getIndex()
-				self.playerData["myParams"] = self.myParams
-				self.playerData["whatPoster"] = self.whatPoster
-
-				self.playSelectedMedia()
+				currentIndex = self["listview"].getIndex()
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.myParams)
 
 			else:
 				# save index here because user moved around for sure
@@ -748,7 +733,7 @@ class DP_View(Screen, NumericalTextInput):
 				self.viewStep += 1
 				self._load(entryData)
 
-		self.refresh()
+				self.refresh()
 
 		printl("", self, "C")
 
@@ -1062,150 +1047,12 @@ class DP_View(Screen, NumericalTextInput):
 	#===============================================================================
 	#
 	#===============================================================================
-	def playEntry(self, selection):
-		printl("", self, "S")
-
-		if config.plugins.dreamplex.useBackdropVideos.value:
-			self.stopBackdropVideo()
-
-		self.media_id = selection[1]['ratingKey']
-		server = selection[1]['server']
-
-		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
-
-		self.selectMedia(self.count, self.options, self.server)
-
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
 	def stopBackdropVideo(self):
 		printl("", self, "S")
 
 		if self.loadedStillPictureLib and self.usedStillPicture:
 			# stop the m1v playback to avoid blocking the playback of the movie
 			self["backdropVideo"].finishStillPicture()
-
-		printl("", self, "C")
-
-	#===========================================================
-	#
-	#===========================================================
-	def selectMedia(self, count, options, server ):
-		printl("", self, "S")
-
-		#if we have two or more files for the same movie, then present a screen
-		self.options = options
-		self.server = server
-		self.dvdplayback=False
-
-		if count > 1:
-			printl("we have more than one playable part ...", self, "I")
-			indexCount=0
-			functionList = []
-
-			for items in self.options:
-				printl("item: " + str(items), self, "D")
-				if items[1] is not None:
-					name=items[1].split('/')[-1]
-				else:
-					size = convertSize(int(items[3]))
-					duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
-					# this is the case when there is no information of the real file name
-					name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
-
-				printl("name " + str(name), self, "D")
-				functionList.append((name ,indexCount, ))
-				indexCount+=1
-
-			self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
-
-		else:
-			self.setSelectedMedia()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setSelectedMedia(self, choice=None):
-		printl("", self, "S")
-		result = 0
-		printl("choice: " + str(choice), self, "D")
-
-		if choice is not None:
-			result = int(choice[1])
-
-		printl("result: " + str(result), self, "D")
-
-		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
-
-		self.buildPlayerData()
-
-		printl("We have selected media at " + self.mediaFileUrl, self, "I")
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def buildPlayerData(self):
-		printl("", self, "S")
-
-		self.playerData[self.currentQueuePosition] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
-
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def playSelectedMedia(self):
-		printl("", self, "S")
-
-		resumeStamp = self.playerData[0]['resumeStamp']
-		printl("resumeStamp: " + str(resumeStamp), self, "I")
-
-		if self.showDetail:
-			currentFile = "Location:\n " + str(self.playerData[0]['currentFile'])
-			self.session.open(MessageBox,_("%s") % currentFile, MessageBox.TYPE_INFO)
-			self.showDetail = False
-		else:
-			if self.playerData[0]['fallback']:
-				message = _("Sorry I didn't find the file on the provided locations")
-				locations = _("Location:") + "\n " + self.playerData[0]['locations']
-				suggestion = _("Please verify you direct local settings")
-				fallback = _("I will now try to play the file via transcode.")
-				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
-			else:
-				self.checkResume(resumeStamp)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def checkResume(self, resumeStamp):
-		printl("", self, "S")
-
-		if resumeStamp > 0:
-			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
-
-		else:
-			self.session.open(DP_Player, self.playerData)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def handleResume(self, confirm):
-		printl("", self, "S")
-
-		if confirm:
-			self.session.open(DP_Player, self.playerData, True)
-
-		else:
-			self.session.open(DP_Player, self.playerData)
 
 		printl("", self, "C")
 
