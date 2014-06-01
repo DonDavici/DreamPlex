@@ -55,21 +55,5 @@ class DP_LibMusic(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		url = entryData["contentUrl"]
-		printl("url: " + str(url), self, "D")
-
-		if "viewMode" not in entryData:
-			printl("show artists ...", self, "D")
-			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
-
-		elif entryData["viewMode"] == "ShowAlbums":
-			printl("show albums ...", self, "D")
-			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
-
-		elif entryData["viewMode"] == "ShowTracks":
-			printl("show tracks ...", self, "D")
-			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
-
-		#library, mediaContainer = self.getLibraryData(entryData, entryData["url"], entryData["viewMode"], self.g_uuid, self.g_viewGroup, self.g_source)
 		printl ("", self, "C")
-		return library, mediaContainer
+		return self.loadLibraryData(entryData)

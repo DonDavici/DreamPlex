@@ -182,13 +182,40 @@ class DP_LibMain(Screen):
 			self.close()
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
-	def loadLibrary(self, entryData):
+	def loadLibraryData(self, entryData):
 		printl("", self, "S")
 
-		printl("", self, "C")
-		return []
+		printl("entryData: " + str(entryData), self, "D")
+
+		url = entryData["contentUrl"]
+
+		if entryData.has_key("source"):
+			source = entryData["source"]
+			uuid = entryData["uuid"]
+		else:
+			source = "plex"
+			uuid = None
+
+		# in this case we do not use cache because there is no uuid and updated on information on this level
+		# maybe we find a way later and implement it than
+		if entryData.has_key("viewMode"):
+			myType = entryData["viewMode"]
+			source = "plex"
+		else:
+			print str(entryData)
+			raise Exception
+			myType = entryData["type"]
+
+		# in this case we have to ask plex for sure too
+		if str(entryData.get('key')) != "all":
+			source = "plex"
+
+		library, mediaContainer = self.getLibraryData(source, url, myType, uuid)
+
+		printl ("", self, "C")
+		return library, mediaContainer
 
 	#===========================================================================
 	# 
@@ -384,33 +411,27 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getLibraryData(self, params, url, myType, uuid, viewGroup, source):
+	def getLibraryData(self, source, url, myType, uuid):
 		printl ("", self, "S")
 
 		if config.plugins.dreamplex.useCache.value:
 			#noinspection PyAttributeOutsideInit
-			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, viewGroup)
+			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, myType)
 
 			# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 			# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
-			if "cache" in params:
-				if not params['cache']:
-					source = "plex"
-
-			if source == "cache" or params['cache'] == True:
+			if source == "cache":
 				try:
 					library = self.getLibraryDataFromPickle()
 					printl("from pickle", self, "D")
 				except:
-					printl("music cache not found ... saving", self, "D")
+					printl("cache file not found ... saving", self, "D")
 					library = self.getLibraryDataFromPlex(url, myType)
 					reason = "cache file does not exists, recreating ..."
 					self.generateCacheForSection(reason, library)
 					printl("fallback to: from server", self, "D")
 			else:
 				library = self.getLibraryDataFromPlex(url, myType)
-				reason = "generating cache first time, creating ..."
-				self.generateCacheForSection(reason, library)
 		else:
 			library = self.getLibraryDataFromPlex(url, myType)
 
@@ -438,14 +459,33 @@ class DP_LibMain(Screen):
 
 		printl("myType: " + str(myType), self, "D")
 
-		if myType == "ShowAlbums":
-			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
-
-		elif myType == "ShowArtists":
+		# MUSIC
+		if myType == "artist":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
+
+		elif myType == "ShowAlbums":
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
 
 		elif myType == "ShowTracks":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
+
+		# MOVIES
+		elif myType == "movie":
+			library, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
+
+		# SHOWS
+		elif myType == "show":
+			library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
+
+		elif myType == "ShowEpisodesDirect":
+			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
+
+		elif myType == "ShowSeasons":
+			library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
+
+		elif myType == "ShowEpisodes":
+			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+
 
 		printl ("", self, "C")
 		return library, mediaContainer

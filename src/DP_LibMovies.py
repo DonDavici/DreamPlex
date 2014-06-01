@@ -55,14 +55,7 @@ class DP_LibMovies(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		printl("entryData: " + str(entryData), self, "D")
-
-		url = entryData["contentUrl"]
-		printl("url: " + str(url), self, "D")
-
-		movies, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
-
 		printl ("", self, "C")
-		return movies, mediaContainer
+		return self.loadLibraryData(entryData)
 
 

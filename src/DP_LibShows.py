@@ -56,33 +56,9 @@ class DP_LibShows(DP_LibMain):
 		if entryData is None:
 			entryData = self.initalEntryData
 
-		url = entryData["contentUrl"]
-		printl("url: " + str(url), self, "D")
-
-		# Diplay all TVShows
-		if "viewMode" not in entryData:
-			showEpisodesDirectly = False
-
-			if "showEpisodesDirectly" in entryData:
-				if entryData["showEpisodesDirectly"]:
-					showEpisodesDirectly = True
-
-			if showEpisodesDirectly:
-				printl("show episodes directly ...", self, "D")
-				library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
-			else:
-				printl("show TV shows ...", self, "D")
-				library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
-
-		# Display the Seasons Menu
-		elif entryData["viewMode"] == "ShowSeasons":
-			printl("show seasons of TV show ...", self, "D")
-			library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
-
-		# Display the Episodes Menu
-		elif entryData["viewMode"] == "ShowEpisodes":
-			printl("show episodes of season ...", self, "D")
-			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+		if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
+			entryData["viewMode"] = "ShowEpisodesDirect"
 
 		printl ("", self, "C")
-		return library, mediaContainer
+		return self.loadLibraryData(entryData)
+

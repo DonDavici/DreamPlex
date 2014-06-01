@@ -353,6 +353,15 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl("incomingEntryData: " + str(incomingEntryData), self, "D")
 
+		# we need this for cache mechanism
+		if incomingEntryData.has_key("uuid"):
+			printl("we have it ...", self, "D")
+			self.currentUuid = incomingEntryData["uuid"]
+
+		if incomingEntryData.has_key("type"):
+			printl("we have it ...", self, "D")
+			self.type = incomingEntryData["type"]
+
 		fullList = []
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(incomingEntryData["contentUrl"])
@@ -376,12 +385,18 @@ class PlexLibrary(Screen):
 			else:
 				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
 
-				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
-					if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
-						entryData["showEpisodesDirectly"] = True
+				if config.plugins.dreamplex.useCache.value:
+					# we set this here now to have this information later
+					if self.g_sectionCache.has_key(self.currentUuid):
+						entryData["source"] = self.g_sectionCache[self.currentUuid]["source"]
 					else:
-						entryData["showEpisodesDirectly"] = False
+						entryData["source"] = "plex"
 
+					entryData["uuid"] = self.currentUuid
+					entryData["type"] = self.type
+					printl("entryData: " + str(entryData), self, "D")
+
+				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
 					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
 
 				elif incomingEntryData["type"] == 'movie':
@@ -866,13 +881,15 @@ class PlexLibrary(Screen):
 				if myUuid in self.g_sectionCache:
 					if int(self.g_sectionCache[myUuid].get("updatedAt")) == int(updatedAt):
 						printl("unchanged data, using cache data ...", self, "D")
-						source = "cache"
+						self.g_sectionCache[myUuid]["source"] = "cache"
 					else:
 						printl("updating existing uuid in cache ...", self, "D")
 						self.g_sectionCache[myUuid] = {'updatedAt': updatedAt}
+						self.g_sectionCache[myUuid]["source"] = "plex"
 				else:
 					printl("new uuid found, updating cache ...", self, "D")
 					self.g_sectionCache[myUuid] = {'updatedAt': updatedAt}
+					self.g_sectionCache[myUuid]["source"] = "plex"
 			else:
 				printl("uuid or updateAt are unknown", self, "D")
 		except Exception, e:
