@@ -204,8 +204,6 @@ class DP_LibMain(Screen):
 			myType = entryData["viewMode"]
 			source = "plex"
 		else:
-			print str(entryData)
-			raise Exception
 			myType = entryData["type"]
 
 		# in this case we have to ask plex for sure too
@@ -415,23 +413,30 @@ class DP_LibMain(Screen):
 		printl ("", self, "S")
 
 		if config.plugins.dreamplex.useCache.value:
+			pickleFileExists = False
+			regeneratePickleFile = False
 			#noinspection PyAttributeOutsideInit
 			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, myType)
+			if os.path.exists(self.pickleName):
+				pickleFileExists = True
 
 			# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
 			# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
-			if source == "cache":
+			if source == "cache" and pickleFileExists:
 				try:
 					library = self.getLibraryDataFromPickle()
 					printl("from pickle", self, "D")
 				except:
-					printl("cache file not found ... saving", self, "D")
+					printl("cache file not found", self, "D")
 					library = self.getLibraryDataFromPlex(url, myType)
-					reason = "cache file does not exists, recreating ..."
-					self.generateCacheForSection(reason, library)
-					printl("fallback to: from server", self, "D")
+					regeneratePickleFile = True
 			else:
 				library = self.getLibraryDataFromPlex(url, myType)
+
+			if not pickleFileExists or regeneratePickleFile:
+				printl("pickleFileExists: " + str(pickleFileExists), self, "D")
+				printl("regeneratePickleFile: " + str(regeneratePickleFile), self, "D")
+				self.generateCacheForSection(library)
 		else:
 			library = self.getLibraryDataFromPlex(url, myType)
 
@@ -493,10 +498,9 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def generateCacheForSection(self, reason, library):
+	def generateCacheForSection(self, library):
 		printl ("", self, "S")
 
-		printl ("reason: " + str(reason), self, "S")
 		pickleData = library
 		fd = open(self.pickleName, "wb")
 		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL

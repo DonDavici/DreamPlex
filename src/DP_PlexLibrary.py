@@ -248,8 +248,10 @@ class PlexLibrary(Screen):
 
 		fullList=[]
 
-		# load section cache
-		self.loadSectionCache()
+		self.sectionCacheLoaded = False
+		if config.plugins.dreamplex.useCache.value:
+			# load section cache
+			self.loadSectionCache()
 
 		# sections tree
 		tree = self.getAllSectionsXmlTree()
@@ -355,11 +357,11 @@ class PlexLibrary(Screen):
 
 		# we need this for cache mechanism
 		if incomingEntryData.has_key("uuid"):
-			printl("we have it ...", self, "D")
+			printl("we have a uuid ...", self, "D")
 			self.currentUuid = incomingEntryData["uuid"]
 
 		if incomingEntryData.has_key("type"):
-			printl("we have it ...", self, "D")
+			printl("we have a type ...", self, "D")
 			self.type = incomingEntryData["type"]
 
 		fullList = []
@@ -830,19 +832,16 @@ class PlexLibrary(Screen):
 	def loadSectionCache(self):
 		printl("", self, "S")
 
-		self.sectionCacheLoaded = False
-
-		if config.plugins.dreamplex.useCache.value:
-			self.sectionCache = "%s%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "sections", )
-			try:
-				fd = open(self.sectionCache, "rb")
-				self.g_sectionCache = pickle.load(fd)
-				fd.close()
-				printl("section chache data loaded", self, "D")
-				self.sectionCacheLoaded = True
-			except:
-				printl("section chache data not loaded", self, "D")
-				self.g_sectionCache = {}
+		self.sectionCache = "%s%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, "sections", )
+		try:
+			fd = open(self.sectionCache, "rb")
+			self.g_sectionCache = pickle.load(fd)
+			fd.close()
+			printl("section chache data loaded", self, "D")
+			self.sectionCacheLoaded = True
+		except:
+			printl("section chache data not loaded", self, "D")
+			self.g_sectionCache = {}
 
 		printl("", self, "C")
 
@@ -872,7 +871,9 @@ class PlexLibrary(Screen):
 
 		try:
 			if not self.sectionCacheLoaded:
+				printl("adding data to section cache  ...", self, "D")
 				self.g_sectionCache[myUuid] = {'updatedAt': updatedAt}
+				self.g_sectionCache[myUuid]["source"] = "plex"
 
 			elif self.sectionCacheLoaded and myUuid != "Unknown" and updatedAt != "Unknown":
 				printl("searching in cache ...", self, "D")
