@@ -88,6 +88,7 @@ class DP_View(Screen, NumericalTextInput):
 	showMedia                       = False
 	showDetail                      = False
 	isDirectory                     = False
+	forceUpdate                     = False
 
 	backdrop_postfix                = ""
 	poster_postfix                  = ""
@@ -808,7 +809,8 @@ class DP_View(Screen, NumericalTextInput):
 		printl("entryData: " + str(entryData), self, "D")
 
 		# loadLibrary is a function in each class that inherits from DP_LibMain (DP_LibMovies, DP_LibSHows, DP_LibMusic)
-		libraryDataArr = self.loadLibrary(entryData)
+		libraryDataArr = self.loadLibrary(entryData, self.forceUpdate)
+		self.forceUpdate=False
 
 		# this is the content for the list (must be tuple no dict)
 		self.libraryData = libraryDataArr[0]
@@ -1207,6 +1209,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def markUnwatched(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.unseenUrl)
 		self.getViewListData()
@@ -1218,6 +1221,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def markWatched(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.seenUrl)
 		self.getViewListData()
@@ -1229,6 +1233,7 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def initiateRefresh(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.refreshUrl)
 		self.getViewListData()

@@ -49,13 +49,13 @@ class DP_LibMovies(DP_LibMain):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def loadLibrary(self, entryData = None):
+	def loadLibrary(self, entryData = None, forceUpdate=False):
 		printl ("", self, "S")
 
 		if entryData is None:
 			entryData = self.initalEntryData
 
 		printl ("", self, "C")
-		return self.loadLibraryData(entryData)
+		return self.loadLibraryData(entryData, forceUpdate)
 
 

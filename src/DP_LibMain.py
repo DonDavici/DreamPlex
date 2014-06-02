@@ -133,6 +133,14 @@ class DP_LibMain(Screen):
 		printl("", self, "C")
 
 	#===========================================================================
+	#
+	#===========================================================================
+	def loadLibrary(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
 	# 
 	#===========================================================================
 	def onViewClosed(self, cause=None):
@@ -184,7 +192,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def loadLibraryData(self, entryData):
+	def loadLibraryData(self, entryData, forceUpdate):
 		printl("", self, "S")
 
 		printl("entryData: " + str(entryData), self, "D")
@@ -210,7 +218,10 @@ class DP_LibMain(Screen):
 		if str(entryData.get('key')) != "all":
 			source = "plex"
 
-		library, mediaContainer = self.getLibraryData(source, url, myType, uuid)
+		if forceUpdate:
+			source = "plex"
+
+		library, mediaContainer = self.getLibraryData(source, url, myType, uuid, forceUpdate)
 
 		printl ("", self, "C")
 		return library, mediaContainer
@@ -409,7 +420,7 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getLibraryData(self, source, url, myType, uuid):
+	def getLibraryData(self, source, url, myType, uuid, forceUpdate=False):
 		printl ("", self, "S")
 
 		if config.plugins.dreamplex.useCache.value:
@@ -432,6 +443,9 @@ class DP_LibMain(Screen):
 					regeneratePickleFile = True
 			else:
 				library = self.getLibraryDataFromPlex(url, myType)
+
+				if forceUpdate:
+					regeneratePickleFile = True
 
 			if not pickleFileExists or regeneratePickleFile:
 				printl("pickleFileExists: " + str(pickleFileExists), self, "D")
