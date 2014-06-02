@@ -373,14 +373,13 @@ class PlexLibrary(Screen):
 
 		for entry in entries:
 			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
 
 			entryData["hasSecondaryTag"] = entryData.get("secondary", False)
 			entryData["hasPromptTag"] = entryData.get("prompt", False)
+			entryData["type"] = incomingEntryData["type"]
 
 			if entryData["hasSecondaryTag"]: #means that the next answer is a filter
 				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
-				entryData["type"] = incomingEntryData["type"]
 
 				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
 
@@ -412,6 +411,8 @@ class PlexLibrary(Screen):
 
 				else:
 					raise Exception("we should not be here")
+
+			printl("entryData: " + str(entryData), self, "D")
 
 		printl("", self, "C")
 		return fullList
