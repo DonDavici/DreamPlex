@@ -24,7 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 from Components.config import config
 
-from DP_ViewCine import DP_ViewCine
+from DP_View import DP_View
 
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
@@ -41,7 +41,7 @@ def getViewClass():
 #===============================================================================
 # 
 #===============================================================================
-class DPS_ViewShows(DP_ViewCine):
+class DPS_ViewShows(DP_View):
 
 	parentSeasonId = None
 
@@ -51,7 +51,7 @@ class DPS_ViewShows(DP_ViewCine):
 	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
 		printl("", self , "S")
 
-		DP_ViewCine.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
+		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
 
 		self.setTitle(_("Shows"))
 

@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 from DP_LibMain import DP_LibMain
-from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
 

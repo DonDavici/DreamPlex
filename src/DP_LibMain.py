@@ -36,7 +36,6 @@ from DP_View import DP_View
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
-from __plugin__ import getPlugins, Plugin
 
 #===============================================================================
 # 
@@ -227,7 +226,7 @@ class DP_LibMain(Screen):
 		return library, mediaContainer
 
 	#===========================================================================
-	# 
+	# DEADEND REMOVE OR INPLEMENT ME FOR DVD SUPPORT BUT ONLY IN DIRECT LOCAL MODE
 	#===========================================================================
 	def playEntry(self, entry, flags=None):
 		"""
@@ -318,104 +317,6 @@ class DP_LibMain(Screen):
 			self.session.openWithCallback(self.leaveMoviePlayer, DP_Player, playbackList, self.notifyNextEntry, flags=flags)
 
 		printl("", self, "C")
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def leaveMoviePlayer(self, flags=None):
-		"""
-		After calling this the view should auto reappear
-		"""
-		printl("", self, "S")
-
-		if not flags:
-			flags = {}
-
-		self.notifyEntryStopped(flags)
-		
-		self.session.nav.playService(None) 
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPlaybackList(self, entry):
-		"""
-		prototype fore playbacklist creation
-		"""
-		printl("", self, "S")
-		
-
-		playbackList = []
-		playbackList.append( (entry["Path"], entry["title"], entry, ))
-		
-		printl("", self, "C")
-		return playbackList
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def buildInfoPlaybackArgs(self, entry):
-		printl("", self, "S")
-
-		args = {}
-		args["entry"] = entry
-
-		printl("", self, "C")
-		return args
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyEntryPlaying(self, entry, flags):
-		"""
-		called on start of playback
-		"""
-		printl("", self, "S")
-		
-		args = self.buildInfoPlaybackArgs(entry)
-		args["status"]  = "playing"
-		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
-		
-		for plugin in plugins:
-			printl("plugin.name=" + str(plugin.name), self, "D")
-			plugin.fnc(args, flags)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyEntryStopped(self, flags):
-		"""
-		called on end of playback
-		"""
-		printl("", self, "S")
-		
-		args = {}
-		args["status"] = "stopped"
-		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
-		
-		for plugin in plugins:
-			printl("plugin.name=" + str(plugin.name), self, "D")
-			plugin.fnc(args, flags)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyNextEntry(self, entry, flags):
-		"""
-		called if the next entry in the playbacklist is being playbacked
-		"""
-		printl("", self, "S")
-		
-		self.notifyEntryStopped(flags)
-		self.notifyEntryPlaying(entry, flags)
-		
-		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -477,6 +378,8 @@ class DP_LibMain(Screen):
 		printl ("", self, "S")
 
 		printl("myType: " + str(myType), self, "D")
+		library = None
+		mediaContainer = None
 
 		# MUSIC
 		if myType == "artist":

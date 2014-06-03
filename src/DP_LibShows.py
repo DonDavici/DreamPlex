@@ -24,8 +24,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 from DP_LibMain import DP_LibMain
 
-from DPH_Singleton import Singleton
-
 from __common__ import printl2 as printl
 
 #===============================================================================
@@ -42,7 +40,7 @@ class DP_LibShows(DP_LibMain):
 		self.initalEntryData = initalEntryData
 		printl("initalEntryData: " + str(self.initalEntryData), self, "D")
 
-		DP_LibMain.__init__(self, session, "tvshows")
+		DP_LibMain.__init__(self, session, "shows")
 
 		printl ("", self, "C")
 

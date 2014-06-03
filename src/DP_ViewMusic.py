@@ -27,8 +27,6 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from DPH_Singleton import Singleton
-
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
 
@@ -58,7 +56,7 @@ class DPS_ViewMusic(DP_View):
 
 		self.startPlaybackNow = False
 
-		self.setTitle(_("Shows"))
+		self.setTitle(_("Music"))
 
 		printl("", self, "C")
 
