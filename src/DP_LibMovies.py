@@ -39,8 +39,9 @@ class DP_LibMovies(DP_LibMain):
 
 		self.initalEntryData = initalEntryData
 		printl("initalEntryData: " + str(self.initalEntryData))
-		
-		DP_LibMain.__init__(self, session, "movies")
+
+		libraryName = "movies"
+		DP_LibMain.__init__(self, session, libraryName)
 
 		printl ("", self, "C")
 

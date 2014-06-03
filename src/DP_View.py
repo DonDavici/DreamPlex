@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import math
-import time
 import os
 
 #noinspection PyUnresolvedReferences
@@ -59,19 +58,6 @@ from DPH_Singleton import Singleton
 from __common__ import printl2 as printl, loadPicture
 from __plugin__ import getPlugins, Plugin
 from __init__ import _ # _ is translation
-
-#===============================================================================
-#
-#===============================================================================
-def getViewClass():
-	"""
-	@param: none
-	@return: DP_View Class
-	"""
-	printl("", __name__, "S")
-
-	printl("", __name__, "C")
-	return DP_View
 
 #===========================================================================
 #
@@ -131,29 +117,34 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewData, select=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
+		"""
+		@param viewClass: is the screen session (eg DP_ViewShows)
+		@param libraryName: movie, show, music
+		@type loadLibraryFnc: is loadLibrary Function from Lib_class (eg DP_LibShows)
+		@param viewParams: are the params for dynamic screen handling from skin params
+		@param select: unknown
+		@return:
+		"""
 		printl("", self, "S")
-		Screen.__init__(self, session)
-		self.myParams = viewData[3]
+		Screen.__init__(self, viewClass)
+		self.viewParams = viewParams
 		NumericalTextInput.__init__(self)
 
-		printl("cache: " + str(cache), self, "D")
-		printl("viewData: "+ str(viewData), self, "I")
-		printl("myParams: " + str(self.myParams), self, "D")
+		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
-		self.skinName = self.myParams["settings"]["screen"]
-		self.currentViewName = str(self.myParams["settings"]["name"])
+		self.skinName = self.viewParams["settings"]["screen"]
 		printl("self.skinName: " + str(self.skinName), self, "D")
-		self.useBackdropVideos = self.myParams["settings"]["backdropVideos"]
-		self.select = select
+
+		self.currentViewName = str(self.viewParams["settings"]["name"])
+
+		self.useBackdropVideos = self.viewParams["settings"]["backdropVideos"]
 
 		self.libraryName = libraryName
-		self.loadLibrary = loadLibrary
-		self.viewData = viewData
-		self._playEntry = playEntry
+		self.loadLibrary = loadLibraryFnc
 
-		self.setListViewElementsCount(viewData)
+		self.setListViewElementsCount()
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 
@@ -308,15 +299,15 @@ class DP_View(Screen, NumericalTextInput):
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
-		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
-		self.posterHeight = self.myParams["elements"]["poster"]["height"]
-		self.posterWidth = self.myParams["elements"]["poster"]["width"]
+		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
+		self.posterHeight = self.viewParams["elements"]["poster"]["height"]
+		self.posterWidth = self.viewParams["elements"]["poster"]["width"]
 
 		# Backdrops
 		self.EXpicloadBackdrop = ePicLoad()
-		self.backdrop_postfix = self.myParams["elements"]["backdrop"]["postfix"]
-		self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
-		self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
+		self.backdrop_postfix = self.viewParams["elements"]["backdrop"]["postfix"]
+		self.backdropHeight = self.viewParams["elements"]["backdrop"]["height"]
+		self.backdropWidth = self.viewParams["elements"]["backdrop"]["width"]
 
 		# now we try to enable stillPictureSupport
 		if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
@@ -364,19 +355,10 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def setListViewElementsCount(self, viewData):
+	def setListViewElementsCount(self):
 		printl("", self, "S")
 
-		multiView = True
-
-		if multiView:
-			params = viewData[3]
-			self.itemsPerPage = int(params["settings"]['itemsPerPage'])
-		else:
-			tree = Singleton().getSkinParamsInstance()
-			for view in tree.findall('view'):
-				if view.get('name') == str(viewData[1]):
-					self.itemsPerPage = int(view.get('itemsPerPage'))
+		self.itemsPerPage = int(self.viewParams["settings"]['itemsPerPage'])
 
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 
@@ -392,14 +374,8 @@ class DP_View(Screen, NumericalTextInput):
 		self.currentEntryDataDict = {}
 		self.currentIndexDict = {}
 
-		if self.select is None: # Initial Start of View, select first entry in list
-			self._load()
-			self.refresh()
-
-		else: # changed views, reselect selected entry
-			printl("self.select: " +  str(self.select), self, "D")
-			self._load(self.select[0])
-			self.refresh()
+		self._load()
+		self.refresh()
 
 		printl("", self, "C")
 
@@ -552,8 +528,6 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyRedLong(self):
 		printl("", self, "S")
 
-		self.displayViewMenu()
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -598,7 +572,7 @@ class DP_View(Screen, NumericalTextInput):
 	def toggleFastScroll(self):
 		printl("", self, "S")
 
-		if self.myParams["elements"]["info"]["visible"]:
+		if self.viewParams["elements"]["info"]["visible"]:
 			if self.fastScroll:
 				self.fastScroll = False
 				self["btn_blueText"].setText("fastScroll 'Off'")
@@ -705,7 +679,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		if selection is not None:
 			entryData		= selection[1]
-			context		= selection[2]
+			#context		= selection[2]
 			nextContentUrl = selection[4]
 
 			# we extend details for provide the next data location
@@ -725,7 +699,7 @@ class DP_View(Screen, NumericalTextInput):
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.myParams)
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.viewParams)
 
 			else:
 				# save index here because user moved around for sure
@@ -927,7 +901,7 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
-		printl("self.myParams: " + str(self.myParams), self, "D")
+		printl("self.viewParams: " + str(self.viewParams), self, "D")
 
 		if self.resetGuiElements:
 			self.resetGuiElementsInFastScrollMode()
@@ -1078,36 +1052,6 @@ class DP_View(Screen, NumericalTextInput):
 		self.setText("pagination", _(str(pageCurrent) + "/" + str(pageTotal)))
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setDefaultView(self):
-		printl("", self, "S")
-
-		select = None
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			primaryKeyValuePair = {}
-			printl( "self.onEnterPrimaryKeys: " + str(self.onEnterPrimaryKeys), self, "D")
-			for key in self.onEnterPrimaryKeys:
-				if key != "play" or key != "directMode":
-					primaryKeyValuePair[key] = selection[1][key]
-			select = (self.currentKeyValuePair, primaryKeyValuePair)
-		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, ))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def clearDefaultView(self):
-		printl("", self, "S")
-
-		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, ))
-
-		printl("", self, "C")
-
 
 	#===========================================================================
 	#
@@ -1265,57 +1209,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "C")
 
 	#===========================================================================
-	#
-	#===========================================================================
-	def displayViewMenu(self):
-		printl("", self, "S")
-
-		pluginList = []
-
-		pluginList.append((_("Set view as default"), Plugin("View", fnc=self.setDefaultView), ))
-		pluginList.append((_("Clear default view"), Plugin("View", fnc=self.clearDefaultView), ))
-
-		plugins = getPlugins(where=Plugin.MENU_MOVIES_PLUGINS)
-		for plugin in plugins:
-			pluginList.append((plugin.name, plugin, ))
-
-		if len(pluginList) == 0:
-			pluginList.append((_("No plugins available"), None, ))
-
-		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Options"), list=pluginList)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	#noinspection PyUnusedLocal
-	def pluginCallback(self, args=None):
-		printl("", self, "S")
-
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def displayOptionsMenuCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is None or choice[1] is None:
-			printl("choice: None - we pressed exit", self, "D")
-			return
-
-		printl("choice: " + str(choice[1]), self, "D")
-
-		if choice[1].fnc:
-			printl("5", self, "D")
-			choice[1].fnc()
-
-		printl("", self, "C")
-
-	#===========================================================================
 	# choice = name, media_id, languageCode, stream_id, server, part_id, selected
 	#===========================================================================
 	def displayAudioMenuCallback(self, choice):
@@ -1451,11 +1344,11 @@ class DP_View(Screen, NumericalTextInput):
 
 		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
 
-		if self.myParams["elements"]["poster"]["visible"]:
+		if self.viewParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
 				self["poster"].instance.setPixmapFromFile(ptr)
 
-		if self.myParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
+		if self.viewParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
 			if self.resetBackdrop:
 				self.resetBackdropImage()
 
@@ -1536,13 +1429,13 @@ class DP_View(Screen, NumericalTextInput):
 
 		# enable audio and subtitles information if we have transcoding active
 		if self.serverConfig.playbackType.value == "1":
-			printl("audio: " + str(self.myParams["elements"]["audio"]),self, "D")
-			if self.myParams["elements"]["audio"]["visible"]:
+			printl("audio: " + str(self.viewParams["elements"]["audio"]),self, "D")
+			if self.viewParams["elements"]["audio"]["visible"]:
 				self.toggleElementVisibilityWithLabel("audio")
 			else:
 				self.toggleElementVisibilityWithLabel("audio", "hide")
 
-			if self.myParams["elements"]["subtitles"]["visible"]:
+			if self.viewParams["elements"]["subtitles"]["visible"]:
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
@@ -1576,24 +1469,24 @@ class DP_View(Screen, NumericalTextInput):
 		# this is always the case when the view starts the first time
 		# in this case no need for look for subviews
 		if myType is None:
-			for element in self.myParams["elements"]:
+			for element in self.viewParams["elements"]:
 				printl("element:" + str(element), self, "D")
-				visibility = self.myParams["elements"][element]["visible"]
+				visibility = self.viewParams["elements"][element]["visible"]
 
 				self.alterGuiElementVisibility(element, visibility)
 
 				# we do not alter positions here because this should be done in the skin.xml because we are the first view except ...
 				if str(self.libraryName) == "episodes":
-					params = self.myParams["elements"][element]
+					params = self.viewParams["elements"][element]
 					if "xCoord" in params and "yCoord" in params:
 						xCoord = params.get("xCoord")
 						yCoord = params.get("yCoord")
 						self.alterGuiElementPosition(element,xCoord, yCoord)
 
 		# now we check if we are in a special subView with its own params
-		elif "subViews" in self.myParams:
-			if myType in self.myParams["subViews"]:
-				subViewParams = self.myParams["subViews"][myType]
+		elif "subViews" in self.viewParams:
+			if myType in self.viewParams["subViews"]:
+				subViewParams = self.viewParams["subViews"][myType]
 				printl("subViewParams: " + str(subViewParams), self, "D")
 
 				self.viewChangeStorage[self.viewStep] = {}

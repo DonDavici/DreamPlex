@@ -91,17 +91,14 @@ def getViewsFromSkinParams(myType):
 
 	if myType == "movieView":
 		myFile = "DP_ViewMovies"
-		myClass = "DPS_ViewMovies"
 		defaultParams = getMovieViewDefaults()
 
 	elif myType == "showView":
 		myFile = "DP_ViewShows"
-		myClass = "DPS_ViewShows"
 		defaultParams = getShowViewDefaults()
 
 	elif myType == "musicView":
 		myFile = "DP_ViewMusic"
-		myClass = "DPS_ViewMusic"
 		defaultParams = getMusicViewDefaults()
 		
 	else:
@@ -148,7 +145,7 @@ def getViewsFromSkinParams(myType):
 				if key != "name":
 					currentParams["elements"][name][key] = translatedValue
 
-		view = (_(name), myFile, myClass, currentParams)
+		view = (_(name), myFile, currentParams)
 		
 		availableViewList.append(view)
 	

@@ -48,10 +48,10 @@ class DPS_ViewShows(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
 		printl("", self , "S")
 
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
+		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
 
 		self.setTitle(_("Shows"))
 

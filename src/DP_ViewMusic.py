@@ -49,14 +49,14 @@ class DPS_ViewMusic(DP_View):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
 		printl("", self , "S")
 
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
-
-		self.startPlaybackNow = False
+		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
 
 		self.setTitle(_("Music"))
+
+		self.startPlaybackNow = False
 
 		printl("", self, "C")
 

@@ -46,10 +46,12 @@ class DPS_ViewMovies(DP_View):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
 		printl("", self , "S")
 
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, cache)
+		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
+
+		self.setTitle(_("Movies"))
 
 		printl("", self, "C")
 

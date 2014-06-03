@@ -37,7 +37,8 @@ class DP_LibMusic(DP_LibMain):
 	def __init__(self, session, initalEntryData):
 		printl ("", self, "S")
 
-		DP_LibMain.__init__(self, session, "music")
+		libraryName = "music"
+		DP_LibMain.__init__(self, session, libraryName)
 
 		self.initalEntryData = initalEntryData
 		printl("initalEntryData: " + str(self.initalEntryData))

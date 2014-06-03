@@ -40,7 +40,8 @@ class DP_LibShows(DP_LibMain):
 		self.initalEntryData = initalEntryData
 		printl("initalEntryData: " + str(self.initalEntryData), self, "D")
 
-		DP_LibMain.__init__(self, session, "shows")
+		libraryName = "shows"
+		DP_LibMain.__init__(self, session, libraryName)
 
 		printl ("", self, "C")
 
