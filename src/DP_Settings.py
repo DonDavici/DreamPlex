@@ -147,6 +147,10 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		if config.plugins.dreamplex.showDetailsInList.value:
 			self.cfglist.append(getConfigListEntry(_("> Detail type for additional data"), config.plugins.dreamplex.showDetailsInListDetailType, _(" ")))
 
+		# VIEW SETTINGS
+		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+
+
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		
