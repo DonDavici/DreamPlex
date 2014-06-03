@@ -79,6 +79,11 @@ config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 
+# view settings
+config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
+config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
+config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
+
 if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
 else:
