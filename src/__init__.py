@@ -79,11 +79,6 @@ config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 
-# view settings
-config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
-config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
-config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "1", choices = [("1", "Stable"), ("2", "Beta")])
-
 if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
 else:
@@ -100,6 +95,22 @@ config.plugins.dreamplex.cachefolderpath  		= ConfigDirectory(default = defaultC
 config.plugins.dreamplex.mediafolderpath   		= ConfigDirectory(default = defaultMediaFolderPath, visible_width = 50)
 config.plugins.dreamplex.configfolderpath   	= ConfigDirectory(default = defaultConfigFolderPath, visible_width = 50)
 config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultPlayerTempPath, visible_width = 50)
+
+#movieViews = getViews("movies")
+# showViews = getViews("shows")
+# musicViews = getViews("music")
+
+# counter = 0
+# movieChoices = []
+# for view in movieViews:
+# 	movieChoices[counter] = (str(counter), str(view[0]))
+# 	counter += 1
+
+# TODO this should be dynamic
+# view settings
+config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
+config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
+config.plugins.dreamplex.defaultShowView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
@@ -391,8 +402,8 @@ def prepareEnvironment():
 	initBoxInformation()
 	printGlobalSettings()
 	initPlexServerConfig()
-	checkPlexEnvironment()
 	registerSkinParamsInstance()
+	checkPlexEnvironment()
 	registerPlexFonts()
 	loadPlexSkin()
 	loadPlexPlugins()

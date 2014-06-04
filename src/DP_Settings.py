@@ -149,7 +149,9 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 
 		# VIEW SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
-
+		self.cfglist.append(getConfigListEntry(_("> Default View for Movies"), config.plugins.dreamplex.defaultMovieView, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Default View for Shows"), config.plugins.dreamplex.defaultShowView, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("> Default View for Music"), config.plugins.dreamplex.defaultMusicView, _(" ")))
 
 		# PATH SETTINGS
 		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))

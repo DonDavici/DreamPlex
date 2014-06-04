@@ -30,7 +30,6 @@ from Screens.Screen import Screen
 from Components.config import config
 
 from DP_ViewFactory import getViews
-from DP_Player import DP_Player
 from DP_View import DP_View
 
 from DPH_Singleton import Singleton
@@ -55,8 +54,17 @@ class DP_LibMain(Screen):
 		
 		self._views = getViews(libraryName)
 
-		# TODO read here from settings for view index
-		self.currentViewIndex = 0
+		if self._libraryName == "movies":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultMovieView.value)
+
+		elif self._libraryName == "shows":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultShowView.value)
+
+		elif self._libraryName == "music":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultMusicView.value)
+
+		else:
+			self.currentViewIndex = 0
 		
 		self.onFirstExecBegin.append(self.showView)
 		
