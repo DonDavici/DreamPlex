@@ -25,6 +25,8 @@ You should have received a copy of the GNU General Public License
 #noinspection PyUnresolvedReferences
 from enigma import eTimer, ePythonMessagePump, eConsoleAppContainer
 
+from PIL import Image
+
 from threading import Thread
 from threading import Lock
 
@@ -44,7 +46,7 @@ from DP_PlexLibrary import PlexLibrary
 from DP_ViewFactory import getMovieViewDefaults
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, isValidSize
 from __init__ import _ # _ is translation
 
 #===========================================================================
@@ -72,7 +74,7 @@ class DPS_Syncer(Screen):
 
 		self._session = session
 		self["output"] = ScrollLabel()
-		self["output"].setText(_("HURRA"))
+		self["output"].setText(_("Ready to run ..."))
 
 		self["txt_green"] = Label()
 		self["txt_green"].setText("Start Sync")
@@ -243,7 +245,8 @@ class DPS_Syncer(Screen):
 	def callback_infos(self, info):
 		printl("", self, "S")
 
-		self["output"].setText(info)
+		self["output"].appendText(info + "\n")
+		self["output"].lastPage()
 
 		printl("", self, "C")
 
@@ -253,7 +256,7 @@ class DPS_Syncer(Screen):
 	def callback_finished(self):
 		printl("", self, "S")
 
-		self["output"].setText(_("Finished"))
+		self["output"].appendText(_("Finished"))
 		self["txt_blue"].hide()
 		self["btn_blue"].hide()
 
@@ -271,7 +274,7 @@ class DPS_Syncer(Screen):
 		printl("", self, "S")
 
 		self.mediaSyncerInfo.cancel()
-		self["output"].setText(_("Cancelled!"))
+		self["output"].appendText(_("Cancelled!"))
 
 		printl("", self, "C")
 
@@ -338,7 +341,7 @@ class MediaSyncerInfo(object):
 			# clean up
 			self.backgroundMediaSyncer.MessagePump.recv_msg.get().remove(self.gotThreadMsg)
 			self.callback = None
-			self.backgroundMediaSyncer = None
+			#self.backgroundMediaSyncer = None # this throws a green screen. dont know why
 			self.running = False
 			self.done()
 
@@ -371,6 +374,8 @@ class MediaSyncerInfo(object):
 	def isRunning(self):
 		printl("", self, "S")
 
+		printl("running: " + str(self.running),self , "D")
+
 		printl("", self, "C")
 		return self.running
 
@@ -380,7 +385,7 @@ class MediaSyncerInfo(object):
 	def infoCallBack(self,text):
 		printl("", self, "S")
 
-		printl("text: " + str(text), self, "D")
+		printl("Message: " + str(text), self, "D")
 		if text and self.callback_infos:
 			self.callback_infos(text)
 
@@ -392,7 +397,8 @@ class MediaSyncerInfo(object):
 	def done(self):
 		printl("", self, "S")
 
-		if self.callback_finished:
+		if self.callback_finished is not None:
+			printl("callback_finished: " + str(self.callback_finished),self, "D")
 			self.callback_finished()
 
 		self.running = False
@@ -504,6 +510,8 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "C")
 
+
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -517,32 +525,55 @@ class BackgroundMediaSyncer(Thread):
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 		import os
-		try:
-			for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
-				if self.cancel:
-					break
-
+		import math
+		#try:
+		for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
+			if self.cancel:
+				break
+			try:
 				# firt we check for images in the right size
 				if "1280x720.jpg" in myFile:
 					# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
 					myFileWoExtension = myFile[:-4]
+					extension = str.upper(myFile[-3:])
+					if extension == "JPG":
+						extension = "JPEG"
+					imageLocationWoExtension = config.plugins.dreamplex.mediafolderpath.value + myFileWoExtension
 
 					# location string
-					location = config.plugins.dreamplex.mediafolderpath.value + myFileWoExtension + ".m1v"
+					videoLocation = imageLocationWoExtension + ".m1v"
 					# check if backdrop video exists
-					if fileExists(location):
-						msg_text = _("backdrop video exists under the location " + str(location))
+					if fileExists(videoLocation):
+						msg_text = _("backdrop video exists under the location " + str(videoLocation))
 						self.messages.push((THREAD_WORKING, msg_text))
 						self.messagePump.send(0)
 						continue
 					else:
-						msg_text = _("started rendering backdrop video: " + str(location))
+						msg_text = _("trying to render backdrop now ...: " + str(videoLocation))
 						self.messages.push((THREAD_WORKING, msg_text))
 						self.messagePump.send(0)
+						imageLocation = config.plugins.dreamplex.mediafolderpath.value + myFile
 
-						printl("started rendering myFile: " + str(location),self, "D")
+						i = Image.open(imageLocation)
+						data = i.size
+						printl("data: " + str(data), self, "D")
 
-						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + config.plugins.dreamplex.mediafolderpath.value + str(myFile) + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + location
+						xValid, xResult = isValidSize(i.size[0])
+						yValid, yResult = isValidSize(i.size[1])
+
+						printl("xValid: " + str(xValid), self, "D")
+						printl("yValid: " + str(yValid), self, "D")
+
+						if not xValid or not yValid:
+							xResult = math.ceil(xResult) * 16
+							yResult = math.ceil(yResult) * 16
+							newSize = (int(xResult), int(yResult))
+							resizedImage = i.resize(newSize)
+							resizedImage.save(imageLocation, format=extension)
+
+						printl("started rendering : " + str(videoLocation),self, "D")
+
+						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
 						printl("cmd: " + str(cmd), self, "D")
 
 						os.system(cmd)
@@ -552,16 +583,20 @@ class BackgroundMediaSyncer(Thread):
 						self.messagePump.send(0)
 
 					printl("finished rendering myFile: " + str(myFile),self, "D")
+			except Exception, e:
+				printl("Error: " + str(e), self, "D")
+				self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
+				self.messagePump.send(0)
 
-			if self.cancel:
-				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
-			else:
-				self.messages.push((THREAD_FINISHED, _("We did it :-)")))
+		if self.cancel:
+			self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
+		else:
+			self.messages.push((THREAD_FINISHED, _("We did it :-)")))
 
-		except Exception, e:
-			self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
-		finally:
-			self.messagePump.send(0)
+		# except Exception, e:
+		# 	self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
+		# finally:
+		# 	self.messagePump.send(0)
 
 		self.running = False
 
@@ -623,7 +658,7 @@ class BackgroundMediaSyncer(Thread):
 
 				if section[2] == "movieEntry":
 					printl("movie", self, "D")
-					url = section[3]["t_url"]
+					url = section[3]["contentUrl"]
 
 					if str(config.plugins.dreamplex.showFilter.value).lower() == "true":
 						url += "/all"
@@ -633,21 +668,21 @@ class BackgroundMediaSyncer(Thread):
 					self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
-					library, tmpAbc = self.plexInstance.getMoviesFromSection(url)
+					library, mediaContainer = self.plexInstance.getMoviesFromSection(url)
 
 					self.syncThrougMediaLibrary(library)
 
 
 				if section[2] == "showEntry":
 					printl("tvshow", self, "D")
-					url = section[3]["t_url"] + "/all"
+					url = section[3]["contentUrl"] + "/all"
 
 					msg_text = _("got show url: " + str(url))
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
-					library, tmpAbc, tmpGenres = self.plexInstance.getShowsFromSection(url)
+					library, mediaContainer = self.plexInstance.getShowsFromSection(url)
 
 					self.syncThrougMediaLibrary(library)
 
@@ -700,7 +735,7 @@ class BackgroundMediaSyncer(Thread):
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 					#download backdrop
-					self.downloadMedia(media[2]["fanart_image"], location, t_height, t_width)
+					self.downloadMedia(media[1]["fanart_image"], location, t_height, t_width)
 
 			for variant in self.posterVariants:
 				# interupt if needed
@@ -721,7 +756,7 @@ class BackgroundMediaSyncer(Thread):
 					self.messagePump.send(0)
 					continue
 				else:
-					self.downloadMedia(media[2]["thumb"], location, t_height, t_width)
+					self.downloadMedia(media[1]["thumb"], location, t_height, t_width)
 
 		printl("", self, "C")
 
@@ -739,13 +774,14 @@ class BackgroundMediaSyncer(Thread):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			downloadPage(download_url, location)
+			server = self.plexInstance.getServerFromURL(download_url)
+			authHeader = self.plexInstance.get_hTokenForServer(server)
+			printl("header: " + str(authHeader), self, "D")
+			downloadPage(download_url, location, headers=authHeader)
 
 		return True
 
 		printl("", self, "C")
-
-
 
 THREAD_WORKING = 1
 THREAD_FINISHED = 2

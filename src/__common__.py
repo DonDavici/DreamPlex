@@ -710,6 +710,19 @@ def loadPicture(filename):
 #===========================================================================
 #
 #===========================================================================
+def isValidSize(size):
+	printl2("", "__common__::isValidSize", "S")
+	valid = False
+	result = size / 16
+	if size % 16 == 0:
+		valid = True
+
+	printl2("", "__common__::isValidSize", "C")
+	return valid, result
+
+#===========================================================================
+#
+#===========================================================================
 def getPlexHeader(g_sessionID, asString = True):
 	printl2("", "__common__::getPlexHeader", "S")
 

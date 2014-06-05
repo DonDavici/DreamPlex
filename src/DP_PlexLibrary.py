@@ -1940,7 +1940,7 @@ class PlexLibrary(Screen):
 		transcode_url = None
 
 		if width is not None and height is not None:
-			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s%s' % (server, urllib.quote_plus(url), width, height, self.get_uTokenForServer(server))
+			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, urllib.quote_plus(url), width, height)
 			printl("transcode_url: " + str(transcode_url), self, "D")
 		else:
 			printl("unspecified width and height", self, "D")

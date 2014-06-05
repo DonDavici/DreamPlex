@@ -141,6 +141,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.useBackdropVideos = self.viewParams["settings"]["backdropVideos"]
 
+		self.plexInstance = Singleton().getPlexInstance()
+
 		self.libraryName = libraryName
 		self.loadLibrary = loadLibraryFnc
 
@@ -1373,7 +1375,10 @@ class DP_View(Screen, NumericalTextInput):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			downloadPage(str(download_url), self.whatPoster).addCallback(lambda _: self.showPoster(forceShow = True))
+			server = self.plexInstance.getServerFromURL(download_url)
+			authHeader = self.plexInstance.get_hTokenForServer(server)
+			printl("header: " + str(authHeader), self, "D")
+			downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
 
 		printl("", self, "C")
 
@@ -1396,7 +1401,10 @@ class DP_View(Screen, NumericalTextInput):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			downloadPage(download_url, self.whatBackdrop).addCallback(lambda _: self.showBackdrop(forceShow = True))
+			server = self.plexInstance.getServerFromURL(download_url)
+			authHeader = self.plexInstance.get_hTokenForServer(server)
+			printl("header: " + str(authHeader), self, "D")
+			downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
 
 		printl("", self, "C")
 
