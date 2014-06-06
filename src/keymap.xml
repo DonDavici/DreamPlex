@@ -76,4 +76,20 @@
         <key id="KEY_PREVIOUS" mapto="playPrevious" flags="m" />
         <key id="KEY_NEXT" mapto="playNext" flags="m" />
 	</map>
+
+    <map context="DPS_Syncer">
+		<key id="KEY_RED" mapto="red" flags="b" />
+		<key id="KEY_RED" mapto="red_long" flags="l" />
+        <key id="KEY_BLUE" mapto="blue" flags="b" />
+		<key id="KEY_BLUE" mapto="blue_long" flags="l" />
+		<key id="KEY_YELLOW" mapto="yellow" flags="b" />
+		<key id="KEY_YELLOW" mapto="yellow_long" flags="l" />
+		<key id="KEY_GREEN" mapto="green" flags="b" />
+		<key id="KEY_GREEN" mapto="green_long" flags="l" />
+		<key id="KEY_CHANNELUP" mapto="bouquet_up" flags="m" />
+		<key id="KEY_CHANNELDOWN" mapto="bouquet_down" flags="m" />
+		<key id="KEY_EXIT" mapto="cancel" flags="m" />
+		<key id="KEY_ESC" mapto="cancel" flags="m" />
+		<key id="KEY_HOME" mapto="cancel" flags="m" />
+	</map>
 </keymap>

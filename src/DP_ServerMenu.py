@@ -28,18 +28,20 @@ from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Label import Label
+from Components.Pixmap import Pixmap
 
-from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
-
-from __common__ import printl2 as printl
-from __plugin__ import Plugin
-from __init__ import _ # _ is translation
 
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
+from DP_Syncer import DPS_Syncer
+from DP_ViewFactory import getGuiElements
+
+from __common__ import printl2 as printl
+from __plugin__ import Plugin
+from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -73,15 +75,25 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self.g_serverConfig = g_serverConfig
 		self.plexInstance = Singleton().getPlexInstance()
 
+		self.guiElements = getGuiElements()
+
 		self.setMenuType("server_menu")
 
 		if self.g_horizontal_menu:
 			self.setHorMenuElements()
 			self.translateNames()
 
+		self["btn_red"]			= Pixmap()
+		self["btn_green"]		= Pixmap()
+
 		self["title"] = StaticText()
 		self["txt_exit"] = Label()
-		self["txt_menu"] = Label()
+		self["btn_redText"] = Label()
+		self["btn_redText"].setText("sync Medias")
+
+		self["btn_greenText"] = Label()
+		self["btn_greenText"].setText("render Backdrops")
+
 		self["menu"]= List(enableWrapAround=True)
 
 		self.menu_main_list = self["menu"].list
@@ -94,7 +106,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 				"up":		(self.up, ""),
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
-			    "menu":		(self.onKeyMenu, ""),
+			    "red":		(self.onKeyRed, ""),
 			}, -2)
 
 		self.onLayoutFinish.append(self.finishLayout)
@@ -111,7 +123,10 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		self.setTitle(_("Server Menu"))
 
 		self["txt_exit"].setText(_("Exit"))
-		self["txt_menu"].setText(_("Menu"))
+
+		# first we set the pics for buttons
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 
 		self.getServerData()
 
@@ -136,6 +151,16 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 #===============================================================================
 # KEYSTROKES
 #===============================================================================
+
+	#===============================================================
+	#
+	#===============================================================
+	def onKeyRed(self):
+		printl("", self, "S")
+
+		self.session.open(DPS_Syncer, "sync", self.g_serverConfig,)
+
+		printl("", self, "C")
 
 	#===============================================================
 	#
@@ -306,36 +331,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		printl("", self, "S")
 
 		self.close((True,) )
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKeyMenu(self):
-		printl("", self, "S")
-
-		if self.g_serverConfig:
-			functionList = []
-
-			functionList.append((_("Sync medias from this server."), "sync"))
-			functionList.append((_("Render fullsize backdrops to m1v."), "render"))
-
-			self.session.openWithCallback(self.onKeyMenuCallback, ChoiceBox, title=_("Server Functions"), list=functionList)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKeyMenuCallback(self, choice):
-		printl("", self, "S")
-		printl("choice: " +str(choice), self, "D")
-
-		if choice:
-			from DP_Syncer import DPS_Syncer
-
-			self.session.open(DPS_Syncer, self.g_serverConfig, choice[1])
 
 		printl("", self, "C")
 

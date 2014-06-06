@@ -57,11 +57,12 @@ class DPS_Syncer(Screen):
 	_session = None
 	_mode = None
 
-	def __init__(self, session, serverConfig, mode):
+	def __init__(self, session, mode, serverConfig=None):
 		Screen.__init__(self, session)
 
-		# now that we know the server we establish global plexInstance
-		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))
+		if serverConfig is not None:
+			# now that we know the server we establish global plexInstance
+			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))
 
 		# we are "sync" or "render"
 		self._mode = mode
@@ -74,23 +75,25 @@ class DPS_Syncer(Screen):
 
 		self._session = session
 		self["output"] = ScrollLabel()
-		self["output"].setText(_("Ready to run ..."))
 
 		self["txt_green"] = Label()
-		self["txt_green"].setText("Start Sync")
+		if self._mode == "sync":
+			self["txt_green"].setText(_("Start Sync"))
+		else:
+			self["txt_green"].setText(_("Start Rendering"))
 		self["btn_green"] = Pixmap()
 
 		self["txt_blue"] = Label()
-		self["txt_blue"].setText("run in Background")
+		self["txt_blue"].setText(_("Background"))
 		self["btn_blue"] = Pixmap()
 
 		self["txt_red"] = Label()
-		self["txt_red"].setText("Abort Sync")
+		self["txt_red"].setText(_("Abort Sync"))
 		self["btn_red"] = Pixmap()
 
 		self["txt_exit"] = Label()
 
-		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
+		self["setupActions"] = ActionMap(["DPS_Syncer"],
 		{
 			"red": self.keyRed,
 			"blue": self.keyBlue,
@@ -166,7 +169,6 @@ class DPS_Syncer(Screen):
 			self["btn_red"].hide()
 
 			self["txt_exit"].show()
-
 
 		printl("", self, "C")
 
@@ -510,8 +512,6 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "C")
 
-
-
 	#===========================================================================
 	#
 	#===========================================================================
@@ -632,7 +632,7 @@ class BackgroundMediaSyncer(Thread):
 
 		self.running = True
 		self.cancel = False
-		msg_text = _("some text here")
+		msg_text = _("starting ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 

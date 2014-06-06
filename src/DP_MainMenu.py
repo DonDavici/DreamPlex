@@ -39,6 +39,7 @@ from DP_Settings import DPS_Settings
 from DP_Server import DPS_Server
 from DP_About import DPS_About
 from DP_ServerMenu import DPS_ServerMenu
+from DP_Syncer import DPS_Syncer
 
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
@@ -183,6 +184,9 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 				
 				elif selection[1] == "DPS_About":
 					self.session.open(DPS_About)
+
+				elif selection[1] == "DPS_Syncer":
+					self.session.open(DPS_Syncer, "render")
 
 			else:
 				pass
@@ -335,6 +339,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 		mainMenuList.append((_("Settings"), "DPS_Settings", "settingsEntry"))
 		mainMenuList.append((_("Server"), "DPS_Server", "settingsEntry"))
 		mainMenuList.append((_("Systemcheck"), "DPS_SystemCheck", "settingsEntry"))
+		mainMenuList.append((_("Backdrops"), "DPS_Syncer", "settingsEntry"))
 
 		self.nextExitIsQuit = False
 		
