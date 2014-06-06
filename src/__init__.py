@@ -108,9 +108,9 @@ config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultP
 
 # TODO this should be dynamic
 # view settings
-config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
-config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
-config.plugins.dreamplex.defaultShowView = ConfigSelection(default = 0, choices = [(0, "List"), (1, "long List"), (2, "Backdrop")])
+config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = [("0", "List"), ("1", "long List"), ("2", "Backdrop")])
+config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "0", choices = [("0", "List"), ("1", "long List"), ("2", "Backdrop")])
+config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "0", choices = [("0", "List"), ("1", "long List"), ("2", "Backdrop")])
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
