@@ -96,16 +96,6 @@ config.plugins.dreamplex.mediafolderpath   		= ConfigDirectory(default = default
 config.plugins.dreamplex.configfolderpath   	= ConfigDirectory(default = defaultConfigFolderPath, visible_width = 50)
 config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultPlayerTempPath, visible_width = 50)
 
-#movieViews = getViews("movies")
-# showViews = getViews("shows")
-# musicViews = getViews("music")
-
-# counter = 0
-# movieChoices = []
-# for view in movieViews:
-# 	movieChoices[counter] = (str(counter), str(view[0]))
-# 	counter += 1
-
 # TODO this should be dynamic
 # view settings
 config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = [("0", "List"), ("1", "long List"), ("2", "Backdrop")])

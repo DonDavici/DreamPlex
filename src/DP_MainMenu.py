@@ -23,12 +23,14 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 import time
+from enigma import eSize, getDesktop
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Label import Label
+from Components.VideoWindow import VideoWindow
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -48,6 +50,7 @@ from DPH_WOL import wake_on_lan
 from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
+
 #===============================================================================
 #
 #===============================================================================	
@@ -78,7 +81,13 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 
 		# get all our servers as list
 		self.getServerList(allowOverride)
-		
+
+		test = True
+		if test:
+			self["tvPic"] = VideoWindow(decoder=0)
+		else:
+			self["tvPicture"] = Label()
+
 		self["menu"]= List(self.mainMenuList, True)
 		
 		self.menu_main_list = self["menu"].list
@@ -117,6 +126,13 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 		self.setTitle(_("Main Menu"))
 
 		self["txt_exit"].setText(_("Exit"))
+
+		w = 400
+		h = 225
+		desk = getDesktop(0)
+		self["tvPic"].instance.setFBSize(desk.size())
+		self["tvPic"].instance.resize(eSize(w, h))
+
 
 		if self.g_horizontal_menu:
 			# init horizontal menu

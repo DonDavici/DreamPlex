@@ -26,7 +26,7 @@ import math
 import os
 
 #noinspection PyUnresolvedReferences
-from enigma import eTimer
+from enigma import eTimer, eSize, getDesktop
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
@@ -37,6 +37,7 @@ from Components.Pixmap import Pixmap, MultiPixmap
 from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
+from Components.VideoWindow import VideoWindow
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
@@ -53,6 +54,7 @@ from twisted.web.client import downloadPage
 from DP_ViewFactory import getGuiElements
 from DP_Player import DP_Player
 
+from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl, loadPicture
@@ -139,7 +141,8 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.currentViewName = str(self.viewParams["settings"]["name"])
 
-		self.useBackdropVideos = self.viewParams["settings"]["backdropVideos"]
+		self.stillPictureEnabledInView = self.viewParams["settings"]["backdropVideos"]
+		self.stillPictureEnabledInSettings = config.plugins.dreamplex.useBackdropVideos.value
 
 		self.plexInstance = Singleton().getPlexInstance()
 
@@ -291,12 +294,9 @@ class DP_View(Screen, NumericalTextInput):
 		self["runtimeLabel"].setText(_("Runtime:"))
 
 		self["backdrop"] = Pixmap()
-		self["backdropVideo"] = Pixmap() # this is just to avoid greenscreen, maybe we find a better way
-		self["backdroptext"] = Label()
-
 		self["poster"] = Pixmap()
-		self["postertext"] = Label()
-
+		self["stillPicture"] = Label()
+		self["backdropVideo"] = VideoWindow(decoder=0)
 		self["rating_stars"] = ProgressBar()
 
 		# Poster
@@ -312,12 +312,17 @@ class DP_View(Screen, NumericalTextInput):
 		self.backdropWidth = self.viewParams["elements"]["backdrop"]["width"]
 
 		# now we try to enable stillPictureSupport
-		if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
+		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
+			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+			self.session.nav.stopService()
 			try:
-				from DPH_StillPicture import StillPicture
-				self["backdropVideo"] = StillPicture(session)
+				# we use this to load the m1v direct to the buffer, for now it seems that we have to add it to a skin component
+				self["stillPicture"] = StillPicture(viewClass) # this is just to avoid greenscreen, maybe we find a better way
+				# we use this to be able to resize the tv picture and show as backdrop
+
 				self.loadedStillPictureLib = True
 			except Exception, ex:
+
 				printl("Exception: " + str(ex), self, "D")
 				printl("was not able to import lib for stillpictures", self, "D")
 
@@ -759,8 +764,10 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("returnTo: " + str(self.returnTo), self, "D")
 
-		if config.plugins.dreamplex.useBackdropVideos.value:
+		if self.loadedStillPictureLib:
 			self.stopBackdropVideo()
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(self.currentService)
 
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
@@ -976,18 +983,17 @@ class DP_View(Screen, NumericalTextInput):
 						# check if showiframe lib loaded ...
 						if self.loadedStillPictureLib:
 							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + ".m1v"
+							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
 							printl("backdrop: " + str(backdrop), self, "D")
 
 							# check if the backdrop file exists
 							if os.access(backdrop, os.F_OK):
 								printl("yes", self, "D")
-								self["backdropVideo"].setStillPicture(backdrop)
+								self["stillPicture"].setStillPicture(backdrop)
 								self["backdrop"].hide()
 								self.usedStillPicture = True
 							else:
 								printl("no", self, "D")
-								self["backdropVideo"].hide()
 								self["backdrop"].show()
 								# if not handle as normal backdrop
 								self.handleBackdrop()
@@ -1018,7 +1024,7 @@ class DP_View(Screen, NumericalTextInput):
 		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
 		self.refreshTimer = eTimer()
 		self.refreshTimer.callback.append(self.showBackdrop)
-		self.refreshTimer.start(1000, True)
+		self.refreshTimer.start(500, True)
 
 		printl("", self, "C")
 
@@ -1030,7 +1036,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		if self.loadedStillPictureLib and self.usedStillPicture:
 			# stop the m1v playback to avoid blocking the playback of the movie
-			self["backdropVideo"].finishStillPicture()
+			self["stillPicture"].finishStillPicture()
 
 		printl("", self, "C")
 
@@ -1436,6 +1442,13 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
+
+		if self.loadedStillPictureLib:
+			w = 400
+			h = 225
+			desk = getDesktop(0)
+			self["backdropVideo"].instance.setFBSize(desk.size())
+			self["backdropVideo"].instance.resize(eSize(w, h))
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])

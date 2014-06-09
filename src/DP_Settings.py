@@ -117,13 +117,12 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("> Use Cache for Sections"), config.plugins.dreamplex.useCache, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Use Picture Cache"), config.plugins.dreamplex.usePicCache, _("Use this if you do not have enough space on your box e.g. no hdd drive just flash.")))
 		self.cfglist.append(getConfigListEntry(_("> Show Infobar when buffer drained"), config.plugins.dreamplex.showInfobarOnBuffer, _(" ")))
-		
+		self.cfglist.append(getConfigListEntry(_("> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
 		self.cfglist.append(getConfigListEntry(_("> Stop Live TV on startup"), config.plugins.dreamplex.stopLiveTvOnStartup, _(" ")))
+
 		# playing themes stops live tv for this reason we enable this only if live stops on startup is set
 		# also backdrops as video needs to turn of live tv
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			self.cfglist.append(getConfigListEntry(_(">> Show Backdrops as Videos"), config.plugins.dreamplex.useBackdropVideos, _("Use this if you have m1v videos as backdrops")))
-
 			# if backdrop videos are active we have to turn off theme playback
 			if config.plugins.dreamplex.useBackdropVideos.value:
 				config.plugins.dreamplex.playTheme.value = False
@@ -132,7 +131,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		else:
 			# if the live startup stops is not set we have to turn of playtheme automatically
 			config.plugins.dreamplex.playTheme.value = False
-			config.plugins.dreamplex.useBackdropVideos.value = False
+			#config.plugins.dreamplex.useBackdropVideos.value = False
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
