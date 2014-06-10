@@ -38,12 +38,15 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def __init__(self):
+	def __init__(self, forceMiniTv=False):
 		printl("", self, "S")
 
 		self.stopLiveTvOnStartup = config.plugins.dreamplex.stopLiveTvOnStartup.value
 
-		if not self.stopLiveTvOnStartup:
+		# we use this e.g in DP_View to use miniTv for backdrops via libiframe
+		self.forceMiniTv = forceMiniTv
+
+		if not self.stopLiveTvOnStartup or self.forceMiniTv:
 			self["miniTv"] = VideoWindow(decoder=0)
 		else:
 			self["miniTv"] = Label()
@@ -56,12 +59,15 @@ class DPH_ScreenHelper(object):
 	def initMiniTv(self):
 		printl("", self, "S")
 
-		if not self.stopLiveTvOnStartup:
+		if not self.stopLiveTvOnStartup or self.forceMiniTv:
+			# TODO make this dynamik via skin params file
 			w = 400
 			h = 225
 			desk = getDesktop(0)
 			self["miniTv"].instance.setFBSize(desk.size())
 			self["miniTv"].instance.resize(eSize(w, h))
+		else:
+			self["miniTv"].hide()
 
 		printl("", self, "C")
 

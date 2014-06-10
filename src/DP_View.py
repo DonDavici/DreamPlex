@@ -128,7 +128,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		"""
 		printl("", self, "S")
 		Screen.__init__(self, viewClass)
-		DPH_ScreenHelper.__init__(self)
+		DPH_ScreenHelper.__init__(self, forceMiniTv=True)
 
 		self.viewParams = viewParams
 
@@ -572,24 +572,23 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		printl("", self, "C")
 
+
+
 	#===========================================================================
 	#
 	#===========================================================================
-	def toggleFastScroll(self):
+	def initFastScroll(self):
 		printl("", self, "S")
 
-		if self.viewParams["elements"]["info"]["visible"]:
-			if self.fastScroll:
-				self.fastScroll = False
-				self["btn_blueText"].setText("fastScroll 'Off'")
-				self["info"].hide()
-				self["infoLabel"].hide()
-			else:
-				self.fastScroll = True
-				self["btn_blueText"].setText("fastScroll 'On'")
-				self.resetGuiElements = True
-				self["info"].show()
-				self["infoLabel"].show()
+		if self.fastScroll:
+			self["btn_blueText"].setText("fastScroll 'On'")
+			self["info"].hide()
+			self["infoLabel"].hide()
+		else:
+			self["btn_blueText"].setText("fastScroll 'Off'")
+			self.resetGuiElements = True
+			self["info"].show()
+			self["infoLabel"].show()
 
 		self.setFunctionsText()
 
@@ -602,6 +601,30 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self["txt_functions"].setText("Menu")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFastScroll(self):
+		printl("", self, "S")
+
+		#if self.viewParams["elements"]["info"]["visible"]:
+		if self.fastScroll:
+			self.fastScroll = False
+			self["btn_blueText"].setText("fastScroll 'Off'")
+			self["info"].hide()
+			self["infoLabel"].hide()
+		else:
+			self.fastScroll = True
+			self["btn_blueText"].setText("fastScroll 'On'")
+			self.resetGuiElements = True
+			self["info"].show()
+			self["infoLabel"].show()
+			self["miniTv"].hide()
+
+		self.setFunctionsText()
 
 		printl("", self, "C")
 
@@ -988,11 +1011,13 @@ class DP_View(Screen, DPH_ScreenHelper):
 							# check if the backdrop file exists
 							if os.access(backdrop, os.F_OK):
 								printl("yes", self, "D")
+								self["miniTv"].show()
 								self["stillPicture"].setStillPicture(backdrop)
 								self["backdrop"].hide()
 								self.usedStillPicture = True
 							else:
 								printl("no", self, "D")
+								self["miniTv"].hide()
 								self["backdrop"].show()
 								# if not handle as normal backdrop
 								self.handleBackdrop()
@@ -1450,7 +1475,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
 
-		self.toggleFastScroll()
+		self.initFastScroll()
 
 		self["txt_exit"].setText("Exit")
 
