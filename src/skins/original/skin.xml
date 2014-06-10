@@ -42,7 +42,8 @@
             <convert type="ConditionalShowHide" />
         </widget>
 
-        <widget name="tvPic" position="400,60" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <!-- mini-tv -->
+        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -302,7 +303,10 @@
         </widget>
 
         <!-- settings -->
-        <widget name="output" zPosition="99" position="40,80" size="1220,450" font="Saint; 18" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1" />
+        <widget name="output" zPosition="99" position="440,80" size="820,450" font="Saint; 18" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1" />
+
+        <!-- mini-tv -->
+        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
 
         <!-- functions -->
         <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_red-fs8.png" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
@@ -365,7 +369,8 @@
             <convert type="ClockToText">Date</convert>
         </widget>
 
-        <widget name="tvPic" position="400,60" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <!-- mini-tv -->
+        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
 
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
@@ -427,11 +432,11 @@
         <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="545,165" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="cast" transparent="1" zPosition="4" halign="left"  position="620,165" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="year" transparent="1" zPosition="4" halign="left" position="970,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="runtime" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="runtime" transparent="1" zPosition="4" halign="left"  position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="year" transparent="1" zPosition="4" halign="left" position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/cover-fs8.png" zPosition="50" position="100,370" size="240,292" alphatest="blend" transparent="0"/>
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
@@ -440,7 +445,7 @@
 
         <widget name="backdrop" transparent="0" zPosition="45" position="750,400" size="400,225" alphatest="blend"/>
         <widget name="stillPicture" backgroundColor="transparent" zPosition="-3" position="750,400" size="400,225"/>
-        <widget name="backdropVideo" backgroundColor="transparent" zPosition="99" position="750,400" size="400,225"/>
+        <widget name="miniTv" backgroundColor="transparent" zPosition="99" position="750,400" size="400,225"/>
 
         <widget name="infoLabel" transparent="1" zPosition="4" halign="left" position="820,470" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="info" transparent="1" zPosition="4" halign="left" position="920,470" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -464,7 +469,7 @@
         <widget name="audio" transparent="1" zPosition="4" halign="left" position="620,360" size="400,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="890,360" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" position="970,360" size="200,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" position="975,360" size="200,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <!-- music specific -->
 

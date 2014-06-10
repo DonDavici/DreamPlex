@@ -26,18 +26,16 @@ import math
 import os
 
 #noinspection PyUnresolvedReferences
-from enigma import eTimer, eSize, getDesktop
+from enigma import eTimer
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Label import Label
 from Components.config import config
-from Components.config import NumericalTextInput
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
-from Components.VideoWindow import VideoWindow
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
@@ -56,15 +54,16 @@ from DP_Player import DP_Player
 
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
+from DPH_ScreenHelper import DPH_ScreenHelper
 
 from __common__ import printl2 as printl, loadPicture
-from __plugin__ import getPlugins, Plugin
+from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, NumericalTextInput):
+class DP_View(Screen, DPH_ScreenHelper):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -125,13 +124,13 @@ class DP_View(Screen, NumericalTextInput):
 		@param libraryName: movie, show, music
 		@type loadLibraryFnc: is loadLibrary Function from Lib_class (eg DP_LibShows)
 		@param viewParams: are the params for dynamic screen handling from skin params
-		@param select: unknown
 		@return:
 		"""
 		printl("", self, "S")
 		Screen.__init__(self, viewClass)
+		DPH_ScreenHelper.__init__(self)
+
 		self.viewParams = viewParams
-		NumericalTextInput.__init__(self)
 
 		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
@@ -295,9 +294,9 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["backdrop"] = Pixmap()
 		self["poster"] = Pixmap()
-		self["stillPicture"] = Label()
-		self["backdropVideo"] = VideoWindow(decoder=0)
 		self["rating_stars"] = ProgressBar()
+
+		self["stillPicture"] = Label()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -1443,12 +1442,7 @@ class DP_View(Screen, NumericalTextInput):
 
 		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
 
-		if self.loadedStillPictureLib:
-			w = 400
-			h = 225
-			desk = getDesktop(0)
-			self["backdropVideo"].instance.setFBSize(desk.size())
-			self["backdropVideo"].instance.resize(eSize(w, h))
+		self.initMiniTv()
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])

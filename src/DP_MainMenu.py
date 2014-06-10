@@ -23,14 +23,12 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 import time
-from enigma import eSize, getDesktop
 
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Label import Label
-from Components.VideoWindow import VideoWindow
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -46,6 +44,7 @@ from DP_Syncer import DPS_Syncer
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
+from DPH_ScreenHelper import DPH_ScreenHelper
 
 from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from __plugin__ import Plugin
@@ -54,7 +53,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================	
-class DPS_MainMenu(Screen, DPH_HorizontalMenu):
+class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 	g_horizontal_menu = False
 	selectedEntry = None
@@ -70,6 +69,8 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 	def __init__(self, session, allowOverride=True):
 		printl("", self, "S")
 		Screen.__init__(self, session)
+		DPH_ScreenHelper.__init__(self)
+
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
 		self.session = session
@@ -81,12 +82,6 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 
 		# get all our servers as list
 		self.getServerList(allowOverride)
-
-		test = True
-		if test:
-			self["tvPic"] = VideoWindow(decoder=0)
-		else:
-			self["tvPicture"] = Label()
 
 		self["menu"]= List(self.mainMenuList, True)
 		
@@ -127,12 +122,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu):
 
 		self["txt_exit"].setText(_("Exit"))
 
-		w = 400
-		h = 225
-		desk = getDesktop(0)
-		self["tvPic"].instance.setFBSize(desk.size())
-		self["tvPic"].instance.resize(eSize(w, h))
-
+		self.initMiniTv()
 
 		if self.g_horizontal_menu:
 			# init horizontal menu

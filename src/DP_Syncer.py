@@ -45,6 +45,7 @@ from Tools.Directories import fileExists
 from DP_PlexLibrary import PlexLibrary
 from DP_ViewFactory import getMovieViewDefaults
 from DPH_Singleton import Singleton
+from DPH_ScreenHelper import DPH_ScreenHelper
 
 from __common__ import printl2 as printl, isValidSize
 from __init__ import _ # _ is translation
@@ -52,13 +53,14 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DPS_Syncer(Screen):
+class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 	_session = None
 	_mode = None
 
 	def __init__(self, session, mode, serverConfig=None):
 		Screen.__init__(self, session)
+		DPH_ScreenHelper.__init__(self)
 
 		if serverConfig is not None:
 			# now that we know the server we establish global plexInstance
@@ -115,6 +117,8 @@ class DPS_Syncer(Screen):
 		printl("", self, "S")
 
 		self.setTitle("Server - Syncer")
+
+		self.initMiniTv()
 
 		if self.mediaSyncerInfo.isRunning():
 			self["txt_green"].hide()
