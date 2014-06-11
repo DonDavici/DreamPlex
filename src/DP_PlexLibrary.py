@@ -475,7 +475,7 @@ class PlexLibrary(Screen):
 			entryData['tagType']            = "Show"
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['banner']             = self.getImage(entry, server, myType = "banner")
 			entryData['token']			    = self.g_myplex_accessToken
 
@@ -533,7 +533,7 @@ class PlexLibrary(Screen):
 			entryData['tagType']            = "Episodes"
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['token']			    = self.g_myplex_accessToken
 
 			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer
@@ -605,7 +605,7 @@ class PlexLibrary(Screen):
 			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['fanart_image']	    = self.getImage(entry, server, myType = "art")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['token']			    = self.g_myplex_accessToken
 
 			# add part and media data to main data element
@@ -661,6 +661,9 @@ class PlexLibrary(Screen):
 			entryData['server']				        = server
 			entryData['tagType']                    = "Directory"
 			entryData["viewMode"]				    = nextViewMode
+
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
@@ -1900,7 +1903,7 @@ class PlexLibrary(Screen):
 	#=============================================================================
 	# 
 	#=============================================================================
-	def getImage(self,  data, server, myType, transcode = True):
+	def getImage(self, data, server, myType, transcode = True):
 		"""
 		Simply take a URL or path and determine how to format for images
 		@ input: elementTree element, server name

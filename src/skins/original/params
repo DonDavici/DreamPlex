@@ -48,7 +48,7 @@
 	</movieView>
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="False">
+	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
 
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>

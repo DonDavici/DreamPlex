@@ -621,6 +621,7 @@ class BackgroundMediaSyncer(Thread):
 		p_width = params["elements"]["poster"]["width"]
 		p_postfix = params["elements"]["poster"]["postfix"]
 
+		# we use this for fullsize m1v backdrops that can be loaded to miniTv
 		l_height = "1280"
 		l_width = "720"
 		l_postfix = "_backdrop_1280x720.jpg"
@@ -678,7 +679,7 @@ class BackgroundMediaSyncer(Thread):
 
 
 				if section[2] == "showEntry":
-					printl("tvshow", self, "D")
+					printl("show", self, "D")
 					url = section[3]["contentUrl"] + "/all"
 
 					msg_text = _("got show url: " + str(url))
@@ -687,6 +688,33 @@ class BackgroundMediaSyncer(Thread):
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getShowsFromSection(url)
+
+					self.syncThrougMediaLibrary(library)
+
+				if section[2] == "musicEntry":
+					printl("music", self, "D")
+
+					# first we go through the artists
+					url = section[3]["contentUrl"] + "/all"
+
+					msg_text = _("got music url: " + str(url))
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
+
+					printl("url: " + str(url), self, "D")
+					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
+
+					self.syncThrougMediaLibrary(library)
+
+					# now we go through the albums
+					url = section[3]["contentUrl"] + "/albums"
+
+					msg_text = _("got music url: " + str(url))
+					self.messages.push((THREAD_WORKING, msg_text))
+					self.messagePump.send(0)
+
+					printl("url: " + str(url), self, "D")
+					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
 
 					self.syncThrougMediaLibrary(library)
 
@@ -711,6 +739,10 @@ class BackgroundMediaSyncer(Thread):
 		printl("", self, "S")
 
 		for media in library:
+			printl("media: " + str(media), self, "D")
+			msg_text = _("checking for  " + str(media[1]["ratingKey"]))
+			self.messages.push((THREAD_WORKING, msg_text))
+			self.messagePump.send(0)
 
 			# interupt if needed
 			if self.cancel:
@@ -730,16 +762,17 @@ class BackgroundMediaSyncer(Thread):
 
 				# check if backdrop exists
 				if fileExists(location):
-					msg_text = _("backdrop exists under the location " + str(location))
+					msg_text = _("found backdrop")
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 					continue
 				else:
-					msg_text = _("file does not exist ... start downloading")
-					self.messages.push((THREAD_WORKING, msg_text))
-					self.messagePump.send(0)
-					#download backdrop
-					self.downloadMedia(media[1]["fanart_image"], location, t_height, t_width)
+					if "art" in media[1] and media[1]["art"] != "":
+						msg_text = _("backdrop not found, trying to download ...")
+						self.messages.push((THREAD_WORKING, msg_text))
+						self.messagePump.send(0)
+						#download backdrop
+						self.downloadMedia(media[1]["art"], location, t_height, t_width)
 
 			for variant in self.posterVariants:
 				# interupt if needed
@@ -755,12 +788,16 @@ class BackgroundMediaSyncer(Thread):
 
 				# check if poster exists
 				if fileExists(location):
-					msg_text = _("poster exists under the location " + str(location))
+					msg_text = _("found poster")
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 					continue
 				else:
-					self.downloadMedia(media[1]["thumb"], location, t_height, t_width)
+					if "thumb" in media[1] and media[1]["thumb"] != "":
+						msg_text = _("poster not found, trying to download ...")
+						self.messages.push((THREAD_WORKING, msg_text))
+						self.messagePump.send(0)
+						self.downloadMedia(media[1]["thumb"], location, t_height, t_width)
 
 		printl("", self, "C")
 
@@ -770,18 +807,18 @@ class BackgroundMediaSyncer(Thread):
 	def downloadMedia(self, download_url, location, width, height):
 		printl("", self, "S")
 
-		if download_url:
-			download_url = download_url.replace('&width=999&height=999', '&width=' + width + '&height=' + height)
-			printl( "download url " + download_url, self, "D")
 
-		if not download_url:
-			printl("no pic data available", self, "D")
-		else:
-			printl("starting download", self, "D")
-			server = self.plexInstance.getServerFromURL(download_url)
-			authHeader = self.plexInstance.get_hTokenForServer(server)
-			printl("header: " + str(authHeader), self, "D")
-			downloadPage(download_url, location, headers=authHeader)
+		download_url = download_url.replace('&width=999&height=999', '&width=' + width + '&height=' + height)
+		printl( "download url " + download_url, self, "D")
+
+		msg_text = _("download_url: " + str(download_url))
+		self.messages.push((THREAD_WORKING, msg_text))
+		self.messagePump.send(0)
+		printl("starting download", self, "D")
+		server = self.plexInstance.getServerFromURL(download_url)
+		authHeader = self.plexInstance.get_hTokenForServer(server)
+		printl("header: " + str(authHeader), self, "D")
+		downloadPage(download_url, location, headers=authHeader)
 
 		return True
 
