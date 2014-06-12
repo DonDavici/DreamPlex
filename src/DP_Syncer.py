@@ -688,8 +688,25 @@ class BackgroundMediaSyncer(Thread):
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getShowsFromSection(url)
+					printl("library: " + str(library))
 
 					self.syncThrougMediaLibrary(library)
+
+					for seasons in library:
+						printl("seasons: " + str(seasons))
+						seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
+						library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
+
+						self.syncThrougMediaLibrary(library)
+
+						for episodes in library:
+							printl("seasons: " + str(episodes))
+							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
+
+							library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
+
+							self.syncThrougMediaLibrary(library)
+
 
 				if section[2] == "musicEntry":
 					printl("music", self, "D")

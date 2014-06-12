@@ -562,7 +562,7 @@ class PlexLibrary(Screen):
 		else:
 			viewMode	= "directMode"
 
-		return self.getMediaData(url, tagType = "Video", nextViewMode = viewMode)
+		return self.getMediaData(url, tagType = "Video", nextViewMode = viewMode, switchMedias=True )
 
 	#===========================================================================
 	#
@@ -577,7 +577,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMediaData(self, url, tagType, nextViewMode):
+	def getMediaData(self, url, tagType, nextViewMode, switchMedias=False):
 		printl("", self, "S")
 		fullList=[]
 
@@ -604,8 +604,14 @@ class PlexLibrary(Screen):
 			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
 			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['art']	            = self.getImage(entry, server, myType = "art")
+			if switchMedias:
+				# we need this for example for episodes
+				entryData['thumb']			    = self.getImage(entry, server, myType = "art")
+				entryData['art']	            = self.getImage(entry, server, myType = "thumb")
+			else:
+				entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+				entryData['art']	            = self.getImage(entry, server, myType = "art")
+
 			entryData['token']			    = self.g_myplex_accessToken
 
 			# add part and media data to main data element
