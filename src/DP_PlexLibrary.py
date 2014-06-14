@@ -615,9 +615,8 @@ class PlexLibrary(Screen):
 			entryData['token']			    = self.g_myplex_accessToken
 
 			# add part and media data to main data element
-			mediaDataArr, partDataArr = self.getPartAndMediaDataFromEntry(entry)
+			mediaDataArr= self.getPartAndMediaDataFromEntry(entry)
 
-			entryData["partDataArr"] = partDataArr
 			entryData["mediaDataArr"] = mediaDataArr
 
 			# set seen state for picture handling in view
@@ -682,23 +681,27 @@ class PlexLibrary(Screen):
 	#===========================================================================s
 	def getPartAndMediaDataFromEntry(self, entry):
 		printl("", self, "S")
+		mediaDataArr = []
 
 		for child in entry:
-			mediaDataArr = []
+			isMedia = False
 			if child.tag == "Media":
+				isMedia = True
 				mediaData = (dict(child.items()))
 				printl("mediaData: " + str(mediaData), self, "D")
-				mediaDataArr.append(mediaData)
+				mediaData["Parts"] = []
 
 			for babies in child:
-				partDataArr = []
 				if babies.tag == "Part":
 					partData = (dict(babies.items()))
 					printl( "partData:" + str(partData), self, "D")
-					partDataArr.append(partData)
+					mediaData["Parts"].append(partData)
+
+			if isMedia:
+				mediaDataArr.append(mediaData)
 
 		printl("", self, "C")
-		return mediaDataArr, partDataArr
+		return mediaDataArr
 
 	#===========================================================================
 	#
