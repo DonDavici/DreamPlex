@@ -432,8 +432,8 @@
         <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="545,165" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="cast" transparent="1" zPosition="4" halign="left"  position="620,165" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="runtime" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="duration" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -545,7 +545,7 @@
         <widget name="genre" transparent="1" zPosition="4" halign="left" valign="top" position="950,400" size="200,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="runtimeLabel" transparent="1" zPosition="4" halign="right" position="820,430" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="top" position="950,430" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="duration" transparent="1" zPosition="4" halign="left" valign="top" position="950,430" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="yearLabel" transparent="1" zPosition="4" halign="right" position="820,460" size="120,30" font="Saint; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="top" position="950,460" size="160,25" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -631,8 +631,8 @@
         <widget name="genreLabel" transparent="1" zPosition="4" halign="right" valign="center" position="725,361" size="120,30" font="Saint; 16" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="genre" transparent="1" zPosition="4" halign="left" valign="center" position="860,360" size="400,30" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
-        <widget name="runtimeLabel" transparent="1" zPosition="4" halign="right" valign="center" position="725,391" size="120,30" font="Saint; 16" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="runtime" transparent="1" zPosition="4" halign="left" valign="center" position="860,390" size="160,30" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="durationLabel" transparent="1" zPosition="4" halign="right" valign="center" position="725,391" size="120,30" font="Saint; 16" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="duration" transparent="1" zPosition="4" halign="left" valign="center" position="860,390" size="160,30" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="yearLabel" transparent="1" zPosition="4" halign="right" valign="center" position="725,421" size="120,30" font="Saint; 16" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" valign="center" position="860,420" size="160,30" font="Saint; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>

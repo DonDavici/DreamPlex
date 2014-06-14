@@ -38,7 +38,7 @@ def getDefaultCineElementsList():
 
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
-	                "genre", "year", "runtime", "rating_stars", "sound", "filter", "pagination", "total",
+	                "genre", "year", "duration", "rating_stars", "sound", "filter", "pagination", "total",
 	                "btn_red", "btn_green", "btn_yellow", "btn_blue"]
 
 	printl("", __name__, "C")
@@ -250,7 +250,7 @@ def getShowViewDefaults():
 	# override default True
 	params["elements"]["subtitles"]["visible"]                     = False
 	params["elements"]["audio"]["visible"]                         = False
-	params["elements"]["runtime"]["visible"]                       = False
+	params["elements"]["duration"]["visible"]                       = False
 	params["elements"]["season"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
@@ -294,7 +294,7 @@ def getMusicViewDefaults():
 	params["elements"]["subtitles"]["visible"]                     = False
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
-	params["elements"]["runtime"]["visible"]                       = False
+	params["elements"]["duration"]["visible"]                       = False
 	params["elements"]["season"]["visible"]                        = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False

@@ -56,7 +56,7 @@ from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, loadPicture
+from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -288,9 +288,9 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["yearLabel"] = Label()
 		self["yearLabel"].setText(_("Year:"))
 
-		self["runtime"] = Label()
-		self["runtimeLabel"] = Label()
-		self["runtimeLabel"].setText(_("Runtime:"))
+		self["duration"] = Label()
+		self["durationLabel"] = Label()
+		self["durationLabel"].setText(_("Runtime:"))
 
 		self["backdrop"] = Pixmap()
 		self["poster"] = Pixmap()
@@ -978,7 +978,13 @@ class DP_View(Screen, DPH_ScreenHelper):
 				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
 				self.setText("year", str(self.details.get("year", " - ")))
 				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-				self.setText("runtime", str(self.details.get("runtime", " - ")))
+				duration = str(self.details.get("duration", " - "))
+
+				if duration == " - ":
+					self.setText("duration", duration)
+				else:
+					self.setText("duration", durationToTime(duration))
+
 				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
 				self.setText("cast", str(self.details.get("cast", " ")))
 				self.setText("writer", str(self.details.get("writer", " ").encode('utf8')))
@@ -987,7 +993,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 				if self.fastScroll == False or self.showMedia == True and self.details ["viewMode"] == "play":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
-					#self.handleCodecPixmaps()
+					self.handleCodecPixmaps()
 					#self.handleAspectPixmaps()
 					#self.handleResolutionPixmaps()
 					#self.handleRatedPixmaps()
@@ -1353,14 +1359,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
 
-		#try:
-		#	del self.EXpicloadBackdrop
-		#except Exception:
-		#	pass
-		#finally:
-		#	self.EXpicloadBackdrop = ePicLoad()
-		#	self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-
 		if forceShow:
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
@@ -1414,7 +1412,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.details["thumb"]
+		download_url = "http://" + self.details["server"] + self.details["thumb"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 			printl( "download url " + download_url, self, "D")
@@ -1423,8 +1421,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			server = self.plexInstance.getServerFromURL(download_url)
-			authHeader = self.plexInstance.get_hTokenForServer(server)
+			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
 			printl("header: " + str(authHeader), self, "D")
 			downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
 
@@ -1440,7 +1437,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.details["art"]
+		download_url = "http://" + self.details["server"] + self.details["art"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 			printl( "download url " + download_url, self, "D")
@@ -1449,8 +1446,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 			printl("no pic data available", self, "D")
 		else:
 			printl("starting download", self, "D")
-			server = self.plexInstance.getServerFromURL(download_url)
-			authHeader = self.plexInstance.get_hTokenForServer(server)
+			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
 			printl("header: " + str(authHeader), self, "D")
 			downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
 
