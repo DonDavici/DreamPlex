@@ -990,7 +990,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 				self.setText("writer", str(self.details.get("writer", " ").encode('utf8')))
 				self.setText("director", str(self.details.get("director", " ").encode('utf8')))
 
-				if self.fastScroll == False or self.showMedia == True and self.details ["viewMode"] == "play":
+				if (self.fastScroll == False or self.showMedia == True) and self.details ["viewMode"] == "play":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
 					self.handleCodecPixmaps()
@@ -1161,7 +1161,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 				selection = i
 				break
 
-		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions\n\nPlease take note that switching the subtitles here will take only effect if you enable transcoding!"), list=functionList,selection=selection)
 
 		printl("", self, "C")
 
@@ -1200,7 +1200,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 				selection = i
 				break
 
-		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, title=_("Audio Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, title=_("Audio Functions\n\nPlease take note that switching the language here will take only effect if you enable transcoding!"), list=functionList,selection=selection)
 
 		printl("", self, "C")
 
@@ -1412,7 +1412,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = "http://" + self.details["server"] + self.details["thumb"]
+		download_url = self.details["thumb"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 			printl( "download url " + download_url, self, "D")
@@ -1437,7 +1437,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = "http://" + self.details["server"] + self.details["art"]
+		download_url = self.details["art"]
 		if download_url:
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 			printl( "download url " + download_url, self, "D")

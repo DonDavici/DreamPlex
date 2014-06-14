@@ -24,7 +24,7 @@
 
 		elementsList = ["current", "total", "backdrop", "poster", "audio", "resolution",
 	                    "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
-	                    "genre", "year", "runtime", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total"]
+	                    "genre", "year", "durations", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total"]
 
 
 		settingsList = ["itemsPerPage", "apiLevel", "screen"]
@@ -66,7 +66,7 @@
 
 		<subView name="ShowEpisodes">
 			<element name="shortDescription" visible="True"/>
-			<element name="runtime" visible="True" xCoord="620" yCoord="340"/>
+			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="info" visible="True"/>
 			<element name="btn_yellow" visible="True"/>
 			<element name="audio" visible="True"/>
@@ -85,7 +85,7 @@
 
 		<subView name="ShowEpisodes">
 			<element name="shortDescription" visible="True"/>
-			<element name="runtime" visible="True" />
+			<element name="duration" visible="True" />
 		</subView>
 	</showView>
 
@@ -98,7 +98,7 @@
 
 		<subView name="ShowEpisodes">
 			<element name="shortDescription" visible="True"/>
-			<element name="runtime" visible="True" />
+			<element name="duration" visible="True" />
 		</subView>
 	</showView>
 
@@ -112,7 +112,7 @@
 		</subView>
 
 		<subView name="ShowEpisodes">
-			<element name="runtime" visible="True" xCoord="620" yCoord="340"/>
+			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="genre" visible="False" />
 		</subView>
 	</musicView>
