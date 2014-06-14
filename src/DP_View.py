@@ -994,10 +994,10 @@ class DP_View(Screen, DPH_ScreenHelper):
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
 					self.handleCodecPixmaps()
-					#self.handleAspectPixmaps()
-					#self.handleResolutionPixmaps()
-					#self.handleRatedPixmaps()
-					#self.handleSoundPixmaps()
+					self.handleAspectPixmaps()
+					self.handleResolutionPixmaps()
+					self.handleRatedPixmaps()
+					self.handleSoundPixmaps()
 
 				# navigation
 				self.handleNavigationData()
@@ -1762,7 +1762,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def handleSoundPixmaps(self):
 		printl("", self, "S")
 
-		audio = self.details.get("audioCodec", "unknown").upper()
+		audio = self.details["mediaDataArr"][0].get("audioCodec", "unknown").upper()
 		printl("audioCodec: " + str(audio), self, "D")
 
 		if audio == "DCA":
@@ -1801,7 +1801,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def handleResolutionPixmaps(self):
 		printl("", self, "S")
 
-		resolution = self.details.get("videoResolution", "unknown").upper()
+		resolution = self.details["mediaDataArr"][0].get("videoResolution", "unknown").upper()
 		printl("videoResolution: " + str(resolution), self, "D")
 
 		if resolution == "1080":
@@ -1836,7 +1836,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def handleAspectPixmaps(self):
 		printl("", self, "S")
 
-		aspect = self.details.get("aspectRatio", "unknown").upper()
+		aspect = self.details["mediaDataArr"][0].get("aspectRatio", "unknown").upper()
 		printl("aspectRatio: " + str(aspect), self, "D")
 
 		if aspect == "1.33":
@@ -1870,8 +1870,8 @@ class DP_View(Screen, DPH_ScreenHelper):
 	#===========================================================================
 	def handleCodecPixmaps(self):
 		printl("", self, "S")
-
-		codec = self.details.get("videoCodec", "unknown").upper()
+		# we take always the first entry. later we have to chech which one is selected
+		codec = self.details["mediaDataArr"][0].get("videoCodec", "unknown").upper()
 		printl("videoCodec: " + str(codec), self, "D")
 
 		if codec == "VC1":
