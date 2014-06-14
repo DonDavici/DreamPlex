@@ -786,11 +786,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		printl("returnTo: " + str(self.returnTo), self, "D")
 
-		if self.loadedStillPictureLib:
-			self.stopBackdropVideo()
-			printl("restoring liveTv", self, "D")
-			self.session.nav.playService(self.currentService)
-
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
 			self.session.nav.stopService()
@@ -799,6 +794,10 @@ class DP_View(Screen, DPH_ScreenHelper):
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 		else:
+			if self.loadedStillPictureLib:
+				self.stopBackdropVideo()
+				printl("restoring liveTv", self, "D")
+				self.session.nav.playService(self.currentService)
 			printl("", self, "C")
 			self.close()
 
