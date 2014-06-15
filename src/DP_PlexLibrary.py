@@ -425,7 +425,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Video", nextViewMode = "play")
+		return self.getMediaData(url, tagType = "Video", nextViewMode = "play", currentViewMode = "ShowMovies")
 
 	#===============================================================================
 	#
@@ -435,7 +435,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getDirectoryData(url, nextViewMode = "ShowAlbums")
+		return self.getDirectoryData(url, nextViewMode = "ShowAlbums", currentViewMode = "ShowArtists")
 
 	#===============================================================================
 	#
@@ -445,7 +445,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getDirectoryData(url, nextViewMode = "ShowTracks")
+		return self.getDirectoryData(url, nextViewMode = "ShowTracks", currentViewMode = "ShowAlbums")
 
 	#=======================================================================
 	#
@@ -470,7 +470,8 @@ class PlexLibrary(Screen):
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
 
-			entryData["viewMode"]			= "ShowSeasons"
+			entryData["currentViewMode"]	= "ShowShows"
+			entryData["nextViewMode"]		= "ShowSeasons"
 			entryData['server']			    = server
 			entryData['tagType']            = "Show"
 
@@ -528,7 +529,8 @@ class PlexLibrary(Screen):
 				self.getEpisodesOfSeason(url)
 				return
 
-			entryData["viewMode"]			= "ShowEpisodes"
+			entryData["currentViewMode"]	= "ShowSeasons"
+			entryData["nextViewMode"]		= "ShowEpisodes"
 			entryData['server']			    = server
 			entryData['tagType']            = "Episodes"
 
@@ -558,11 +560,11 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 		if not directMode:
-			viewMode    = "play"
+			nextViewMode    = "play"
 		else:
-			viewMode	= "directMode"
+			nextViewMode	= "directMode"
 
-		return self.getMediaData(url, tagType = "Video", nextViewMode = viewMode, switchMedias=True )
+		return self.getMediaData(url, tagType = "Video", nextViewMode = nextViewMode, currentViewMode="ShowEpisodes", switchMedias=True )
 
 	#===========================================================================
 	#
@@ -572,12 +574,12 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Track", nextViewMode = "play")
+		return self.getMediaData(url, tagType = "Track", nextViewMode = "play", currentViewMode="ShowTracks")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMediaData(self, url, tagType, nextViewMode, switchMedias=False):
+	def getMediaData(self, url, tagType, nextViewMode, currentViewMode, switchMedias=False):
 		printl("", self, "S")
 		fullList=[]
 
@@ -595,7 +597,8 @@ class PlexLibrary(Screen):
 			entryData = (dict(entry.items()))
 			printl("entryData: " + str(entryData), self, "D")
 
-			entryData["viewMode"]			= nextViewMode
+			entryData["currentViewMode"]	= currentViewMode
+			entryData["nextViewMode"]		= nextViewMode
 			entryData['server']			    = server
 			entryData['tagType']            = tagType
 			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
@@ -632,9 +635,10 @@ class PlexLibrary(Screen):
 			entryData = (dict(entry.items()))
 			printl("directoryData: " + str(entryData), self, "D")
 
-			entryData['server'] 	= str(server)
-			entryData['tagType']    = "Directory"
-			entryData["viewMode"]	= "ShowDirectory"
+			entryData['server'] 	        = str(server)
+			entryData['tagType']            = "Directory"
+			entryData["currentViewMode"]	= currentViewMode
+			entryData["nextViewMode"]	    = "ShowDirectory"
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
@@ -645,7 +649,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getDirectoryData(self, url, nextViewMode):
+	def getDirectoryData(self, url, nextViewMode, currentViewMode):
 		printl("", self, "S")
 		fullList = []
 
@@ -665,7 +669,8 @@ class PlexLibrary(Screen):
 
 			entryData['server']				        = server
 			entryData['tagType']                    = "Directory"
-			entryData["viewMode"]				    = nextViewMode
+			entryData["currentViewMode"]		    = currentViewMode
+			entryData["nextViewMode"]			    = nextViewMode
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")

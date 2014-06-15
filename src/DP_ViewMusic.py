@@ -63,9 +63,9 @@ class DPS_ViewMusic(DP_View):
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
-		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
+		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
 
-		if self.details ["viewMode"] == "ShowAlbums":
+		if self.details ["currentViewMode"] == "ShowAlbums":
 			printl( "is ShowAlbums", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
 			self.bname = self.details["ratingKey"]
@@ -75,7 +75,7 @@ class DPS_ViewMusic(DP_View):
 			self.resetPoster = True
 			self.resetBackdrop = True
 
-		elif self.details ["viewMode"] == "ShowTracks":
+		elif self.details ["currentViewMode"] == "ShowTracks":
 			printl( "is ShowTracks", self, "D")
 			self.bname = self.parentSeasonId
 			self.pname = self.details["ratingKey"]
@@ -108,21 +108,6 @@ class DPS_ViewMusic(DP_View):
 
 		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
 		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onEnter(self):
-		printl("", self, "S")
-
-		# first we call the the rest of the onEnter from super
-		super(DPS_ViewMusic,self).onEnter()
-
-		# this is the part we extend
-		#if self.viewMode == "ShowAlbums" or self.viewMode == "ShowTracks":
-		self.processGuiElements(self.viewMode)
 
 		printl("", self, "C")
 

@@ -715,14 +715,14 @@ class DP_View(Screen, DPH_ScreenHelper):
 			entryData["contentUrl"] = nextContentUrl
 			printl("entryData: " + str(entryData), self, "D")
 
-			viewMode	= entryData['viewMode']
-			printl("viewMode: " +str(viewMode), self, "D")
+			currentViewMode	= entryData['currentViewMode']
+			printl("currentViewMode: " +str(currentViewMode), self, "D")
 
 			# we need this for onEnter-func in child lib
-			self.viewMode = viewMode
+			self.currentViewMode = currentViewMode
 
-			if viewMode == "play" or viewMode == "directMode":
-				printl("viewMode -> play", self, "D")
+			if currentViewMode == "play" or currentViewMode == "directMode":
+				printl("currentViewMode -> play", self, "D")
 
 				if config.plugins.dreamplex.useBackdropVideos.value:
 					self.stopBackdropVideo()
@@ -875,29 +875,20 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["listview"].setList(self.listViewList)
 		self["listview"].setIndex(0)
 
+		# now we set the currentViewMode to be able to alter skin elements according to their settings in the params file
+		self.selection = self["listview"].getCurrent()
+
+		# none is possible if there is no data in the section
+		if self.selection is not None:
+			self.currentViewMode = self.selection[1]["currentViewMode"]
+			printl("currentViewMode: " + str(self.currentViewMode), self, "D")
+			self.processSubViewElements(myType=self.currentViewMode)
+		else:
+			text = "You have no data in this section!"
+			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+			self.close()
+
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setText(self, name, value, ignore=False, what=None):
-		#printl("", self, "S")
-
-		try:
-			if self[name]:
-				if len(value) > 0:
-					self[name].setText(value)
-				elif ignore is False:
-					if what is None:
-						self[name].setText(_("Not available"))
-					else:
-						self[name].setText(what + ' ' + _("not available"))
-				else:
-					self[name].setText(" ")
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-		#printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -1004,25 +995,26 @@ class DP_View(Screen, DPH_ScreenHelper):
 					if self.startPlaybackNow: # only if we are a show
 						self.startThemePlayback()
 
-				self.setText("title", self.details.get("title", " ").encode('utf-8'))
-				self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
-				self.setText("season", "Season " + self.details.get("season", " "))
-				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
-				self.setText("year", str(self.details.get("year", " - ")))
-				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
+				self["title"].setText(self.details.get("title", " ").encode('utf-8'))
+				self["grandparentTitle"].setText(self.mediaContainer.get("grandparentTitle", " "))
+				self["season"].setText(self.mediaContainer.get("title2", " "))
+				self["tag"].setText(self.details.get("tagline", " ").encode('utf8'))
+				self["year"].setText(str(self.details.get("year", " - ")))
+				self["genre"].setText(str(self.details.get("genre", " - ").encode('utf8')))
+
 				duration = str(self.details.get("duration", " - "))
 
 				if duration == " - ":
-					self.setText("duration", duration)
+					self["duration"].setText(duration)
 				else:
-					self.setText("duration", durationToTime(duration))
+					self["duration"].setText(durationToTime(duration))
 
-				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
-				self.setText("cast", str(self.details.get("cast", " ")))
-				self.setText("writer", str(self.details.get("writer", " ").encode('utf8')))
-				self.setText("director", str(self.details.get("director", " ").encode('utf8')))
+				self["shortDescription"].setText(str(self.details.get("summary", " ").encode('utf8')))
+				self["cast"].setText(str(self.details.get("cast", " ")))
+				self["writer"].setText(str(self.details.get("writer", " ").encode('utf8')))
+				self["director"].setText(str(self.details.get("director", " ").encode('utf8')))
 
-				if (self.fastScroll == False or self.showMedia == True) and self.details ["viewMode"] == "play":
+				if (self.fastScroll == False or self.showMedia == True) and self.details ["currentViewMode"] == "play":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
 					self.handleCodecPixmaps()
@@ -1032,8 +1024,8 @@ class DP_View(Screen, DPH_ScreenHelper):
 					self.handleSoundPixmaps()
 
 		else:
-			self.setText("title", "no data retrieved")
-			self.setText("shortDescription", "no data retrieved")
+			self["title"].setText( "no data retrieved")
+			self["shortDescription"].setText("no data retrieved")
 
 		printl("", self, "C")
 
@@ -1081,8 +1073,8 @@ class DP_View(Screen, DPH_ScreenHelper):
 		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
 		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
 
-		self.setText("total", _(str(itemsTotal)))
-		self.setText("pagination", _(str(pageCurrent) + "/" + str(pageTotal)))
+		self["total"].setText(_(str(itemsTotal)))
+		self["pagination"].setText(_(str(pageCurrent) + "/" + str(pageTotal)))
 
 		printl("", self, "C")
 
@@ -1507,33 +1499,33 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("self.unseenPic: " + str(self.unseenPic), self, "D")
 
 		printl("", self, "C")
+
 	#===========================================================================
 	#
 	#===========================================================================
-	def processGuiElements(self, myType=None):
+	def processGuiElements(self):
+		printl("", self, "S")
+
+		# this is always the case when the view starts the first time
+
+		for element in self.viewParams["elements"]:
+			printl("element:" + str(element), self, "D")
+			visibility = self.viewParams["elements"][element]["visible"]
+
+			self.alterGuiElementVisibility(element, visibility)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def processSubViewElements(self, myType):
 		printl("", self, "S")
 
 		printl("myType: " +  str(myType), self, "D")
 
-		# this is always the case when the view starts the first time
-		# in this case no need for look for subviews
-		if myType is None:
-			for element in self.viewParams["elements"]:
-				printl("element:" + str(element), self, "D")
-				visibility = self.viewParams["elements"][element]["visible"]
-
-				self.alterGuiElementVisibility(element, visibility)
-
-				# we do not alter positions here because this should be done in the skin.xml because we are the first view except ...
-				if str(self.libraryName) == "episodes":
-					params = self.viewParams["elements"][element]
-					if "xCoord" in params and "yCoord" in params:
-						xCoord = params.get("xCoord")
-						yCoord = params.get("yCoord")
-						self.alterGuiElementPosition(element,xCoord, yCoord)
-
 		# now we check if we are in a special subView with its own params
-		elif "subViews" in self.viewParams:
+		if "subViews" in self.viewParams:
 			if myType in self.viewParams["subViews"]:
 				subViewParams = self.viewParams["subViews"][myType]
 				printl("subViewParams: " + str(subViewParams), self, "D")

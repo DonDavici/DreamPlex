@@ -61,15 +61,12 @@ class DPS_ViewMovies(DP_View):
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
 
-		self.setTitle(_("Movies"))
-
-		printl( "is playable content",self, "D")
-		bname = self.details["ratingKey"]
-
 		printl( "is movie",self, "D")
 		self.changeBackdrop = True
 		self.changePoster = True
+
 		pname = self.details["ratingKey"]
+		bname = self.details["ratingKey"]
 		
 		if not self.usePicCache:
 			pname = "temp"

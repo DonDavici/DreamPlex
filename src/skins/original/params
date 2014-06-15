@@ -21,39 +21,39 @@
 	<!-- VIEWS -->
 
 	<!-- HOW TO ...
-
-		elementsList = ["current", "total", "backdrop", "poster", "audio", "resolution",
-	                    "aspect", "codec", "rated", "title", "tag", "shortDescription", "subtitles", "audio",
-	                    "genre", "year", "durations", "backdroptext", "postertext", "rating_stars", "sound", "filter", "pagination", "total"]
-
-
-		settingsList = ["itemsPerPage", "apiLevel", "screen"]
-
 		Check default values here => /src/DP_ViewFactory.py
 
-		Please note that if you want that a Label of an information should move aswell it has to be named like this in skin.xml
+		Please note that if you want that a Label of an information should move as well it has to be named like this in skin.xml
 		for example : "sound" if sound has a Label it must be a widget and the name "soundLabel"
 	-->
 
 	<!-- MOVIE VIEWS -->
 	<movieView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+		<subView name="ShowMovies">
+		</subView>
 	</movieView>
 
 	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
-		<main name="backdrop" visible="False"/>
+		<subView name="ShowMovies">
+			<element name="backdrop" visible="False"/>
+		</subView>
 	</movieView>
 
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
-		<main name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+		<subView name="ShowMovies">
+			<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+		</subView>
+
 	</movieView>
 
 	<!-- SHOW VIEWS -->
 	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+		<subView name="ShowShows">
+		</subView>
 
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>
 			<element name="season" xCoord="545" yCoord="100" visible="True"/>
-			<element name="title" visible="False" />
 			<element name="genre" visible="False" />
 			<element name="shortDescription" visible="False"/>
 			<element name="year" visible="False"/>
@@ -65,6 +65,7 @@
 		</subView>
 
 		<subView name="ShowEpisodes">
+			<element name="grandparentTitle" xCoord="545" yCoord="55" visible="True"/>
 			<element name="shortDescription" visible="True"/>
 			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="info" visible="True"/>
@@ -75,7 +76,10 @@
 	</showView>
 
 	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
-		<main name="backdrop" visible="False"/>
+		<subView name="ShowShows">
+			<element name="backdrop" visible="False"/>
+		</subView>
+
 
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
@@ -90,6 +94,12 @@
 	</showView>
 
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+		<subView name="ShowShows">
+			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+			<element name="genre" visible="False" />
+			<element name="shortDescription" visible="False"/>
+		</subView>
+
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
 			<element name="genre" visible="False" />
@@ -104,6 +114,10 @@
 
 	<!-- MUSIC VIEWS -->
 	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+		<subView name="ShowArtists">
+			<element name="genre" visible="False" />
+			<element name="info" visible="False"/>
+		</subView>
 
 		<subView name="ShowAlbums">
 			<element name="genre" visible="False" />

@@ -62,10 +62,10 @@ class DPS_ViewShows(DP_View):
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
-		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
+		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
 
-		if self.details ["viewMode"] == "ShowSeasons":
-			printl( "is ShowSeasons", self, "D")
+		if self.details ["currentViewMode"] == "ShowShows":
+			printl( "is ShowShows", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
 			self.isTvShow = True
 			self.startPlaybackNow = True
@@ -76,7 +76,19 @@ class DPS_ViewShows(DP_View):
 			self.resetPoster = True
 			self.resetBackdrop = True
 
-		elif self.details ["viewMode"] == "ShowEpisodes":
+		elif self.details ["currentViewMode"] == "ShowSeasons":
+			printl( "is ShowSeasons",self, "D")
+			self.isTvShow = True
+			self.parentSeasonNr = self.details["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.details["ratingKey"]
+			self.startPlaybackNow = False
+			self.changeBackdrop = False
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
+		elif self.details ["currentViewMode"] == "ShowEpisodes":
 			printl( "is ShowEpisodes specific season",self, "D")
 			self.isTvShow = True
 			self.parentSeasonNr = self.details["ratingKey"]
@@ -88,7 +100,7 @@ class DPS_ViewShows(DP_View):
 			self.resetPoster = False
 			self.resetBackdrop = False
 
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
+		elif self.details ["currentViewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
 			printl( "is ShowEpisodes all entry", self, "D")
 			self.isTvShow = True
 			self.bname = self.parentSeasonId
@@ -99,7 +111,7 @@ class DPS_ViewShows(DP_View):
 			self.resetPoster = False
 			self.resetBackdrop = False
 
-		elif self.details["viewMode"] == "directMode":
+		elif self.details["currentViewMode"] == "directMode":
 			printl( "is directMode",self, "D")
 			self.startPlaybackNow = True
 			#self.isTvShow = True
@@ -135,21 +147,6 @@ class DPS_ViewShows(DP_View):
 
 		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
 		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onEnter(self):
-		printl("", self, "S")
-
-		# first we call the the rest of the onEnter from super
-		super(DPS_ViewShows,self).onEnter()
-
-		# this is the part we extend
-		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes" or self.viewMode == "directMode":
-			self.processGuiElements(self.viewMode)
 
 		printl("", self, "C")
 

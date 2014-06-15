@@ -149,8 +149,8 @@ class DP_LibMain(Screen):
 
 		# in this case we do not use cache because there is no uuid and updated on information on this level
 		# maybe we find a way later and implement it than
-		if entryData.has_key("viewMode"):
-			myType = entryData["viewMode"]
+		if entryData.has_key("nextViewMode"):
+			myType = entryData["nextViewMode"]
 			source = "plex"
 		else:
 			myType = entryData["type"]
