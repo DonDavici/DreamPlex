@@ -103,15 +103,14 @@
 	</showView>
 
 	<!-- MUSIC VIEWS -->
-	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="False">
-		<subView name="ShowSeasons">
-			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
+	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+
+		<subView name="ShowAlbums">
 			<element name="genre" visible="False" />
-			<element name="shortDescription" visible="False"/>
 			<element name="info" visible="False"/>
 		</subView>
 
-		<subView name="ShowEpisodes">
+		<subView name="ShowTracks">
 			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="genre" visible="False" />
 		</subView>

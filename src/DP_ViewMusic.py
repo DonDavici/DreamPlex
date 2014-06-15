@@ -56,8 +56,6 @@ class DPS_ViewMusic(DP_View):
 
 		self.setTitle(_("Music"))
 
-		self.startPlaybackNow = False
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -67,14 +65,9 @@ class DPS_ViewMusic(DP_View):
 		printl("", self, "S")
 		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
 
-		self.setTitle("Music")
-
-		# TODO change backdrop and poster usage via self.myParams["elements"]["backdrop"]["visible"]
-
 		if self.details ["viewMode"] == "ShowAlbums":
 			printl( "is ShowAlbums", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]
-			self.isTvShow = True
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["ratingKey"]
 			self.changeBackdrop = True
@@ -82,38 +75,14 @@ class DPS_ViewMusic(DP_View):
 			self.resetPoster = True
 			self.resetBackdrop = True
 
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
-			printl( "is ShowEpisodes all entry", self, "D")
-			self.isTvShow = True
+		elif self.details ["viewMode"] == "ShowTracks":
+			printl( "is ShowTracks", self, "D")
 			self.bname = self.parentSeasonId
-			self.pname = self.parentSeasonId
-			self.startPlaybackNow = False
+			self.pname = self.details["ratingKey"]
 			self.changeBackdrop = True
 			self.changePoster = True
 			self.resetPoster = False
 			self.resetBackdrop = False
-
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
-			printl( "is ShowEpisodes special season",self, "D")
-			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
-
-		elif self.details["viewMode"] == "directMode":
-			printl( "is directMode",self, "D")
-			#self.isTvShow = True
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["grandparentRatingKey"]
-			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]
-			self.changePoster = self.myParams["elements"]["poster"]["visible"]
-			self.resetPoster = True
-			self.resetBackdrop = True
 
 		else:
 			printl( "is playable content",self, "D")
@@ -152,8 +121,8 @@ class DPS_ViewMusic(DP_View):
 		super(DPS_ViewMusic,self).onEnter()
 
 		# this is the part we extend
-		if self.viewMode == "ShowSeasons" or self.viewMode == "ShowEpisodes":
-			self.processGuiElements(self.viewMode)
+		#if self.viewMode == "ShowAlbums" or self.viewMode == "ShowTracks":
+		self.processGuiElements(self.viewMode)
 
 		printl("", self, "C")
 
@@ -167,20 +136,5 @@ class DPS_ViewMusic(DP_View):
 		super(DPS_ViewMusic,self).onLeave()
 
 		self.restoreElementsInViewStep()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def _refresh(self):
-		printl("", self, "S")
-
-		super(DPS_ViewMusic,self)._refresh()
-
-		if self.details ["viewMode"] == "play":
-			printl("duration: " + str(self.details["duration"]),self, "D")
-			duration = str(datetime.timedelta(seconds=int(self.details["duration"])))
-			self["duration"].setText(str(duration))
 
 		printl("", self, "C")

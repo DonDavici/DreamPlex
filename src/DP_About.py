@@ -99,8 +99,7 @@ class DPS_About(Screen):
 		content += "\n"
 		content += "Contributors: \t wezhunter\n"
 		content += "\t andyblac \n"
-		content += "\n"
-		content += "Skinner: \t IPMAN\n"
+		content += "\t IPMAN\n"
 		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
 		
 		printl("", self, "C")

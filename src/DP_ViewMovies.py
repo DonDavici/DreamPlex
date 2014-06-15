@@ -65,7 +65,6 @@ class DPS_ViewMovies(DP_View):
 
 		printl( "is playable content",self, "D")
 		bname = self.details["ratingKey"]
-		self.startPlaybackNow = False
 
 		printl( "is movie",self, "D")
 		self.changeBackdrop = True

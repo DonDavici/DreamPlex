@@ -64,10 +64,6 @@ class DPS_ViewShows(DP_View):
 		printl("", self, "S")
 		printl("viewMode: " + str(self.details ["viewMode"]), self, "D")
 
-		self.setTitle("Shows")
-
-		# TODO change backdrop and poster usage via self.myParams["elements"]["backdrop"]["visible"]
-
 		if self.details ["viewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons", self, "D")
 			self.parentSeasonId = self.details ["ratingKey"]

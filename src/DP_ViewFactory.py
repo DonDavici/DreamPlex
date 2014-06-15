@@ -294,7 +294,7 @@ def getMusicViewDefaults():
 	params["elements"]["subtitles"]["visible"]                     = False
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
-	params["elements"]["duration"]["visible"]                       = False
+	params["elements"]["duration"]["visible"]                      = False
 	params["elements"]["season"]["visible"]                        = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False

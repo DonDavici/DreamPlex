@@ -946,15 +946,48 @@ class DP_View(Screen, DPH_ScreenHelper):
 			self.details 	= self.selection[1]
 			self.context	= self.selection[2]
 
-			if self.isDirectory:
-				# because we are a dirctory we have to do nothing here
-				# processing the normal way would lead to greenscreen
-				pass
-			else:
-				# lets get all data we need to show the needed pictures
-				# we also check if we want to play
-				self.getPictureInformationToLoad()
+			# lets get all data we need to show the needed pictures
+			# we also check if we want to play
+			self.getPictureInformationToLoad()
 
+			# navigation
+			self.handleNavigationData()
+
+			# now lets switch images
+			if self.changePoster:
+				self.showPoster()
+
+			if not self.fastScroll or self.showMedia:
+				if self.changeBackdrop:
+					# check if showiframe lib loaded ...
+					if self.loadedStillPictureLib:
+						printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
+						backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
+						printl("backdrop: " + str(backdrop), self, "D")
+
+						# check if the backdrop file exists
+						if os.access(backdrop, os.F_OK):
+							printl("yes", self, "D")
+							self["miniTv"].show()
+							self["stillPicture"].setStillPicture(backdrop)
+							self["backdrop"].hide()
+							self.usedStillPicture = True
+						else:
+							printl("no", self, "D")
+							self["miniTv"].hide()
+							self["backdrop"].show()
+							# if not handle as normal backdrop
+							self.handleBackdrop()
+
+					else:
+						# if not handle as normal backdrop
+						self.handleBackdrop()
+
+			# we need those for fastScroll
+			# this prevents backdrop load on next item
+			self.showMedia = False
+
+			if not self.isDirectory:
 				if self.context is not None:
 					# lets set the urls for context functions of the selected entry
 					self.seenUrl = self.context.get("watchedURL", None)
@@ -997,43 +1030,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 					self.handleResolutionPixmaps()
 					self.handleRatedPixmaps()
 					self.handleSoundPixmaps()
-
-				# navigation
-				self.handleNavigationData()
-
-				# now lets switch images
-				if self.changePoster:
-					self.showPoster()
-
-				if not self.fastScroll or self.showMedia:
-					if self.changeBackdrop:
-						# check if showiframe lib loaded ...
-						if self.loadedStillPictureLib:
-							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
-							printl("backdrop: " + str(backdrop), self, "D")
-
-							# check if the backdrop file exists
-							if os.access(backdrop, os.F_OK):
-								printl("yes", self, "D")
-								self["miniTv"].show()
-								self["stillPicture"].setStillPicture(backdrop)
-								self["backdrop"].hide()
-								self.usedStillPicture = True
-							else:
-								printl("no", self, "D")
-								self["miniTv"].hide()
-								self["backdrop"].show()
-								# if not handle as normal backdrop
-								self.handleBackdrop()
-
-						else:
-							# if not handle as normal backdrop
-							self.handleBackdrop()
-
-				# we need those for fastScroll
-				# this prevents backdrop load on next item
-				self.showMedia = False
 
 		else:
 			self.setText("title", "no data retrieved")
