@@ -252,7 +252,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 			entryData[0]["contentUrl"] = searchUrl
 
-		self.executeSelectedEntry(entryData[0])
+		# first we check if we get back a result
+		tree = self.plexInstance.getXmlTreeFromUrl(searchUrl)
+
+		if tree is not None:
+			self.executeSelectedEntry(entryData[0])
+		else:
+			text = "There is no result with this search string!"
+			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
