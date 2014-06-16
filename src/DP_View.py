@@ -76,6 +76,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	showDetail                      = False
 	isDirectory                     = False
 	forceUpdate                     = False
+	lastTagType                     = None
 
 	backdrop_postfix                = ""
 	poster_postfix                  = ""
@@ -582,13 +583,12 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		if self.fastScroll:
 			self["btn_blueText"].setText("fastScroll 'On'")
-			self["info"].hide()
-			self["infoLabel"].hide()
+			self.toggleElementVisibilityWithLabel("info")
+
 		else:
 			self["btn_blueText"].setText("fastScroll 'Off'")
 			self.resetGuiElements = True
-			self["info"].show()
-			self["infoLabel"].show()
+			self.toggleElementVisibilityWithLabel("info","hide")
 
 		self.setFunctionsText()
 
@@ -905,11 +905,13 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		if self.selection is not None:
 			printl("selection: " + str(self.selection), self, "D")
-			tagType = self.selection[1]['tagType']
+			self.tagType = self.selection[1]['tagType']
 
 			self.isDirectory = False
-			if tagType == "Directory":
+			if self.tagType == "Directory":
 				self.isDirectory = True
+
+			printl("isDirectory: " + str(self.isDirectory), self, "D")
 
 		self._refresh()
 
@@ -931,54 +933,64 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		printl("showMedia: " + str(self.showMedia), self, "D")
 
-		printl("isDirectory: " + str(self.isDirectory), self, "D")
-
 		if self.selection is not None:
 			self.details 	= self.selection[1]
 			self.context	= self.selection[2]
+			if not self.isDirectory:
+				# lets get all data we need to show the needed pictures
+				# we also check if we want to play
+				self.getPictureInformationToLoad()
 
-			# lets get all data we need to show the needed pictures
-			# we also check if we want to play
-			self.getPictureInformationToLoad()
+				# navigation
+				self.handleNavigationData()
 
-			# navigation
-			self.handleNavigationData()
+				# now lets switch images
+				if self.changePoster:
+					self.showPoster()
 
-			# now lets switch images
-			if self.changePoster:
-				self.showPoster()
+				if not self.fastScroll or self.showMedia:
+					if self.changeBackdrop:
+						# check if showiframe lib loaded ...
+						if self.loadedStillPictureLib:
+							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
+							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
+							printl("backdrop: " + str(backdrop), self, "D")
 
-			if not self.fastScroll or self.showMedia:
-				if self.changeBackdrop:
-					# check if showiframe lib loaded ...
-					if self.loadedStillPictureLib:
-						printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-						backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
-						printl("backdrop: " + str(backdrop), self, "D")
+							# check if the backdrop file exists
+							if os.access(backdrop, os.F_OK):
+								printl("yes", self, "D")
+								self["miniTv"].show()
+								self["stillPicture"].setStillPicture(backdrop)
+								self["backdrop"].hide()
+								self.usedStillPicture = True
+							else:
+								printl("no", self, "D")
+								self["miniTv"].hide()
+								self["backdrop"].show()
+								# if not handle as normal backdrop
+								self.handleBackdrop()
 
-						# check if the backdrop file exists
-						if os.access(backdrop, os.F_OK):
-							printl("yes", self, "D")
-							self["miniTv"].show()
-							self["stillPicture"].setStillPicture(backdrop)
-							self["backdrop"].hide()
-							self.usedStillPicture = True
 						else:
-							printl("no", self, "D")
-							self["miniTv"].hide()
-							self["backdrop"].show()
 							# if not handle as normal backdrop
 							self.handleBackdrop()
 
-					else:
-						# if not handle as normal backdrop
-						self.handleBackdrop()
+				# we need those for fastScroll
+				# this prevents backdrop load on next item
+				self.showMedia = False
+				if self.tagType != self.lastTagType:
+					self.toggleElementVisibilityWithLabel("audio")
+					self.toggleElementVisibilityWithLabel("subtitles")
+					self.toggleElementVisibilityWithLabel("genre")
+					self.toggleElementVisibilityWithLabel("duration")
+					self.toggleElementVisibilityWithLabel("year")
+					self["btn_yellow"].show()
+					self["btn_yellowText"].show()
+					self["btn_blue"].show()
+					self["btn_blueText"].show()
+					self["miniTv"].show()
 
-			# we need those for fastScroll
-			# this prevents backdrop load on next item
-			self.showMedia = False
+					self.initFastScroll()
 
-			if not self.isDirectory:
 				if self.context is not None:
 					# lets set the urls for context functions of the selected entry
 					self.seenUrl = self.context.get("watchedURL", None)
@@ -1022,6 +1034,36 @@ class DP_View(Screen, DPH_ScreenHelper):
 					self.handleResolutionPixmaps()
 					self.handleRatedPixmaps()
 					self.handleSoundPixmaps()
+			else:
+				if self.tagType != self.lastTagType:
+					self.toggleElementVisibilityWithLabel("audio", "hide")
+					self.toggleElementVisibilityWithLabel("subtitles", "hide")
+					self.toggleElementVisibilityWithLabel("genre", "hide")
+					self.toggleElementVisibilityWithLabel("duration", "hide")
+					self.toggleElementVisibilityWithLabel("year", "hide")
+					self.toggleElementVisibilityWithLabel("info", "hide")
+
+					self["btn_yellow"].hide()
+					self["btn_yellowText"].hide()
+					self["btn_blue"].hide()
+					self["btn_blueText"].hide()
+
+					self["miniTv"].hide()
+
+				self["title"].setText("Directory")
+				self["grandparentTitle"].setText("")
+				self["season"].setText("")
+				self["tag"].setText("Name:")
+				self["year"].setText("")
+				self["genre"].setText("")
+				self["duration"].setText("")
+				self["shortDescription"].setText(self.details.get("title", " ").encode('utf-8'))
+				self["cast"].setText("")
+				self["writer"].setText("")
+				self["director"].setText("")
+
+			# we save this to avoid extensive unnessary skin changes
+			self.lastTagType = self.tagType
 
 		else:
 			self["title"].setText( "no data retrieved")
@@ -1462,8 +1504,9 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		self["txt_exit"].setText("Exit")
 
-		# if we are in fastScrollMode we remove some gui elements
-		self.resetGuiElementsInFastScrollMode()
+		if self.fastScroll:
+			# if we are in fastScrollMode we remove some gui elements
+			self.resetGuiElementsInFastScrollMode()
 
 		# now we set seen/unseen pictures
 		self.getSeenVisus()

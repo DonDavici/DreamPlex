@@ -199,6 +199,7 @@ def getMovieViewDefaults():
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
+	params["elements"]["info"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

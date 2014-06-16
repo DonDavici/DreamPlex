@@ -150,10 +150,12 @@ class DP_LibMain(Screen):
 		# in this case we do not use cache because there is no uuid and updated on information on this level
 		# maybe we find a way later and implement it than
 		if entryData.has_key("nextViewMode"):
-			myType = entryData["nextViewMode"]
+			nextViewMode = entryData["nextViewMode"]
+			currentViewMode = entryData["currentViewMode"]
 			source = "plex"
 		else:
-			myType = entryData["type"]
+			nextViewMode = entryData["type"]
+			currentViewMode = None
 
 		# in this case we have to ask plex for sure too
 		if str(entryData.get('key')) != "all":
@@ -162,7 +164,7 @@ class DP_LibMain(Screen):
 		if forceUpdate:
 			source = "plex"
 
-		library, mediaContainer = self.getLibraryData(source, url, myType, uuid, forceUpdate)
+		library, mediaContainer = self.getLibraryData(source, url, nextViewMode, currentViewMode, uuid, forceUpdate)
 
 		printl ("", self, "C")
 		return library, mediaContainer
@@ -170,14 +172,14 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getLibraryData(self, source, url, myType, uuid, forceUpdate=False):
+	def getLibraryData(self, source, url, nextViewMode, currentViewMode, uuid, forceUpdate=False):
 		printl ("", self, "S")
 
 		if config.plugins.dreamplex.useCache.value:
 			pickleFileExists = False
 			regeneratePickleFile = False
 			#noinspection PyAttributeOutsideInit
-			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, myType)
+			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, nextViewMode)
 			if os.path.exists(self.pickleName):
 				pickleFileExists = True
 
@@ -189,10 +191,10 @@ class DP_LibMain(Screen):
 					printl("from pickle", self, "D")
 				except:
 					printl("cache file not found", self, "D")
-					library = self.getLibraryDataFromPlex(url, myType)
+					library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
 					regeneratePickleFile = True
 			else:
-				library = self.getLibraryDataFromPlex(url, myType)
+				library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
 
 				if forceUpdate:
 					regeneratePickleFile = True
@@ -202,7 +204,7 @@ class DP_LibMain(Screen):
 				printl("regeneratePickleFile: " + str(regeneratePickleFile), self, "D")
 				self.generateCacheForSection(library)
 		else:
-			library = self.getLibraryDataFromPlex(url, myType)
+			library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
 
 		printl ("", self, "C")
 		return library
@@ -223,38 +225,39 @@ class DP_LibMain(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getLibraryDataFromPlex(self, url, myType):
+	def getLibraryDataFromPlex(self, url, nextViewMode, currentViewMode):
 		printl ("", self, "S")
 
-		printl("myType: " + str(myType), self, "D")
+		printl("nextViewMode: " + str(nextViewMode), self, "D")
+		printl("currentViewMode: " + str(currentViewMode), self, "D")
 		library = None
 		mediaContainer = None
 
 		# MUSIC
-		if myType == "artist":
+		if nextViewMode == "artist":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
 
-		elif myType == "ShowAlbums":
+		elif nextViewMode == "ShowAlbums":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
 
-		elif myType == "ShowTracks":
+		elif nextViewMode == "ShowTracks":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
 
 		# MOVIES
-		elif myType == "movie":
+		elif nextViewMode == "movie" or (currentViewMode == "ShowMovies" and nextViewMode == "ShowDirectory"):
 			library, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
 
 		# SHOWS
-		elif myType == "show":
+		elif nextViewMode == "show":
 			library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
 
-		elif myType == "ShowEpisodesDirect":
+		elif nextViewMode == "ShowEpisodesDirect":
 			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
 
-		elif myType == "ShowSeasons":
+		elif nextViewMode == "ShowSeasons":
 			library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
 
-		elif myType == "ShowEpisodes":
+		elif nextViewMode == "ShowEpisodes":
 			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
 
 

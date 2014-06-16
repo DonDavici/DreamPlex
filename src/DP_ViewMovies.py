@@ -67,13 +67,13 @@ class DPS_ViewMovies(DP_View):
 
 		pname = self.details["ratingKey"]
 		bname = self.details["ratingKey"]
-		
+
 		if not self.usePicCache:
 			pname = "temp"
 			bname = "temp"
 			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-		
+
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
-		
+
 		printl("", self, "C")
