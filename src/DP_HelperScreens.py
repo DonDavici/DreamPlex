@@ -26,13 +26,15 @@ from Screens.InputBox import InputBox
 from Screens.Screen import Screen
 from Components.Label import Label
 
+from DPH_ScreenHelper import DPH_ScreenHelper
+
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
 
 #===============================================================================
 #
 #===============================================================================
-class DPS_InputBox(InputBox):
+class DPS_InputBox(InputBox, DPH_ScreenHelper):
 
 	#===========================================================================
 	#
@@ -40,6 +42,7 @@ class DPS_InputBox(InputBox):
 	def __init__(self, session, *args, **kwargs):
 		Screen.__init__(self, session)
 		InputBox.__init__(self, session, **kwargs)
+		DPH_ScreenHelper.__init__(self)
 		self.entryData = args
 
 		printl("entryData: " + str(self.entryData), self, "D")
@@ -49,7 +52,19 @@ class DPS_InputBox(InputBox):
 
 		self.setTitle(_("Search ..."))
 
-			#===========================================================================
+		self.onLayoutFinish.append(self.finishLayout)
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self.initMiniTv()
+
+		printl("", self, "C")
+
+	#===========================================================================
 	#
 	#===========================================================================
 	def go(self):

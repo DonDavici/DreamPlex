@@ -232,7 +232,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				hasPromptTag = entryData.get('hasPromptTag', False)
 				printl("hasPromptTag: " + str(hasPromptTag), self, "D")
 				if hasPromptTag:
-					self.session.openWithCallback(self.addSearchString, DPS_InputBox, entryData, title=_("Please enter your search string!"), text="", maxSize=55, type=Input.TEXT )
+					self.session.openWithCallback(self.addSearchString, DPS_InputBox, entryData, title=_("Please enter your search string: "), text=" " * 55, maxSize=55, type=Input.TEXT )
 				else:
 					self.menuStep -= 1
 					self.executeSelectedEntry(entryData)

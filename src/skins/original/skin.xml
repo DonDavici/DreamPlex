@@ -71,6 +71,9 @@
         <widget name="text" zPosition="10" position="100,295" transparent="1" size="580,30" font="Saint; 18"  halign="left"/>
         <widget name="input" zPosition="10" position="400,295" transparent="1" size="580,25" font="Saint; 18"/>
 
+        <!-- mini-tv -->
+        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
+
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
             <convert type="ClockToText">Default</convert>
