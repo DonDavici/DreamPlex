@@ -174,8 +174,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self.currentMenuDataDict[self.menuStep] = self.g_serverDataMenu
+		printl("currentMenuDataDict: " + str(self.currentMenuDataDict), self, "D")
+
+		# first of all we save the data from the current step
 		self.currentIndexDict[self.menuStep] = self["menu"].getIndex()
+
+		# now we increase the step value because we go to the next step
 		self.menuStep += 1
+		printl("menuStep: " + str(self.menuStep), self, "D")
 
 		# this is used to step in directly into a server when there is only one entry in the serverlist
 		if selectionOverride is not None:
@@ -345,9 +351,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def cancel(self):
 		printl("", self, "S")
 		self.menuStep -= 1
+		printl("menuStep: " + str(self.menuStep), self, "D")
 
 		if self.menuStep >= 0:
-			self["menu"].setList(self.currentMenuDataDict[self.menuStep])
+			self.g_serverDataMenu = self.currentMenuDataDict[self.menuStep]
+			self["menu"].setList(self.g_serverDataMenu)
 			self["menu"].setIndex(self.currentIndexDict[self.menuStep])
 			self.refreshMenu()
 
@@ -397,6 +405,9 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		if not menuData:
 			text = "You have no data in this section!"
 			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+			self.menuStep -= 1
+			printl("menuStep: " + str(self.menuStep), self, "D")
+
 		else:
 			self["menu"].setList(menuData)
 			self.g_serverDataMenu = menuData #lets save the menu to call it when cancel is pressed
