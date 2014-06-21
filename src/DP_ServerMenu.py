@@ -246,20 +246,19 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def addSearchString(self, entryData, searchString = None):
 		printl("", self, "S")
 		printl("entryData: " + str(entryData), self, "D")
+
 		if searchString is not None:
-			searchUrl = entryData[0]["contentUrl"] + "&query=" + searchString
+			if "origContentUrl" in entryData[0]:
+				searchUrl = entryData[0]["origContentUrl"] + "&local=1&query=" + searchString
+			else:
+				searchUrl = entryData[0]["contentUrl"] + "&local=1&query=" + searchString
+				entryData[0]["origContentUrl"] = entryData[0]["contentUrl"]
+
 			printl("searchUrl: " + str(searchUrl), self, "D")
 
 			entryData[0]["contentUrl"] = searchUrl
 
-		# first we check if we get back a result
-		tree = self.plexInstance.getXmlTreeFromUrl(searchUrl)
-
-		if tree is not None:
-			self.executeSelectedEntry(entryData[0])
-		else:
-			text = "There is no result with this search string!"
-			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+		self.executeSelectedEntry(entryData[0])
 
 		printl("", self, "C")
 
