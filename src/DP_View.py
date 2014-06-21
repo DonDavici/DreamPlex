@@ -111,10 +111,11 @@ class DP_View(Screen, DPH_ScreenHelper):
 	usedStillPicture                = False
 	refreshTimer                    = None # initial value to stay agile in list of media
 	selection                       = None # this stores the current list entry of list
+	leaving                         = False # we use this to know if we are going deeper into the lib or leaving e.g. show - season - episode
 
 	playerData                      = {} # inital playerData dict
 	currentQueuePosition            = 0 # this is the current selection id
-	detailsPaneVisible              = True # is shortDescription or details visible
+	detailsPaneVisible              = False # is shortDescription or details visible
 
 	#===========================================================================
 	#
@@ -289,6 +290,18 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["yearLabel"] = Label()
 		self["yearLabel"].setText(_("Year:"))
 
+		self["leafCount"] = Label()
+		self["leafCountLabel"] = Label()
+		self["leafCountLabel"].setText(_("Medias:"))
+
+		self["unviewedLeafCount"] = Label()
+		self["unviewedLeafCountLabel"] = Label()
+		self["unviewedLeafCountLabel"].setText(_("Unseen:"))
+
+		self["viewedLeafCount"] = Label()
+		self["viewedLeafCountLabel"] = Label()
+		self["viewedLeafCountLabel"].setText(_("Seen:"))
+
 		self["duration"] = Label()
 		self["durationLabel"] = Label()
 		self["durationLabel"].setText(_("Runtime:"))
@@ -339,7 +352,8 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def setCustomTitle(self):
 		printl("", self, "S")
 
-		self.setTitle(_(self.libraryName))
+		self.myTitle = _(self.libraryName)
+		self.setTitle(self.myTitle)
 
 		printl("", self, "C")
 
@@ -748,21 +762,42 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		if self.detailsPaneVisible:
-			self.detailsPaneVisible = False
-			self["shortDescription"].hide()
-			self["btn_yellowText"].setText(_("show 'Description'"))
-			self.toggleElementVisibilityWithLabel("writer")
-			self.toggleElementVisibilityWithLabel("director")
-			self.toggleElementVisibilityWithLabel("cast")
+			self.hideDetails()
 		else:
-			self.detailsPaneVisible = True
-			self["shortDescription"].show()
-			self["btn_yellowText"].setText(_("show 'Details'"))
-			self.toggleElementVisibilityWithLabel("writer", "hide")
-			self.toggleElementVisibilityWithLabel("director", "hide")
-			self.toggleElementVisibilityWithLabel("cast", "hide")
+			self.showDetails()
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def hideDetails(self):
+		printl("", self, "S")
+
+		self.detailsPaneVisible = False
+		self["shortDescription"].show()
+		self["btn_yellowText"].setText(_("show 'Details'"))
+		self.toggleElementVisibilityWithLabel("writer", "hide")
+		self.toggleElementVisibilityWithLabel("director", "hide")
+		self.toggleElementVisibilityWithLabel("cast", "hide")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showDetails(self):
+		printl("", self, "S")
+
+		self.detailsPaneVisible = True
+		self["shortDescription"].hide()
+		self["btn_yellowText"].setText(_("show 'Description'"))
+		self.toggleElementVisibilityWithLabel("writer")
+		self.toggleElementVisibilityWithLabel("director")
+		self.toggleElementVisibilityWithLabel("cast")
+
+		printl("", self, "C")
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -786,6 +821,9 @@ class DP_View(Screen, DPH_ScreenHelper):
 
 		printl("returnTo: " + str(self.returnTo), self, "D")
 
+		if self.detailsPaneVisible:
+			self.hideDetails()
+
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
 			self.session.nav.stopService()
@@ -793,6 +831,12 @@ class DP_View(Screen, DPH_ScreenHelper):
 		if self.viewStep >= 0:
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
+
+			if self.viewStep >= 1:
+				self.leaving = True
+			else:
+				self.setTitle(self.myTitle)
+				self.leaving = False
 		else:
 			if self.loadedStillPictureLib:
 				self.stopBackdropVideo()
@@ -978,11 +1022,13 @@ class DP_View(Screen, DPH_ScreenHelper):
 				# this prevents backdrop load on next item
 				self.showMedia = False
 				if self.tagType != self.lastTagType:
-					self.toggleElementVisibilityWithLabel("audio")
-					self.toggleElementVisibilityWithLabel("subtitles")
-					self.toggleElementVisibilityWithLabel("genre")
-					self.toggleElementVisibilityWithLabel("duration")
-					self.toggleElementVisibilityWithLabel("year")
+					if self.lastTagType == "Directory":
+						self.toggleElementVisibilityWithLabel("audio")
+						self.toggleElementVisibilityWithLabel("subtitles")
+						self.toggleElementVisibilityWithLabel("genre")
+						self.toggleElementVisibilityWithLabel("duration")
+						self.toggleElementVisibilityWithLabel("year")
+
 					self["btn_yellow"].show()
 					self["btn_yellowText"].show()
 					self["btn_blue"].show()
@@ -1008,8 +1054,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 						self.startThemePlayback()
 
 				self["title"].setText(self.details.get("title", " ").encode('utf-8'))
-				self["grandparentTitle"].setText(self.mediaContainer.get("grandparentTitle", " "))
-				self["season"].setText(self.mediaContainer.get("title2", " "))
+
 				self["tag"].setText(self.details.get("tagline", " ").encode('utf8'))
 				self["year"].setText(str(self.details.get("year", " - ")))
 				self["genre"].setText(str(self.details.get("genre", " - ").encode('utf8')))

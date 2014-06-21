@@ -392,7 +392,7 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/list_view-fs8.png" position="30,330" zPosition="2" size="1280,720" transparent="1"/>
 
         <!-- title -->
-        <widget source="Title" text="" render="Label" transparent="1" halign="left" zPosition="4" position="120,15" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" />
+        <widget source="Title" text="" render="Label" transparent="1" halign="left" zPosition="4" position="120,15" size="400,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" />
 
         <!-- clock/date -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1">
@@ -438,8 +438,14 @@
         <widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="duration" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
+        <widget name="viewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="viewedLeafCount" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
         <widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="year" transparent="1" zPosition="4" halign="left" position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="unviewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="1070,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="unviewedLeafCount" transparent="1" zPosition="4" halign="left" position="1150,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/cover-fs8.png" zPosition="50" position="100,370" size="240,292" alphatest="blend" transparent="0"/>
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
@@ -467,6 +473,9 @@
 
         <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="545,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="genre" transparent="1" zPosition="4" halign="left" position="620,340" size="300,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+        <widget name="leafCountLabel" transparent="1" zPosition="4" halign="left" position="545,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="leafCount" transparent="1" zPosition="4" halign="left" position="620,340" size="300,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="545,360" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="audio" transparent="1" zPosition="4" halign="left" position="620,360" size="400,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>

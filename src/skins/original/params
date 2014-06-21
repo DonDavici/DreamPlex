@@ -54,14 +54,14 @@
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>
 			<element name="season" xCoord="545" yCoord="100" visible="True"/>
-			<element name="genre" visible="False" />
 			<element name="shortDescription" visible="False"/>
-			<element name="year" visible="False"/>
+			<element name="year" visible="False" />
 			<element name="info" visible="False"/>
 			<element name="btn_yellow" visible="False"/>
-			<main name="writer" visible="False"/>
-			<main name="director" visible="False"/>
-			<main name="cast" visible="False"/>
+			<element name="leafCount" visible="True"/>
+			<element name="viewedLeafCount" visible="True"/>
+			<element name="unviewedLeafCount" visible="True"/>
+
 		</subView>
 
 		<subView name="ShowEpisodes">
@@ -72,6 +72,9 @@
 			<element name="btn_yellow" visible="True"/>
 			<element name="audio" visible="True"/>
 			<element name="subtitles" visible="True"/>
+			<element name="leafCount" visible="False"/>
+			<element name="viewedLeafCount" visible="False"/>
+			<element name="unviewedLeafCount" visible="False"/>
 		</subView>
 	</showView>
 

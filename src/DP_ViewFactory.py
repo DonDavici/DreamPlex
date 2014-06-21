@@ -38,7 +38,7 @@ def getDefaultCineElementsList():
 
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
-	                "genre", "year", "duration", "rating_stars", "sound", "filter", "pagination", "total",
+	                "genre", "year", "duration", "rating_stars", "sound", "filter", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
 	                "btn_red", "btn_green", "btn_yellow", "btn_blue"]
 
 	printl("", __name__, "C")
@@ -200,6 +200,9 @@ def getMovieViewDefaults():
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
 	params["elements"]["info"]["visible"]                          = False
+	params["elements"]["leafCount"]["visible"]                     = False
+	params["elements"]["unviewedLeafCount"]["visible"]             = False
+	params["elements"]["viewedLeafCount"]["visible"]               = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -236,13 +239,17 @@ def getShowViewDefaults():
 
 	# override default True
 	params["elements"]["subtitles"]["visible"]                     = False
+	params["elements"]["genre"]["visible"]                         = False
 	params["elements"]["audio"]["visible"]                         = False
-	params["elements"]["duration"]["visible"]                       = False
+	params["elements"]["duration"]["visible"]                      = False
 	params["elements"]["season"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["leafCount"]["visible"]                     = False
+	params["elements"]["unviewedLeafCount"]["visible"]             = False
+	params["elements"]["viewedLeafCount"]["visible"]               = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -287,6 +294,9 @@ def getMusicViewDefaults():
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False
 	params["elements"]["btn_yellow"]["visible"]                    = False
+	params["elements"]["leafCount"]["visible"]                     = False
+	params["elements"]["unviewedLeafCount"]["visible"]             = False
+	params["elements"]["viewedLeafCount"]["visible"]               = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
