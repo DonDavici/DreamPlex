@@ -111,7 +111,7 @@ class DPS_ViewMusic(DP_View):
 
 		printl("", self, "C")
 
-	#===========================================================================
+#===========================================================================
 	#
 	#===========================================================================
 	def onLeave(self):
@@ -120,6 +120,10 @@ class DPS_ViewMusic(DP_View):
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewMusic,self).onLeave()
 
+		# first restore Elements
 		self.restoreElementsInViewStep()
+
+		# we do the refresh here to be able to handle directory content
+		self.refresh()
 
 		printl("", self, "C")

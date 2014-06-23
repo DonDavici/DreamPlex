@@ -480,11 +480,15 @@ class PlexLibrary(Screen):
 			entryData['banner']             = self.getImage(entry, server, myType = "banner")
 			entryData['token']			    = self.g_myplex_accessToken
 
-			viewState = self.getViewStateForShowEntry(entryData)
-			printl("viewState: " + str(viewState), self, "D")
+			if mediaContainer["title2"] != "By Folder":
+				viewState = self.getViewStateForShowEntry(entryData)
+				printl("viewState: " + str(viewState), self, "D")
 
-			if self.g_showUnSeenCounts:
-				entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
+				if self.g_showUnSeenCounts:
+					entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
+			else:
+				entryData['tagType']            = "Directory"
+				viewState = None
 
 			#Create URL based on whether we are going to flatten the season view
 			if self.g_flattenShow:
@@ -494,7 +498,7 @@ class PlexLibrary(Screen):
 				url = 'http://%s/%s'  % ( server, entryData['key'])
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState))
+			fullList.append(self.getFullListEntry(entryData, url, viewState, isDirectory=True))
 
 		printl("", self, "C")
 		return fullList, mediaContainer
@@ -538,16 +542,20 @@ class PlexLibrary(Screen):
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['token']			    = self.g_myplex_accessToken
 
-			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer
-			if "ratingKey" not in entryData:
+			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer but only if we are not in ByFolder mode
+			if "ratingKey" not in entryData and mediaContainer["title2"] != "By Folder":
 				entryData["ratingKey"] = mediaContainer["key"]
 
-			seenVisu = self.getViewStateForShowEntry(entryData)
+			if mediaContainer["title2"] != "By Folder":
+				viewState = self.getViewStateForShowEntry(entryData)
+			else:
+				entryData['tagType']            = "Directory"
+				viewState = None
 
 			url = 'http://%s/%s'  % ( server, entryData['key'])
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, seenVisu, isDirectory=True))
+			fullList.append(self.getFullListEntry(entryData, url, viewState, isDirectory=True))
 
 		printl("fullList: " + str(fullList), self, "C")
 		printl("", self, "C")

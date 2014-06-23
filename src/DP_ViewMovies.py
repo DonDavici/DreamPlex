@@ -77,3 +77,17 @@ class DPS_ViewMovies(DP_View):
 		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
 
 		printl("", self, "C")
+
+#===========================================================================
+	#
+	#===========================================================================
+	def onLeave(self):
+		printl("", self, "S")
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewMovies,self).onLeave()
+
+		# we do the refresh here to be able to handle directory content
+		self.refresh()
+
+		printl("", self, "C")

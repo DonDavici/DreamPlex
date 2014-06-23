@@ -54,7 +54,6 @@
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>
 			<element name="season" xCoord="545" yCoord="100" visible="True"/>
-			<element name="shortDescription" visible="False"/>
 			<element name="year" visible="False" />
 			<element name="info" visible="False"/>
 			<element name="btn_yellow" visible="False"/>
@@ -66,7 +65,6 @@
 
 		<subView name="ShowEpisodes">
 			<element name="grandparentTitle" xCoord="545" yCoord="55" visible="True"/>
-			<element name="shortDescription" visible="True"/>
 			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="info" visible="True"/>
 			<element name="btn_yellow" visible="True"/>

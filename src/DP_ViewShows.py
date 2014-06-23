@@ -91,9 +91,8 @@ class DPS_ViewShows(DP_View):
 		elif self.details ["currentViewMode"] == "ShowEpisodes":
 			printl( "is ShowEpisodes specific season",self, "D")
 			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.details["ratingKey"]
+			self.bname = self.details["ratingKey"]
+			self.pname = self.details["parentRatingKey"]
 			self.startPlaybackNow = False
 			self.changeBackdrop = False
 			self.changePoster = True
@@ -153,26 +152,13 @@ class DPS_ViewShows(DP_View):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onLeave(self):
-		printl("", self, "S")
-
-		# first we call the the rest of the onEnter from super
-		super(DPS_ViewShows,self).onLeave()
-
-		self.restoreElementsInViewStep()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def _refresh(self):
 		printl("", self, "S")
 
-		# first we call the the rest of the onEnter from super
+		# first we call the the rest of the _refresh from super
 		super(DPS_ViewShows,self)._refresh()
 
-		if self.viewStep == 1 and not self.leaving:
+		if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
 			self.setTitle(self.mediaContainer.get("title2", " "))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
@@ -182,5 +168,36 @@ class DPS_ViewShows(DP_View):
 			self["season"].setText(self.mediaContainer.get("title2", " "))
 		else:
 			self["season"].setText("")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onEnter(self):
+		printl("", self, "S")
+
+		self.lastTagType = None
+
+		super(DPS_ViewShows,self).onEnter()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onLeave(self):
+		printl("", self, "S")
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewShows,self).onLeave()
+
+		# first restore Elements
+		self.restoreElementsInViewStep()
+
+		self.lastTagType = None
+
+		# we do the refresh here to be able to handle directory content
+		self.refresh()
 
 		printl("", self, "C")

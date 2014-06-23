@@ -72,6 +72,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	returnTo                        = None
 	currentEntryDataDict            = {}
 	currentIndexDict                = {}
+	currentTagTypeDict              = {}
 	showMedia                       = False
 	showDetail                      = False
 	isDirectory                     = False
@@ -391,9 +392,11 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def getViewListData(self):
 		printl("", self, "S")
 
+		# we have to initialize here as well
 		self.viewStep = 0
 		self.currentEntryDataDict = {}
 		self.currentIndexDict = {}
+		self.currentTagTypeDict = {}
 
 		self._load()
 		self.refresh()
@@ -832,6 +835,11 @@ class DP_View(Screen, DPH_ScreenHelper):
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
+			# if self.currentTagTypeDict[self.viewStep] == "Directory":
+			# 	self.isDirectory = True
+			# 	# we reset this to trigger screen changes
+			# 	self.lastTagType = None
+
 			if self.viewStep >= 1:
 				self.leaving = True
 			else:
@@ -844,8 +852,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 				self.session.nav.playService(self.currentService)
 			printl("", self, "C")
 			self.close()
-
-		self.refresh()
 
 		printl("", self, "C")
 
@@ -950,10 +956,13 @@ class DP_View(Screen, DPH_ScreenHelper):
 		if self.selection is not None:
 			printl("selection: " + str(self.selection), self, "D")
 			self.tagType = self.selection[1]['tagType']
+			#self.currentTagTypeDict[self.viewStep] = self.tagType
 
-			self.isDirectory = False
 			if self.tagType == "Directory":
 				self.isDirectory = True
+			else:
+				self["txt_functions"].show()
+				self.isDirectory = False
 
 			printl("isDirectory: " + str(self.isDirectory), self, "D")
 
@@ -1080,13 +1089,17 @@ class DP_View(Screen, DPH_ScreenHelper):
 					self.handleRatedPixmaps()
 					self.handleSoundPixmaps()
 			else:
-				if self.tagType != self.lastTagType:
+				if self.tagType != self.lastTagType or self.tagType is None:
 					self.toggleElementVisibilityWithLabel("audio", "hide")
 					self.toggleElementVisibilityWithLabel("subtitles", "hide")
 					self.toggleElementVisibilityWithLabel("genre", "hide")
 					self.toggleElementVisibilityWithLabel("duration", "hide")
 					self.toggleElementVisibilityWithLabel("year", "hide")
 					self.toggleElementVisibilityWithLabel("info", "hide")
+					self.toggleElementVisibilityWithLabel("leafCount", "hide")
+					self.toggleElementVisibilityWithLabel("viewedLeafCount", "hide")
+					self.toggleElementVisibilityWithLabel("unviewedLeafCount", "hide")
+					self["txt_functions"].hide()
 
 					self["btn_yellow"].hide()
 					self["btn_yellowText"].hide()
