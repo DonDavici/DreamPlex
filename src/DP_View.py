@@ -738,7 +738,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 			# we need this for onEnter-func in child lib
 			self.currentViewMode = currentViewMode
 
-			if currentViewMode == "play" or currentViewMode == "directMode":
+			if currentViewMode == "play" or currentViewMode == "directMode" or currentViewMode == "ShowMovies":
 				printl("currentViewMode -> play", self, "D")
 
 				if config.plugins.dreamplex.useBackdropVideos.value:
