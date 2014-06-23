@@ -54,7 +54,7 @@ from DP_Player import DP_Player
 
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
-from DPH_ScreenHelper import DPH_ScreenHelper
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
 
 from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
@@ -63,7 +63,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, DPH_ScreenHelper):
+class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -132,6 +132,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 		printl("", self, "S")
 		Screen.__init__(self, viewClass)
 		DPH_ScreenHelper.__init__(self, forceMiniTv=True)
+		DPH_MultiColorFunctions.__init__(self)
 
 		self.viewParams = viewParams
 
@@ -219,11 +220,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["paginationLabel"].setText(_("Pages:"))
 		self["pagination"] = Label()
 
-		self["filterLabel"] = Label()
-		self["filterLabel"].setText(_("Filter:"))
-		self["filter"]		= Label()
-		self["filter"].setText(_("press '0-9'"))
-
 		self["btn_red"]			= Pixmap()
 		self["btn_yellow"]		= Pixmap()
 		self["btn_blue"]		= Pixmap()
@@ -233,10 +229,6 @@ class DP_View(Screen, DPH_ScreenHelper):
 		self["btn_yellowText"]		= Label()
 		self["btn_blueText"]		= Label()
 		self["btn_greenText"]		= Label()
-
-		self["btn_redText"].setText(_("View '") + str(self.currentViewName) + "'")
-
-		self["btn_yellowText"].setText(_("show 'Details'"))
 
 		self["sound"] = MultiPixmap()
 
@@ -542,7 +534,23 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def onKeyRed(self):
 		printl("", self, "S")
 
-		self.onToggleView()
+		self.executeColorFunction("red", self.currentFunctionLevel)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initColorFunctions(self):
+		printl("", self, "S")
+
+		self.currentFunctionLevel = "1"
+
+		self.setColorFunction(color="red", level="1", functionList=(_("View '") + str(self.currentViewName) + "'", "self.onToggleView()"))
+		self.setColorFunction(color="yellow", level="1", functionList=(_("show 'Details'"), "self.toggleDetails()"))
+		self.setColorFunction(color="blue", level="1", functionList=("Test", "self.toggleFastScroll()"))
+
+		self.alterColorFunctionNames(level="1")
 
 		printl("", self, "C")
 
@@ -560,7 +568,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def onKeyYellow(self):
 		printl("", self, "S")
 
-		self.toggleDetails()
+		self.executeColorFunction("yellow", self.currentFunctionLevel)
 
 		printl("", self, "C")
 
@@ -578,7 +586,7 @@ class DP_View(Screen, DPH_ScreenHelper):
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		self.toggleFastScroll()
+		self.executeColorFunction("blue", self.currentFunctionLevel)
 
 		printl("", self, "C")
 
@@ -1581,6 +1589,8 @@ class DP_View(Screen, DPH_ScreenHelper):
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
+
+		self.initColorFunctions()
 
 		printl("", self, "C")
 

@@ -38,7 +38,7 @@ def getDefaultCineElementsList():
 
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
-	                "genre", "year", "duration", "rating_stars", "sound", "filter", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
+	                "genre", "year", "duration", "rating_stars", "sound", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
 	                "btn_red", "btn_green", "btn_yellow", "btn_blue"]
 
 	printl("", __name__, "C")

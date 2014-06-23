@@ -72,3 +72,54 @@ class DPH_ScreenHelper(object):
 		printl("", self, "C")
 
 
+#===============================================================================
+#
+#===============================================================================
+class DPH_MultiColorFunctions(object):
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def __init__(self):
+		printl("", self, "S")
+
+		self.colorFunctionContainer = {}
+		self.colorFunctionContainer["red"] = {}
+		self.colorFunctionContainer["green"] = {}
+		self.colorFunctionContainer["yellow"] = {}
+		self.colorFunctionContainer["blue"] = {}
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def setColorFunction(self, color, level, functionList):
+		printl("", self, "S")
+
+		self.colorFunctionContainer[color][level] = functionList
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getColorFunction(self, color, level):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.colorFunctionContainer[color][level]
+
+	def executeColorFunction(self, color, level):
+
+		eval(self.colorFunctionContainer[color][level][1])
+
+	def alterColorFunctionNames(self, level):
+
+		colorList = ["red", "green", "yellow", "blue"]
+
+		for color in colorList:
+			if color != "green":
+				self["btn_"+ color + "Text"].setText(self.colorFunctionContainer[color][level][0])
+
+
