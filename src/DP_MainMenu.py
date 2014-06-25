@@ -102,7 +102,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.session.nav.stopService()
 
 		if self.g_horizontal_menu:
-			self.setHorMenuElements()
+			self.setHorMenuElements(depth=2)
 			self.translateNames()
 
 		self.onFirstExecBegin.append(self.onExec)

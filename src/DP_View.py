@@ -29,13 +29,13 @@ import os
 from enigma import eTimer
 
 from Components.ActionMap import HelpableActionMap
-from Components.Sources.List import List
 from Components.Label import Label
 from Components.config import config
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
+from Components.Sources.List import List
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
@@ -55,6 +55,7 @@ from DP_Player import DP_Player
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
+from DPH_MovingLabel import DPH_HorizontalMenu
 
 from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
@@ -63,7 +64,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
+class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalMenu):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -304,6 +305,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["rating_stars"] = ProgressBar()
 
 		self["stillPicture"] = Label()
+
+		# init horizontal multifunctions
+		self.setHorMenuElements(depth=1, initMenu=True)
+		self.translateNames()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -1591,6 +1596,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
 
 		self.initColorFunctions()
+
+		self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
 

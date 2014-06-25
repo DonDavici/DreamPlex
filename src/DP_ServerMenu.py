@@ -83,7 +83,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.setMenuType("server_menu")
 
 		if self.g_horizontal_menu:
-			self.setHorMenuElements()
+			self.setHorMenuElements(depth=2)
 			self.translateNames()
 
 		self["btn_red"]			= Pixmap()

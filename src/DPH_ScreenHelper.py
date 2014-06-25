@@ -89,6 +89,8 @@ class DPH_MultiColorFunctions(object):
 		self.colorFunctionContainer["yellow"] = {}
 		self.colorFunctionContainer["blue"] = {}
 
+		#self.functionLevelAmount = functionLevelAmount
+
 		printl("", self, "C")
 
 	#===============================================================================

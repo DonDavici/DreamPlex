@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License
 #noinspection PyUnresolvedReferences
 from enigma import eTimer
 from Components.Label import MultiColorLabel
+from Components.Sources.List import List
 from skin import parseColor
 from __common__ import printl2 as printl
 from DPH_Singleton import Singleton
@@ -34,26 +35,44 @@ class DPH_HorizontalMenu(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def setHorMenuElements(self):
+	def setHorMenuElements(self, depth, initMenu=False):
 		printl("", self, "S")
+		self.depth = depth
+
+		self.setRangeList()
+		self.initTrue = initMenu
+		if initMenu:
+			mainMenuList = []
+			mainMenuList.append(("-1", "DPS_Settings", "settingsEntry"))
+			mainMenuList.append(("0", "DPS_Server", "settingsEntry"))
+			mainMenuList.append(("+1", "DPS_SystemCheck", "settingsEntry"))
+			self["menu"]= List(mainMenuList, True)
+
 
 		highlighted = parseColor("#e69405")
 		normal = parseColor("#ffffff")
 
-		self["-2"] = MultiColorLabel()
-		self["-2"].foreColors = [highlighted, normal]
+		for i in self.rangeList:
+			self[str(i)] = MultiColorLabel()
+			self[str(i)].foreColors = [highlighted, normal]
+			self[str(i)].show()
 
-		self["-1"] = MultiColorLabel()
-		self["-1"].foreColors = [highlighted, normal]
+		printl("", self, "C")
 
-		self["0"]  = MultiColorLabel()
-		self["0"].foreColors = [highlighted, normal]
+	#===============================================================================
+	#
+	#===============================================================================
+	def setRangeList(self):
+		printl("", self, "S")
 
-		self["+1"] = MultiColorLabel()
-		self["+1"].foreColors = [highlighted, normal]
+		rangeList = []
+		for i in range(1,(self.depth+1)):
+			rangeList.append("-" + str(i))
+			rangeList.append("+" + str(i))
 
-		self["+2"] = MultiColorLabel()
-		self["+2"].foreColors = [highlighted, normal]
+		rangeList.append("0")
+
+		self.rangeList = rangeList
 
 		printl("", self, "C")
 
@@ -63,11 +82,8 @@ class DPH_HorizontalMenu(object):
 	def translateNames(self):
 		printl("", self, "S")
 
-		self.translatePositionToName(-2, "-2")
-		self.translatePositionToName(-1, "-1")
-		self.translatePositionToName( 0, "0")
-		self.translatePositionToName(+1, "+1")
-		self.translatePositionToName(+2, "+2")
+		for i in self.rangeList:
+			self.translatePositionToName(int(i), str(i))
 
 		printl("", self, "C")
 
@@ -84,13 +100,15 @@ class DPH_HorizontalMenu(object):
 			self["menu"].selectPrevious()
 
 		currentIndex = self["menu"].index
+		if self.initTrue:
+			pass
 		content = self["menu"].list
 		printl("content " + str(content), self, "D")
 		count = len(content)
 
 		self[self.translatePositionToName(0)].setText(content[currentIndex][0])
 		self[self.translatePositionToName(0)].setForegroundColorNum(0)
-		for i in range(1,3): # 1, 2
+		for i in range(1,(self.depth+1)):
 			targetIndex = currentIndex + i
 			if targetIndex < count:
 				self[self.translatePositionToName(+i)].setText(content[targetIndex][0])
