@@ -55,7 +55,6 @@ from DP_Player import DP_Player
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
-from DPH_MovingLabel import DPH_HorizontalMenu
 
 from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
@@ -64,7 +63,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalMenu):
+class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -188,6 +187,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),
+
+		    "1":			(self.onKey1, ""),
+			"2":			(self.onKey2, ""),
+			"3":			(self.onKey3, ""),
 		}, -2)
 
 		self.onLayoutFinish.append(self.setCustomTitle)
@@ -210,6 +213,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 		self.serverConfig = Singleton().getPlexInstance().getServerConfig()
 
 		# init skin elements
+		self.setMultiLevelElements(levels=3)
+
 		self["txt_functions"] = Label()
 		self["txt_exit"] = Label()
 
@@ -305,10 +310,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 		self["rating_stars"] = ProgressBar()
 
 		self["stillPicture"] = Label()
-
-		# init horizontal multifunctions
-		self.setHorMenuElements(depth=1, initMenu=True)
-		self.translateNames()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -552,8 +553,19 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 		self.currentFunctionLevel = "1"
 
 		self.setColorFunction(color="red", level="1", functionList=(_("View '") + str(self.currentViewName) + "'", "self.onToggleView()"))
+		self.setColorFunction(color="green", level="1", functionList=None)
 		self.setColorFunction(color="yellow", level="1", functionList=(_("show 'Details'"), "self.toggleDetails()"))
 		self.setColorFunction(color="blue", level="1", functionList=("Test", "self.toggleFastScroll()"))
+
+		self.setColorFunction(color="red", level="2", functionList=("L2", "self.onToggleView()"))
+		self.setColorFunction(color="green", level="2", functionList=("L2", "self.toggleDetails()"))
+		self.setColorFunction(color="yellow", level="2", functionList=("L2", "self.toggleFastScroll()"))
+		self.setColorFunction(color="blue", level="2", functionList=("L2", "self.toggleFastScroll()"))
+
+		self.setColorFunction(color="red", level="3", functionList=("L3", "self.onToggleView()"))
+		self.setColorFunction(color="green", level="3", functionList=("L3", "self.toggleDetails()"))
+		self.setColorFunction(color="yellow", level="3", functionList=("L3", "self.toggleFastScroll()"))
+		self.setColorFunction(color="blue", level="3", functionList=("L3", "self.toggleFastScroll()"))
 
 		self.alterColorFunctionNames(level="1")
 
@@ -603,7 +615,38 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 
 		printl("", self, "C")
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey1(self):
+		printl("", self, "S")
 
+		self.setLevelActive(currentLevel=1)
+		self.alterColorFunctionNames(level="1")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey2(self):
+		printl("", self, "S")
+
+		self.setLevelActive(currentLevel=2)
+		self.alterColorFunctionNames(level="2")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey3(self):
+		printl("", self, "S")
+
+		self.setLevelActive(currentLevel=3)
+		self.alterColorFunctionNames(level="3")
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -1565,6 +1608,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 
 		self.initMiniTv()
 
+		self.setLevelActive(currentLevel=1)
+
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
@@ -1596,8 +1641,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_HorizontalM
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
 
 		self.initColorFunctions()
-
-		self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
 

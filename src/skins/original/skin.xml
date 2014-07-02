@@ -496,6 +496,9 @@
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
         <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
+        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
         <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
         <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
@@ -505,9 +508,9 @@
         <!-- functions -->
         <widget name="txt_functions" position="1180,677" zPosition="9" size="200,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="-1" transparent="1" zPosition="10" position="1110,677" size="20,50" font="Saint; 14" halign="center" />
-        <widget name="0" transparent="1" zPosition="10" position="1130,677" size="20,50" font="Saint; 14" halign="center" />
-        <widget name="+1" transparent="1" zPosition="10" position="1140,677" size="20,50" font="Saint; 14" halign="center" />
+        <widget name="L1" transparent="1" zPosition="10" position="1110,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
+        <widget name="L2" transparent="1" zPosition="10" position="1125,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
+        <widget name="L3" transparent="1" zPosition="10" position="1140,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
 
         <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
 

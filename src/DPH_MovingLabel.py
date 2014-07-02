@@ -23,10 +23,10 @@ You should have received a copy of the GNU General Public License
 #noinspection PyUnresolvedReferences
 from enigma import eTimer
 from Components.Label import MultiColorLabel
-from Components.Sources.List import List
 from skin import parseColor
 from __common__ import printl2 as printl
 from DPH_Singleton import Singleton
+
 
 class DPH_HorizontalMenu(object):
 
@@ -35,19 +35,11 @@ class DPH_HorizontalMenu(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def setHorMenuElements(self, depth, initMenu=False):
+	def setHorMenuElements(self, depth):
 		printl("", self, "S")
 		self.depth = depth
 
 		self.setRangeList()
-		self.initTrue = initMenu
-		if initMenu:
-			mainMenuList = []
-			mainMenuList.append(("-1", "DPS_Settings", "settingsEntry"))
-			mainMenuList.append(("0", "DPS_Server", "settingsEntry"))
-			mainMenuList.append(("+1", "DPS_SystemCheck", "settingsEntry"))
-			self["menu"]= List(mainMenuList, True)
-
 
 		highlighted = parseColor("#e69405")
 		normal = parseColor("#ffffff")
@@ -100,8 +92,6 @@ class DPH_HorizontalMenu(object):
 			self["menu"].selectPrevious()
 
 		currentIndex = self["menu"].index
-		if self.initTrue:
-			pass
 		content = self["menu"].list
 		printl("content " + str(content), self, "D")
 		count = len(content)

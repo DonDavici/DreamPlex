@@ -27,6 +27,9 @@ from enigma import eSize, getDesktop
 
 from Components.VideoWindow import VideoWindow
 from Components.Label import Label
+from Components.Label import MultiColorLabel
+
+from skin import parseColor
 
 from __common__ import printl2 as printl
 
@@ -71,7 +74,6 @@ class DPH_ScreenHelper(object):
 
 		printl("", self, "C")
 
-
 #===============================================================================
 #
 #===============================================================================
@@ -88,8 +90,6 @@ class DPH_MultiColorFunctions(object):
 		self.colorFunctionContainer["green"] = {}
 		self.colorFunctionContainer["yellow"] = {}
 		self.colorFunctionContainer["blue"] = {}
-
-		#self.functionLevelAmount = functionLevelAmount
 
 		printl("", self, "C")
 
@@ -112,16 +112,71 @@ class DPH_MultiColorFunctions(object):
 		printl("", self, "C")
 		return self.colorFunctionContainer[color][level]
 
+	#===============================================================================
+	#
+	#===============================================================================
 	def executeColorFunction(self, color, level):
+		printl("", self, "S")
 
 		eval(self.colorFunctionContainer[color][level][1])
 
-	def alterColorFunctionNames(self, level):
+		printl("", self, "C")
 
+	#===============================================================================
+	#
+	#===============================================================================
+	def alterColorFunctionNames(self, level):
+		printl("", self, "S")
 		colorList = ["red", "green", "yellow", "blue"]
 
 		for color in colorList:
-			if color != "green":
+			functionList = self.colorFunctionContainer[color][level]
+
+			if functionList is not None:
+				# if it is not already visible we change this now
+				if self["btn_"+ color + "Text"].getVisible() == 0:
+					self["btn_"+ color + "Text"].show()
+					self["btn_"+ color].show()
+
 				self["btn_"+ color + "Text"].setText(self.colorFunctionContainer[color][level][0])
+			else:
+				if self["btn_"+ color + "Text"].getVisible() == 1:
+					self["btn_"+ color + "Text"].hide()
+					self["btn_"+ color].hide()
 
+		printl("", self, "C")
 
+	#===============================================================================
+	#
+	#===============================================================================
+	def setMultiLevelElements(self, levels):
+		printl("", self, "S")
+		self.levels = levels
+
+		highlighted = parseColor("#e69405")
+		normal = parseColor("#ffffff")
+
+		for i in range(1,int(levels)+1):
+			self["L"+str(i)] = MultiColorLabel()
+			self["L"+str(i)].foreColors = [highlighted, normal]
+			self["L"+str(i)].setText(str(i))
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def setLevelActive(self, currentLevel):
+		printl("", self, "S")
+
+		self.currentLevel = currentLevel
+		printl("currentLevel: " + str(self.currentLevel), self, "D")
+
+		for i in range(1,int(self.levels)+1):
+			if int(self.currentLevel) == int(i):
+				self["L" + str(i)].setForegroundColorNum(0)
+			else:
+				print "hide" + str(i)
+				self["L" + str(i)].setForegroundColorNum(1)
+
+		printl("", self, "C")
