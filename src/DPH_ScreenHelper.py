@@ -169,11 +169,11 @@ class DPH_MultiColorFunctions(object):
 	def setLevelActive(self, currentLevel):
 		printl("", self, "S")
 
-		self.currentLevel = currentLevel
-		printl("currentLevel: " + str(self.currentLevel), self, "D")
+		self.currentFunctionLevel = currentLevel
+		printl("currentFunctionLevel: " + str(self.currentFunctionLevel), self, "D")
 
 		for i in range(1,int(self.levels)+1):
-			if int(self.currentLevel) == int(i):
+			if int(self.currentFunctionLevel) == int(i):
 				self["L" + str(i)].setForegroundColorNum(0)
 			else:
 				print "hide" + str(i)

@@ -422,13 +422,6 @@
             </convert>
         </widget>
 
-        <!-- menu -->
-        <widget source="menu" render="Listbox" position="10,232" size="1,1" zPosition="0">
-            <convert type="TemplatedMultiContent">
-                {"template": [ MultiContentEntryText(pos = (10, 14), size = (390, 40), flags = RT_HALIGN_CENTER, text = 0) ], "fonts": [gFont("Saint", 26)], "itemHeight": 50 }
-            </convert>
-        </widget>
-
         <!-- general -->
         <widget name="title" transparent="1" zPosition="5" halign="left" position="545,75" size="680,36" font="Saint;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="tag" transparent="1" zPosition="48" halign="left" valign="left" noWrap="1" position="545,100" size="340,26" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000"/>

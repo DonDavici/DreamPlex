@@ -51,6 +51,8 @@ from twisted.web.client import downloadPage
 
 from DP_ViewFactory import getGuiElements
 from DP_Player import DP_Player
+from DP_Settings import DPS_Settings
+from DP_Server import DPS_Server
 
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
@@ -117,6 +119,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	playerData                      = {} # inital playerData dict
 	currentQueuePosition            = 0 # this is the current selection id
 	detailsPaneVisible              = False # is shortDescription or details visible
+	autoPlayMode                    = False
+	currentFunctionLevel            = "1"
 
 	#===========================================================================
 	#
@@ -459,7 +463,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKeyMenu(self):
 		printl("", self, "S")
 
-		self.displayOptionsMenu()
+		#self.displayOptionsMenu()
 
 		printl("", self, "C")
 
@@ -550,24 +554,80 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def initColorFunctions(self):
 		printl("", self, "S")
 
-		self.currentFunctionLevel = "1"
-
 		self.setColorFunction(color="red", level="1", functionList=(_("View '") + str(self.currentViewName) + "'", "self.onToggleView()"))
-		self.setColorFunction(color="green", level="1", functionList=None)
+		self.setColorFunction(color="green", level="1", functionList=(_(""), "self.executeLibraryFunction()")) # name is empty because we set it dynamical
 		self.setColorFunction(color="yellow", level="1", functionList=(_("show 'Details'"), "self.toggleDetails()"))
-		self.setColorFunction(color="blue", level="1", functionList=("Test", "self.toggleFastScroll()"))
+		self.setColorFunction(color="blue", level="1", functionList=("", "self.togglePlayMode()"))
 
-		self.setColorFunction(color="red", level="2", functionList=("L2", "self.onToggleView()"))
-		self.setColorFunction(color="green", level="2", functionList=("L2", "self.toggleDetails()"))
-		self.setColorFunction(color="yellow", level="2", functionList=("L2", "self.toggleFastScroll()"))
-		self.setColorFunction(color="blue", level="2", functionList=("L2", "self.toggleFastScroll()"))
+		self.setColorFunction(color="red", level="2", functionList=("", "self.toggleFastScroll()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="green", level="2", functionList=("refresh Library", "self.initiateRefresh()"))
+		self.setColorFunction(color="yellow", level="2", functionList=None)
+		self.setColorFunction(color="blue", level="2", functionList=None)
 
-		self.setColorFunction(color="red", level="3", functionList=("L3", "self.onToggleView()"))
-		self.setColorFunction(color="green", level="3", functionList=("L3", "self.toggleDetails()"))
-		self.setColorFunction(color="yellow", level="3", functionList=("L3", "self.toggleFastScroll()"))
-		self.setColorFunction(color="blue", level="3", functionList=("L3", "self.toggleFastScroll()"))
+		self.setColorFunction(color="red", level="3", functionList=("Server Settings", "self.showServerSettings()"))
+		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", "self.showGeneralSettings()"))
+		self.setColorFunction(color="yellow", level="3", functionList=None)
+		self.setColorFunction(color="blue", level="3", functionList=None)
 
 		self.alterColorFunctionNames(level="1")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initPlayMode(self):
+		printl("", self, "S")
+
+		color = "blue"
+		self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def togglePlayMode(self):
+		printl("", self, "S")
+		color = "blue"
+
+		if self.autoPlayMode:
+			self.autoPlayMode = False
+			self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+		else:
+			self.autoPlayMode = True
+			self["btn_"+ color + "Text"].setText(_("playmode 'multi'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showServerSettings(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		self.session.open(DPS_Server)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showGeneralSettings(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		self.session.open(DPS_Settings)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def executeLibraryFunction(self):
+		printl("", self, "S")
+
+		if self.seen:
+			self.markUnwatched()
+		else:
+			self.markWatched()
 
 		printl("", self, "C")
 
@@ -613,6 +673,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKeyGreen(self):
 		printl("", self, "S")
 
+		self.executeColorFunction("green", self.currentFunctionLevel)
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -621,8 +683,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey1(self):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel=1)
+		self.setLevelActive(currentLevel="1")
 		self.alterColorFunctionNames(level="1")
+
+		self.initPlayMode()
+
+		self.lastTagType = None
+		self.refresh()
 
 		printl("", self, "C")
 
@@ -632,8 +699,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey2(self):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel=2)
+		self.setLevelActive(currentLevel="2")
 		self.alterColorFunctionNames(level="2")
+
+		self.initFastScroll()
 
 		printl("", self, "C")
 
@@ -643,7 +712,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey3(self):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel=3)
+		self.setLevelActive(currentLevel="3")
 		self.alterColorFunctionNames(level="3")
 
 		printl("", self, "C")
@@ -655,11 +724,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		if self.fastScroll:
-			self["btn_blueText"].setText("fastScroll 'On'")
+			self["btn_redText"].setText("fastScroll 'On'")
 			self.toggleElementVisibilityWithLabel("info")
 
 		else:
-			self["btn_blueText"].setText("fastScroll 'Off'")
+			self["btn_redText"].setText("fastScroll 'Off'")
 			self.resetGuiElements = True
 			self.toggleElementVisibilityWithLabel("info","hide")
 
@@ -673,7 +742,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def setFunctionsText(self):
 		printl("", self, "S")
 
-		self["txt_functions"].setText("Menu")
+		#self["txt_functions"].setText("Menu")
 
 		printl("", self, "C")
 
@@ -686,12 +755,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		#if self.viewParams["elements"]["info"]["visible"]:
 		if self.fastScroll:
 			self.fastScroll = False
-			self["btn_blueText"].setText("fastScroll 'Off'")
+			self["btn_redText"].setText("fastScroll 'Off'")
 			self["info"].hide()
 			self["infoLabel"].hide()
 		else:
 			self.fastScroll = True
-			self["btn_blueText"].setText("fastScroll 'On'")
+			self["btn_redText"].setText("fastScroll 'On'")
 			self.resetGuiElements = True
 			self["info"].show()
 			self["infoLabel"].show()
@@ -1019,10 +1088,32 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			else:
 				self["txt_functions"].show()
 				self.isDirectory = False
+				self.seen = False
+				if "viewCount" in self.selection[1]:
+					if "viewCount" > 0:
+						self.seen = True
+
+				if self.currentFunctionLevel == "1":
+					self.refreshFunctions()
 
 			printl("isDirectory: " + str(self.isDirectory), self, "D")
 
 		self._refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def refreshFunctions(self):
+		printl("", self, "S")
+
+		if self.seen:
+			viewStateName = "set 'Unseen'"
+		else:
+			viewStateName = "set 'Seen'"
+
+		self["btn_greenText"].setText(viewStateName)
 
 		printl("", self, "C")
 
@@ -1094,13 +1185,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 						self.toggleElementVisibilityWithLabel("duration")
 						self.toggleElementVisibilityWithLabel("year")
 
-					self["btn_yellow"].show()
-					self["btn_yellowText"].show()
-					self["btn_blue"].show()
-					self["btn_blueText"].show()
+					if self.tagType != "Show" and self.tagType != "Episodes":
+						self.showNoneMediaFunctions()
+					else:
+						self.hideNoneMediaFunctions()
+
 					self["miniTv"].show()
 
-					self.initFastScroll()
+					#self.initFastScroll()
 
 				if self.context is not None:
 					# lets set the urls for context functions of the selected entry
@@ -1157,10 +1249,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					self.toggleElementVisibilityWithLabel("unviewedLeafCount", "hide")
 					self["txt_functions"].hide()
 
-					self["btn_yellow"].hide()
-					self["btn_yellowText"].hide()
-					self["btn_blue"].hide()
-					self["btn_blueText"].hide()
+					self.hideNoneMediaFunctions()
 
 					self["miniTv"].hide()
 
@@ -1184,6 +1273,24 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self["shortDescription"].setText("no data retrieved")
 
 		printl("", self, "C")
+
+	def hideNoneMediaFunctions(self):
+
+		self["btn_yellow"].hide()
+		self["btn_yellowText"].hide()
+		self["btn_blue"].hide()
+		self["btn_blueText"].hide()
+		self["btn_green"].hide()
+		self["btn_greenText"].hide()
+
+	def showNoneMediaFunctions(self):
+
+		self["btn_yellow"].show()
+		self["btn_yellowText"].show()
+		self["btn_blue"].show()
+		self["btn_blueText"].show()
+		self["btn_green"].show()
+		self["btn_greenText"].show()
 
 	#===============================================================================
 	#
@@ -1608,15 +1715,18 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self.initMiniTv()
 
+		self.initColorFunctions()
+
 		self.setLevelActive(currentLevel=1)
+
+		# we do like we pressed the button to init the right names
+		self.onKey1()
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
-
-		self.initFastScroll()
 
 		self["txt_exit"].setText("Exit")
 
@@ -1639,8 +1749,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
-
-		self.initColorFunctions()
 
 		printl("", self, "C")
 
