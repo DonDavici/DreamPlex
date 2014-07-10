@@ -120,6 +120,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	currentQueuePosition            = 0 # this is the current selection id
 	detailsPaneVisible              = False # is shortDescription or details visible
 	autoPlayMode                    = False
+	resumeMode                  = False
 	currentFunctionLevel            = "1"
 
 	#===========================================================================
@@ -554,14 +555,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def initColorFunctions(self):
 		printl("", self, "S")
 
-		self.setColorFunction(color="red", level="1", functionList=(_("View '") + str(self.currentViewName) + "'", "self.onToggleView()"))
-		self.setColorFunction(color="green", level="1", functionList=(_(""), "self.executeLibraryFunction()")) # name is empty because we set it dynamical
-		self.setColorFunction(color="yellow", level="1", functionList=(_("show 'Details'"), "self.toggleDetails()"))
-		self.setColorFunction(color="blue", level="1", functionList=("", "self.togglePlayMode()"))
+		self.setColorFunction(color="red", level="1", functionList=("", "self.togglePlayMode()"))
+		self.setColorFunction(color="green", level="1", functionList=(_(""), "self.toggleResumeMode()"))
+		self.setColorFunction(color="yellow", level="1", functionList=(_(""), "self.executeLibraryFunction()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="blue", level="1", functionList=(_("show 'Details'"), "self.toggleDetails( )"))
 
-		self.setColorFunction(color="red", level="2", functionList=("", "self.toggleFastScroll()")) # name is empty because we set it dynamical
-		self.setColorFunction(color="green", level="2", functionList=("refresh Library", "self.initiateRefresh()"))
-		self.setColorFunction(color="yellow", level="2", functionList=None)
+		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", "self.onToggleView()"))
+		self.setColorFunction(color="green", level="2", functionList=("", "self.toggleFastScroll()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="yellow", level="2", functionList=("refresh Library", "self.initiateRefresh()"))
 		self.setColorFunction(color="blue", level="2", functionList=None)
 
 		self.setColorFunction(color="red", level="3", functionList=("Server Settings", "self.showServerSettings()"))
@@ -579,7 +580,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def initPlayMode(self):
 		printl("", self, "S")
 
-		color = "blue"
+		color = "red"
 		self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
 
 		printl("", self, "C")
@@ -589,7 +590,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def togglePlayMode(self):
 		printl("", self, "S")
-		color = "blue"
+		color = "red"
 
 		if self.autoPlayMode:
 			self.autoPlayMode = False
@@ -597,6 +598,33 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			self.autoPlayMode = True
 			self["btn_"+ color + "Text"].setText(_("playmode 'multi'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initResumeMode(self):
+		printl("", self, "S")
+
+		color = "green"
+		self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleResumeMode(self):
+		printl("", self, "S")
+		color = "green"
+
+		if self.resumeMode:
+			self.resumeMode = False
+			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+		else:
+			self.resumeMode = True
+			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
 
 		printl("", self, "C")
 
@@ -687,6 +715,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.alterColorFunctionNames(level="1")
 
 		self.initPlayMode()
+		self.initResumeMode()
 
 		self.lastTagType = None
 		self.refresh()
@@ -723,26 +752,16 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def initFastScroll(self):
 		printl("", self, "S")
 
+		color = "green"
+
 		if self.fastScroll:
-			self["btn_redText"].setText("fastScroll 'On'")
+			self["btn_" + color + "Text"].setText("fastScroll 'On'")
 			self.toggleElementVisibilityWithLabel("info")
 
 		else:
-			self["btn_redText"].setText("fastScroll 'Off'")
+			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
 			self.resetGuiElements = True
 			self.toggleElementVisibilityWithLabel("info","hide")
-
-		self.setFunctionsText()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setFunctionsText(self):
-		printl("", self, "S")
-
-		#self["txt_functions"].setText("Menu")
 
 		printl("", self, "C")
 
@@ -752,21 +771,21 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def toggleFastScroll(self):
 		printl("", self, "S")
 
+		color = "green"
+
 		#if self.viewParams["elements"]["info"]["visible"]:
 		if self.fastScroll:
 			self.fastScroll = False
-			self["btn_redText"].setText("fastScroll 'Off'")
+			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
 			self["info"].hide()
 			self["infoLabel"].hide()
 		else:
 			self.fastScroll = True
-			self["btn_redText"].setText("fastScroll 'On'")
+			self["btn_" + color + "Text"].setText("fastScroll 'On'")
 			self.resetGuiElements = True
 			self["info"].show()
 			self["infoLabel"].show()
 			self["miniTv"].hide()
-
-		self.setFunctionsText()
 
 		printl("", self, "C")
 
@@ -902,9 +921,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def hideDetails(self):
 		printl("", self, "S")
 
+		color = "blue"
+
 		self.detailsPaneVisible = False
 		self["shortDescription"].show()
-		self["btn_yellowText"].setText(_("show 'Details'"))
+		self["btn_" + color + "Text"].setText(_("show 'Details'"))
 		self.toggleElementVisibilityWithLabel("writer", "hide")
 		self.toggleElementVisibilityWithLabel("director", "hide")
 		self.toggleElementVisibilityWithLabel("cast", "hide")
@@ -917,9 +938,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def showDetails(self):
 		printl("", self, "S")
 
+		color = "blue"
+
 		self.detailsPaneVisible = True
 		self["shortDescription"].hide()
-		self["btn_yellowText"].setText(_("show 'Description'"))
+		self["btn_"  + color + "Text"].setText(_("show 'Description'"))
 		self.toggleElementVisibilityWithLabel("writer")
 		self.toggleElementVisibilityWithLabel("director")
 		self.toggleElementVisibilityWithLabel("cast")
@@ -1108,12 +1131,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def refreshFunctions(self):
 		printl("", self, "S")
 
+		color = "yellow"
+
 		if self.seen:
 			viewStateName = "set 'Unseen'"
 		else:
 			viewStateName = "set 'Seen'"
 
-		self["btn_greenText"].setText(viewStateName)
+		self["btn_"+ color + "Text"].setText(viewStateName)
 
 		printl("", self, "C")
 
@@ -1274,7 +1299,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		printl("", self, "C")
 
+	#===============================================================================
+	#
+	#===============================================================================
 	def hideNoneMediaFunctions(self):
+		printl("", self, "S")
 
 		self["btn_yellow"].hide()
 		self["btn_yellowText"].hide()
@@ -1283,7 +1312,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_green"].hide()
 		self["btn_greenText"].hide()
 
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def showNoneMediaFunctions(self):
+		printl("", self, "S")
 
 		self["btn_yellow"].show()
 		self["btn_yellowText"].show()
@@ -1291,6 +1326,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_blueText"].show()
 		self["btn_green"].show()
 		self["btn_greenText"].show()
+
+		printl("", self, "C")
 
 	#===============================================================================
 	#
