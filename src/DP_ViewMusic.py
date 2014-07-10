@@ -65,9 +65,11 @@ class DPS_ViewMusic(DP_View):
 		printl("", self, "S")
 		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
 
-		if self.details ["currentViewMode"] == "ShowAlbums":
-			printl( "is ShowAlbums", self, "D")
-			self.parentSeasonId = self.details ["ratingKey"]
+		#ShowArtists
+
+		if self.details ["currentViewMode"] == "ShowArtists":
+			printl( "is ShowArtists", self, "D")
+			self.parentArtistId = self.details ["ratingKey"]
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["ratingKey"]
 			self.changeBackdrop = True
@@ -75,14 +77,33 @@ class DPS_ViewMusic(DP_View):
 			self.resetPoster = True
 			self.resetBackdrop = True
 
-		elif self.details ["currentViewMode"] == "ShowTracks":
-			printl( "is ShowTracks", self, "D")
-			self.bname = self.parentSeasonId
+		elif self.details ["currentViewMode"] == "ShowAlbums" and self.details ["nextViewMode"] == "ShowDirectory":
+			printl( "is ShowAlbums in Directory", self, "D")
+			self.bname = self.parentArtistId
 			self.pname = self.details["ratingKey"]
 			self.changeBackdrop = True
 			self.changePoster = True
-			self.resetPoster = False
+			self.resetPoster = True
 			self.resetBackdrop = False
+
+		elif self.details ["currentViewMode"] == "ShowAlbums" and not self.details ["nextViewMode"] == "ShowDirectory":
+			printl( "is ShowAlbums without Directory", self, "D")
+			self.bname = self.details["ratingKey"]
+			self.pname = self.details["ratingKey"]
+			self.changeBackdrop = True
+			self.changePoster = True
+			# self.resetPoster = False
+			# self.resetBackdrop = False
+
+		elif self.details ["currentViewMode"] == "ShowTracks":
+			printl( "is ShowTracks", self, "D")
+			self.parentSeasonId = self.details ["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.parentSeasonId
+			self.changeBackdrop = False
+			self.changePoster = False
+			# self.resetPoster = False
+			# self.resetBackdrop = False
 
 		else:
 			printl( "is playable content",self, "D")

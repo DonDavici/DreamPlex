@@ -50,7 +50,6 @@ class DP_LibMusic(DP_LibMain):
 	#===============================================================================
 	def loadLibrary(self, entryData = None, forceUpdate=False):
 		printl ("", self, "S")
-		printl("entryData: " + str(entryData), self, "D")
 
 		if entryData is None:
 			entryData = self.initalEntryData

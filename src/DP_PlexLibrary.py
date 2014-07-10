@@ -445,7 +445,7 @@ class PlexLibrary(Screen):
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getDirectoryData(url, nextViewMode = "ShowTracks", currentViewMode = "ShowAlbums")
+		return self.getMediaData(url, tagType = "Track", nextViewMode = "ShowTracks", currentViewMode = "ShowAlbums")
 
 	#=======================================================================
 	#
@@ -665,7 +665,7 @@ class PlexLibrary(Screen):
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
 		# find coressponding tags in xml
-		entries = tree.findall('Directory')
+		entries = tree.findall("Directory")
 
 		# write global xml data to entryData
 		mediaContainer  = (dict(tree.items()))

@@ -136,8 +136,6 @@ class DP_LibMain(Screen):
 	def loadLibraryData(self, entryData, forceUpdate):
 		printl("", self, "S")
 
-		printl("entryData: " + str(entryData), self, "D")
-
 		url = entryData["contentUrl"]
 
 		if entryData.has_key("source"):
@@ -237,7 +235,7 @@ class DP_LibMain(Screen):
 		if nextViewMode == "artist":
 			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
 
-		elif nextViewMode == "ShowAlbums":
+		elif nextViewMode == "ShowAlbums" or (currentViewMode == "ShowAlbums" and nextViewMode == "ShowDirectory"):
 			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
 
 		elif nextViewMode == "ShowTracks":
@@ -259,7 +257,6 @@ class DP_LibMain(Screen):
 
 		elif nextViewMode == "ShowEpisodes":
 			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
-
 
 		printl ("", self, "C")
 		return library, mediaContainer

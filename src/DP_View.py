@@ -874,7 +874,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 			# we extend details for provide the next data location
 			entryData["contentUrl"] = nextContentUrl
-			printl("entryData: " + str(entryData), self, "D")
 
 			currentViewMode	= entryData['currentViewMode']
 			printl("currentViewMode: " +str(currentViewMode), self, "D")
@@ -1161,44 +1160,18 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		if self.selection is not None:
 			self.details 	= self.selection[1]
 			self.context	= self.selection[2]
+
+			# navigation
+			self.handleNavigationData()
+
+			# lets get all data we need to show the needed pictures
+			# we also check if we want to play
+			self.getPictureInformationToLoad()
+
+			# now go for it
+			self.handlePictures()
+
 			if not self.isDirectory:
-				# lets get all data we need to show the needed pictures
-				# we also check if we want to play
-				self.getPictureInformationToLoad()
-
-				# navigation
-				self.handleNavigationData()
-
-				# now lets switch images
-				if self.changePoster:
-					self.showPoster()
-
-				if not self.fastScroll or self.showMedia:
-					if self.changeBackdrop:
-						# check if showiframe lib loaded ...
-						if self.loadedStillPictureLib:
-							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
-							printl("backdrop: " + str(backdrop), self, "D")
-
-							# check if the backdrop file exists
-							if os.access(backdrop, os.F_OK):
-								printl("yes", self, "D")
-								self["miniTv"].show()
-								self["stillPicture"].setStillPicture(backdrop)
-								self["backdrop"].hide()
-								self.usedStillPicture = True
-							else:
-								printl("no", self, "D")
-								self["miniTv"].hide()
-								self["backdrop"].show()
-								# if not handle as normal backdrop
-								self.handleBackdrop()
-
-						else:
-							# if not handle as normal backdrop
-							self.handleBackdrop()
-
 				# we need those for fastScroll
 				# this prevents backdrop load on next item
 				self.showMedia = False
@@ -1302,9 +1275,49 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===============================================================================
 	#
 	#===============================================================================
+	def handlePictures(self):
+		printl("", self, "S")
+
+		# now lets switch images
+		if self.changePoster:
+			self.showPoster()
+
+		if not self.fastScroll or self.showMedia:
+			if self.changeBackdrop:
+				# check if showiframe lib loaded ...
+				if self.loadedStillPictureLib:
+					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
+					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
+					printl("backdrop: " + str(backdrop), self, "D")
+
+					# check if the backdrop file exists
+					if os.access(backdrop, os.F_OK):
+						printl("yes", self, "D")
+						self["miniTv"].show()
+						self["stillPicture"].setStillPicture(backdrop)
+						self["backdrop"].hide()
+						self.usedStillPicture = True
+					else:
+						printl("no", self, "D")
+						self["miniTv"].hide()
+						self["backdrop"].show()
+						# if not handle as normal backdrop
+						self.handleBackdrop()
+
+				else:
+					# if not handle as normal backdrop
+					self.handleBackdrop()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def hideNoneMediaFunctions(self):
 		printl("", self, "S")
 
+		self["btn_red"].hide()
+		self["btn_redText"].hide()
 		self["btn_yellow"].hide()
 		self["btn_yellowText"].hide()
 		self["btn_blue"].hide()
@@ -1320,6 +1333,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def showNoneMediaFunctions(self):
 		printl("", self, "S")
 
+		self["btn_red"].show()
+		self["btn_redText"].show()
 		self["btn_yellow"].show()
 		self["btn_yellowText"].show()
 		self["btn_blue"].show()
