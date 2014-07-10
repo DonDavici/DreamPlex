@@ -120,7 +120,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	currentQueuePosition            = 0 # this is the current selection id
 	detailsPaneVisible              = False # is shortDescription or details visible
 	autoPlayMode                    = False
-	resumeMode                  = False
+	resumeMode                      = True
 	currentFunctionLevel            = "1"
 
 	#===========================================================================
@@ -608,7 +608,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		color = "green"
-		self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+		self["btn_"+ color + "Text"].setText(_("resume 'On'"))
 
 		printl("", self, "C")
 
