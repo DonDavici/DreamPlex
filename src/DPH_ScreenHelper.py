@@ -31,6 +31,8 @@ from Components.Label import MultiColorLabel
 
 from skin import parseColor
 
+from DPH_Singleton import Singleton
+
 from __common__ import printl2 as printl
 
 #===============================================================================
@@ -63,16 +65,34 @@ class DPH_ScreenHelper(object):
 		printl("", self, "S")
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
-			# TODO make this dynamik via skin params file
-			w = 400
-			h = 225
+			width, height = self.getMiniTvParams(self.menuType)
 			desk = getDesktop(0)
 			self["miniTv"].instance.setFBSize(desk.size())
-			self["miniTv"].instance.resize(eSize(w, h))
+			self["miniTv"].instance.resize(eSize(width, height))
 		else:
 			self["miniTv"].hide()
 
 		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getMiniTvParams(self):
+		printl("", self, "S")
+
+		tree = Singleton().getSkinParamsInstance()
+
+		for miniTv in tree.findall('miniTv'):
+			name = str(miniTv.get('name'))
+			if name == self.menuType:
+				height = str(miniTv.get('height'))
+				width = str(miniTv.get('width'))
+			else:
+				width = 400
+				height = 225
+
+		printl("", self, "C")
+		return width, height
 
 #===============================================================================
 #

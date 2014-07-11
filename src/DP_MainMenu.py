@@ -76,6 +76,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.session = session
 
 		self.setMenuType("main_menu")
+		self.initMenu()
 
 		self["title"] = StaticText()
 		self["txt_exit"] = Label()

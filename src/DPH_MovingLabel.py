@@ -142,11 +142,21 @@ class DPH_HorizontalMenu(object):
 	def setMenuType(self, menuType):
 		printl("", self, "S")
 
+		self.menuType = menuType
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def initMenu(self):
+		printl("", self, "S")
+
 		tree = Singleton().getSkinParamsInstance()
 
 		for orientation in tree.findall('orientation'):
 			name = str(orientation.get('name'))
-			if name == menuType:
+			if name == self.menuType:
 				myType = str(orientation.get('type'))
 				if myType == "horizontal":
 					self.g_horizontal_menu = True

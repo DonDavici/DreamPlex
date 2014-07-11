@@ -81,6 +81,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.guiElements = getGuiElements()
 
 		self.setMenuType("server_menu")
+		self.initMenu()
 
 		if self.g_horizontal_menu:
 			self.setHorMenuElements(depth=2)

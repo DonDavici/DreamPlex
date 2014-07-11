@@ -5,6 +5,11 @@
 	<orientation name="main_menu" type="horizontal" />
 	<orientation name="server_menu" type="horizontal" />
 
+	<!-- MINI TV SIZE -->
+	<miniTv name="main_menu" heigth="225" width="400" />
+	<miniTv name="server_menu" heigth="225" width="400" />
+	<miniTv name="filter_menu" heigth="225" width="400" />
+
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/HandelGotD.ttf" size="100" name="Saint" />
 	

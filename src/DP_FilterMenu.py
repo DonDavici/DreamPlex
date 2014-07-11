@@ -40,19 +40,20 @@ from DPH_MovingLabel import DPH_HorizontalMenu
 #===============================================================================
 #
 #===============================================================================
-class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
+class DPS_FilterMenu(Screen, DPH_HorizontalMenu):
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, filterData ):
+	def __init__(self, session ):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
 		self.session = session
 		self.plexInstance = Singleton().getPlexInstance()
 
-		self.setMenuType("server_menu")
+		self.setMenuType("filter_menu")
+		self.initMenu()
 
 		if self.g_horizontal_menu:
 			self.setHorMenuElements(depth=2)
@@ -97,7 +98,5 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu):
 		if self.g_horizontal_menu:
 			# init horizontal menu
 			self.refreshOrientationHorMenu(0)
-
-
 
 		printl("", self, "C")
