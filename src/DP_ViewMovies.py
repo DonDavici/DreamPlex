@@ -65,8 +65,12 @@ class DPS_ViewMovies(DP_View):
 		self.changeBackdrop = True
 		self.changePoster = True
 
-		pname = self.details["ratingKey"]
-		bname = self.details["ratingKey"]
+		if "ratingKey" in self.details:
+			pname = self.details["ratingKey"]
+			bname = self.details["ratingKey"]
+		else:
+			pname = "temp"
+			bname = "temp"
 
 		if not self.usePicCache:
 			pname = "temp"

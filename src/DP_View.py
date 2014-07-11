@@ -1151,11 +1151,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
 		printl("self.viewParams: " + str(self.viewParams), self, "D")
 
-		if self.resetGuiElements:
-			self.resetGuiElementsInFastScrollMode()
-
-		self.resetCurrentImages()
-
 		printl("showMedia: " + str(self.showMedia), self, "D")
 
 		if self.selection is not None:
@@ -1168,6 +1163,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			# lets get all data we need to show the needed pictures
 			# we also check if we want to play
 			self.getPictureInformationToLoad()
+
+			if self.resetGuiElements:
+				self.resetGuiElementsInFastScrollMode()
+
+			self.resetCurrentImages()
 
 			# now go for it
 			self.handlePictures()
@@ -1622,14 +1622,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def showPoster(self, forceShow = False):
 		printl("", self, "S")
 
-		#try:
-		#	del self.EXpicloadPoster
-		#except Exception:
-		#	pass
-		#finally:
-		#	self.EXpicloadPoster = ePicLoad()
-		#	self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-
 		if forceShow:
 			if self.whatPoster is not None:
 				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
@@ -1716,15 +1708,18 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
 		if "thumb" in self.details:
-			download_url = self.details["thumb"]
-			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
-			printl( "download url " + download_url, self, "D")
-			printl("starting download", self, "D")
-			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
-			printl("header: " + str(authHeader), self, "D")
-			downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
+			if self.details["thumb"] != "":
+				download_url = self.details["thumb"]
+				download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
+				printl( "download url: " + download_url, self, "D")
+				printl("starting download", self, "D")
+				authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
+				printl("header: " + str(authHeader), self, "D")
+				downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
+			else:
+				self.noPicData()
 		else:
-			printl("no pic data available", self, "D")
+			self.noPicData()
 
 		printl("", self, "C")
 
@@ -1739,19 +1734,27 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
 		if "art" in self.details:
-			download_url = self.details["art"]
-			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
-			printl( "download url " + download_url, self, "D")
-			printl("starting download", self, "D")
-			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
-			printl("header: " + str(authHeader), self, "D")
-			downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
-
+			if self.details["art"] != "":
+				download_url = self.details["art"]
+				download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
+				printl( "download url: " + download_url, self, "D")
+				printl("starting download", self, "D")
+				authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
+				printl("header: " + str(authHeader), self, "D")
+				downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
+			else:
+				self.noPicData()
 		else:
-			printl("no pic data available", self, "D")
+			self.noPicData()
 
 		printl("", self, "C")
 
+	#==============================================================================
+	#
+	#==============================================================================
+	def noPicData(self):
+
+		printl("no pic data available", self, "D")
 	#==============================================================================
 	#
 	#==============================================================================

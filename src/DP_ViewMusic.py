@@ -65,57 +65,58 @@ class DPS_ViewMusic(DP_View):
 		printl("", self, "S")
 		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
 
-		#ShowArtists
+		self.lastPosterName = None
+		self.lastBackdropName = None
 
-		if self.details ["currentViewMode"] == "ShowArtists":
-			printl( "is ShowArtists", self, "D")
-			self.parentArtistId = self.details ["ratingKey"]
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["ratingKey"]
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = True
-			self.resetBackdrop = True
+		if "type" in self.details:
+			if self.details["type"] == "album" or self.details["type"] == "artist":
+				self.changePoster = True
+				self.changeBackdrop = True
+				self.resetBackdrop = True
+				self.resetPoster = True
+				if "ratingKey" in self.details:
+					self.pname = self.details["ratingKey"]
+					self.bname = self.details["ratingKey"]
+				else:
+					if "parentRatingKey" in self.details:
+						self.pname = self.details["parentRatingKey"]
+						self.bname = self.details["parentRatingKey"]
+					else:
+						self.pname = "temp"
+						self.bname = "temp"
 
-		elif self.details ["currentViewMode"] == "ShowAlbums" and self.details ["nextViewMode"] == "ShowDirectory":
-			printl( "is ShowAlbums in Directory", self, "D")
-			self.bname = self.parentArtistId
-			self.pname = self.details["ratingKey"]
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = True
-			self.resetBackdrop = False
+				self.lastPosterName = self.pname
+				self.lastBackdropName = self.bname
 
-		elif self.details ["currentViewMode"] == "ShowAlbums" and not self.details ["nextViewMode"] == "ShowDirectory":
-			printl( "is ShowAlbums without Directory", self, "D")
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["ratingKey"]
-			self.changeBackdrop = True
-			self.changePoster = True
-			# self.resetPoster = False
-			# self.resetBackdrop = False
+			elif self.details["type"] == "track":
+				self.resetBackdrop = False
+				self.resetPoster = False
 
-		elif self.details ["currentViewMode"] == "ShowTracks":
-			printl( "is ShowTracks", self, "D")
-			self.parentSeasonId = self.details ["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.parentSeasonId
-			self.changeBackdrop = False
-			self.changePoster = False
-			# self.resetPoster = False
-			# self.resetBackdrop = False
+				# this is when we are coming from directory
+				if self.lastPosterName is  None and self.lastBackdropName is  None:
+					if "parentRatingKey" in self.details:
+						self.pname = self.details["parentRatingKey"]
+						self.bname = self.details["parentRatingKey"]
+					else:
+						self.pname = "temp"
+						self.bname = "temp"
 
+					self.changePoster = True
+					self.changeBackdrop = True
+				else:
+					self.pname = self.lastPosterName
+					self.bname = self.lastBackdropName
+					self.changePoster = False
+					self.changeBackdrop = False
+
+		# looks like we are just a directory
 		else:
-			printl( "is playable content",self, "D")
-			self.bname = self.details["ratingKey"]
-
-			if self.parentSeasonId is not None:
-				self.pname = self.parentSeasonId
-			else:
-				self.pname = self.details["parentRatingKey"]
-			# we dont want to have the same poster downloaded and used for each episode
+			self.pname = "temp"
+			self.bname = "temp"
+			self.resetBackdrop = True
+			self.resetPoster = True
 			self.changePoster = False
-			self.changeBackdrop = True
+			self.changeBackdrop = False
 
 		if not self.usePicCache:
 			self.pname = "temp"
