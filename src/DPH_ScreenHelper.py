@@ -95,14 +95,14 @@ class DPH_ScreenHelper(object):
 		for miniTv in tree.findall('miniTv'):
 			name = str(miniTv.get('name'))
 			if name == self.menuType:
-				height = str(miniTv.get('height'))
 				width = str(miniTv.get('width'))
+				height = str(miniTv.get('height'))
 			else:
 				width = 400
 				height = 225
-
+		printl("width: " + str(width) + " - height: " + str(height), self, "D")
 		printl("", self, "C")
-		return width, height
+		return int(width), int(height)
 
 #===============================================================================
 #
