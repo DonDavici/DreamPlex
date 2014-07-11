@@ -1715,18 +1715,16 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.details["thumb"]
-		if download_url:
+		if "thumb" in self.details:
+			download_url = self.details["thumb"]
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
 			printl( "download url " + download_url, self, "D")
-
-		if not download_url:
-			printl("no pic data available", self, "D")
-		else:
 			printl("starting download", self, "D")
 			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
 			printl("header: " + str(authHeader), self, "D")
 			downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
+		else:
+			printl("no pic data available", self, "D")
 
 		printl("", self, "C")
 
@@ -1740,18 +1738,17 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.details["art"]
-		if download_url:
+		if "art" in self.details:
+			download_url = self.details["art"]
 			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
 			printl( "download url " + download_url, self, "D")
-
-		if not download_url:
-			printl("no pic data available", self, "D")
-		else:
 			printl("starting download", self, "D")
 			authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
 			printl("header: " + str(authHeader), self, "D")
 			downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
+
+		else:
+			printl("no pic data available", self, "D")
 
 		printl("", self, "C")
 
