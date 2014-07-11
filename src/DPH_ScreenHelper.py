@@ -43,6 +43,16 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
+	def setMenuType(self, menuType):
+		printl("", self, "S")
+
+		self.menuType = menuType
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def __init__(self, forceMiniTv=False):
 		printl("", self, "S")
 
@@ -65,7 +75,7 @@ class DPH_ScreenHelper(object):
 		printl("", self, "S")
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
-			width, height = self.getMiniTvParams(self.menuType)
+			width, height = self.getMiniTvParams()
 			desk = getDesktop(0)
 			self["miniTv"].instance.setFBSize(desk.size())
 			self["miniTv"].instance.resize(eSize(width, height))

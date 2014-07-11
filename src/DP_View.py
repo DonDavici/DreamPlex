@@ -139,6 +139,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		DPH_ScreenHelper.__init__(self, forceMiniTv=True)
 		DPH_MultiColorFunctions.__init__(self)
 
+		self.setMenuType(libraryName)
 		self.viewParams = viewParams
 
 		printl("viewParams: " + str(self.viewParams), self, "D")
