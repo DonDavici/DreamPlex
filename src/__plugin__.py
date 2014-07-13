@@ -98,9 +98,6 @@ class Plugin(object):
 	MENU_SYSTEM = 7
 	MENU_FILTER = 8
 
-	# todo this could not work - we have to fix
-	MENU_MOVIES_PLUGINS = 9
-
 	pid = None
 	name = None
 	desc = None

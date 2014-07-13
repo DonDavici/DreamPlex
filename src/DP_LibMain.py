@@ -106,7 +106,6 @@ class DP_LibMain(Screen):
 
 				if len(cause) >= 2 and cause[1] is not None:
 					selection = cause[1]
-				self.setDefault(selection)
 				self.close()
 
 			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW or cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE:

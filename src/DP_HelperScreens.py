@@ -24,7 +24,6 @@ You should have received a copy of the GNU General Public License
 #=================================
 from Screens.InputBox import InputBox
 from Screens.Screen import Screen
-from Components.Label import Label
 
 from DPH_ScreenHelper import DPH_ScreenHelper
 
