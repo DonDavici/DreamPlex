@@ -79,7 +79,6 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.initMenu()
 
 		self["title"] = StaticText()
-		self["txt_exit"] = Label()
 
 		# get all our servers as list
 		self.getServerList(allowOverride)
@@ -120,8 +119,6 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 		
 		self.setTitle(_("Main Menu"))
-
-		self["txt_exit"].setText(_("Exit"))
 
 		self.initMiniTv()
 

@@ -222,7 +222,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.setMultiLevelElements(levels=3)
 
 		self["txt_functions"] = Label()
-		self["txt_exit"] = Label()
 
 		self["totalLabel"] = Label()
 		self["totalLabel"].setText(_("Total:"))
@@ -1780,8 +1779,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
-
-		self["txt_exit"].setText("Exit")
 
 		if self.fastScroll:
 			# if we are in fastScrollMode we remove some gui elements

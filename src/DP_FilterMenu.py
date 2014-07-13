@@ -60,7 +60,6 @@ class DPS_FilterMenu(Screen, DPH_HorizontalMenu):
 			self.translateNames()
 
 		self["title"] = StaticText()
-		self["txt_exit"] = Label()
 		self["txt_menu"] = Label()
 		self["menu"]= List(enableWrapAround=True)
 
@@ -90,7 +89,6 @@ class DPS_FilterMenu(Screen, DPH_HorizontalMenu):
 
 		self.setTitle(_("Server Menu"))
 
-		self["txt_exit"].setText(_("Exit"))
 		self["txt_menu"].setText(_("Menu"))
 
 		self.checkServerState()

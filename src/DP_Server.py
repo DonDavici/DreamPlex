@@ -68,8 +68,6 @@ class DPS_Server(Screen):
 		self["txt_blue"] = Label()
 		self["btn_blue"] = Pixmap()
 
-		self["txt_exit"] = Label()
-
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
 			 "ok"	:	self.keyYellow,
@@ -98,8 +96,6 @@ class DPS_Server(Screen):
 		self["txt_green"].setText(_("Add"))
 		self["txt_yellow"].setText(_("Edit"))
 		self["txt_blue"].setText(_("Discover"))
-
-		self["txt_exit"].setText(_("Exit"))
 
 		printl("", self, "C")
 
@@ -303,7 +299,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		}, -2)
 
 		self["help"] = StaticText()
-		self["txt_exit"] = Label()
 
 		self["txt_green"] = Label()
 		self["btn_green"] = Pixmap()
@@ -343,8 +338,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 	#===========================================================================
 	def finishLayout(self):
 		printl("", self, "S")
-
-		self["txt_exit"].setText(_("Exit"))
 
 		self["txt_green"].setText(_("Save"))
 

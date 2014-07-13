@@ -47,9 +47,6 @@ class DPS_InputBox(InputBox, DPH_ScreenHelper):
 
 		printl("entryData: " + str(self.entryData), self, "D")
 
-		self["txt_exit"] = Label()
-		self["txt_exit"].setText(_("Exit"))
-
 		self.setTitle(_("Search ..."))
 
 		self.onLayoutFinish.append(self.finishLayout)

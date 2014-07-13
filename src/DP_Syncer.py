@@ -93,8 +93,6 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		self["txt_red"].setText(_("Abort Sync"))
 		self["btn_red"] = Pixmap()
 
-		self["txt_exit"] = Label()
-
 		self["setupActions"] = ActionMap(["DPS_Syncer"],
 		{
 			"red": self.keyRed,
@@ -123,11 +121,8 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		if self.mediaSyncerInfo.isRunning():
 			self["txt_green"].hide()
 			self["btn_green"].hide()
-			self["txt_exit"].hide()
 
 		else:
-			self["txt_exit"].setText(_("Exit"))
-
 			self["txt_red"].hide()
 			self["btn_red"].hide()
 
@@ -172,8 +167,6 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 			self["txt_red"].hide()
 			self["btn_red"].hide()
 
-			self["txt_exit"].show()
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -211,7 +204,6 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 			self["txt_red"].show()
 			self["btn_green"].hide()
 			self["txt_green"].hide()
-			self["txt_exit"].hide()
 
 		printl("", self, "C")
 
@@ -265,8 +257,6 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		self["output"].appendText(_("Finished"))
 		self["txt_blue"].hide()
 		self["btn_blue"].hide()
-
-		self["txt_exit"].show()
 
 		self["txt_red"].hide()
 		self["btn_red"].hide()

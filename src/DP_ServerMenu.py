@@ -91,7 +91,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self["btn_green"]		= Pixmap()
 
 		self["title"] = StaticText()
-		self["txt_exit"] = Label()
 		self["btn_redText"] = Label()
 		self["btn_redText"].setText("sync Medias")
 
@@ -125,8 +124,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self.setTitle(_("Server Menu"))
-
-		self["txt_exit"].setText(_("Exit"))
 
 		self.initMiniTv()
 

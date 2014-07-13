@@ -49,8 +49,6 @@ class DPS_About(Screen):
 		self["leftText"] = Label()
 		self["rightText"] = Label()
 
-		self["txt_exit"] = Label()
-
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
 			"cancel": self.keyCancel,
@@ -68,8 +66,6 @@ class DPS_About(Screen):
 
 		self.setTitle(_("About"))
 		
-		self["txt_exit"].setText(_("Exit"))
-
 		self["leftText"].setText(self.getLeftText())
 		self["rightText"].setText(self.getRightText())
 

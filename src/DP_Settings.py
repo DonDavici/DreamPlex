@@ -64,8 +64,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self["txt_green"] = Label()
 		self["btn_green"] = Pixmap()
 
-		self["txt_exit"] = Label()
-
 		self["help"] = StaticText()
 		
 		self["setupActions"] = ActionMap(["SetupActions", "ColorActions", "DPS_Settings"],
@@ -92,8 +90,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	#===========================================================================
 	def finishLayout(self):
 		printl("", self, "S")
-
-		self["txt_exit"].setText(_("Exit"))
 
 		self["txt_green"].hide()
 		self["btn_green"].hide()

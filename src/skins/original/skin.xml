@@ -52,9 +52,6 @@
         <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
             <convert type="ClockToText">Date</convert>
         </widget>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
         <!-- DPS_InputBox -->
@@ -83,9 +80,6 @@
         </widget>
 
         <!-- functions -->
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_About -->
@@ -111,9 +105,6 @@
         </widget>
 
         <!-- functions -->
-        
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_Settings -->
@@ -141,9 +132,6 @@
 
         <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
         <widget name="txt_green" position="400,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_SystemCheck -->
@@ -170,9 +158,6 @@
 
         <!-- functions -->
         <widget name="txt_ok" position="1110,677" zPosition="9" size="50,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_Server -->
@@ -223,9 +208,6 @@
 
         <widget name="btn_blue" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_blue-fs8.png" zPosition="6" position="980,687" size="12,17" alphatest="blend"/>
         <widget name="txt_blue" position="1000,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_ServerConfig -->
@@ -257,9 +239,6 @@
 
         <widget name="btn_yellow" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_yellow-fs8.png" zPosition="6" position="680,687" size="12,17" alphatest="blend"/>
         <widget name="txt_yellow" position="700,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_Mappings -->
@@ -320,9 +299,6 @@
 
         <widget name="btn_blue" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_blue-fs8.png" zPosition="6" position="980,687" size="12,17" alphatest="blend"/>
         <widget name="txt_blue" position="1000,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!--DPS_ServerMenu -->
@@ -378,9 +354,6 @@
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
         <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-
-        <!-- exit -->
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_ViewList -->
@@ -504,9 +477,6 @@
         <widget name="L1" transparent="1" zPosition="10" position="1110,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
         <widget name="L2" transparent="1" zPosition="10" position="1125,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
         <widget name="L3" transparent="1" zPosition="10" position="1140,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
-
-        <widget name="txt_exit" position="18,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ff0000" backgroundColor="#000000" transparent="1"/>
-
     </screen>
 
     <!-- DPS_ViewListLong -->
