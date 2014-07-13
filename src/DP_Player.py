@@ -103,7 +103,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, myParams):
+	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode):
 		printl("", self, "S")
 		
 		self.session = session
@@ -111,6 +111,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		self.currentIndex = currentIndex
 		self.playerData = {}
 		self.listCount = len(self.listViewList)
+		self.autoPlayMode = autoPlayMode
+		self.resumeMode = resumeMode
 
 		self.myParams = myParams
 		self["mediaTitle"] = StaticText()
@@ -275,7 +277,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 
 			self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
 		else:
-			self.checkResume(resumeStamp)
+			if self.resumeMode:
+				self.checkResume(resumeStamp)
 
 		printl("", self, "C")
 
@@ -290,7 +293,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 
 		else:
 			self.play()
-			#self.session.open(DP_Player, self.playerData)
 
 		printl("", self, "C")
 
@@ -482,7 +484,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		printl("", self, "C")
 		return str(self.playerData[self.currentIndex]['playUrl'])
 
-
 	#===========================================================================
 	#
 	#===========================================================================
@@ -542,7 +543,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		self.bufferInfo()
 		
 		#printl("", self, "C")
-	
 
 	#===========================================================================
 	# 
@@ -710,16 +710,16 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 						
 						#time = length * self.start
 						#time = int(139144271)
-						time = self.resumeStamp * 90000
+						elapsed = self.resumeStamp * 90000
 						printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "I")
 						self.resumeStamp = None
-						if time < 90000:
+						if elapsed < 90000:
 							printl( "skip seeking < 10s", self, "I")
 							printl("", self, "C")
 							return
 						#if config.plugins.dreamplex.setBufferSize.value:
 							#self.session.nav.getCurrentService().streamed().setBufferSize(config.plugins.dreamplex.bufferSize.value)
-						self.doSeek(int(time))
+						self.doSeek(int(elapsed))
 		
 		except Exception, e:
 			printl("exception: " + str(e), self, "W")
@@ -801,11 +801,14 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 	def doEofInternal(self, playing):
 		printl("", self, "S")
 
-		if not self.nextPlaylistEntryAvailable():
-			self.leavePlayerConfirmed(True)
+		if self.autoPlayMode:
+			if not self.nextPlaylistEntryAvailable():
+				self.leavePlayerConfirmed(True)
+			else:
+				#start next file
+				self.playNextEntry()
 		else:
-			#start next file
-			self.playNextEntry()
+			self.leavePlayerConfirmed(True)
 		
 		printl("", self, "C")
 
