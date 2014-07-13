@@ -39,6 +39,7 @@ from __common__ import printl2 as printl, getBoxInformation
 from __init__ import initServerEntryConfig, getVersion, _ # _ is translation
 
 from DP_Mappings import DPS_Mappings
+from DP_Syncer import DPS_Syncer
 from DPH_PlexGdm import PlexGdm
 #===============================================================================
 #
@@ -70,7 +71,7 @@ class DPS_Server(Screen):
 
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
 			{
-			 "ok"	:	self.keyYellow,
+			 "ok"	:	self.keyOk,
 			 "back"	:	self.keyClose,
 			 "red"	:	self.keyRed,
 			 "yellow":	self.keyYellow,
@@ -94,7 +95,7 @@ class DPS_Server(Screen):
 
 		self["txt_red"].setText(_("Delete"))
 		self["txt_green"].setText(_("Add"))
-		self["txt_yellow"].setText(_("Edit"))
+		self["txt_yellow"].setText(_("Sync Media"))
 		self["txt_blue"].setText(_("Discover"))
 
 		printl("", self, "C")
@@ -107,20 +108,20 @@ class DPS_Server(Screen):
 
 		self.myEntryList = []
 
-		for entry in config.plugins.dreamplex.Entries:
+		for serverConfig in config.plugins.dreamplex.Entries:
 
-			name = entry.name.value
+			name = serverConfig.name.value
 
-			if entry.connectionType.value == "2":
-				text1 = entry.myplexUrl.value
-				text2 = entry.myplexUsername.value
+			if serverConfig.connectionType.value == "2":
+				text1 = serverConfig.myplexUrl.value
+				text2 = serverConfig.myplexUsername.value
 			else:
-				text1 = "%d.%d.%d.%d" % tuple(entry.ip.value)
-				text2 = "%d"% entry.port.value
+				text1 = "%d.%d.%d.%d" % tuple(serverConfig.ip.value)
+				text2 = "%d"% serverConfig.port.value
 
-			active = str(entry.state.value)
+			active = str(serverConfig.state.value)
 
-			self.myEntryList.append((name, text1, text2, active, entry))
+			self.myEntryList.append((name, text1, text2, active, serverConfig))
 
 		printl("", self, "C")
 		return self.myEntryList
@@ -190,23 +191,7 @@ class DPS_Server(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def keyOK(self): #not in use for now
-		printl("", self, "S")
-
-		try:
-			sel = self["entryList"].getCurrent()[4]
-		except Exception, ex:
-			printl("Exception: " + str(ex), self, "W")
-			sel = None
-
-		self.close(self.session, self.what, sel)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def keyYellow(self):
+	def keyOk(self):
 		printl("", self, "S")
 
 		try:
@@ -221,6 +206,27 @@ class DPS_Server(Screen):
 
 		printl("config selction: " +  str(sel), self, "D")
 		self.session.openWithCallback(self.updateList, DPS_ServerConfig, sel)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def keyYellow(self):
+		printl("", self, "S")
+
+		try:
+			serverConfig = self["entryList"].getCurrent()[4]
+
+		except Exception, ex:
+			printl("Exception: " + str(ex), self, "W")
+			serverConfig = None
+
+		if serverConfig is None:
+			return
+
+		printl("config selction: " +  str(serverConfig), self, "D")
+		self.session.open(DPS_Syncer, "sync", serverConfig)
 
 		printl("", self, "C")
 

@@ -87,15 +87,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.setHorMenuElements(depth=2)
 			self.translateNames()
 
-		self["btn_red"]			= Pixmap()
-		self["btn_green"]		= Pixmap()
-
 		self["title"] = StaticText()
-		self["btn_redText"] = Label()
-		self["btn_redText"].setText("sync Medias")
-
-		self["btn_greenText"] = Label()
-		self["btn_greenText"].setText("render Backdrops")
 
 		self["menu"]= List(enableWrapAround=True)
 
@@ -126,10 +118,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.setTitle(_("Server Menu"))
 
 		self.initMiniTv()
-
-		# first we set the pics for buttons
-		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
-		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 
 		self.getServerData()
 
