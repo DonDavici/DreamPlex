@@ -61,10 +61,10 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DP_Player(InfoBarBase, InfoBarShowHide, \
+class DP_Player(InfoBarBase, InfoBarShowHide,
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
-		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, InfoBarPiP):
+		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications):
 
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -103,7 +103,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode):
+	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode, poster):
 		printl("", self, "S")
 		
 		self.session = session
@@ -113,6 +113,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 		self.listCount = len(self.listViewList)
 		self.autoPlayMode = autoPlayMode
 		self.resumeMode = resumeMode
+		self.whatPoster = poster
 
 		self.myParams = myParams
 		self["mediaTitle"] = StaticText()
@@ -170,6 +171,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 			iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
 			iPlayableService.evEOF: self.__evEOF,
 		})
+
+		self.onLayoutFinish.append(self.setPoster)
 
 		# from here we go on
 		self.onFirstExecBegin.append(self.playMedia)
@@ -372,7 +375,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 				printl("we are able to stream over 4097", self, "I")
 				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
 			else:
-				# todo add errorhandler
 				raise Exception
 
 		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
@@ -840,7 +842,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 			progress = currentTime / (totalTime/100)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
-			progress = 100;
+			progress = 100
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
@@ -863,7 +865,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, \
 				printl( "Movie marked as watched. Over 95% complete", self, "I")
 				plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
-		printl("", self, "C")	   
+		printl("", self, "C")
 
 	#===========================================================================
 	# stopTranscoding
