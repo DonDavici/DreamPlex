@@ -97,6 +97,7 @@ class Plugin(object):
 	MENU_TVSHOWS = 6
 	MENU_SYSTEM = 7
 	MENU_FILTER = 8
+	MENU_CHANNELS = 9
 
 	pid = None
 	name = None

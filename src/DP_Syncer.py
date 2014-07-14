@@ -827,9 +827,8 @@ class BackgroundMediaSyncer(Thread):
 		printl("header: " + str(authHeader), self, "D")
 		downloadPage(download_url, location, headers=authHeader)
 
-		return True
-
 		printl("", self, "C")
+		return True
 
 THREAD_WORKING = 1
 THREAD_FINISHED = 2
@@ -837,7 +836,7 @@ THREAD_ERROR = 3
 #===========================================================================
 #
 #===========================================================================
-class ThreadQueue:
+class ThreadQueue(object):
 	def __init__(self):
 		self.__list = [ ]
 		self.__lock = Lock()

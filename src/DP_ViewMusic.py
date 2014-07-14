@@ -22,7 +22,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import datetime
 from Components.config import config
 
 from DP_View import DP_View

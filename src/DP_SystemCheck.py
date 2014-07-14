@@ -32,7 +32,6 @@ from enigma import eConsoleAppContainer
 
 from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Pixmap import Pixmap
 from Components.config import config
 from Components.Label import Label
 

@@ -27,12 +27,10 @@ import httplib
 import socket
 import sys
 import os
-import datetime 
 import base64
 import hmac
 import uuid
 import cPickle as pickle
-import copy
 
 from time import time
 from urllib import quote_plus
@@ -147,9 +145,6 @@ class PlexLibrary(Screen):
 	# 
 	#===========================================================================
 	def __init__(self, session, serverConfig=None):
-		"""
-		@type serverConfig: Config
-		"""
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -328,7 +323,6 @@ class PlexLibrary(Screen):
 				# in case of music we use always filters
 				fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
 
-			# improveMe
 			elif entryData.get('type') == 'photo':
 				printl( "_MODE_PHOTOS detected but excluded", self, "D")
 				# if (myFilter is not None) and (myFilter != "photos"):
@@ -790,8 +784,7 @@ class PlexLibrary(Screen):
 				printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 				self.g_serverDict = {'serverName':self.serverConfig_Name, 'address':self.g_currentServer, 'discovery':'local', 'token':None, 'uuid':None, 'role':'master'}
 			else:
-				# todo add error handling here
-				pass
+				raise Exception
 
 			# we have to set self.g_myplex_accessTokenDict here
 			# because none will trigger empty tokens that are needed when we do not use myPlex
@@ -936,6 +929,7 @@ class PlexLibrary(Screen):
 		if self.serverConfig_connectionType == "2": # MYPLEX
 
 			if self.serverConfig_myplexToken == "ERROR":
+				tree = None
 				self._showErrorOnTv(_("MyPlex Token error:\nCheck Username and Password.\n%s") % self.serverConfig_myplexToken)
 			else:
 				tree = self.getXmlTreeFromPlex('/pms/system/library/sections')
@@ -2441,7 +2435,6 @@ class PlexLibrary(Screen):
 		viewCount = int(entryData.get('viewCount', 0))
 		viewOffset = int(entryData.get('viewOffset', 0))
 
-		# improveMe: this should be done outside maybe in DP_View
 		if viewCount > 0:
 			viewState = "seen"
 

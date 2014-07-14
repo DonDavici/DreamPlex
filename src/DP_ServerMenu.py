@@ -27,8 +27,6 @@ from Components.Input import Input
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
-from Components.Label import Label
-from Components.Pixmap import Pixmap
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
