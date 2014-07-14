@@ -94,7 +94,6 @@ class DPH_ScreenHelper(object):
 		width = 400
 		height = 225
 		printl("menuType: " + str(self.menuType), self, "D")
-		print str(self.menuType)
 
 		for miniTv in tree.findall('miniTv'):
 			name = str(miniTv.get('name'))

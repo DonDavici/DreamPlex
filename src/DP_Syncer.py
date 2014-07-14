@@ -62,6 +62,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
 
+		self.setMenuType("syncer")
+		self.initMenu()
+
 		if serverConfig is not None:
 			# now that we know the server we establish global plexInstance
 			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))

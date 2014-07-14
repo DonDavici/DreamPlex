@@ -11,6 +11,7 @@
 	<miniTv name="music" height="225" width="400" />
 	<miniTv name="movie" height="225" width="400" />
 	<miniTv name="show" height="225" width="400" />
+	<miniTv name="syncer" height="225" width="400" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/HandelGotD.ttf" size="100" name="Saint" />
