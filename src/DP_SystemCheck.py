@@ -82,7 +82,6 @@ class DPS_SystemCheck(Screen):
 		vlist.append((_("Check curl installation data."), "check_Curl"))
 		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
 		vlist.append((_("Check python imaging installation data."), "check_Pil"))
-		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
@@ -120,9 +119,6 @@ class DPS_SystemCheck(Screen):
 
 		if selection[1] == "oe16" or selection[1] == "oe20":
 			self.checkLib(selection[1])
-
-		if selection[1] == "check_DP":
-			self.checkDreamPlexInstallation()
 
 		if selection[1] == "check_Curl":
 			self.checkCurlInstallation()
@@ -331,19 +327,6 @@ class DPS_SystemCheck(Screen):
 		printl("", self, "C")
 		return state
 
-	#===========================================================================
-	#
-	#===========================================================================
-	def checkDreamPlexInstallation(self):
-		printl("", self, "S")
-
-		command = "opkg status DreamPlex"
-
-		self.check = "dreamplex"
-		self.executeCommand(command)
-
-		printl("", self, "C")
-
 	#===============================================================================
 	#
 	#===============================================================================
@@ -400,10 +383,6 @@ class DPS_SystemCheck(Screen):
 
 				elif self.check == "pythonImaging":
 					self.session.openWithCallback(self.installPyhtonImagingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
-
-				elif self.check == "dreamplex":
-					# for now we do nothing at this point
-					pass
 
 				else:
 					printl("no proper value i self.check", self, "W")
