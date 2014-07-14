@@ -93,12 +93,14 @@ class DPH_ScreenHelper(object):
 		tree = Singleton().getSkinParamsInstance()
 		width = 400
 		height = 225
+		printl("menuType: " + str(self.menuType), self, "D")
+		print str(self.menuType)
 
 		for miniTv in tree.findall('miniTv'):
 			name = str(miniTv.get('name'))
 			if name == self.menuType:
-				width = str(miniTv.get('width'))
-				height = str(miniTv.get('height'))
+				width = miniTv.get('width')
+				height = miniTv.get('height')
 
 		printl("width: " + str(width) + " - height: " + str(height), self, "D")
 		printl("", self, "C")
