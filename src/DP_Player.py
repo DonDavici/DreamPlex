@@ -122,8 +122,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
 				InfoBarAudioSelection, InfoBarSimpleEventView, \
 				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
-				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, \
-				InfoBarPiP:
+				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications:
 			printl("x: " + str(x), self, "D")
 			x.__init__(self)
 
