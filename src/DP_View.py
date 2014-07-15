@@ -1223,7 +1223,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self["writer"].setText(str(self.details.get("writer", " ").encode('utf8')))
 				self["director"].setText(str(self.details.get("director", " ").encode('utf8')))
 
-				if (self.fastScroll == False or self.showMedia == True) and self.details ["currentViewMode"] == "play":
+				if (self.fastScroll == False or self.showMedia == True) and self.details ["tagType"] == "Video":
 					# handle all pixmaps
 					self.handlePopularityPixmaps()
 					self.handleCodecPixmaps()
@@ -1232,6 +1232,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					self.handleRatedPixmaps()
 					self.handleSoundPixmaps()
 			else:
+
 				if self.tagType != self.lastTagType or self.tagType is None:
 					self.toggleElementVisibilityWithLabel("audio", "hide")
 					self.toggleElementVisibilityWithLabel("subtitles", "hide")
@@ -1245,6 +1246,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					self["txt_functions"].hide()
 
 					self.hideNoneMediaFunctions()
+					self.hideMediaPixmaps()
 
 					self["miniTv"].hide()
 
@@ -1266,6 +1268,21 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			self["title"].setText( "no data retrieved")
 			self["shortDescription"].setText("no data retrieved")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideMediaPixmaps(self):
+		printl("", self, "S")
+
+		self["rating_stars"].hide()
+		self["codec"].hide()
+		self["aspect"].hide()
+		self["resolution"].hide()
+		self["rated"].hide()
+		self["sound"].hide()
 
 		printl("", self, "C")
 
