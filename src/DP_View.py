@@ -1698,7 +1698,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def resetCurrentImages(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
 
 		if self.viewParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
@@ -2024,7 +2024,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def resetBackdropImage(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
 		self["backdrop"].instance.setPixmapFromFile(ptr)
 
 		printl("", self, "C")

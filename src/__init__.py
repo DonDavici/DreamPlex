@@ -263,7 +263,7 @@ def initServerEntryConfig():
 def registerSkinParamsInstance():
 	printl("", "__init__::registerSkinParamsInstance", "S")
 
-	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value +"/params")
 	Singleton().getSkinParamsInstance(configXml)
 
 	printl("", "__init__::registerSkinParamsInstance", "C")
@@ -333,7 +333,7 @@ def getInstalledSkins():
 	printl("", "__init__::getInstalledSkins", "S")
 
 	mySkins = []
-	myDefaultSkin = "default"
+	myDefaultSkin = "original"
 
 	try:
 		for skin in os.listdir(config.plugins.dreamplex.skinfolderpath.value):
@@ -362,7 +362,7 @@ def getInstalledSkins():
 
 	printl("Found enigma2 skins \"%s\"" % str(mySkins), "__init__::getInstalledSkins", "D")
 
-	config.plugins.dreamplex.skins	= ConfigSelection(default = myDefaultSkin, choices = mySkins)
+	config.plugins.dreamplex.skin	= ConfigSelection(default = myDefaultSkin, choices = mySkins)
 
 	printl("", "__init__::getInstalledSkins", "C")
 
