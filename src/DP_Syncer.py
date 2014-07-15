@@ -25,8 +25,6 @@ You should have received a copy of the GNU General Public License
 #noinspection PyUnresolvedReferences
 from enigma import eTimer, ePythonMessagePump, eConsoleAppContainer
 
-from PIL import Image
-
 from threading import Thread
 from threading import Lock
 
@@ -512,8 +510,9 @@ class BackgroundMediaSyncer(Thread):
 	#
 	#===========================================================================
 	def renderBackdrops(self):
-
 		printl("", self, "S")
+
+		from PIL import Image
 
 		self.running = True
 		self.cancel = False
