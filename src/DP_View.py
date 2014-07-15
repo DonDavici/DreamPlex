@@ -875,15 +875,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			# we extend details for provide the next data location
 			entryData["contentUrl"] = nextContentUrl
 
-			currentViewMode	= entryData['currentViewMode']
-			printl("currentViewMode: " +str(currentViewMode), self, "D")
+			self.currentViewMode	= entryData['currentViewMode']
+			printl("currentViewMode: " + str(self.currentViewMode), self, "D")
 
 			# we need this for onEnter-func in child lib
-			self.currentViewMode = currentViewMode
 
-			if currentViewMode == "play" or currentViewMode == "directMode" or currentViewMode == "ShowMovies":
-				printl("currentViewMode -> play", self, "D")
-
+			if entryData['tagType'] == "Track" or entryData['tagType'] == "Video":
 				if config.plugins.dreamplex.useBackdropVideos.value:
 					self.stopBackdropVideo()
 
