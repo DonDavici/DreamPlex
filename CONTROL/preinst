@@ -12,4 +12,8 @@ echo Proceeding to installation...
 fi
 echo Deleting presets like default view ...
 rm /hdd/dreamplex/*.bin > /dev/null 2>&1
+echo Deleting cache files from former versions
+rm /hdd/dreamplex/cache/* > /dev/null 2>&1
+echo Deleting media files from former versions
+rm /hdd/dreamplex/media/* > /dev/null 2>&1
 exit 0
