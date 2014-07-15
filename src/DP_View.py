@@ -1600,9 +1600,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		printl("start pĺaying theme", self, "I")
-		accessToken = Singleton().getPlexInstance().get_aTokenForServer()#g_myplex_accessToken
 		theme = self.details["theme"]
 		server = self.details["server"]
+		accessToken = Singleton().getPlexInstance().get_aTokenForServer(server)
 		printl("theme: " + str(theme), self, "D")
 		url = "http://" + str(server) + str(theme) + str(accessToken) #"?X-Plex-Token=" + str(accessToken)
 		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
