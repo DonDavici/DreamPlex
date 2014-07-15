@@ -279,7 +279,7 @@ class PlexLibrary(Screen):
 				entryData["path"] = "/library/sections/" + entryData.get('key')
 				entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
 
-			if not self.g_useFilterSections:
+			if not self.g_useFilterSections and entryData.get('type') != 'artist':
 				entryData["path"] += '/all'
 
 			entryData["serverName"] = self.serverConfig_Name.encode()
