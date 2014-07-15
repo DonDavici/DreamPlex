@@ -58,7 +58,7 @@ defaultPlayerTempPath  	= "/hdd/dreamplex/"
 defaultConfigFolderPath	= "/hdd/dreamplex/config/"
 
 # skin data
-defaultSkin = "default"
+defaultSkin = "original"
 skins = []
 
 config.plugins.dreamplex = ConfigSubsection()
