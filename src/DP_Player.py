@@ -51,7 +51,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
 	InfoBarServiceNotifications, InfoBarSimpleEventView, \
 	InfoBarExtensions, InfoBarNotifications, \
-	InfoBarSubtitleSupport, InfoBarPiP, InfoBarServiceErrorPopupSupport
+	InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport
 
 from DPH_Singleton import Singleton
 
