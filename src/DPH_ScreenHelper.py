@@ -207,7 +207,6 @@ class DPH_MultiColorFunctions(object):
 			if int(self.currentFunctionLevel) == int(i):
 				self["L" + str(i)].setForegroundColorNum(0)
 			else:
-				print "hide" + str(i)
 				self["L" + str(i)].setForegroundColorNum(1)
 
 		printl("", self, "C")
