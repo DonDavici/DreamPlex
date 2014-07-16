@@ -314,8 +314,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["poster"] = Pixmap()
 		self["rating_stars"] = ProgressBar()
 
-		self["stillPicture"] = Label()
-
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
 		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
