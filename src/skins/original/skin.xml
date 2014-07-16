@@ -423,7 +423,7 @@
 
         <widget name="backdrop" transparent="0" zPosition="45" position="750,400" size="400,225" alphatest="blend"/>
         <widget name="stillPicture" backgroundColor="transparent" zPosition="-3" position="750,400" size="400,225"/>
-        <widget name="miniTv" backgroundColor="transparent" zPosition="99" position="750,400" size="400,225"/>
+        <widget name="miniTv" backgroundColor="transparent" zPosition="40" position="750,400" size="400,225"/>
 
         <widget name="infoLabel" transparent="1" zPosition="4" halign="left" position="820,470" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="info" transparent="1" zPosition="4" halign="left" position="920,470" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
