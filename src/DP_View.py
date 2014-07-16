@@ -332,7 +332,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self.session.nav.stopService()
 			try:
 				# we use this to load the m1v direct to the buffer, for now it seems that we have to add it to a skin component
-				self["stillPicture"] = StillPicture(viewClass) # this is just to avoid greenscreen, maybe we find a better way
+				self["stillPicture"] = StillPicture(viewClass) # this is working over an renderer
 				# we use this to be able to resize the tv picture and show as backdrop
 
 				self.loadedStillPictureLib = True
