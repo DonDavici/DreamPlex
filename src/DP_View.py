@@ -340,6 +340,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 				printl("Exception: " + str(ex), self, "D")
 				printl("was not able to import lib for stillpictures", self, "D")
+		else:
+			# we need this as dummy
+			self["stillPicture"] = Label()
 
 		# on layout finish we have to do some stuff
 		self.onLayoutFinish.append(self.setPara)
