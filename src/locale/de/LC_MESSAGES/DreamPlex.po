@@ -483,7 +483,7 @@ msgid ""
 " This file was partially played.\n"
 "\n"
 " Do you want to resume?"
-msgstr "Fortsetzen (oder Neustart) ?"
+msgstr "Fortsetzen (Ja) oder  Neustart (Nein) ?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:1668
 msgid "Total:"
