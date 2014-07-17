@@ -2056,9 +2056,25 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			found = True
 			self["rated"].setPixmapNum(4)
 
-		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
+		elif mpaa == "NOT RATED" or mpaa == "G" or mpaa == "NR":
 			found = True
 			self["rated"].setPixmapNum(5)
+
+		elif mpaa == "de/6":
+			found = True
+			self["rated"].setPixmapNum(6)
+
+		elif mpaa == "de/12":
+			found = True
+			self["rated"].setPixmapNum(7)
+
+		elif mpaa == "de/16":
+			found = True
+			self["rated"].setPixmapNum(8)
+
+		elif mpaa == "de/18":
+			found = True
+			self["rated"].setPixmapNum(9)
 
 		elif mpaa == "UNKNOWN" or mpaa == "UNKNOWN" or mpaa == "":
 			found = False
