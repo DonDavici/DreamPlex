@@ -28,6 +28,8 @@ from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
 from Components.config import config
+from Components.Pixmap import Pixmap
+from Components.Label import Label
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -37,6 +39,7 @@ from __common__ import printl2 as printl, checkXmlFile, getXmlContent, writeXmlC
 from __init__ import _ # _ is translation
 
 from DP_PathSelector import DPS_PathSelector
+from DP_ViewFactory import getGuiElements
 
 #===============================================================================
 # import cProfile
@@ -77,16 +80,35 @@ class DPS_Mappings(Screen):
 		"green": self.greenKey,
 		}, -1)
 		
-		
+		self.guiElements = getGuiElements()
+
 		self["content"] = DPS_MappingsEntryList([], serverID)
 		self.updateList()
-		
-		self["key_red"] = StaticText(_("Delete Entry"))
-		self["key_green"] = StaticText(_("Add Entry"))
+
+		self["btn_red"]			= Pixmap()
+		self["btn_redText"]		= Label()
+
+		self["btn_green"]		= Pixmap()
+		self["btn_greenText"]   = Label()
+
+		self.onLayoutFinish.append(self.finishLayout)
 		
 		printl("", self, "C")
-		
-	
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_redText"].setText(_("Delete Entry"))
+
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+		self["btn_greenText"].setText(_("Add Entry"))
+
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================

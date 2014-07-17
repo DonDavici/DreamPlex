@@ -261,11 +261,12 @@
         </widget>
 
         <!-- functions -->
-        <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_red-fs8.png" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_red" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_green" position="400,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_red" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_green" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_Syncer -->
