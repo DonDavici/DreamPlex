@@ -303,7 +303,7 @@ class DPS_SystemCheck(Screen):
 
 		command = "opkg status mjpegtools"
 
-		self.check = "mjpegtools"
+		self.check = "jpegTools"
 		state = self.executeCommand(command)
 
 		printl("", self, "C")
@@ -365,7 +365,7 @@ class DPS_SystemCheck(Screen):
 				# plugin is installed
 				self.session.open(MessageBox, _("Information:\n") + data, MessageBox.TYPE_INFO)
 			else:
-				if override is False:
+				if override:
 					return False
 				# plugin is not install
 				if self.check == "gst":
@@ -457,7 +457,7 @@ class DPS_SystemCheck(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def installPyhtonImagaingLibs(self, confirm):
+	def installPyhtonImagingLibs(self, confirm):
 		printl("", self, "S")
 
 		command = ""
