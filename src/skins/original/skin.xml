@@ -54,7 +54,7 @@
         </widget>
     </screen>
 
-        <!-- DPS_InputBox -->
+    <!-- DPS_InputBox -->
     <screen name="DPS_InputBox" position="0,0" size="1280,720" title=" " backgroundColor="#70000000" flags="wfNoBorder">
         <!-- background -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/background-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
@@ -261,7 +261,6 @@
         </widget>
 
         <!-- functions -->
-
         <widget name="btn_red" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
         <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
@@ -656,15 +655,38 @@
     </screen>
 
     <!-- DPS_PathSelector -->
-    <screen name="DPS_PathSelector" position="center,center" size="560,320" title="Select path ...">
-        <ePixmap pixmap="skin_default/buttons/btn_red-fs8.png" position="0,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/btn_green-fs8.png" position="140,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/btn_yellow-fs8.png" position="280,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <ePixmap pixmap="skin_default/buttons/btn_blue-fs8.png" position="420,0" zPosition="0" size="140,40" transparent="1" alphatest="on"/>
-        <widget name="target" position="0,60" size="540,22" valign="center" font="Saint;22"/>
-        <widget name="filelist" position="0,100" zPosition="1" size="560,220" scrollbarMode="showOnDemand"/>
-        <widget render="Label" source="key_red" position="0,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Saint;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
-        <widget render="Label" source="key_green" position="140,0" size="140,40" zPosition="5" valign="center" halign="center" backgroundColor="red" font="Saint;21" transparent="1" foregroundColor="white" shadowColor="black" shadowOffset="-1,-1"/>
+        <screen name="DPS_PathSelector" position="0,0" size="1280,720" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
+        <!-- background -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/background-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+
+        <!-- title -->
+        <widget source="Title" text="" render="Label" transparent="1" zPosition="4" valign="center" position="120,10" size="190,30" font="Saint; 18" foregroundColor="#5C5C5C" backgroundColor="#000000" halign="left"/>
+
+        <!-- menu frame -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/main_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
+
+        <widget name="text" zPosition="10" position="100,295" transparent="1" size="580,30" font="Saint; 18"  halign="left"/>
+        <widget name="input" zPosition="10" position="400,295" transparent="1" size="580,25" font="Saint; 18"/>
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
+            <convert type="ClockToText">Default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="850,15" size="390,40" zPosition="4" font="Saint; 18" halign="right" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1">
+            <convert type="ClockToText">Date</convert>
+        </widget>
+
+        <!-- content -->
+        <widget name="targetText" zPosition="10" position="100,295" transparent="1" size="580,30" font="Saint; 18"  halign="left"/>
+        <widget name="target" zPosition="10" position="400,295" transparent="1" size="580,25" valign="center" font="Saint;18"/>
+        <widget name="filelist" zPosition="10" position="680,340" size="560,300" scrollbarMode="showOnDemand" transparent="1"/>
+
+        <!-- functions -->
+        <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Saint;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_PlexPlayer -->

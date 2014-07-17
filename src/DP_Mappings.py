@@ -26,7 +26,6 @@ from enigma import eListboxPythonMultiContent, gFont, RT_HALIGN_LEFT, RT_VALIGN_
 
 from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Sources.StaticText import StaticText
 from Components.config import config
 from Components.Pixmap import Pixmap
 from Components.Label import Label

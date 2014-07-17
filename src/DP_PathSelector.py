@@ -23,11 +23,13 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 from Screens.Screen import Screen
-from Components.Sources.StaticText import StaticText
+from Components.Pixmap import Pixmap
 from Components.ActionMap import ActionMap
 
 from Components.FileList import FileList
 from Components.Label import Label
+
+from DP_ViewFactory import getGuiElements
 
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
@@ -44,7 +46,9 @@ class DPS_PathSelector(Screen):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
-		
+
+		self.guiElements = getGuiElements()
+
 		self.myType = myType
 		inhibitDirs = ["/bin", "/boot", "/dev", "/etc", "/lib", "/proc", "/sbin", "/sys", "/usr", "/var"]
 		inhibitMounts = []
@@ -63,9 +67,35 @@ class DPS_PathSelector(Screen):
 			"red": self.cancel
 			
 		}, -1)
-		self["key_red"] = StaticText(_("Cancel"))
-		self["key_green"] = StaticText(_("OK"))
+
+		self["targetText"] = Label()
+
+		self["btn_red"]			= Pixmap()
+		self["btn_redText"]		= Label()
+
+		self["btn_green"]		= Pixmap()
+		self["btn_greenText"]   = Label()
+
+		self.onLayoutFinish.append(self.finishLayout)
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_redText"].setText(_("Cancel"))
+
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+		self["btn_greenText"].setText(_("Ok"))
+
+		self["targetText"].setText(_("Target: "))
+
+		self.setTitle(_("Pathselector"))
+
 		printl("", self, "C")
 
 	#===========================================================================
