@@ -157,7 +157,7 @@
         <widget name="content" zPosition="3" position="40,120" size="1220,450" transparent="1" itemHeight="30" scrollbarMode="showOnDemand" foregroundColor="#ffffff" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/focus_settings-fs8.png"/>
 
         <!-- functions -->
-        <widget name="txt_ok" position="1110,677" zPosition="9" size="50,37" font="Saint;14" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#000000" transparent="1"/>
+
     </screen>
 
     <!-- DPS_Server -->

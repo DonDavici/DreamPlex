@@ -89,8 +89,6 @@ class DPS_SystemCheck(Screen):
 		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
-		self["txt_ok"] = Label()
-
 		self.onLayoutFinish.append(self.finishLayout)
 
 		printl("", self, "C")
@@ -104,8 +102,6 @@ class DPS_SystemCheck(Screen):
 		self.setTitle(_("System - Systemcheck"))
 
 		self["header"].setText(_("Functions List:"))
-
-		self["txt_ok"].setText(_("Ok"))
 
 		printl("", self, "C")
 
