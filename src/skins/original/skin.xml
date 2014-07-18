@@ -682,9 +682,6 @@
         <!-- menu frame -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/images/main_menu-fs8.png" position="20,280" zPosition="2" size="1280,720" transparent="1"/>
 
-        <widget name="text" zPosition="10" position="100,295" transparent="1" size="580,30" font="Saint; 18"  halign="left"/>
-        <widget name="input" zPosition="10" position="400,295" transparent="1" size="580,25" font="Saint; 18"/>
-
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
             <convert type="ClockToText">Default</convert>
