@@ -75,6 +75,13 @@
 		<key id="KEY_RED" mapto="seekManual" flags="m" />
         <key id="KEY_PREVIOUS" mapto="playPrevious" flags="m" />
         <key id="KEY_NEXT" mapto="playNext" flags="m" />
+        <key id="KEY_TV" mapto="keyTv" flags="m" />
+        <key id="KEY_OK" mapto="ok" flags="m" />
+        <key id="KEY_ENTER" mapto="enter" flags="m" />
+        <key id="KEY_EXIT" mapto="cancel" flags="m" />
+        <key id="KEY_ESC" mapto="cancel" flags="m" />
+        <key id="KEY_STOP" mapto="stop" flags="m" />
+
 	</map>
 
     <map context="DPS_Syncer">

@@ -143,11 +143,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		"cancel": self.hide,
 		"keyTV": self.leavePlayer,
 		"stop": self.leavePlayer,
-		"leavePlayer": self.hide,
 		"seekManual": self.seekManual,
 		"playNext": self.playNextEntry,
 		"playPrevious": self.playPreviousEntry,
-		"stopRunningRecords": self.leavePlayer
 		}, -2)
 
 		self["poster"] = Pixmap()
