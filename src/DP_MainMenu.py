@@ -188,6 +188,9 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				elif selection[1] == "DPS_About":
 					self.session.open(DPS_About)
 
+				elif selection[1] == "LiveTv":
+					self.exit()
+
 				elif selection[1] == "DPS_Syncer":
 					self.session.open(DPS_Syncer, "render")
 
@@ -383,6 +386,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 						self.selectionOverride = [serverName, Plugin.MENU_SERVER, "serverEntry", serverConfig]
 
 			self.mainMenuList.append((_("System"), Plugin.MENU_SYSTEM, "systemEntry"))
+			self.mainMenuList.append((_("LiveTv"), "LiveTv", "LiveTv"))
 			self.mainMenuList.append((_("About"), "DPS_About", "aboutEntry"))
 
 			printl("", self, "C")
