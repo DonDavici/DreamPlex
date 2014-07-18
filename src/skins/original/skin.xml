@@ -41,6 +41,10 @@
             <convert type="MenuEntryCompare">systemEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/picons/menu_system.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
+            <convert type="MenuEntryCompare">LiveTv</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
 
         <!-- mini-tv -->
         <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
