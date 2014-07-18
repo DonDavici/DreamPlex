@@ -58,7 +58,7 @@ from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
 
-from __common__ import printl2 as printl, loadPicture, durationToTime
+from __common__ import printl2 as printl, loadPicture, durationToTime, encodeMe
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -1251,11 +1251,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					if self.startPlaybackNow: # only if we are a show
 						self.startThemePlayback()
 
-				self["title"].setText(self.details.get("title", " ").encode('utf-8'))
+				self["title"].setText(encodeMe(self.details.get("title", " ")))
 
-				self["tag"].setText(self.details.get("tagline", " ").encode('utf8'))
+				self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
 				self["year"].setText(str(self.details.get("year", " - ")))
-				self["genre"].setText(str(self.details.get("genre", " - ").encode('utf8')))
+				self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
 
 				duration = str(self.details.get("duration", " - "))
 
@@ -1264,15 +1264,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				else:
 					self["duration"].setText(durationToTime(duration))
 
-				self["shortDescription"].setText(str(self.details.get("summary", " ").encode('utf8')))
-				self["cast"].setText(str(self.details.get("cast", " ")))
-				self["writer"].setText(str(self.details.get("writer", " ").encode('utf8')))
-				self["director"].setText(str(self.details.get("director", " ").encode('utf8')))
-
+				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))#.encode('utf-8', "ignore")))
+				self["cast"].setText(encodeMe(self.details.get("cast", " ")))#.encode('utf-8', "ignore")))
+				self["writer"].setText(encodeMe(self.details.get("writer", " ")))#.encode('utf-8', "ignore"))))
+				self["director"].setText(encodeMe(self.details.get("director", " ")))#.encode('utf-8',"ignore")))
 				self.mediaDataArr = self.details["mediaDataArr"][0]
 				self.parts = self.mediaDataArr["Parts"][0]
-				print self.mediaDataArr
-				print self.parts
+
 				self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
 				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
 				self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))

@@ -761,3 +761,16 @@ def getPlexHeader(g_sessionID, asString = True):
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
+
+#===========================================================================
+#
+#===========================================================================
+def encodeMe(stringToEncode):
+	printl2("", "__common__::encodeMe", "S")
+	try:
+		encodedString = stringToEncode.encode('utf-8', "ignore")
+	except:
+		encodedString = stringToEncode
+
+	printl2("", "__common__::encodeMe", "C")
+	return encodedString
