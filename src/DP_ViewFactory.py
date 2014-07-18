@@ -39,7 +39,8 @@ def getDefaultCineElementsList():
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
 	                "genre", "year", "duration", "rating_stars", "sound", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
-	                "btn_red", "btn_green", "btn_yellow", "btn_blue"]
+	                "btn_red", "btn_green", "btn_yellow", "btn_blue", "videoCodec", "bitrate", "videoFrameRate", "audioChannels", "aspectRatio",
+	                "videoResolution", "audioCodec", "file"]
 
 	printl("", __name__, "C")
 	return elementsList
@@ -200,6 +201,14 @@ def getMovieViewDefaults():
 	params["elements"]["leafCount"]["visible"]                     = False
 	params["elements"]["unviewedLeafCount"]["visible"]             = False
 	params["elements"]["viewedLeafCount"]["visible"]               = False
+	params["elements"]["videoCodec"]["visible"]                    = False
+	params["elements"]["bitrate"]["visible"]                       = False
+	params["elements"]["videoFrameRate"]["visible"]                = False
+	params["elements"]["audioChannels"]["visible"]                 = False
+	params["elements"]["aspectRatio"]["visible"]                   = False
+	params["elements"]["videoResolution"]["visible"]               = False
+	params["elements"]["audioCodec"]["visible"]                    = False
+	params["elements"]["file"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -240,13 +249,18 @@ def getShowViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["duration"]["visible"]                      = False
 	params["elements"]["season"]["visible"]                        = False
-	params["elements"]["director"]["visible"]                      = False
-	params["elements"]["cast"]["visible"]                          = False
-	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["season"]["visible"]                        = False
 	params["elements"]["leafCount"]["visible"]                     = False
 	params["elements"]["unviewedLeafCount"]["visible"]             = False
 	params["elements"]["viewedLeafCount"]["visible"]               = False
+	params["elements"]["videoCodec"]["visible"]                    = False
+	params["elements"]["bitrate"]["visible"]                       = False
+	params["elements"]["videoFrameRate"]["visible"]                = False
+	params["elements"]["audioChannels"]["visible"]                 = False
+	params["elements"]["aspectRatio"]["visible"]                   = False
+	params["elements"]["videoResolution"]["visible"]               = False
+	params["elements"]["audioCodec"]["visible"]                    = False
+	params["elements"]["file"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
@@ -294,6 +308,14 @@ def getMusicViewDefaults():
 	params["elements"]["leafCount"]["visible"]                     = False
 	params["elements"]["unviewedLeafCount"]["visible"]             = False
 	params["elements"]["viewedLeafCount"]["visible"]               = False
+	params["elements"]["videoCodec"]["visible"]                    = False
+	params["elements"]["bitrate"]["visible"]                       = False
+	params["elements"]["videoFrameRate"]["visible"]                = False
+	params["elements"]["audioChannels"]["visible"]                 = False
+	params["elements"]["aspectRatio"]["visible"]                   = False
+	params["elements"]["videoResolution"]["visible"]               = False
+	params["elements"]["audioCodec"]["visible"]                    = False
+	params["elements"]["file"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"

@@ -314,6 +314,39 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["poster"] = Pixmap()
 		self["rating_stars"] = ProgressBar()
 
+		# media details
+		self["videoCodec"] = Label()
+		self["videoCodecLabel"] = Label()
+		self["videoCodecLabel"].setText(_("Video Codec:"))
+
+		self["bitrate"] = Label()
+		self["bitrateLabel"] = Label()
+		self["bitrateLabel"].setText(_("Bitrate:"))
+
+		self["videoFrameRate"] = Label()
+		self["videoFrameRateLabel"] = Label()
+		self["videoFrameRateLabel"].setText(_("Framerate:"))
+
+		self["audioChannels"] = Label()
+		self["audioChannelsLabel"] = Label()
+		self["audioChannelsLabel"].setText(_("Audio Channels:"))
+
+		self["aspectRatio"] = Label()
+		self["aspectRatioLabel"] = Label()
+		self["aspectRatioLabel"].setText(_("Aspect Ratio:"))
+
+		self["videoResolution"] = Label()
+		self["videoResolutionLabel"] = Label()
+		self["videoResolutionLabel"].setText(_("Resultion:"))
+
+		self["audioCodec"] = Label()
+		self["audioCodecLabel"] = Label()
+		self["audioCodecLabel"].setText(_("Audio Codec:"))
+
+		self["file"] = Label()
+		self["fileLabel"] = Label()
+		self["fileLabel"].setText(_(""))
+
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
 		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
@@ -923,9 +956,15 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.detailsPaneVisible = False
 		self["shortDescription"].show()
 		self["btn_" + color + "Text"].setText(_("show 'Details'"))
-		#self.toggleElementVisibilityWithLabel("writer", "hide")
-		#self.toggleElementVisibilityWithLabel("director", "hide")
-		#self.toggleElementVisibilityWithLabel("cast", "hide")
+
+		self.toggleElementVisibilityWithLabel("videoCodec", "hide")
+		self.toggleElementVisibilityWithLabel("bitrate", "hide")
+		self.toggleElementVisibilityWithLabel("videoFrameRate", "hide")
+		self.toggleElementVisibilityWithLabel("audioChannels", "hide")
+		self.toggleElementVisibilityWithLabel("aspectRatio", "hide")
+		self.toggleElementVisibilityWithLabel("videoResolution", "hide")
+		self.toggleElementVisibilityWithLabel("audioCodec", "hide")
+		self.toggleElementVisibilityWithLabel("file", "hide")
 
 		printl("", self, "C")
 
@@ -940,9 +979,15 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.detailsPaneVisible = True
 		self["shortDescription"].hide()
 		self["btn_"  + color + "Text"].setText(_("show 'Description'"))
-		#self.toggleElementVisibilityWithLabel("writer")
-		#self.toggleElementVisibilityWithLabel("director")
-		#self.toggleElementVisibilityWithLabel("cast")
+
+		self.toggleElementVisibilityWithLabel("videoCodec")
+		self.toggleElementVisibilityWithLabel("bitrate")
+		self.toggleElementVisibilityWithLabel("videoFrameRate")
+		self.toggleElementVisibilityWithLabel("audioChannels")
+		self.toggleElementVisibilityWithLabel("aspectRatio")
+		self.toggleElementVisibilityWithLabel("videoResolution")
+		self.toggleElementVisibilityWithLabel("audioCodec")
+		self.toggleElementVisibilityWithLabel("file")
 
 		printl("", self, "C")
 

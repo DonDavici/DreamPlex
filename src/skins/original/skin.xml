@@ -397,6 +397,23 @@
 
         <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="545,125" size="710,210" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <!-- detail pane -->
+        <widget name="videoCodecLabel" transparent="1" zPosition="4" halign="left" position="545,125" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="videoCodec" transparent="1" zPosition="4" halign="left" position="620,125" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="bitrateLabel" transparent="1" zPosition="4" halign="left" position="545,145" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="bitrate" transparent="1" zPosition="4" halign="left" position="620,145" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="videoFrameRateLabel" transparent="1" zPosition="4" halign="left" position="545,165" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="videoFrameRate" transparent="1" zPosition="4" halign="left"  position="620,165" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="audioChannelsLabel" transparent="1" zPosition="4" halign="left" position="545,185" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="audioChannels" transparent="1" zPosition="4" halign="left"  position="620,185" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="aspectRatioLabel" transparent="1" zPosition="4" halign="left" position="545,205" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="aspectRatio" transparent="1" zPosition="4" halign="left"  position="620,205" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="videoResolutionLabel" transparent="1" zPosition="4" halign="left" position="545,225" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="videoResolution" transparent="1" zPosition="4" halign="left"  position="620,225" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="audioCodecLabel" transparent="1" zPosition="4" halign="left" position="545,245" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="audioCodec" transparent="1" zPosition="4" halign="left"  position="620,245" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="fileLabel" transparent="1" zPosition="4" halign="left" position="545,265" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="file" transparent="1" zPosition="4" halign="left"  position="620,265" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
         <widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="duration" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
