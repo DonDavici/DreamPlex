@@ -1226,10 +1226,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 						self.toggleElementVisibilityWithLabel("duration")
 						self.toggleElementVisibilityWithLabel("year")
 
-					if self.tagType != "Show" and self.tagType != "Episodes":
+					if self.tagType != "Show" and self.tagType != "Episodes" and self.tagType != "Track":
 						self.showNoneMediaFunctions()
+						self.showVideoDetails()
 					else:
 						self.hideNoneMediaFunctions()
+						self.hideVideoDetails()
 
 					self["miniTv"].show()
 
@@ -1264,22 +1266,24 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				else:
 					self["duration"].setText(durationToTime(duration))
 
-				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))#.encode('utf-8', "ignore")))
-				self["cast"].setText(encodeMe(self.details.get("cast", " ")))#.encode('utf-8', "ignore")))
-				self["writer"].setText(encodeMe(self.details.get("writer", " ")))#.encode('utf-8', "ignore"))))
-				self["director"].setText(encodeMe(self.details.get("director", " ")))#.encode('utf-8',"ignore")))
-				self.mediaDataArr = self.details["mediaDataArr"][0]
-				self.parts = self.mediaDataArr["Parts"][0]
+				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+				self["cast"].setText(encodeMe(self.details.get("cast", " ")))
+				self["writer"].setText(encodeMe(self.details.get("writer", " ")))
+				self["director"].setText(encodeMe(self.details.get("director", " ")))
 
-				self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
-				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
-				self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
-				self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
-				self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
-				self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
-				self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+				if self.tagType == "Video" or self.tagType == "Track":
+					# technical details
+					self.mediaDataArr = self.details["mediaDataArr"][0]
+					self.parts = self.mediaDataArr["Parts"][0]
 
-				self["file"].setText(self.parts.get("file", " - "))
+					self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
+					self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+					self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
+					self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+					self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
+					self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
+					self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+					self["file"].setText(self.parts.get("file", " - "))
 
 				if (self.fastScroll == False or self.showMedia == True) and self.details ["tagType"] == "Video":
 					# handle all pixmaps
@@ -1301,6 +1305,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					self.toggleElementVisibilityWithLabel("leafCount", "hide")
 					self.toggleElementVisibilityWithLabel("viewedLeafCount", "hide")
 					self.toggleElementVisibilityWithLabel("unviewedLeafCount", "hide")
+					self.toggleElementVisibilityWithLabel("writer", "hide")
+					self.toggleElementVisibilityWithLabel("director", "hide")
+					self.toggleElementVisibilityWithLabel("cast", "hide")
 					self["txt_functions"].hide()
 
 					self.hideNoneMediaFunctions()
@@ -1326,6 +1333,30 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			self["title"].setText( "no data retrieved")
 			self["shortDescription"].setText("no data retrieved")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def showVideoDetails(self):
+		printl("", self, "S")
+
+		self.toggleElementVisibilityWithLabel("writer")
+		self.toggleElementVisibilityWithLabel("director")
+		self.toggleElementVisibilityWithLabel("cast")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideVideoDetails(self):
+		printl("", self, "S")
+
+		self.toggleElementVisibilityWithLabel("writer", "hide")
+		self.toggleElementVisibilityWithLabel("director", "hide")
+		self.toggleElementVisibilityWithLabel("cast", "hide")
 
 		printl("", self, "C")
 
