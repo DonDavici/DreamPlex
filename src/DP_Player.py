@@ -192,7 +192,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 
 		printl("", self, "C")
 
-#===========================================================
+	#===========================================================
 	#
 	#===========================================================
 	def selectMedia(self, count, options, server ):
@@ -337,35 +337,32 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	def setServiceReferenceData(self):
 		printl("", self, "S")
 
-		entryUrl = self.getEntryUrl()
-		title = self.getTitle()
+		self["mediaTitle"].setText(self.title)
 
-		self["mediaTitle"].setText(title)
+		self.setEnigmaServiceId()
 
-		self.setEnigmaServiceId(entryUrl)
-
-		self.sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, entryUrl)
-		self.sref.setName(title)
+		self.sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
+		self.sref.setName(self.title)
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def setEnigmaServiceId(self, entryUrl):
+	def setEnigmaServiceId(self):
 		printl("", self, "S")
 
 		# check for playable services
 		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
 
 		# lets built the sref for the movieplayer out of the gathered information
-		if entryUrl[:4] == "http": #this means we are in streaming mode so we will use sref 4097
+		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
 
-		elif entryUrl[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
+		elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
 
-		elif entryUrl[-5:] == ".m2ts":
+		elif self.url[-5:] == ".m2ts":
 			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
 
 		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
@@ -426,11 +423,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	def play(self, resume = False):
 		printl("", self, "S")
 
-		# populate self.sref with new data
-		self.setServiceReferenceData()
-
 		# populate addional data
 		self.setPlayerData()
+
+		# populate self.sref with new data
+		self.setServiceReferenceData()
 
 		# start playback
 		self.session.nav.playService(self.sref)
@@ -474,15 +471,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 
 		printl("", self, "C")
 		return str(self.playerData[self.currentIndex]['videoData']['title'])
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getEntryUrl(self):
-		printl("", self, "S")
-
-		printl("", self, "C")
-		return str(self.playerData[self.currentIndex]['playUrl'])
 
 	#===========================================================================
 	#
