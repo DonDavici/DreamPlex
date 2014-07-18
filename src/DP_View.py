@@ -2063,19 +2063,19 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			found = True
 			self["rated"].setPixmapNum(5)
 
-		elif mpaa == "de/6":
+		elif mpaa == "DE/6":
 			found = True
 			self["rated"].setPixmapNum(6)
 
-		elif mpaa == "de/12":
+		elif mpaa == "DE/12":
 			found = True
 			self["rated"].setPixmapNum(7)
 
-		elif mpaa == "de/16":
+		elif mpaa == "DE/16":
 			found = True
 			self["rated"].setPixmapNum(8)
 
-		elif mpaa == "de/18":
+		elif mpaa == "DE/18":
 			found = True
 			self["rated"].setPixmapNum(9)
 
