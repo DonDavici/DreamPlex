@@ -1707,8 +1707,7 @@ class PlexLibrary(Screen):
 
 		printl("playLibraryMediaUrl: " + str(url), self, "D")
 
-		server = self.getServerFromURL(url)
-		printl("server: " + str(server), self, "D")
+		printl("server: " + str(self.server), self, "D")
 
 		if url is None:
 			return
@@ -1718,7 +1717,7 @@ class PlexLibrary(Screen):
 		# set standard playurl
 		playurl=url
 
-		token = self.get_aTokenForServer(server)
+		token = self.get_aTokenForServer(self.server)
 
 		#alter playurl if needed
 		if protocol == "file":
