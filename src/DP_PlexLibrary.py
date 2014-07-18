@@ -2285,7 +2285,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def transcode(self, myID, url):
 		printl("", self, "S")
-
+		# todo try to add here header as well
 		server=self.getServerFromURL(url)
 
 		#Check for myplex user, which we need to alter to a master server

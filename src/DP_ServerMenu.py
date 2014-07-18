@@ -133,7 +133,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("self.selectionOverride: " + str(self.selectionOverride), self, "D")
 
 		if self.selectionOverride is not None:
-			self.okbuttonClick(self.selectionOverride)
+			self.okbuttonClick()
 
 		printl("", self, "C")
 
@@ -154,7 +154,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===============================================================
 	#
 	#===============================================================
-	def okbuttonClick(self, selectionOverride = None):
+	def okbuttonClick(self):
 		printl("", self, "S")
 
 		self.currentMenuDataDict[self.menuStep] = self.g_serverDataMenu
@@ -168,8 +168,11 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("menuStep: " + str(self.menuStep), self, "D")
 
 		# this is used to step in directly into a server when there is only one entry in the serverlist
-		if selectionOverride is not None:
-			selection = selectionOverride
+		if self.selectionOverride is not None:
+			selection = self.selectionOverride
+
+			# because we change the screen we have to unset the information to be able to return to main menu
+			self.selectionOverride = None
 		else:
 			selection = self["menu"].getCurrent()
 
