@@ -41,6 +41,7 @@ from Tools import Notifications
 from Components.AVSwitch import AVSwitch
 from Components.config import config
 from Components.Pixmap import Pixmap
+from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Components.Slider import Slider
 from Components.Sources.StaticText import StaticText
@@ -55,7 +56,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl, convertSize
+from __common__ import printl2 as printl, convertSize, encodeMe
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -115,6 +116,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		self.resumeMode = resumeMode
 		self.whatPoster = poster
 
+		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+
 		self.myParams = myParams
 		self["mediaTitle"] = StaticText()
 		Screen.__init__(self, session)
@@ -149,12 +152,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		}, -2)
 
 		self["poster"] = Pixmap()
+		self["shortDescription"] = Label()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
-		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
-		self.posterHeight = self.myParams["elements"]["poster"]["height"]
-		self.posterWidth = self.myParams["elements"]["poster"]["width"]
 
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
 		if self.has_key('MovieListActions'):
@@ -508,7 +509,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		# lets prepare all additional data for a better experience :-)
 		self.title = str(self.videoData['title'])
 		self.tagline = str(self.videoData['tagline'])
-		self.summary = str(self.videoData['summary'].encode("utf-8"))
+		self["shortDescription"].setText(encodeMe(self.videoData['summary']))
 		self.year = str(self.videoData['year'])
 		self.studio = str(self.videoData['studio'])
 		self.duration = str(self.videoData['duration'])
@@ -790,6 +791,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 			self.handleProgress()
 			if self.playbackType == "1":
 				self.stopTranscoding()
+
+			self.session.nav.playService(self.currentService)
 			self.close()
 		
 		printl("", self, "C")

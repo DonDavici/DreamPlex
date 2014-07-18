@@ -704,7 +704,7 @@
     </screen>
 
     <!-- DPS_PlexPlayer -->
-    <screen name="DPS_PlexPlayer" position="70,600" size="1140,80" title="InfoBar" flags="wfNoBorder">
+    <screen name="DPS_PlexPlayer" position="0,0" size="1280,720" title="InfoBar" flags="wfNoBorder">
         <ePixmap position="0,0" zPosition="-1" size="1140,80" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/infobarmovie.png"/>
         <ePixmap zPosition="-1" position="625,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress_grey.png"/>
         <ePixmap zPosition="-1" position="15,40" size="500,8" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress_grey.png"/>
@@ -740,6 +740,7 @@
         </widget>
 
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
+        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="545,125" size="710,210" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="bufferslider" position="625,40" size="500,8" zPosition="3" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/all/progress.png"/>
         <widget source="mediaTitle" transparent="1" render="Label" zPosition="3" position="625,5" size="350,28" font="Saint;23" backgroundColor="#00000000" foregroundColor="#00404040"/>
