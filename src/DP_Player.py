@@ -137,7 +137,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		self.bitrate = 0
 		self.endReached = False
 
-		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "DPS_Player"],
+		self["actions"] = ActionMap(["InfobarSeekActions", "DPS_Player"],
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
