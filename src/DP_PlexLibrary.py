@@ -603,7 +603,8 @@ class PlexLibrary(Screen):
 			entryData["nextViewMode"]		= nextViewMode
 			entryData['server']			    = server
 			entryData['tagType']            = tagType
-			entryData['title']              = entryData["index"] + ". " + entryData["title"]
+			if "index" in entryData:
+				entryData['title']              = entryData["index"] + ". " + entryData["title"]
 			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
 			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
 			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
