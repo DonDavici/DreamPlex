@@ -345,7 +345,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self["file"] = Label()
 		self["fileLabel"] = Label()
-		self["fileLabel"].setText(_(""))
+		self["fileLabel"].setText(_("File:"))
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -1268,6 +1268,20 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self["cast"].setText(str(self.details.get("cast", " ")))
 				self["writer"].setText(str(self.details.get("writer", " ").encode('utf8')))
 				self["director"].setText(str(self.details.get("director", " ").encode('utf8')))
+
+				self.mediaDataArr = self.details["mediaDataArr"][0]
+				self.parts = self.mediaDataArr["Parts"][0]
+				print self.mediaDataArr
+				print self.parts
+				self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
+				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+				self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
+				self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+				self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
+				self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
+				self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+
+				self["file"].setText(self.parts.get("file", " - "))
 
 				if (self.fastScroll == False or self.showMedia == True) and self.details ["tagType"] == "Video":
 					# handle all pixmaps
