@@ -397,13 +397,6 @@
 
         <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="545,125" size="710,210" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
         <!-- detail pane -->
-        <widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="545,125" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="director" transparent="1" zPosition="4" halign="left" position="620,125" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
-        <widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="545,145" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="writer" transparent="1" zPosition="4" halign="left" position="620,145" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
-        <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="545,165" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="cast" transparent="1" zPosition="4" halign="left"  position="620,165" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
-
         <widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,340" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="duration" transparent="1" zPosition="4" halign="left"  position="975,340" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
@@ -420,6 +413,13 @@
         <widget name="poster" transparent="1" zPosition="49" position="121,379" size="195,268" alphatest="blend"/>
 
         <widget name="rated" position="330,500" size="284,65" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-g-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/rated-not-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/7plus-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/12plus-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/16plus-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/rated/18plus-fs8.png"/>
+
+        <widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="345,585" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="director" transparent="1" zPosition="4" halign="left" position="420,585" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="345,605" size="120,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="writer" transparent="1" zPosition="4" halign="left" position="420,605" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+        <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="345,625" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="cast" transparent="1" zPosition="4" halign="left"  position="420,625" size="600,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 
         <widget name="backdrop" transparent="0" zPosition="45" position="750,400" size="400,225" alphatest="blend"/>
         <widget name="stillPicture" backgroundColor="transparent" zPosition="-3" position="750,400" size="400,225"/>

@@ -923,9 +923,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.detailsPaneVisible = False
 		self["shortDescription"].show()
 		self["btn_" + color + "Text"].setText(_("show 'Details'"))
-		self.toggleElementVisibilityWithLabel("writer", "hide")
-		self.toggleElementVisibilityWithLabel("director", "hide")
-		self.toggleElementVisibilityWithLabel("cast", "hide")
+		#self.toggleElementVisibilityWithLabel("writer", "hide")
+		#self.toggleElementVisibilityWithLabel("director", "hide")
+		#self.toggleElementVisibilityWithLabel("cast", "hide")
 
 		printl("", self, "C")
 
@@ -940,9 +940,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.detailsPaneVisible = True
 		self["shortDescription"].hide()
 		self["btn_"  + color + "Text"].setText(_("show 'Description'"))
-		self.toggleElementVisibilityWithLabel("writer")
-		self.toggleElementVisibilityWithLabel("director")
-		self.toggleElementVisibilityWithLabel("cast")
+		#self.toggleElementVisibilityWithLabel("writer")
+		#self.toggleElementVisibilityWithLabel("director")
+		#self.toggleElementVisibilityWithLabel("cast")
 
 		printl("", self, "C")
 
