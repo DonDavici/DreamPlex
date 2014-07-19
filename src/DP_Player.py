@@ -26,7 +26,7 @@ import threading
 import time
 from time import sleep
 
-from enigma import ePicLoad
+from enigma import ePicLoad, eTimer
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
@@ -122,6 +122,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		self.myParams = myParams
 		self["mediaTitle"] = StaticText()
 		Screen.__init__(self, session)
+
+		self.plexInstance = Singleton().getPlexInstance()
 
 		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
 				InfoBarAudioSelection, InfoBarSimpleEventView, \
@@ -442,12 +444,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")
 			self.multiUser = True
-			self.timelinewatcherthread_stop = threading.Event()
-			self.timelinewatcherthread_wait = threading.Event()
-			self.timelinewatcherthread_stop.clear()
-			self.timelinewatcherthread_wait.clear()
-			self.timelinewatcherThread = threading.Thread(target=self.timelineWatcher,name="TimeLineWatcherThread", args=(self.timelinewatcherthread_stop, self.timelinewatcherthread_wait,))
-			self.timelinewatcherThread.daemon = True
+			self.timelineWatcher = eTimer()
+			self.timelineWatcher.callback.append(self.updateTimeline)
 
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
@@ -721,15 +719,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 			self.setSeekState(self.SEEK_STATE_PLAY)
 	
 		if self.multiUser:
-			self.timelinewatcherthread_wait.clear()
-			if not self.timelinewatcherThread.isAlive():
-				self.timelinewatcherthread_stop.clear()
-				sleep(2)
-				try:
-					self.timelinewatcherThread.start()
-				except:
-					pass
-		
+			# because the buffer is full we start updating timeline
+			self.timelineWatcher.start(5000,False)
+
 		#printl("", self, "C")
 
 	#===========================================================================
@@ -741,6 +733,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		if config.plugins.dreamplex.showInfobarOnBuffer.value:
 			#show infobar to indicate buffer is empty 
 			self.show()
+
+		self.timelineWatcher.stop()
 
 		#printl("", self, "C")
 		
@@ -773,9 +767,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		if answer:
 			self.session.nav.stopService()
 
-			if self.multiUser:
-				self.timelinewatcherthread_wait.set()
-				self.timelinewatcherthread_stop.set()
 			self.handleProgress()
 
 			if self.playbackType == "1":
@@ -823,7 +814,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	#===========================================================================
 	def handleProgress(self):
 		printl("", self, "S")
-		
+
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 
@@ -833,11 +824,13 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		else:
 			progress = 100
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		
 		if self.multiUser:
-			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
+			self.timelineWatcher.stop()
+
+			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
+			urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+			self.plexInstance.doRequest(urlPath)
+			#self.plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
 		
 		#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
 		else:
@@ -847,28 +840,25 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 			#If we are less than 95% complete, store resume time
 			elif progress < 95:
 				printl("Less than 95% progress, will store resume time", self, "I" )
-				plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
+				self.plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
 
 			#Otherwise, mark as watched
 			else:
 				printl( "Movie marked as watched. Over 95% complete", self, "I")
-				plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
+				self.plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
 		printl("", self, "C")
 
 	#===========================================================================
-	# stopTranscoding
+	#
 	#===========================================================================
 	def stopTranscoding(self):
 		printl("", self, "S")
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		
 		if self.universalTranscoder:
-			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
+			self.plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
 		else:
-			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
+			self.plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
 		
 		printl("", self, "C")
 	
@@ -909,27 +899,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		printl("", self, "C")
 	
 	#===========================================================================
-	# timelineWatcher
-	#===========================================================================
-	def timelineWatcher(self, stop_event, wait_event):
-		printl("", self, "S")
-
-		while not stop_event.is_set():
-			while not wait_event.is_set():
-				ret = self.updateTimeline()
-				if ret:
-					wait_event.wait(3)
-					continue
-				else:
-					wait_event.wait(3)
-					break
-				
-			stop_event.wait(1)
-			continue
-		
-		printl("", self, "C")
-
-	#===========================================================================
 	# 
 	#===========================================================================
 	def updateTimeline(self):
@@ -944,24 +913,31 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 			printl("currentTime: " + str(currentTime), self, "C")
 			printl("totalTime: " + str(totalTime), self, "C")
 
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
+			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 
 			seekState = self.seekstate
 			if seekState == self.SEEK_STATE_PAUSE:
 				printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
-				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "paused", str(currentTime*1000), str(totalTime*1000))
+				urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
-			if seekState == self.SEEK_STATE_PLAY :
+			elif seekState == self.SEEK_STATE_PLAY :
 				printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
-				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "playing", str(currentTime*1000), str(totalTime*1000))
+				urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+
+			# todo add buffering here if needed
+				#urlPath += "&state=buffering&time=" + str(currentTime*1000)
+
+			# todo add stopped here if needed
+				#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+
+			self.plexInstance.doRequest(urlPath)
 
 		except Exception, e:    
 			printl("exception: " + str(e), self, "E")
 			return False
 
 		printl("" ,self,"C")
-		return True		
+		return True
 			
 	#===========================================================================
 	# 

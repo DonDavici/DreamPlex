@@ -137,6 +137,8 @@ class PlexLibrary(Screen):
 	seenPic = "seen-fs8.png"
 	unseenPic = "unseen-fs8.png"
 	startedPic = "started-fs8.png"
+	authHeader = None
+	lastHeaderForServer = None
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -1070,7 +1072,7 @@ class PlexLibrary(Screen):
 	#============================================================================
 	#
 	#============================================================================
-	def doRequest(self, url, myType="GET" ):
+	def doRequest(self, url, myType="GET"):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 		server = self.getServerFromURL(url)
@@ -1080,9 +1082,22 @@ class PlexLibrary(Screen):
 		try:
 			conn = httplib.HTTPConnection(server)
 
-			authHeader = self.get_hTokenForServer(server)
-			printl("header: " + str(authHeader), self, "D")
-			conn.request(myType, urlPath, headers=authHeader)
+			# the very first time it is none
+			# we also have to check if the server that where used changed meanwhile
+			if self.authHeader is None or server != self.lastHeaderForServer:
+
+				authHeaderPartOne = self.get_hTokenForServer(server)
+				self.lastHeaderForServer = server
+
+				if self.g_sessionID is None:
+					self.g_sessionID=str(uuid.uuid4())
+
+				authHeaderPartTwo = getPlexHeader(self.g_sessionID)
+
+				self.authHeader = dict(authHeaderPartOne.items() + authHeaderPartTwo.items())
+
+			#printl("header: " + str(self.authHeader), self, "D")
+			conn.request(myType, urlPath, headers=self.authHeader)
 
 			data = conn.getresponse()
 
@@ -1124,70 +1139,6 @@ class PlexLibrary(Screen):
 			printl( error, self, "I")
 			printl("", self, "C")
 			return False
-
-	#============================================================================
-	#
-	#============================================================================
-	def getTimelineURL(self, server, container, myId, state, myTime=0, duration=0):
-		printl("", self, "S")
-		conn = None
-		try:
-
-			urlPath="/:/timeline?containerKey=" + container + "&key=/library/metadata/" + myId + "&ratingKey=" + myId
-
-			if state == "buffering":
-				urlPath += "&state=buffering&time=" + str(myTime)
-			elif state == "playing":
-				urlPath += "&state=playing&time=" + str(myTime) + "&duration=" + str(duration)
-			elif state == "stopped":
-				urlPath += "&state=stopped&time=" + str(myTime) + "&duration=" + str(duration)
-			elif state == "paused":
-				urlPath += "&state=paused&time=" + str(myTime) + "&duration=" + str(duration)
-			else:
-				printl("No valid state supplied for getTimelineURL. State: " + str(state), self, "D")
-				return
-
-			urlPath += self.get_uTokenForServer(server)
-
-			if self.g_sessionID is None:
-				self.g_sessionID=str(uuid.uuid4())
-
-			plexHeader = getPlexHeader(self.g_sessionID)
-
-			conn = httplib.HTTPConnection(server)#,timeout=5)
-			conn.request("GET", urlPath, headers=plexHeader)
-			data = conn.getresponse()
-
-			if int(data.status) == 200:
-				link=data.read()
-				try: conn.close()
-				except: pass
-				printl("", self, "C")
-				return link
-
-			else:
-				link=data.read()
-				try: conn.close()
-				except: pass
-				printl("", self, "C")
-				return link
-
-		except socket.gaierror :
-			error = "Unable to locate host [%s]\nCheck host name is correct" % server
-			printl( error, self, "I")
-
-
-		except socket.error, msg :
-			error="Server[%s] is offline, or not responding\nReason: %s" % (server, str(msg))
-			printl( error, self, "I")
-
-		try:
-			conn.close()
-		except:
-			pass
-
-		printl("", self, "C")
-		return False
 
 	#========================================================================
 	#
