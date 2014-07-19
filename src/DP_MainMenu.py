@@ -440,8 +440,6 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		if answer:
 			self.checkServerState()
-		else:
-			self.session.open(DPS_ServerMenu, self.g_serverConfig)
 
 		printl("", self, "C")
 
