@@ -282,8 +282,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 
 			self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
 		else:
-			if self.resumeMode:
-				self.checkResume(resumeStamp)
+			self.checkResume(resumeStamp)
 
 		printl("", self, "C")
 
@@ -293,7 +292,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	def checkResume(self, resumeStamp):
 		printl("", self, "S")
 
-		if resumeStamp > 0:
+		if resumeStamp > 0 and self.resumeMode:
 			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
 
 		else:
