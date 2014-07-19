@@ -655,10 +655,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		if self.resumeMode:
 			self.resumeMode = False
-			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
 		else:
 			self.resumeMode = True
-			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
+			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
 
 		printl("", self, "C")
 
