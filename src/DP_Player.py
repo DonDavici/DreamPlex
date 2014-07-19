@@ -441,11 +441,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")
-			if self.connectionType == "2" or (self.connectionType == "0" and self.localAuth):
-				printl("we are configured for multiuser", self, "D")
-				self.multiUser = True
-
-		if self.multiUser:
+			self.multiUser = True
 			self.timelinewatcherthread_stop = threading.Event()
 			self.timelinewatcherthread_wait = threading.Event()
 			self.timelinewatcherthread_stop.clear()
@@ -776,7 +772,12 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		
 		if answer:
 			self.session.nav.stopService()
+
+			if self.multiUser:
+				self.timelinewatcherthread_wait.set()
+				self.timelinewatcherthread_stop.set()
 			self.handleProgress()
+
 			if self.playbackType == "1":
 				self.stopTranscoding()
 
@@ -860,10 +861,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	#===========================================================================
 	def stopTranscoding(self):
 		printl("", self, "S")
-		
-		if self.multiUser:
-			self.timelinewatcherthread_wait.set()
-			self.timelinewatcherthread_stop.set()
 		
 		instance = Singleton()
 		plexInstance = instance.getPlexInstance()
