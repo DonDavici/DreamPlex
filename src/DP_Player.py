@@ -100,6 +100,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	switchedLanguage = False
 	timeshift_enabled = False
 	isVisible = False
+	playbackType = None
 
 	#===========================================================================
 	#
@@ -256,6 +257,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		printl("", self, "S")
 
 		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
+
+		# populate addional data
+		self.setPlayerData()
 
 		self.playSelectedMedia()
 
@@ -422,9 +426,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	#===========================================================================
 	def play(self, resume = False):
 		printl("", self, "S")
-
-		# populate addional data
-		self.setPlayerData()
 
 		# populate self.sref with new data
 		self.setServiceReferenceData()
