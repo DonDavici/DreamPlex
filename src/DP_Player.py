@@ -145,7 +145,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
-		"keyTV": self.leavePlayer,
+		"keyTv": self.leavePlayer,
 		"stop": self.leavePlayer,
 		"seekManual": self.seekManual,
 		"playNext": self.playNextEntry,
