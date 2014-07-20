@@ -35,7 +35,6 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
-from DP_ViewFactory import getGuiElements
 from DPH_ScreenHelper import DPH_ScreenHelper
 
 from __common__ import printl2 as printl
@@ -76,8 +75,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.g_serverConfig = g_serverConfig
 		self.plexInstance = Singleton().getPlexInstance()
 
-		self.guiElements = getGuiElements()
-
 		self.setMenuType("server_menu")
 		self.initMenu()
 
@@ -88,8 +85,6 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self["title"] = StaticText()
 
 		self["menu"]= List(enableWrapAround=True)
-
-		self.menu_main_list = self["menu"].list
 
 		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions",
 			{
@@ -118,6 +113,9 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.initMiniTv()
 
 		self.getServerData()
+
+		# save the mainMenuList for later usage
+		self.menu_main_list = self["menu"].list
 
 		if self.g_horizontal_menu:
 			# init horizontal menu

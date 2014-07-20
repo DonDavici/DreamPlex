@@ -51,12 +51,14 @@ from __init__ import _ # _ is translation
 
 #===============================================================================
 #
-#===============================================================================	
+#===============================================================================
 class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 	g_horizontal_menu = False
+
 	selectedEntry = None
 	g_serverConfig = None
+
 	nextExitIsQuit = True
 	currentService = None
 	plexInstance = None
@@ -69,6 +71,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
+		self.allowOverride = allowOverride
 
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
@@ -77,14 +80,13 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.setMenuType("main_menu")
 		self.initMenu()
 
+		if self.g_horizontal_menu:
+			self.setHorMenuElements(depth=2)
+			self.translateNames()
+
 		self["title"] = StaticText()
 
-		# get all our servers as list
-		self.getServerList(allowOverride)
-
-		self["menu"]= List(self.mainMenuList, True)
-		
-		self.menu_main_list = self["menu"].list
+		self["menu"]= List(enableWrapAround=True)
 
 		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions", 
 			{
@@ -100,12 +102,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 			self.session.nav.stopService()
 
-		if self.g_horizontal_menu:
-			self.setHorMenuElements(depth=2)
-			self.translateNames()
-
 		self.onFirstExecBegin.append(self.onExec)
-		self.onFirstExecBegin.append(self.onExecRunDev)
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onShown.append(self.checkSelectionOverride)
 
@@ -121,9 +118,16 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self.initMiniTv()
 
-		if self.g_horizontal_menu:
-			# init horizontal menu
-			self.refreshOrientationHorMenu(0)
+		# get all our servers as list
+		self.getServerList(self.allowOverride)
+
+		# now that our mainMenuList is populated we set the list element
+		self["menu"].setList(self.mainMenuList)
+
+		# save the mainMenuList for later usage
+		self.menu_main_list = self["menu"].list
+
+		self.refreshMenu()
 
 		printl("", self, "C")
 
@@ -170,7 +174,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 					printl("found Plugin.MENU_SYSTEM", self, "D")
 					self["menu"].setList(self.getSettingsMenu())
 					self.setTitle(_("System"))
-					self.refreshMenu(0)
+					self.refreshMenu()
 
 					if self.g_horizontal_menu:
 						self.refreshOrientationHorMenu(0)
@@ -208,7 +212,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 		
 		self["menu"].setList(self.getSettingsMenu())
-		self.refreshMenu(0)
+		self.refreshMenu()
 
 		printl("", self, "C")
 	
@@ -312,13 +316,11 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def refreshMenu(self, value):
+	def refreshMenu(self):
 		printl("", self, "S")
 		
-		if value == 1:
-			self["menu"].selectNext()
-		elif value == -1:
-			self["menu"].selectPrevious()
+		if self.g_horizontal_menu:
+			self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
 		
@@ -485,7 +487,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.sleepNow()
 		else:
 			# User said 'no'
-			self.refreshMenu(0)
+			self.refreshMenu()
 
 		printl("", self, "C")
 
@@ -503,15 +505,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 #===============================================================================
 # ADDITIONAL STARTUPS
 #===============================================================================
-	
-	#===============================================================================
-	# 
-	#===============================================================================
-	def onExecRunDev(self):
-		printl("", self, "S")
-		
-		printl("", self, "C")
-	
+
 	#===========================================================================
 	# 
 	#===========================================================================
