@@ -159,13 +159,13 @@ class DPS_ViewShows(DP_View):
 		super(DPS_ViewShows,self)._refresh()
 
 		if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
-			self.setTitle(self.mediaContainer.get("title2", " "))
+			self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
 
 		if self.viewStep == 2:
-			self["season"].setText(self.mediaContainer.get("title2", " "))
+			self["season"].setText(str(self.mediaContainer.get("title2", " ")))
 		else:
 			self["season"].setText("")
 
