@@ -409,6 +409,7 @@ class MediaSyncerInfo(object):
 
 		if self.backgroundMediaSyncer and self.running:
 			self.backgroundMediaSyncer.Cancel()
+			self.running = False
 
 		printl("", self, "C")
 
