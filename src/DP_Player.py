@@ -101,6 +101,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 	timeshift_enabled = False
 	isVisible = False
 	playbackType = None
+	timelineWatcher = None
 
 	#===========================================================================
 	#
@@ -734,7 +735,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 			#show infobar to indicate buffer is empty 
 			self.show()
 
-		self.timelineWatcher.stop()
+		if self.multiUser and self.timelineWatcher is not None:
+			self.timelineWatcher.stop()
 
 		#printl("", self, "C")
 		
@@ -824,7 +826,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide,
 		else:
 			progress = 100
 		
-		if self.multiUser:
+		if self.multiUser and self.timelineWatcher is not None:
 			self.timelineWatcher.stop()
 
 			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
