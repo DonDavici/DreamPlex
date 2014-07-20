@@ -122,6 +122,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	autoPlayMode                    = False
 	resumeMode                      = True
 	currentFunctionLevel            = "1"
+	currentService                  = None
 
 	#===========================================================================
 	#
@@ -361,8 +362,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
-			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
-			self.session.nav.stopService()
+
+			# if liveTv is not stopped on startup we have to do so now
+			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+				self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+				self.session.nav.stopService()
 			try:
 				# we use this to load the m1v direct to the buffer, for now it seems that we have to add it to a skin component
 				self["stillPicture"] = StillPicture(viewClass) # this is working over an renderer
@@ -1038,8 +1042,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			if self.loadedStillPictureLib:
 				self.stopBackdropVideo()
+
+			if self.currentService is not None:
 				printl("restoring liveTv", self, "D")
 				self.session.nav.playService(self.currentService)
+
 			printl("", self, "C")
 			self.close()
 
