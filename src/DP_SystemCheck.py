@@ -469,7 +469,7 @@ class DPS_SystemCheck(Screen):
 				command = "opkg update; opkg install python-imaging"
 
 			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install python"
+				command = "opkg update; opkg install python-imaging"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
