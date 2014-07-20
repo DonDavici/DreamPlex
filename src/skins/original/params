@@ -9,8 +9,8 @@
 	<miniTv name="main_menu" height="225" width="400" />
 	<miniTv name="server_menu" height="225" width="400" />
 	<miniTv name="music" height="225" width="400" />
-	<miniTv name="movie" height="225" width="400" />
-	<miniTv name="show" height="225" width="400" />
+	<miniTv name="movies" height="225" width="400" />
+	<miniTv name="shows" height="225" width="400" />
 	<miniTv name="syncer" height="225" width="400" />
 
 	<!-- FONTS SECTION -->
