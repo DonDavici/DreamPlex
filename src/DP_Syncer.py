@@ -131,6 +131,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 			self["txt_blue"].hide()
 			self["btn_blue"].hide()
 
+		if self._mode == "render":
+			msg_text = _("Please note to run at least once the sync media function within the server menu.\nThis will download the needed files in the right size of 1280x720.")
+			self["output"].setText(msg_text)
 
 		printl("", self, "C")
 
@@ -256,7 +259,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 	def callback_finished(self):
 		printl("", self, "S")
 
-		self["output"].appendText(_("Finished"))
+		self["output"].appendText(_("\n\nFinished"))
 		self["txt_blue"].hide()
 		self["btn_blue"].hide()
 
@@ -532,81 +535,108 @@ class BackgroundMediaSyncer(Thread):
 
 		self.running = True
 		self.cancel = False
-		msg_text = _("some text here")
+		msg_text = _("\n\nStarting to search for picture files with 1280x720 in its name ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 		import os
 		import math
+		import glob
 		#try:
-		for myFile in os.listdir(config.plugins.dreamplex.mediafolderpath.value):
-			if self.cancel:
-				break
-			try:
-				# firt we check for images in the right size
-				if "1280x720.jpg" in myFile:
-					# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
-					myFileWoExtension = myFile[:-4]
-					extension = str.upper(myFile[-3:])
-					if extension == "JPG":
-						extension = "JPEG"
-					imageLocationWoExtension = config.plugins.dreamplex.mediafolderpath.value + myFileWoExtension
+		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720.jpg"))
 
-					# location string
-					videoLocation = imageLocationWoExtension + ".m1v"
-					# check if backdrop video exists
-					if fileExists(videoLocation):
-						msg_text = _("backdrop video exists under the location " + str(videoLocation))
-						self.messages.push((THREAD_WORKING, msg_text))
-						self.messagePump.send(0)
-						continue
-					else:
-						msg_text = _("trying to render backdrop now ...: " + str(videoLocation))
-						self.messages.push((THREAD_WORKING, msg_text))
-						self.messagePump.send(0)
-						imageLocation = config.plugins.dreamplex.mediafolderpath.value + myFile
+		msg_text = _("\n\nFiles found: ") + str(self.count)
+		self.messages.push((THREAD_WORKING, msg_text))
+		self.messagePump.send(0)
+		from time import sleep
+		sleep(1)
 
-						i = Image.open(imageLocation)
-						data = i.size
-						printl("data: " + str(data), self, "D")
+		if int(self.count) > 0:
+			self.currentIndex = 0
+			for myFile in glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720.jpg"):
+				sleep(0.2)
+				self.currentIndex += 1
+				if self.cancel:
+					break
+				try:
+					# firt we check for images in the right size
+					if "1280x720.jpg" in myFile:
+						# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
+						myFileWoExtension = myFile[:-4]
+						extension = str.upper(myFile[-3:])
+						if extension == "JPG":
+							extension = "JPEG"
+						imageLocationWoExtension = config.plugins.dreamplex.mediafolderpath.value + myFileWoExtension
 
-						xValid, xResult = isValidSize(i.size[0])
-						yValid, yResult = isValidSize(i.size[1])
+						# location string
+						videoLocation = imageLocationWoExtension + ".m1v"
+						# check if backdrop video exists
+						if fileExists(videoLocation):
+							msg_text = _("backdrop video exists under the location ") + self.getCounter()
+							self.messages.push((THREAD_WORKING, msg_text))
+							self.messagePump.send(0)
+							continue
+						else:
+							msg_text = _("trying to render backdrop now ...: ") + self.getCounter()
+							self.messages.push((THREAD_WORKING, msg_text))
+							self.messagePump.send(0)
+							imageLocation = config.plugins.dreamplex.mediafolderpath.value + myFile
 
-						printl("xValid: " + str(xValid), self, "D")
-						printl("yValid: " + str(yValid), self, "D")
+							i = Image.open(imageLocation)
+							data = i.size
+							printl("data: " + str(data), self, "D")
 
-						if not xValid or not yValid:
-							xResult = math.ceil(xResult) * 16
-							yResult = math.ceil(yResult) * 16
-							newSize = (int(xResult), int(yResult))
-							resizedImage = i.resize(newSize)
-							resizedImage.save(imageLocation, format=extension)
+							xValid, xResult = isValidSize(i.size[0])
+							yValid, yResult = isValidSize(i.size[1])
 
-						printl("started rendering : " + str(videoLocation),self, "D")
+							printl("xValid: " + str(xValid), self, "D")
+							printl("yValid: " + str(yValid), self, "D")
 
-						cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
-						printl("cmd: " + str(cmd), self, "D")
+							if not xValid or not yValid:
+								xResult = math.ceil(xResult) * 16
+								yResult = math.ceil(yResult) * 16
+								newSize = (int(xResult), int(yResult))
+								resizedImage = i.resize(newSize)
+								resizedImage.save(imageLocation, format=extension)
 
-						os.system(cmd)
+							printl("started rendering : " + str(videoLocation),self, "D")
 
-						msg_text = _("finished rendering myFile: " + str(myFile))
-						self.messages.push((THREAD_WORKING, msg_text))
-						self.messagePump.send(0)
+							cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+							printl("cmd: " + str(cmd), self, "D")
 
-					printl("finished rendering myFile: " + str(myFile),self, "D")
-			except Exception, e:
-				printl("Error: " + str(e), self, "D")
-				self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
-				self.messagePump.send(0)
+							os.system(cmd)
+
+						printl("finished rendering myFile: " + str(myFile),self, "D")
+				except Exception, e:
+					printl("Error: " + str(e), self, "D")
+					self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
+					self.messagePump.send(0)
+		else:
+			msg_text = _("\n\nNo Files found. Nothing to do!")
+			self.messages.push((THREAD_WORKING, msg_text))
+			self.messagePump.send(0)
+
+			sleep(1)
 
 		if self.cancel:
 			self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
 		else:
-			self.messages.push((THREAD_FINISHED, _("We did it :-)")))
+			self.messages.push((THREAD_FINISHED, _("\n\nWe are done!")))
 
+		self.messagePump.send(0)
+
+		sleep(1)
 		self.running = False
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getCounter(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return "(" + str(self.currentIndex) + "/" + str(self.count) + ") "
 
 	#===========================================================================
 	#
