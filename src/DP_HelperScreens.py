@@ -44,6 +44,8 @@ class DPS_InputBox(InputBox, DPH_ScreenHelper):
 		DPH_ScreenHelper.__init__(self)
 		self.entryData = args
 
+		self.setMenuType("input_box")
+
 		printl("entryData: " + str(self.entryData), self, "D")
 
 		self.setTitle(_("Search ..."))
