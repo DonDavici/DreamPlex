@@ -339,7 +339,7 @@
             <convert type="MenuEntryCompare">showEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-                <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/picons/menu_music.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/picons/menu_music.png" zPosition="10" position="800,350" size="256,256" alphatest="blend" >
             <convert type="MenuEntryCompare">musicEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
