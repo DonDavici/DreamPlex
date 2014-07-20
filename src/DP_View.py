@@ -1240,6 +1240,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 						self.hideNoneMediaFunctions()
 						self.hideVideoDetails()
 
+					if self.tagType == "Track":
+						# this sets resumeMode to resume off
+						self.toggleResumeMode()
+						# this sets playmode to multi
+						self.togglePlayMode()
+
 					self["miniTv"].show()
 
 					#self.initFastScroll()
