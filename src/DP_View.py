@@ -1233,7 +1233,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 						self.toggleElementVisibilityWithLabel("duration")
 						self.toggleElementVisibilityWithLabel("year")
 
-					if self.tagType != "Show" and self.tagType != "Episodes" and self.tagType != "Track":
+					if self.tagType != "Show" and self.tagType != "Episodes":
 						self.showNoneMediaFunctions()
 						self.showVideoDetails()
 					else:
