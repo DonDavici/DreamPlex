@@ -585,14 +585,9 @@ class BackgroundMediaSyncer(Thread):
 				self.messagePump.send(0)
 
 		if self.cancel:
-			self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress OK to close.") ))
+			self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
 		else:
 			self.messages.push((THREAD_FINISHED, _("We did it :-)")))
-
-		# except Exception, e:
-		# 	self.messages.push((THREAD_FINISHED, _("Error!\nError-message:%s\nPress OK to close." % e) ))
-		# finally:
-		# 	self.messagePump.send(0)
 
 		self.running = False
 
