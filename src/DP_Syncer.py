@@ -28,6 +28,8 @@ from enigma import eTimer, ePythonMessagePump, eConsoleAppContainer
 from threading import Thread
 from threading import Lock
 
+from Screens.MessageBox import MessageBox
+
 from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Components.config import config
@@ -282,6 +284,19 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		if not self.mediaSyncerInfo.isRunning():
 			self.close(0)
+		else:
+			self.session.openWithCallback(self.askForBackground,MessageBox,_("Sync or Renderer is still running!\nContinue in background?"), MessageBox.TYPE_YESNO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def askForBackground(self, answer):
+		printl("", self, "S")
+
+		if answer:
+			self.close(1)
 
 		printl("", self, "C")
 
