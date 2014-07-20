@@ -646,6 +646,9 @@ class PlexLibrary(Screen):
 			entryData["currentViewMode"]	= currentViewMode
 			entryData["nextViewMode"]	    = "ShowDirectory"
 
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
+
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
 
