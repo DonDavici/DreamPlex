@@ -69,10 +69,16 @@ class DPS_ViewMusic(DP_View):
 
 		if "type" in self.details:
 			if self.details["type"] == "album" or self.details["type"] == "artist":
-				self.changePoster = True
-				self.changeBackdrop = True
-				self.resetBackdrop = True
-				self.resetPoster = True
+				if self.details["type"] == "album":
+					self.changePoster = True
+					self.changeBackdrop = False
+					self.resetBackdrop = False
+					self.resetPoster = True
+				else:
+					self.changePoster = True
+					self.changeBackdrop = True
+					self.resetBackdrop = True
+					self.resetPoster = True
 				if "ratingKey" in self.details:
 					self.pname = self.details["ratingKey"]
 					self.bname = self.details["ratingKey"]
