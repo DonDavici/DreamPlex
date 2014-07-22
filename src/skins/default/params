@@ -15,17 +15,17 @@
 	<miniTv name="input_box" height="225" width="400" />
 
 	<!-- FONTS SECTION -->
-	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/HandelGotD.ttf" size="100" name="Saint" />
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/HandelGotD.ttf" size="100" name="Saint" />
 	
 	<!-- GUI ELEMENTS -->
-	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/seen-fs8.png" />
-	<guiElement name="startedPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/started-fs8.png" />
-	<guiElement name="unseenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/icons/unseen-fs8.png" />
+	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
+	<guiElement name="startedPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png" />
+	<guiElement name="unseenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/unseen-fs8.png" />
 
-	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_red-fs8.png" />
-	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_green-fs8.png" />
-	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_blue-fs8.png" />
-	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/original/buttons/btn_yellow-fs8.png"/>
+	<guiElement name="key_red" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_red-fs8.png" />
+	<guiElement name="key_green" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_green-fs8.png" />
+	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_blue-fs8.png" />
+	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_yellow-fs8.png"/>
 
 	<!-- VIEWS -->
 

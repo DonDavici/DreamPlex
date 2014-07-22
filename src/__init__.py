@@ -333,7 +333,7 @@ def getInstalledSkins():
 	printl("", "__init__::getInstalledSkins", "S")
 
 	mySkins = []
-	myDefaultSkin = "original"
+	myDefaultSkin = "default"
 
 	try:
 		for skin in os.listdir(config.plugins.dreamplex.skinfolderpath.value):
