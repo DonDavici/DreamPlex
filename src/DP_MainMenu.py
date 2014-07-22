@@ -63,6 +63,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	currentService = None
 	plexInstance = None
 	selectionOverride = None
+	checkedForUpdates = False
 
 	#===========================================================================
 	# 
@@ -366,6 +367,10 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		if self.selectionOverride is not None:
 			self.okbuttonClick()
 
+		if config.plugins.dreamplex.checkForUpdateOnStartup.value and not self.checkedForUpdates:
+			DPS_SystemCheck(self.session).checkForUpdate()
+			self.checkedForUpdates = True
+
 		printl("", self, "C")
 	#===============================================================================
 	#
@@ -520,7 +525,4 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		# for now we do not see any incoming traffic from the app :-(
 		#HttpDeamon().startDeamon()
 		
-		if config.plugins.dreamplex.checkForUpdateOnStartup.value:
-			DPS_SystemCheck(self.session).checkForUpdate()
-
 		printl("", self, "C")
