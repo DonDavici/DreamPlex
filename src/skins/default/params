@@ -42,20 +42,12 @@
 		</subView>
 	</movieView>
 
-	<!-- finish me
-	<movieView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
-		<subView name="ShowMovies">
-			<element name="backdrop" visible="False"/>
-		</subView>
-	</movieView>
-
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
 		<subView name="ShowMovies">
 			<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
 		</subView>
 
 	</movieView>
-	-->
 
 	<!-- SHOW VIEWS -->
 	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
@@ -87,25 +79,6 @@
 		</subView>
 	</showView>
 
-	<!-- finish me
-	<showView name="long List" apiLevel="1" itemsPerPage="14" screen="DPS_ViewListLong" backdropVideos="False">
-		<subView name="ShowShows">
-			<element name="backdrop" visible="False"/>
-		</subView>
-
-
-		<subView name="ShowSeasons">
-			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
-			<element name="genre" visible="False" />
-			<element name="shortDescription" visible="False"/>
-		</subView>
-
-		<subView name="ShowEpisodes">
-			<element name="shortDescription" visible="True"/>
-			<element name="duration" visible="True" />
-		</subView>
-	</showView>
-
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
 		<subView name="ShowShows">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
@@ -124,7 +97,6 @@
 			<element name="duration" visible="True" />
 		</subView>
 	</showView>
-	-->
 
 	<!-- MUSIC VIEWS -->
 	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
