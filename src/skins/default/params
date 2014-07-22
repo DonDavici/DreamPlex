@@ -27,6 +27,9 @@
 	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_blue-fs8.png" />
 	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_yellow-fs8.png"/>
 
+	<guiElement name="musicCase" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/cover-fs8.png" />
+	<guiElement name="videoCase" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/cover-fs8.png" />
+
 	<!-- VIEWS -->
 
 	<!-- HOW TO ...

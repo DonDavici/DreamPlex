@@ -348,6 +348,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["fileLabel"] = Label()
 		self["fileLabel"].setText(_("File:"))
 
+		self["casePic"] = Pixmap()
+
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
 		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
@@ -1895,6 +1897,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
 		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+
+		if self.libraryName == "music":
+			self["casePic"].instance.setPixmapFromFile(self.guiElements["musicCase"])
+
+		else:
+			self["casePic"].instance.setPixmapFromFile(self.guiElements["videoCase"])
 
 		if self.fastScroll:
 			# if we are in fastScrollMode we remove some gui elements
