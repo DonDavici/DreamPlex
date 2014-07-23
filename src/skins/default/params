@@ -8,11 +8,11 @@
 	<!-- MINI TV SIZE -->
 	<miniTv name="main_menu" height="225" width="400" />
 	<miniTv name="server_menu" height="225" width="400" />
+	<miniTv name="syncer" height="225" width="400" />
+	<miniTv name="input_box" height="225" width="400" />
 	<miniTv name="music" height="225" width="400" />
 	<miniTv name="movies" height="225" width="400" />
 	<miniTv name="shows" height="225" width="400" />
-	<miniTv name="syncer" height="225" width="400" />
-	<miniTv name="input_box" height="225" width="400" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/HandelGotD.ttf" size="100" name="Saint" />
@@ -27,7 +27,7 @@
 	<guiElement name="key_blue" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_blue-fs8.png" />
 	<guiElement name="key_yellow" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_yellow-fs8.png"/>
 
-	<guiElement name="musicCase" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/cover-fs8.png" />
+	<guiElement name="musicCase" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/music-fs8.png" />
 	<guiElement name="videoCase" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/cover-fs8.png" />
 
 	<!-- VIEWS -->
@@ -104,18 +104,20 @@
 	<!-- MUSIC VIEWS -->
 	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
 		<subView name="ShowArtists">
-			<element name="genre" visible="False" />
-			<element name="info" visible="False"/>
+
 		</subView>
 
 		<subView name="ShowAlbums">
-			<element name="genre" visible="False" />
 			<element name="info" visible="False"/>
+			<element name="duration" visible="False"/>
+			<element name="leafCount" visible="True" xCoord="545" yCoord="360"/>
 		</subView>
 
 		<subView name="ShowTracks">
 			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
 			<element name="genre" visible="False" />
+			<element name="leafCount" visible="False" />
+
 		</subView>
 	</musicView>
 </xml>

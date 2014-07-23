@@ -26,7 +26,7 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, encodeMe
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -54,6 +54,47 @@ class DPS_ViewShows(DP_View):
 		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
 
 		self.setTitle(_("Shows"))
+
+		self.playTheme = config.plugins.dreamplex.playTheme.value
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def _refresh(self):
+		printl("", self, "S")
+
+		if not self.isFolder:
+			self["title"].setText(encodeMe(self.details.get("title", " ")))
+			self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
+
+			self.setMediaFunctions()
+
+			# if we are a show an if playtheme is enabled we start playback here
+			if self.playTheme:
+				if self.startPlaybackNow: # only if we are a show
+					self.startThemePlayback()
+
+			if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
+				self.setTitle(str(self.mediaContainer.get("title2", " ")))
+				self["leafCount"].setText(self.details.get("leafCount", " "))
+				self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
+				self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
+
+			if self.viewStep == 2:
+				self["season"].setText(str(self.mediaContainer.get("title2", " ")))
+			else:
+				self["season"].setText("")
+
+			if "type" in self.details:
+				if self.details["type"] == "show":
+					self["year"].setText(str(self.details.get("year", " - ")))
+
+			if self.tagType != "Show" and self.tagType != "Episodes":
+				self.showNoneMediaFunctions()
+			else:
+				self.hideNoneMediaFunctions()
 
 		printl("", self, "C")
 
@@ -146,40 +187,6 @@ class DPS_ViewShows(DP_View):
 
 		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
 		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def _refresh(self):
-		printl("", self, "S")
-
-		# first we call the the rest of the _refresh from super
-		super(DPS_ViewShows,self)._refresh()
-
-		if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
-			self.setTitle(str(self.mediaContainer.get("title2", " ")))
-			self["leafCount"].setText(self.details.get("leafCount", " "))
-			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
-			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
-
-		if self.viewStep == 2:
-			self["season"].setText(str(self.mediaContainer.get("title2", " ")))
-		else:
-			self["season"].setText("")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onEnter(self):
-		printl("", self, "S")
-
-		self.lastTagType = None
-
-		super(DPS_ViewShows,self).onEnter()
 
 		printl("", self, "C")
 

@@ -534,6 +534,10 @@ class PlexLibrary(Screen):
 			entryData['server']			    = server
 			entryData['tagType']            = "Episodes"
 
+			# this is the case for show all epsiodes of show without season number
+			if "type" not in entryData:
+				entryData["type"]               = "season"
+
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['token']			    = self.g_myplex_accessToken
@@ -645,6 +649,7 @@ class PlexLibrary(Screen):
 			entryData['tagType']            = "Directory"
 			entryData["currentViewMode"]	= currentViewMode
 			entryData["nextViewMode"]	    = "ShowDirectory"
+			entryData["type"]               = "Folder"
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
@@ -683,6 +688,10 @@ class PlexLibrary(Screen):
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
+
+			if "type" in entryData:
+				if entryData["type"] == "album" or entryData["type"] == "artist":
+					entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))

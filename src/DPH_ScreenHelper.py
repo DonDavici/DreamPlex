@@ -53,6 +53,7 @@ class DPH_ScreenHelper(object):
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
 			self["miniTv"] = VideoWindow(decoder=0)
+			self.miniTvInUse = True
 		else:
 			self["miniTv"] = Label()
 

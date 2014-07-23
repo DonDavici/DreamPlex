@@ -57,8 +57,9 @@ from DP_Server import DPS_Server
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
+from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, encodeMe
+from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -77,7 +78,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	currentTagTypeDict              = {}
 	showMedia                       = False
 	showDetail                      = False
-	isDirectory                     = False
+	isFolder                     = False
 	forceUpdate                     = False
 	lastTagType                     = None
 
@@ -107,7 +108,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	startPlaybackNow                = False
 	changePoster                    = True
 	changeBackdrop                  = True
-	resetGuiElements                = False
+	fastScroll                = False
 	viewStep                        = 0 # we use this to know the steps we did to store the changes form subviews
 	viewChangeStorage               = {} # we use this to save changed value if we have subViews
 	loadedStillPictureLib           = False # until we do not know if we can load the libs it will be false
@@ -123,6 +124,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	resumeMode                      = True
 	currentFunctionLevel            = "1"
 	currentService                  = None
+	miniTvInUse                     = False
+	keyOneDisabled                  = False
 
 	#===========================================================================
 	#
@@ -163,6 +166,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 
+		self.noneDirectoryElementsList = getNoneDirectoryElements()
+		self.directoryElementsList = getDefaultDirectoryElementsList()
+
 		# Initialise library list
 		myList = []
 		self["listview"] = List(myList, True)
@@ -200,9 +206,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			"3":			(self.onKey3, ""),
 		}, -2)
 
-		self.onLayoutFinish.append(self.setCustomTitle)
-		self.onFirstExecBegin.append(self.getViewListData)
-
 		self.guiElements = getGuiElements()
 
 		# set navigation values
@@ -210,7 +213,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
-		self.playTheme = config.plugins.dreamplex.playTheme.value
 		self.fastScroll = config.plugins.dreamplex.fastScroll.value
 
 		# get data from plex library
@@ -221,8 +223,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		# init skin elements
 		self.setMultiLevelElements(levels=3)
-
-		self["txt_functions"] = Label()
 
 		self["totalLabel"] = Label()
 		self["totalLabel"].setText(_("Total:"))
@@ -370,7 +370,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 				self.session.nav.stopService()
 			try:
-				# we use this to load the m1v direct to the buffer, for now it seems that we have to add it to a skin component
 				self["stillPicture"] = StillPicture(viewClass) # this is working over an renderer
 				# we use this to be able to resize the tv picture and show as backdrop
 
@@ -387,6 +386,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.onLayoutFinish.append(self.setPara)
 		self.onLayoutFinish.append(self.processGuiElements)
 		self.onLayoutFinish.append(self.finishLayout)
+		self.onLayoutFinish.append(self.setCustomTitle)
+		self.onFirstExecBegin.append(self.getViewListData)
 
 		printl("", self, "C")
 
@@ -442,7 +443,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.currentTagTypeDict = {}
 
 		self._load()
-		self.refresh()
 
 		printl("", self, "C")
 
@@ -493,7 +493,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		self.showMedia = True
-		self.resetGuiElements = True
 		self.refresh()
 
 		printl("", self, "C")
@@ -671,6 +670,39 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	#
 	#===========================================================================
+	def initFastScroll(self):
+		printl("", self, "S")
+
+		color = "green"
+		self["btn_"+ color + "Text"].setText(_("fastScroll 'On'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFastScroll(self):
+		printl("", self, "S")
+
+		color = "green"
+
+		if self.fastScroll:
+			self.fastScroll = False
+			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
+			self["info"].hide()
+			self["infoLabel"].hide()
+		else:
+			self.fastScroll = True
+			self["btn_" + color + "Text"].setText("fastScroll 'On'")
+			self["info"].show()
+			self["infoLabel"].show()
+			self["miniTv"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def showServerSettings(self):
 		printl("", self, "S")
 
@@ -748,17 +780,20 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onKey1(self):
+	def onKey1(self, initial=False):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel="1")
-		self.alterColorFunctionNames(level="1")
+		if not self.keyOneDisabled:
+			self.setLevelActive(currentLevel="1")
+			self.alterColorFunctionNames(level="1")
 
-		self.initPlayMode()
-		self.initResumeMode()
+			self.initPlayMode()
+			self.initResumeMode()
 
-		self.lastTagType = None
-		self.refresh()
+			if not initial:
+				self.refreshFunctionName()
+
+			self.lastTagType = None
 
 		printl("", self, "C")
 
@@ -783,49 +818,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self.setLevelActive(currentLevel="3")
 		self.alterColorFunctionNames(level="3")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def initFastScroll(self):
-		printl("", self, "S")
-
-		color = "green"
-
-		if self.fastScroll:
-			self["btn_" + color + "Text"].setText("fastScroll 'On'")
-			self.toggleElementVisibilityWithLabel("info")
-
-		else:
-			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
-			self.resetGuiElements = True
-			self.toggleElementVisibilityWithLabel("info","hide")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def toggleFastScroll(self):
-		printl("", self, "S")
-
-		color = "green"
-
-		#if self.viewParams["elements"]["info"]["visible"]:
-		if self.fastScroll:
-			self.fastScroll = False
-			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
-			self["info"].hide()
-			self["infoLabel"].hide()
-		else:
-			self.fastScroll = True
-			self["btn_" + color + "Text"].setText("fastScroll 'On'")
-			self.resetGuiElements = True
-			self["info"].show()
-			self["infoLabel"].show()
-			self["miniTv"].hide()
 
 		printl("", self, "C")
 
@@ -905,6 +897,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def onEnter(self):
 		printl("", self, "S")
+		self.lastTagType = None
+
 		selection = self["listview"].getCurrent()
 
 		if selection is not None:
@@ -1031,8 +1025,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
+			self.selection = self["listview"].getCurrent()
+			if self.selection is not None:
+				self.details 	= self.selection[1]
+				self.context	= self.selection[2]
+
+
 			# if self.currentTagTypeDict[self.viewStep] == "Directory":
-			# 	self.isDirectory = True
+			# 	self.isFolder = True
 			# 	# we reset this to trigger screen changes
 			# 	self.lastTagType = None
 
@@ -1081,6 +1081,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		# now just refresh list
 		self.updateList()
+
+		# now refresh
+		self.refresh()
 		printl("", self, "C")
 
 	#===========================================================================
@@ -1155,31 +1158,86 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		if self.selection is not None:
 			printl("selection: " + str(self.selection), self, "D")
 			self.tagType = self.selection[1]['tagType']
-			#self.currentTagTypeDict[self.viewStep] = self.tagType
+			self.type = self.selection[1]['type']
 
-			if self.tagType == "Directory":
-				self.isDirectory = True
+			# we are a real folder on os level
+			if self.type == "Folder":
+				self.isFolder = True
 			else:
-				self["txt_functions"].show()
-				self.isDirectory = False
-				self.seen = False
-				if "viewCount" in self.selection[1]:
-					if "viewCount" > 0:
-						self.seen = True
+				self.isFolder = False
+			printl("isFolder: " + str(self.isFolder), self, "D")
 
-				if self.currentFunctionLevel == "1":
-					self.refreshFunctions()
+			# we are a xml directory tag
+			if self.tagType != "Directory":
+				self.handleViewStateInformation()
 
-			printl("isDirectory: " + str(self.isDirectory), self, "D")
+		printl("fastScroll: " + str(self.fastScroll), self, "D")
+		printl("self.viewParams: " + str(self.viewParams), self, "D")
 
-		self._refresh()
+		printl("showMedia: " + str(self.showMedia), self, "D")
+
+		if self.selection is not None:
+			self.details 	= self.selection[1]
+			self.context	= self.selection[2]
+
+			# navigation
+			self.handleNavigationData()
+
+			# depending on the settings in params we reset all images that are needed to
+			self.resetCurrentImages()
+
+			if not self.isFolder:
+				# to avoid unneeded skin changes we check here if the type is equal to the last one
+				if self.tagType != self.lastTagType:
+					# if we were are no folder anymore we switch back
+					self.unsetFromDirectoryMode()
+				else:
+					# if we are a folder within a specific library we switch to folder mode
+					self.setToDirectoryMode()
+
+				# if we are in fastScrollMode we have to reset some screen elements
+				if self.fastScroll:
+					self.resetGuiElementsInFastScrollMode()
+
+				# lets get all data we need to show the needed pictures
+				# we also check if we want to play
+				self.getPictureInformationToLoad()
+
+				# now go for it
+				self.handlePictures()
+
+				# now we go with the type related stuff like movie, music, etc.
+				self._refresh()
+
+			# we save this to avoid extensive unnessary skin changes
+			self.lastTagType = self.tagType
+
+		else:
+			self["title"].setText( "no data retrieved")
+			self["shortDescription"].setText("no data retrieved")
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def refreshFunctions(self):
+	def handleViewStateInformation(self):
+		printl("", self, "S")
+
+		self.seen = False
+		if "viewCount" in self.selection[1]:
+			if "viewCount" > 0:
+				self.seen = True
+
+		if self.currentFunctionLevel == "1":
+			self.refreshFunctionName()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def refreshFunctionName(self):
 		printl("", self, "S")
 
 		color = "yellow"
@@ -1199,155 +1257,83 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def _refresh(self):
 		printl("", self, "S")
 
-		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
-		printl("self.viewParams: " + str(self.viewParams), self, "D")
+		printl("", self, "C")
 
-		printl("showMedia: " + str(self.showMedia), self, "D")
+	#===============================================================================
+	#
+	#===============================================================================
+	def setDuration(self):
+		printl("", self, "S")
 
-		if self.selection is not None:
-			self.details 	= self.selection[1]
-			self.context	= self.selection[2]
+		duration = str(self.details.get("duration", " - "))
 
-			# navigation
-			self.handleNavigationData()
-
-			# lets get all data we need to show the needed pictures
-			# we also check if we want to play
-			self.getPictureInformationToLoad()
-
-			if self.resetGuiElements:
-				self.resetGuiElementsInFastScrollMode()
-
-			self.resetCurrentImages()
-
-			# now go for it
-			self.handlePictures()
-
-			if not self.isDirectory:
-				# we need those for fastScroll
-				# this prevents backdrop load on next item
-				self.showMedia = False
-				if self.tagType != self.lastTagType:
-					if self.lastTagType == "Directory":
-						self.toggleElementVisibilityWithLabel("audio")
-						self.toggleElementVisibilityWithLabel("subtitles")
-						self.toggleElementVisibilityWithLabel("genre")
-						self.toggleElementVisibilityWithLabel("duration")
-						self.toggleElementVisibilityWithLabel("year")
-
-					if self.tagType != "Show" and self.tagType != "Episodes":
-						self.showNoneMediaFunctions()
-						self.showVideoDetails()
-					else:
-						self.hideNoneMediaFunctions()
-						self.hideVideoDetails()
-
-					if self.tagType == "Track":
-						# this sets resumeMode to resume off
-						self.toggleResumeMode()
-						# this sets playmode to multi
-						self.togglePlayMode()
-
-					self["miniTv"].show()
-
-					#self.initFastScroll()
-
-				if self.context is not None:
-					# lets set the urls for context functions of the selected entry
-					self.seenUrl = self.context.get("watchedURL", None)
-					self.unseenUrl = self.context.get("unwatchURL", None)
-					self.deleteUrl = self.context.get("deleteURL", None)
-					self.refreshUrl = self.context.get("libraryRefreshURL", None)
-					printl("seenUrl: " + str(self.seenUrl),self, "D")
-					printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-					printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-					printl("refreshUrl: " + str(self.refreshUrl),self, "D")
-
-				# if we are a show an if playtheme is enabled we start playback here
-				if self.playTheme:
-					if self.startPlaybackNow: # only if we are a show
-						self.startThemePlayback()
-
-				self["title"].setText(encodeMe(self.details.get("title", " ")))
-
-				self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
-				self["year"].setText(str(self.details.get("year", " - ")))
-				self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
-
-				duration = str(self.details.get("duration", " - "))
-
-				if duration == " - ":
-					self["duration"].setText(duration)
-				else:
-					self["duration"].setText(durationToTime(duration))
-
-				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
-				self["cast"].setText(encodeMe(self.details.get("cast", " ")))
-				self["writer"].setText(encodeMe(self.details.get("writer", " ")))
-				self["director"].setText(encodeMe(self.details.get("director", " ")))
-
-				if self.tagType == "Video" or self.tagType == "Track":
-					# technical details
-					self.mediaDataArr = self.details["mediaDataArr"][0]
-					self.parts = self.mediaDataArr["Parts"][0]
-
-					self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
-					self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
-					self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
-					self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
-					self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
-					self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
-					self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-					self["file"].setText(self.parts.get("file", " - "))
-
-				if (self.fastScroll == False or self.showMedia == True) and self.details ["tagType"] == "Video":
-					# handle all pixmaps
-					self.handlePopularityPixmaps()
-					self.handleCodecPixmaps()
-					self.handleAspectPixmaps()
-					self.handleResolutionPixmaps()
-					self.handleRatedPixmaps()
-					self.handleSoundPixmaps()
-			else:
-
-				if self.tagType != self.lastTagType or self.tagType is None:
-					self.toggleElementVisibilityWithLabel("audio", "hide")
-					self.toggleElementVisibilityWithLabel("subtitles", "hide")
-					self.toggleElementVisibilityWithLabel("genre", "hide")
-					self.toggleElementVisibilityWithLabel("duration", "hide")
-					self.toggleElementVisibilityWithLabel("year", "hide")
-					self.toggleElementVisibilityWithLabel("info", "hide")
-					self.toggleElementVisibilityWithLabel("leafCount", "hide")
-					self.toggleElementVisibilityWithLabel("viewedLeafCount", "hide")
-					self.toggleElementVisibilityWithLabel("unviewedLeafCount", "hide")
-					self.toggleElementVisibilityWithLabel("writer", "hide")
-					self.toggleElementVisibilityWithLabel("director", "hide")
-					self.toggleElementVisibilityWithLabel("cast", "hide")
-					self["txt_functions"].hide()
-
-					self.hideNoneMediaFunctions()
-					self.hideMediaPixmaps()
-
-					self["miniTv"].hide()
-
-				self["title"].setText("Directory")
-				self["grandparentTitle"].setText("")
-				self["season"].setText("")
-				self["tag"].setText("Name:")
-				self["year"].setText("")
-				self["genre"].setText("")
-				self["duration"].setText("")
-				self["shortDescription"].setText(self.details.get("title", " ").encode('utf-8'))
-				self["cast"].setText("")
-				self["writer"].setText("")
-				self["director"].setText("")
-
-			# we save this to avoid extensive unnessary skin changes
-			self.lastTagType = self.tagType
-
+		if duration == " - ":
+			self["duration"].setText(duration)
 		else:
-			self["title"].setText( "no data retrieved")
-			self["shortDescription"].setText("no data retrieved")
+			self["duration"].setText(durationToTime(duration))
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def setMediaFunctions(self):
+		printl("", self, "S")
+
+		if self.context is not None:
+			# lets set the urls for context functions of the selected entry
+			self.seenUrl = self.context.get("watchedURL", None)
+			self.unseenUrl = self.context.get("unwatchURL", None)
+			self.deleteUrl = self.context.get("deleteURL", None)
+			self.refreshUrl = self.context.get("libraryRefreshURL", None)
+			printl("seenUrl: " + str(self.seenUrl),self, "D")
+			printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def unsetFromDirectoryMode(self):
+		printl("", self, "S")
+
+		# we need those for fastScroll
+		# this prevents backdrop load on next item
+		self.showMedia = False
+
+		if self.miniTvInUse:
+			self["miniTv"].show()
+		if self.lastTagType == "Directory":
+			self.toggleElementVisibilityWithLabel("audio")
+			self.toggleElementVisibilityWithLabel("subtitles")
+			self.toggleElementVisibilityWithLabel("genre")
+			self.toggleElementVisibilityWithLabel("duration")
+			self.toggleElementVisibilityWithLabel("year")
+
+		printl("", self, "C")
+	#===============================================================================
+	#
+	#===============================================================================
+	def setToDirectoryMode(self):
+		printl("", self, "S")
+
+		if self.tagType != self.lastTagType or self.tagType is None:
+			for element in self.noneDirectoryElementsList:
+				try:
+					self.toggleElementVisibilityWithLabel(element, "hide")
+				except: pass
+
+			self.hideNoneMediaFunctions()
+			self.hideMediaPixmaps()
+
+			if self.miniTvInUse:
+				self["miniTv"].hide()
+
+		self["title"].setText("Directory")
+		self["tag"].setText("Name:")
+		self["shortDescription"].setText(self.details.get("title", " ").encode('utf-8'))
 
 		printl("", self, "C")
 
@@ -1443,6 +1429,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_green"].hide()
 		self["btn_greenText"].hide()
 
+		self.keyOneDisabled = True
+		self.onKey2()
+		self["L1"].hide()
+		#self["L2"].hide()
+		#self["L3"].hide()
+
 		printl("", self, "C")
 
 	#===============================================================================
@@ -1459,6 +1451,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_blueText"].show()
 		self["btn_green"].show()
 		self["btn_greenText"].show()
+
+		self.keyOneDisabled = False
+		self.onKey1()
+		self["L1"].show()
 
 		printl("", self, "C")
 
@@ -1883,14 +1879,15 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
 
-		self.initMiniTv()
+		if self.miniTvInUse:
+			self.initMiniTv()
 
 		self.initColorFunctions()
 
 		self.setLevelActive(currentLevel=1)
 
 		# we do like we pressed the button to init the right names
-		self.onKey1()
+		self.onKey1(initial=True)
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])

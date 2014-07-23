@@ -26,7 +26,7 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, encodeMe
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -54,6 +54,46 @@ class DPS_ViewMusic(DP_View):
 		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
 
 		self.setTitle(_("Music"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def _refresh(self):
+		printl("", self, "S")
+
+		if self.tagType == "Track":
+			# this sets resumeMode to resume off
+			self.toggleResumeMode()
+			# this sets playmode to multi
+			self.togglePlayMode()
+
+		if "type" in self.details:
+			if self.details["type"] == "artist":
+				self["title"].setText(encodeMe(self.details.get("title", " ")))
+				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+				self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
+
+				self.toggleElementVisibilityWithLabel("genre")
+				self["shortDescription"].show()
+
+				self.hideNoneMediaFunctions()
+				self.hideMediaPixmaps()
+
+			elif self.details["type"] == "album":
+				self["title"].setText(encodeMe(self.details.get("title", " ")))
+				self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
+
+				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+				self["year"].setText(str(self.details.get("year", " - ")))
+
+				self.toggleElementVisibilityWithLabel("year")
+				self.toggleElementVisibilityWithLabel("genre")
+				self["shortDescription"].show()
+
+				self.hideNoneMediaFunctions()
+				self.hideMediaPixmaps()
 
 		printl("", self, "C")
 
@@ -138,7 +178,7 @@ class DPS_ViewMusic(DP_View):
 
 		printl("", self, "C")
 
-#===========================================================================
+	#===========================================================================
 	#
 	#===========================================================================
 	def onLeave(self):
@@ -154,3 +194,4 @@ class DPS_ViewMusic(DP_View):
 		self.refresh()
 
 		printl("", self, "C")
+
