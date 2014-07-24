@@ -43,7 +43,7 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def __init__(self, forceMiniTv=False):
+	def __init__(self, width=None, height=None, forceMiniTv=False):
 		printl("", self, "S")
 
 		self.stopLiveTvOnStartup = config.plugins.dreamplex.stopLiveTvOnStartup.value
@@ -52,6 +52,9 @@ class DPH_ScreenHelper(object):
 		self.forceMiniTv = forceMiniTv
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
+			# if width is None and height is None:
+			# 	self["miniTv"] = VideoWindow(decoder=0)
+			# else:
 			self["miniTv"] = VideoWindow(decoder=0)
 			self.miniTvInUse = True
 		else:
@@ -62,21 +65,21 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def initMiniTv(self, width=None, heigth=None):
+	def initMiniTv(self, width=None, height=None):
 		"""
 		the widht and height is in params files a param section on its own
 		but for the views the settings located there for this reason
 		we have both ways.
 		"""
 		printl("", self, "S")
-		self.miniTvInUse = True
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
-			if width is None or heigth is None:
+			if width is None or height is None:
 				width, height = self.getMiniTvParams()
 			desk = getDesktop(0)
+			print str(self["miniTv"].instance)
 			self["miniTv"].instance.setFBSize(desk.size())
-			self["miniTv"].instance.resize(eSize(width, height))
+			self["miniTv"].instance.resize(eSize(int(width), int(height)))
 		else:
 			self["miniTv"].hide()
 

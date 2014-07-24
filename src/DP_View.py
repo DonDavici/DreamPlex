@@ -140,7 +140,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		"""
 		printl("", self, "S")
 		Screen.__init__(self, viewClass)
-		DPH_ScreenHelper.__init__(self, forceMiniTv=True)
+		DPH_ScreenHelper.__init__(self, forceMiniTv= True)
 		DPH_MultiColorFunctions.__init__(self)
 
 		self.setMenuType(libraryName)
@@ -365,17 +365,15 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
-
 			# if liveTv is not stopped on startup we have to do so now
 			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
 				self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 				self.session.nav.stopService()
+
 			try:
 				self["stillPicture"] = StillPicture(viewClass) # this is working over an renderer
 				# we use this to be able to resize the tv picture and show as backdrop
-
 				self.loadedStillPictureLib = True
-				self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
 
 			except Exception, ex:
 
@@ -1913,6 +1911,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.initColorFunctions()
 
 		self.setLevelActive(currentLevel=1)
+
+		self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
 
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)

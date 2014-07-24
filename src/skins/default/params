@@ -45,6 +45,7 @@
 	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">
 		<subView name="ShowMovies">
 			<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
+			<element name="miniTv" xCoord="0" yCoord="0"/>
 		</subView>
 
 	</movieView>
@@ -91,6 +92,7 @@
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
 			<element name="genre" visible="False" />
 			<element name="shortDescription" visible="False"/>
+			<element name="miniTv" xCoord="0" yCoord="0"/>
 		</subView>
 
 		<subView name="ShowSeasons">

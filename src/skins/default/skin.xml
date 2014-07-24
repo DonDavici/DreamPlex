@@ -47,7 +47,7 @@
         </widget>
 
         <!-- mini-tv -->
-        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <widget name="miniTv" position="25,58" size="0,0" zPosition="10" backgroundColor="transparent"/>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -73,7 +73,7 @@
         <widget name="input" zPosition="10" position="400,295" transparent="1" size="580,25" font="Saint; 18"/>
 
         <!-- mini-tv -->
-        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <widget name="miniTv" position="25,58" size="0,0" zPosition="10" backgroundColor="transparent"/>
 
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="950,15" size="169,40" zPosition="4" font="Saint; 18" halign="left" foregroundColor="#e69405" backgroundColor="#000000" transparent="1" valign="top">
@@ -292,7 +292,7 @@
         <widget name="output" zPosition="99" position="440,80" size="820,450" font="Saint; 18" backgroundColor="#000000" foregroundColor="#5C5C5C" transparent="1" />
 
         <!-- mini-tv -->
-        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <widget name="miniTv" position="25,58" size="0,0" zPosition="10" backgroundColor="transparent"/>
 
         <!-- functions -->
         <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_red-fs8.png" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
@@ -353,7 +353,7 @@
         </widget>
 
         <!-- mini-tv -->
-        <widget name="miniTv" position="25,58" size="241,120" zPosition="10" backgroundColor="transparent"/>
+        <widget name="miniTv" position="25,58" size="0,0" zPosition="10" backgroundColor="transparent"/>
     </screen>
 
     <!-- DPS_ViewList -->
@@ -444,7 +444,7 @@
 
         <widget name="backdrop" transparent="0" zPosition="45" position="750,400" size="400,225" alphatest="blend"/>
         <widget name="stillPicture" backgroundColor="transparent" zPosition="-3" position="750,400" size="400,225"/>
-        <widget name="miniTv" backgroundColor="transparent" zPosition="40" position="750,400" size="400,225"/>
+        <widget name="miniTv" backgroundColor="transparent" zPosition="3" position="750,400" size="0,0"/>
 
         <widget name="infoLabel" transparent="1" zPosition="4" halign="left" position="820,470" size="160,30" font="Saint; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="info" transparent="1" zPosition="4" halign="left" position="920,470" size="160,25" font="Saint; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
