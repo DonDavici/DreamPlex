@@ -1185,34 +1185,45 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			# navigation
 			self.handleNavigationData()
 
-			# depending on the settings in params we reset all images that are needed to
-			self.resetCurrentImages()
-
 			if not self.isFolder:
-				# to avoid unneeded skin changes we check here if the type is equal to the last one
-				if self.tagType != self.lastTagType:
-					# if we were are no folder anymore we switch back
-					self.unsetFromDirectoryMode()
-				else:
-					# if we are a folder within a specific library we switch to folder mode
-					self.setToDirectoryMode()
+				# lets get all data we need to show the needed pictures
+				# we also check if we want to play
+				self.getPictureInformationToLoad()
 
 				# if we are in fastScrollMode we have to reset some screen elements
 				if self.fastScroll:
 					self.resetGuiElementsInFastScrollMode()
 
-				# lets get all data we need to show the needed pictures
-				# we also check if we want to play
-				self.getPictureInformationToLoad()
-
-				# now go for it
-				self.handlePictures()
+				# to avoid unneeded skin changes we check here if the type is equal to the last one
+				if self.tagType != self.lastTagType:
+					# if we were are no folder anymore we switch back
+					self.unsetFromDirectoryMode()
 
 				# now we go with the type related stuff like movie, music, etc.
 				self._refresh()
 
+			else:
+				self.changeBackdrop = False
+
+				# to avoid unneeded skin changes we check here if the type is equal to the last one
+				if self.tagType != self.lastTagType:
+					self.changePoster = True
+					self.resetPoster = True
+				else:
+					self.changePoster = False
+					self.resetPoster = False
+
+				# if we are a folder within a specific library we switch to folder mode
+				self.setToDirectoryMode()
+
 			# we save this to avoid extensive unnessary skin changes
 			self.lastTagType = self.tagType
+
+			# depending on the settings in params we reset all images that are needed to
+			self.resetCurrentImages()
+
+			# now go for it
+			self.handlePictures()
 
 		else:
 			self["title"].setText( "no data retrieved")
@@ -1304,6 +1315,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		# we need those for fastScroll
 		# this prevents backdrop load on next item
 		self.showMedia = False
+		self.changeBackdrop = True
+
+		self["backdrop"].show()
 
 		if self.miniTvInUse:
 			self["miniTv"].show()
@@ -1336,6 +1350,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["title"].setText("Directory")
 		self["tag"].setText("Name:")
 		self["shortDescription"].setText(self.details.get("title", " ").encode('utf-8'))
+
+		self.whatPoster = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/folder-fs8.png"
+		self["poster"].show()
 
 		printl("", self, "C")
 
