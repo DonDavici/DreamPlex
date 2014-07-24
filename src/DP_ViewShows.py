@@ -65,36 +65,38 @@ class DPS_ViewShows(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
-		if not self.isFolder:
-			self["title"].setText(encodeMe(self.details.get("title", " ")))
-			self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
 
-			self.setMediaFunctions()
+		self["title"].setText(encodeMe(self.details.get("title", " ")))
+		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
+		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
 
-			# if we are a show an if playtheme is enabled we start playback here
-			if self.playTheme:
-				if self.startPlaybackNow: # only if we are a show
-					self.startThemePlayback()
+		self.setDuration()
+		self.setMediaFunctions()
 
-			if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
-				self.setTitle(str(self.mediaContainer.get("title2", " ")))
-				self["leafCount"].setText(self.details.get("leafCount", " "))
-				self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
-				self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
+		# if we are a show an if playtheme is enabled we start playback here
+		if self.playTheme:
+			if self.startPlaybackNow: # only if we are a show
+				self.startThemePlayback()
 
-			if self.viewStep == 2:
-				self["season"].setText(str(self.mediaContainer.get("title2", " ")))
-			else:
-				self["season"].setText("")
+		if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
+			self.setTitle(str(self.mediaContainer.get("title2", " ")))
+			self["leafCount"].setText(self.details.get("leafCount", " "))
+			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
+			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
 
-			if "type" in self.details:
-				if self.details["type"] == "show":
-					self["year"].setText(str(self.details.get("year", " - ")))
+		if self.viewStep == 2:
+			self["season"].setText(str(self.mediaContainer.get("title2", " ")))
+		else:
+			self["season"].setText("")
 
-			if self.tagType != "Show" and self.tagType != "Episodes":
-				self.showNoneMediaFunctions()
-			else:
-				self.hideNoneMediaFunctions()
+		if "type" in self.details:
+			if self.details["type"] == "show":
+				self["year"].setText(str(self.details.get("year", " - ")))
+
+		if self.tagType != "Show" and self.tagType != "Episodes":
+			self.showNoneMediaFunctions()
+		else:
+			self.hideNoneMediaFunctions()
 
 		printl("", self, "C")
 

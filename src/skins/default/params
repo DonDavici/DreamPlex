@@ -63,6 +63,7 @@
 			<element name="leafCount" visible="True"/>
 			<element name="viewedLeafCount" visible="True"/>
 			<element name="unviewedLeafCount" visible="True"/>
+			<element name="shortDescription" visible="False"/>
 
 		</subView>
 
@@ -76,6 +77,13 @@
 			<element name="leafCount" visible="False"/>
 			<element name="viewedLeafCount" visible="False"/>
 			<element name="unviewedLeafCount" visible="False"/>
+			<element name="shortDescription" visible="True"/>
+			<element name="rating_stars" visible="True"/>
+			<element name="codec" visible="True"/>
+			<element name="aspect" visible="True"/>
+			<element name="resolution" visible="True"/>
+			<element name="rated" visible="True"/>
+			<element name="sound" visible="True"/>
 		</subView>
 	</showView>
 

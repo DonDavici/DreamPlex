@@ -288,6 +288,15 @@ def getShowViewDefaults():
 	params["elements"]["videoResolution"]["visible"]               = False
 	params["elements"]["audioCodec"]["visible"]                    = False
 	params["elements"]["file"]["visible"]                          = False
+	params["elements"]["director"]["visible"]                      = False
+	params["elements"]["writer"]["visible"]                        = False
+	params["elements"]["cast"]["visible"]                          = False
+	params["elements"]["rating_stars"]["visible"]                          = False
+	params["elements"]["codec"]["visible"]                          = False
+	params["elements"]["aspect"]["visible"]                          = False
+	params["elements"]["resolution"]["visible"]                          = False
+	params["elements"]["rated"]["visible"]                          = False
+	params["elements"]["sound"]["visible"]                          = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
