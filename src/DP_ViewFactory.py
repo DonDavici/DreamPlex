@@ -79,7 +79,7 @@ def getNoneDirectoryElements():
 def getDefaultSettingsList():
 	printl("", __name__, "S")
 
-	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name"]
+	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth"]
 
 	printl("", __name__, "C")
 	return settingsList

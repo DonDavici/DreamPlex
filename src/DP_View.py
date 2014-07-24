@@ -374,6 +374,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				# we use this to be able to resize the tv picture and show as backdrop
 
 				self.loadedStillPictureLib = True
+				self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
+
 			except Exception, ex:
 
 				printl("Exception: " + str(ex), self, "D")
@@ -1878,9 +1880,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
-
-		if self.miniTvInUse:
-			self.initMiniTv()
 
 		self.initColorFunctions()
 

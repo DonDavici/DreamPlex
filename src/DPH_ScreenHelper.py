@@ -62,11 +62,18 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def initMiniTv(self):
+	def initMiniTv(self, width=None, heigth=None):
+		"""
+		the widht and height is in params files a param section on its own
+		but for the views the settings located there for this reason
+		we have both ways.
+		"""
 		printl("", self, "S")
+		self.miniTvInUse = True
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
-			width, height = self.getMiniTvParams()
+			if width is None or heigth is None:
+				width, height = self.getMiniTvParams()
 			desk = getDesktop(0)
 			self["miniTv"].instance.setFBSize(desk.size())
 			self["miniTv"].instance.resize(eSize(width, height))

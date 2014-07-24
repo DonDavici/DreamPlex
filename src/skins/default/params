@@ -5,14 +5,11 @@
 	<orientation name="main_menu" type="horizontal" />
 	<orientation name="server_menu" type="horizontal" />
 
-	<!-- MINI TV SIZE -->
+	<!-- MINI TV SIZE FOR NONE VIEW SCREENS-->
 	<miniTv name="main_menu" height="225" width="400" />
 	<miniTv name="server_menu" height="225" width="400" />
 	<miniTv name="syncer" height="225" width="400" />
 	<miniTv name="input_box" height="225" width="400" />
-	<miniTv name="music" height="225" width="400" />
-	<miniTv name="movies" height="225" width="400" />
-	<miniTv name="shows" height="225" width="400" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/HandelGotD.ttf" size="100" name="Saint" />
@@ -40,12 +37,12 @@
 	-->
 
 	<!-- MOVIE VIEWS -->
-	<movieView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+	<movieView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="225" backdropVideoWidth="400">
 		<subView name="ShowMovies">
 		</subView>
 	</movieView>
 
-	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+	<movieView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">
 		<subView name="ShowMovies">
 			<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
 		</subView>
@@ -53,7 +50,7 @@
 	</movieView>
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+	<showView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="225" backdropVideoWidth="400">
 		<subView name="ShowShows">
 		</subView>
 
@@ -82,7 +79,7 @@
 		</subView>
 	</showView>
 
-	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True">
+	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">
 		<subView name="ShowShows">
 			<element name="grandparentTitle" xCoord="470" yCoord="30" visible="True"/>
 			<element name="genre" visible="False" />
@@ -102,7 +99,7 @@
 	</showView>
 
 	<!-- MUSIC VIEWS -->
-	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True">
+	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="225" backdropVideoWidth="400">
 		<subView name="ShowArtists">
 
 		</subView>
