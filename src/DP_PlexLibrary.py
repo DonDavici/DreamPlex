@@ -471,6 +471,9 @@ class PlexLibrary(Screen):
 			entryData['server']			    = server
 			entryData['tagType']            = "Show"
 
+			if "type" not in entryData:
+				entryData["type"]           = "show"
+
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['banner']             = self.getImage(entry, server, myType = "banner")
@@ -484,6 +487,7 @@ class PlexLibrary(Screen):
 					entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
 			else:
 				entryData['tagType']            = "Directory"
+				entryData["type"]               = "Folder"
 				viewState = None
 
 			#Create URL based on whether we are going to flatten the season view
@@ -550,6 +554,7 @@ class PlexLibrary(Screen):
 				viewState = self.getViewStateForShowEntry(entryData)
 			else:
 				entryData['tagType']            = "Directory"
+				entryData["type"]               = "Folder"
 				viewState = None
 
 			url = 'http://%s/%s'  % ( server, entryData['key'])
