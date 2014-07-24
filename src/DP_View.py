@@ -676,7 +676,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		color = "green"
-		self["btn_"+ color + "Text"].setText(_("fastScroll 'On'"))
+		if self.fastScroll:
+			self["btn_"+ color + "Text"].setText(_("fastScroll 'On'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("fastScroll 'Off'"))
 
 		printl("", self, "C")
 

@@ -64,7 +64,6 @@
 			<element name="viewedLeafCount" visible="True"/>
 			<element name="unviewedLeafCount" visible="True"/>
 			<element name="shortDescription" visible="False"/>
-
 		</subView>
 
 		<subView name="ShowEpisodes">
