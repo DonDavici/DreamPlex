@@ -623,7 +623,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		color = "red"
-		self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+
+		if self.autoPlayMode:
+			self["btn_"+ color + "Text"].setText(_("playmode 'multi'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
 
 		printl("", self, "C")
 
@@ -650,7 +654,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		color = "green"
-		self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+
+		if self.resumeMode:
+			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
 
 		printl("", self, "C")
 
@@ -792,11 +800,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		if not self.keyOneDisabled:
 			self.setLevelActive(currentLevel="1")
 			self.alterColorFunctionNames(level="1")
-
-			# this sets resumeMode to resume off
-			self.toggleResumeMode()
-			# this sets playmode to multi
-			self.togglePlayMode()
 
 			if not initial:
 				self.refreshFunctionName()
@@ -1265,6 +1268,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			viewStateName = "set 'Unseen'"
 		else:
 			viewStateName = "set 'Seen'"
+
+		self.initPlayMode()
+		self.initResumeMode()
 
 		self["btn_"+ color + "Text"].setText(viewStateName)
 
@@ -1908,9 +1914,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self.setLevelActive(currentLevel=1)
 
-		self.initPlayMode()
-		self.initResumeMode()
-
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)
 
@@ -1922,6 +1925,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		if self.libraryName == "music":
 			self["casePic"].instance.setPixmapFromFile(self.guiElements["musicCase"])
+			self.autoPlayMode = True
+			self.resumeMode = False
 
 		else:
 			self["casePic"].instance.setPixmapFromFile(self.guiElements["videoCase"])
