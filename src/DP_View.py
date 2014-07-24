@@ -153,6 +153,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("self.skinName: " + str(self.skinName), self, "D")
 
 		self.currentViewName = str(self.viewParams["settings"]["name"])
+		printl("self.currentViewName: " + str(self.currentViewName), self, "D")
 
 		self.stillPictureEnabledInView = self.viewParams["settings"]["backdropVideos"]
 		self.stillPictureEnabledInSettings = config.plugins.dreamplex.useBackdropVideos.value
@@ -792,8 +793,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self.setLevelActive(currentLevel="1")
 			self.alterColorFunctionNames(level="1")
 
-			self.initPlayMode()
-			self.initResumeMode()
+			# this sets resumeMode to resume off
+			self.toggleResumeMode()
+			# this sets playmode to multi
+			self.togglePlayMode()
 
 			if not initial:
 				self.refreshFunctionName()
@@ -1199,6 +1202,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				if self.tagType != self.lastTagType:
 					# if we were are no folder anymore we switch back
 					self.unsetFromDirectoryMode()
+					if self.tagType == "Track" or self.tagType == "Video":
+						self.showMediaFunctions()
 
 				# now we go with the type related stuff like movie, music, etc.
 				self._refresh()
@@ -1342,7 +1347,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 					self.toggleElementVisibilityWithLabel(element, "hide")
 				except: pass
 
-			self.hideNoneMediaFunctions()
+			self.hideMediaFunctions()
 			self.hideMediaPixmaps()
 
 			if self.miniTvInUse:
@@ -1437,7 +1442,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===============================================================================
 	#
 	#===============================================================================
-	def hideNoneMediaFunctions(self):
+	def hideMediaFunctions(self):
 		printl("", self, "S")
 
 		self["btn_red"].hide()
@@ -1460,7 +1465,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===============================================================================
 	#
 	#===============================================================================
-	def showNoneMediaFunctions(self):
+	def showMediaFunctions(self):
 		printl("", self, "S")
 
 		self["btn_red"].show()
@@ -1902,6 +1907,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.initColorFunctions()
 
 		self.setLevelActive(currentLevel=1)
+
+		self.initPlayMode()
+		self.initResumeMode()
 
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)

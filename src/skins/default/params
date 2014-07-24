@@ -113,15 +113,13 @@
 
 		<subView name="ShowAlbums">
 			<element name="info" visible="False"/>
-			<element name="duration" visible="False"/>
 			<element name="leafCount" visible="True" xCoord="545" yCoord="360"/>
 		</subView>
 
 		<subView name="ShowTracks">
 			<element name="duration" visible="True" xCoord="620" yCoord="340"/>
-			<element name="genre" visible="False" />
 			<element name="leafCount" visible="False" />
-
+			<element name="duration" visible="True" />
 		</subView>
 	</musicView>
 </xml>

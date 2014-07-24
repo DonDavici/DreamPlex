@@ -428,6 +428,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def getMusicByArtist(self, url):
 		printl("", self, "S")
+		print "4711"
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
@@ -438,10 +439,22 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def getMusicByAlbum(self, url):
 		printl("", self, "S")
+		print "4712"
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Track", nextViewMode = "ShowTracks", currentViewMode = "ShowAlbums")
+		return  self.getMediaData(url, tagType = "Track", nextViewMode = "ShowTracks", currentViewMode = "ShowAlbums")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMusicTracks(self, url):
+		printl("", self, "S")
+		print "4713"
+		printl("url: " + str(url), self, "D")
+
+		printl("", self, "C")
+		return self.getMediaData(url, tagType = "Track", nextViewMode = "play", currentViewMode="ShowTracks")
 
 	#=======================================================================
 	#
@@ -582,16 +595,6 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMusicTracks(self, url):
-		printl("", self, "S")
-		printl("url: " + str(url), self, "D")
-
-		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Track", nextViewMode = "play", currentViewMode="ShowTracks")
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def getMediaData(self, url, tagType, nextViewMode, currentViewMode, switchMedias=False):
 		printl("", self, "S")
 		fullList=[]
@@ -656,6 +659,10 @@ class PlexLibrary(Screen):
 			entryData["nextViewMode"]	    = "ShowDirectory"
 			if "type" not in entryData:
 				entryData["type"]               = "Folder"
+
+			# dirty workaround for music
+			if entryData["type"] == "album":
+				entryData["nextViewMode"]	    = "ShowTracks"
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")

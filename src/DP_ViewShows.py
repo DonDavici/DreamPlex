@@ -94,9 +94,9 @@ class DPS_ViewShows(DP_View):
 				self["year"].setText(str(self.details.get("year", " - ")))
 
 		if self.tagType != "Show" and self.tagType != "Episodes":
-			self.showNoneMediaFunctions()
+			self.showMediaFunctions()
 		else:
-			self.hideNoneMediaFunctions()
+			self.hideMediaFunctions()
 
 		printl("", self, "C")
 

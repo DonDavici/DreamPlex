@@ -64,10 +64,7 @@ class DPS_ViewMusic(DP_View):
 		printl("", self, "S")
 
 		if self.tagType == "Track":
-			# this sets resumeMode to resume off
-			self.toggleResumeMode()
-			# this sets playmode to multi
-			self.togglePlayMode()
+			self.setDuration()
 
 		if "type" in self.details:
 			if self.details["type"] == "artist":
@@ -78,7 +75,7 @@ class DPS_ViewMusic(DP_View):
 				self.toggleElementVisibilityWithLabel("genre")
 				self["shortDescription"].show()
 
-				self.hideNoneMediaFunctions()
+				self.hideMediaFunctions()
 				self.hideMediaPixmaps()
 
 			elif self.details["type"] == "album":
@@ -92,7 +89,7 @@ class DPS_ViewMusic(DP_View):
 				self.toggleElementVisibilityWithLabel("genre")
 				self["shortDescription"].show()
 
-				self.hideNoneMediaFunctions()
+				self.hideMediaFunctions()
 				self.hideMediaPixmaps()
 
 		printl("", self, "C")
