@@ -930,8 +930,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self.viewStep += 1
 				self._load(entryData)
 
-				self.refresh()
-
 		printl("", self, "C")
 
 	#===========================================================================

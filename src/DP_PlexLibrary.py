@@ -649,7 +649,8 @@ class PlexLibrary(Screen):
 			entryData['tagType']            = "Directory"
 			entryData["currentViewMode"]	= currentViewMode
 			entryData["nextViewMode"]	    = "ShowDirectory"
-			entryData["type"]               = "Folder"
+			if "type" not in entryData:
+				entryData["type"]               = "Folder"
 
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
