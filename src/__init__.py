@@ -39,6 +39,7 @@ from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_LANGUAGE
 
 from DPH_Singleton import Singleton
+from DP_ViewFactory import getViews
 
 from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
@@ -95,12 +96,6 @@ config.plugins.dreamplex.cachefolderpath  		= ConfigDirectory(default = defaultC
 config.plugins.dreamplex.mediafolderpath   		= ConfigDirectory(default = defaultMediaFolderPath, visible_width = 50)
 config.plugins.dreamplex.configfolderpath   	= ConfigDirectory(default = defaultConfigFolderPath, visible_width = 50)
 config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultPlayerTempPath, visible_width = 50)
-
-# TODO this should be dynamic
-# view settings
-config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = [("0", "List")])#, ("1", "long List"), ("2", "Backdrop")])
-config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "0", choices = [("0", "List")])#, ("1", "long List"), ("2", "Backdrop")])
-config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "0", choices = [("0", "List")])#, ("1", "long List"), ("2", "Backdrop")])
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
@@ -367,6 +362,40 @@ def getInstalledSkins():
 	printl("", "__init__::getInstalledSkins", "C")
 
 #===============================================================================
+#
+#===============================================================================
+def getViewTypesForSettings():
+	printl("", "__init__::getExistingViews", "S")
+
+	# view settings
+	viewChoicesForMovies = getViewsByType("movies")
+	config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "0", choices = viewChoicesForMovies)
+
+	viewChoicesForShows = getViewsByType("shows")
+	config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "0", choices = viewChoicesForShows)
+
+	viewChoicesForMusic = getViewsByType("music")
+	config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = viewChoicesForMusic)
+
+	printl("", "__init__::getExistingViews", "C")
+
+#===============================================================================
+#
+#===============================================================================
+def getViewsByType(myType):
+	printl("", "__init__::getViewsByType", "S")
+	views = getViews(myType)
+
+	viewChoices = []
+	i = 0
+	for view in views:
+		viewChoices.append((str(i), str(view[0])))
+		i += 1
+
+	printl("", "__init__::getViewsByType", "C")
+	return viewChoices
+
+#===============================================================================
 # 
 #===============================================================================
 def _(txt):
@@ -387,12 +416,14 @@ def _(txt):
 # EXECUTE ON STARTUP
 #===============================================================================
 def prepareEnvironment():
+	# the order here is important
 	localeInit()
 	getInstalledSkins()
 	initBoxInformation()
 	printGlobalSettings()
 	initPlexServerConfig()
 	registerSkinParamsInstance()
+	getViewTypesForSettings()
 	checkPlexEnvironment()
 	registerPlexFonts()
 	loadPlexSkin()

@@ -27,7 +27,6 @@ import copy
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
-from __init__ import _ # _ is translation
 
 
 #===========================================================================
@@ -160,7 +159,7 @@ def getViewsFromSkinParams(myType):
 			else:
 				currentParams["settings"][setting] = translateValues(value)
 
-		view = (_(name), myFile, currentParams)
+		view = (name, myFile, currentParams)
 		
 		availableViewList.append(view)
 	

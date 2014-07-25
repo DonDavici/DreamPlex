@@ -49,7 +49,6 @@ from enigma import ePicLoad
 from urllib import quote_plus
 from twisted.web.client import downloadPage
 
-from DP_ViewFactory import getGuiElements
 from DP_Player import DP_Player
 from DP_Settings import DPS_Settings
 from DP_Server import DPS_Server
@@ -57,7 +56,7 @@ from DP_Server import DPS_Server
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
-from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList
+from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
 from __common__ import printl2 as printl, loadPicture, durationToTime
 from __plugin__ import Plugin
