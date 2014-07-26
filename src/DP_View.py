@@ -1127,11 +1127,15 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	#
 	#===========================================================================
-	def updateList(self):
+	def updateList(self, myIndex=None):
 		printl("", self, "S")
+		print "we are here"
 
 		self["listview"].setList(self.listViewList)
-		self["listview"].setIndex(0)
+		if myIndex is not None:
+			self["listview"].setIndex(myIndex)
+		else:
+			self["listview"].setIndex(0)
 
 		# now we set the currentViewMode to be able to alter skin elements according to their settings in the params file
 		self.selection = self["listview"].getCurrent()
@@ -1256,7 +1260,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	#
 	#===========================================================================
-	def refreshFunctionName(self):
+	def refreshFunctionName(self, noInit=False):
 		printl("", self, "S")
 
 		color = "yellow"
@@ -1266,8 +1270,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			viewStateName = "set 'Seen'"
 
-		self.initPlayMode()
-		self.initResumeMode()
+		if not noInit:
+			self.initPlayMode()
+			self.initResumeMode()
 
 		self["btn_"+ color + "Text"].setText(viewStateName)
 
@@ -1656,7 +1661,17 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.unseenUrl)
-		self.getViewListData()
+
+		currentIndex = self["listview"].getIndex()
+		currentSelection = self["listview"].getCurrent()
+		myList = list(currentSelection)
+		myList[3] = self.unseenPic
+		myList[1]["viewCount"] = 0
+		self["listview"].modifyEntry(currentIndex, myList)
+
+		self.seen = False
+
+		self.refreshFunctionName(noInit=True)
 
 		printl("", self, "C")
 
@@ -1668,7 +1683,17 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.seenUrl)
-		self.getViewListData()
+
+		currentIndex = self["listview"].getIndex()
+		currentSelection = self["listview"].getCurrent()
+		myList = list(currentSelection)
+		myList[3] = self.seenPic
+		myList[1]["viewCount"] = 1
+		self["listview"].modifyEntry(currentIndex, myList)
+
+		self.seen = True
+
+		self.refreshFunctionName(noInit=True)
 
 		printl("", self, "C")
 
