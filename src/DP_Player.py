@@ -52,7 +52,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
 	InfoBarServiceNotifications, InfoBarSimpleEventView, \
 	InfoBarExtensions, InfoBarNotifications, \
-	InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport
+	InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarCueSheetSupport
 
 from DPH_Singleton import Singleton
 
@@ -62,7 +62,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DP_Player(InfoBarBase, InfoBarShowHide,
+class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
 		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications):
