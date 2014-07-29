@@ -2674,21 +2674,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def filter(self):
 		printl("", self, "S")
 
-		# printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
-		#
-		# if len(self.activeFilter[2]) > 0:
-		# 	text = _("set Filter (set to '%s')") % (_(self.activeFilter[2]))
-		# else:
-		# 	text = _("set Filter (set to '%s')") % (_(self.activeFilter[0]))
-
-		#self["txt_filter"].setText(text)
-
-		# original samples
-		#self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
-		#self.activeFilter = ("All", (None, False), ("All", ))
-		self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
-		self.origListViewList = self.listViewList
-
 		if self.onNumberKeyLastChar == " ":
 			self["listview"].setList(self.listViewList)
 		else:
