@@ -767,8 +767,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 		
 		if answer:
-			self.session.nav.stopService()
-
+			#self.session.nav.stopService()
 			self.handleProgress()
 
 			if self.playbackType == "1":
