@@ -128,6 +128,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	miniTvInUse                     = False
 	keyOneDisabled                  = False
 	filterMode                      = False
+	playbackMode                    = "default"
 
 	#===========================================================================
 	#
@@ -622,12 +623,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self.setColorFunction(color="red", level="1", functionList=("", "self.togglePlayMode()"))
 		self.setColorFunction(color="green", level="1", functionList=(_(""), "self.toggleResumeMode()"))
 		self.setColorFunction(color="yellow", level="1", functionList=(_(""), "self.executeLibraryFunction()")) # name is empty because we set it dynamical
-		self.setColorFunction(color="blue", level="1", functionList=(_("show 'Details'"), "self.toggleDetails( )"))
+		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), "self.togglePlaybackMode()"))
 
 		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", "self.onToggleView()"))
 		self.setColorFunction(color="green", level="2", functionList=("", "self.toggleFastScroll()")) # name is empty because we set it dynamical
 		self.setColorFunction(color="yellow", level="2", functionList=("refresh Library", "self.initiateRefresh()"))
-		self.setColorFunction(color="blue", level="2", functionList=None)
+		self.setColorFunction(color="blue", level="2", functionList=(_("show 'Details'"), "self.toggleDetails( )"))
 
 		self.setColorFunction(color="red", level="3", functionList=("Server Settings", "self.showServerSettings()"))
 		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", "self.showGeneralSettings()"))
@@ -758,6 +759,43 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	#===========================================================================
 	#
 	#===========================================================================
+	def initPlaybackMode(self):
+		printl("", self, "S")
+
+		self.playbackModes = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))]
+		self.configuredPlaybackMode = int(self.serverConfig.playbackType.value)
+		self.nextPlaybackMode = self.configuredPlaybackMode
+		self.lengthOfPlaybackModes = len(self.playbackModes)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def togglePlaybackMode(self):
+		printl("", self, "S")
+
+		color = "blue"
+
+		self.nextPlaybackMode += 1
+
+		if self.nextPlaybackMode >= self.lengthOfPlaybackModes:
+			self.nextPlaybackMode = 0
+
+		if self.configuredPlaybackMode == self.nextPlaybackMode:
+			myName = "default"
+		else:
+			myName = self.playbackModes[self.nextPlaybackMode][1]
+
+		self.playbackMode = self.nextPlaybackMode
+
+		self["btn_" + color + "Text"].setText("playback mode '" + myName + "'")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def initFilterMode(self):
 		printl("", self, "S")
 		color = "red"
@@ -840,7 +878,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		self.executeColorFunction("blue", self.currentFunctionLevel)
+		#self.executeColorFunction("blue", self.currentFunctionLevel)
+
+		self.togglePlaybackMode()
 
 		printl("", self, "C")
 
@@ -1157,7 +1197,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.viewParams, self.autoPlayMode, self.resumeMode, self.whatPoster)
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.viewParams, self.autoPlayMode, self.resumeMode, self.playbackMode, self.whatPoster)
 
 			else:
 				# save index here because user moved around for sure
@@ -2172,6 +2212,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)
+
+		# we use this for override playback mode if wanted
+		self.initPlaybackMode()
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])

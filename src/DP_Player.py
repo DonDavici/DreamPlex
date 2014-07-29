@@ -106,7 +106,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode, poster):
+	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode, playbackMode, poster):
 		printl("", self, "S")
 		
 		self.session = session
@@ -116,6 +116,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.listCount = len(self.listViewList)
 		self.autoPlayMode = autoPlayMode
 		self.resumeMode = resumeMode
+		self.playbackMode = playbackMode
 		self.whatPoster = poster
 
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
@@ -258,6 +259,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===============================================================================
 	def buildPlayerData(self):
 		printl("", self, "S")
+
+		Singleton().getPlexInstance().setPlaybackType(str(self.playbackMode))
 
 		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
 

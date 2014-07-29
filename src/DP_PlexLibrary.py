@@ -174,31 +174,7 @@ class PlexLibrary(Screen):
 		# PLAYBACK TYPES
 		self.g_segments = self.g_serverConfig.segments.value # is needed here because of fallback
 
-		if self.serverConfig_playbackType == "0": # STREAMED
-			self.g_stream = "1"
-			self.g_transcode = "false"
-
-		elif self.serverConfig_playbackType == "1": # TRANSCODED
-			self.g_stream = "1"
-			self.g_transcode = "true"
-			self.g_segments = self.g_serverConfig.segments.value
-
-			printl("using transcode: " + str(self.g_transcode), self, "I")
-			printl("using this transcoding quality: " +  str(self.serverConfig_quality), self, "I")
-			printl("using this segments size: " +  str(self.g_segments), self, "I")
-
-		elif self.serverConfig_playbackType == "2": # DIRECT LOCAL
-			self.g_stream = "0"
-			self.g_transcode = "false"
-
-		elif self.serverConfig_playbackType == "3": # DIRECT REMOTE
-			self.g_stream = "2"
-			self.g_transcode = "false"
-			self.g_nasoverride = "true"
-			self.g_nasoverrideip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.nasOverrideIp.value)
-			self.g_nasuserid = str(self.g_serverConfig.smbUser.value)
-			self.g_naspass = str(self.g_serverConfig.smbPassword.value)
-			self.g_nasroot = str(self.g_serverConfig.nasRoot.value)
+		self.setPlaybackType(self.serverConfig_playbackType)
 
 		printl("using this debugMode: " + str(config.plugins.dreamplex.debugMode.value), self, "D")
 		printl("using this serverName: " +  self.serverConfig_Name, self, "I")
@@ -233,6 +209,35 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 
+	#============================================================================
+	#
+	#============================================================================
+	def setPlaybackType(self, myType):
+		if myType == "0": # STREAMED
+			self.g_stream = "1"
+			self.g_transcode = "false"
+
+		elif myType == "1": # TRANSCODED
+			self.g_stream = "1"
+			self.g_transcode = "true"
+			self.g_segments = self.g_serverConfig.segments.value
+
+			printl("using transcode: " + str(self.g_transcode), self, "I")
+			printl("using this transcoding quality: " +  str(self.serverConfig_quality), self, "I")
+			printl("using this segments size: " +  str(self.g_segments), self, "I")
+
+		elif myType == "2": # DIRECT LOCAL
+			self.g_stream = "0"
+			self.g_transcode = "false"
+
+		# elif myType == "3": # DIRECT REMOTE
+		# 	self.g_stream = "2"
+		# 	self.g_transcode = "false"
+		# 	self.g_nasoverride = "true"
+		# 	self.g_nasoverrideip = "%d.%d.%d.%d" % tuple(self.g_serverConfig.nasOverrideIp.value)
+		# 	self.g_nasuserid = str(self.g_serverConfig.smbUser.value)
+		# 	self.g_naspass = str(self.g_serverConfig.smbPassword.value)
+		# 	self.g_nasroot = str(self.g_serverConfig.nasRoot.value)
 #===============================================================================
 # LIBRARY ACCESS
 #===============================================================================
