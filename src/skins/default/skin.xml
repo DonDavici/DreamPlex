@@ -498,6 +498,7 @@
         <widget name="L1" transparent="1" zPosition="10" position="1110,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
         <widget name="L2" transparent="1" zPosition="10" position="1125,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
         <widget name="L3" transparent="1" zPosition="10" position="1140,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
+        <widget name="L4" transparent="1" zPosition="10" position="1155,677" size="20,37" font="Saint; 14" halign="center" valign="center"/>
     </screen>
 
     <!-- DPS_ViewBackdrop -->

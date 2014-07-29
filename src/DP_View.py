@@ -125,6 +125,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	currentService                  = None
 	miniTvInUse                     = False
 	keyOneDisabled                  = False
+	filterMode                      = False
 
 	#===========================================================================
 	#
@@ -204,6 +205,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		    "1":			(self.onKey1, ""),
 			"2":			(self.onKey2, ""),
 			"3":			(self.onKey3, ""),
+			"4":			(self.onKey4, ""),
+			"5":			(self.onKey5, ""),
+			"6":			(self.onKey6, ""),
+			"7":			(self.onKey7, ""),
+			"8":			(self.onKey8, ""),
+			"9":			(self.onKey9, ""),
+			"0":			(self.onKey0, ""),
+
 		}, -2)
 
 		self.guiElements = getGuiElements()
@@ -222,7 +231,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.serverConfig = Singleton().getPlexInstance().getServerConfig()
 
 		# init skin elements
-		self.setMultiLevelElements(levels=3)
+		self.setMultiLevelElements(levels=4)
 
 		self["totalLabel"] = Label()
 		self["totalLabel"].setText(_("Total:"))
@@ -616,6 +625,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self.setColorFunction(color="yellow", level="3", functionList=None)
 		self.setColorFunction(color="blue", level="3", functionList=None)
 
+		self.setColorFunction(color="red", level="4", functionList=("", "self.toggleFilterMode()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="green", level="4", functionList=None)
+		self.setColorFunction(color="yellow", level="4", functionList=None)
+		self.setColorFunction(color="blue", level="4", functionList=None)
+
 		self.alterColorFunctionNames(level="1")
 
 		printl("", self, "C")
@@ -735,6 +749,31 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	#
 	#===========================================================================
+	def initFilterMode(self):
+		printl("", self, "S")
+		color = "red"
+
+		self.filterMode = True
+
+		self["btn_"+ color + "Text"].setText(_("turn filter mode off"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFilterMode(self):
+		printl("", self, "S")
+
+		if self.filterMode:
+			self.filterMode = False
+			self.onKey1() # we return to normal functions
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def showGeneralSettings(self):
 		printl("", self, "S")
 
@@ -806,14 +845,18 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey1(self, initial=False):
 		printl("", self, "S")
 
-		if not self.keyOneDisabled:
-			self.setLevelActive(currentLevel="1")
-			self.alterColorFunctionNames(level="1")
+		if not self.filterMode:
+			if not self.keyOneDisabled:
+				self.setLevelActive(currentLevel="1")
+				self.alterColorFunctionNames(level="1")
 
-			if not initial:
-				self.refreshFunctionName()
+				if not initial:
+					self.refreshFunctionName()
 
-			self.lastTagType = None
+				self.lastTagType = None
+
+		else:
+			pass
 
 		printl("", self, "C")
 
@@ -823,10 +866,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey2(self):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel="2")
-		self.alterColorFunctionNames(level="2")
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="2")
+			self.alterColorFunctionNames(level="2")
 
-		self.initFastScroll()
+			self.initFastScroll()
+
+		else:
+			pass
 
 		printl("", self, "C")
 
@@ -836,8 +883,77 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey3(self):
 		printl("", self, "S")
 
-		self.setLevelActive(currentLevel="3")
-		self.alterColorFunctionNames(level="3")
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="3")
+			self.alterColorFunctionNames(level="3")
+
+		else:
+			pass
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey4(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="4")
+			self.alterColorFunctionNames(level="4")
+
+			self.initFilterMode()
+
+		else:
+			pass
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey5(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey6(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey7(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey8(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey9(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey0(self):
+		printl("", self, "S")
 
 		printl("", self, "C")
 
