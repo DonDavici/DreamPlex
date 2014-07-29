@@ -487,6 +487,8 @@ class PlexLibrary(Screen):
 			if "type" not in entryData:
 				entryData["type"]           = "show"
 
+			entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
+
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
 			entryData['banner']             = self.getImage(entry, server, myType = "banner")
@@ -497,7 +499,7 @@ class PlexLibrary(Screen):
 				printl("viewState: " + str(viewState), self, "D")
 
 				if self.g_showUnSeenCounts:
-					entryData['title'] = entryData['title'] + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
+					entryData['title'] = entryData['title']# + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
 			else:
 				entryData['tagType']            = "Directory"
 				entryData["type"]               = "Folder"

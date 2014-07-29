@@ -35,11 +35,11 @@ from __common__ import printl2 as printl
 def getDefaultCineElementsList():
 	printl("", __name__, "S")
 
-	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "season", "cast", "audio", "info",
+	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
 	                "genre", "year", "duration", "rating_stars", "sound", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
 	                "videoCodec", "bitrate", "videoFrameRate", "audioChannels", "aspectRatio",
-	                "videoResolution", "audioCodec", "file"]
+	                "videoResolution", "audioCodec", "file", "childCount", "studio"]
 
 	printl("", __name__, "C")
 	return elementsList
@@ -223,7 +223,7 @@ def getMovieViewDefaults():
 
 	# override default True
 	params["elements"]["grandparentTitle"]["visible"]              = False
-	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["childCount"]["visible"]                    = False
 	params["elements"]["info"]["visible"]                          = False
 	params["elements"]["leafCount"]["visible"]                     = False
 	params["elements"]["unviewedLeafCount"]["visible"]             = False
@@ -272,13 +272,7 @@ def getShowViewDefaults():
 
 	# override default True
 	params["elements"]["subtitles"]["visible"]                     = False
-	params["elements"]["genre"]["visible"]                         = False
 	params["elements"]["audio"]["visible"]                         = False
-	params["elements"]["duration"]["visible"]                      = False
-	params["elements"]["season"]["visible"]                        = False
-	params["elements"]["leafCount"]["visible"]                     = False
-	params["elements"]["unviewedLeafCount"]["visible"]             = False
-	params["elements"]["viewedLeafCount"]["visible"]               = False
 	params["elements"]["videoCodec"]["visible"]                    = False
 	params["elements"]["bitrate"]["visible"]                       = False
 	params["elements"]["videoFrameRate"]["visible"]                = False
@@ -335,7 +329,7 @@ def getMusicViewDefaults():
 	params["elements"]["audio"]["visible"]                         = False
 	params["elements"]["year"]["visible"]                          = False
 	params["elements"]["duration"]["visible"]                      = False
-	params["elements"]["season"]["visible"]                        = False
+	params["elements"]["childCount"]["visible"]                    = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["cast"]["visible"]                          = False

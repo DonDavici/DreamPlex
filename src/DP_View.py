@@ -254,7 +254,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 
 		self["title"] = Label()
 		self["grandparentTitle"] = Label()
-		self["season"] = Label()
 
 		self["tag"] = Label()
 
@@ -306,6 +305,14 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["viewedLeafCount"] = Label()
 		self["viewedLeafCountLabel"] = Label()
 		self["viewedLeafCountLabel"].setText(_("Seen:"))
+
+		self["childCount"] = Label()
+		self["childCountLabel"] = Label()
+		self["childCountLabel"].setText(_("Seasons:"))
+
+		self["studio"] = Label()
+		self["studioLabel"] = Label()
+		self["studioLabel"].setText(_("Studio:"))
 
 		self["duration"] = Label()
 		self["durationLabel"] = Label()
@@ -673,6 +680,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self.resumeMode = True
 			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
 
+		# we have to reset here to force changes on the screen that are fastscroll related
+		self.lastTagType = None
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -686,6 +696,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self["btn_"+ color + "Text"].setText(_("fastScroll 'On'"))
 		else:
 			self["btn_"+ color + "Text"].setText(_("fastScroll 'Off'"))
+			self["info"].hide()
+			self["infoLabel"].hide()
 
 		printl("", self, "C")
 

@@ -65,7 +65,6 @@ class DPS_ViewShows(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
-
 		self["title"].setText(encodeMe(self.details.get("title", " ")))
 		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
 		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
@@ -78,25 +77,40 @@ class DPS_ViewShows(DP_View):
 			if self.startPlaybackNow: # only if we are a show
 				self.startThemePlayback()
 
-		if self.viewStep == 1 and not self.leaving and self.mediaContainer["title2"] != "By Folder":
+		if self.viewStep == 1 or self.viewStep == 0:# and not self.leaving and self.mediaContainer["title2"] != "By Folder":
 			self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
+			self["childCount"].setText(str(self.details.get("childCount", " ")))
+			self["studio"].setText(self.details.get("studio", " "))
+			self["genre"].setText(self.details.get("genre", " "))
+
+		if self.viewStep == 0:
+			self.handleRatedPixmaps()
 
 		if self.viewStep == 2:
-			self["season"].setText(str(self.mediaContainer.get("title2", " ")))
-		else:
-			self["season"].setText("")
+			self["childCount"].setText(str(self.mediaContainer.get("title2", " ")))
+			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
+			self.changeBackdrop = True
+			if self.fastScroll == False or self.showMedia == True:
+				# handle all pixmaps
+				self.handlePopularityPixmaps()
+				self.handleCodecPixmaps()
+				self.handleAspectPixmaps()
+				self.handleResolutionPixmaps()
+				#self.handleRatedPixmaps() # seems that there is no information about that
+				self.handleSoundPixmaps()
 
 		if "type" in self.details:
 			if self.details["type"] == "show":
 				self["year"].setText(str(self.details.get("year", " - ")))
 
-		if self.tagType != "Show" and self.tagType != "Episodes":
-			self.showMediaFunctions()
-		else:
-			self.hideMediaFunctions()
+		if self.tagType != self.lastTagType:
+			if self.tagType != "Show" and self.tagType != "Episodes":
+				self.showMediaFunctions()
+			else:
+				self.hideMediaFunctions()
 
 		printl("", self, "C")
 
