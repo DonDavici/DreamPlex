@@ -36,6 +36,7 @@ from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
 from Components.Sources.List import List
+from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
@@ -65,12 +66,13 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
+class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextInput):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
 	ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE = 3
 
+	onNumberKeyLastChar             = "#"
 	returnTo                        = None
 	currentEntryDataDict            = {}
 	currentIndexDict                = {}
@@ -142,6 +144,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		Screen.__init__(self, viewClass)
 		DPH_ScreenHelper.__init__(self, forceMiniTv= True)
 		DPH_MultiColorFunctions.__init__(self)
+		NumericalTextInput.__init__(self)
 
 		self.setMenuType(libraryName)
 		self.viewParams = viewParams
@@ -236,6 +239,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["totalLabel"] = Label()
 		self["totalLabel"].setText(_("Total:"))
 		self["total"] = Label()
+
+		self["number_key_popup"] = Label()
+		self["number_key_popup"].hide()
 
 		self["paginationLabel"] = Label()
 		self["paginationLabel"].setText(_("Pages:"))
@@ -397,6 +403,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		else:
 			# we need this as dummy
 			self["stillPicture"] = Label()
+
+		# for number key input
+		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
 
 		# on layout finish we have to do some stuff
 		self.onLayoutFinish.append(self.setPara)
@@ -754,6 +763,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		color = "red"
 
 		self.filterMode = True
+		self["L1"].hide()
+		self["L2"].hide()
+		self["L3"].hide()
 
 		self["btn_"+ color + "Text"].setText(_("turn filter mode off"))
 
@@ -768,6 +780,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		if self.filterMode:
 			self.filterMode = False
 			self.onKey1() # we return to normal functions
+			self["L1"].show()
+			self["L2"].show()
+			self["L3"].show()
 
 		printl("", self, "C")
 
@@ -856,7 +871,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 				self.lastTagType = None
 
 		else:
-			pass
+			self.onNumberKey(1)
 
 		printl("", self, "C")
 
@@ -867,13 +882,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		if not self.filterMode:
-			self.setLevelActive(currentLevel="2")
-			self.alterColorFunctionNames(level="2")
+				self.setLevelActive(currentLevel="2")
+				self.alterColorFunctionNames(level="2")
 
-			self.initFastScroll()
+				self.initFastScroll()
 
 		else:
-			pass
+			self.onNumberKey(2)
 
 		printl("", self, "C")
 
@@ -884,11 +899,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		if not self.filterMode:
-			self.setLevelActive(currentLevel="3")
-			self.alterColorFunctionNames(level="3")
+				self.setLevelActive(currentLevel="3")
+				self.alterColorFunctionNames(level="3")
 
 		else:
-			pass
+			self.onNumberKey(3)
 
 		printl("", self, "C")
 
@@ -905,7 +920,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 			self.initFilterMode()
 
 		else:
-			pass
+			self.onNumberKey(4)
 
 		printl("", self, "C")
 
@@ -915,6 +930,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey5(self):
 		printl("", self, "S")
 
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(5)
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -923,6 +944,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	def onKey6(self):
 		printl("", self, "S")
 
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(6)
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -930,6 +957,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def onKey7(self):
 		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(7)
 
 		printl("", self, "C")
 
@@ -938,6 +970,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def onKey8(self):
 		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(8)
 
 		printl("", self, "C")
 
@@ -946,6 +983,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def onKey9(self):
 		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(9)
 
 		printl("", self, "C")
 
@@ -954,6 +996,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 	#===========================================================================
 	def onKey0(self):
 		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(0)
 
 		printl("", self, "C")
 
@@ -1025,6 +1072,61 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["listview"].setIndex(index)
 
 		self.refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onNumberKey(self, number):
+		printl("", self, "S")
+
+		printl(str(number), self, "I")
+
+		key = self.getKey(number)
+		if key is not None:
+			keyvalue = key.encode("utf-8")
+			if len(keyvalue) == 1:
+				self.onNumberKeyLastChar = keyvalue[0].upper()
+				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onNumberKeyPopup(self, value, visible):
+		printl("", self, "S")
+
+		if visible:
+			self["number_key_popup"].setText(value)
+			self["number_key_popup"].show()
+		else:
+			self["number_key_popup"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def timeout(self):
+		"""
+		onNumberKeyTimeout
+		"""
+		printl("", self, "S")
+
+		printl(self.onNumberKeyLastChar, self, "I")
+		if self.onNumberKeyLastChar != ' ':
+			pass
+			# filter
+		else:
+			pass
+			# reset filter
+
+		self.filter()
+
+		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
+		NumericalTextInput.timeout(self)
 
 		printl("", self, "C")
 
@@ -1591,7 +1693,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_greenText"].hide()
 
 		self.keyOneDisabled = True
-		self.onKey2()
+		if not self.filterMode:
+			self.onKey2()
 		self["L1"].hide()
 		#self["L2"].hide()
 		#self["L3"].hide()
@@ -1614,8 +1717,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		self["btn_greenText"].show()
 
 		self.keyOneDisabled = False
-		self.onKey1()
-		self["L1"].show()
+		if not self.filterMode:
+			self.onKey1()
+			self["L1"].show()
 
 		printl("", self, "C")
 
@@ -2561,5 +2665,36 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions):
 		printl("", self, "S")
 
 		self.areFunctionsHidden = visible
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def filter(self):
+		printl("", self, "S")
+
+		# printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
+		#
+		# if len(self.activeFilter[2]) > 0:
+		# 	text = _("set Filter (set to '%s')") % (_(self.activeFilter[2]))
+		# else:
+		# 	text = _("set Filter (set to '%s')") % (_(self.activeFilter[0]))
+
+		#self["txt_filter"].setText(text)
+
+		# original samples
+		#self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
+		#self.activeFilter = ("All", (None, False), ("All", ))
+		self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
+		self.origListViewList = self.listViewList
+
+		if self.onNumberKeyLastChar == " ":
+			self["listview"].setList(self.listViewList)
+		else:
+			listViewList = [x for x in self.origListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
+			self["listview"].setList(listViewList)
+
+		self.refresh()
 
 		printl("", self, "C")

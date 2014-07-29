@@ -65,7 +65,8 @@ class DPS_ViewMovies(DP_View):
 		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
 
 		self.setDuration()
-		self.setMediaFunctions()
+		if not self.filterMode:
+			self.setMediaFunctions()
 
 		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
 		self["cast"].setText(encodeMe(self.details.get("cast", " ")))
