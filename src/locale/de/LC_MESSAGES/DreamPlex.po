@@ -932,7 +932,7 @@ msgstr "nach ersten Buchstaben"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:817
 msgid "By Resolution"
-msgstr "nsch Auflösung"
+msgstr "nach Auflösung"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:818
 msgid "By Rating"
@@ -968,27 +968,27 @@ msgstr "nach Hauptdarsteller"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:826
 msgid "Recently Aired"
-msgstr "jüngst ausgestrahlt"
+msgstr "zuletzt  ausgestrahlt"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:827
 msgid "Recently Added"
-msgstr "jüngst hinzugefügt"
+msgstr "zuletzt  hinzugefügt"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:828
 msgid "Recently Released"
-msgstr "jüngst veröffentlicht"
+msgstr "zuletzt  veröffentlicht"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:829
 msgid "Recently Viewed"
-msgstr "jüngst gesehen"
+msgstr "zuletzt  gesehen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:830
 msgid "Recently Viewed Episodes"
-msgstr "jüngst gesehene Episoden"
+msgstr "zuletzt  gesehene Episoden"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:831
 msgid "Recently Viewed Shows"
-msgstr "jüngst gesehene Shows"
+msgstr "zuletzt  gesehene Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:832
 msgid "Unwatched"
