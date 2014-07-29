@@ -882,10 +882,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		if not self.filterMode:
-				self.setLevelActive(currentLevel="2")
-				self.alterColorFunctionNames(level="2")
+			self.setLevelActive(currentLevel="2")
+			self.alterColorFunctionNames(level="2")
 
-				self.initFastScroll()
+			self.initFastScroll()
 
 		else:
 			self.onNumberKey(2)
@@ -899,8 +899,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		if not self.filterMode:
-				self.setLevelActive(currentLevel="3")
-				self.alterColorFunctionNames(level="3")
+			self.setLevelActive(currentLevel="3")
+			self.alterColorFunctionNames(level="3")
 
 		else:
 			self.onNumberKey(3)
@@ -2677,7 +2677,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		if self.onNumberKeyLastChar == " ":
 			self["listview"].setList(self.listViewList)
 		else:
-			listViewList = [x for x in self.origListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
+			listViewList = [x for x in self.listViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
 			self["listview"].setList(listViewList)
 
 		self.refresh()
