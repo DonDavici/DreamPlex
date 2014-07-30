@@ -84,8 +84,21 @@
 			<element name="resolution" visible="True"/>
 			<element name="rated" visible="True"/>
 			<element name="sound" visible="True"/>
-			<element name="writer" visible="True"/>
 		</subView>
+
+		<!-- this view step is like ShowShows called directly so you have to alter against view_factory settings and not against a subview before as usal  -->
+		<subView name="ShowEpisodesDirect">
+			<element name="genre" visible="False"/>
+			<element name="year" visible="False"/>
+			<element name="childCount" visible="False"/>
+			<element name="studio" visible="False"/>
+			<element name="viewedLeafCount" visible="False"/>
+			<element name="unviewedLeafCount" visible="False"/>
+			<element name="leafCount" visible="False"/>
+			<element name="audio" visible="True"/>
+			<element name="subtitles" visible="True"/>
+		</subView>
+
 	</showView>
 
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="6" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">

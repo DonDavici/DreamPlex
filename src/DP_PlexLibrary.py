@@ -592,12 +592,14 @@ class PlexLibrary(Screen):
 	def getEpisodesOfSeason(self, url, directMode=False):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
-		if not directMode:
-			nextViewMode    = "play"
-		else:
-			nextViewMode	= "directMode"
+		nextViewMode = "play"
 
-		return self.getMediaData(url, tagType = "Video", nextViewMode = nextViewMode, currentViewMode="ShowEpisodes", switchMedias=True )
+		if not directMode:
+			currentViewMode = "ShowEpisodes"
+		else:
+			currentViewMode = "ShowEpisodesDirect"
+
+		return self.getMediaData(url, tagType = "Video", nextViewMode = nextViewMode, currentViewMode=currentViewMode, switchMedias=True )
 
 	#===========================================================================
 	#

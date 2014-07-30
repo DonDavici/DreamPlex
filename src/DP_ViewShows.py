@@ -44,6 +44,7 @@ def getViewClass():
 class DPS_ViewShows(DP_View):
 
 	parentSeasonId = None
+	grandparentTitle = None
 
 	#===========================================================================
 	# 
@@ -75,7 +76,6 @@ class DPS_ViewShows(DP_View):
 
 		if self.details ["currentViewMode"] == "ShowShows":
 			printl( "is ShowShows", self, "D")
-
 			self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
@@ -86,12 +86,15 @@ class DPS_ViewShows(DP_View):
 			self["year"].setText(str(self.details.get("year", " - ")))
 
 			self.parentSeasonId = self.details ["ratingKey"]
+
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["ratingKey"]
+
 			self.changeBackdrop = True
 			self.changePoster = True
 			self.resetPoster = True
 			self.resetBackdrop = True
+
 			# if we are a show an if playtheme is enabled we start playback here
 			if self.playTheme:
 				self.startThemePlayback()
@@ -103,16 +106,9 @@ class DPS_ViewShows(DP_View):
 
 		elif self.details ["currentViewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons",self, "D")
-			self.parentSeasonNr = self.details["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
+			self.grandparentTitle = str(self.mediaContainer.get("title2", " "))
+			self.setTitle(self.grandparentTitle)
 
-			self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
@@ -120,87 +116,57 @@ class DPS_ViewShows(DP_View):
 			self["studio"].setText(self.details.get("studio", " "))
 			self["genre"].setText(self.details.get("genre", " "))
 
+			self.parentSeasonNr = self.details["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.details["ratingKey"]
+
+			self.changeBackdrop = True
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
 			if self.tagType != self.lastTagType:
 				self.hideMediaFunctions()
 
-		elif self.details ["currentViewMode"] == "ShowEpisodes":
-			printl( "is ShowEpisodes specific season",self, "D")
+		elif self.details ["currentViewMode"] == "ShowEpisodes" or self.details["currentViewMode"] == "ShowEpisodesDirect":
+			printl( "is ShowEpisodes",self, "D")
+			self["tag"].setText(str(self.mediaContainer.get("title2", " ")))
+			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
+
+			if self.details["currentViewMode"] == "ShowEpisodesDirect":
+				self["tag"].setText("Season: " + encodeMe(self.details.get("parentIndex", " ")))
+				self.setTitle(str(self.details.get("grandparentTitle", " ")))
+			else:
+				if self.grandparentTitle is not None:
+					self.setTitle(self.grandparentTitle)
+
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["parentRatingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
 
-			if self.tagType != self.lastTagType:
-				self.showMediaFunctions()
-
-		elif self.details ["currentViewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
-			printl( "is ShowEpisodes all entry", self, "D")
-			self.bname = self.parentSeasonId
-			self.pname = self.parentSeasonId
-			self.startPlaybackNow = False
 			self.changeBackdrop = True
 			self.changePoster = True
 			self.resetPoster = False
 			self.resetBackdrop = False
 
-			self["childCount"].setText(str(self.mediaContainer.get("title2", " ")))
-			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
-			self.changeBackdrop = True
 			if self.fastScroll == False or self.showMedia == True:
 				# handle all pixmaps
 				self.handlePopularityPixmaps()
 				self.handleCodecPixmaps()
 				self.handleAspectPixmaps()
 				self.handleResolutionPixmaps()
-				#self.handleRatedPixmaps() # seems that there is no information about that
-				self.handleSoundPixmaps()
-
-			if self.tagType != self.lastTagType:
-				self.showMediaFunctions()
-
-		elif self.details["currentViewMode"] == "directMode":
-			printl( "is directMode",self, "D")
-			self.startPlaybackNow = True
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["grandparentRatingKey"]
-			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]
-			self.changePoster = self.myParams["elements"]["poster"]["visible"]
-			self.resetPoster = True
-			self.resetBackdrop = True
-
-			self["childCount"].setText(str(self.mediaContainer.get("title2", " ")))
-			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
-			self.changeBackdrop = True
-			if self.fastScroll == False or self.showMedia == True:
-				# handle all pixmaps
-				self.handlePopularityPixmaps()
-				self.handleCodecPixmaps()
-				self.handleAspectPixmaps()
-				self.handleResolutionPixmaps()
-				#self.handleRatedPixmaps() # seems that there is no information about that
 				self.handleSoundPixmaps()
 
 			if self.tagType != self.lastTagType:
 				self.showMediaFunctions()
 
 		else:
-			printl( "is playable content",self, "D")
-			self.bname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-
-			if self.parentSeasonId is not None:
-				self.pname = self.parentSeasonId
-			else:
-				self.pname = self.details["parentRatingKey"]
-			# we dont want to have the same poster downloaded and used for each episode
-			self.changePoster = False
-			self.changeBackdrop = True
+			raise Exception
 
 		# now gather information for pictures
 		self.getPictureInformationToLoad()
+
+		# reset leaving here for next run
+		self.leaving = False
 
 		printl("", self, "C")
 
@@ -216,7 +182,11 @@ class DPS_ViewShows(DP_View):
 		# first restore Elements
 		self.restoreElementsInViewStep()
 
+		# the lastTagType will be reset every time we switch to another view step
 		self.lastTagType = None
+
+		# this helps us to restore pictures in the step before
+		self.leaving = True
 
 		# we do the refresh here to be able to handle directory content
 		self.refresh()
