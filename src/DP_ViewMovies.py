@@ -61,12 +61,20 @@ class DPS_ViewMovies(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
+		# handle pictures
+		self.changeBackdrop = True
+		self.changePoster = True
+
+		if "ratingKey" in self.details:
+			self.pname = self.details["ratingKey"]
+			self.bname = self.details["ratingKey"]
+		else:
+			self.pname = "temp"
+			self.bname = "temp"
+
+		# handle content
 		self["title"].setText(encodeMe(self.details.get("title", " ")))
 		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
-
-		self.setDuration()
-		self.setMediaFunctions()
-
 		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
 		self["cast"].setText(encodeMe(self.details.get("cast", " ")))
 		self["writer"].setText(encodeMe(self.details.get("writer", " ")))
@@ -96,32 +104,12 @@ class DPS_ViewMovies(DP_View):
 			self.handleRatedPixmaps()
 			self.handleSoundPixmaps()
 
-		printl("", self, "C")
+		# final sets
+		self.setDuration()
+		self.setMediaFunctions()
 
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPictureInformationToLoad(self):
-		printl("", self, "S")
-
-		printl( "is movie",self, "D")
-		self.changeBackdrop = True
-		self.changePoster = True
-
-		if "ratingKey" in self.details:
-			pname = self.details["ratingKey"]
-			bname = self.details["ratingKey"]
-		else:
-			pname = "temp"
-			bname = "temp"
-
-		if not self.usePicCache:
-			pname = "temp"
-			bname = "temp"
-			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
+		# now gather information for pictures
+		self.getPictureInformationToLoad()
 
 		printl("", self, "C")
 

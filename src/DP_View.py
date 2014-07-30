@@ -1464,10 +1464,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 			self.handleNavigationData()
 
 			if not self.isFolder:
-				# lets get all data we need to show the needed pictures
-				# we also check if we want to play
-				self.getPictureInformationToLoad()
-
 				# if we are in fastScrollMode we have to reset some screen elements
 				if self.fastScroll:
 					self.resetGuiElementsInFastScrollMode()
@@ -2698,6 +2694,21 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	#===========================================================================
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
+
+		# if pic cache is not configured we set a name that will not exist to force download each time from server
+		# todo enhance this not clear at all
+		if not self.usePicCache:
+			self.pname = "temp"
+			self.bname = "temp"
+			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
+
+		printl("bname: " + str(self.bname), self, "D")
+		printl("pname: " + str(self.pname), self, "D")
+		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
+		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
+
+		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
+		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
 
 		printl("", self, "C")
 

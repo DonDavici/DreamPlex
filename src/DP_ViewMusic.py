@@ -63,44 +63,6 @@ class DPS_ViewMusic(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
-		if self.tagType == "Track":
-			self.setDuration()
-
-		if "type" in self.details:
-			if self.details["type"] == "artist":
-				self["title"].setText(encodeMe(self.details.get("title", " ")))
-				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
-				self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
-
-				self.toggleElementVisibilityWithLabel("genre")
-				self["shortDescription"].show()
-
-				self.hideMediaFunctions()
-				self.hideMediaPixmaps()
-
-			elif self.details["type"] == "album":
-				self["title"].setText(encodeMe(self.details.get("title", " ")))
-				self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
-
-				self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
-				self["year"].setText(str(self.details.get("year", " - ")))
-
-				self.toggleElementVisibilityWithLabel("year")
-				self.toggleElementVisibilityWithLabel("genre")
-				self["shortDescription"].show()
-
-				self.hideMediaFunctions()
-				self.hideMediaPixmaps()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getPictureInformationToLoad(self):
-		printl("", self, "S")
-		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
-
 		self.lastPosterName = None
 		self.lastBackdropName = None
 
@@ -111,11 +73,34 @@ class DPS_ViewMusic(DP_View):
 					self.changeBackdrop = False
 					self.resetBackdrop = False
 					self.resetPoster = True
+					self["title"].setText(encodeMe(self.details.get("title", " ")))
+					self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
+
+					self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+					self["year"].setText(str(self.details.get("year", " - ")))
+
+					self.toggleElementVisibilityWithLabel("year")
+					self.toggleElementVisibilityWithLabel("genre")
+					self["shortDescription"].show()
+
+					self.hideMediaFunctions()
+					self.hideMediaPixmaps()
 				else:
 					self.changePoster = True
 					self.changeBackdrop = True
 					self.resetBackdrop = True
 					self.resetPoster = True
+
+					self["title"].setText(encodeMe(self.details.get("title", " ")))
+					self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+					self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
+
+					self.toggleElementVisibilityWithLabel("genre")
+					self["shortDescription"].show()
+
+				self.hideMediaFunctions()
+				self.hideMediaPixmaps()
+
 				if "ratingKey" in self.details:
 					self.pname = self.details["ratingKey"]
 					self.bname = self.details["ratingKey"]
@@ -133,6 +118,7 @@ class DPS_ViewMusic(DP_View):
 			elif self.details["type"] == "track":
 				self.resetBackdrop = False
 				self.resetPoster = False
+				self.setDuration()
 
 				# this is when we are coming from directory
 				if self.lastPosterName is  None and self.lastBackdropName is  None:
@@ -151,27 +137,19 @@ class DPS_ViewMusic(DP_View):
 					self.changePoster = False
 					self.changeBackdrop = False
 
-		# looks like we are just a directory
+			# looks like we are just a directory
+			elif self.details["type"] == "folder":
+				self.pname = "temp"
+				self.bname = "temp"
+				self.resetBackdrop = True
+				self.resetPoster = True
+				self.changePoster = False
+				self.changeBackdrop = False
 		else:
-			self.pname = "temp"
-			self.bname = "temp"
-			self.resetBackdrop = True
-			self.resetPoster = True
-			self.changePoster = False
-			self.changeBackdrop = False
+			raise Exception
 
-		if not self.usePicCache:
-			self.pname = "temp"
-			self.bname = "temp"
-			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-
-		printl("bname: " + str(self.bname), self, "D")
-		printl("pname: " + str(self.pname), self, "D")
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
-
-		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
-		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
+		# now gather information for pictures
+		self.getPictureInformationToLoad()
 
 		printl("", self, "C")
 

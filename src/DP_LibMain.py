@@ -148,7 +148,7 @@ class DP_LibMain(Screen):
 		# maybe we find a way later and implement it than
 		if entryData.has_key("nextViewMode"):
 			nextViewMode = entryData["nextViewMode"]
-			currentViewMode = entryData["currentViewMode"]
+			currentViewMode = None#entryData["currentViewMode"]
 			source = "plex"
 		else:
 			nextViewMode = entryData["type"]

@@ -55,7 +55,7 @@ class DP_LibShows(DP_LibMain):
 			entryData = self.initalEntryData
 
 		if str(entryData.get('key')) == "onDeck" or str(entryData.get('key')) == "recentlyViewed" or str(entryData.get('key')) == "newest" or str(entryData.get('key')) == "recentlyAdded":
-			entryData["currentViewMode"] = "ShowEpisodesDirect"
+			entryData["nextViewMode"] = "ShowEpisodesDirect"
 
 		printl ("", self, "C")
 		return self.loadLibraryData(entryData, forceUpdate)

@@ -65,6 +65,7 @@ class DPS_ViewShows(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
+		# for all view steps
 		self["title"].setText(encodeMe(self.details.get("title", " ")))
 		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
 		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
@@ -72,12 +73,45 @@ class DPS_ViewShows(DP_View):
 		self.setDuration()
 		self.setMediaFunctions()
 
-		# if we are a show an if playtheme is enabled we start playback here
-		if self.playTheme:
-			if self.startPlaybackNow: # only if we are a show
+		if self.details ["currentViewMode"] == "ShowShows":
+			printl( "is ShowShows", self, "D")
+
+			self.setTitle(str(self.mediaContainer.get("title2", " ")))
+			self["leafCount"].setText(self.details.get("leafCount", " "))
+			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
+			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
+			self["childCount"].setText(str(self.details.get("childCount", " ")))
+			self["studio"].setText(self.details.get("studio", " "))
+			self["genre"].setText(self.details.get("genre", " "))
+			self["year"].setText(str(self.details.get("year", " - ")))
+
+			self.parentSeasonId = self.details ["ratingKey"]
+			self.bname = self.details["ratingKey"]
+			self.pname = self.details["ratingKey"]
+			self.changeBackdrop = True
+			self.changePoster = True
+			self.resetPoster = True
+			self.resetBackdrop = True
+			# if we are a show an if playtheme is enabled we start playback here
+			if self.playTheme:
 				self.startThemePlayback()
 
-		if self.viewStep == 1 or self.viewStep == 0:# and not self.leaving and self.mediaContainer["title2"] != "By Folder":
+			if self.tagType != self.lastTagType:
+				self.hideMediaFunctions()
+
+			self.handleRatedPixmaps()
+
+		elif self.details ["currentViewMode"] == "ShowSeasons":
+			printl( "is ShowSeasons",self, "D")
+			self.parentSeasonNr = self.details["ratingKey"]
+			self.bname = self.parentSeasonId
+			self.pname = self.details["ratingKey"]
+			self.startPlaybackNow = False
+			self.changeBackdrop = False
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
 			self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
@@ -86,10 +120,32 @@ class DPS_ViewShows(DP_View):
 			self["studio"].setText(self.details.get("studio", " "))
 			self["genre"].setText(self.details.get("genre", " "))
 
-		if self.viewStep == 0:
-			self.handleRatedPixmaps()
+			if self.tagType != self.lastTagType:
+				self.hideMediaFunctions()
 
-		if self.viewStep == 2:
+		elif self.details ["currentViewMode"] == "ShowEpisodes":
+			printl( "is ShowEpisodes specific season",self, "D")
+			self.bname = self.details["ratingKey"]
+			self.pname = self.details["parentRatingKey"]
+			self.startPlaybackNow = False
+			self.changeBackdrop = False
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
+			if self.tagType != self.lastTagType:
+				self.showMediaFunctions()
+
+		elif self.details ["currentViewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
+			printl( "is ShowEpisodes all entry", self, "D")
+			self.bname = self.parentSeasonId
+			self.pname = self.parentSeasonId
+			self.startPlaybackNow = False
+			self.changeBackdrop = True
+			self.changePoster = True
+			self.resetPoster = False
+			self.resetBackdrop = False
+
 			self["childCount"].setText(str(self.mediaContainer.get("title2", " ")))
 			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
 			self.changeBackdrop = True
@@ -102,81 +158,33 @@ class DPS_ViewShows(DP_View):
 				#self.handleRatedPixmaps() # seems that there is no information about that
 				self.handleSoundPixmaps()
 
-		if "type" in self.details:
-			if self.details["type"] == "show":
-				self["year"].setText(str(self.details.get("year", " - ")))
-
-		if self.tagType != self.lastTagType:
-			if self.tagType != "Show" and self.tagType != "Episodes":
+			if self.tagType != self.lastTagType:
 				self.showMediaFunctions()
-			else:
-				self.hideMediaFunctions()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPictureInformationToLoad(self):
-		printl("", self, "S")
-		printl("currentViewMode: " + str(self.details ["currentViewMode"]), self, "D")
-
-		if self.details ["currentViewMode"] == "ShowShows":
-			printl( "is ShowShows", self, "D")
-			self.parentSeasonId = self.details ["ratingKey"]
-			self.isTvShow = True
-			self.startPlaybackNow = True
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["ratingKey"]
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = True
-			self.resetBackdrop = True
-
-		elif self.details ["currentViewMode"] == "ShowSeasons":
-			printl( "is ShowSeasons",self, "D")
-			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]
-			self.bname = self.parentSeasonId
-			self.pname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
-
-		elif self.details ["currentViewMode"] == "ShowEpisodes":
-			printl( "is ShowEpisodes specific season",self, "D")
-			self.isTvShow = True
-			self.bname = self.details["ratingKey"]
-			self.pname = self.details["parentRatingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
-
-		elif self.details ["currentViewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
-			printl( "is ShowEpisodes all entry", self, "D")
-			self.isTvShow = True
-			self.bname = self.parentSeasonId
-			self.pname = self.parentSeasonId
-			self.startPlaybackNow = False
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
 
 		elif self.details["currentViewMode"] == "directMode":
 			printl( "is directMode",self, "D")
 			self.startPlaybackNow = True
-			#self.isTvShow = True
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["grandparentRatingKey"]
 			self.changeBackdrop = self.myParams["elements"]["backdrop"]["visible"]
 			self.changePoster = self.myParams["elements"]["poster"]["visible"]
 			self.resetPoster = True
 			self.resetBackdrop = True
+
+			self["childCount"].setText(str(self.mediaContainer.get("title2", " ")))
+			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
+			self.changeBackdrop = True
+			if self.fastScroll == False or self.showMedia == True:
+				# handle all pixmaps
+				self.handlePopularityPixmaps()
+				self.handleCodecPixmaps()
+				self.handleAspectPixmaps()
+				self.handleResolutionPixmaps()
+				#self.handleRatedPixmaps() # seems that there is no information about that
+				self.handleSoundPixmaps()
+
+			if self.tagType != self.lastTagType:
+				self.showMediaFunctions()
 
 		else:
 			printl( "is playable content",self, "D")
@@ -191,18 +199,8 @@ class DPS_ViewShows(DP_View):
 			self.changePoster = False
 			self.changeBackdrop = True
 
-		if not self.usePicCache:
-			self.pname = "temp"
-			self.bname = "temp"
-			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-
-		printl("bname: " + str(self.bname), self, "D")
-		printl("pname: " + str(self.pname), self, "D")
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
-
-		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
-		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
+		# now gather information for pictures
+		self.getPictureInformationToLoad()
 
 		printl("", self, "C")
 

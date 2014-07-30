@@ -712,6 +712,8 @@ class PlexLibrary(Screen):
 			if "type" in entryData:
 				if entryData["type"] == "album" or entryData["type"] == "artist":
 					entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
+			else:
+				entryData["type"] = "Folder"
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
