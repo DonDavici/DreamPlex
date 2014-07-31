@@ -142,6 +142,19 @@ class DPS_ViewShows(DP_View):
 					self["grandparentTitle"].setText(self.grandparentTitle)
 					#self.setTitle(self.grandparentTitle)
 
+			# technical details
+			self.mediaDataArr = self.details["mediaDataArr"][0]
+			self.parts = self.mediaDataArr["Parts"][0]
+
+			self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
+			self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+			self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
+			self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+			self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
+			self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
+			self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+			self["file"].setText(encodeMe(self.parts.get("file", " - ")))
+
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["parentRatingKey"]
 

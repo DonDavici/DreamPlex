@@ -115,6 +115,15 @@ class DPS_ViewMusic(DP_View):
 				self.resetPoster = False
 				self.setDuration()
 
+				# technical details
+				self.mediaDataArr = self.details["mediaDataArr"][0]
+				self.parts = self.mediaDataArr["Parts"][0]
+
+				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+				self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+				self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+				self["file"].setText(encodeMe(self.parts.get("file", " - ")))
+
 				# this is when we are coming from directory
 				if self.lastPosterName is  None and self.lastBackdropName is  None:
 					if "parentRatingKey" in self.details:
