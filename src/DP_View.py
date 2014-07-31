@@ -878,9 +878,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		#self.executeColorFunction("blue", self.currentFunctionLevel)
-
-		self.togglePlaybackMode()
+		self.executeColorFunction("blue", self.currentFunctionLevel)
 
 		printl("", self, "C")
 
