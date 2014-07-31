@@ -69,10 +69,6 @@ class DPS_ViewMusic(DP_View):
 		if "type" in self.details:
 			if self.details["type"] == "album" or self.details["type"] == "artist":
 				if self.details["type"] == "album":
-					self.changePoster = True
-					self.changeBackdrop = False
-					self.resetBackdrop = False
-					self.resetPoster = True
 					self["title"].setText(encodeMe(self.details.get("title", " ")))
 					self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
 
@@ -86,11 +82,6 @@ class DPS_ViewMusic(DP_View):
 					self.hideMediaFunctions()
 					self.hideMediaPixmaps()
 				else:
-					self.changePoster = True
-					self.changeBackdrop = True
-					self.resetBackdrop = True
-					self.resetPoster = True
-
 					self["title"].setText(encodeMe(self.details.get("title", " ")))
 					self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
 					self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
@@ -98,6 +89,10 @@ class DPS_ViewMusic(DP_View):
 					self.toggleElementVisibilityWithLabel("genre")
 					self["shortDescription"].show()
 
+				self.changePoster = True
+				self.changeBackdrop = True
+				self.resetBackdrop = True
+				self.resetPoster = True
 				self.hideMediaFunctions()
 				self.hideMediaPixmaps()
 

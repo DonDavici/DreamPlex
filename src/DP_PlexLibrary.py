@@ -601,7 +601,7 @@ class PlexLibrary(Screen):
 			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
 			entryData['art']	            = self.getImage(entry, server, myType = "art")
 
-		# in some cases there are other thumbs like parentThumb
+		# in some cases there are other images
 		if "parentThumb" in entryData:
 			entryData['parentThumb']	    = self.getImage(entry, server, myType = "parentThumb")
 
