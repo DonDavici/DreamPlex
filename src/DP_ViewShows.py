@@ -113,8 +113,6 @@ class DPS_ViewShows(DP_View):
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
 			self["childCount"].setText(str(self.details.get("childCount", " ")))
-			self["studio"].setText(self.details.get("studio", " "))
-			self["genre"].setText(self.details.get("genre", " "))
 
 			self.parentSeasonNr = self.details["ratingKey"]
 			self.bname = self.parentSeasonId
