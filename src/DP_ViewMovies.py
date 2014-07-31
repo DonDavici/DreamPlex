@@ -93,7 +93,7 @@ class DPS_ViewMovies(DP_View):
 		self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
 		self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
 		self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-		self["file"].setText(self.parts.get("file", " - "))
+		self["file"].setText(encodeMe(self.parts.get("file", " - ")))
 
 		if self.fastScroll == False or self.showMedia == True:
 			# handle all pixmaps
