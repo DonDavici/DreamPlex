@@ -58,9 +58,7 @@
 		<subView name="ShowSeasons">
 			<element name="grandparentTitle" xCoord="545" yCoord="75" visible="True"/>
 			<element name="duration" visible="False"/>
-			<element name="studio" visible="False"/>
 			<element name="childCount" visible="False"/>
-			<element name="genre" visible="False"/>
 			<element name="year" visible="False" />
 			<element name="info" visible="False"/>
 			<element name="btn_yellow" visible="False"/>
