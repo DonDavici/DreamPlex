@@ -494,9 +494,9 @@ class PlexLibrary(Screen):
 
 			entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
 
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['art']	            = self.getImage(entry, server, myType = "art")
-			entryData['banner']             = self.getImage(entry, server, myType = "banner")
+			# now we populate entryData with the transcode data for images
+			entryData = self.getImageData(entryData, entry, server)
+
 			entryData['token']			    = self.g_myplex_accessToken
 
 			if mediaContainer["title2"] != "By Folder":
@@ -562,8 +562,9 @@ class PlexLibrary(Screen):
 			if "type" not in entryData:
 				entryData["type"]               = "season"
 
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['art']	            = self.getImage(entry, server, myType = "art")
+			# now we populate entryData with the transcode data for images
+			entryData = self.getImageData(entryData, entry, server)
+
 			entryData['token']			    = self.g_myplex_accessToken
 
 			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer but only if we are not in ByFolder mode
@@ -586,6 +587,29 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return fullList, mediaContainer
 
+	#===============================================================================
+	#
+	#===============================================================================
+	def getImageData(self, entryData, entry, server, switchMedias=False):
+		printl("", self, "S")
+
+		if switchMedias:
+			# we need this for example for episodes
+			entryData['thumb']			    = self.getImage(entry, server, myType = "art")
+			entryData['art']	            = self.getImage(entry, server, myType = "thumb")
+		else:
+			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
+			entryData['art']	            = self.getImage(entry, server, myType = "art")
+
+		# in some cases there are other thumbs like parentThumb
+		if "parentThumb" in entryData:
+			entryData['parentThumb']	    = self.getImage(entry, server, myType = "parentThumb")
+
+		if "banner" in entryData:
+			entryData['banner']             = self.getImage(entry, server, myType = "banner")
+
+		printl("", self, "C")
+		return entryData
 	#===============================================================================
 	#
 	#===============================================================================
@@ -634,13 +658,8 @@ class PlexLibrary(Screen):
 			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
 			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
-			if switchMedias:
-				# we need this for example for episodes
-				entryData['thumb']			    = self.getImage(entry, server, myType = "art")
-				entryData['art']	            = self.getImage(entry, server, myType = "thumb")
-			else:
-				entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-				entryData['art']	            = self.getImage(entry, server, myType = "art")
+			# now we populate entryData with the transcode data for images
+			entryData = self.getImageData(entryData, entry, server, switchMedias)
 
 			entryData['token']			    = self.g_myplex_accessToken
 
@@ -673,8 +692,8 @@ class PlexLibrary(Screen):
 			if entryData["type"] == "album":
 				entryData["nextViewMode"]	    = "ShowTracks"
 
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['art']	            = self.getImage(entry, server, myType = "art")
+			# now we populate entryData with the transcode data for images
+			entryData = self.getImageData(entryData, entry, server)
 
 			# add to fullList
 			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
@@ -708,8 +727,8 @@ class PlexLibrary(Screen):
 			entryData["currentViewMode"]		    = currentViewMode
 			entryData["nextViewMode"]			    = nextViewMode
 
-			entryData['thumb']			    = self.getImage(entry, server, myType = "thumb")
-			entryData['art']	            = self.getImage(entry, server, myType = "art")
+			# now we populate entryData with the transcode data for images
+			entryData = self.getImageData(entryData, entry, server)
 
 			if "type" in entryData:
 				if entryData["type"] == "album" or entryData["type"] == "artist":

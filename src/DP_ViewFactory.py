@@ -344,6 +344,7 @@ def getMusicViewDefaults():
 	params["elements"]["audioCodec"]["visible"]                    = False
 	params["elements"]["file"]["visible"]                          = False
 	params["elements"]["genre"]["visible"]                         = False
+	params["elements"]["studio"]["visible"]                        = False
 
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
