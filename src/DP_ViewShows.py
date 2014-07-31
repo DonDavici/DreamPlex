@@ -102,6 +102,7 @@ class DPS_ViewShows(DP_View):
 			if self.tagType != self.lastTagType:
 				self.hideMediaFunctions()
 
+			self.handlePopularityPixmaps()
 			self.handleRatedPixmaps()
 
 		elif self.details ["currentViewMode"] == "ShowSeasons":

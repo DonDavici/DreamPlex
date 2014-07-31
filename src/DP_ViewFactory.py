@@ -284,7 +284,6 @@ def getShowViewDefaults():
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["cast"]["visible"]                          = False
-	params["elements"]["rating_stars"]["visible"]                          = False
 	params["elements"]["codec"]["visible"]                          = False
 	params["elements"]["aspect"]["visible"]                          = False
 	params["elements"]["resolution"]["visible"]                          = False
