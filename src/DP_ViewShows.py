@@ -76,7 +76,7 @@ class DPS_ViewShows(DP_View):
 
 		if self.details ["currentViewMode"] == "ShowShows":
 			printl( "is ShowShows", self, "D")
-			self.setTitle(str(self.mediaContainer.get("title2", " ")))
+			#self.setTitle(str(self.mediaContainer.get("title2", " ")))
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
@@ -108,7 +108,8 @@ class DPS_ViewShows(DP_View):
 		elif self.details ["currentViewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons",self, "D")
 			self.grandparentTitle = str(self.mediaContainer.get("title2", " "))
-			self.setTitle(self.grandparentTitle)
+			self["grandparentTitle"].setText(self.grandparentTitle)
+			#self.setTitle(self.grandparentTitle)
 
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
@@ -134,10 +135,12 @@ class DPS_ViewShows(DP_View):
 
 			if self.details["currentViewMode"] == "ShowEpisodesDirect":
 				self["tag"].setText("Season: " + encodeMe(self.details.get("parentIndex", " ")))
-				self.setTitle(str(self.details.get("grandparentTitle", " ")))
+				self["grandparentTitle"].setText(str(self.details.get("grandparentTitle", " ")))
+				#self.setTitle(str(self.details.get("grandparentTitle", " ")))
 			else:
 				if self.grandparentTitle is not None:
-					self.setTitle(self.grandparentTitle)
+					self["grandparentTitle"].setText(self.grandparentTitle)
+					#self.setTitle(self.grandparentTitle)
 
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["parentRatingKey"]
