@@ -693,7 +693,9 @@
 
         <widget source="session.CurrentService" render="Label" position="1200,495" size="90,30" zPosition="4" font="Regular;22" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1">
             <convert type="ServicePosition">Remaining</convert>
-        </widget>          
+        </widget>
+
+        <widget name="bufferslider" position="37,15" size="500,8" zPosition="10" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/progress-fs8.png" />
 
     </screen>
 
