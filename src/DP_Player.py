@@ -390,6 +390,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def playNextEntry(self):
 		printl("", self, "S")
+		# first we write back the state of the current file to the plex server
+		self.handleProgress()
 
 		# increase position
 		self.currentIndex += 1
@@ -411,6 +413,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def playPreviousEntry(self):
 		printl("", self, "S")
+		# first we write back the state of the current file to the plex server
+		self.handleProgress()
 
 		self.currentIndex -= 1
 
@@ -455,9 +459,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self["bufferslider"].setValue(100)
 		else:
 			self["bufferslider"].setValue(1)
-
-		if self.playbackType == "2":
-			self.bufferFull()
 
 		printl("", self, "C")
 
@@ -777,7 +778,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 		
 		if answer:
-			#self.session.nav.stopService()
 			self.handleProgress()
 
 			if self.playbackType == "1":
@@ -798,6 +798,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			if not self.nextPlaylistEntryAvailable():
 				self.leavePlayerConfirmed(True)
 			else:
+				# first we write back the state of the current file to the plex server
+				self.handleProgress()
+
 				#start next file
 				self.playNextEntry()
 		else:
