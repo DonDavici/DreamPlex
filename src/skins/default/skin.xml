@@ -398,7 +398,6 @@
         </widget>
 
         <!-- information -->
-
         <widget name="totalLabel" transparent="1" zPosition="-88" halign="left" position="35,13" size="60,30" font="Regular;18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="total" transparent="1" zPosition="4" halign="left" position="88,14" size="100,30" font="Regular;18" foregroundColor="#FF8C00" backgroundColor="#0f0f0f"/>
 
@@ -410,8 +409,8 @@
             <convert type="TemplatedMultiContent">
                 {"template": [ MultiContentEntryText(pos = (40,0), size = (623,30), flags = RT_HALIGN_LEFT | RT_VALIGN_CENTER, text = 0),
                 MultiContentEntryPixmapAlphaTest(pos = (0,4), size = (24,24), png = 3) ],
-                "fonts": [gFont("Regular", 22)],
-                "itemHeight": 33,
+                "fonts": [gFont("Regular", 18)],
+                "itemHeight": 30,
                 "scrollbarMode": "showNever"
                 }
             </convert>
