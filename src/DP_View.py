@@ -621,8 +621,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		self.setColorFunction(color="red", level="1", functionList=("", "self.togglePlayMode()"))
-		self.setColorFunction(color="green", level="1", functionList=(_(""), "self.toggleResumeMode()"))
-		self.setColorFunction(color="yellow", level="1", functionList=(_(""), "self.executeLibraryFunction()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="green", level="1", functionList=("", "self.toggleResumeMode()"))
+		self.setColorFunction(color="yellow", level="1", functionList=("", "self.executeLibraryFunction()")) # name is empty because we set it dynamical
 		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), "self.togglePlaybackMode()"))
 
 		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", "self.onToggleView()"))
