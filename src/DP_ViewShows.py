@@ -65,6 +65,8 @@ class DPS_ViewShows(DP_View):
 	#===========================================================================
 	def _refresh(self):
 		printl("", self, "S")
+		# we have to reset it here
+		self.themeMusicIsRunning = False
 
 		# for all view steps
 		self["title"].setText(encodeMe(self.details.get("title", " ")))
@@ -96,7 +98,7 @@ class DPS_ViewShows(DP_View):
 			self.resetBackdrop = True
 
 			# if we are a show an if playtheme is enabled we start playback here
-			if self.playTheme:
+			if self.playTheme and "theme" in self.details:
 				self.startThemePlayback()
 
 			if self.tagType != self.lastTagType:
