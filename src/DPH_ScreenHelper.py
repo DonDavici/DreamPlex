@@ -119,6 +119,21 @@ class DPH_ScreenHelper(object):
 #===============================================================================
 #
 #===============================================================================
+class DPH_PlexScreen(object):
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def setColorFunctionIcons(self):
+		# first we set the pics for buttons
+		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
+		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+
+#===============================================================================
+#
+#===============================================================================
 class DPH_MultiColorFunctions(object):
 
 	#===============================================================================

@@ -139,6 +139,7 @@ class PlexLibrary(Screen):
 	startedPic = "started-fs8.png"
 	authHeader = None
 	lastHeaderForServer = None
+	lastResponse = None
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -1106,6 +1107,7 @@ class PlexLibrary(Screen):
 
 		if token is None:
 			self._showErrorOnTv("", response)
+			self.lastResponse = response
 
 			printl("", self, "C")
 			return False
@@ -1123,6 +1125,15 @@ class PlexLibrary(Screen):
 		printl ("token: " + token, self, "D", True, 8)
 		printl("", self, "C")
 		return token
+
+	#============================================================================
+	#
+	#============================================================================
+	def getLastResponse(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.lastResponse
 
 	#============================================================================
 	#

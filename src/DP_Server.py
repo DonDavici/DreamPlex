@@ -41,10 +41,13 @@ from __init__ import initServerEntryConfig, getVersion, _ # _ is translation
 from DP_Mappings import DPS_Mappings
 from DP_Syncer import DPS_Syncer
 from DPH_PlexGdm import PlexGdm
+from DPH_ScreenHelper import DPH_PlexScreen
+from DP_ViewFactory import getGuiElements
+from DPH_Singleton import Singleton
 #===============================================================================
 #
 #===============================================================================
-class DPS_Server(Screen):
+class DPS_Server(Screen, DPH_PlexScreen):
 
 	def __init__(self, session, what = None):
 		printl("", self, "S")
@@ -53,20 +56,22 @@ class DPS_Server(Screen):
 		self.session = session
 		from Components.Sources.List import List
 
+		self.guiElements = getGuiElements()
+
 		self["entryList"]= List(self.builEntryList(), True)
 		self["header"] = Label()
 		self["columnHeader"] = Label()
 
-		self["txt_red"] = Label()
+		self["btn_redText"] = Label()
 		self["btn_red"] = Pixmap()
 
-		self["txt_green"] = Label()
+		self["btn_greenText"] = Label()
 		self["btn_green"] = Pixmap()
 
-		self["txt_yellow"] = Label()
+		self["btn_yellowText"] = Label()
 		self["btn_yellow"] = Pixmap()
 
-		self["txt_blue"] = Label()
+		self["btn_blueText"] = Label()
 		self["btn_blue"] = Pixmap()
 
 		self["actions"] = ActionMap(["WizardActions","MenuActions","ShortcutActions"],
@@ -90,13 +95,16 @@ class DPS_Server(Screen):
 	def finishLayout(self):
 		printl("", self, "S")
 
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
+
 		self["header"].setText(_("Server List:"))
 		self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
 
-		self["txt_red"].setText(_("Delete"))
-		self["txt_green"].setText(_("Add"))
-		self["txt_yellow"].setText(_("Sync Media"))
-		self["txt_blue"].setText(_("Discover"))
+		self["btn_redText"].setText(_("Delete"))
+		self["btn_greenText"].setText(_("Add"))
+		self["btn_yellowText"].setText(_("Sync Media"))
+		self["btn_blueText"].setText(_("Discover"))
 
 		printl("", self, "C")
 
@@ -285,7 +293,7 @@ class DPS_Server(Screen):
 #===============================================================================
 #
 #===============================================================================
-class DPS_ServerConfig(ConfigListScreen, Screen):
+class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 	useMappings = False
 
@@ -295,22 +303,32 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		self.session = session
 		Screen.__init__(self, session)
 
+		self.guiElements = getGuiElements()
+
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
 		{
 			"green": self.keySave,
 			"cancel": self.keyCancel,
 			"yellow": self.keyYellow,
+			"blue": self.keyBlue,
+			"red": self.keyRed,
 			"left": self.keyLeft,
 			"right": self.keyRight,
 		}, -2)
 
 		self["help"] = StaticText()
 
-		self["txt_green"] = Label()
+		self["btn_redText"] = Label()
+		self["btn_red"] = Pixmap()
+
+		self["btn_greenText"] = Label()
 		self["btn_green"] = Pixmap()
 
-		self["txt_yellow"] = Label()
+		self["btn_yellowText"] = Label()
 		self["btn_yellow"] = Pixmap()
+
+		self["btn_blueText"] = Label()
+		self["btn_blue"] = Pixmap()
 
 		if entry is None:
 			self.newmode = 1
@@ -345,9 +363,12 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 	def finishLayout(self):
 		printl("", self, "S")
 
-		self["txt_green"].setText(_("Save"))
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
 
 		self.setKeyNames()
+
+		self.plexInstance = Singleton().getPlexInstance()
 
 		printl("", self, "C")
 
@@ -479,10 +500,14 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 	def setKeyNames(self):
 		printl("", self, "S")
 
+		self["btn_greenText"].setText(_("Save"))
+
 		if self.useMappings:
-			self["txt_yellow"].setText(_("Mappings"))
-		else:
-			self["txt_yellow"].setText(_("check myPlex Token"))
+			self["btn_yellowText"].setText(_("Mappings"))
+
+		if self.current.localAuth.value or self.current.connectionType.value == "2":
+			self["btn_redText"].setText(_("check myPlex Token"))
+			self["btn_blueText"].setText(_("(re)create myPlex Token"))
 
 		printl("", self, "C")
 
@@ -550,7 +575,32 @@ class DPS_ServerConfig(ConfigListScreen, Screen):
 		if self.useMappings:
 			serverID = self.currentId
 			self.session.open(DPS_Mappings, serverID)
-		else:
-			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def keyBlue(self):
+		printl("", self, "S")
+
+		# token = self.plexInstance.getNewMyPlexToken()
+		#
+		# if token:
+		# 	self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		# else:
+		# 	response = self.plexInstance.getLastResponse()
+		# 	self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def keyRed(self):
+		printl("", self, "S")
+
+		# self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+
+		printl("", self, "C")
+

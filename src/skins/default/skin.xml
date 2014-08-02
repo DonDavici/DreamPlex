@@ -170,17 +170,17 @@
         </widget>
 
         <!-- functions -->
-        <widget name="btn_red" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_red-fs8.png" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_red" position="120,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_green" position="400,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_green" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="btn_yellow" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_yellow-fs8.png" zPosition="6" position="680,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_yellow" position="700,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="btn_blue" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_blue-fs8.png" zPosition="6" position="980,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_blue" position="1000,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_blue"  zPosition="6" position="890,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_ServerConfig -->
@@ -207,11 +207,17 @@
         <widget source="help" render="Label" position="40,565" size="1025,100" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#212121" zPosition="30" transparent="1"/>
 
         <!-- functions -->
-        <widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_green-fs8.png" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_green" position="400,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
-        <widget name="btn_yellow" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/buttons/btn_yellow-fs8.png" zPosition="6" position="680,687" size="12,17" alphatest="blend"/>
-        <widget name="txt_yellow" position="700,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_green" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_blue"  zPosition="6" position="890,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_Mappings -->
