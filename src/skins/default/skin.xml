@@ -18,11 +18,11 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/main_menu-fs8.png" position="0,400" zPosition="-1" size="1280,225" alphatest="blend" transparent="1"/>
         
 		<!-- moving targets -->
-        <widget name="-2" transparent="1" zPosition="-80" position="4,490" size="350,60" font="Regular; 26" halign="center" />
-        <widget name="-1" transparent="1" zPosition="8" position="62,490" size="400,60" font="Regular; 35" halign="center" />
-        <widget name="0" transparent="1" zPosition="8" position="500,490" size="400,60" font="Regular; 35" halign="center" />
-        <widget name="+1" transparent="1" zPosition="8" position="938,490" size="400,60" font="Regular; 35" halign="center" />
-        <widget name="+2" transparent="1" zPosition="-80" position="996,490" size="350,60" font="Regular; 26" halign="center" />
+        <widget name="-2" transparent="1" zPosition="8" position="4,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="-1" transparent="1" zPosition="8" position="252,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="0" transparent="1" zPosition="8" position="500,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="+1" transparent="1" zPosition="8" position="748,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="+2" transparent="1" zPosition="8" position="996,490" size="250,50" font="Regular; 22" halign="center" />
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/picons/dreamplex.png" zPosition="10" position="800,60" size="350,350" alphatest="blend" >
@@ -323,11 +323,11 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/main_menu-fs8.png" position="0,400" zPosition="-1" size="1280,225" alphatest="blend" transparent="1"/>
 		
 		<!-- moving targets -->
-        <widget name="-2" transparent="1" zPosition="-80" position="4,490" size="350,60" font="Regular; 26" halign="center" />
-        <widget name="-1" transparent="1" zPosition="8" position="62,490" size="410,60" font="Regular; 35" halign="center" />
-        <widget name="0" transparent="1" zPosition="8" position="500,490" size="410,60" font="Regular; 35" halign="center" />
-        <widget name="+1" transparent="1" zPosition="8" position="938,490" size="410,60" font="Regular; 35" halign="center" />
-        <widget name="+2" transparent="1" zPosition="-80" position="996,490" size="350,60" font="Regular; 26" halign="center" />
+        <widget name="-2" transparent="1" zPosition="8" position="4,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="-1" transparent="1" zPosition="8" position="252,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="0" transparent="1" zPosition="8" position="500,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="+1" transparent="1" zPosition="8" position="748,490" size="250,50" font="Regular; 22" halign="center" />
+        <widget name="+2" transparent="1" zPosition="8" position="996,490" size="250,50" font="Regular; 22" halign="center" />
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/picons/menu_movies.png" zPosition="10" position="800,60" size="350,350" alphatest="blend" >
