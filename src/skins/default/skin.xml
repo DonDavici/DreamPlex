@@ -679,7 +679,7 @@
         <widget source="session.CurrentService" render="PositionGauge" position="210,490" size="1060,1" zPosition="3" transparent="1" >
             <convert type="ServicePosition">Gauge</convert>
         </widget>        
-        <widget source="session.CurrentService" render="Progress" position="210,488" size="1060,5" foregroundColor="#FF8C00" backgroundColor="#40000000" zPosition="4" transparent="1">
+        <widget source="session.CurrentService" render="Progress" position="210,488" size="1060,5" backgroundColor="#40000000" zPosition="4" transparent="1">
             <convert type="ServicePosition">Position</convert>
         </widget>
 
