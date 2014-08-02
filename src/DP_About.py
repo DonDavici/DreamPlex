@@ -93,9 +93,10 @@ class DPS_About(Screen):
 		content += "Version: \t" + getVersion() + "\n\n"
 		content += "Autor: \t DonDavici\n"
 		content += "\n"
+		content += "Skin: \t Ipman alias Yipman\n"
+		content += "\n"
 		content += "Contributors: \t wezhunter\n"
 		content += "\t andyblac \n"
-		content += "\t IPMAN\n"
 		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
 		
 		printl("", self, "C")
