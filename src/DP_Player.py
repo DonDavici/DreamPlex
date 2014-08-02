@@ -525,8 +525,13 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def __evUpdatedBufferInfo(self):
 		#printl("", self, "S")
-		
-		self.bufferInfo()
+
+		if self.playbackType == "2":
+			self.bufferFull()
+		else:
+			# we lock the infobar until the buffer is full for better feedback to user
+			self.lockShow()
+			self.bufferInfo()
 		
 		#printl("", self, "C")
 
@@ -535,8 +540,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def ok(self):
 		#printl("", self, "S")
-		
-		self.bufferInfo()
+
+		if self.playbackType != "2":
+			self.bufferInfo()
 
 		if self.shown:
 			self.hide()
@@ -550,10 +556,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def bufferInfo(self):
 		#printl("", self, "S")
-		
-		if self.playbackType == "2":
-			self.bufferFull() # redundant
-			return
+
 		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
 		
 		self.bufferPercent = bufferInfo[0]
@@ -725,6 +728,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.multiUser:
 			# because the buffer is full we start updating timeline
 			self.timelineWatcher.start(5000,False)
+
+		# now we unlock again so that the infobar can dismiss
+		self.unlockShow()
+		self.hide()
 
 		#printl("", self, "C")
 
