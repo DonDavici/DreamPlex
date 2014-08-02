@@ -421,41 +421,41 @@
         <widget name="title" transparent="1" zPosition="5" halign="left" position="245,455" size="650,33" font="Regular;24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="tag" transparent="1" zPosition="51" halign="left" valign="left" noWrap="1" position="245,433" size="650,51" font="Regular; 18" foregroundColor="#5C5C5C" backgroundColor="#212121"/>
 
-        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="245,489" size="630,140" font="Regular;19" foregroundColor="#ffffff" backgroundColor="#212121"/>
+        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="245,489" size="630,140" font="Regular;16" foregroundColor="#ffffff" backgroundColor="#212121"/>
         		
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/five_stars_dark-fs8.png" zPosition="83" position="1148,437" size="141,29" alphatest="blend" transparent="1"/>
 		<widget name="rating_stars" zPosition="84" position="1148,437" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/five_stars_bright-fs8.png"/>
         
-		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="890,438" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="year" transparent="1" zPosition="4" halign="left" position="990,438" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="890,466" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="genre" transparent="1" zPosition="4" halign="left" position="990,466" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-        <widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="890,494" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="director" transparent="1" zPosition="4" halign="left" position="990,494" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="890,522" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="writer" transparent="1" zPosition="4" halign="left" position="990,522" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-        <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="890,550" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="cast" transparent="1" zPosition="4" halign="left"  position="990,550" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="890,578" size="120,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="subtitles" transparent="1" zPosition="4" halign="left" position="990,578" size="200,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="890,606" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="audio" transparent="1" zPosition="4" halign="left" position="990,606" size="400,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-        <widget name="studioLabel" transparent="1" zPosition="-4" halign="left" position="890,606" size="160,30" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="studio" transparent="1" zPosition="-4" halign="left" position="990,606" size="160,25" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,635" size="160,27" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="duration" transparent="1" zPosition="4" halign="left"  position="990,635" size="290,27" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="890,438" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="year" transparent="1" zPosition="4" halign="left" position="990,438" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+        <widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="890,466" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="genre" transparent="1" zPosition="4" halign="left" position="990,466" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+        <widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="890,494" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="director" transparent="1" zPosition="4" halign="left" position="990,494" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="890,522" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="writer" transparent="1" zPosition="4" halign="left" position="990,522" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+        <widget name="castLabel" transparent="1" zPosition="4" halign="left" position="890,550" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="cast" transparent="1" zPosition="4" halign="left"  position="990,550" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="890,578" size="120,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="subtitles" transparent="1" zPosition="4" halign="left" position="990,578" size="200,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="890,606" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="audio" transparent="1" zPosition="4" halign="left" position="990,606" size="400,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+        <widget name="studioLabel" transparent="1" zPosition="-4" halign="left" position="890,606" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="studio" transparent="1" zPosition="-4" halign="left" position="990,606" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="890,635" size="160,27" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="duration" transparent="1" zPosition="4" halign="left"  position="990,635" size="290,27" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<!-- tv show specific -->
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="245,438" size="680,35" font="Regular;24" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
         				
-		<widget name="leafCountLabel" transparent="1" zPosition="6" halign="left" position="890,578" size="160,30" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="leafCount" transparent="1" zPosition="6" halign="left" position="990,578" size="300,25" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="leafCountLabel" transparent="1" zPosition="6" halign="left" position="890,578" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="leafCount" transparent="1" zPosition="6" halign="left" position="990,578" size="300,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
-		<widget name="viewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,606" size="160,30" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="viewedLeafCount" transparent="1" zPosition="6" halign="left"  position="990,606" size="160,25" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="viewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,606" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="viewedLeafCount" transparent="1" zPosition="6" halign="left"  position="990,606" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
         	
-		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,635" size="160,30" font="Regular; 19" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-        <widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="990,635" size="160,25" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,635" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="990,635" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="820,677" size="160,30" font="Regular; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
         <widget name="info" transparent="1" zPosition="9" halign="left" position="920,677" size="160,25" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
@@ -501,24 +501,25 @@
 
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_green" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_blue"  zPosition="6" position="890,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <!-- functions -->
-        <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Regular;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="501,310" size="75,80" font="Regular;70" foregroundColor="#FF8C00" transparent="1"/>
         
-		<widget name="L1" transparent="1" zPosition="10" position="1110,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>
-        <widget name="L2" transparent="1" zPosition="10" position="1125,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>
-        <widget name="L3" transparent="1" zPosition="10" position="1140,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>		
-    
+		<widget name="L1" transparent="1" zPosition="10" position="1170,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L2" transparent="1" zPosition="10" position="1185,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L3" transparent="1" zPosition="10" position="1200,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L4" transparent="1" zPosition="10" position="1215,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+
 	</screen>    
 
     <!-- DPS_ViewBackdrop -->
@@ -637,24 +638,25 @@
        
         <!-- buttons -->
         <widget name="btn_red"  zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_green"  zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_yellow"  zPosition="6" position="640,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_yellowText" position="660,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <widget name="btn_blue"  zPosition="6" position="890,687" size="12,17" alphatest="blend"/>
-        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+        <widget name="btn_blueText" position="910,677" zPosition="9" size="231,37" font="Regular;14" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
         <!-- functions -->
-        <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="436,560" size="75,80" font="Regular;70" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="501,310" size="75,80" font="Regular;70" foregroundColor="#FF8C00" transparent="1"/>
 		 
-        <widget name="L1" transparent="1" zPosition="10" position="1110,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>
-        <widget name="L2" transparent="1" zPosition="10" position="1125,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>
-        <widget name="L3" transparent="1" zPosition="10" position="1140,677" size="20,37" font="Regular; 16" halign="center" valign="center"/>
-        
+        <widget name="L1" transparent="1" zPosition="10" position="1170,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L2" transparent="1" zPosition="10" position="1185,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L3" transparent="1" zPosition="10" position="1200,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+        <widget name="L4" transparent="1" zPosition="10" position="1215,677" size="20,37" font="Regular; 14" halign="center" valign="center"/>
+
     </screen>    
 
     <!-- DPS_PlexPlayer -->
@@ -672,7 +674,7 @@
 
         <widget name="poster" transparent="1" zPosition="49" position="0,450" size="195,268" alphatest="blend"/>
         <widget source="mediaTitle" render="Label" zPosition="4" position="210,443" size="1070,42" font="Regular; 30" halign="left" valign="top" noWrap="1" foregroundColor="#FF8C00" backgroundColor="#40000000" transparent="1" />
-        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="210,531" size="1060,185" font="Regular; 19" foregroundColor="#ffffff" backgroundColor="#40000000"/>
+        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="210,531" size="1060,185" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#40000000"/>
         
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/back_progress.png" position="210,490" size="1060,1" zPosition="3" transparent="1" />
         
