@@ -379,10 +379,13 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		else:
 			serverData = self.plexInstance.getAllSections(filterBy)
 
-		self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
+		if not serverData:
+			self.showNoDataMessage()
+		else:
+			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
-		self["menu"].setList(serverData)
-		self.refreshMenu()
+			self["menu"].setList(serverData)
+			self.refreshMenu()
 
 		printl("", self, "C")
 
@@ -394,8 +397,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		menuData = self.plexInstance.getSectionFilter(entryData)
 
 		if not menuData:
-			text = "You have no data in this section!"
-			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+			self.showNoDataMessage()
 			self.menuStep -= 1
 			printl("menuStep: " + str(self.menuStep), self, "D")
 
@@ -405,6 +407,17 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.refreshMenu()
 
 		printl("", self, "S")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showNoDataMessage(self):
+		printl("", self, "S")
+
+		text = "You have no data in this section!"
+		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#

@@ -129,6 +129,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	keyOneDisabled                  = False
 	filterMode                      = False
 	playbackMode                    = "default"
+	themeMusicIsRunning             = False
 
 	#===========================================================================
 	#
@@ -1293,7 +1294,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
-			self.session.nav.stopService()
+			if self.themeMusicIsRunning:
+				self.session.nav.stopService()
 
 		if self.viewStep >= 0:
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
@@ -2040,11 +2042,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		server = self.details["server"]
 		accessToken = Singleton().getPlexInstance().get_aTokenForServer(server)
 		printl("theme: " + str(theme), self, "D")
-		url = "http://" + str(server) + str(theme) + str(accessToken) #"?X-Plex-Token=" + str(accessToken)
+		url = "http://" + str(server) + str(theme) + str(accessToken)
 		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
 		printl("sref: " + str(sref), self, "D")
 		self.session.nav.stopService()
 		self.session.nav.playService(eServiceReference(sref))
+		self.themeMusicIsRunning = True
 
 		printl("", self, "C")
 
