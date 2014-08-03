@@ -37,13 +37,13 @@
 	-->
 
 	<!-- MOVIE VIEWS -->
-	<movieView name="List" apiLevel="1" itemsPerPage="11" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555" >
+	<movieView name="List" apiLevel="1" itemsPerPage="12" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555" >
 		<subView name="ShowMovies">
 		<element name="miniTv" xCoord="25" yCoord="86"/>
 		</subView>
 	</movieView>	
 
-	<movieView name="Backdrop" apiLevel="1" itemsPerPage="11" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">
+	<movieView name="Backdrop" apiLevel="1" itemsPerPage="12" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="720" backdropVideoWidth="1280">
 		<subView name="ShowMovies">
 			<element name="backdrop" visible="True" height="720" width="1280" postfix="_backdrop_1280x720.jpg"/>
 		    <element name="miniTv" xCoord="0" yCoord="0"/>
@@ -54,7 +54,7 @@
 	-->
 
 	<!-- SHOW VIEWS -->
-	<showView name="List" apiLevel="1" itemsPerPage="11" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555">
+	<showView name="List" apiLevel="1" itemsPerPage="12" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555">
 		<subView name="ShowShows">	
 		    <element name="grandparentTitle" visible="False"/>
 		    <element name="title" xCoord="245" yCoord="473" />
@@ -145,7 +145,7 @@
 	-->
 
 	<!-- MUSIC VIEWS -->
-	<musicView name="List" apiLevel="1" itemsPerPage="10" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555">
+	<musicView name="List" apiLevel="1" itemsPerPage="12" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555">
 		<subView name="ShowArtists">
 
 		</subView>
