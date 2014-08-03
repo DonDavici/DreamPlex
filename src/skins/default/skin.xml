@@ -490,7 +490,7 @@
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/frame-fs8.png" position="0,0" zPosition="47" size="1280,720" alphatest="blend" transparent="1"/>
 		
 		<widget name="backdrop" transparent="0" zPosition="43" position="25,86" size="555,321" alphatest="blend"/>
-        <widget name="backdropVideo" zPosition="46" position="25,86" size="555,321" />
+        <!--<widget name="backdropVideo" zPosition="46" position="25,86" size="555,321" />-->
 		<widget name="stillPicture" backgroundColor="#ff111111" zPosition="-3" position="25,86" size="555,321"/>
         <widget name="miniTv" position="25,86" size="555,321" zPosition="45" backgroundColor="#ff111111"/>
 		      
@@ -639,7 +639,7 @@
 		<widget name="poster" transparent="1" zPosition="49" position="576,246" size="195,268" alphatest="blend"/>
                
 		<widget name="backdrop" transparent="0" zPosition="-4" position="0,0" size="1280,720" alphatest="blend"/>
-        <widget name="backdropVideo" zPosition="-2" position="0,0" size="1280,720" />
+        <!--<widget name="backdropVideo" zPosition="-2" position="0,0" size="1280,720" />-->
 		<widget name="stillPicture" backgroundColor="#ff111111" zPosition="-30" position="0,0" size="1280,720"/>
         <widget name="miniTv" position="0,0" size="1280,720" zPosition="-3" backgroundColor="#ff111111"/>		
        
