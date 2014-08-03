@@ -108,6 +108,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode, playbackMode, poster):
 		printl("", self, "S")
+		printl("currentIndex: " + str(currentIndex), self, "D")
 		
 		self.session = session
 		self.listViewList = listViewList
