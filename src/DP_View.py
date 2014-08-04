@@ -295,6 +295,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self["info"].setText(_("press 'Info'"))
 		self["infoLabel"] = Label()
 		self["infoLabel"].setText(_("Info:"))
+		if not self.fastScroll:
+			self["info"].hide()
+			self["infoLabel"].hide()
 
 		self["director"] = Label()
 		self["directorLabel"] = Label()

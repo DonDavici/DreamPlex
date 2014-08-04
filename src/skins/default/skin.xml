@@ -452,7 +452,10 @@
 		
 		<!-- tv show specific -->
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="245,438" size="680,35" font="Regular;24" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
-        				
+
+        <widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="890,550" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="childCount" transparent="1" zPosition="6" halign="left" position="990,550" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
+
 		<widget name="leafCountLabel" transparent="1" zPosition="6" halign="left" position="890,578" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="leafCount" transparent="1" zPosition="6" halign="left" position="990,578" size="300,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
@@ -461,9 +464,9 @@
         	
 		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,635" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="990,635" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		
-		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="820,677" size="160,30" font="Regular; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="info" transparent="1" zPosition="9" halign="left" position="920,677" size="160,25" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+
+		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="250,250" size="160,30" font="Regular; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="info" transparent="1" zPosition="9" halign="left" position="350,250" size="160,25" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 		
 		<!-- detail pane -->
         <widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="245,488" size="160,30" font="Regular; 12" foregroundColor="#FF8C00" backgroundColor="#212121"/>
@@ -620,6 +623,9 @@
 		
 		<!-- tv show specific -->
         <widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="793,238" size="520,30" font="Regular;20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+
+        <widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="793,418" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+        <widget name="childCount" transparent="1" zPosition="6" halign="left" position="893,418" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<widget name="leafCountLabel" transparent="1" zPosition="4" halign="left" position="793,443" size="160,30" font="Regular; 17" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="leafCount" transparent="1" zPosition="4" halign="left" position="893,443" size="300,25" font="Regular; 17" foregroundColor="#ffffff" backgroundColor="#212121"/>
