@@ -79,7 +79,7 @@ class DPS_ViewMovies(DP_View):
 		self["cast"].setText(encodeMe(self.details.get("cast", " ")))
 		self["writer"].setText(encodeMe(self.details.get("writer", " ")))
 		self["director"].setText(encodeMe(self.details.get("director", " ")))
-		self["studio"].setText(self.details.get("studio", " "))
+		self["studio"].setText(encodeMe(self.details.get("studio", " ")))
 		self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
 		self["year"].setText(str(self.details.get("year", " - ")))
 

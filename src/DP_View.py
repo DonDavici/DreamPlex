@@ -296,9 +296,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self["info"].setText(_("press 'Info'"))
 		self["infoLabel"] = Label()
 		self["infoLabel"].setText(_("Info:"))
-		if not self.fastScroll:
-			self["info"].hide()
-			self["infoLabel"].hide()
 
 		self["director"] = Label()
 		self["directorLabel"] = Label()
@@ -2279,6 +2276,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
+
+		if not self.fastScroll:
+			self["info"].hide()
+			self["infoLabel"].hide()
 
 		printl("", self, "C")
 
