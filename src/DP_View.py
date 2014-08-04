@@ -229,6 +229,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.fastScroll = config.plugins.dreamplex.fastScroll.value
 		self.liveTvInViews = config.plugins.dreamplex.liveTvInViews.value
+		self.startWithFilterMode = config.plugins.dreamplex.startWithFilterMode.value
 
 		# get data from plex library
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
@@ -1384,9 +1385,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		# now refresh
 		self.refresh()
 
-		filterMode = True
-		if filterMode:
+		# check in settings
+		if self.startWithFilterMode:
 			self.onKey4()
+
 		printl("", self, "C")
 
 	#===========================================================================
