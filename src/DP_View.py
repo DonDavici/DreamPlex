@@ -1347,6 +1347,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		self.listViewList = self.alterViewStateInList(self.libraryData)
+		self.beforeFilterListViewList = self.listViewList
 
 		# mediaContainer on top of xml
 		self.mediaContainer = libraryDataArr[1]
@@ -2730,10 +2731,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		if self.onNumberKeyLastChar == " ":
-			self["listview"].setList(self.listViewList)
+			self["listview"].setList(self.beforeFilterListViewList)
 		else:
-			listViewList = [x for x in self.listViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
-			self["listview"].setList(listViewList)
+			self.listViewList = [x for x in self.beforeFilterListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
+			self["listview"].setList(self.listViewList)
 
 		self.refresh()
 
