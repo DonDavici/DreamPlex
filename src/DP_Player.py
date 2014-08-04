@@ -480,7 +480,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.playbackData = self.playerData[self.currentIndex]
 		self.videoData = self.playerData[self.currentIndex]['videoData']
-		self.mediaData = self.playerData[self.currentIndex]['mediaData']
+
+		# not used for now
+		#self.mediaData = self.playerData[self.currentIndex]['mediaData']
 
 		# go through the data out of the function call
 		self.resumeStamp = int(self.playbackData['resumeStamp']) / 1000 # plex stores seconds * 1000
@@ -494,20 +496,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.universalTranscoder = self.playbackData['universalTranscoder']
 		self.localAuth = self.playbackData['localAuth']
 
-		# lets prepare all additional data for a better experience :-)
-		self.title = str(self.videoData['title'])
-		self.tagline = str(self.videoData['tagline'])
+		self.title = encodeMe(self.videoData['title'])
 		self["shortDescription"].setText(encodeMe(self.videoData['summary']))
-		self.year = str(self.videoData['year'])
-		self.studio = str(self.videoData['studio'])
-		self.duration = str(self.videoData['duration'])
-		self.contentRating = str(self.videoData['contentRating'])
-
-		self.audioCodec = str(self.mediaData['audioCodec'])
-		self.videoCodec = str(self.mediaData['videoCodec'])
-		self.videoResolution = str(self.mediaData['videoResolution'])
-		self.videoFrameRate = str(self.mediaData['videoFrameRate'])
-
+		self["poster"]
+		config
 		printl("", self, "C")
 
 	#===========================================================================
