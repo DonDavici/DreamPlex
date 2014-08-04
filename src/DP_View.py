@@ -228,6 +228,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.fastScroll = config.plugins.dreamplex.fastScroll.value
+		self.liveTvInViews = config.plugins.dreamplex.liveTvInViews.value
 
 		# get data from plex library
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
@@ -336,6 +337,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self["durationLabel"].setText(_("Runtime:"))
 
 		self["backdrop"] = Pixmap()
+
+		if self.liveTvInViews:
+			self["backdrop"].hide()
+
 		self["poster"] = Pixmap()
 		self["rating_stars"] = ProgressBar()
 
@@ -1513,6 +1518,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 			# depending on the settings in params we reset all images that are needed to
 			self.resetCurrentImages()
 
+			# supress changing backdrop if we want liveTv in views via settings
+			if self.liveTvInViews:
+				self.changeBackdrop = False
+
 			# now go for it
 			self.handlePictures()
 
@@ -2135,7 +2144,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def resetCurrentImages(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 
 		if self.viewParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
@@ -2472,7 +2481,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def resetBackdropImage(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 		self["backdrop"].instance.setPixmapFromFile(ptr)
 
 		printl("", self, "C")
