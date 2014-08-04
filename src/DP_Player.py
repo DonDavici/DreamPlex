@@ -498,8 +498,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.title = encodeMe(self.videoData['title'])
 		self["shortDescription"].setText(encodeMe(self.videoData['summary']))
-		self["poster"]
-		config
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -837,8 +836,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 			urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 			self.plexInstance.doRequest(urlPath)
-			#self.plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
-		
+
 		#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
 		else:
 			if currentTime < 30:

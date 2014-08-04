@@ -2712,7 +2712,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		# if pic cache is not configured we set a name that will not exist to force download each time from server
-		# todo enhance this not clear at all
 		if not self.usePicCache:
 			self.pname = "temp"
 			self.bname = "temp"

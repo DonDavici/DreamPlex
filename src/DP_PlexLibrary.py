@@ -44,7 +44,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 
 from __plugin__ import getPlugin, Plugin
-from __common__ import printl2 as printl, getXmlContent, getPlexHeader
+from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeMe
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -1212,7 +1212,7 @@ class PlexLibrary(Screen):
 	def mediaType(self, partData, server):
 		printl("", self, "S")
 		stream = partData['key']
-		myFile = partData['file']
+		myFile = encodeMe(partData['file'])
 		self.fallback = False
 		self.locations = ""
 
