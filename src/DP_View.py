@@ -1383,6 +1383,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# now refresh
 		self.refresh()
+
+		filterMode = True
+		if filterMode:
+			self.onKey4()
 		printl("", self, "C")
 
 	#===========================================================================

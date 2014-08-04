@@ -224,7 +224,6 @@ def getMovieViewDefaults():
 	# override default True
 	params["elements"]["grandparentTitle"]["visible"]              = False
 	params["elements"]["childCount"]["visible"]                    = False
-	params["elements"]["info"]["visible"]                          = False
 	params["elements"]["leafCount"]["visible"]                     = False
 	params["elements"]["unviewedLeafCount"]["visible"]             = False
 	params["elements"]["viewedLeafCount"]["visible"]               = False

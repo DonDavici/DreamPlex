@@ -465,8 +465,8 @@
 		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,635" size="160,30" font="Regular; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="990,635" size="160,25" font="Regular; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
-		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="250,250" size="160,30" font="Regular; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="info" transparent="1" zPosition="9" halign="left" position="350,250" size="160,25" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="890,550" size="160,30" font="Regular; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="info" transparent="1" zPosition="9" halign="left" position="990,550" size="160,25" font="Regular; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 		
 		<!-- detail pane -->
         <widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="245,488" size="160,30" font="Regular; 12" foregroundColor="#FF8C00" backgroundColor="#212121"/>
@@ -486,7 +486,6 @@
         <widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="245,608" size="160,30" font="Regular; 12" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="file" transparent="1" zPosition="9" halign="left"  position="350,608" size="550,60" font="Regular; 12" foregroundColor="#ffffff" backgroundColor="#212121"/>
                 
-
         <widget name="casePic" zPosition="50" position="0,390" size="240,292" alphatest="blend" transparent="0"/>
         <widget name="poster" transparent="1" zPosition="49" position="32,400" size="195,268" alphatest="blend"/>
 
