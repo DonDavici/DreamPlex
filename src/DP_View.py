@@ -399,9 +399,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.loadedStillPictureLib = True
 
 			except Exception, ex:
-
 				printl("Exception: " + str(ex), self, "D")
 				printl("was not able to import lib for stillpictures", self, "D")
+
+				# we need this as dummy
+				self["stillPicture"] = Label()
 		else:
 			# we need this as dummy
 			self["stillPicture"] = Label()
