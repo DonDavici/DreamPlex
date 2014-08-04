@@ -78,15 +78,16 @@
 			<element name="grandparentTitle" visible="False"/>
 			<element name="title" xCoord="245" yCoord="455" />
 			<element name="shortDescription" xCoord="245" yCoord="489"/>
-			<element name="duration" xCoord="990" yCoord="635" visible="True"/>			
-			<element name="audio" visible="True"/>
-			<element name="subtitles" visible="True"/>						
+			<element name="studio" xCoord="990" yCoord="490"/>
+			<element name="writer" visible="True" xCoord="990" yCoord="516"/>
+			<element name="subtitles" visible="True" xCoord="990" yCoord="594"/>
+			<element name="audio" visible="True" xCoord="990" yCoord="620"/>
+			<element name="duration" visible="True" xCoord="990" yCoord="646"/>									
 			<element name="codec" visible="True"/>
 			<element name="aspect" visible="True"/>
 			<element name="resolution" visible="True"/>
 			<element name="sound" visible="True"/>
-			<element name="writer" visible="True"/>
-		    
+					    
 			<element name="leafCount" visible="False"/>
 			<element name="viewedLeafCount" visible="False"/>
 			<element name="unviewedLeafCount" visible="False"/>
