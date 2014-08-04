@@ -1061,8 +1061,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
-
-		self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, ))
+		cause = (DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, )
+		self.leaveNow(cause)
 
 		printl("", self, "C")
 
@@ -1320,17 +1320,29 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.setTitle(self.myTitle)
 				self.leaving = False
 		else:
-			if self.loadedStillPictureLib:
-				self.stopBackdropVideo()
-
-			if self.currentService is not None:
-				printl("restoring liveTv", self, "D")
-				self.session.nav.playService(self.currentService)
-
-			printl("", self, "C")
-			self.close()
+			self.leaveNow()
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def leaveNow(self, cause=None):
+		printl("", self, "S")
+
+		if self.loadedStillPictureLib:
+			self.stopBackdropVideo()
+
+		if self.currentService is not None:
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(self.currentService)
+
+		if cause is not None:
+			printl("", self, "C")
+			self.close(cause)
+		else:
+			printl("", self, "C")
+			self.close()
 
 	#===========================================================================
 	#
@@ -1421,7 +1433,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		else:
 			text = "You have no data in this section!"
 			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
-			self.close()
+			self.leaveNow()
 
 		printl("", self, "C")
 
