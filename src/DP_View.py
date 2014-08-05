@@ -228,6 +228,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
 		self.fastScroll = config.plugins.dreamplex.fastScroll.value
+		self.liveTvInViews = config.plugins.dreamplex.liveTvInViews.value
+		self.startWithFilterMode = config.plugins.dreamplex.startWithFilterMode.value
 
 		# get data from plex library
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
@@ -336,6 +338,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self["durationLabel"].setText(_("Runtime:"))
 
 		self["backdrop"] = Pixmap()
+
+		if self.liveTvInViews:
+			self["backdrop"].hide()
+
 		self["poster"] = Pixmap()
 		self["rating_stars"] = ProgressBar()
 
@@ -399,9 +405,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.loadedStillPictureLib = True
 
 			except Exception, ex:
-
 				printl("Exception: " + str(ex), self, "D")
 				printl("was not able to import lib for stillpictures", self, "D")
+
+				# we need this as dummy
+				self["stillPicture"] = Label()
 		else:
 			# we need this as dummy
 			self["stillPicture"] = Label()
@@ -1059,8 +1067,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
-
-		self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, ))
+		cause = (DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, )
+		self.leaveNow(cause)
 
 		printl("", self, "C")
 
@@ -1318,17 +1326,29 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.setTitle(self.myTitle)
 				self.leaving = False
 		else:
-			if self.loadedStillPictureLib:
-				self.stopBackdropVideo()
-
-			if self.currentService is not None:
-				printl("restoring liveTv", self, "D")
-				self.session.nav.playService(self.currentService)
-
-			printl("", self, "C")
-			self.close()
+			self.leaveNow()
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def leaveNow(self, cause=None):
+		printl("", self, "S")
+
+		if self.loadedStillPictureLib:
+			self.stopBackdropVideo()
+
+		if self.currentService is not None:
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(self.currentService)
+
+		if cause is not None:
+			printl("", self, "C")
+			self.close(cause)
+		else:
+			printl("", self, "C")
+			self.close()
 
 	#===========================================================================
 	#
@@ -1347,6 +1367,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		self.listViewList = self.alterViewStateInList(self.libraryData)
+		self.beforeFilterListViewList = self.listViewList
 
 		# mediaContainer on top of xml
 		self.mediaContainer = libraryDataArr[1]
@@ -1360,6 +1381,11 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# now refresh
 		self.refresh()
+
+		# check in settings
+		if self.startWithFilterMode:
+			self.onKey4()
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -1418,7 +1444,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		else:
 			text = "You have no data in this section!"
 			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
-			self.close()
+			self.leaveNow()
 
 		printl("", self, "C")
 
@@ -1497,6 +1523,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 			# depending on the settings in params we reset all images that are needed to
 			self.resetCurrentImages()
+
+			# supress changing backdrop if we want liveTv in views via settings
+			if self.liveTvInViews:
+				self.changeBackdrop = False
 
 			# now go for it
 			self.handlePictures()
@@ -2120,7 +2150,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def resetCurrentImages(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 
 		if self.viewParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
@@ -2246,6 +2276,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
 				self.toggleElementVisibilityWithLabel("subtitles", "hide")
+
+		if not self.fastScroll:
+			self["info"].hide()
+			self["infoLabel"].hide()
 
 		printl("", self, "C")
 
@@ -2457,7 +2491,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def resetBackdropImage(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 		self["backdrop"].instance.setPixmapFromFile(ptr)
 
 		printl("", self, "C")
@@ -2697,7 +2731,6 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		# if pic cache is not configured we set a name that will not exist to force download each time from server
-		# todo enhance this not clear at all
 		if not self.usePicCache:
 			self.pname = "temp"
 			self.bname = "temp"
@@ -2730,10 +2763,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("", self, "S")
 
 		if self.onNumberKeyLastChar == " ":
-			self["listview"].setList(self.listViewList)
+			self["listview"].setList(self.beforeFilterListViewList)
 		else:
-			listViewList = [x for x in self.listViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
-			self["listview"].setList(listViewList)
+			self.listViewList = [x for x in self.beforeFilterListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
+			self["listview"].setList(self.listViewList)
 
 		self.refresh()
 

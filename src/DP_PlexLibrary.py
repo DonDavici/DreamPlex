@@ -44,7 +44,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 
 from __plugin__ import getPlugin, Plugin
-from __common__ import printl2 as printl, getXmlContent, getPlexHeader
+from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeMe
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -133,13 +133,13 @@ class PlexLibrary(Screen):
 	g_myplex_accessTokenDict = {}
 	g_sectionCache = None
 	g_multiUser = False # this is only true if we use myPlex Connection and we have a plexPlass Account active on the server
-	g_currentError = ""
 	seenPic = "seen-fs8.png"
 	unseenPic = "unseen-fs8.png"
 	startedPic = "started-fs8.png"
 	authHeader = None
 	lastHeaderForServer = None
 	lastResponse = None
+	lastError = None
 	
 	#Create the standard header structure and load with a User Agent to ensure we get back a response.
 	g_txheaders = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
@@ -259,94 +259,101 @@ class PlexLibrary(Screen):
 		# sections tree
 		tree = self.getAllSectionsXmlTree()
 
-		entries = tree.findall('Directory')
+		if not tree:
+			return False
+		else:
+			entries = tree.findall('Directory')
+			count = 0
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("entryData: " + str(entryData), self, "D")
 
-			# set the source for the section data
-			source = "plex"
-			if config.plugins.dreamplex.useCache.value:
-				source = self.updateSectionCache(entryData)
+				# set the source for the section data
+				source = "plex"
+				if config.plugins.dreamplex.useCache.value:
+					source = self.updateSectionCache(entryData)
 
-			entryData["source"] =source
+				entryData["source"] =source
 
-			# add specific data to entryData if needed
-			if self.serverConfig_connectionType == "2": # MYPLEX
-				entryData["address"] = entryData['address'] + ":" + entryData['port']
+				# add specific data to entryData if needed
+				if self.serverConfig_connectionType == "2": # MYPLEX
+					entryData["address"] = entryData['address'] + ":" + entryData['port']
 
-				# we have to do this because via myPlex there could be diffrent servers with other tokens
-				if str(entryData.get('address')) not in self.g_myplex_accessToken:
-					printl("section address" + str(entryData.get('address')), self, "D")
-					self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
+					# we have to do this because via myPlex there could be diffrent servers with other tokens
+					if str(entryData.get('address')) not in self.g_myplex_accessToken:
+						printl("section address" + str(entryData.get('address')), self, "D")
+						self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
 
-				# finally we set AccessTokenHeader
-				self.setAccessTokenHeader(str(entryData.get('serverVersion')))
-			else:
-				entryData["path"] = "/library/sections/" + entryData.get('key')
-				entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
-
-			if not self.g_useFilterSections and entryData.get('type') != 'artist':
-				entryData["path"] += '/all'
-
-			entryData["serverName"] = self.serverConfig_Name.encode()
-			entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
-
-			# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
-			detail = ""
-			if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
-				if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
-					detail = " ( " + entryData['sourceTitle'] + ")"
-				elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
-					detail = " (" + str(entryData['serverName']) + ")"
-
-			entryName = _(entryData.get('title').encode('utf-8')) + detail
-
-			if entryData.get('type') == 'show':
-				printl( "_MODE_TVSHOWS detected", self, "D")
-				if myFilter is not None and myFilter != "tvshow":
-					continue
-
-				if self.g_useFilterSections:
-					fullList.append((entryName, Plugin.MENU_FILTER, "showEntry", entryData))
+					# finally we set AccessTokenHeader
+					self.setAccessTokenHeader(str(entryData.get('serverVersion')))
 				else:
-					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+					entryData["path"] = "/library/sections/" + entryData.get('key')
+					entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
 
-			elif entryData.get('type') == 'movie':
-				printl( "_MODE_MOVIES detected", self, "D")
-				if (myFilter is not None) and (myFilter != "movies"):
-					continue
+				if not self.g_useFilterSections and entryData.get('type') != 'artist':
+					entryData["path"] += '/all'
 
-				if self.g_useFilterSections:
-					fullList.append((entryName, Plugin.MENU_FILTER, "movieEntry", entryData))
+				entryData["serverName"] = self.serverConfig_Name.encode()
+				entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
+
+				# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
+				detail = ""
+				if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
+					if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
+						detail = " ( " + entryData['sourceTitle'] + ")"
+					elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
+						detail = " (" + str(entryData['serverName']) + ")"
+
+				entryName = _(entryData.get('title').encode('utf-8')) + detail
+
+				if entryData.get('type') == 'show':
+					printl( "_MODE_TVSHOWS detected", self, "D")
+					if myFilter is not None and myFilter != "tvshow":
+						continue
+
+					if self.g_useFilterSections:
+						fullList.append((entryName, Plugin.MENU_FILTER, "showEntry", entryData))
+					else:
+						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+
+				elif entryData.get('type') == 'movie':
+					printl( "_MODE_MOVIES detected", self, "D")
+					if (myFilter is not None) and (myFilter != "movies"):
+						continue
+
+					if self.g_useFilterSections:
+						fullList.append((entryName, Plugin.MENU_FILTER, "movieEntry", entryData))
+					else:
+						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
+
+				elif entryData.get('type') == 'artist':
+					printl( "_MODE_ARTISTS detected", self, "D")
+					if (myFilter is not None) and (myFilter != "music"):
+						continue
+
+					# in case of music we use always filters
+					fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
+
+				elif entryData.get('type') == 'photo':
+					printl( "_MODE_PHOTOS detected but excluded", self, "D")
+					# if (myFilter is not None) and (myFilter != "photos"):
+					# 	continue
+					# if self.g_useFilterSections:
+					# 	fullList.append((entryName, Plugin.MENU_FILTER, "pictureEntry", entryData))
+					# else:
+					# 	fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("pictures", Plugin.MENU_PICTURES), "movieEntry", entryData))
+
 				else:
-					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
-
-			elif entryData.get('type') == 'artist':
-				printl( "_MODE_ARTISTS detected", self, "D")
-				if (myFilter is not None) and (myFilter != "music"):
-					continue
-
-				# in case of music we use always filters
-				fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
-
-			elif entryData.get('type') == 'photo':
-				printl( "_MODE_PHOTOS detected but excluded", self, "D")
-				# if (myFilter is not None) and (myFilter != "photos"):
-				# 	continue
-				# if self.g_useFilterSections:
-				# 	fullList.append((entryName, Plugin.MENU_FILTER, "pictureEntry", entryData))
-				# else:
-				# 	fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("pictures", Plugin.MENU_PICTURES), "movieEntry", entryData))
-
-			else:
-				raise Exception("we should not be here")
+					raise Exception("we should not be here")
 
 		if config.plugins.dreamplex.useCache.value:
 			self.saveSectionCache()
 
-		printl("fullList: " + str(fullList), self, "D")
+		# as a last step we check if there where any content
+		if not count > 0:
+			self.lastError = _("No data in this section!")
+
 		printl("", self, "C")
 		return fullList
 
@@ -370,51 +377,59 @@ class PlexLibrary(Screen):
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(incomingEntryData["contentUrl"])
 
-		# find coressponding tags in xml
-		entries = tree.findall('Directory')
+		if not tree:
+			return False
+		else:
+			# find coressponding tags in xml
+			entries = tree.findall('Directory')
+			count = 0
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
+			for entry in entries:
+				entryData = (dict(entry.items()))
 
-			entryData["hasSecondaryTag"] = entryData.get("secondary", False)
-			entryData["hasPromptTag"] = entryData.get("prompt", False)
-			entryData["type"] = incomingEntryData["type"]
+				entryData["hasSecondaryTag"] = entryData.get("secondary", False)
+				entryData["hasPromptTag"] = entryData.get("prompt", False)
+				entryData["type"] = incomingEntryData["type"]
 
-			if entryData["hasSecondaryTag"]: #means that the next answer is a filter
-				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
+				if entryData["hasSecondaryTag"]: #means that the next answer is a filter
+					entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
 
-				fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
-
-			else:
-				entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
-
-				if config.plugins.dreamplex.useCache.value:
-					# we set this here now to have this information later
-					if self.g_sectionCache.has_key(self.currentUuid):
-						entryData["source"] = self.g_sectionCache[self.currentUuid]["source"]
-					else:
-						entryData["source"] = "plex"
-
-					entryData["uuid"] = self.currentUuid
-					entryData["type"] = self.type
-					printl("entryData: " + str(entryData), self, "D")
-
-				if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
-					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
-
-				elif incomingEntryData["type"] == 'movie':
-					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
-
-				elif incomingEntryData["type"] == 'artist':
-					fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", entryData))
-
-				# elif incomingEntryData["type"] == 'photo':
-				# 	printl( "_MODE_PHOTOS detected", self, "D")
+					fullList.append((_(entryData.get('title').encode('utf-8')), Plugin.MENU_FILTER, "showFilter", entryData))
 
 				else:
-					raise Exception("we should not be here")
+					entryData["contentUrl"] = incomingEntryData["contentUrl"] + "/" + entryData["key"]
 
-			printl("entryData: " + str(entryData), self, "D")
+					if config.plugins.dreamplex.useCache.value:
+						# we set this here now to have this information later
+						if self.g_sectionCache.has_key(self.currentUuid):
+							entryData["source"] = self.g_sectionCache[self.currentUuid]["source"]
+						else:
+							entryData["source"] = "plex"
+
+						entryData["uuid"] = self.currentUuid
+						entryData["type"] = self.type
+						printl("entryData: " + str(entryData), self, "D")
+
+					if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
+						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+
+					elif incomingEntryData["type"] == 'movie':
+						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
+
+					elif incomingEntryData["type"] == 'artist':
+						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("music", Plugin.MENU_MUSIC), "musicEntry", entryData))
+
+					# elif incomingEntryData["type"] == 'photo':
+					# 	printl( "_MODE_PHOTOS detected", self, "D")
+
+					else:
+						raise Exception("we should not be here")
+
+				printl("entryData: " + str(entryData), self, "D")
+
+		# as a last step we check if there where any content
+		if not count > 0:
+			self.lastError = _("No data in this section!")
 
 		printl("", self, "C")
 		return fullList
@@ -989,8 +1004,8 @@ class PlexLibrary(Screen):
 		if self.serverConfig_connectionType == "2": # MYPLEX
 
 			if self.serverConfig_myplexToken == "ERROR":
-				tree = None
-				self._showErrorOnTv(_("MyPlex Token error:\nCheck Username and Password.\n%s") % self.serverConfig_myplexToken)
+				self.lastError = _("MyPlex Token error:\nCheck Username and Password.\n%s") % self.serverConfig_myplexToken
+				return False
 			else:
 				tree = self.getXmlTreeFromPlex('/pms/system/library/sections')
 
@@ -1178,31 +1193,31 @@ class PlexLibrary(Screen):
 
 			elif int(data.status) >= 400:
 				error = "HTTP response error: " + str(data.status) + " " + str(data.reason)
-				printl( error, self, "I")
+				printl( error, self, "D")
+				self.lastError = error
+
 				printl("", self, "C")
-				self.g_currentError = error
 				return False
 
 			else:
 				link=data.read()
-
-				#printl("====== XML returned =======", self, "D")
-				#printl("data: " + link, self, "D")
-				#printl("====== XML finished ======", self, "D")
 
 				printl("", self, "C")
 				return link
 
 		except socket.gaierror :
 			error = 'Unable to lookup host: ' + server + "\nCheck host name is correct"
-			printl( error, self, "I")
+			printl( error, self, "D")
+			self.lastError = error
 
 			printl("", self, "C")
 			return False
 
 		except socket.error, msg :
 			error="Unable to connect to " + server +"\nReason: " + str(msg)
-			printl( error, self, "I")
+			self.lastError = error
+			printl( error, self, "D")
+
 			printl("", self, "C")
 			return False
 
@@ -1212,7 +1227,7 @@ class PlexLibrary(Screen):
 	def mediaType(self, partData, server):
 		printl("", self, "S")
 		stream = partData['key']
-		myFile = partData['file']
+		myFile = encodeMe(partData['file'])
 		self.fallback = False
 		self.locations = ""
 
@@ -1881,8 +1896,6 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl("url = " + MYPLEX_SERVER + url, self, "D")
 
-		tree = None
-
 		printl( "Starting request", self, "D")
 		curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url + "?X-Plex-Token=" + str(self.serverConfig_myplexToken))
 
@@ -1892,7 +1905,10 @@ class PlexLibrary(Screen):
 		try:
 			tree = etree.fromstring(response)
 		except Exception:
-			self._showErrorOnTv("no xml as response", response)
+			self.lastError = "no xml as response: " + str(response)
+
+			printl("", self, "C")
+			return False
 
 		printl("", self, "C")
 		return tree
@@ -1904,21 +1920,31 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		#Get the URL and server name. Get the XML and parse
 
-		tree = None
-
 		html = self.doRequest(url)
 		printl("html: " + str(html), self, "D")
 		if html is False:
 			printl("", self, "C")
-			return
+			return False
 
 		try:
 			tree = etree.fromstring(html)
+
+			printl("", self, "C")
+			return tree
 		except Exception:
-			self._showErrorOnTv("no xml as response", html)
+			self.lastError = "no xml as response: " + str(html)
+			printl("Error: " + str(html), self, "D")
+			printl("", self, "C")
+			return False
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getLastErrorMessage(self):
+		printl("", self, "S")
 
 		printl("", self, "C")
-		return tree
+		return self.lastError
 
 	#===============================================================================
 	#
