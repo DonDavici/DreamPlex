@@ -414,7 +414,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def showNoDataMessage(self):
 		printl("", self, "S")
 
-		text = "You have no data in this section!"
+		text = self.plexInstance.getLastErrorMessage()
 		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
