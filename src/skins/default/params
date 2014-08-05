@@ -12,7 +12,7 @@
     <miniTv name="input_box" height="321" width="555" />
 
 	<!-- FONTS SECTION -->
-	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="Regular" />
+	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="OpenSans" />
 	
 	<!-- GUI ELEMENTS -->
 	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
