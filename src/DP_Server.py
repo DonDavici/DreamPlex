@@ -369,8 +369,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.setKeyNames()
 
-		# now that we know the server we establish global plexInstance
-		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
+		if self.newmode == 0:
+			# now that we know the server we establish global plexInstance
+			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
 
 		printl("", self, "C")
 
@@ -499,13 +500,15 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def setKeyNames(self):
+	def asetKeyNames(self):
 		printl("", self, "S")
 
 		self["btn_greenText"].setText(_("Save"))
 
 		if self.useMappings:
 			self["btn_yellowText"].setText(_("Mappings"))
+			self["btn_yellowText"].show()
+			self["btn_yellow"].show()
 		else:
 			self["btn_yellowText"].hide()
 			self["btn_yellow"].hide()
@@ -513,6 +516,10 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		if self.current.localAuth.value or self.current.connectionType.value == "2":
 			self["btn_redText"].setText(_("check myPlex Token"))
 			self["btn_blueText"].setText(_("(re)create myPlex Token"))
+			self["btn_redText"].show()
+			self["btn_red"].show()
+			self["btn_blueText"].show()
+			self["btn_blue"].show()
 		else:
 			self["btn_redText"].hide()
 			self["btn_red"].hide()
