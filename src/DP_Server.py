@@ -38,6 +38,7 @@ from Screens.Screen import Screen
 from __common__ import printl2 as printl, getBoxInformation
 from __init__ import initServerEntryConfig, getVersion, _ # _ is translation
 
+from DP_PlexLibrary import PlexLibrary
 from DP_Mappings import DPS_Mappings
 from DP_Syncer import DPS_Syncer
 from DPH_PlexGdm import PlexGdm
@@ -368,7 +369,8 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.setKeyNames()
 
-		self.plexInstance = Singleton().getPlexInstance()
+		# now that we know the server we establish global plexInstance
+		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
 
 		printl("", self, "C")
 
@@ -504,10 +506,18 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		if self.useMappings:
 			self["btn_yellowText"].setText(_("Mappings"))
+		else:
+			self["btn_yellowText"].hide()
+			self["btn_yellow"].hide()
 
 		if self.current.localAuth.value or self.current.connectionType.value == "2":
 			self["btn_redText"].setText(_("check myPlex Token"))
 			self["btn_blueText"].setText(_("(re)create myPlex Token"))
+		else:
+			self["btn_redText"].hide()
+			self["btn_red"].hide()
+			self["btn_blueText"].hide()
+			self["btn_blue"].hide()
 
 		printl("", self, "C")
 
@@ -584,13 +594,13 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyBlue(self):
 		printl("", self, "S")
 
-		# token = self.plexInstance.getNewMyPlexToken()
-		#
-		# if token:
-		# 	self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
-		# else:
-		# 	response = self.plexInstance.getLastResponse()
-		# 	self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		token = self.plexInstance.getNewMyPlexToken()
+
+		if token:
+			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		else:
+			response = self.plexInstance.getLastResponse()
+			self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
@@ -600,7 +610,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		# self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
