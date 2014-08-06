@@ -500,7 +500,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def asetKeyNames(self):
+	def setKeyNames(self):
 		printl("", self, "S")
 
 		self["btn_greenText"].setText(_("Save"))
