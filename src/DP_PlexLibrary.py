@@ -268,7 +268,6 @@ class PlexLibrary(Screen):
 			for entry in entries:
 				counter += 1
 				entryData = (dict(entry.items()))
-				printl("entryData: " + str(entryData), self, "D")
 
 				# set the source for the section data
 				source = "plex"
@@ -410,7 +409,6 @@ class PlexLibrary(Screen):
 
 						entryData["uuid"] = self.currentUuid
 						entryData["type"] = self.type
-						printl("entryData: " + str(entryData), self, "D")
 
 					if incomingEntryData["type"] == 'show' or incomingEntryData["type"] == 'episode':
 						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
@@ -1926,7 +1924,9 @@ class PlexLibrary(Screen):
 		#Get the URL and server name. Get the XML and parse
 
 		html = self.doRequest(url)
-		printl("html: " + str(html), self, "D")
+
+		# enable only if we really need this
+		#printl("html: " + str(html), self, "D")
 		if html is False:
 			printl("", self, "C")
 			return False
@@ -1955,14 +1955,14 @@ class PlexLibrary(Screen):
 	#
 	#===============================================================================
 	def getListFromTag(self, entry, tagName):
-		printl("", self, "S")
+		#printl("", self, "S")
 		tempList = []
 
 		for child in entry:
 			if child.tag == tagName:
 				tempList.append(child.get('tag').encode("utf-8"))
 
-		printl("", self, "C")
+		#printl("", self, "C")
 		return tempList
 	
 	#=============================================================================

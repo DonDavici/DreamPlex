@@ -1368,7 +1368,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		# this is the content for the list (must be tuple no dict)
 		self.libraryData = libraryDataArr[0]
-		printl("libraryData: " + str(self.libraryData), self, "D")
+
+		# enable this only if you realy need the information for debuging
+		#printl("libraryData: " + str(self.libraryData), self, "D")
 
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
 		self.listViewList = self.alterViewStateInList(self.libraryData)
@@ -1398,13 +1400,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	#===========================================================================
 	def alterViewStateInList(self, listViewList):
 		printl("", self, "S")
-		printl("listViewList: " + str(listViewList), self, "S")
+		#printl("listViewList: " + str(listViewList), self, "S")
 		newList = []
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
 		for listViewEntry in listViewList:
 			viewState = str(listViewEntry[3])
-			printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
+			#printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 
 			if listViewEntry is not None:
 				if viewState == 'seen':

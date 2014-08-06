@@ -154,11 +154,11 @@ class DPH_MultiColorFunctions(object):
 	#
 	#===============================================================================
 	def setColorFunction(self, color, level, functionList):
-		printl("", self, "S")
+		#printl("", self, "S")
 
 		self.colorFunctionContainer[color][level] = functionList
 
-		printl("", self, "C")
+		#printl("", self, "C")
 
 	#===============================================================================
 	#

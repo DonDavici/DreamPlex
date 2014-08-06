@@ -91,7 +91,6 @@ class DPH_HorizontalMenu(object):
 
 		currentIndex = self["menu"].index
 		content = self["menu"].list
-		printl("content " + str(content), self, "D")
 		count = len(content)
 
 		self[self.translatePositionToName(0)].setText(content[currentIndex][0])
@@ -124,7 +123,7 @@ class DPH_HorizontalMenu(object):
 	#
 	#===============================================================================
 	def translatePositionToName(self, name, value=None):
-		printl("", self, "S")
+		#printl("", self, "S")
 
 		if value is None:
 			printl("", self, "C")
@@ -132,7 +131,7 @@ class DPH_HorizontalMenu(object):
 		else:
 			self._translatePositionToName[name] = value
 
-		printl("", self, "C")
+		#printl("", self, "C")
 
 	#===============================================================================
 	#

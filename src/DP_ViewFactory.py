@@ -33,7 +33,7 @@ from __common__ import printl2 as printl
 #
 #===========================================================================
 def getDefaultCineElementsList():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::", "S")
 
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
@@ -41,25 +41,25 @@ def getDefaultCineElementsList():
 	                "videoCodec", "bitrate", "videoFrameRate", "audioChannels", "aspectRatio",
 	                "videoResolution", "audioCodec", "file", "childCount", "studio"]
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::", "C")
 	return elementsList
 
 #===========================================================================
 #
 #===========================================================================
 def getDefaultDirectoryElementsList():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getDefaultDirectoryElementsList", "S")
 
 	elementsList = ["pagination", "total", "title", "tag", "shortDescription"]
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getDefaultDirectoryElementsList", "C")
 	return elementsList
 
 #===========================================================================
 #
 #===========================================================================
 def getNoneDirectoryElements():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getNoneDirectoryElements", "S")
 
 	directoryElementsList = getDefaultDirectoryElementsList()
 	cineElementsList = getDefaultCineElementsList()
@@ -71,16 +71,16 @@ def getNoneDirectoryElements():
 
 	return noneDirectoryElements
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getNoneDirectoryElements", "C")
 #===========================================================================
 #
 #===========================================================================
 def getDefaultSettingsList():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getDefaultSettingsList", "S")
 
 	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth"]
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getDefaultSettingsList", "C")
 	return settingsList
 
 #===============================================================================
@@ -90,7 +90,7 @@ def getViews(libraryName):
 	"""
 	@return: availableViewList
 	"""
-	printl("", "DP_View::getViews", "S")
+	printl("", "DP_ViewFactory::getViews", "S")
 
 	if libraryName == "movies":
 		availableViewList = getViewsFromSkinParams("movieView")
@@ -104,14 +104,14 @@ def getViews(libraryName):
 	else:
 		availableViewList = ()
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getViews", "C")
 	return availableViewList
 
 #===========================================================================
 # 
 #===========================================================================
 def getViewsFromSkinParams(myType):
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getViewsFromSkinParams", "S")
 	
 	tree = Singleton().getSkinParamsInstance()
 
@@ -135,22 +135,22 @@ def getViewsFromSkinParams(myType):
 	for view in tree.findall(myType):
 		# lets copy params to new alterable variable
 		currentParams = copy.deepcopy(defaultParams)
-		printl("currentParams: " + str(currentParams), __name__, "D")
+		#printl("currentParams: " + str(currentParams), __name__, "D")
 
 		useMe, subViewDict = getSubViewParams(view)
 		if useMe:
 			currentParams["subViews"] = subViewDict
 
 		name = str(view.get("name"))
-		printl("viewMe:" + str(view), __name__, "D")
+		printl("viewMe:" + str(view), "DP_ViewFactory::getViewsFromSkinParams", "D")
 
 		# settings
 		settings = defaultParams["settings"]
 		for setting in settings:
-			printl("setting:" + str(setting), __name__, "D")
+			printl("setting:" + str(setting), "DP_ViewFactory::getViewsFromSkinParams", "D")
 			#check if there are params that we have to override
 			value = view.get(setting, None)
-			printl("value: " + str(value), __name__, "D")
+			printl("value: " + str(value), "DP_ViewFactory::getViewsFromSkinParams", "D")
 
 			# check if this value is mandatory
 			# if we are mandatory we stop here
@@ -163,15 +163,15 @@ def getViewsFromSkinParams(myType):
 		
 		availableViewList.append(view)
 	
-	printl("availableViewList: " + str(availableViewList), __name__, "D")
-	printl("", __name__, "C")
+	#printl("availableViewList: " + str(availableViewList), __name__, "D")
+	printl("", "DP_ViewFactory::getViewsFromSkinParams", "C")
 	return availableViewList
 
 #===========================================================================
 #
 #===========================================================================
 def getSubViewParams(tree):
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getSubViewParams", "S")
 
 	useMe = False
 	myDict = {}
@@ -187,7 +187,7 @@ def getSubViewParams(tree):
 				myDictParams[name] = {}
 
 				params = element.attrib
-				printl("params: " + str(params), __name__, "D")
+				#printl("params: " + str(params), __name__, "D")
 
 				for key, value in params.items():
 					translatedValue = translateValues(value)
@@ -197,14 +197,14 @@ def getSubViewParams(tree):
 
 		myDict[subViewName] = myDictParams
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getSubViewParams", "C")
 	return useMe, myDict
 
 #===========================================================================
 # 
 #===========================================================================
 def getMovieViewDefaults():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getMovieViewDefaults", "S")
 	params = {}
 
 	params["settings"] = {}
@@ -245,14 +245,14 @@ def getMovieViewDefaults():
 	params["elements"]["poster"]["width"]                          = "195"
 	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getMovieViewDefaults", "C")
 	return params
 
 #===========================================================================
 #
 #===========================================================================
 def getShowViewDefaults():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getShowViewDefaults", "S")
 	params = {}
 
 	params["settings"] = {}
@@ -298,14 +298,14 @@ def getShowViewDefaults():
 	params["elements"]["poster"]["width"]                          = "195"
 	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getShowViewDefaults", "C")
 	return params
 
 #===========================================================================
 # 
 #===========================================================================
 def getMusicViewDefaults():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getMusicViewDefaults", "S")
 	params = {}
 
 	params["settings"] = {}
@@ -354,14 +354,14 @@ def getMusicViewDefaults():
 	params["elements"]["poster"]["width"]                          = "195"
 	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
 
-	printl("", __name__, "C")
+	printl("", "DP_ViewFactory::getMusicViewDefaults", "C")
 	return params
 
 #===========================================================================
 #
 #===========================================================================
 def translateValues(value):
-	printl("", __name__, "S")
+	#printl("", "DP_ViewFactory::translateValues", "S")
 
 	# translate xml value to real true or false
 	if value == "true" or value == "True":
@@ -370,14 +370,14 @@ def translateValues(value):
 	if value == "false" or value == "False":
 		value = False
 
-	printl("", __name__, "C")
+	#printl("", "DP_ViewFactory::translateValues", "C")
 	return value
 
 #===========================================================================
 #
 #===========================================================================
 def getGuiElements():
-	printl("", __name__, "S")
+	printl("", "DP_ViewFactory::getGuiElements", "S")
 
 	tree = Singleton().getSkinParamsInstance()
 
@@ -387,6 +387,6 @@ def getGuiElements():
 		path = str(guiElement.get('path'))
 		guiElements[name] = path
 
-	printl("guiElements: " + str(guiElements), __name__, "D")
-	printl("", __name__, "C")
+	printl("guiElements: " + str(guiElements), "DP_ViewFactory::getGuiElements", "D")
+	printl("", "DP_ViewFactory::getGuiElements", "C")
 	return guiElements
