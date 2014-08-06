@@ -2739,7 +2739,12 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		printl("bname: " + str(self.bname), self, "D")
 		printl("pname: " + str(self.pname), self, "D")
 		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
+
+		if self.currentViewName == "Backdrop":
+			fullsize_postfix = "_backdrop_1280x720.jpg"
+			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + fullsize_postfix
+		else:
+			self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
 
 		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
 		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
