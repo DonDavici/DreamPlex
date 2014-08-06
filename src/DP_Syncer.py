@@ -73,12 +73,12 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 		self.mediaSyncerInfo = g_mediaSyncerInfo.instance
-		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
-		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
-		self.mediaSyncerInfo.setMode(self._mode)
 
 		self._session = session
 		self["output"] = ScrollLabel()
+
+		# we use this counter to reset scorll label every x entries to stay responsive
+		self.counter = 0
 
 		self["txt_green"] = Label()
 		if self._mode == "sync":
@@ -107,7 +107,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		}, -2)
 
 		self.onFirstExecBegin.append(self.startup)
-		self.onLayoutFinish.append(self.finishLayout)
+		self.onShown.append(self.finishLayout)
 		self.onClose.append(self.__onClose)
 
 	#===============================================================================
@@ -120,6 +120,27 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		self.initMiniTv()
 
+		# first we have to check if we are running in another mode
+		isRunning = self.mediaSyncerInfo.isRunning()
+		if isRunning:
+			currentMode = self.mediaSyncerInfo.getMode()
+			printl("currentMode: " +  str(currentMode), self, "D")
+			printl("_mode: " + str(self._mode), self, "D")
+
+			if currentMode != self._mode:
+				if self._mode == "render":
+					text = "Can not start renderer because there is still a syncer running."
+				else:
+					text = "Can not start syncer because there is still a renderer running."
+				self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+				printl("detected another run of syncer", self, "D")
+				self.close()
+				return
+
+		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
+		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
+		self.mediaSyncerInfo.setMode(self._mode)
+
 		if self.mediaSyncerInfo.isRunning():
 			self["txt_green"].hide()
 			self["btn_green"].hide()
@@ -131,9 +152,15 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 			self["txt_blue"].hide()
 			self["btn_blue"].hide()
 
-		if self._mode == "render":
+		if self._mode == "render" and not isRunning:
 			msg_text = _("Please note to run at least once the sync media function within the server menu.\nThis will download the needed files in the right size of 1280x720.")
-			self["output"].setText(msg_text)
+
+		elif self._mode == "sync" and not isRunning:
+			msg_text = _("This will download all medias from the selected server.\n\nAdditional to this we downlaod the pictures in 1280x720 for better fullscreen backdrops.")
+		else:
+			msg_text = _("Reconnecting to background task ...\n")
+
+		self["output"].setText(msg_text)
 
 		printl("", self, "C")
 
@@ -248,7 +275,14 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 	def callback_infos(self, info):
 		printl("", self, "S")
 
-		self["output"].appendText(info + "\n")
+		self.counter += 1
+
+		if self.counter > 100:
+			self["output"].setText(info + "\n")
+			self.counter = 0
+		else:
+			self["output"].appendText(info + "\n")
+
 		self["output"].lastPage()
 
 		printl("", self, "C")
@@ -381,6 +415,15 @@ class MediaSyncerInfo(object):
 		self.mode = mode
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMode(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.mode
 
 	#===========================================================================
 	#
@@ -700,9 +743,9 @@ class BackgroundMediaSyncer(Thread):
 					if str(config.plugins.dreamplex.showFilter.value).lower() == "true":
 						url += "/all"
 
-					msg_text = _("got movie url: " + str(url))
-					self.messages.push((THREAD_WORKING, msg_text))
-					self.messagePump.send(0)
+					# msg_text = _("got movie url: " + str(url))
+					# self.messages.push((THREAD_WORKING, msg_text))
+					# self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMoviesFromSection(url)
@@ -714,9 +757,9 @@ class BackgroundMediaSyncer(Thread):
 					printl("show", self, "D")
 					url = section[3]["contentUrl"] + "/all"
 
-					msg_text = _("got show url: " + str(url))
-					self.messages.push((THREAD_WORKING, msg_text))
-					self.messagePump.send(0)
+					# msg_text = _("got show url: " + str(url))
+					# self.messages.push((THREAD_WORKING, msg_text))
+					# self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getShowsFromSection(url)
@@ -746,9 +789,9 @@ class BackgroundMediaSyncer(Thread):
 					# first we go through the artists
 					url = section[3]["contentUrl"] + "/all"
 
-					msg_text = _("got music url: " + str(url))
-					self.messages.push((THREAD_WORKING, msg_text))
-					self.messagePump.send(0)
+					# msg_text = _("got music url: " + str(url))
+					# self.messages.push((THREAD_WORKING, msg_text))
+					# self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
@@ -758,9 +801,9 @@ class BackgroundMediaSyncer(Thread):
 					# now we go through the albums
 					url = section[3]["contentUrl"] + "/albums"
 
-					msg_text = _("got music url: " + str(url))
-					self.messages.push((THREAD_WORKING, msg_text))
-					self.messagePump.send(0)
+					# msg_text = _("got music url: " + str(url))
+					# self.messages.push((THREAD_WORKING, msg_text))
+					# self.messagePump.send(0)
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
@@ -789,7 +832,7 @@ class BackgroundMediaSyncer(Thread):
 
 		for media in library:
 			printl("media: " + str(media), self, "D")
-			msg_text = _("checking for  " + str(media[1]["ratingKey"]))
+			msg_text = _("checking for medias with ratingKey: " + str(media[1]["ratingKey"]))
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 
@@ -860,13 +903,13 @@ class BackgroundMediaSyncer(Thread):
 		download_url = download_url.replace('&width=999&height=999', '&width=' + width + '&height=' + height)
 		printl( "download url " + download_url, self, "D")
 
-		msg_text = _("download_url: " + str(download_url))
-		self.messages.push((THREAD_WORKING, msg_text))
-		self.messagePump.send(0)
+		# msg_text = _("download_url: " + str(download_url))
+		# self.messages.push((THREAD_WORKING, msg_text))
+		# self.messagePump.send(0)
 		printl("starting download", self, "D")
 		server = self.plexInstance.getServerFromURL(download_url)
 		authHeader = self.plexInstance.get_hTokenForServer(server)
-		printl("header: " + str(authHeader), self, "D")
+		# printl("header: " + str(authHeader), self, "D")
 		downloadPage(download_url, location, headers=authHeader)
 
 		printl("", self, "C")
