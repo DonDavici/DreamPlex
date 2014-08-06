@@ -29,6 +29,7 @@ from threading import Thread
 from threading import Lock
 
 from Screens.MessageBox import MessageBox
+from Tools import Notifications
 
 from Components.Label import Label
 from Components.ActionMap import ActionMap
@@ -457,6 +458,11 @@ class MediaSyncerInfo(object):
 		if self.callback_finished is not None:
 			printl("callback_finished: " + str(self.callback_finished),self, "D")
 			self.callback_finished()
+
+		if self.mode == "render":
+			Notifications.AddNotification(MessageBox, _("DreamPlex: Rendering finished!\n"), type=MessageBox.TYPE_INFO, timeout=0)
+		else:
+			Notifications.AddNotification(MessageBox, _("DreamPlex: Mediasync finished!\n"), type=MessageBox.TYPE_INFO, timeout=0)
 
 		self.running = False
 
