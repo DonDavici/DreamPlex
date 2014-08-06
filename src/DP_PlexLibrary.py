@@ -1379,6 +1379,9 @@ class PlexLibrary(Screen):
 
 		myFile = urllib.unquote(myFile)
 
+		# for some reason there might be double // in the string we remove them
+		myFile = myFile.replace("//", "/")
+
 		printl("altered file string: " + str(myFile), self, "I")
 		try:
 			exists = open(myFile)
