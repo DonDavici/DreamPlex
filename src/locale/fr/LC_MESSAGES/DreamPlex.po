@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-03 10:38+0100\n"
-"PO-Revision-Date: 2014-08-03 14:37+0100\n"
-"Last-Translator: DonDavici <dondavici@gmail.com>\n"
+"POT-Creation-Date: 2014-08-05 22:07+0100\n"
+"PO-Revision-Date: 2014-08-06 10:02+0100\n"
+"Last-Translator: \n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -14,186 +14,178 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Loco-Source-Locale: _\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: .\n"
+"X-Poedit-Basepath: /Users/reuf/Downloads/DreamPlex-videoMaker/\n"
 "X-Loco-Parser: loco_parse_po\n"
 "X-Loco-Target-Locale: zz_ZZ\n"
 "X-Generator: Poedit 1.6.7\n"
-"X-Poedit-SearchPath-0: /Users/reuf/Downloads/enigma2-plugin-extensions-"
-"dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex\n"
+"X-Poedit-SearchPath-0: DreamPlex\n"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:31
+#: DreamPlex/DPH_Translations.py:31
 msgid "All"
 msgstr "Tous"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:32
+#: DreamPlex/DPH_Translations.py:32
 msgid "All Movies"
 msgstr "Tous les films"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:33
+#: DreamPlex/DPH_Translations.py:33
 msgid "All Filmy"
 msgstr "Tous les films (?)"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:34
+#: DreamPlex/DPH_Translations.py:34
 msgid "All Shows"
 msgstr "Toutes les séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:35
+#: DreamPlex/DPH_Translations.py:35
 msgid "All episodes"
 msgstr "Toutes les épisodes"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:36
+#: DreamPlex/DPH_Translations.py:36
 msgid "By Genre"
 msgstr "Par genre"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:37
+#: DreamPlex/DPH_Translations.py:37
 msgid "By Folder"
 msgstr "Par dossier"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:38
+#: DreamPlex/DPH_Translations.py:38
 msgid "By First Letter"
 msgstr "Par la première lettre"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:39
+#: DreamPlex/DPH_Translations.py:39
 msgid "By Resolution"
 msgstr "Par la résolution"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:40
+#: DreamPlex/DPH_Translations.py:40
 msgid "By Rating"
 msgstr "Par l'évaluation"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:41
+#: DreamPlex/DPH_Translations.py:41
 msgid "By Country"
 msgstr "Par le pays"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:42
+#: DreamPlex/DPH_Translations.py:42
 msgid "By Director"
 msgstr "Par le régisseur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:43
+#: DreamPlex/DPH_Translations.py:43
 msgid "By Decade"
 msgstr "Par la décade"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:44
+#: DreamPlex/DPH_Translations.py:44
 msgid "By Year"
 msgstr "Par l'année"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:45
+#: DreamPlex/DPH_Translations.py:45
 msgid "By Collection"
 msgstr "Par la collection"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:46
+#: DreamPlex/DPH_Translations.py:46
 msgid "By Content Rating"
 msgstr "Par l'évaluation du contenu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:47
+#: DreamPlex/DPH_Translations.py:47
 msgid "By Starring Actor"
 msgstr "Par le rôle principal"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:48
+#: DreamPlex/DPH_Translations.py:48
 msgid "Recently Aired"
 msgstr "Récemment sorti"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:49
+#: DreamPlex/DPH_Translations.py:49
 msgid "Recently Added"
 msgstr "Récemment ajouté"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:50
+#: DreamPlex/DPH_Translations.py:50
 msgid "Recently Released"
 msgstr "Récemment sorti"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:51
+#: DreamPlex/DPH_Translations.py:51
 msgid "Recently Viewed"
 msgstr "Récemment vu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:52
+#: DreamPlex/DPH_Translations.py:52
 msgid "Recently Viewed Episodes"
 msgstr "Episodes récemment vues"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:53
+#: DreamPlex/DPH_Translations.py:53
 msgid "Recently Viewed Shows"
 msgstr "Séries récemment vues"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:54
+#: DreamPlex/DPH_Translations.py:54
 msgid "Unwatched"
 msgstr "Non vu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:55
+#: DreamPlex/DPH_Translations.py:55
 msgid "On Deck"
 msgstr "Sur le Deck"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:56
+#: DreamPlex/DPH_Translations.py:56
 msgid "Search..."
 msgstr "Recherche..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:57
+#: DreamPlex/DPH_Translations.py:57
 msgid "Search Shows..."
 msgstr "Chercher les séries..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:58
+#: DreamPlex/DPH_Translations.py:58
 msgid "Search Episodes..."
 msgstr "Chercher les épisodes..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:59
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:430
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ViewMovies.py:54
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:293
+#: DreamPlex/DPH_Translations.py:59 DreamPlex/DP_ServerMenu.py:430
+#: DreamPlex/DP_ViewMovies.py:54 DreamPlex/__init__.py:295
 msgid "Movies"
 msgstr "Films"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:60
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ViewShows.py:57
+#: DreamPlex/DPH_Translations.py:60 DreamPlex/DP_ViewShows.py:57
 msgid "Shows"
 msgstr "Shows"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DPH_Translations.py:61
+#: DreamPlex/DPH_Translations.py:61
 msgid "Series"
 msgstr "Séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_About.py:67
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:399
+#: DreamPlex/DP_About.py:67 DreamPlex/DP_MainMenu.py:399
 msgid "About"
 msgstr "Info"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_HelperScreens.py:51
+#: DreamPlex/DP_HelperScreens.py:51
 msgid "Search ..."
 msgstr "Recherche ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:118
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:304
+#: DreamPlex/DP_MainMenu.py:118 DreamPlex/DP_MainMenu.py:304
 msgid "Main Menu"
 msgstr "Menu principal"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:177
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:397
+#: DreamPlex/DP_MainMenu.py:177 DreamPlex/DP_MainMenu.py:397
 msgid "System"
 msgstr "Système"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:338
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:2057
+#: DreamPlex/DP_MainMenu.py:338 DreamPlex/DP_PlexLibrary.py:2083
 msgid "UNEXPECTED ERROR:"
 msgstr "ERREUR INATTENDUE:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:350
+#: DreamPlex/DP_MainMenu.py:350
 msgid "Settings"
 msgstr "Paramètres"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:351
+#: DreamPlex/DP_MainMenu.py:351
 msgid "Server"
 msgstr "Serveur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:352
+#: DreamPlex/DP_MainMenu.py:352
 msgid "Systemcheck"
 msgstr "Vérifier l'installation"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:353
+#: DreamPlex/DP_MainMenu.py:353
 msgid "Backdrops"
 msgstr "Arrière-plans"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:398
+#: DreamPlex/DP_MainMenu.py:398
 msgid "LiveTv"
 msgstr "LiveTv"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:459
+#: DreamPlex/DP_MainMenu.py:459
 msgid ""
 "Plexserver seems to be offline. Start with Wake on Lan settings? \n"
 "\n"
@@ -206,7 +198,7 @@ msgstr ""
 "Attention :\n"
 "Si vous appuyez sur Oui, le spinner s'affichera pendant "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_MainMenu.py:469
+#: DreamPlex/DP_MainMenu.py:469
 msgid ""
 "Plexserver seems to be offline. Please check your your settings or "
 "connection!\n"
@@ -216,68 +208,67 @@ msgstr ""
 "connexion !\n"
 " Réessayer ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Mappings.py:104
+#: DreamPlex/DP_Mappings.py:104
 msgid "Delete Entry"
 msgstr "Supprimer l'entrée"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Mappings.py:107
+#: DreamPlex/DP_Mappings.py:107
 msgid "Add Entry"
 msgstr "Ajouter une entrée"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Mappings.py:152
+#: DreamPlex/DP_Mappings.py:152
 msgid "Enter your remote path segment here:"
 msgstr "Entrez le chemin distant:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Mappings.py:154
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Mappings.py:169
+#: DreamPlex/DP_Mappings.py:154 DreamPlex/DP_Mappings.py:169
 msgid "Adding new mapping was not completed"
 msgstr "Ajout de mapping n'a pas réussi "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PathSelector.py:90
+#: DreamPlex/DP_PathSelector.py:90
 msgid "Cancel"
 msgstr "Annuler"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PathSelector.py:93
+#: DreamPlex/DP_PathSelector.py:93
 msgid "Ok"
 msgstr "Ok"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PathSelector.py:95
+#: DreamPlex/DP_PathSelector.py:95
 msgid "Target: "
 msgstr "Cible: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PathSelector.py:97
+#: DreamPlex/DP_PathSelector.py:97
 msgid "Pathselector"
 msgstr "Sélecteur chemin"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PathSelector.py:187
+#: DreamPlex/DP_PathSelector.py:187
 msgid "Invalid Location"
 msgstr "Location invalide"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:230
+#: DreamPlex/DP_Player.py:231
 msgid "Select media to play"
 msgstr "Choisir le média à afficher"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:284
+#: DreamPlex/DP_Player.py:285
 msgid "Sorry I didn't find the file on the provided locations"
 msgstr "Navré, je n'ai pas trouvé le fichier à la location indiquée"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:285
+#: DreamPlex/DP_Player.py:286
 msgid "Location:"
 msgstr "Position:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:286
+#: DreamPlex/DP_Player.py:287
 msgid "Please verify you direct local settings"
 msgstr "Verifiez les paramètres pour 'direct local'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:287
+#: DreamPlex/DP_Player.py:288
 msgid "I will now try to play the file via transcode."
 msgstr "Essayer de jouer le fichier en le transcodant."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:289
+#: DreamPlex/DP_Player.py:290
 msgid "Warning:"
 msgstr "Attention:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:302
+#: DreamPlex/DP_Player.py:303
 msgid ""
 " This file was partially played.\n"
 "\n"
@@ -287,14 +278,12 @@ msgstr ""
 "\n"
 "Continuer (Oui) ou Recommencer dès le début (Non) ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:593
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:610
+#: DreamPlex/DP_Player.py:585 DreamPlex/DP_Player.py:602
 #, python-format
 msgid "This Box can't decode %s streams!"
 msgstr "Ce flux (%s) ne peut pas être lue"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:627
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Player.py:647
+#: DreamPlex/DP_Player.py:619 DreamPlex/DP_Player.py:639
 #, python-format
 msgid ""
 "Your Box can't decode this video stream!\n"
@@ -303,23 +292,27 @@ msgstr ""
 "Cette vidéo ne peut pas être lue\n"
 "(%s)"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:900
+#: DreamPlex/DP_PlexLibrary.py:355 DreamPlex/DP_PlexLibrary.py:432
+msgid "No data in this section!"
+msgstr "Pas de données dans cette section!"
+
+#: DreamPlex/DP_PlexLibrary.py:915
 msgid "Press exit to return"
 msgstr "Appuyer sur Exit pour sortir"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:901
+#: DreamPlex/DP_PlexLibrary.py:916
 msgid "If you are using myPlex"
 msgstr "Si vous utilisez myPlex"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:902
+#: DreamPlex/DP_PlexLibrary.py:917
 msgid "please check if curl is installed."
 msgstr "vérifiez si le cURL est installé."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:903
+#: DreamPlex/DP_PlexLibrary.py:918
 msgid "You can use Systemcheck in the menu."
 msgstr "Vous pouvez utiliez Systemcheck dans le menu."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_PlexLibrary.py:993
+#: DreamPlex/DP_PlexLibrary.py:1007
 #, python-format
 msgid ""
 "MyPlex Token error:\n"
@@ -330,11 +323,11 @@ msgstr ""
 "Vérifiez votre nom d'utilisateur et votre mot de passe.\n"
 "%s"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:101
+#: DreamPlex/DP_Server.py:101
 msgid "Server List:"
 msgstr "Serveurs:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:102
+#: DreamPlex/DP_Server.py:102
 msgid ""
 "Name                                         IP/"
 "myPlex                                  Port/"
@@ -344,141 +337,119 @@ msgstr ""
 "myPlex                                   Port/"
 "Email                                  Actif "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:104
+#: DreamPlex/DP_Server.py:104
 msgid "Delete"
 msgstr "Supprimer"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:105
+#: DreamPlex/DP_Server.py:105
 msgid "Add"
 msgstr "Ajouter"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:106
+#: DreamPlex/DP_Server.py:106
 msgid "Sync Media"
 msgstr "Synchroniser médias"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:107
+#: DreamPlex/DP_Server.py:107
 msgid "Discover"
 msgstr "Chercher"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:183
+#: DreamPlex/DP_Server.py:183
 msgid "Really delete this Server Entry?"
 msgstr "Etes-vous sûr vouloir supprimer ce serveur ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:269
+#: DreamPlex/DP_Server.py:269
 msgid "Select server"
 msgstr "Choisir le serveur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:385
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:110
+#: DreamPlex/DP_Server.py:385 DreamPlex/DP_Settings.py:110
 msgid "General Settings"
 msgstr "Règlages générales"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:385
+#: DreamPlex/DP_Server.py:385
 msgid "-"
 msgstr "-"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:387
+#: DreamPlex/DP_Server.py:387
 msgid " > State"
 msgstr "> Etat"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:387
+#: DreamPlex/DP_Server.py:387
 msgid "Toggle state to on/off to show this server in lost or not."
 msgstr "Changer Etat en oui/non pour afficher le serveur."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:388
+#: DreamPlex/DP_Server.py:388
 msgid " > Autostart"
 msgstr " > Démarrage automatique"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:388
+#: DreamPlex/DP_Server.py:388
 msgid "Enter this server automatically on startup."
 msgstr "Utiliser ce serveur par défaut au démarrage"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:389
+#: DreamPlex/DP_Server.py:389
 msgid " > Name"
 msgstr " > Nom"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:389
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:392
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:394
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:403
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:404
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:410
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:413
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:438
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:440
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:443
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:444
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:467
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:468
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:110
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:112
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:113
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:115
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:117
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:126
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:136
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:137
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:138
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:139
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:144
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:146
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:148
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:151
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:152
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:153
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:154
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:157
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:159
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:162
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:165
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:168
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:171
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:175
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:176
+#: DreamPlex/DP_Server.py:389 DreamPlex/DP_Server.py:392
+#: DreamPlex/DP_Server.py:394 DreamPlex/DP_Server.py:403
+#: DreamPlex/DP_Server.py:404 DreamPlex/DP_Server.py:410
+#: DreamPlex/DP_Server.py:413 DreamPlex/DP_Server.py:438
+#: DreamPlex/DP_Server.py:440 DreamPlex/DP_Server.py:443
+#: DreamPlex/DP_Server.py:444 DreamPlex/DP_Server.py:467
+#: DreamPlex/DP_Server.py:468 DreamPlex/DP_Settings.py:110
+#: DreamPlex/DP_Settings.py:112 DreamPlex/DP_Settings.py:113
+#: DreamPlex/DP_Settings.py:115 DreamPlex/DP_Settings.py:121
+#: DreamPlex/DP_Settings.py:122 DreamPlex/DP_Settings.py:123
+#: DreamPlex/DP_Settings.py:124 DreamPlex/DP_Settings.py:125
+#: DreamPlex/DP_Settings.py:128 DreamPlex/DP_Settings.py:137
+#: DreamPlex/DP_Settings.py:147 DreamPlex/DP_Settings.py:149
+#: DreamPlex/DP_Settings.py:151 DreamPlex/DP_Settings.py:153
+#: DreamPlex/DP_Settings.py:156 DreamPlex/DP_Settings.py:157
+#: DreamPlex/DP_Settings.py:158 DreamPlex/DP_Settings.py:159
+#: DreamPlex/DP_Settings.py:162 DreamPlex/DP_Settings.py:164
+#: DreamPlex/DP_Settings.py:167 DreamPlex/DP_Settings.py:170
+#: DreamPlex/DP_Settings.py:173 DreamPlex/DP_Settings.py:176
+#: DreamPlex/DP_Settings.py:180 DreamPlex/DP_Settings.py:181
 msgid " "
 msgstr " "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:392
+#: DreamPlex/DP_Server.py:392
 msgid "Connection Settings"
 msgstr "Paramètres de connexion"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:394
+#: DreamPlex/DP_Server.py:394
 msgid " > Connection Type"
 msgstr " > Type de connexion"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:397
+#: DreamPlex/DP_Server.py:397
 msgid " > Local Authentication"
 msgstr " > Authentication locale"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:397
+#: DreamPlex/DP_Server.py:397
 msgid "Toggle state to on/off"
 msgstr "Changer l'état à oui/non"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:403
+#: DreamPlex/DP_Server.py:403
 msgid " >> DNS"
 msgstr " >> DNS"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:404
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:468
+#: DreamPlex/DP_Server.py:404 DreamPlex/DP_Server.py:468
 msgid " >> Port"
 msgstr " >> Port"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:410
+#: DreamPlex/DP_Server.py:410
 msgid "Playback Settings"
 msgstr "Paramètres de lecture"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:413
+#: DreamPlex/DP_Server.py:413
 msgid " > Playback Type"
 msgstr " > Type de lecture"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:419
+#: DreamPlex/DP_Server.py:419
 msgid " >> Use universal Transcoder"
 msgstr " >> Utiliser le Transcoder universel"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:419
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:421
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:422
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:424
+#: DreamPlex/DP_Server.py:419 DreamPlex/DP_Server.py:421
+#: DreamPlex/DP_Server.py:422 DreamPlex/DP_Server.py:424
 msgid ""
 "You need gstreamer_fragmented installed for this feature! Please check in "
 "System ... "
@@ -487,89 +458,84 @@ msgstr ""
 "gstreamer_fragmented pour utiliser cette option\n"
 "Vérifier l'installation dans le Système ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:421
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:424
+#: DreamPlex/DP_Server.py:421 DreamPlex/DP_Server.py:424
 msgid " >> Transcoding quality"
 msgstr " >> Qualité de rencodage"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:422
+#: DreamPlex/DP_Server.py:422
 msgid " >> Segmentsize in seconds"
 msgstr " >> Segmentsize en secondes"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:438
+#: DreamPlex/DP_Server.py:438
 msgid "Wake On Lan Settings"
 msgstr "Paramètres Wake On Lan"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:440
+#: DreamPlex/DP_Server.py:440
 msgid " > Use Wake on Lan (WoL)"
 msgstr " > Utiliser Wake on Lan (WoL)"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:443
+#: DreamPlex/DP_Server.py:443
 msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
 msgstr ""
 " >> Mac Addresse (taille: 12 charactères alphanumeriques sans séparateur) "
 "uniquement pour WoL"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:444
+#: DreamPlex/DP_Server.py:444
 msgid " >> Wait for server delay (max 180 seconds) only for WoL"
 msgstr " >> Attendre sur le serveur  (max. 180 secondes) uniquement pour WoL"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:467
+#: DreamPlex/DP_Server.py:467
 msgid " >> IP"
 msgstr " >> IP"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:478
+#: DreamPlex/DP_Server.py:478
 msgid " >> myPLEX URL"
 msgstr " >> myPlex URL"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:478
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:479
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:480
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:481
+#: DreamPlex/DP_Server.py:478 DreamPlex/DP_Server.py:479
+#: DreamPlex/DP_Server.py:480 DreamPlex/DP_Server.py:481
 msgid "You need curl installed for this feature! Please check in System ..."
 msgstr ""
 "Pour cette options vous avez besoin du cURL ! Vérifier l'instalation dans le "
 "Système ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:479
+#: DreamPlex/DP_Server.py:479
 msgid " >> myPLEX Username"
 msgstr " >> myPLEX Nom d'utilisateur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:480
+#: DreamPlex/DP_Server.py:480
 msgid " >> myPLEX Password"
 msgstr " >> myPLEX mot de passe"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:481
+#: DreamPlex/DP_Server.py:481
 msgid " >> myPLEX renew myPlex token"
 msgstr " >> myPlex token renouveler"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:503
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:192
+#: DreamPlex/DP_Server.py:503 DreamPlex/DP_Settings.py:197
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:506
+#: DreamPlex/DP_Server.py:506
 msgid "Mappings"
 msgstr "Mappage"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:509
+#: DreamPlex/DP_Server.py:509
 msgid "check myPlex Token"
 msgstr "vérifier myPlex Token"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Server.py:510
+#: DreamPlex/DP_Server.py:510
 msgid "(re)create myPlex Token"
 msgstr "(re)créer myPlex Token"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:111
+#: DreamPlex/DP_ServerMenu.py:111
 msgid "Server Menu"
 msgstr "Serveur menu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:220
+#: DreamPlex/DP_ServerMenu.py:220
 msgid "Please enter your search string: "
 msgstr "Entrez votre recherche: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:418
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1420
+#: DreamPlex/DP_ServerMenu.py:418 DreamPlex/DP_View.py:1446
 #, python-format
 msgid ""
 "\n"
@@ -578,45 +544,44 @@ msgstr ""
 "\n"
 "%s"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:431
+#: DreamPlex/DP_ServerMenu.py:431
 msgid "Tv Shows"
 msgstr "TV Séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:432
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ViewMusic.py:56
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:299
+#: DreamPlex/DP_ServerMenu.py:432 DreamPlex/DP_ViewMusic.py:56
+#: DreamPlex/__init__.py:301
 msgid "Music"
 msgstr "Musique"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:438
+#: DreamPlex/DP_ServerMenu.py:438
 msgid "Pictures"
 msgstr "Photos"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_ServerMenu.py:439
+#: DreamPlex/DP_ServerMenu.py:439
 msgid "Channels"
 msgstr "Chaînes"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:111
+#: DreamPlex/DP_Settings.py:111
 msgid "> Used Skin"
 msgstr "> Thème utilisé"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:111
+#: DreamPlex/DP_Settings.py:111
 msgid "If you change the skin you have to restart at least the GUI!"
 msgstr "Lors du changement du Skin vous devez redémarrer le GUI !"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:112
+#: DreamPlex/DP_Settings.py:112
 msgid "> Show Plugin in Main Menu"
 msgstr "> Afficher le plugin dans le menu principal"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:113
+#: DreamPlex/DP_Settings.py:113
 msgid "> Use Cache for Sections"
 msgstr "> Utiliser cache (tampon) pour les vues"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:114
+#: DreamPlex/DP_Settings.py:114
 msgid "> Use Picture Cache"
 msgstr "> Utiliser cache (tampon) pour les photos"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:114
+#: DreamPlex/DP_Settings.py:114
 msgid ""
 "Use this if you do not have enough space on your box e.g. no hdd drive just "
 "flash."
@@ -624,31 +589,15 @@ msgstr ""
 "Utiliser ceci si vous n'avez pas suffisement d'espace sur votre box, p.ex "
 "pas de disque dur, uniquement flash."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:115
+#: DreamPlex/DP_Settings.py:115
 msgid "> Show Infobar when buffer drained"
 msgstr "> Afficher la barre d'information lorsque la cache (tampon) est vide"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:116
-msgid "> Show Backdrops as Videos"
-msgstr "> Afficher les vidéo dans l'arrière plan"
-
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:116
-msgid "Use this if you have m1v videos as backdrops"
-msgstr "Utiliser ces paramètres avec les m1v vidéos d'arrière plan"
-
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:117
-msgid "> Stop Live TV on startup"
-msgstr "> Arrêter Live-TV au démarrage"
-
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:126
-msgid ">> Play Themes in TV Shows"
-msgstr ">> Jouer la bande sonore dans les séries TV"
-
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:133
+#: DreamPlex/DP_Settings.py:118
 msgid "> Check for updates on startup"
 msgstr "> Vérifier les mises à jours au démarrage"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:133
+#: DreamPlex/DP_Settings.py:118
 msgid ""
 "If activated on each start we will check if there is a new version depending "
 "on your update type."
@@ -656,104 +605,127 @@ msgstr ""
 "Si activé, à chaque démarrage nous vérifions les mises à jours, selon le "
 "type de mise à jour choisi."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:134
+#: DreamPlex/DP_Settings.py:119
 msgid "> Updatetype"
 msgstr "> Type de mise à jour"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:134
+#: DreamPlex/DP_Settings.py:119
 msgid "Use Beta only if you really want to help with testing"
 msgstr "Utiliser les versions Betas si vous voulez aider à tester"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:136
+#: DreamPlex/DP_Settings.py:121
 msgid "Userinterface Settings"
 msgstr "Paramètres d'interface utilisateur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:137
+#: DreamPlex/DP_Settings.py:122
 msgid "> Summerize Sections"
 msgstr "> Résumer les séctions"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:138
+#: DreamPlex/DP_Settings.py:123
 msgid "> Show Filter for Section"
 msgstr "> Afficher les filtres pour la section"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:139
+#: DreamPlex/DP_Settings.py:124
 msgid "> Show Seen/Unseen count in TvShows"
 msgstr "> Afficher le nombre Vu / Non vu dans les séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:144
+#: DreamPlex/DP_Settings.py:125
+msgid "> Start with Filtermode"
+msgstr "> Démarrer avec le mode filtres"
+
+#: DreamPlex/DP_Settings.py:127
+msgid "> Show Backdrops as Videos"
+msgstr "> Afficher les vidéo dans l'arrière plan"
+
+#: DreamPlex/DP_Settings.py:127
+msgid "Use this if you have m1v videos as backdrops"
+msgstr "Utiliser ces paramètres avec les m1v vidéos d'arrière plan"
+
+#: DreamPlex/DP_Settings.py:128
+msgid "> Stop Live TV on startup"
+msgstr "> Arrêter Live-TV au démarrage"
+
+#: DreamPlex/DP_Settings.py:137
+msgid ">> Play Themes in TV Shows"
+msgstr ">> Jouer la bande sonore dans les séries TV"
+
+#: DreamPlex/DP_Settings.py:147
 msgid "> Use fastScroll as default"
 msgstr "> Utiliser FastScroll par défaut"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:146
+#: DreamPlex/DP_Settings.py:149
+msgid "> Show liveTv in Views instead of backdrops"
+msgstr "> Afficher LiveTV dans les Vues à la place des vidéo arrière-plan"
+
+#: DreamPlex/DP_Settings.py:151
 msgid "> Show additional data for myPlex sections"
 msgstr "> Afficher les données supplémentaires pour la section myPlex"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:148
+#: DreamPlex/DP_Settings.py:153
 msgid "> Detail type for additional data"
 msgstr "> Type de donnée pour les données supplémentaire "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:151
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:157
+#: DreamPlex/DP_Settings.py:156 DreamPlex/DP_Settings.py:162
 msgid "Path Settings"
 msgstr "Paramètres de chemin"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:152
+#: DreamPlex/DP_Settings.py:157
 msgid "> Default View for Movies"
 msgstr "> Vue par défaut pour les films"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:153
+#: DreamPlex/DP_Settings.py:158
 msgid "> Default View for Shows"
 msgstr "> Vue par défaut pour les séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:154
+#: DreamPlex/DP_Settings.py:159
 msgid "> Default View for Music"
 msgstr "> Vue par défaut pour la musique"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:159
+#: DreamPlex/DP_Settings.py:164
 msgid "> Media Folder Path"
 msgstr "> Chemin du dossier média"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:162
+#: DreamPlex/DP_Settings.py:167
 msgid "> Config Folder Path"
 msgstr "> Chemin du dossier configuration"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:165
+#: DreamPlex/DP_Settings.py:170
 msgid "> Cache Folder Path"
 msgstr "> Chemin du dossier cache (tampon)"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:168
+#: DreamPlex/DP_Settings.py:173
 msgid "> Player Temp Path"
 msgstr "> Chemin du dossier temporaire du lecteur"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:171
+#: DreamPlex/DP_Settings.py:176
 msgid "> Log Folder Path"
 msgstr "> Chemin du dossier des logs"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:175
+#: DreamPlex/DP_Settings.py:180
 msgid "Misc Settings"
 msgstr "Autres paramètres"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Settings.py:176
+#: DreamPlex/DP_Settings.py:181
 msgid "> Debug Mode"
 msgstr "> Mode débogage"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:85
+#: DreamPlex/DP_Syncer.py:85
 msgid "Start Sync"
 msgstr "Syncroniser"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:87
+#: DreamPlex/DP_Syncer.py:87
 msgid "Start Rendering"
 msgstr "Démarrer rendu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:91
+#: DreamPlex/DP_Syncer.py:91
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:95
+#: DreamPlex/DP_Syncer.py:95
 msgid "Abort Sync"
 msgstr "Annuler synchronisation"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:135
+#: DreamPlex/DP_Syncer.py:135
 msgid ""
 "Please note to run at least once the sync media function within the server "
 "menu.\n"
@@ -763,7 +735,7 @@ msgstr ""
 "serveur.\n"
 "Ceci téléchargera les fichier nécessaires au bon format (1280x720)."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:262
+#: DreamPlex/DP_Syncer.py:262
 msgid ""
 "\n"
 "\n"
@@ -773,11 +745,11 @@ msgstr ""
 "\n"
 "Términé"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:278
+#: DreamPlex/DP_Syncer.py:278
 msgid "Cancelled!"
 msgstr "Annulé!"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:291
+#: DreamPlex/DP_Syncer.py:291
 msgid ""
 "Sync or Renderer is still running!\n"
 "Continue in background?"
@@ -785,7 +757,7 @@ msgstr ""
 "Synchronisation en cours!\n"
 "Continuer en arrière-plan ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:538
+#: DreamPlex/DP_Syncer.py:538
 msgid ""
 "\n"
 "\n"
@@ -795,7 +767,7 @@ msgstr ""
 "\n"
 "Rechercher les images avec 1280x720 dans leurs noms ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:547
+#: DreamPlex/DP_Syncer.py:547
 msgid ""
 "\n"
 "\n"
@@ -805,15 +777,15 @@ msgstr ""
 "\n"
 "Fichiers trouvés : "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:574
+#: DreamPlex/DP_Syncer.py:574
 msgid "backdrop video exists under the location "
 msgstr "vidéos arrière-plan existent dans la location "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:579
+#: DreamPlex/DP_Syncer.py:579
 msgid "trying to render backdrop now ...: "
 msgstr "rendu des arrière-plan en cours ... : "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:611
+#: DreamPlex/DP_Syncer.py:611
 #, python-format
 msgid ""
 "Error!\n"
@@ -822,7 +794,7 @@ msgstr ""
 "Erreur!\n"
 "Message d'erreur : %s "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:614
+#: DreamPlex/DP_Syncer.py:614
 msgid ""
 "\n"
 "\n"
@@ -832,7 +804,7 @@ msgstr ""
 "\n"
 "Aucun fichier trouvé. Rien à faire! "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:621
+#: DreamPlex/DP_Syncer.py:621
 msgid ""
 "Process aborted.\n"
 "Press Exit to close."
@@ -840,7 +812,7 @@ msgstr ""
 "Action annuée.\n"
 "Appuyer sur Quitter pour fermer."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:623
+#: DreamPlex/DP_Syncer.py:623
 msgid ""
 "\n"
 "\n"
@@ -850,28 +822,27 @@ msgstr ""
 "\n"
 "Terminé!"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:672
+#: DreamPlex/DP_Syncer.py:672
 msgid "starting ..."
 msgstr "démarrage ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:687
+#: DreamPlex/DP_Syncer.py:687
 msgid "Reading section of the server ..."
 msgstr "Lecture de la section serveur ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:703
+#: DreamPlex/DP_Syncer.py:703
 msgid "got movie url: "
 msgstr "trouvé url du film: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:717
+#: DreamPlex/DP_Syncer.py:717
 msgid "got show url: "
 msgstr "trouvé url de la série: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:749
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:761
+#: DreamPlex/DP_Syncer.py:749 DreamPlex/DP_Syncer.py:761
 msgid "got music url: "
 msgstr "trouvé url de la musique: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:771
+#: DreamPlex/DP_Syncer.py:771
 msgid ""
 "Process aborted.\n"
 "Press OK to close."
@@ -879,11 +850,11 @@ msgstr ""
 "Action annulée.\n"
 "Appuyer sur OK pour fermer. "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:773
+#: DreamPlex/DP_Syncer.py:773
 msgid "We did it :-)"
 msgstr "Terminé."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:776
+#: DreamPlex/DP_Syncer.py:776
 #, python-format
 msgid ""
 "Error!\n"
@@ -894,83 +865,83 @@ msgstr ""
 "Message d'erreur: %s\n"
 "Appuyez sur OK pour quitter."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:792
+#: DreamPlex/DP_Syncer.py:792
 msgid "checking for  "
 msgstr "vérification"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:814
+#: DreamPlex/DP_Syncer.py:814
 msgid "found backdrop"
 msgstr "trouvé l'arrière-plan "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:820
+#: DreamPlex/DP_Syncer.py:820
 msgid "backdrop not found, trying to download ..."
 msgstr "arrière-plan non trouvé, essaie de télécharger ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:840
+#: DreamPlex/DP_Syncer.py:840
 msgid "found poster"
 msgstr "trouvé le poster "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:846
+#: DreamPlex/DP_Syncer.py:846
 msgid "poster not found, trying to download ..."
 msgstr "poster non trouvé, essaie de télécharger ..."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_Syncer.py:863
+#: DreamPlex/DP_Syncer.py:863
 msgid "download_url: "
 msgstr "url de téléchargement"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:72
+#: DreamPlex/DP_SystemCheck.py:72
 msgid "Check for gst-plugin-fragmented"
 msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE16."
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:75
+#: DreamPlex/DP_SystemCheck.py:75
 msgid "Check for gst-plugins-bad-fragmented"
 msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE20. "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:79
+#: DreamPlex/DP_SystemCheck.py:79
 msgid "Check for gst-plugin-fragmented if you are using OE16."
 msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE16. "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:80
+#: DreamPlex/DP_SystemCheck.py:80
 msgid "Check for gst-plugins-bad-fragmented if you are using OE20."
 msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE20. "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:82
+#: DreamPlex/DP_SystemCheck.py:82
 msgid "Check curl installation data."
 msgstr "Vérifier l'installation du cURL ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:83
+#: DreamPlex/DP_SystemCheck.py:83
 msgid "Check mjpegtools intallation data."
 msgstr "Vérifier l'installation des mjpegtools ? "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:84
+#: DreamPlex/DP_SystemCheck.py:84
 msgid "Check python imaging installation data."
 msgstr "Vérifier l'installation de python imaging ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:87
+#: DreamPlex/DP_SystemCheck.py:87
 msgid "Check for update."
 msgstr "Vérifier les mises à jour ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:102
+#: DreamPlex/DP_SystemCheck.py:102
 msgid "System - Systemcheck"
 msgstr "Vérifier l'installation"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:104
+#: DreamPlex/DP_SystemCheck.py:104
 msgid "Functions List:"
 msgstr "Fonctions média:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:163
+#: DreamPlex/DP_SystemCheck.py:163
 msgid "Your current Version is "
 msgstr "Votre version actuelle est "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:166
+#: DreamPlex/DP_SystemCheck.py:166
 msgid "No update available"
 msgstr "Pas de mise à jour"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:169
+#: DreamPlex/DP_SystemCheck.py:169
 msgid "No internet connection available or curl is not installed!"
 msgstr "Aucune connection internet trouvée ou cURL pas trouvé !"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:262
+#: DreamPlex/DP_SystemCheck.py:262
 msgid ""
 "Enigma2 must be restarted!\n"
 "Should Enigma2 now restart?"
@@ -978,15 +949,12 @@ msgstr ""
 "Enigma2 doit être redémarrer !\n"
 "Redémarrer mainenant ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:278
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:366
+#: DreamPlex/DP_SystemCheck.py:278 DreamPlex/DP_SystemCheck.py:366
 msgid "Information:\n"
 msgstr "Information:\n"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:372
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:375
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:378
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:381
+#: DreamPlex/DP_SystemCheck.py:372 DreamPlex/DP_SystemCheck.py:375
+#: DreamPlex/DP_SystemCheck.py:378 DreamPlex/DP_SystemCheck.py:381
 msgid ""
 "The selected plugin is not installed!\n"
 " Do you want to proceed to install?"
@@ -994,204 +962,195 @@ msgstr ""
 "Le plugin sélectionné n'est pas installé!\n"
 "Installer le plugin maintenant ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:421
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_SystemCheck.py:532
+#: DreamPlex/DP_SystemCheck.py:421 DreamPlex/DP_SystemCheck.py:532
 msgid "Could not install "
 msgstr "Echec d'installation"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:242
+#: DreamPlex/DP_View.py:244
 msgid "Total:"
 msgstr "Total:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:249
+#: DreamPlex/DP_View.py:251
 msgid "Pages:"
 msgstr "Pages:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:279
+#: DreamPlex/DP_View.py:281
 msgid "Cast:"
 msgstr "Joue: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:284
+#: DreamPlex/DP_View.py:286
 msgid "press 'Text'"
 msgstr "appuyez 'Text'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:286
+#: DreamPlex/DP_View.py:288
 msgid "Subtitles:"
 msgstr "Sous-titres:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:289
+#: DreamPlex/DP_View.py:291
 msgid "press 'Audio'"
 msgstr "appuyez 'Audio'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:291
+#: DreamPlex/DP_View.py:293
 msgid "Audio:"
 msgstr "Son:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:294
+#: DreamPlex/DP_View.py:296
 msgid "press 'Info'"
 msgstr "appuyez 'Info'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:296
+#: DreamPlex/DP_View.py:298
 msgid "Info:"
 msgstr "Info:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:300
+#: DreamPlex/DP_View.py:302
 msgid "Director:"
 msgstr "Régisseur:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:304
+#: DreamPlex/DP_View.py:306
 msgid "Writer:"
 msgstr "Scénariste:: "
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:308
+#: DreamPlex/DP_View.py:310
 msgid "Genre:"
 msgstr "Genre:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:312
+#: DreamPlex/DP_View.py:314
 msgid "Year:"
 msgstr "Année:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:316
+#: DreamPlex/DP_View.py:318
 msgid "Medias:"
 msgstr "Médias:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:320
+#: DreamPlex/DP_View.py:322
 msgid "Unseen:"
 msgstr "Non vus:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:324
+#: DreamPlex/DP_View.py:326
 msgid "Seen:"
 msgstr "Vus:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:328
+#: DreamPlex/DP_View.py:330
 msgid "Seasons:"
 msgstr "Saison:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:332
+#: DreamPlex/DP_View.py:334
 msgid "Studio:"
 msgstr "Studio:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:336
+#: DreamPlex/DP_View.py:338
 msgid "Runtime:"
 msgstr "Durée:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:345
+#: DreamPlex/DP_View.py:351
 msgid "Video Codec:"
 msgstr "Codec vidéo:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:349
+#: DreamPlex/DP_View.py:355
 msgid "Bitrate:"
 msgstr "Débit:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:353
+#: DreamPlex/DP_View.py:359
 msgid "Framerate:"
 msgstr "Img/sec:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:357
+#: DreamPlex/DP_View.py:363
 msgid "Audio Channels:"
 msgstr "Pistes son:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:361
+#: DreamPlex/DP_View.py:367
 msgid "Aspect Ratio:"
 msgstr "Raport:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:365
+#: DreamPlex/DP_View.py:371
 msgid "Resultion:"
 msgstr "Résolution:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:369
+#: DreamPlex/DP_View.py:375
 msgid "Audio Codec:"
 msgstr "Codecs son:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:373
+#: DreamPlex/DP_View.py:379
 msgid "File:"
 msgstr "Fichier:"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:627
+#: DreamPlex/DP_View.py:635
 msgid "playback mode 'default'"
 msgstr "mode lecture 'défaut'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:629
+#: DreamPlex/DP_View.py:637
 msgid "View '"
 msgstr "Vue '"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:632
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1233
+#: DreamPlex/DP_View.py:640 DreamPlex/DP_View.py:1241
 msgid "show 'Details'"
 msgstr "afficher 'Détails'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:657
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:675
+#: DreamPlex/DP_View.py:665 DreamPlex/DP_View.py:683
 msgid "playmode 'multi'"
 msgstr "mode lecture 'multi'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:659
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:672
+#: DreamPlex/DP_View.py:667 DreamPlex/DP_View.py:680
 msgid "playmode 'single'"
 msgstr "mode lecture 'un'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:688
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:706
+#: DreamPlex/DP_View.py:696 DreamPlex/DP_View.py:714
 msgid "resume 'On'"
 msgstr "résumer 'Oui'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:690
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:703
+#: DreamPlex/DP_View.py:698 DreamPlex/DP_View.py:711
 msgid "resume 'Off'"
 msgstr "résumer 'Non'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:721
+#: DreamPlex/DP_View.py:729
 msgid "fastScroll 'On'"
 msgstr "fastScroll 'Oui'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:723
+#: DreamPlex/DP_View.py:731
 msgid "fastScroll 'Off'"
 msgstr "fastScroll 'Non'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:766
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:175
+#: DreamPlex/DP_View.py:774 DreamPlex/__init__.py:177
 msgid "Streamed"
 msgstr "Streamed"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:766
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:175
+#: DreamPlex/DP_View.py:774 DreamPlex/__init__.py:177
 msgid "Transcoded"
 msgstr "Transcodé"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:766
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:175
+#: DreamPlex/DP_View.py:774 DreamPlex/__init__.py:177
 msgid "Direct Local"
 msgstr "Direct Local"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:809
+#: DreamPlex/DP_View.py:817
 msgid "turn filter mode off"
 msgstr "désactiver mode filtre"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1256
+#: DreamPlex/DP_View.py:1264
 msgid "show 'Description'"
 msgstr "afficher 'Déscription'"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1807
+#: DreamPlex/DP_View.py:1837
 msgid "/"
 msgstr "/"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1819
+#: DreamPlex/DP_View.py:1849
 msgid "Mark media unwatched"
 msgstr "Marquer comme non vu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1820
+#: DreamPlex/DP_View.py:1850
 msgid "Mark media watched"
 msgstr "Marquer comme vu"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1821
+#: DreamPlex/DP_View.py:1851
 msgid "Initiate Library refresh"
 msgstr "Démarrer mise à jour de la librairie"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1824
+#: DreamPlex/DP_View.py:1854
 msgid "Media Functions"
 msgstr "Fonctions média"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1881
+#: DreamPlex/DP_View.py:1911
 msgid ""
 "Subtitle Functions\n"
 "\n"
@@ -1203,7 +1162,7 @@ msgstr ""
 "Notez que changement de sous-titres ici aura l'effet UNIQUEMENT si vous "
 "activez le transcodage!"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1920
+#: DreamPlex/DP_View.py:1950
 msgid ""
 "Audio Functions\n"
 "\n"
@@ -1215,243 +1174,126 @@ msgstr ""
 "Notez que changement de langue ici aura l'effet UNIQUEMENT si vous activez "
 "le transcodage!"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:1986
+#: DreamPlex/DP_View.py:2016
 msgid "Are you sure?"
 msgstr "Êtes-vous sûr ?"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/DP_View.py:2000
+#: DreamPlex/DP_View.py:2030
 msgid "Deleting aborted!"
 msgstr "Suppression annulée !"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:171
+#: DreamPlex/__init__.py:173
 msgid "IP"
 msgstr "IP"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:171
+#: DreamPlex/__init__.py:173
 msgid "DNS"
 msgstr "DNS"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:171
+#: DreamPlex/__init__.py:173
 msgid "MYPLEX"
 msgstr "MYPLEX"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "64kbps, 128p, 3fps"
 msgstr "64kbps, 128p, 3fps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "96kbps, 128p, 12fps"
 msgstr "96kbps, 128p, 12fps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "208kbps, 160p, 15fps"
 msgstr "208kbps, 160p, 15fps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "320kbps, 240p"
 msgstr "320kbps, 240p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "720kbps, 320p"
 msgstr "720kbps, 320p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "1.5Mbps, 480p"
 msgstr "1.5Mbps, 480p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "2Mbps, 720p"
 msgstr "2Mbps, 720p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "3Mbps, 720p"
 msgstr "3Mbps, 720p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "4Mbps, 720p"
 msgstr "4Mbps, 720p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "8Mbps, 1080p"
 msgstr "8Mbps, 1080p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "10Mbps, 1080p"
 msgstr "10Mbps, 1080p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "12Mbps, 1080p"
 msgstr "12Mbps, 1080p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:213
+#: DreamPlex/__init__.py:215
 msgid "20Mbps, 1080p"
 msgstr "20Mbps, 1080p"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "420x240, 320kbps"
 msgstr "420x240, 320kbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "576x320, 720 kbps"
 msgstr "576x320, 720 kbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "720x480, 1,5mbps"
 msgstr "720x480, 1,5mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1024x768, 2mbps"
 msgstr "1024x768, 2mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1280x720, 3mbps"
 msgstr "1280x720, 3mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1280x720, 4mbps"
 msgstr "1280x720, 4mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1920x1080, 8mbps"
 msgstr "1920x1080, 8mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1920x1080, 10mbps"
 msgstr "1920x1080, 10mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1920x1080, 12mbps"
 msgstr "1920x1080, 12mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:217
+#: DreamPlex/__init__.py:219
 msgid "1920x1080, 20mbps"
 msgstr "1920x1080, 20mbps"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/__init__.py:296
+#: DreamPlex/__init__.py:298
 msgid "TV Shows"
 msgstr "TV Séries"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/plugin.py:28
+#: DreamPlex/plugin.py:28
 msgid "DreamPlex"
 msgstr "DreamPlex"
 
-#: /Users/reuf/Downloads/enigma2-plugin-extensions-dreamplex-2.0/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/plugin.py:51
+#: DreamPlex/plugin.py:51
 msgid "plex client for enigma2"
 msgstr "Plex client pour Enigma2"
-
-#~ msgid "myPlex Token:"
-#~ msgstr "myPlex Token:"
-
-#~ msgid "for the user:"
-#~ msgstr "pour l'utilisateur :"
-
-#~ msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
-#~ msgstr "mipsel (OE 1.6) trouvé => Cherche gst-plugin-fragmented"
-
-#~ msgid "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
-#~ msgstr "mipsel (OE 2.0) trouvé => Cherche gst-plugin-bad-fragmented"
-
-#~ msgid "Check DreamPlex installation data."
-#~ msgstr "Vérifier les paramètres d'installation de DreamPlex ?"
-
-#~ msgid "Exit"
-#~ msgstr "Sortir"
-
-#~ msgid ""
-#~ "UNEXPECTED ERROR:\n"
-#~ "This is the answer from the request ...\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Erreur inattendue:\n"
-#~ "La reqête donne la réponse suivante ...\n"
-#~ "%s"
-
-#~ msgid "no xml as response - tree"
-#~ msgstr "pas de xml dans la réponse - tree"
-
-#~ msgid "no xml as response - directory"
-#~ msgstr "pas de xml dans la réponse - directory"
-
-#~ msgid "no xml as response - viewGroup"
-#~ msgstr "pas de xml dans la réponse - viewGroup"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "by Artists"
-#~ msgstr "par Artistes"
-
-#~ msgid "by Albums"
-#~ msgstr "par Albums"
-
-#~ msgid "Help"
-#~ msgstr "Aide"
-
-#~ msgid "toggle View "
-#~ msgstr "Changer de vue"
-
-#~ msgid "(current 'Default')"
-#~ msgstr "(actuellement 'Par défaut')"
-
-#~ msgid "load additional data"
-#~ msgstr "charge les données supplémentaires "
-
-#~ msgid "show media functions"
-#~ msgstr "affiche les fonctions média"
-
-#~ msgid "Select filter"
-#~ msgstr "Choisir le filtre"
-
-#~ msgid "Select view"
-#~ msgstr "Choirsir la vue"
-
-#~ msgid "set Filter (set to '%s')"
-#~ msgstr "activer filtre (activer '%s')"
-
-#~ msgid "Not available"
-#~ msgstr "Pas disponible"
-
-#~ msgid "not available"
-#~ msgstr "pas disponible"
-
-#~ msgid "Refresh this section"
-#~ msgstr "Rafraîchir la section"
-
-#~ msgid "Subtitle Functions"
-#~ msgstr "Fonctions sous-titres"
-
-#~ msgid "Audio Functions"
-#~ msgstr "Fonctions Son"
-
-#~ msgid "You have to reenter the section to see the changes!"
-#~ msgstr "Vous devez re-rentrer dans la section pour voir les changements"
-
-#~ msgid "Set view as default"
-#~ msgstr "Définir la vue comme par défaut"
-
-#~ msgid "Clear default view"
-#~ msgstr "Supprimer la définition de la vue par défaut"
-
-#~ msgid "No plugins available"
-#~ msgstr "Aucun plugin disponible"
-
-#~ msgid "Options"
-#~ msgstr "Options"
-
-#~ msgid "Close"
-#~ msgstr "Fermer"
-
-#~ msgid "State"
-#~ msgstr "Status"
-
-#~ msgid "Name"
-#~ msgstr "Nom"
-
-#~ msgid "Port"
-#~ msgstr "Port"
-
-#~ msgid "Edit"
-#~ msgstr "Modifier"
-
-#~ msgid "mappings"
-#~ msgstr "mappage"
