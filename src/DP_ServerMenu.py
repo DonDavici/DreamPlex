@@ -98,6 +98,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			}, -2)
 
 		self.onLayoutFinish.append(self.finishLayout)
+		self.onShown.append(self.getInitialData)
 		self.onShown.append(self.checkSelectionOverride)
 
 		printl("", self, "C")
@@ -112,6 +113,14 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self.initMiniTv()
 
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getInitialData(self):
+		printl("", self, "S")
+
 		self.getServerData()
 
 		# save the mainMenuList for later usage
@@ -122,6 +131,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.refreshOrientationHorMenu(0)
 
 		printl("", self, "C")
+
 
 	#===============================================================================
 	#
