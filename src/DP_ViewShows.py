@@ -160,7 +160,12 @@ class DPS_ViewShows(DP_View):
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["parentRatingKey"]
 
-			self.changeBackdrop = True
+			if self.currentViewName == "Backdrop":
+				#we change this because the backdrops of episodes are low quality and will be very pixi
+				self.changeBackdrop = False
+			else:
+				self.changeBackdrop = True
+
 			self.changePoster = True
 			self.resetPoster = False
 			self.resetBackdrop = False
