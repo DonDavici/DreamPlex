@@ -263,9 +263,10 @@ class PlexLibrary(Screen):
 			return False
 		else:
 			entries = tree.findall('Directory')
-			count = 0
+			counter = 0
 
 			for entry in entries:
+				counter += 1
 				entryData = (dict(entry.items()))
 				printl("entryData: " + str(entryData), self, "D")
 
@@ -351,7 +352,7 @@ class PlexLibrary(Screen):
 			self.saveSectionCache()
 
 		# as a last step we check if there where any content
-		if not count > 0:
+		if counter == 0:
 			self.lastError = _("No data in this section!")
 
 		printl("", self, "C")
@@ -382,9 +383,10 @@ class PlexLibrary(Screen):
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall('Directory')
-			count = 0
+			counter = 0
 
 			for entry in entries:
+				counter += 1
 				entryData = (dict(entry.items()))
 
 				entryData["hasSecondaryTag"] = entryData.get("secondary", False)
@@ -428,7 +430,7 @@ class PlexLibrary(Screen):
 				printl("entryData: " + str(entryData), self, "D")
 
 		# as a last step we check if there where any content
-		if not count > 0:
+		if counter == 0:
 			self.lastError = _("No data in this section!")
 
 		printl("", self, "C")
