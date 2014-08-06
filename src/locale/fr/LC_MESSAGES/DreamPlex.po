@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-08-05 22:07+0100\n"
-"PO-Revision-Date: 2014-08-05 22:07+0100\n"
-"Last-Translator: DonDavici <dondavici@gmail.com>\n"
+"PO-Revision-Date: 2014-08-06 10:02+0100\n"
+"Last-Translator: \n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,6 @@ msgid "All Movies"
 msgstr "Tous les films"
 
 #: DreamPlex/DPH_Translations.py:33
-#, fuzzy
 msgid "All Filmy"
 msgstr "Tous les films (?)"
 
