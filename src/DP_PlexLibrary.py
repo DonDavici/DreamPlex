@@ -449,7 +449,6 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def getMusicByArtist(self, url):
 		printl("", self, "S")
-		print "4711"
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
@@ -460,7 +459,6 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	def getMusicByAlbum(self, url):
 		printl("", self, "S")
-		print "4712"
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
@@ -471,7 +469,6 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def getMusicTracks(self, url):
 		printl("", self, "S")
-		print "4713"
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
@@ -727,6 +724,7 @@ class PlexLibrary(Screen):
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
+		print str(tree)
 		# find coressponding tags in xml
 		entries = tree.findall("Directory")
 
