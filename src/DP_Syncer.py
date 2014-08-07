@@ -157,7 +157,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 			msg_text = _("Please note to run at least once the sync media function within the server menu.\nThis will download the needed files in the right size of 1280x720.")
 
 		elif self._mode == "sync" and not isRunning:
-			msg_text = _("This will download all medias from the selected server.\n\nAdditional to this we downlaod the pictures in 1280x720 for better fullscreen backdrops.")
+			msg_text = _("This will download all medias from the selected server.\n\nAdditional to this we download the pictures in 1280x720 for better fullscreen backdrops.")
 		else:
 			msg_text = _("Reconnecting to background task ...\n")
 
