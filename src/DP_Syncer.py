@@ -37,7 +37,6 @@ from Components.config import config
 from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap
 
-from twisted.web.client import downloadPage
 import urllib
 
 from Screens.Screen import Screen
