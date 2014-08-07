@@ -1500,6 +1500,8 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				# if we are in fastScrollMode we have to reset some screen elements
 				if self.fastScroll:
 					self.resetGuiElementsInFastScrollMode()
+				else:
+					self.initFastScroll()
 
 				# to avoid unneeded skin changes we check here if the type is equal to the last one
 				if self.tagType != self.lastTagType:

@@ -63,11 +63,22 @@ class DPS_ViewMusic(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
-		self.lastPosterName = None
-		self.lastBackdropName = None
-
 		if "type" in self.details:
-			if self.details["type"] == "album" or self.details["type"] == "artist":
+			if self.details["type"] == "folder":
+				self.fromDirectory = True
+			else:
+				self.fromDirectory = False
+
+			# looks like we are just a directory
+			if self.details["type"] == "folder":
+				self.pname = "temp"
+				self.bname = "temp"
+				self.resetBackdrop = True
+				self.resetPoster = True
+				self.changePoster = False
+				self.changeBackdrop = False
+				self.fromDirectory = True
+			elif self.details["type"] == "album" or self.details["type"] == "artist":
 				if self.details["type"] == "album":
 					self["title"].setText(encodeMe(self.details.get("title", " ")))
 					self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
@@ -107,9 +118,6 @@ class DPS_ViewMusic(DP_View):
 						self.pname = "temp"
 						self.bname = "temp"
 
-				self.lastPosterName = self.pname
-				self.lastBackdropName = self.bname
-
 			elif self.details["type"] == "track":
 				self.resetBackdrop = False
 				self.resetPoster = False
@@ -125,7 +133,7 @@ class DPS_ViewMusic(DP_View):
 				self["file"].setText(encodeMe(self.parts.get("file", " - ")))
 
 				# this is when we are coming from directory
-				if self.lastPosterName is  None and self.lastBackdropName is  None:
+				if self.fromDirectory:
 					if "parentRatingKey" in self.details:
 						self.pname = self.details["parentRatingKey"]
 						self.bname = self.details["parentRatingKey"]
@@ -136,19 +144,8 @@ class DPS_ViewMusic(DP_View):
 					self.changePoster = True
 					self.changeBackdrop = True
 				else:
-					self.pname = self.lastPosterName
-					self.bname = self.lastBackdropName
 					self.changePoster = False
 					self.changeBackdrop = False
-
-			# looks like we are just a directory
-			elif self.details["type"] == "folder":
-				self.pname = "temp"
-				self.bname = "temp"
-				self.resetBackdrop = True
-				self.resetPoster = True
-				self.changePoster = False
-				self.changeBackdrop = False
 		else:
 			raise Exception
 

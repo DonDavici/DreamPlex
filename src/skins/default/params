@@ -153,7 +153,7 @@
 
 		<subView name="ShowAlbums">
 			<element name="info" visible="True"/>
-			<element name="leafCount" visible="True" xCoord="545" yCoord="360"/>
+			<element name="leafCount" visible="True"/>
 		</subView>
 
 		<subView name="ShowTracks">
