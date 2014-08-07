@@ -38,6 +38,7 @@ from Components.ScrollLabel import ScrollLabel
 from Components.Pixmap import Pixmap
 
 from twisted.web.client import downloadPage
+import urllib
 
 from Screens.Screen import Screen
 
@@ -703,8 +704,8 @@ class BackgroundMediaSyncer(Thread):
 		p_postfix = params["elements"]["poster"]["postfix"]
 
 		# we use this for fullsize m1v backdrops that can be loaded to miniTv
-		l_height = "1280"
-		l_width = "720"
+		l_height = "720"
+		l_width = "1280"
 		l_postfix = "_backdrop_1280x720.jpg"
 
 		self.backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
@@ -870,7 +871,7 @@ class BackgroundMediaSyncer(Thread):
 						self.messages.push((THREAD_WORKING, msg_text))
 						self.messagePump.send(0)
 						#download backdrop
-						self.downloadMedia(media[1]["art"], location, t_height, t_width)
+						self.downloadMedia(media[1]["art"], location, t_width, t_height)
 
 			for variant in self.posterVariants:
 				# interupt if needed
@@ -895,7 +896,7 @@ class BackgroundMediaSyncer(Thread):
 						msg_text = _("poster not found, trying to download ...")
 						self.messages.push((THREAD_WORKING, msg_text))
 						self.messagePump.send(0)
-						self.downloadMedia(media[1]["thumb"], location, t_height, t_width)
+						self.downloadMedia(media[1]["thumb"], location, t_width, t_height)
 
 		printl("", self, "C")
 
@@ -916,7 +917,9 @@ class BackgroundMediaSyncer(Thread):
 		server = self.plexInstance.getServerFromURL(download_url)
 		authHeader = self.plexInstance.get_hTokenForServer(server)
 		# printl("header: " + str(authHeader), self, "D")
-		downloadPage(download_url, location, headers=authHeader)
+		#downloadPage(download_url, location, headers=authHeader)
+		media=urllib.URLopener(headers=authHeader)
+		media.retrieve(download_url, location)
 
 		printl("", self, "C")
 		return True
