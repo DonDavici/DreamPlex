@@ -505,7 +505,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self["btn_greenText"].setText(_("Save"))
 
-		if self.useMappings:
+		if self.useMappings and self.newmode == 0:
 			self["btn_yellowText"].setText(_("Mappings"))
 			self["btn_yellowText"].show()
 			self["btn_yellow"].show()
@@ -513,7 +513,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self["btn_yellowText"].hide()
 			self["btn_yellow"].hide()
 
-		if self.current.localAuth.value or self.current.connectionType.value == "2":
+		if (self.current.localAuth.value or self.current.connectionType.value == "2") and self.newmode == 0:
 			self["btn_redText"].setText(_("check myPlex Token"))
 			self["btn_blueText"].setText(_("(re)create myPlex Token"))
 			self["btn_redText"].show()
