@@ -491,6 +491,8 @@ g_mediaSyncerInfo = MediaSyncerInfo()
 #===========================================================================
 class BackgroundMediaSyncer(Thread):
 
+	urllibInstance = None
+
 	def __init__ (self):
 		Thread.__init__(self)
 		self.cancel = False
@@ -723,20 +725,12 @@ class BackgroundMediaSyncer(Thread):
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 
-		# get servername
-		self.server = self.plexInstance.getCurrentServer()
-		self.prefix = self.plexInstance.getServerName().lower()
-
-		# we establish the connection once here
-		authHeader = self.plexInstance.get_hTokenForServer(self.server)
-		self.media=urllib.URLopener(headers=authHeader)
-
 		# get sections from server
 		self.sectionList = self.plexInstance.getAllSections()
 		printl("sectionList: "+ str(self.sectionList),self, "D")
 
 		# get servername
-		self.prefix = Singleton().getPlexInstance().getServerName().lower()
+		self.prefix = self.plexInstance.getServerName().lower()
 
 		# prepare variants
 		self.prepareMediaVariants()
@@ -918,13 +912,16 @@ class BackgroundMediaSyncer(Thread):
 	def downloadMedia(self, download_url, location, width, height):
 		printl("", self, "S")
 
-
 		download_url = download_url.replace('&width=999&height=999', '&width=' + width + '&height=' + height)
 		printl( "download url " + download_url, self, "D")
 
+		if self.urllibInstance is None:
+			server = self.plexInstance.getServerFromURL(download_url)
+			self.initUrllibInstance(server)
+
 		printl("starting download", self, "D")
 		try:
-			self.media.retrieve(download_url, location)
+			self.urllibInstance.retrieve(download_url, location)
 
 			msg_text = _("... success")
 			self.messages.push((THREAD_WORKING, msg_text))
@@ -938,6 +935,21 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "C")
 		return True
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initUrllibInstance(self, server):
+		printl("", self, "S")
+
+		# we establish the connection once here
+		authHeader = self.plexInstance.get_hTokenForServer(server)
+
+		self.urllibInstance=urllib.URLopener()
+		self.urllibInstance.addheader("X-Plex-Token", authHeader["X-Plex-Token"])
+
+		printl("", self, "C")
+
 
 THREAD_WORKING = 1
 THREAD_FINISHED = 2
