@@ -27,6 +27,7 @@ from enigma import eTimer, ePythonMessagePump, eConsoleAppContainer
 
 from threading import Thread
 from threading import Lock
+from time import sleep
 
 from Screens.MessageBox import MessageBox
 from Tools import Notifications
@@ -48,7 +49,7 @@ from DP_ViewFactory import getMovieViewDefaults
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, isValidSize
+from __common__ import printl2 as printl, isValidSize, encodeMe
 from __init__ import _ # _ is translation
 
 #===========================================================================
@@ -722,6 +723,14 @@ class BackgroundMediaSyncer(Thread):
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 
+		# get servername
+		self.server = self.plexInstance.getCurrentServer()
+		self.prefix = self.plexInstance.getServerName().lower()
+
+		# we establish the connection once here
+		authHeader = self.plexInstance.get_hTokenForServer(self.server)
+		self.media=urllib.URLopener(headers=authHeader)
+
 		# get sections from server
 		self.sectionList = self.plexInstance.getAllSections()
 		printl("sectionList: "+ str(self.sectionList),self, "D")
@@ -841,12 +850,16 @@ class BackgroundMediaSyncer(Thread):
 			msg_text = _("checking for medias with ratingKey: " + str(media[1]["ratingKey"]))
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
+			msg_text = _("title: " + encodeMe(media[1]["title"]))
+			self.messages.push((THREAD_WORKING, msg_text))
+			self.messagePump.send(0)
 
 			# interupt if needed
 			if self.cancel:
 				break
 
 			for variant in self.backdropVariants:
+				sleep(0.2)
 				# interupt if needed
 				if self.cancel:
 					break
@@ -860,7 +873,7 @@ class BackgroundMediaSyncer(Thread):
 
 				# check if backdrop exists
 				if fileExists(location):
-					msg_text = _("found backdrop")
+					msg_text = _("found backdrop - size(" + str(t_width) +"x" +str(t_height)+ ")")
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 					continue
@@ -886,7 +899,7 @@ class BackgroundMediaSyncer(Thread):
 
 				# check if poster exists
 				if fileExists(location):
-					msg_text = _("found poster")
+					msg_text = _("found poster - size(" + str(t_width) +"x" +str(t_height)+ ")")
 					self.messages.push((THREAD_WORKING, msg_text))
 					self.messagePump.send(0)
 					continue
@@ -909,16 +922,19 @@ class BackgroundMediaSyncer(Thread):
 		download_url = download_url.replace('&width=999&height=999', '&width=' + width + '&height=' + height)
 		printl( "download url " + download_url, self, "D")
 
-		# msg_text = _("download_url: " + str(download_url))
-		# self.messages.push((THREAD_WORKING, msg_text))
-		# self.messagePump.send(0)
 		printl("starting download", self, "D")
-		server = self.plexInstance.getServerFromURL(download_url)
-		authHeader = self.plexInstance.get_hTokenForServer(server)
-		# printl("header: " + str(authHeader), self, "D")
-		#downloadPage(download_url, location, headers=authHeader)
-		media=urllib.URLopener(headers=authHeader)
-		media.retrieve(download_url, location)
+		try:
+			self.media.retrieve(download_url, location)
+
+			msg_text = _("... success")
+			self.messages.push((THREAD_WORKING, msg_text))
+			self.messagePump.send(0)
+		except Exception, e:
+			printl("download not possible: " + str(e), self, "D")
+
+			msg_text = _("... failed")
+			self.messages.push((THREAD_WORKING, msg_text))
+			self.messagePump.send(0)
 
 		printl("", self, "C")
 		return True
