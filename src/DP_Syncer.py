@@ -942,11 +942,18 @@ class BackgroundMediaSyncer(Thread):
 	def initUrllibInstance(self, server):
 		printl("", self, "S")
 
-		# we establish the connection once here
-		authHeader = self.plexInstance.get_hTokenForServer(server)
+		serverConfig = self.plexInstance.getServerConfig()
 
+		# we establish the connection once here
 		self.urllibInstance=urllib.URLopener()
-		self.urllibInstance.addheader("X-Plex-Token", authHeader["X-Plex-Token"])
+
+		# we add headers only in special cases
+		connectionType = serverConfig.connectionType.value
+		localAuth = serverConfig.localAuth.value
+
+		if connectionType == "2" or localAuth:
+			authHeader = self.plexInstance.get_hTokenForServer(server)
+			self.urllibInstance.addheader("X-Plex-Token", authHeader["X-Plex-Token"])
 
 		printl("", self, "C")
 
