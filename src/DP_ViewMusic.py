@@ -144,6 +144,8 @@ class DPS_ViewMusic(DP_View):
 					self.changePoster = True
 					self.changeBackdrop = True
 				else:
+					self.pname = "temp"
+					self.bname = "temp"
 					self.changePoster = False
 					self.changeBackdrop = False
 		else:
