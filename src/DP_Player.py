@@ -550,25 +550,28 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def bufferInfo(self):
 		#printl("", self, "S")
 
-		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
-		
-		self.bufferPercent = bufferInfo[0]
-		self.buffer1 = bufferInfo[1]
-		self.bufferAvgOutRate = bufferInfo[2]
-		self.buffer3 = bufferInfo[3]
-		self.buffersize = bufferInfo[4]
-		
-		if int(self.bufferPercent) > 10:
-			self["bufferslider"].setValue(int(self.bufferPercent))
-			#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
-		else:
-			self["bufferslider"].setValue(1)
+		try:
+			bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
 
-		if self.bufferPercent > 95:
-			self.bufferFull()
-				
-		if self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0):
-			self.bufferEmpty()
+			self.bufferPercent = bufferInfo[0]
+			self.buffer1 = bufferInfo[1]
+			self.bufferAvgOutRate = bufferInfo[2]
+			self.buffer3 = bufferInfo[3]
+			self.buffersize = bufferInfo[4]
+
+			if int(self.bufferPercent) > 10:
+				self["bufferslider"].setValue(int(self.bufferPercent))
+				#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
+			else:
+				self["bufferslider"].setValue(1)
+
+			if self.bufferPercent > 95:
+				self.bufferFull()
+
+			if self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0):
+				self.bufferEmpty()
+		except:
+			pass
 
 		#printl("", self, "C")
 
