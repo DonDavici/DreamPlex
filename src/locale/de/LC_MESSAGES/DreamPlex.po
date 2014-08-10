@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-10 10:13+0100\n"
-"PO-Revision-Date: 2014-08-10 10:18+0100\n"
+"POT-Creation-Date: 2014-08-10 10:55+0100\n"
+"PO-Revision-Date: 2014-08-10 10:55+0100\n"
 "Last-Translator: DonDavici <dondavici@gmail.com>\n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: \n"
@@ -427,6 +427,7 @@ msgstr ""
 "Keine Files gefunden. Nichts zu tun!"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:673
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:823
 msgid ""
 "Process aborted.\n"
 "Press Exit to close."
@@ -452,14 +453,6 @@ msgstr "starte ..."
 msgid "Reading section of the server ..."
 msgstr "lese section vom server ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:823
-msgid ""
-"Process aborted.\n"
-"Press OK to close."
-msgstr ""
-"Prozess abgebrochen.\n"
-"Drücke OK um zu schließen."
-
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:825
 msgid "We did it :-)"
 msgstr "Geschafft :-)"
@@ -469,11 +462,11 @@ msgstr "Geschafft :-)"
 msgid ""
 "Error!\n"
 "Error-message:%s\n"
-"Press OK to close."
+"Press Exit to close."
 msgstr ""
 "Fehler!\n"
 "Fehlermeldung:%s\n"
-"Drücke OK um zu schließen."
+"Drücke Exit um zu schließen."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:844
 msgid "checking for medias with ratingKey: "
@@ -1310,6 +1303,13 @@ msgstr "für den Benutzer:"
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:610
 msgid "Error:"
 msgstr "Fehler:"
+
+#~ msgid ""
+#~ "Process aborted.\n"
+#~ "Press OK to close."
+#~ msgstr ""
+#~ "Prozess abgebrochen.\n"
+#~ "Drücke OK um zu schließen."
 
 #~ msgid "got movie url: "
 #~ msgstr "movie url:"
