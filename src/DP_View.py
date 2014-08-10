@@ -826,10 +826,10 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	#===========================================================================
 	#
 	#===========================================================================
-	def toggleFilterMode(self):
+	def toggleFilterMode(self, quit=False):
 		printl("", self, "S")
 
-		if self.filterMode:
+		if self.filterMode or quit:
 			self.filterMode = False
 			self.onKey1() # we return to normal functions
 			self["L1"].show()
@@ -1314,16 +1314,13 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
 			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
+			if self.filterMode:
+				self.toggleFilterMode(quit=True)
+
 			self.selection = self["listview"].getCurrent()
 			if self.selection is not None:
 				self.details 	= self.selection[1]
 				self.context	= self.selection[2]
-
-
-			# if self.currentTagTypeDict[self.viewStep] == "Directory":
-			# 	self.isFolder = True
-			# 	# we reset this to trigger screen changes
-			# 	self.lastTagType = None
 
 			if self.viewStep >= 1:
 				self.leaving = True
@@ -1390,7 +1387,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self.refresh()
 
 		# check in settings
-		if self.startWithFilterMode:
+		if self.startWithFilterMode and self.filterableContent:
 			self.onKey4()
 
 		printl("", self, "C")

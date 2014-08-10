@@ -61,6 +61,9 @@ class DPS_ViewMovies(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
+		# we use this for filtermode at startup
+		self.filterableContent = True
+
 		# handle pictures
 		self.changeBackdrop = True
 		self.changePoster = True

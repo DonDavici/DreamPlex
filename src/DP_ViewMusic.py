@@ -63,6 +63,9 @@ class DPS_ViewMusic(DP_View):
 	def _refresh(self):
 		printl("", self, "S")
 
+		# we use this for filtermode at startup
+		self.filterableContent = True
+
 		if "type" in self.details:
 			if self.details["type"] == "folder":
 				self.fromDirectory = True
@@ -148,6 +151,7 @@ class DPS_ViewMusic(DP_View):
 					self.bname = "temp"
 					self.changePoster = False
 					self.changeBackdrop = False
+
 		else:
 			raise Exception
 
@@ -162,14 +166,33 @@ class DPS_ViewMusic(DP_View):
 	def onLeave(self):
 		printl("", self, "S")
 
+		# first we have to turn off filtermode or the keypress that is needed to refresh function names will be interpreted as filter action
+		self.toggleFilterMode(quit=True)
+
 		# first we call the the rest of the onEnter from super
 		super(DPS_ViewMusic,self).onLeave()
 
 		# first restore Elements
 		self.restoreElementsInViewStep()
 
+		self.initFilterMode()
+
 		# we do the refresh here to be able to handle directory content
 		self.refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onEnter(self):
+		printl("", self, "S")
+
+		# first we have to turn off filtermode or the keypress that is needed to refresh function names will be interpreted as filter action
+		self.toggleFilterMode(quit=True)
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewMusic,self).onEnter()
 
 		printl("", self, "C")
 

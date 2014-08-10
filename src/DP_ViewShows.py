@@ -107,6 +107,9 @@ class DPS_ViewShows(DP_View):
 			self.handlePopularityPixmaps()
 			self.handleRatedPixmaps()
 
+			# we use this for filtermode at startup
+			self.filterableContent = False
+
 		elif self.details ["currentViewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons",self, "D")
 			self.grandparentTitle = str(self.mediaContainer.get("title2", " "))
@@ -129,6 +132,9 @@ class DPS_ViewShows(DP_View):
 
 			if self.tagType != self.lastTagType:
 				self.hideMediaFunctions()
+
+			# we use this for filtermode at startup
+			self.filterableContent = False
 
 		elif self.details ["currentViewMode"] == "ShowEpisodes" or self.details["currentViewMode"] == "ShowEpisodesDirect":
 			printl( "is ShowEpisodes",self, "D")
@@ -180,6 +186,9 @@ class DPS_ViewShows(DP_View):
 
 			if self.tagType != self.lastTagType:
 				self.showMediaFunctions()
+
+			# we use this for filtermode at startup
+			self.filterableContent = True
 
 		else:
 			raise Exception
