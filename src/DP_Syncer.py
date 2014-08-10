@@ -594,7 +594,7 @@ class BackgroundMediaSyncer(Thread):
 		import math
 		import glob
 		#try:
-		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720.jpg"))
+		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720_v2.jpg"))
 
 		msg_text = _("\n\nFiles found: ") + str(self.count)
 		self.messages.push((THREAD_WORKING, msg_text))
@@ -604,14 +604,14 @@ class BackgroundMediaSyncer(Thread):
 
 		if int(self.count) > 0:
 			self.currentIndex = 0
-			for myFile in glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720.jpg"):
+			for myFile in glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720_v2.jpg"):
 				sleep(0.2)
 				self.currentIndex += 1
 				if self.cancel:
 					break
 				try:
 					# firt we check for images in the right size
-					if "1280x720.jpg" in myFile:
+					if "1280x720_v2.jpg" in myFile:
 						# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
 						myFileWoExtension = myFile[:-4]
 						extension = str.upper(myFile[-3:])
@@ -708,7 +708,7 @@ class BackgroundMediaSyncer(Thread):
 		# we use this for fullsize m1v backdrops that can be loaded to miniTv
 		l_height = "720"
 		l_width = "1280"
-		l_postfix = "_backdrop_1280x720.jpg"
+		l_postfix = "_backdrop_1280x720_v2.jpg"
 
 		self.backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
 		self.posterVariants = [[p_height, p_width, p_postfix]]

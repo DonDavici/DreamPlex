@@ -389,7 +389,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		# Backdrops
 		self.EXpicloadBackdrop = ePicLoad()
 		if self.currentViewName == "Backdrop":
-			self.backdrop_postfix = "_backdrop_1280x720.jpg"
+			self.backdrop_postfix = "_backdrop_1280x720_v2.jpg"
 			self.backdropHeight = "720"
 			self.backdropWidth = "1280"
 		else:

@@ -239,11 +239,11 @@ def getMovieViewDefaults():
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
 	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
 	params["elements"]["poster"]["height"]                         = "268"
 	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
+	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getMovieViewDefaults", "C")
 	return params
@@ -292,11 +292,11 @@ def getShowViewDefaults():
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
 	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
 	params["elements"]["poster"]["height"]                         = "268"
 	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
+	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getShowViewDefaults", "C")
 	return params
@@ -348,11 +348,11 @@ def getMusicViewDefaults():
 	# add addional params in elements
 	params["elements"]["backdrop"]["height"]                       = "315"
 	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop.jpg"
+	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
 	params["elements"]["poster"]["height"]                         = "268"
 	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster.jpg"
+	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getMusicViewDefaults", "C")
 	return params
