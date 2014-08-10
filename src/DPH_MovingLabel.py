@@ -115,6 +115,8 @@ class DPH_HorizontalMenu(object):
 				printl("secondResult: " + str(secondResult), self, "D")
 				self[self.translatePositionToName(-i)].setText(content[secondResult][0])
 
+		self.hideUnusedElementsFromMenu(count)
+
 		printl("", self, "C")
 		return True
 
@@ -147,5 +149,42 @@ class DPH_HorizontalMenu(object):
 				myType = str(orientation.get('type'))
 				if myType == "horizontal":
 					self.g_horizontal_menu = True
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideUnusedElementsFromMenu(self, count):
+		printl("", self, "S")
+
+		if count == 1:
+			self["-2"].hide()
+			self["-1"].hide()
+			self["+1"].hide()
+			self["+2"].hide()
+
+		elif count == 2:
+			self["-2"].hide()
+			self["-1"].hide()
+			self["+2"].hide()
+
+		elif count == 3:
+			self["-2"].hide()
+			self["+2"].hide()
+
+		elif count == 4:
+			pass
+			#self["-2"].hide()
+
+		elif count >= 5:
+			self["-2"].show()
+			self["-1"].show()
+			self["+1"].show()
+			self["+2"].show()
+
+		else:
+			# this should not happen
+			raise Exception
 
 		printl("", self, "C")
