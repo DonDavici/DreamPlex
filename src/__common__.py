@@ -765,12 +765,12 @@ def getPlexHeader(g_sessionID, asString = True):
 #===========================================================================
 #
 #===========================================================================
-def encodeMe(stringToEncode):
-	#printl2("", "__common__::encodeMe", "S")
+def encodeThat(stringToEncode):
+	#printl2("", "__common__::encodeThat", "S")
 	try:
 		encodedString = stringToEncode.encode('utf-8', "ignore")
 	except:
 		encodedString = stringToEncode
 
-	#printl2("", "__common__::encodeMe", "C")
+	#printl2("", "__common__::encodeThat", "C")
 	return encodedString

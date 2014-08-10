@@ -26,7 +26,7 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl, encodeMe
+from __common__ import printl2 as printl, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -69,9 +69,9 @@ class DPS_ViewShows(DP_View):
 		self.themeMusicIsRunning = False
 
 		# for all view steps
-		self["title"].setText(encodeMe(self.details.get("title", " ")))
-		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
-		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+		self["title"].setText(encodeThat(self.details.get("title", " ")))
+		self["tag"].setText(encodeThat(self.details.get("tagline", " ")))
+		self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
 
 		self.setDuration()
 		self.setMediaFunctions()
@@ -83,7 +83,7 @@ class DPS_ViewShows(DP_View):
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
 			self["unviewedLeafCount"].setText(str(int(self.details.get("leafCount", " ")) - int(self.details.get("viewedLeafCount", " "))))
 			self["childCount"].setText(str(self.details.get("childCount", " ")))
-			self["studio"].setText(encodeMe(self.details.get("studio", " ")))
+			self["studio"].setText(encodeThat(self.details.get("studio", " ")))
 			self["genre"].setText(self.details.get("genre", " "))
 			self["year"].setText(str(self.details.get("year", " - ")))
 
@@ -133,10 +133,10 @@ class DPS_ViewShows(DP_View):
 		elif self.details ["currentViewMode"] == "ShowEpisodes" or self.details["currentViewMode"] == "ShowEpisodesDirect":
 			printl( "is ShowEpisodes",self, "D")
 			self["tag"].setText(str(self.mediaContainer.get("title2", " ")))
-			self["writer"].setText(encodeMe(self.details.get("writer", " ")))
+			self["writer"].setText(encodeThat(self.details.get("writer", " ")))
 
 			if self.details["currentViewMode"] == "ShowEpisodesDirect":
-				self["tag"].setText("Season: " + encodeMe(self.details.get("parentIndex", " ")))
+				self["tag"].setText("Season: " + encodeThat(self.details.get("parentIndex", " ")))
 				self["grandparentTitle"].setText(str(self.details.get("grandparentTitle", " ")))
 				#self.setTitle(str(self.details.get("grandparentTitle", " ")))
 			else:
@@ -155,7 +155,7 @@ class DPS_ViewShows(DP_View):
 			self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
 			self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
 			self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-			self["file"].setText(encodeMe(self.parts.get("file", " - ")))
+			self["file"].setText(encodeThat(self.parts.get("file", " - ")))
 
 			self.bname = self.details["ratingKey"]
 			self.pname = self.details["parentRatingKey"]

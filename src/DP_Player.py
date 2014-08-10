@@ -56,7 +56,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl, convertSize, encodeMe
+from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -496,8 +496,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.universalTranscoder = self.playbackData['universalTranscoder']
 		self.localAuth = self.playbackData['localAuth']
 
-		self.title = encodeMe(self.videoData['title'])
-		self["shortDescription"].setText(encodeMe(self.videoData['summary']))
+		self.title = encodeThat(self.videoData['title'])
+		self["shortDescription"].setText(encodeThat(self.videoData['summary']))
 
 		printl("", self, "C")
 

@@ -49,7 +49,7 @@ from DP_ViewFactory import getMovieViewDefaults
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, isValidSize, encodeMe
+from __common__ import printl2 as printl, isValidSize, encodeThat
 from __init__ import _ # _ is translation
 
 #===========================================================================
@@ -844,7 +844,7 @@ class BackgroundMediaSyncer(Thread):
 			msg_text = _("checking for medias with ratingKey: " + str(media[1]["ratingKey"]))
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
-			msg_text = _("title: " + encodeMe(media[1]["title"]))
+			msg_text = _("title: " + encodeThat(media[1]["title"]))
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 

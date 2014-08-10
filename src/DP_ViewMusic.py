@@ -26,7 +26,7 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl, encodeMe
+from __common__ import printl2 as printl, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -80,10 +80,10 @@ class DPS_ViewMusic(DP_View):
 				self.fromDirectory = True
 			elif self.details["type"] == "album" or self.details["type"] == "artist":
 				if self.details["type"] == "album":
-					self["title"].setText(encodeMe(self.details.get("title", " ")))
-					self["leafCount"].setText(encodeMe(self.details.get("leafCount", " ")))
+					self["title"].setText(encodeThat(self.details.get("title", " ")))
+					self["leafCount"].setText(encodeThat(self.details.get("leafCount", " ")))
 
-					self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
+					self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
 					self["year"].setText(str(self.details.get("year", " - ")))
 
 					self.toggleElementVisibilityWithLabel("year")
@@ -93,9 +93,9 @@ class DPS_ViewMusic(DP_View):
 					self.hideMediaFunctions()
 					self.hideMediaPixmaps()
 				else:
-					self["title"].setText(encodeMe(self.details.get("title", " ")))
-					self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
-					self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
+					self["title"].setText(encodeThat(self.details.get("title", " ")))
+					self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
+					self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
 
 					self.toggleElementVisibilityWithLabel("genre")
 					self["shortDescription"].show()
@@ -130,7 +130,7 @@ class DPS_ViewMusic(DP_View):
 				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
 				self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
 				self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-				self["file"].setText(encodeMe(self.parts.get("file", " - ")))
+				self["file"].setText(encodeThat(self.parts.get("file", " - ")))
 
 				# this is when we are coming from directory
 				if self.fromDirectory:

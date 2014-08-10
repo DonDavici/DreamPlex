@@ -26,7 +26,7 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl, encodeMe
+from __common__ import printl2 as printl, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -73,14 +73,14 @@ class DPS_ViewMovies(DP_View):
 			self.bname = "temp"
 
 		# handle content
-		self["title"].setText(encodeMe(self.details.get("title", " ")))
-		self["tag"].setText(encodeMe(self.details.get("tagline", " ")))
-		self["shortDescription"].setText(encodeMe(self.details.get("summary", " ")))
-		self["cast"].setText(encodeMe(self.details.get("cast", " ")))
-		self["writer"].setText(encodeMe(self.details.get("writer", " ")))
-		self["director"].setText(encodeMe(self.details.get("director", " ")))
-		self["studio"].setText(encodeMe(self.details.get("studio", " ")))
-		self["genre"].setText(encodeMe(self.details.get("genre", " - ")))
+		self["title"].setText(encodeThat(self.details.get("title", " ")))
+		self["tag"].setText(encodeThat(self.details.get("tagline", " ")))
+		self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
+		self["cast"].setText(encodeThat(self.details.get("cast", " ")))
+		self["writer"].setText(encodeThat(self.details.get("writer", " ")))
+		self["director"].setText(encodeThat(self.details.get("director", " ")))
+		self["studio"].setText(encodeThat(self.details.get("studio", " ")))
+		self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
 		self["year"].setText(str(self.details.get("year", " - ")))
 
 		# technical details
@@ -94,7 +94,7 @@ class DPS_ViewMovies(DP_View):
 		self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
 		self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
 		self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-		self["file"].setText(encodeMe(self.parts.get("file", " - ")))
+		self["file"].setText(encodeThat(self.parts.get("file", " - ")))
 
 		if self.fastScroll == False or self.showMedia == True:
 			# handle all pixmaps
