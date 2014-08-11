@@ -95,7 +95,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		self["btn_blue"] = Pixmap()
 
 		self["txt_red"] = Label()
-		self["txt_red"].setText(_("Abort Sync"))
+		self["txt_red"].setText(_("Abort"))
 		self["btn_red"] = Pixmap()
 
 		self["setupActions"] = ActionMap(["DPS_Syncer"],
@@ -316,7 +316,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self.mediaSyncerInfo.cancel()
-		self["output"].appendText(_("Cancelled!"))
+		self["output"].appendText(_("\n\nCancelled!"))
 
 		printl("", self, "C")
 
@@ -770,7 +770,7 @@ class BackgroundMediaSyncer(Thread):
 
 		self.running = True
 		self.cancel = False
-		msg_text = _("starting ...")
+		msg_text = _("\n\nstarting ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 
@@ -785,7 +785,7 @@ class BackgroundMediaSyncer(Thread):
 		self.prepareMediaVariants()
 
 		try:
-			msg_text = _("Reading section of the server ...")
+			msg_text = _("\n\nReading section of the server ...")
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 
@@ -798,7 +798,9 @@ class BackgroundMediaSyncer(Thread):
 					if section[2] == "movieEntry":
 						printl("movie", self, "D")
 						movieUrl = section[3]["contentUrl"]
-						movieUrl += "/all"
+
+						if "/all" not in movieUrl:
+							movieUrl += "/all"
 
 						printl("movieUrl: " + str(movieUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
@@ -808,7 +810,11 @@ class BackgroundMediaSyncer(Thread):
 				if self.serverConfig.syncShows.value:
 					if section[2] == "showEntry":
 						printl("show: " + str(section))
-						showUrl = section[3]["contentUrl"] + "/all"
+						showUrl = section[3]["contentUrl"]\
+
+						if "/all" not in showUrl:
+							showUrl += "/all"
+
 						printl("showUrl: " + str(showUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
 
@@ -841,7 +847,10 @@ class BackgroundMediaSyncer(Thread):
 						printl("music", self, "D")
 
 						# first we go through the artists
-						url = section[3]["contentUrl"] + "/all"
+						url = section[3]["contentUrl"]\
+
+						if "/all" not in url:
+							url += "/all"
 
 						printl("url: " + str(url), self, "D")
 						library, mediaContainer = self.plexInstance.getMusicByArtist(url)
