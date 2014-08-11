@@ -831,7 +831,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			progress = currentTime / (totalTime/100)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
-			progress = 100
+			progress = 0
 		
 		if self.multiUser and self.timelineWatcher is not None:
 			self.timelineWatcher.stop()
@@ -1061,8 +1061,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def getPlayPosition(self):
 		printl("", self, "S")
-		
-		position = self.seek.getPlayPosition()
+
+		try:
+			position = self.seek.getPlayPosition()
+		except:
+			return None
 		
 		printl("", self, "C")
 		return position
