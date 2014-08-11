@@ -251,6 +251,11 @@ def initServerEntryConfig():
 	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "D")
 	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "D")
 
+	printl ("=== SYNC ===", "__init__::initServerEntryConfig", "D")
+	config.plugins.dreamplex.Entries[i].syncMovies	    = ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].syncShows	    = ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].syncMusic	    = ConfigYesNo(default = True)
+
 	printl("", "__init__::initServerEntryConfig", "C")
 	return config.plugins.dreamplex.Entries[i]
 

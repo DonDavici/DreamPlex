@@ -65,10 +65,11 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		DPH_ScreenHelper.__init__(self)
 
 		self.setMenuType("syncer")
+		self.serverConfig = serverConfig
 
 		if serverConfig is not None:
 			# now that we know the server we establish global plexInstance
-			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, serverConfig))
+			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, self.serverConfig))
 
 		# we are "sync" or "render"
 		self._mode = mode
@@ -121,6 +122,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		self.setTitle("Server - Syncer")
 
 		self.initMiniTv()
+
+		self.mediaSyncerInfo.setPlexInstance(self.plexInstance)
+		self.mediaSyncerInfo.setServerConfig(self.serverConfig)
 
 		# first we have to check if we are running in another mode
 		isRunning = self.mediaSyncerInfo.isRunning()
@@ -357,6 +361,8 @@ class MediaSyncerInfo(object):
 		self.callback_infos = None
 		self.callback_finished = None
 		self.mode = None
+		self.serverConfig = None
+		self.plexInstance = None
 
 		printl("", self, "C")
 
@@ -370,6 +376,8 @@ class MediaSyncerInfo(object):
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
 			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
 			self.backgroundMediaSyncer.setMode(self.mode)
+			self.backgroundMediaSyncer.setServerConfig(self.serverConfig)
+			self.backgroundMediaSyncer.setPlexInstance(self.plexInstance)
 
 			self.backgroundMediaSyncer.startSyncing()
 			self.running = True
@@ -426,6 +434,26 @@ class MediaSyncerInfo(object):
 
 		printl("", self, "C")
 		return self.mode
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setServerConfig(self, serverConfig):
+		printl("", self, "S")
+
+		self.serverConfig = serverConfig
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setPlexInstance(self, plexInstance):
+		printl("", self, "S")
+
+		self.plexInstance = plexInstance
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -501,8 +529,6 @@ class BackgroundMediaSyncer(Thread):
 		self.messagePump = ePythonMessagePump()
 		self.running = False
 
-		self.plexInstance = Singleton().getPlexInstance()
-
 	#===========================================================================
 	#
 	#===========================================================================
@@ -528,6 +554,26 @@ class BackgroundMediaSyncer(Thread):
 		printl("", self, "S")
 
 		self.mode = mode
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setServerConfig(self, serverConfig):
+		printl("", self, "S")
+
+		self.serverConfig = serverConfig
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setPlexInstance(self, plexInstance):
+		printl("", self, "S")
+
+		self.plexInstance = plexInstance
 
 		printl("", self, "C")
 
@@ -745,65 +791,67 @@ class BackgroundMediaSyncer(Thread):
 				if self.cancel:
 					break
 
-				if section[2] == "movieEntry":
-					printl("movie", self, "D")
-					movieUrl = section[3]["contentUrl"]
-					movieUrl += "/all"
+				if self.serverConfig.syncMovies.value:
+					if section[2] == "movieEntry":
+						printl("movie", self, "D")
+						movieUrl = section[3]["contentUrl"]
+						movieUrl += "/all"
 
-					printl("movieUrl: " + str(movieUrl), self, "D")
-					library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
+						printl("movieUrl: " + str(movieUrl), self, "D")
+						library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
 
-					self.syncThrougMediaLibrary(library, myType="Movie")
+						self.syncThrougMediaLibrary(library, myType="Movie")
 
+				if self.serverConfig.syncShows.value:
+					if section[2] == "showEntry":
+						printl("show: " + str(section))
+						showUrl = section[3]["contentUrl"] + "/all"
+						printl("showUrl: " + str(showUrl), self, "D")
+						library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
 
-				if section[2] == "showEntry":
-					printl("show: " + str(section))
-					showUrl = section[3]["contentUrl"] + "/all"
-					printl("showUrl: " + str(showUrl), self, "D")
-					library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
+						self.syncThrougMediaLibrary(library, myType="Show")
 
-					self.syncThrougMediaLibrary(library, myType="Show")
-
-					for seasons in library:
-						if self.cancel:
-							break
-						printl("seasons: " + str(seasons))
-
-						seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
-						printl("seasonsUrl: " + str(seasonsUrl), self, "D")
-						library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
-
-						self.syncThrougMediaLibrary(library, myType="Season")
-
-						for episodes in library:
+						for seasons in library:
 							if self.cancel:
 								break
-							printl("episode: " + str(episodes))
+							printl("seasons: " + str(seasons))
 
-							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
-							printl("episodesUrl: " + str(episodesUrl), self, "D")
-							library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
+							seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
+							printl("seasonsUrl: " + str(seasonsUrl), self, "D")
+							library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
 
-							self.syncThrougMediaLibrary(library, myType="Episode")
+							self.syncThrougMediaLibrary(library, myType="Season")
 
-				if section[2] == "musicEntry":
-					printl("music", self, "D")
+							for episodes in library:
+								if self.cancel:
+									break
+								printl("episode: " + str(episodes))
 
-					# first we go through the artists
-					url = section[3]["contentUrl"] + "/all"
+								episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
+								printl("episodesUrl: " + str(episodesUrl), self, "D")
+								library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
 
-					printl("url: " + str(url), self, "D")
-					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
+								self.syncThrougMediaLibrary(library, myType="Episode")
 
-					self.syncThrougMediaLibrary(library, myType="Music")
+				if self.serverConfig.syncMusic.value:
+					if section[2] == "musicEntry":
+						printl("music", self, "D")
 
-					# now we go through the albums
-					url = section[3]["contentUrl"] + "/albums"
+						# first we go through the artists
+						url = section[3]["contentUrl"] + "/all"
 
-					printl("url: " + str(url), self, "D")
-					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
+						printl("url: " + str(url), self, "D")
+						library, mediaContainer = self.plexInstance.getMusicByArtist(url)
 
-					self.syncThrougMediaLibrary(library, myType="Albums")
+						self.syncThrougMediaLibrary(library, myType="Music")
+
+						# now we go through the albums
+						url = section[3]["contentUrl"] + "/albums"
+
+						printl("url: " + str(url), self, "D")
+						library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
+
+						self.syncThrougMediaLibrary(library, myType="Albums")
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
@@ -826,6 +874,8 @@ class BackgroundMediaSyncer(Thread):
 		printl("", self, "S")
 
 		for media in library:
+			if self.cancel:
+				break
 			printl("media: " + str(media), self, "D")
 			msg_text = "\n" + str(myType) + " with ratingKey: " + str(media[1]["ratingKey"])
 			self.messages.push((THREAD_WORKING, msg_text))
@@ -924,14 +974,12 @@ class BackgroundMediaSyncer(Thread):
 	def initUrllibInstance(self, server):
 		printl("", self, "S")
 
-		serverConfig = self.plexInstance.getServerConfig()
-
 		# we establish the connection once here
 		self.urllibInstance=urllib.URLopener()
 
 		# we add headers only in special cases
-		connectionType = serverConfig.connectionType.value
-		localAuth = serverConfig.localAuth.value
+		connectionType = self.serverConfig.connectionType.value
+		localAuth = self.serverConfig.localAuth.value
 
 		if connectionType == "2" or localAuth:
 			authHeader = self.plexInstance.get_hTokenForServer(server)

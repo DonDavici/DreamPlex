@@ -446,6 +446,13 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self.cfglist.append(getConfigListEntry(_(" >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"), self.current.wol_mac, _(" ")))
 			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _(" ")))
 
+		##
+		self.cfglist.append(getConfigListEntry(_("Sync Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		##
+		self.cfglist.append(getConfigListEntry(_(" > Sync Movies Medias"), self.current.syncMovies, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Sync Shows Medias"), self.current.syncShows, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Sync Music Medias"), self.current.syncMusic, _(" ")))
+
 		#===================================================================
 		#
 		# getConfigListEntry(_("Transcode Type (no function yet but soon ;-)"), self.current.transcodeType),
