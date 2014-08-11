@@ -747,50 +747,44 @@ class BackgroundMediaSyncer(Thread):
 
 				if section[2] == "movieEntry":
 					printl("movie", self, "D")
-					url = section[3]["contentUrl"]
+					movieUrl = section[3]["contentUrl"]
+					movieUrl += "/all"
 
-					if str(config.plugins.dreamplex.showFilter.value).lower() == "true":
-						url += "/all"
+					printl("movieUrl: " + str(movieUrl), self, "D")
+					library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
 
-					# msg_text = _("got movie url: " + str(url))
-					# self.messages.push((THREAD_WORKING, msg_text))
-					# self.messagePump.send(0)
-
-					printl("url: " + str(url), self, "D")
-					library, mediaContainer = self.plexInstance.getMoviesFromSection(url)
-
-					self.syncThrougMediaLibrary(library)
+					self.syncThrougMediaLibrary(library, myType="Movie")
 
 
 				if section[2] == "showEntry":
-					printl("show", self, "D")
-					url = section[3]["contentUrl"] + "/all"
+					printl("show: " + str(section))
+					showUrl = section[3]["contentUrl"] + "/all"
+					printl("showUrl: " + str(showUrl), self, "D")
+					library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
 
-					# msg_text = _("got show url: " + str(url))
-					# self.messages.push((THREAD_WORKING, msg_text))
-					# self.messagePump.send(0)
-
-					printl("url: " + str(url), self, "D")
-					library, mediaContainer = self.plexInstance.getShowsFromSection(url)
-					printl("library: " + str(library))
-
-					self.syncThrougMediaLibrary(library)
+					self.syncThrougMediaLibrary(library, myType="Show")
 
 					for seasons in library:
+						if self.cancel:
+							break
 						printl("seasons: " + str(seasons))
+
 						seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
+						printl("seasonsUrl: " + str(seasonsUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
 
-						self.syncThrougMediaLibrary(library)
+						self.syncThrougMediaLibrary(library, myType="Season")
 
 						for episodes in library:
-							printl("seasons: " + str(episodes))
-							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
+							if self.cancel:
+								break
+							printl("episode: " + str(episodes))
 
+							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
+							printl("episodesUrl: " + str(episodesUrl), self, "D")
 							library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
 
-							self.syncThrougMediaLibrary(library)
-
+							self.syncThrougMediaLibrary(library, myType="Episode")
 
 				if section[2] == "musicEntry":
 					printl("music", self, "D")
@@ -798,26 +792,18 @@ class BackgroundMediaSyncer(Thread):
 					# first we go through the artists
 					url = section[3]["contentUrl"] + "/all"
 
-					# msg_text = _("got music url: " + str(url))
-					# self.messages.push((THREAD_WORKING, msg_text))
-					# self.messagePump.send(0)
-
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
 
-					self.syncThrougMediaLibrary(library)
+					self.syncThrougMediaLibrary(library, myType="Music")
 
 					# now we go through the albums
 					url = section[3]["contentUrl"] + "/albums"
 
-					# msg_text = _("got music url: " + str(url))
-					# self.messages.push((THREAD_WORKING, msg_text))
-					# self.messagePump.send(0)
-
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
 
-					self.syncThrougMediaLibrary(library)
+					self.syncThrougMediaLibrary(library, myType="Albums")
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
@@ -836,21 +822,17 @@ class BackgroundMediaSyncer(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def syncThrougMediaLibrary(self, library):
+	def syncThrougMediaLibrary(self, library, myType):
 		printl("", self, "S")
 
 		for media in library:
 			printl("media: " + str(media), self, "D")
-			msg_text = _("checking for medias with ratingKey: " + str(media[1]["ratingKey"]))
+			msg_text = "\n" + str(myType) + " with ratingKey: " + str(media[1]["ratingKey"])
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 			msg_text = _("title: " + encodeThat(media[1]["title"]))
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
-
-			# interupt if needed
-			if self.cancel:
-				break
 
 			for variant in self.backdropVariants:
 				sleep(0.2)
