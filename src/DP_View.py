@@ -1726,7 +1726,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				# check if showiframe lib loaded ...
 				if self.loadedStillPictureLib:
 					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720.m1v"
+					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
 					printl("backdrop: " + str(backdrop), self, "D")
 
 					# check if the backdrop file exists
