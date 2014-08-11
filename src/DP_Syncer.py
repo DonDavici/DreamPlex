@@ -123,8 +123,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		self.initMiniTv()
 
-		self.mediaSyncerInfo.setPlexInstance(self.plexInstance)
-		self.mediaSyncerInfo.setServerConfig(self.serverConfig)
+		if self._mode == "sync":
+			self.mediaSyncerInfo.setPlexInstance(self.plexInstance)
+			self.mediaSyncerInfo.setServerConfig(self.serverConfig)
 
 		# first we have to check if we are running in another mode
 		isRunning = self.mediaSyncerInfo.isRunning()
@@ -376,8 +377,10 @@ class MediaSyncerInfo(object):
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
 			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
 			self.backgroundMediaSyncer.setMode(self.mode)
-			self.backgroundMediaSyncer.setServerConfig(self.serverConfig)
-			self.backgroundMediaSyncer.setPlexInstance(self.plexInstance)
+
+			if self.mode == "sync":
+				self.backgroundMediaSyncer.setServerConfig(self.serverConfig)
+				self.backgroundMediaSyncer.setPlexInstance(self.plexInstance)
 
 			self.backgroundMediaSyncer.startSyncing()
 			self.running = True
