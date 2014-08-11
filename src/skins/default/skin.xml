@@ -370,8 +370,8 @@
         <!-- title -->
         <widget source="Title" text="" render="Label" transparent="1" zPosition="4" valign="center" position="55,12" size="190,30" font="OpenSans; 18" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" halign="left"/>
 
-        <widget name="text" zPosition="10" position="20,445" transparent="1" size="580,30" font="OpenSans; 18" backgroundColor="#212121" halign="left"/>
-        <widget name="input" zPosition="10" position="315,445" transparent="1" size="580,25" backgroundColor="#212121" font="OpenSans; 18"/>
+        <widget name="text" zPosition="10" position="20,445" transparent="1" size="610,30" font="OpenSans; 18" backgroundColor="#212121" halign="left"/>
+        <widget name="input" zPosition="10" position="355,445" transparent="1" size="580,25" backgroundColor="#212121" font="OpenSans; 18"/>
 
         <!-- mini-tv -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/frame-fs8.png" position="0,0" zPosition="11" size="1280,720" alphatest="blend" transparent="1"/>
