@@ -167,10 +167,13 @@ class DPH_HorizontalMenu(object):
 		elif count == 2:
 			self["-2"].hide()
 			self["-1"].hide()
+			self["+1"].show()
 			self["+2"].hide()
 
 		elif count == 3:
 			self["-2"].hide()
+			self["-1"].show()
+			self["+1"].show()
 			self["+2"].hide()
 
 		elif count == 4:
