@@ -166,20 +166,11 @@ class DPH_MultiColorFunctions(object):
 	def getColorFunction(self, color, level):
 		printl("", self, "S")
 
-		printl("", self, "C")
-		return self.colorFunctionContainer[color][level]
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def executeColorFunction(self, color, level):
-		printl("", self, "S")
-
 		# we put this into try because if there is no function registered it will come a gs
 		try:
-			eval(self.colorFunctionContainer[color][level][1])
+			return self.colorFunctionContainer[color][level][1]
 		except:
-			pass
+			return False
 
 		printl("", self, "C")
 

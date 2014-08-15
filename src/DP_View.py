@@ -624,7 +624,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyRed(self):
 		printl("", self, "S")
 
-		self.executeColorFunction("red", self.currentFunctionLevel)
+		func = self.getColorFunction("red", self.currentFunctionLevel)
+		if func:
+			func()
 
 		printl("", self, "C")
 
@@ -634,22 +636,22 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def initColorFunctions(self):
 		printl("", self, "S")
 
-		self.setColorFunction(color="red", level="1", functionList=("", "self.togglePlayMode()"))
-		self.setColorFunction(color="green", level="1", functionList=("", "self.toggleResumeMode()"))
-		self.setColorFunction(color="yellow", level="1", functionList=("", "self.executeLibraryFunction()")) # name is empty because we set it dynamical
-		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), "self.togglePlaybackMode()"))
+		self.setColorFunction(color="red", level="1", functionList=("", self.togglePlayMode))
+		self.setColorFunction(color="green", level="1", functionList=("", self.toggleResumeMode))
+		self.setColorFunction(color="yellow", level="1", functionList=("", self.executeLibraryFunction)) # name is empty because we set it dynamical
+		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), self.togglePlaybackMode))
 
-		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", "self.onToggleView()"))
-		self.setColorFunction(color="green", level="2", functionList=("", "self.toggleFastScroll()")) # name is empty because we set it dynamical
-		self.setColorFunction(color="yellow", level="2", functionList=("refresh Library", "self.initiateRefresh()"))
-		self.setColorFunction(color="blue", level="2", functionList=(_("show 'Details'"), "self.toggleDetails( )"))
+		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", self.onToggleView))
+		self.setColorFunction(color="green", level="2", functionList=("", self.toggleFastScroll)) # name is empty because we set it dynamical
+		self.setColorFunction(color="yellow", level="2", functionList=("refresh Library", self.initiateRefresh))
+		self.setColorFunction(color="blue", level="2", functionList=(_("show 'Details'"), self.toggleDetails))
 
-		self.setColorFunction(color="red", level="3", functionList=("Server Settings", "self.showServerSettings()"))
-		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", "self.showGeneralSettings()"))
+		self.setColorFunction(color="red", level="3", functionList=("Server Settings", self.showServerSettings))
+		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", self.showGeneralSettings))
 		self.setColorFunction(color="yellow", level="3", functionList=None)
 		self.setColorFunction(color="blue", level="3", functionList=None)
 
-		self.setColorFunction(color="red", level="4", functionList=("", "self.toggleFilterMode()")) # name is empty because we set it dynamical
+		self.setColorFunction(color="red", level="4", functionList=("", self.toggleFilterMode)) # name is empty because we set it dynamical
 		self.setColorFunction(color="green", level="4", functionList=None)
 		self.setColorFunction(color="yellow", level="4", functionList=None)
 		self.setColorFunction(color="blue", level="4", functionList=None)
@@ -874,7 +876,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyYellow(self):
 		printl("", self, "S")
 
-		self.executeColorFunction("yellow", self.currentFunctionLevel)
+		func = self.getColorFunction("yellow", self.currentFunctionLevel)
+		if func:
+			func()
 
 		printl("", self, "C")
 
@@ -892,7 +896,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		self.executeColorFunction("blue", self.currentFunctionLevel)
+		func = self.getColorFunction("blue", self.currentFunctionLevel)
+		if func:
+			func()
 
 		printl("", self, "C")
 
@@ -902,7 +908,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def onKeyGreen(self):
 		printl("", self, "S")
 
-		self.executeColorFunction("green", self.currentFunctionLevel)
+		func = self.getColorFunction("green", self.currentFunctionLevel)
+		if func:
+			func()
 
 		printl("", self, "C")
 
