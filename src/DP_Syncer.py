@@ -178,7 +178,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 	def __onClose(self):
 		printl("", self, "S")
 
-		self.mediaSyncerInfo.setCallbacks(None, None)
+		self.mediaSyncerInfo.setCallbacks(None, None, None)
 
 		printl("", self, "C")
 
