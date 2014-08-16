@@ -648,7 +648,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 
 		self.setColorFunction(color="red", level="3", functionList=("Server Settings", self.showServerSettings))
 		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", self.showGeneralSettings))
-		self.setColorFunction(color="yellow", level="3", functionList=None)
+		self.setColorFunction(color="yellow", level="3", functionList=(_("delete Medias"), self.deleteMedias))
 		self.setColorFunction(color="blue", level="3", functionList=None)
 
 		self.setColorFunction(color="red", level="4", functionList=("", self.toggleFilterMode)) # name is empty because we set it dynamical
@@ -657,6 +657,21 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		self.setColorFunction(color="blue", level="4", functionList=None)
 
 		self.alterColorFunctionNames(level="1")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def deleteMedias(self):
+		printl("", self, "S")
+		from os import remove
+
+		remove(self.whatPoster)
+		remove(self.whatBackdrop)
+
+		text = "Successfully removed images!"
+		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
