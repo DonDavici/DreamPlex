@@ -79,6 +79,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		self._session = session
 		self["output"] = ScrollLabel()
+		self["progress"] = Label()
 
 		# we use this counter to reset scorll label every x entries to stay responsive
 		self.counter = 0
@@ -145,7 +146,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 				return
 
 		printl("self.mediaSyncer: " + str(self.mediaSyncerInfo), self, "D")
-		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished)
+		self.mediaSyncerInfo.setCallbacks(self.callback_infos, self.callback_finished, self.callback_progress)
 		self.mediaSyncerInfo.setMode(self._mode)
 
 		if self.mediaSyncerInfo.isRunning():
@@ -297,6 +298,16 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 	#===========================================================================
 	#
 	#===========================================================================
+	def callback_progress(self, info):
+		printl("", self, "S")
+
+		self["progress"].setText(info)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def callback_finished(self):
 		printl("", self, "S")
 
@@ -361,6 +372,7 @@ class MediaSyncerInfo(object):
 
 		self.callback_infos = None
 		self.callback_finished = None
+		self.callback_progress = None
 		self.mode = None
 		self.serverConfig = None
 		self.plexInstance = None
@@ -376,6 +388,7 @@ class MediaSyncerInfo(object):
 		if not self.running:
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
 			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
+			self.backgroundMediaSyncer.ProgressPump.recv_msg.get().append(self.gotThreadProgressMsg)
 			self.backgroundMediaSyncer.setMode(self.mode)
 
 			if self.mode == "sync":
@@ -409,13 +422,27 @@ class MediaSyncerInfo(object):
 		printl("", self, "C")
 
 	#===========================================================================
+	# msg as second params is needed -. do not remove even if it is not used
+	# form outside!!!!
+	#===========================================================================
+	# noinspection PyUnusedLocal
+	def gotThreadProgressMsg(self, msg):
+		printl("", self, "S")
+
+		msg = self.backgroundMediaSyncer.Progress.pop()
+		self.progressCallBack(msg[1])
+
+		printl("", self, "C")
+
+	#===========================================================================
 	#
 	#===========================================================================
-	def setCallbacks(self, callback_infos, callback_finished):
+	def setCallbacks(self, callback_infos, callback_finished, callback_progress):
 		printl("", self, "S")
 
 		self.callback_infos = callback_infos
 		self.callback_finished = callback_finished
+		self.callback_progress = callback_progress
 
 		printl("", self, "C")
 
@@ -484,6 +511,18 @@ class MediaSyncerInfo(object):
 	#===========================================================================
 	#
 	#===========================================================================
+	def progressCallBack(self,text):
+		printl("", self, "S")
+
+		printl("Message: " + str(text), self, "D")
+		if text and self.callback_progress:
+			self.callback_progress(text)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def done(self):
 		printl("", self, "S")
 
@@ -530,6 +569,10 @@ class BackgroundMediaSyncer(Thread):
 		self.arg = None
 		self.messages = ThreadQueue()
 		self.messagePump = ePythonMessagePump()
+
+		self.progress = ThreadQueue()
+		self.progressPump = ePythonMessagePump()
+
 		self.running = False
 
 	#===========================================================================
@@ -549,6 +592,24 @@ class BackgroundMediaSyncer(Thread):
 
 		printl("", self, "C")
 		return self.messages
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getProgressPump(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.progressPump
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getProgressQueue(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.progress
 
 	#===========================================================================
 	#
@@ -595,6 +656,9 @@ class BackgroundMediaSyncer(Thread):
 	#===========================================================================
 	MessagePump = property(getMessagePump)
 	Message = property(getMessageQueue)
+
+	ProgressPump = property(getProgressPump)
+	Progress = property(getProgressQueue)
 
 	#===========================================================================
 	#
@@ -776,6 +840,7 @@ class BackgroundMediaSyncer(Thread):
 
 		# get sections from server
 		self.sectionList = self.plexInstance.getAllSections()
+		self.sectionCount=len(self.sectionList)
 		printl("sectionList: "+ str(self.sectionList),self, "D")
 
 		# get servername
@@ -783,6 +848,15 @@ class BackgroundMediaSyncer(Thread):
 
 		# prepare variants
 		self.prepareMediaVariants()
+
+		self.movieCount = 0
+		self.showCount = 0
+		self.seasonCount = 0
+		self.episodeCount = 0
+		self.artistCount = 0
+		self.albumCount = 0
+
+		contentQueue = {"movies": list(), "shows": list(),"seasons": list(),"episodes": list(),"artists": list(),"albums": list()}
 
 		try:
 			msg_text = _("\n\nReading section of the server ...")
@@ -804,8 +878,11 @@ class BackgroundMediaSyncer(Thread):
 
 						printl("movieUrl: " + str(movieUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
+						self.movieCount += len(library)
 
-						self.syncThrougMediaLibrary(library, myType="Movie")
+						contentQueue["movies"].append(library)
+
+						#self.syncThrougMediaLibrary(library, myType="Movie")
 
 				if self.serverConfig.syncShows.value:
 					if section[2] == "showEntry":
@@ -817,8 +894,9 @@ class BackgroundMediaSyncer(Thread):
 
 						printl("showUrl: " + str(showUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
-
-						self.syncThrougMediaLibrary(library, myType="Show")
+						self.showCount += len(library)
+						contentQueue["shows"].append(library)
+						#self.syncThrougMediaLibrary(library, myType="Show")
 
 						for seasons in library:
 							if self.cancel:
@@ -828,8 +906,9 @@ class BackgroundMediaSyncer(Thread):
 							seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
 							printl("seasonsUrl: " + str(seasonsUrl), self, "D")
 							library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
-
-							self.syncThrougMediaLibrary(library, myType="Season")
+							self.seasonCount += len(library)
+							contentQueue["seasons"].append(library)
+							#self.syncThrougMediaLibrary(library, myType="Season")
 
 							for episodes in library:
 								if self.cancel:
@@ -839,8 +918,9 @@ class BackgroundMediaSyncer(Thread):
 								episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
 								printl("episodesUrl: " + str(episodesUrl), self, "D")
 								library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
-
-								self.syncThrougMediaLibrary(library, myType="Episode")
+								self.episodeCount += len(library)
+								contentQueue["episodes"].append(library)
+								#self.syncThrougMediaLibrary(library, myType="Episode")
 
 				if self.serverConfig.syncMusic.value:
 					if section[2] == "musicEntry":
@@ -854,16 +934,45 @@ class BackgroundMediaSyncer(Thread):
 
 						printl("url: " + str(url), self, "D")
 						library, mediaContainer = self.plexInstance.getMusicByArtist(url)
-
-						self.syncThrougMediaLibrary(library, myType="Music")
+						self.artistCount += len(library)
+						contentQueue["artists"].append(library)
+						#self.syncThrougMediaLibrary(library, myType="Music")
 
 						# now we go through the albums
 						url = section[3]["contentUrl"] + "/albums"
 
 						printl("url: " + str(url), self, "D")
 						library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
+						self.albumCount += len(library)
+						contentQueue["albums"].append(library)
+						#self.syncThrougMediaLibrary(library, myType="Albums")
 
-						self.syncThrougMediaLibrary(library, myType="Albums")
+			print "sectionCount " + str(self.sectionCount)
+			print "movieCount " + str(self.movieCount)
+			print "showCount  " + str(self.showCount)
+			print "seasonCount " + str(self.seasonCount)
+			print "episodeCount " + str(self.episodeCount)
+			print "artistCount "  + str(self.artistCount)
+			print "albumCount " + str(self.albumCount)
+
+			for library in contentQueue["movies"]:
+				self.syncThrougMediaLibrary(library, myType="Movie")
+
+			for library in contentQueue["shows"]:
+				self.syncThrougMediaLibrary(library, myType="Show")
+
+			for library in contentQueue["seasons"]:
+				self.syncThrougMediaLibrary(library, myType="Season")
+
+			for library in contentQueue["episodes"]:
+				self.syncThrougMediaLibrary(library, myType="Episode")
+
+			for library in contentQueue["artists"]:
+				self.syncThrougMediaLibrary(library, myType="Music")
+
+			for library in contentQueue["albums"]:
+				self.syncThrougMediaLibrary(library, myType="Albums")
+
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
@@ -947,6 +1056,45 @@ class BackgroundMediaSyncer(Thread):
 						self.messages.push((THREAD_WORKING, msg_text))
 						self.messagePump.send(0)
 						self.downloadMedia(media[1]["thumb"], location, t_width, t_height)
+
+			self.decreaseQueueCount(myType=myType)
+
+			msg_text = "Movies: " + str(self.movieCount) + "\n" + "Shows: " + str(self.showCount)\
+						+ "\n" + "Seasons: " + str(self.seasonCount) + "\n" + "Episodes: " + str(self.episodeCount) \
+						+ "\n" + "Artists: " + str(self.artistCount) + "\n" + "Albums: " + str(self.albumCount)
+			self.progress.push((THREAD_WORKING, msg_text))
+			self.progressPump.send(0)
+
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def decreaseQueueCount(self, myType):
+		printl("", self, "S")
+
+		if myType == "Movie":
+			self.movieCount -= 1
+
+		elif myType == "Show":
+			self.showCount -= 1
+
+		elif myType == "Season":
+			self.seasonCount -= 1
+
+		elif myType == "Episode":
+			self.episodeCount -= 1
+
+		elif myType == "Music":
+			self.artistCount -= 1
+
+		elif myType == "Albums":
+			self.albumCount -= 1
+
+		else:
+			raise Exception
+
 
 		printl("", self, "C")
 

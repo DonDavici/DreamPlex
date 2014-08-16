@@ -294,6 +294,7 @@
 
         <!-- settings -->
         <widget name="output" zPosition="99" position="630,80" size="670,450" font="OpenSans; 18" backgroundColor="#212121" foregroundColor="#ffffff" transparent="1" />
+        <widget name="progress" zPosition="99" position="30,440" size="670,300" font="OpenSans; 18" backgroundColor="#212121" foregroundColor="#ffffff" transparent="1" />
 
         <!-- mini-tv -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/frame-fs8.png" position="0,0" zPosition="11" size="1280,720" alphatest="blend" transparent="1"/>
