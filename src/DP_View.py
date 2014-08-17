@@ -1843,7 +1843,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 	def stopBackdropVideo(self):
 		printl("", self, "S")
 
-		if self.loadedStillPictureLib and self.usedStillPicture:
+		if self.loadedStillPictureLib:
 			# stop the m1v playback to avoid blocking the playback of the movie
 			self["stillPicture"].finishStillPicture()
 
