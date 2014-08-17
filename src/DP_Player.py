@@ -248,22 +248,22 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		printl("result: " + str(result), self, "D")
 
-		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
+		mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
+		printl("We have selected media at " + mediaFileUrl, self, "I")
 
-		self.buildPlayerData()
+		self.buildPlayerData(mediaFileUrl)
 
-		printl("We have selected media at " + self.mediaFileUrl, self, "I")
 		printl("", self, "C")
 
 	#===============================================================================
 	#
 	#===============================================================================
-	def buildPlayerData(self):
+	def buildPlayerData(self, mediaFileUrl):
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().setPlaybackType(str(self.playbackMode))
 
-		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
+		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, mediaFileUrl)
 
 		# populate addional data
 		self.setPlayerData()
