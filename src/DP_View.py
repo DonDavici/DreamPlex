@@ -1763,6 +1763,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 						printl("no", self, "D")
 						self["miniTv"].hide()
 						self["backdrop"].show()
+
+						self["stillPicture"].finishStillPicture()
+
 						# if not handle as normal backdrop
 						self.handleBackdrop()
 
