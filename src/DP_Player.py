@@ -283,7 +283,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.playerData[self.currentIndex]['fallback']:
 			message = _("Sorry I didn't find the file on the provided locations")
-			locations = _("Location:") + "\n " + self.playerData[0]['locations']
+			locations = _("Location:") + "\n " + self.playerData[self.currentIndex]['locations']
 			suggestion = _("Please verify you direct local settings")
 			fallback = _("I will now try to play the file via transcode.")
 
