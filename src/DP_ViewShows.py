@@ -216,9 +216,6 @@ class DPS_ViewShows(DP_View):
 		# the lastTagType will be reset every time we switch to another view step
 		self.lastTagType = None
 
-		# this helps us to restore pictures in the step before
-		self.leaving = True
-
 		# we do the refresh here to be able to handle directory content
 		self.refresh()
 

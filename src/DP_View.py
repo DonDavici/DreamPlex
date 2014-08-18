@@ -1346,10 +1346,9 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 				self.context	= self.selection[2]
 
 			if self.viewStep >= 1:
-				self.leaving = True
-			else:
-				self.setTitle(self.myTitle)
 				self.leaving = False
+			else:
+				self.leaving = True
 		else:
 			self.leaveNow()
 
