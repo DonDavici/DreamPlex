@@ -41,12 +41,12 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_
 from DPH_Singleton import Singleton
 from DP_ViewFactory import getViews
 
-from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
+from __common__ import getVersion, registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 #===============================================================================
 #
 #===============================================================================
-version = "0.1"
+version = getVersion()
 source = "feed" # other option is "ipk"
 
 
@@ -101,15 +101,6 @@ config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultP
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
-
-#===============================================================================
-# 
-#===============================================================================
-def getVersion():
-	printl("", "__init__::getVersion", "S")
-
-	printl("", "__init__::getVersion", "C")
-	return version
 
 #===============================================================================
 # 

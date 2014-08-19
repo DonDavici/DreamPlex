@@ -55,6 +55,7 @@ except ImportError:
 #===============================================================================
 # CONSTANTS
 #===============================================================================
+version = "0.1"
 gBoxType = None
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
@@ -138,6 +139,15 @@ def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
 
 		else:
 			print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
+
+#===============================================================================
+#
+#===============================================================================
+def getVersion():
+	#printl2("", "__common__::getVersion", "S")
+
+	#rintl2("", "__common__::getVersion", "C")
+	return version
 
 #===============================================================================
 # 
@@ -735,29 +745,34 @@ def isValidSize(size):
 #===========================================================================
 #
 #===========================================================================
-def getPlexHeader(g_sessionID, asString = True):
+def getPlexHeader(g_sessionID, asDict = True):
 	printl2("", "__common__::getPlexHeader", "S")
 
 	boxData = getBoxInformation()
 
-	if asString:
-		plexHeader={'X-Plex-Platform': "Enigma2",
+	if asDict:
+		plexHeader={'X-Plex-Platform': boxData[2],
 					'X-Plex-Platform-Version': boxData[3],
 					'X-Plex-Provides': "player",
 					'X-Plex-Product': "DreamPlex",
-					'X-Plex-Version': "1",
+					'X-Plex-Version': getVersion(),
 					'X-Plex-Device': boxData[0],
+					#'X-Plex-Device-Name': 'DDiPhone',
+					'X-Plex-Model': boxData[1],
 					'X-Plex-Client-Identifier': g_sessionID,
-					'X-Plex-Device-Name': boxData[1]}
+					'X-Plex-Client-Platform': "Enigma2"}
 	else:
 		plexHeader = []
-		plexHeader.append('X-Plex-Platform: Enigma2')
-		plexHeader.append('X-Plex-Platform-Version: ' + boxData[3])
-		plexHeader.append('X-Plex-Provides: player')
-		plexHeader.append('X-Plex-Product: DreamPlex')
-		plexHeader.append('X-Plex-Version: 1')
-		plexHeader.append('X-Plex-Device: ' +  boxData[0])
-		plexHeader.append('X-Plex-Client-Identifier: ' + g_sessionID)
+		plexHeader.append('X-Plex-Platform=' + boxData[2]) # arch
+		plexHeader.append('X-Plex-Platform-Version=' + boxData[3]) # version
+		plexHeader.append('X-Plex-Provides=player')
+		plexHeader.append('X-Plex-Product=DreamPlex')
+		plexHeader.append('X-Plex-Version=' + getVersion())
+		plexHeader.append('X-Plex-Device=' +  boxData[0]) # manu
+		#plexHeader.append("X-Plex-Device-Name=DDiPhone")
+		plexHeader.append("X-Plex-Model=" + boxData[1]) # model
+		plexHeader.append('X-Plex-Client-Identifier=' + g_sessionID)
+		plexHeader.append("X-Plex-Client-Platform=Enigma2")
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
