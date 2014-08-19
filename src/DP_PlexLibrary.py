@@ -1110,7 +1110,7 @@ class PlexLibrary(Screen):
 		base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
 		token = None
 
-		myplex_header = getPlexHeader(self.g_sessionID, asString=False)
+		myplex_header = getPlexHeader(self.g_sessionID, asDictW=False)
 		myplex_header.append('Authorization: Basic ' + base64string)
 
 		printl( "Starting auth request", self, "I")
@@ -2342,7 +2342,6 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def transcode(self, myID, url):
 		printl("", self, "S")
-		# todo try to add here header as well
 		server=self.getServerFromURL(url)
 
 		#Check for myplex user, which we need to alter to a master server
@@ -2353,9 +2352,9 @@ class PlexLibrary(Screen):
 
 		filename= '/'.join(url.split('/')[3:])
 
-		#These are the DEV API keys - may need to change them on release
-		publicKey="KQMIY6GATPC63AIMC4R2" #self.pKey
-		privateKey = "k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0="  #pac
+		# https://blog.plex.tv/2010/12/24/happy-holidays-from-plex/
+		publicKey="KQMIY6GATPC63AIMC4R2"
+		privateKey = "k3U6GLkZOoNIoSgjDshPErvqMIFdE0xMTx8kgsrhnC0="
 
 		streamURL = ""
 		transcode = []
@@ -2378,20 +2377,10 @@ class PlexLibrary(Screen):
 			transcode.append("subtitleSize=100")
 			transcode.append("audioBoost=100")
 			transcode.append("waitForSegments=1")
-			transcode.append("X-Plex-Device=iPhone")
-			transcode.append("X-Plex-Client-Platform=iOS")
-			transcode.append("X-Plex-Device-Name=DDiPhone")
-			transcode.append("X-Plex-Model=5%2C2")
-			transcode.append("X-Plex-Platform=iOS")
-			transcode.append("X-Plex-Client-Identifier=%s" % self.g_sessionID)
-			transcode.append("X-Plex-Product=Plex%2FiOS")
-			transcode.append("X-Plex-Platform-Version=6.1.2")
-			transcode.append("X-Plex-Version=3.1.3")
-			timestamp = "@%d" % ts
+
 			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
-			streamParams += self.get_uTokenForServer(server)
-			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
-			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
+
+			streamURL += "http://%s/%s" % (server, streamParams)
 			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
 		else:
 			printl("Setting up HTTP Stream", self, "I")
@@ -2408,15 +2397,26 @@ class PlexLibrary(Screen):
 			transcode.append("3g=0")
 			transcode.append("httpCookies=")
 			transcode.append("userAgent=")
-			timestamp = "@%d" % ts
 			streamParams = "%s/%s?%s" % (streamPath, streamFile, "&".join(transcode))
-			pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
-			streamURL += "http://%s/%s&X-Plex-Client-Capabilities=%s&X-Plex-Access-Key=%s&X-Plex-Access-Time=%d&X-Plex-Access-Code=%s" % (server, streamParams, self.g_capability, publicKey, ts, pac)
+
+			streamURL += "http://%s/%s" % (server, streamParams)
 			printl("Encoded HTTP Stream URL: " + str(streamURL), self, "I")
 
-		req = Request(streamURL)
-		#req.add_header('X-Plex-Client-Capabilities', self.g_capability)
-		#printl ("Telling the server we can accept: " + str(self.g_capability), self, "I")
+		timestamp = "@%d" % ts
+		pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
+
+		req = Request(streamURL, headers=getPlexHeader(asDict=False))
+		req.add_header('X-Plex-Client-Capabilities', self.g_capability)
+		req.add_header('X-Plex-Access-Key', publicKey)
+		req.add_header('X-Plex-Access-Time', ts)
+		req.add_header('X-Plex-Access-Code', pac)
+
+		try:
+			tokenData = self.get_hTokenForServer(server)
+			req.add_header("X-Plex-Token", tokenData["X-Plex-Token"])
+		except Exception:
+			pass
+
 		resp = urlopen(req)
 		if resp is None:
 			raise IOError, "No response from Server"
