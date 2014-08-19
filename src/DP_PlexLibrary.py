@@ -2405,7 +2405,7 @@ class PlexLibrary(Screen):
 		timestamp = "@%d" % ts
 		pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
 
-		req = Request(streamURL, headers=getPlexHeader(asDict=False))
+		req = Request(streamURL, headers=getPlexHeader(self.g_sessionID, asDict=False))
 		req.add_header('X-Plex-Client-Capabilities', self.g_capability)
 		req.add_header('X-Plex-Access-Key', publicKey)
 		req.add_header('X-Plex-Access-Time', ts)

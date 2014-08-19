@@ -49,7 +49,6 @@ from __common__ import getVersion, registerPlexFonts, loadPlexSkin, checkPlexEnv
 version = getVersion()
 source = "feed" # other option is "ipk"
 
-
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultSkinsFolderPath	= resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/skins")
 defaultLogFolderPath    = "/tmp/"
