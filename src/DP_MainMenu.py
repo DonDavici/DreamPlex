@@ -30,7 +30,6 @@ from Components.Sources.StaticText import StaticText
 from Components.config import config
 
 from Screens.MessageBox import MessageBox
-from Screens.Screen import Screen
 
 from DP_PlexLibrary import PlexLibrary
 from DP_SystemCheck import DPS_SystemCheck
@@ -43,7 +42,7 @@ from DP_Syncer import DPS_Syncer
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
-from DPH_ScreenHelper import DPH_ScreenHelper
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
 
 from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
 from __plugin__ import Plugin
@@ -52,7 +51,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
+class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 	g_horizontal_menu = False
 
@@ -70,8 +69,9 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	def __init__(self, session, allowOverride=True):
 		printl("", self, "S")
-		Screen.__init__(self, session)
+		DPH_Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
+
 		self.allowOverride = allowOverride
 
 		self.selectionOverride = None
@@ -89,7 +89,7 @@ class DPS_MainMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self["menu"]= List(enableWrapAround=True)
 
-		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions", 
+		self["actions"] = HelpableActionMap(self, "DP_MainMenuActions",
 			{
 				"ok":		(self.okbuttonClick, ""),
 				"left":		(self.left, ""),

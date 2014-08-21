@@ -27,6 +27,10 @@
 		<key id="KEY_GREEN" mapto="green" flags="b" />
         <key id="KEY_MENU" mapto="menu" flags="m" />
 	</map>
+
+    <map context="DP_PluginCloser">
+        <key id="KEY_STOP" mapto="stop" flags="m" />
+    </map>
 	
 	<map context="DPS_Settings">
 		<key id="KEY_CHANNELUP" mapto="bouquet_up" flags="m" />

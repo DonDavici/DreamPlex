@@ -39,7 +39,6 @@ from Components.Sources.List import List
 from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
-from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
 from Tools.Directories import fileExists
@@ -56,7 +55,7 @@ from DP_Server import DPS_Server
 
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
-from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
 from __common__ import printl2 as printl, loadPicture, durationToTime
@@ -66,7 +65,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextInput):
+class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextInput):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -143,7 +142,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 		@return:
 		"""
 		printl("", self, "S")
-		Screen.__init__(self, viewClass)
+		DPH_Screen.__init__(self, viewClass)
 		DPH_ScreenHelper.__init__(self, forceMiniTv= True)
 		DPH_MultiColorFunctions.__init__(self)
 		NumericalTextInput.__init__(self)
@@ -198,7 +197,7 @@ class DP_View(Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextIn
 			"red":			(self.onKeyRed, ""),
 			"yellow":		(self.onKeyYellow, ""),
 			"blue":			(self.onKeyBlue, ""),
-			"green":		(self.onKeyGreen, ""),
+			"green":		(self.closePlugin, ""),
 			"text":			(self.onKeyText, ""),
 			"red_long":		(self.onKeyRedLong, ""),
 			"yellow_long":	(self.onKeyYellowLong, ""),

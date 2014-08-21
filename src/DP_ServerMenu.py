@@ -29,13 +29,12 @@ from Components.Sources.StaticText import StaticText
 from Components.config import config
 
 from Screens.MessageBox import MessageBox
-from Screens.Screen import Screen
 
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
-from DPH_ScreenHelper import DPH_ScreenHelper
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
 
 from __common__ import printl2 as printl
 from __plugin__ import Plugin
@@ -44,7 +43,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
+class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 	g_horizontal_menu = False
 
@@ -65,8 +64,9 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	def __init__(self, session, g_serverConfig ):
 		printl("", self, "S")
-		Screen.__init__(self, session)
+		DPH_Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
+
 
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
@@ -95,6 +95,7 @@ class DPS_ServerMenu(Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
 			    "red":		(self.onKeyRed, ""),
+			    "green":    (self.closePlugin, ""),
 			}, -2)
 
 		self.onLayoutFinish.append(self.finishLayout)

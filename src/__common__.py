@@ -57,6 +57,7 @@ except ImportError:
 #===============================================================================
 version = "0.1"
 gBoxType = None
+screens = []
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
@@ -645,7 +646,6 @@ def writeXmlContent(content, location):
 
 	printl2("", "__common__::getXmlContent", "C")
 
-
 #===========================================================================
 # 
 #===========================================================================
@@ -741,6 +741,32 @@ def isValidSize(size):
 
 	printl2("", "__common__::isValidSize", "C")
 	return valid, result
+
+#===========================================================================
+#
+#===========================================================================
+def addNewScreen(screen):
+	printl2("", "__common__::addNewScreen", "S")
+
+	screens.append(screen)
+
+	printl2("", "__common__::addNewScreen", "C")
+
+#===========================================================================
+#
+#===========================================================================
+def closePlugin():
+	printl2("", "__common__::closePlugin", "S")
+
+	for screen in screens:
+		try:
+			screen.close()
+		except Exception:
+			# TODO check for memory usage if we are really free after close
+			# this could take place if the screen was closed already manually
+			pass
+
+	printl2("", "__common__::closePlugin", "C")
 
 #===========================================================================
 #

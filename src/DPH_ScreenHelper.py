@@ -22,18 +22,21 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from Components.config import config
 from enigma import eSize, getDesktop
 
+from Components.config import config
+from Components.ActionMap import HelpableActionMap
 from Components.VideoWindow import VideoWindow
 from Components.Label import Label
 from Components.Label import MultiColorLabel
+
+from Screens.Screen import Screen
 
 from skin import parseColor
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, addNewScreen, closePlugin
 
 #===============================================================================
 #
@@ -43,7 +46,7 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def __init__(self, width=None, height=None, forceMiniTv=False):
+	def __init__(self, forceMiniTv=False):
 		printl("", self, "S")
 
 		self.stopLiveTvOnStartup = config.plugins.dreamplex.stopLiveTvOnStartup.value
@@ -52,9 +55,6 @@ class DPH_ScreenHelper(object):
 		self.forceMiniTv = forceMiniTv
 
 		if not self.stopLiveTvOnStartup or self.forceMiniTv:
-			# if width is None and height is None:
-			# 	self["miniTv"] = VideoWindow(decoder=0)
-			# else:
 			self["miniTv"] = VideoWindow(decoder=0)
 			self.miniTvInUse = True
 		else:
@@ -231,3 +231,35 @@ class DPH_MultiColorFunctions(object):
 				self["L" + str(i)].setForegroundColorNum(1)
 
 		printl("", self, "C")
+
+
+#===============================================================================
+#
+#===============================================================================
+class DPH_Screen(Screen):
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def __init__(self, session):
+
+		Screen.__init__(self, session)
+
+		self["globalActions"] = HelpableActionMap(self, "DP_PluginCloser",
+			{
+			    "stop":    (self.closePlugin, ""),
+			}, -2)
+
+		self.onLayoutFinish.append(self.addNewScreen)
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def addNewScreen(self):
+		addNewScreen(self)
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def closePlugin(self):
+		closePlugin()
