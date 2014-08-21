@@ -93,27 +93,32 @@ class DPH_HorizontalMenu(object):
 		content = self["menu"].list
 		count = len(content)
 
-		self[self.translatePositionToName(0)].setText(content[currentIndex][0])
+		try:
+			self[self.translatePositionToName(0)].setText(content[currentIndex][0])
+
+			for i in range(1,(self.depth+1)):
+				targetIndex = currentIndex + i
+				if targetIndex < count:
+					self[self.translatePositionToName(+i)].setText(content[targetIndex][0])
+				else:
+					firstResult = targetIndex - count
+					printl("firstResult: " + str(firstResult), self, "D")
+					if firstResult >= count:
+						firstResult = currentIndex
+
+					self[self.translatePositionToName(+i)].setText(content[firstResult][0])
+
+				targetIndex = currentIndex - i
+				if targetIndex >= 0:
+					self[self.translatePositionToName(-i)].setText(content[targetIndex][0])
+				else:
+					secondResult = count + targetIndex
+					printl("secondResult: " + str(secondResult), self, "D")
+					self[self.translatePositionToName(-i)].setText(content[secondResult][0])
+		except Exception:
+			self[self.translatePositionToName(0)].setText(_("no Data"))
+
 		self[self.translatePositionToName(0)].setForegroundColorNum(0)
-		for i in range(1,(self.depth+1)):
-			targetIndex = currentIndex + i
-			if targetIndex < count:
-				self[self.translatePositionToName(+i)].setText(content[targetIndex][0])
-			else:
-				firstResult = targetIndex - count
-				printl("firstResult: " + str(firstResult), self, "D")
-				if firstResult >= count:
-					firstResult = currentIndex
-
-				self[self.translatePositionToName(+i)].setText(content[firstResult][0])
-
-			targetIndex = currentIndex - i
-			if targetIndex >= 0:
-				self[self.translatePositionToName(-i)].setText(content[targetIndex][0])
-			else:
-				secondResult = count + targetIndex
-				printl("secondResult: " + str(secondResult), self, "D")
-				self[self.translatePositionToName(-i)].setText(content[secondResult][0])
 
 		self.hideUnusedElementsFromMenu(count)
 
