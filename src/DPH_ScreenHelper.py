@@ -242,6 +242,7 @@ class DPH_Screen(Screen):
 	#
 	#===============================================================================
 	def __init__(self, session):
+		printl("", self, "S")
 
 		Screen.__init__(self, session)
 
@@ -252,14 +253,24 @@ class DPH_Screen(Screen):
 
 		self.onLayoutFinish.append(self.addNewScreen)
 
+		printl("", self, "C")
+
 	#===============================================================================
 	#
 	#===============================================================================
 	def addNewScreen(self):
+		printl("", self, "S")
+
 		addNewScreen(self)
+
+		printl("", self, "C")
 
 	#===============================================================================
 	#
 	#===============================================================================
 	def closePlugin(self):
+		printl("", self, "S")
+
 		closePlugin()
+
+		printl("", self, "C")
