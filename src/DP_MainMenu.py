@@ -287,7 +287,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			printl("restoring liveTv", self, "D")
 			self.session.nav.playService(self.currentService)
 
-		self.close((True,) )
+		self.closePlugin()
 
 		printl("", self, "C")
 

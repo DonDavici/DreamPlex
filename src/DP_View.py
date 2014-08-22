@@ -1363,8 +1363,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self.stopBackdropVideo()
 
 		if self.currentService is not None:
-			printl("restoring liveTv", self, "D")
-			self.session.nav.playService(self.currentService)
+			self.restoreLiveTv()
 
 		if cause is not None:
 			printl("", self, "C")
@@ -1832,18 +1831,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.refreshTimer = eTimer()
 		self.refreshTimer.callback.append(self.showBackdrop)
 		self.refreshTimer.start(500, True)
-
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def stopBackdropVideo(self):
-		printl("", self, "S")
-
-		if self.loadedStillPictureLib:
-			# stop the m1v playback to avoid blocking the playback of the movie
-			self["stillPicture"].finishStillPicture()
 
 		printl("", self, "C")
 
@@ -2799,5 +2786,43 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self["listview"].setList(self.listViewList)
 
 		self.refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def closePlugin(self):
+		printl("", self, "S")
+
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
+
+		if self.currentService is not None:
+			self.restoreLiveTv()
+
+		super(DP_View,self).closePlugin()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def restoreLiveTv(self):
+		printl("", self, "S")
+
+		printl("restoring liveTv", self, "D")
+		self.session.nav.playService(self.currentService)
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def stopBackdropVideo(self):
+		printl("", self, "S")
+
+		# stop the m1v playback to avoid blocking the playback of the movie
+		self["stillPicture"].finishStillPicture()
 
 		printl("", self, "C")
