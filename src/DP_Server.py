@@ -369,10 +369,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.setKeyNames()
 
-		if self.newmode == 0:
-			# now that we know the server we establish global plexInstance
-			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -607,6 +603,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	#===========================================================================
 	def keyBlue(self):
 		printl("", self, "S")
+
+		# now that we know the server we establish global plexInstance
+		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
 
 		token = self.plexInstance.getNewMyPlexToken()
 
