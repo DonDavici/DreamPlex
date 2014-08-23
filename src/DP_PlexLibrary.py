@@ -821,7 +821,7 @@ class PlexLibrary(Screen):
 		self.g_myplex_password = self.g_serverConfig.myplexPassword.value
 		self.g_myplex_url	  = self.g_serverConfig.myplexUrl.value
 
-		if self.serverConfig_myplexToken == "" or self.g_serverConfig.renewMyplexToken.value == True:
+		if self.serverConfig_myplexToken == "":
 			printl("serverconfig: " + str(self.g_serverConfig), self, "D")
 			self.serverConfig_myplexToken = self.getNewMyPlexToken()
 
@@ -1156,10 +1156,6 @@ class PlexLibrary(Screen):
 			self.g_serverConfig.myplexTokenUsername.save()
 			self.g_serverConfig.myplexToken.value = self.serverConfig_myplexToken
 			self.g_serverConfig.myplexToken.save()
-
-		#lets change back renew token to false
-		self.g_serverConfig.renewMyplexToken.value = False
-		self.g_serverConfig.renewMyplexToken.save()
 
 		printl ("token: " + token, self, "D", True, 8)
 		printl("", self, "C")
