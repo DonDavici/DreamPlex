@@ -95,6 +95,9 @@ def getViews(libraryName):
 	if libraryName == "movies":
 		availableViewList = getViewsFromSkinParams("movieView")
 
+	elif libraryName == "mixed":
+		availableViewList = getViewsFromSkinParams("mixedView")
+
 	elif libraryName == "shows":
 		availableViewList = getViewsFromSkinParams("showView")
 
@@ -120,6 +123,13 @@ def getViewsFromSkinParams(myType):
 	if myType == "movieView":
 		myFile = "DP_ViewMovies"
 		defaultParams = getMovieViewDefaults()
+
+	elif myType == "mixedView":
+		myFile = "DP_ViewMixed"
+		defaultParams = getMovieViewDefaults()
+		# todo maybe we extend for our own definition
+		# we rewrite to movieView because we use it for now as reference
+		myType = "movieView"
 
 	elif myType == "showView":
 		myFile = "DP_ViewShows"

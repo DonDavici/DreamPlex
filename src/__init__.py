@@ -284,6 +284,7 @@ def loadPlexPlugins():
 	from DP_LibMovies import DP_LibMovies
 	from DP_LibShows import DP_LibShows
 	from DP_LibMusic import DP_LibMusic
+	from DP_LibMixed import DP_LibMixed
 	from __plugin__ import registerPlugin, Plugin
 
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
@@ -294,6 +295,9 @@ def loadPlexPlugins():
 
 	printl("registering ... music", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
+
+	printl("registering ... mixed", "__init__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="mixed", name=_("Mixed"), start=DP_LibMixed, where=Plugin.MENU_MIXED))
 
 	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
 	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibPictures, where=Plugin.MENU_PICTURES))

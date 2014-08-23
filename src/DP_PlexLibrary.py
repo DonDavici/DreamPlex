@@ -352,14 +352,14 @@ class PlexLibrary(Screen):
 		onDeck["type"] = "movie"
 		onDeck["currentViewMode"] = "movie"
 		onDeck["nextViewMode"] = "movie"
-		fullList.append((_("onDeck"), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", onDeck))
+		fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
 		recentlyAdded = dict()
 		recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
 		recentlyAdded["type"] = "movie"
 		recentlyAdded["currentViewMode"] = "movie"
 		recentlyAdded["nextViewMode"] = "movie"
-		fullList.append((_("New"), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", recentlyAdded))
+		fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
 
 		if config.plugins.dreamplex.useCache.value:
 			self.saveSectionCache()
