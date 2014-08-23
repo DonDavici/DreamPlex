@@ -244,6 +244,9 @@ class DP_LibMain(Screen):
 		elif nextViewMode == "movie" or (currentViewMode == "ShowMovies" and nextViewMode == "ShowDirectory"):
 			library, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
 
+		elif nextViewMode == "mixed":
+			library, mediaContainer = Singleton().getPlexInstance().getMixedContentFromSection(url)
+
 		# SHOWS
 		elif nextViewMode == "show":
 			library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)

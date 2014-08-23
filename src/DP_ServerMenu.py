@@ -382,10 +382,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def getServerData(self, filterBy=None):
 		printl("", self, "S")
 
-		summerize = config.plugins.dreamplex.summerizeSections.value
-
-		if summerize and filterBy is None:
-			serverData = self.getSectionTypes()
+		if config.plugins.dreamplex.summerizeSections.value and filterBy is None:
+			serverData = self.plexInstance.getSectionTypes()
 		else:
 			serverData = self.plexInstance.getAllSections(filterBy)
 
@@ -428,26 +426,3 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getSectionTypes(self):
-		printl("", self, "S")
-
-		fullList = []
-		entryData = {}
-		fullList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", entryData))
-		fullList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,entryData))
-		fullList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", entryData))
-		#fullList.append((_("OnDeck"), Plugin.MENU_MOVIES, "movieEntry", entryData))
-
-		extend = False # SWITCH
-
-		if extend:
-			fullList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", entryData))
-			fullList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", entryData))
-
-		printl("mainMenuList: " + str(fullList), self, "D")
-		printl("", self, "C")
-		return fullList

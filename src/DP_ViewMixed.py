@@ -64,56 +64,102 @@ class DPS_ViewMixed(DP_View):
 		# we use this for filtermode at startup
 		self.filterableContent = True
 
-		# handle pictures
-		self.changeBackdrop = True
-		self.changePoster = True
+		if self.details.get("type") == "movie" or self.details.get("type") == "episode":
+			# handle pictures
+			self.changeBackdrop = True
+			self.changePoster = True
 
-		if "ratingKey" in self.details:
-			self.pname = self.details["ratingKey"]
-			self.bname = self.details["ratingKey"]
+			if "ratingKey" in self.details:
+				self.pname = self.details["ratingKey"]
+				self.bname = self.details["ratingKey"]
+			else:
+				self.pname = "temp"
+				self.bname = "temp"
+
+			# handle content
+			self["title"].setText(encodeThat(self.details.get("title", " ")))
+			self["tag"].setText(encodeThat(self.details.get("tagline", " ")))
+			self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
+			self["cast"].setText(encodeThat(self.details.get("cast", " ")))
+			self["writer"].setText(encodeThat(self.details.get("writer", " ")))
+			self["director"].setText(encodeThat(self.details.get("director", " ")))
+			self["studio"].setText(encodeThat(self.details.get("studio", " ")))
+			self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
+			self["year"].setText(str(self.details.get("year", " - ")))
+
+			# technical details
+			self.mediaDataArr = self.details["mediaDataArr"][0]
+			self.parts = self.mediaDataArr["Parts"][0]
+
+			self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
+			self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+			self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
+			self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+			self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
+			self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
+			self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+			self["file"].setText(encodeThat(self.parts.get("file", " - ")))
+
+			if self.fastScroll == False or self.showMedia == True:
+				# handle all pixmaps
+				self.handlePopularityPixmaps()
+				self.handleCodecPixmaps()
+				self.handleAspectPixmaps()
+				self.handleResolutionPixmaps()
+				self.handleRatedPixmaps()
+				self.handleSoundPixmaps()
+
+			# final sets
+			self.setDuration()
+			self.setMediaFunctions()
+
+		elif self.details.get("type") == "season":
+			# handle pictures
+			self.changeBackdrop = True
+			self.changePoster = True
+
+			if "ratingKey" in self.details:
+				self.pname = self.details["ratingKey"]
+				self.bname = self.details["ratingKey"]
+			else:
+				self.pname = "temp"
+				self.bname = "temp"
+
+			self["title"].setText(encodeThat(self.details.get("title", " ")))
+			self["tag"].setText(encodeThat(self.details.get("tagline", " ")))
+			self["shortDescription"].setText(encodeThat(self.details.get("parentSummary", " ")))
+			self["cast"].setText(encodeThat(self.details.get("cast", " ")))
+			self["writer"].setText(encodeThat(self.details.get("writer", " ")))
+			self["director"].setText(encodeThat(self.details.get("director", " ")))
+			self["studio"].setText(encodeThat(self.details.get("studio", " ")))
+			self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
+			self["year"].setText(str(self.details.get("year", " - ")))
+
+			self.hideMediaFunctions()
+
 		else:
-			self.pname = "temp"
-			self.bname = "temp"
+			raise Exception
 
-		# handle content
-		self["title"].setText(encodeThat(self.details.get("title", " ")))
-		self["tag"].setText(encodeThat(self.details.get("tagline", " ")))
-		self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
-		self["cast"].setText(encodeThat(self.details.get("cast", " ")))
-		self["writer"].setText(encodeThat(self.details.get("writer", " ")))
-		self["director"].setText(encodeThat(self.details.get("director", " ")))
-		self["studio"].setText(encodeThat(self.details.get("studio", " ")))
-		self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
-		self["year"].setText(str(self.details.get("year", " - ")))
-
-		# technical details
-		self.mediaDataArr = self.details["mediaDataArr"][0]
-		self.parts = self.mediaDataArr["Parts"][0]
-
-		self["videoCodec"].setText(self.mediaDataArr.get("videoCodec", " - "))
-		self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
-		self["videoFrameRate"].setText(self.mediaDataArr.get("videoFrameRate", " - "))
-		self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
-		self["aspectRatio"].setText(self.mediaDataArr.get("aspectRatio", " - "))
-		self["videoResolution"].setText(self.mediaDataArr.get("videoResolution", " - "))
-		self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
-		self["file"].setText(encodeThat(self.parts.get("file", " - ")))
-
-		if self.fastScroll == False or self.showMedia == True:
-			# handle all pixmaps
-			self.handlePopularityPixmaps()
-			self.handleCodecPixmaps()
-			self.handleAspectPixmaps()
-			self.handleResolutionPixmaps()
-			self.handleRatedPixmaps()
-			self.handleSoundPixmaps()
-
-		# final sets
-		self.setDuration()
-		self.setMediaFunctions()
+		self.toggleVisibitlyForType(self.details.get("type"))
 
 		# now gather information for pictures
 		self.getPictureInformationToLoad()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleVisibitlyForType(self, myType):
+		printl("", self, "S")
+
+		content = "writer", "cast", "studio", "genre", "year", "director", "subtitles", "audio", "duration"
+
+		for tag in content:
+			if myType == "season":
+				self.toggleElementVisibilityWithLabel(tag, "hide")
+			else:
+				self.toggleElementVisibilityWithLabel(tag)
 
 		printl("", self, "C")
 

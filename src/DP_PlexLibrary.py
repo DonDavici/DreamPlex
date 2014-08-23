@@ -243,6 +243,28 @@ class PlexLibrary(Screen):
 #===============================================================================
 # LIBRARY ACCESS
 #===============================================================================
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSectionTypes(self):
+		printl("", self, "S")
+
+		fullList = []
+		entryData = {}
+		fullList.append((_("Movies"), Plugin.MENU_MOVIES, "movieEntry", entryData))
+		fullList.append((_("Tv Shows"), Plugin.MENU_TVSHOWS, "showEntry" ,entryData))
+		fullList.append((_("Music"), Plugin.MENU_MUSIC, "musicEntry", entryData))
+
+		extend = False # SWITCH
+
+		if extend:
+			fullList.append((_("Pictures"), Plugin.MENU_PICTURES, "pictureEntry", entryData))
+			fullList.append((_("Channels"), Plugin.MENU_CHANNELS, "channelEntry", entryData))
+
+		printl("mainMenuList: " + str(fullList), self, "D")
+		printl("", self, "C")
+		return fullList
+
 	#============================================================================
 	#
 	#============================================================================
@@ -352,14 +374,14 @@ class PlexLibrary(Screen):
 		onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
 		onDeck["type"] = "movie"
 		onDeck["currentViewMode"] = "movie"
-		onDeck["nextViewMode"] = "movie"
+		onDeck["nextViewMode"] = "mixed"
 		fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
 		recentlyAdded = dict()
 		recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
 		recentlyAdded["type"] = "movie"
 		recentlyAdded["currentViewMode"] = "movie"
-		recentlyAdded["nextViewMode"] = "movie"
+		recentlyAdded["nextViewMode"] = "mixed"
 		fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
 
 		if config.plugins.dreamplex.useCache.value:
@@ -453,6 +475,16 @@ class PlexLibrary(Screen):
 	#
 	#===========================================================================
 	def getMoviesFromSection(self, url):
+		printl("", self, "S")
+		printl("url: " + str(url), self, "D")
+
+		printl("", self, "C")
+		return self.getMediaData(url, tagType = "Video", nextViewMode = "play", currentViewMode = "ShowMovies")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMixedContentFromSection(self, url):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 
@@ -719,6 +751,10 @@ class PlexLibrary(Screen):
 			# dirty workaround for music
 			if entryData["type"] == "album":
 				entryData["nextViewMode"]	    = "ShowTracks"
+
+			if entryData["type"] == "season":
+				entryData["nextViewMode"] = "ShowEpisodes"
+				entryData["title"] = entryData["parentTitle"] + " - " + _("Season") + " " + entryData["index"]
 
 			# now we populate entryData with the transcode data for images
 			entryData = self.getImageData(entryData, entry, server)
@@ -1785,7 +1821,7 @@ class PlexLibrary(Screen):
 			printl( "We are playing a stream", self, "I")
 			if self.g_transcode == "true":
 				printl( "We will be transcoding the stream", self, "I")
-				playurl = self.transcode(myId,url+token)
+				playurl = self.transcode(myId,url)
 			else:
 				printl( "We will be playing raw stream", self, "I")
 				playurl = url+token
@@ -2408,7 +2444,7 @@ class PlexLibrary(Screen):
 		timestamp = "@%d" % ts
 		pac = quote_plus(b64encode(hmac.new(b64decode(privateKey), '/' + streamParams + timestamp, digestmod=sha256).digest()).decode()).replace('+', '%20')
 
-		req = Request(streamURL, headers=getPlexHeader(self.g_sessionID, asDict=False))
+		req = Request(streamURL, headers=getPlexHeader(self.g_sessionID))
 		req.add_header('X-Plex-Client-Capabilities', self.g_capability)
 		req.add_header('X-Plex-Access-Key', publicKey)
 		req.add_header('X-Plex-Access-Time', ts)
