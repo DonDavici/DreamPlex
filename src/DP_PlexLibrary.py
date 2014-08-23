@@ -1127,6 +1127,7 @@ class PlexLibrary(Screen):
 
 		myplex_header = getPlexHeader(self.g_sessionID, asDict=False)
 		myplex_header.append('Authorization: Basic ' + base64string)
+		myplex_header.append('X-Plex-Username: ' + self.g_myplex_username)
 
 		printl( "Starting auth request", self, "I")
 		curl_string = 'curl -s -k -X POST "%s"' % ("https://" + MYPLEX_SERVER + "/users/sign_in.xml")
@@ -1144,6 +1145,8 @@ class PlexLibrary(Screen):
 
 		if token is None:
 			self.lastResponse = response
+			print self.lastResponse
+			raise Exception
 
 			printl("", self, "C")
 			return False
