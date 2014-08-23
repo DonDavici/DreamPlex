@@ -789,16 +789,16 @@ def getPlexHeader(g_sessionID, asDict = True):
 					'X-Plex-Client-Platform': "Enigma2"}
 	else:
 		plexHeader = []
-		plexHeader.append('X-Plex-Platform=' + boxData[2]) # arch
-		plexHeader.append('X-Plex-Platform-Version=' + boxData[3]) # version
-		plexHeader.append('X-Plex-Provides=player')
-		plexHeader.append('X-Plex-Product=DreamPlex')
-		plexHeader.append('X-Plex-Version=' + getVersion())
-		plexHeader.append('X-Plex-Device=' +  boxData[0]) # manu
-		#plexHeader.append("X-Plex-Device-Name=DDiPhone")
-		plexHeader.append("X-Plex-Model=" + boxData[1]) # model
-		plexHeader.append('X-Plex-Client-Identifier=' + g_sessionID)
-		plexHeader.append("X-Plex-Client-Platform=Enigma2")
+		plexHeader.append('X-Plex-Platform:' + boxData[2]) # arch
+		plexHeader.append('X-Plex-Platform-Version:' + boxData[3]) # version
+		plexHeader.append('X-Plex-Provides:player')
+		plexHeader.append('X-Plex-Product:DreamPlex')
+		plexHeader.append('X-Plex-Version:' + getVersion())
+		plexHeader.append('X-Plex-Device:' +  boxData[0]) # manu
+		#plexHeader.append("X-Plex-Device-Name:DDiPhone")
+		plexHeader.append("X-Plex-Model:" + boxData[1]) # model
+		plexHeader.append('X-Plex-Client-Identifier:' + g_sessionID)
+		plexHeader.append("X-Plex-Client-Platform:Enigma2")
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
