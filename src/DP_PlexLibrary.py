@@ -34,6 +34,7 @@ import cPickle as pickle
 
 from time import time
 from urllib import quote_plus
+from Tools import Notifications
 from base64 import b64encode, b64decode
 from Components.config import config
 from hashlib import sha256
@@ -1139,10 +1140,9 @@ class PlexLibrary(Screen):
 		try:
 			token = etree.fromstring(response).findtext('authentication-token')
 		except Exception:
-			self._showErrorOnTv("no xml as response", response)
+			pass
 
 		if token is None:
-			self._showErrorOnTv("", response)
 			self.lastResponse = response
 
 			printl("", self, "C")
@@ -1437,7 +1437,7 @@ class PlexLibrary(Screen):
 			tree = etree.fromstring(html)
 		except Exception, e:
 			printl("Exception: " + str(e), self, "D")
-			self._showErrorOnTv("no xml as response", html)
+			self.lastResponse = str(html)
 
 		printl("", self, "C")
 		return tree
@@ -2100,16 +2100,6 @@ class PlexLibrary(Screen):
 # HELPER FUNCTIONS
 #===============================================================================
 	
-	#===========================================================================
-	# 
-	#===========================================================================
-	def _showErrorOnTv(self, text, content):
-		printl("", self, "S")
-		
-		self.session.open(MessageBox,_("UNEXPECTED ERROR:") + "\n%s\n%s" % (text, content), MessageBox.TYPE_INFO)
-		
-		printl("", self, "C")   
-
 	#===========================================================================
 	# 
 	#===========================================================================
