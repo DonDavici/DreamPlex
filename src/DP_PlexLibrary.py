@@ -1124,7 +1124,7 @@ class PlexLibrary(Screen):
 		base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
 		token = None
 
-		myplex_header = getPlexHeader(self.g_sessionID, asDictW=False)
+		myplex_header = getPlexHeader(self.g_sessionID, asDict=False)
 		myplex_header.append('Authorization: Basic ' + base64string)
 
 		printl( "Starting auth request", self, "I")
