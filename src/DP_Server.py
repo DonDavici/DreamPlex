@@ -392,7 +392,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		##
 		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
 
-		if self.current.connectionType.value == "0": # IP
+		if self.current.connectionType.value == "0" or self.current.connectionType.value == "1": # IP or DNS
 			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _("Toggle state to on/off")))
 			self.addIpSettings()
 			if self.current.localAuth.value:
