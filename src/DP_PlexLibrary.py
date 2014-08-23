@@ -347,6 +347,20 @@ class PlexLibrary(Screen):
 				else:
 					raise Exception("we should not be here")
 
+		onDeck = dict()
+		onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
+		onDeck["type"] = "movie"
+		onDeck["currentViewMode"] = "movie"
+		onDeck["nextViewMode"] = "movie"
+		fullList.append((_("onDeck"), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", onDeck))
+
+		recentlyAdded = dict()
+		recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
+		recentlyAdded["type"] = "movie"
+		recentlyAdded["currentViewMode"] = "movie"
+		recentlyAdded["nextViewMode"] = "movie"
+		fullList.append((_("New"), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", recentlyAdded))
+
 		if config.plugins.dreamplex.useCache.value:
 			self.saveSectionCache()
 
