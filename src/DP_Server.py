@@ -306,7 +306,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.guiElements = getGuiElements()
 
-		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
+		self["actions"] = ActionMap(["CiSelectionActions", "ColorActions"],
 		{
 			"green": self.keySave,
 			"cancel": self.keyCancel,
@@ -511,6 +511,10 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self["btn_yellowText"].setText(_("Mappings"))
 			self["btn_yellowText"].show()
 			self["btn_yellow"].show()
+		elif self.current.localAuth.value:
+			self["btn_yellowText"].setText(_("get local auth Token"))
+			self["btn_yellowText"].show()
+			self["btn_yellow"].show()
 		else:
 			self["btn_yellowText"].hide()
 			self["btn_yellow"].hide()
@@ -590,10 +594,24 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyYellow(self):
 		printl("", self, "S")
 
-
 		if self.useMappings:
 			serverID = self.currentId
 			self.session.open(DPS_Mappings, serverID)
+
+		elif self.current.localAuth.value:
+			# now that we know the server we establish global plexInstance
+			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
+
+			ipInConfig = "%d.%d.%d.%d" % tuple(self.current.ip.value)
+			token = self.plexInstance.getPlexUserTokenForLocalServerAuthentication(ipInConfig)
+
+			if token:
+				self.current.myplexLocalToken.value = token
+				self.current.myplexLocalToken.save()
+				self.session.open(MessageBox,(_("Local Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+			else:
+				response = self.plexInstance.getLastResponse()
+				self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
@@ -622,7 +640,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("myPlex Localtoken:") + "\n%s \n"+ _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexLocalToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 

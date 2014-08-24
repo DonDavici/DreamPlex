@@ -170,6 +170,7 @@ class PlexLibrary(Screen):
 		self.serverConfig_port = str(self.g_serverConfig.port.value)
 		self.serverConfig_quality = str(self.g_serverConfig.quality.value)
 		self.serverConfig_myplexToken = str(self.g_serverConfig.myplexToken.value)
+		self.serverConfig_myplexLocalToken = str(self.g_serverConfig.myplexLocalToken.value)
 		self.serverConfig_playbackType = self.g_serverConfig.playbackType.value
 		self.serverConfig_localAuth = self.g_serverConfig.localAuth.value
 
@@ -916,7 +917,10 @@ class PlexLibrary(Screen):
 
 			# just in case we use myPlex also in local Lan we have to set the token data
 			if self.serverConfig_localAuth:
-				self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
+				if self.serverConfig_myplexLocalToken:
+					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexLocalToken
+				else:
+					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
 			else:
 				self.g_myplex_accessTokenDict[str(self.g_currentServer)] = None
 
@@ -1072,6 +1076,38 @@ class PlexLibrary(Screen):
 
 		printl("", self, "C")
 		return tree
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getSharedServerForPlexUser(self):
+		printl("", self, "S")
+
+		xmlResponse = self.getXmlTreeFromPlex('/pms/servers')
+
+		printl("", self, "C")
+		return xmlResponse
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getPlexUserTokenForLocalServerAuthentication(self, ipInConfig):
+		printl("", self, "S")
+
+		xmlResponse = self.getSharedServerForPlexUser()
+		servers = xmlResponse.findall('Server')
+
+		for server in servers:
+			entryData = (dict(server.items()))
+			localIp = entryData["localAddresses"]
+			if localIp == ipInConfig:
+				print str(entryData)
+
+				printl("", self, "C")
+				return entryData["accessToken"]
+
+		printl("", self, "C")
+		return False
 
 	#===============================================================================
 	#
