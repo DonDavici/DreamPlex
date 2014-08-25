@@ -579,7 +579,7 @@ class PlexLibrary(Screen):
 				url = 'http://%s/%s'  % ( server, entryData['key'])
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState, isDirectory=True))
+			fullList.append(self.getFullListEntry(entryData, url, viewState))
 
 		printl("", self, "C")
 		return fullList, mediaContainer
@@ -642,7 +642,7 @@ class PlexLibrary(Screen):
 			url = 'http://%s/%s'  % ( server, entryData['key'])
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState, isDirectory=True))
+			fullList.append(self.getFullListEntry(entryData, url, viewState))
 
 		printl("fullList: " + str(fullList), self, "C")
 		printl("", self, "C")
@@ -761,7 +761,7 @@ class PlexLibrary(Screen):
 			entryData = self.getImageData(entryData, entry, server)
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
+			fullList.append(self.getFullListEntry(entryData, url))
 
 		printl("", self, "C")
 		return fullList, mediaContainer
@@ -803,7 +803,7 @@ class PlexLibrary(Screen):
 				entryData["type"] = "Folder"
 
 			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, isDirectory = True))
+			fullList.append(self.getFullListEntry(entryData, url))
 
 		printl("", self, "C")
 		return fullList, mediaContainer
