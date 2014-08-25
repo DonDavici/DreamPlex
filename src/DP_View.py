@@ -1744,7 +1744,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if not self.fastScroll or self.showMedia:
 			if self.changeBackdrop:
 				# check if showiframe lib loaded ...
-				if self.loadedStillPictureLib:
+				if self.loadedStillPictureLib and "ratingKey" in self.details:
 					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
 					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
 					printl("backdrop: " + str(backdrop), self, "D")
