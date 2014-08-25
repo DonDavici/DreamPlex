@@ -306,10 +306,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.guiElements = getGuiElements()
 
-		self["actions"] = ActionMap(["CiSelectionActions", "ColorActions"],
+		self["actions"] = ActionMap(["DPS_ServerConfig", "ColorActions"],
 		{
 			"green": self.keySave,
 			"cancel": self.keyCancel,
+		    "exit": self.keyCancel,
 			"yellow": self.keyYellow,
 			"blue": self.keyBlue,
 			"red": self.keyRed,
