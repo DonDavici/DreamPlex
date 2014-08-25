@@ -105,8 +105,8 @@
 	</map>
 
     <map context="DPS_ServerConfig">
-		<key id="KEY_LEFT" mapto="left" flags="b" />
-		<key id="KEY_RIGHT" mapto="right" flags="b" />
+		<key id="KEY_LEFT" mapto="left" flags="m" />
+		<key id="KEY_RIGHT" mapto="right" flags="m" />
         <key id="KEY_EXIT" mapto="cancel" flags="m" />
         <key id="KEY_ESC" mapto="cancel" flags="m" />
     </map>
