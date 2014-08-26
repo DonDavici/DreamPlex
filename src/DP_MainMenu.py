@@ -487,8 +487,8 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 						wake_on_lan(self.g_wakeserver)
 					except ValueError:
 						printl("Incorrect MAC address format for server " + str(i), self, "D")
-					except:
-						printl("Unknown wake on lan error", self, "D")
+					except Exception, e:
+						printl("WOL Error: " + str(e), self, "D")
 			self.sleepNow()
 		else:
 			# User said 'no'
