@@ -106,7 +106,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, myParams, autoPlayMode, resumeMode, playbackMode, poster):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, poster):
 		printl("", self, "S")
 		printl("currentIndex: " + str(currentIndex), self, "D")
 		
@@ -122,7 +122,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
-		self.myParams = myParams
+		self.libraryName = libraryName
 		self["mediaTitle"] = StaticText()
 		Screen.__init__(self, session)
 
@@ -135,7 +135,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl("x: " + str(x), self, "D")
 			x.__init__(self)
 
-		self.skinName = "DPS_PlexPlayer"
+		if self.libraryName == "music":
+			self.skinName = "DPS_VideoPlayer"
+		else:
+			self.skinName = "DPS_MusicPlayer"
 
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
@@ -911,7 +914,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def updateTimeline(self):
 		printl("" ,self,"S")
-		try:	
+		try:
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
 			progress = int(( float(currentTime) / float(totalTime) ) * 100)

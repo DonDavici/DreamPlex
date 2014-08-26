@@ -1231,7 +1231,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.viewParams, self.autoPlayMode, self.resumeMode, self.playbackMode, self.whatPoster)
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, self.whatPoster)
 
 			else:
 				# save index here because user moved around for sure

@@ -670,8 +670,8 @@
 
     </screen>    
 
-    <!-- DPS_PlexPlayer -->
-    <screen name="DPS_PlexPlayer" position="0,0" size="1283,723" title="InfoBar" flags="wfNoBorder" backgroundColor="#ffffffff">
+    <!-- DPS_VideoPlayer -->
+    <screen name="DPS_VideoPlayer" position="0,0" size="1283,723" title="InfoBar" flags="wfNoBorder" backgroundColor="#ffffffff">
         <eLabel position="0,444" zPosition="-2" size="1281,276" backgroundColor="#40000000" transparent="0" />
         <eLabel position="0,0" zPosition="-2" size="1283,40" backgroundColor="#40000000" transparent="0" />
        
@@ -692,6 +692,48 @@
         <widget source="session.CurrentService" render="PositionGauge" position="210,490" size="1060,1" zPosition="3" transparent="1" >
             <convert type="ServicePosition">Gauge</convert>
         </widget>        
+        <widget source="session.CurrentService" render="Progress" position="210,488" size="1060,5" backgroundColor="#40000000" zPosition="4" transparent="1">
+            <convert type="ServicePosition">Position</convert>
+        </widget>
+
+        <widget source="session.CurrentService" render="Label" position="155,492" size="140,38" font="OpenSans; 22" halign="right" valign="center" zPosition="4" backgroundColor="#40000000" transparent="1" foregroundColor="#FF8C00">
+            <convert type="ServicePosition">Length</convert>
+        </widget>
+
+        <widget source="session.CurrentService" render="Label" zPosition="4" position="640,492" size="140,38" font="OpenSans;22" halign="right" valign="center" backgroundColor="#40000000" shadowColor="#40000000" shadowOffset="-1,-1" transparent="1">
+            <convert type="ServicePosition">Position</convert>
+        </widget>
+
+        <widget source="session.CurrentService" render="Label" position="1180,492" size="140,38" zPosition="4" font="OpenSans;22" halign="left" valign="center" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1">
+            <convert type="ServicePosition">Remaining</convert>
+        </widget>
+
+        <widget name="bufferslider" position="37,15" size="500,8" zPosition="10" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/progress-fs8.png" />
+
+    </screen>
+
+    <!-- DPS_MusicPlayer -->
+    <screen name="DPS_MusicPlayer" position="0,0" size="1283,723" title="InfoBar" flags="wfNoBorder" backgroundColor="#ffffffff">
+        <eLabel position="0,444" zPosition="-2" size="1281,276" backgroundColor="#40000000" transparent="0" />
+        <eLabel position="0,0" zPosition="-2" size="1283,40" backgroundColor="#40000000" transparent="0" />
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
+            <convert type="ClockToText">default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
+            <convert type="ClockToText">Date</convert>
+        </widget>
+
+        <widget name="poster" transparent="1" zPosition="49" position="0,450" size="195,268" alphatest="blend"/>
+        <widget source="mediaTitle" render="Label" zPosition="4" position="210,443" size="1070,42" font="OpenSans; 30" halign="left" valign="top" noWrap="1" foregroundColor="#FF8C00" backgroundColor="#40000000" transparent="1" />
+        <widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="210,531" size="1060,179" font="OpenSans; 16" foregroundColor="#ffffff" backgroundColor="#40000000"/>
+
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/back_progress.png" position="210,490" size="1060,1" zPosition="3" transparent="1" />
+
+        <widget source="session.CurrentService" render="PositionGauge" position="210,490" size="1060,1" zPosition="3" transparent="1" >
+            <convert type="ServicePosition">Gauge</convert>
+        </widget>
         <widget source="session.CurrentService" render="Progress" position="210,488" size="1060,5" backgroundColor="#40000000" zPosition="4" transparent="1">
             <convert type="ServicePosition">Position</convert>
         </widget>
