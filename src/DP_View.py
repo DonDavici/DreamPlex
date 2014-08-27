@@ -1423,9 +1423,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		for listViewEntry in listViewList:
 			viewState = str(listViewEntry[3])
-			#printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 
 			if listViewEntry is not None:
+				#printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 				if viewState == 'seen':
 					viewState = self.seenPic
 
