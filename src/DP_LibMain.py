@@ -30,11 +30,11 @@ from Screens.Screen import Screen
 from Components.config import config
 
 from DP_ViewFactory import getViews
-from DP_Player import DP_Player
 from DP_View import DP_View
 
+from DPH_Singleton import Singleton
+
 from __common__ import printl2 as printl
-from __plugin__ import getPlugins, Plugin
 
 #===============================================================================
 # 
@@ -53,85 +53,41 @@ class DP_LibMain(Screen):
 		self._libraryName = libraryName
 		
 		self._views = getViews(libraryName)
-		self.currentViewIndex = 0
+
+		if self._libraryName == "movies":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultMovieView.value)
+
+		elif self._libraryName == "shows":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultShowView.value)
+
+		elif self._libraryName == "music":
+			self.currentViewIndex = int(config.plugins.dreamplex.defaultMusicView.value)
+
+		else:
+			self.currentViewIndex = 0
 		
-		self.defaultPickle = "%s%s_view_%s.bin" % (config.plugins.dreamplex.playerTempPath.value, config.plugins.dreamplex.skins.value, libraryName, )
-		self.onFirstExecBegin.append(self.showDefaultView)
+		self.onFirstExecBegin.append(self.showView)
 		
 		printl("", self, "C")
 
 	#===========================================================================
 	# 
 	#===========================================================================
-	def getDefault(self):
+	def showView(self):
 		printl("", self, "S")
-		
-		try:
-			fd = open(self.defaultPickle, "rb")
-			default = pickle.load(fd)
-			fd.close()
-		except:
-			default = {
-			"view": self.currentViewIndex, 
-			"selection": None, 
-			"sort": None, 
-			"filter": None, 
-		}
-		
-		printl("", self, "C")
-		return default
 
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setDefault(self, selection, sort, myFilter):
-		printl("", self, "S")
-		
-		if selection is None and sort is None and myFilter is None:
-			try:
-				os.remove(self.defaultPickle)
-			except:
-				printl("Could not remove " + str(self.defaultPickle), self, "E")
-			
-			printl("", self, "C")
-			return
-		
-		default = {
-			"view": self.currentViewIndex, 
-			"selection": selection, 
-			"sort": sort, 
-			"filter": myFilter,
-		}
-		
-		fd = open(self.defaultPickle, "wb")
-		pickle.dump(default, fd, 2) #pickle.HIGHEST_PROTOCOL)
-		fd.close()
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showDefaultView(self):
-		printl("", self, "S")
-		
-		default = self.getDefault()
-		self.currentViewIndex = default["view"]
-		self.showView(default["selection"], default["sort"], default["filter"])
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def showView(self, selection=None, sort=None, myFilter=None, cache=None):
-		"""
-		Displays the selected View
-		"""
-		printl("", self, "S")
+		viewParams = self._views[self.currentViewIndex][2]
 		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [])
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, self.playEntry, self._views[self.currentViewIndex], select=selection, sort=sort, myFilter=myFilter, cache=cache)
+		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, viewParams)
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def loadLibrary(self):
+		printl("", self, "S")
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -143,248 +99,179 @@ class DP_LibMain(Screen):
 		"""
 		printl("", self, "S")
 		printl("cause: %s" % str(cause), self, "D")
+
 		if cause is not None:
 			if cause[0] == DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT:
 				selection = None
-				sort = None
-				myFilter = None
+
 				if len(cause) >= 2 and cause[1] is not None:
-					#self.currentViewIndex = cause[1]
 					selection = cause[1]
-				if len(cause) >= 3 and cause[2] is not None:
-					sort = cause[2]
-				if len(cause) >= 4 and cause[3] is not None:
-					myFilter = cause[3]
-				self.setDefault(selection, sort, myFilter)
 				self.close()
+
 			elif cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW or cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE:
-				selection = None
-				sort = None
-				myFilter = None
 				self.currentViewIndex += 1
 				if len(self._views) <= self.currentViewIndex:
 					self.currentViewIndex = 0
 				
-				if len(cause) >= 2 and cause[1] is not None:
-					#self.currentViewIndex = cause[1]
-					selection = cause[1]
-				if len(cause) >= 3 and cause[2] is not None:
-					sort = cause[2]
-				if len(cause) >= 4 and cause[3] is not None:
-					myFilter = cause[3]
 				if len(cause) >= 5 and cause[4] is not None:
 					for i in range(len(self._views)):
 						if cause[4]== self._views[i][1]:
 							self.currentViewIndex = i
 							break
 				
-				if cause[0] == DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW:
-					self.showView(selection, sort, myFilter, cache=True)
-				else:
-					self.showView(selection, sort, myFilter, cache=False)
+				self.showView()
+
 			else:
+				printl("", self, "C")
 				self.close()
+
 		else:
+			printl("", self, "C")
 			self.close()
-		
-		printl("", self, "C")
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
-	def loadLibrary(self, params):
+	def loadLibraryData(self, entryData, forceUpdate):
 		printl("", self, "S")
-		
-		printl("", self, "C")
-		return []
 
-	#===========================================================================
-	# 
-	#===========================================================================
-	def playEntry(self, entry, flags=None):
-		"""
-		starts playback, is called by the view
-		"""
-		printl("", self, "S")
-		if not flags:
-			flags = {}
+		url = entryData["contentUrl"]
 
-		playbackPath = entry["Path"]
-		
-		if playbackPath[0] == "/" and os.path.isfile(playbackPath) is False:
-			
-			printl("", self, "C")
-			return False
+		if entryData.has_key("source"):
+			source = entryData["source"]
+			uuid = entryData["uuid"]
 		else:
-			self.notifyEntryPlaying(entry, flags)
-			
-			isDVD, dvdFilelist, dvdDevice = self.checkIfDVD(playbackPath)
-			
-			if isDVD:
-				self.playDVD(dvdDevice, dvdFilelist)
+			source = "plex"
+			uuid = None
+
+		# in this case we do not use cache because there is no uuid and updated on information on this level
+		# maybe we find a way later and implement it than
+		if entryData.has_key("nextViewMode"):
+			nextViewMode = entryData["nextViewMode"]
+			currentViewMode = entryData["currentViewMode"]
+			source = "plex"
+		else:
+			nextViewMode = entryData["type"]
+			currentViewMode = None
+
+		# in this case we have to ask plex for sure too
+		if str(entryData.get('key')) != "all":
+			source = "plex"
+
+		if forceUpdate:
+			source = "plex"
+
+		library, mediaContainer = self.getLibraryData(source, url, nextViewMode, currentViewMode, uuid, forceUpdate)
+
+		printl ("", self, "C")
+		return library, mediaContainer
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getLibraryData(self, source, url, nextViewMode, currentViewMode, uuid, forceUpdate=False):
+		printl ("", self, "S")
+
+		if config.plugins.dreamplex.useCache.value:
+			pickleFileExists = False
+			regeneratePickleFile = False
+			#noinspection PyAttributeOutsideInit
+			self.pickleName = "%s%s_%s.cache" % (config.plugins.dreamplex.cachefolderpath.value, uuid, nextViewMode)
+			if os.path.exists(self.pickleName):
+				pickleFileExists = True
+
+			# params['cache'] is default None. if it is present and it is False we know that we triggered refresh
+			# for this reason we have to set self.g_source = 'plex' because the if is with "or" and not with "and" which si not possible
+			if source == "cache" and pickleFileExists:
+				try:
+					library = self.getLibraryDataFromPickle()
+					printl("from pickle", self, "D")
+				except:
+					printl("cache file not found", self, "D")
+					library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
+					regeneratePickleFile = True
 			else:
-				self.playFile(entry, flags)
-			
-			printl("", self, "C")
-			return True
+				library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
+
+				if forceUpdate:
+					regeneratePickleFile = True
+
+			if not pickleFileExists or regeneratePickleFile:
+				printl("pickleFileExists: " + str(pickleFileExists), self, "D")
+				printl("regeneratePickleFile: " + str(regeneratePickleFile), self, "D")
+				self.generateCacheForSection(library)
+		else:
+			library = self.getLibraryDataFromPlex(url, nextViewMode, currentViewMode)
+
+		printl ("", self, "C")
+		return library
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
-	def checkIfDVD(self, playbackPath):
-		"""
-		tries to determin if media entry is a dvd
-		"""
-		printl("", self, "S")
+	def getLibraryDataFromPickle(self):
+		printl ("", self, "S")
 
-		isDVD = False
-		dvdFilelist = [ ]
-		dvdDevice = None
-		
-		if playbackPath.lower().endswith(u"ifo"): # DVD
-			isDVD = True
-			dvdFilelist.append(str(playbackPath.replace(u"/VIDEO_TS.IFO", "").strip()))
-		
-		elif playbackPath.lower().endswith(u"iso"): # DVD
-			isDVD = True
-			dvdFilelist.append(str(playbackPath))
-		
-		printl("", self, "C")
-		return isDVD, dvdFilelist, dvdDevice
+		fd = open(self.pickleName, "rb")
+		pickleData = pickle.load(fd)
+		fd.close()
+
+		printl ("", self, "C")
+		return pickleData
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
-	#noinspection PyUnresolvedReferences
-	def playDVD(self, dvdDevice, dvdFilelist):
-		"""
-		playbacks a dvd by callinf dvdplayer plugin
-		"""
-		printl("", self, "S")
-		
-		try:
-			from Plugins.Extensions.DVDPlayer.plugin import DVDPlayer
-			# when iso -> filelist, when folder -> device
-			self.session.openWithCallback(self.leaveMoviePlayer, DVDPlayer, dvd_device = dvdDevice, dvd_filelist = dvdFilelist)
-		except Exception, ex:
-			printl("Exception: " + str(ex), self, "E")
-		
-		printl("", self, "C")
+	def getLibraryDataFromPlex(self, url, nextViewMode, currentViewMode):
+		printl ("", self, "S")
+
+		printl("nextViewMode: " + str(nextViewMode), self, "D")
+		printl("currentViewMode: " + str(currentViewMode), self, "D")
+		library = None
+		mediaContainer = None
+
+		# MUSIC
+		if nextViewMode == "artist":
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByArtist(url)
+
+		elif nextViewMode == "ShowAlbums" or (currentViewMode == "ShowAlbums" and nextViewMode == "ShowDirectory"):
+			library, mediaContainer = Singleton().getPlexInstance().getMusicByAlbum(url)
+
+		elif nextViewMode == "ShowTracks":
+			library, mediaContainer = Singleton().getPlexInstance().getMusicTracks(url)
+
+		# MOVIES
+		elif nextViewMode == "movie" or (currentViewMode == "ShowMovies" and nextViewMode == "ShowDirectory"):
+			library, mediaContainer = Singleton().getPlexInstance().getMoviesFromSection(url)
+
+		elif nextViewMode == "mixed":
+			library, mediaContainer = Singleton().getPlexInstance().getMixedContentFromSection(url)
+
+		# SHOWS
+		elif nextViewMode == "show":
+			library, mediaContainer = Singleton().getPlexInstance().getShowsFromSection(url)
+
+		elif nextViewMode == "ShowEpisodesDirect":
+			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url, directMode=True)
+
+		elif nextViewMode == "ShowSeasons":
+			library, mediaContainer = Singleton().getPlexInstance().getSeasonsOfShow(url)
+
+		elif nextViewMode == "ShowEpisodes":
+			library, mediaContainer = Singleton().getPlexInstance().getEpisodesOfSeason(url)
+
+		printl ("", self, "C")
+		return library, mediaContainer
 
 	#===========================================================================
-	# 
+	#
 	#===========================================================================
-	def playFile(self, entry, flags):
-		"""
-		playbacks a file by calling DP_player
-		"""
-		printl("", self, "S")
-		
-		playbackList = self.getPlaybackList(entry)
-		printl("playbackList: " + str(playbackList), self, "D")
-		
-		if len(playbackList) == 1:
-			self.session.openWithCallback(self.leaveMoviePlayer, DP_Player, playbackList, flags=flags)
-		
-		elif len(playbackList) >= 2:
-			self.session.openWithCallback(self.leaveMoviePlayer, DP_Player, playbackList, self.notifyNextEntry, flags=flags)
+	def generateCacheForSection(self, library):
+		printl ("", self, "S")
 
-		printl("", self, "C")
-		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def leaveMoviePlayer(self, flags=None):
-		"""
-		After calling this the view should auto reappear
-		"""
-		printl("", self, "S")
+		pickleData = library
+		fd = open(self.pickleName, "wb")
+		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+		fd.close()
 
-		if not flags:
-			flags = {}
-
-		self.notifyEntryStopped(flags)
-		
-		self.session.nav.playService(None) 
-		
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def getPlaybackList(self, entry):
-		"""
-		prototype fore playbacklist creation
-		"""
-		printl("", self, "S")
-		
-
-		playbackList = []
-		playbackList.append( (entry["Path"], entry["title"], entry, ))
-		
-		printl("", self, "C")
-		return playbackList
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def buildInfoPlaybackArgs(self, entry):
-		printl("", self, "S")
-
-		args = {}
-		args["entry"] = entry
-
-		printl("", self, "C")
-		return args
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyEntryPlaying(self, entry, flags):
-		"""
-		called on start of playback
-		"""
-		printl("", self, "S")
-		
-		args = self.buildInfoPlaybackArgs(entry)
-		args["status"]  = "playing"
-		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
-		
-		for plugin in plugins:
-			printl("plugin.name=" + str(plugin.name), self, "D")
-			plugin.fnc(args, flags)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyEntryStopped(self, flags):
-		"""
-		called on end of playback
-		"""
-		printl("", self, "S")
-		
-		args = {}
-		args["status"] = "stopped"
-		plugins = getPlugins(where=Plugin.INFO_PLAYBACK)
-		
-		for plugin in plugins:
-			printl("plugin.name=" + str(plugin.name), self, "D")
-			plugin.fnc(args, flags)
-			
-		printl("", self, "C")
-
-	#===========================================================================
-	# 
-	#===========================================================================
-	def notifyNextEntry(self, entry, flags):
-		"""
-		called if the next entry in the playbacklist is being playbacked
-		"""
-		printl("", self, "S")
-		
-		self.notifyEntryStopped(flags)
-		self.notifyEntryPlaying(entry, flags)
-		
-		printl("", self, "C")
+		printl ("", self, "C")

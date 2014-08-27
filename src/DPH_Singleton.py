@@ -72,4 +72,3 @@ class Singleton(object):
 			pass
 
 		return self.__skinParamsInstance
-	

@@ -39,15 +39,15 @@ from Components.Language import language
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_LANGUAGE
 
 from DPH_Singleton import Singleton
+from DP_ViewFactory import getViews
 
-from __common__ import registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
+from __common__ import getVersion, registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 #===============================================================================
 #
 #===============================================================================
-version = "0.1"
+version = getVersion()
 source = "feed" # other option is "ipk"
-
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultSkinsFolderPath	= resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/skins")
@@ -58,7 +58,7 @@ defaultPlayerTempPath  	= "/hdd/dreamplex/"
 defaultConfigFolderPath	= "/hdd/dreamplex/config/"
 
 # skin data
-defaultSkin = "default"
+defaultSkin = "original"
 skins = []
 
 config.plugins.dreamplex = ConfigSubsection()
@@ -70,7 +70,9 @@ config.plugins.dreamplex.autoLanguage      			= ConfigYesNo()
 config.plugins.dreamplex.playTheme         			= ConfigYesNo()
 config.plugins.dreamplex.showUnSeenCounts			= ConfigYesNo()
 config.plugins.dreamplex.fastScroll		   			= ConfigYesNo()
-config.plugins.dreamplex.summerizeSections 			= ConfigYesNo()
+config.plugins.dreamplex.liveTvInViews				= ConfigYesNo()
+config.plugins.dreamplex.startWithFilterMode	    = ConfigYesNo()
+config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = True)
 config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.showInfobarOnBuffer 		= ConfigYesNo()
@@ -98,15 +100,6 @@ config.plugins.dreamplex.playerTempPath   		= ConfigDirectory(default = defaultP
 
 config.plugins.dreamplex.entriescount              = ConfigInteger(0)
 config.plugins.dreamplex.Entries                   = ConfigSubList()
-
-#===============================================================================
-# 
-#===============================================================================
-def getVersion():
-	printl("", "__init__::getVersion", "S")
-
-	printl("", "__init__::getVersion", "C")
-	return version
 
 #===============================================================================
 # 
@@ -191,8 +184,8 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].myplexUsername			= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexPassword			= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexLocalToken		= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(visible_width=50, fixed_size=False)
-	config.plugins.dreamplex.Entries[i].renewMyplexToken		= ConfigYesNo()
 
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
@@ -200,7 +193,6 @@ def initServerEntryConfig():
 	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "D", True, 6)
 	printl("myplexToken: " + str(config.plugins.dreamplex.Entries[i].myplexToken.value), "__init__::initServerEntryConfig", "D", True, 8)
 	printl("myplexTokenUsername: " + str(config.plugins.dreamplex.Entries[i].myplexTokenUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
-	printl("renewMyplexToken: " + str(config.plugins.dreamplex.Entries[i].renewMyplexToken.value), "__init__::initServerEntryConfig", "D")
 
 	# STREAMED
 	# no options at the moment
@@ -248,6 +240,11 @@ def initServerEntryConfig():
 	printl("wol_mac: " + str(config.plugins.dreamplex.Entries[i].wol_mac.value), "__init__::initServerEntryConfig", "D")
 	printl("wol_delay: " + str(config.plugins.dreamplex.Entries[i].wol_delay.value), "__init__::initServerEntryConfig", "D")
 
+	printl ("=== SYNC ===", "__init__::initServerEntryConfig", "D")
+	config.plugins.dreamplex.Entries[i].syncMovies	    = ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].syncShows	    = ConfigYesNo(default = True)
+	config.plugins.dreamplex.Entries[i].syncMusic	    = ConfigYesNo(default = True)
+
 	printl("", "__init__::initServerEntryConfig", "C")
 	return config.plugins.dreamplex.Entries[i]
 
@@ -257,7 +254,7 @@ def initServerEntryConfig():
 def registerSkinParamsInstance():
 	printl("", "__init__::registerSkinParamsInstance", "S")
 
-	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+	configXml = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value +"/params")
 	Singleton().getSkinParamsInstance(configXml)
 
 	printl("", "__init__::registerSkinParamsInstance", "C")
@@ -286,6 +283,7 @@ def loadPlexPlugins():
 	from DP_LibMovies import DP_LibMovies
 	from DP_LibShows import DP_LibShows
 	from DP_LibMusic import DP_LibMusic
+	from DP_LibMixed import DP_LibMixed
 	from __plugin__ import registerPlugin, Plugin
 
 	printl("registering ... movies", "__init__::loadPlexPlugins", "D")
@@ -296,6 +294,9 @@ def loadPlexPlugins():
 
 	printl("registering ... music", "__init__::loadPlexPlugins", "D")
 	registerPlugin(Plugin(pid="music", name=_("Music"), start=DP_LibMusic, where=Plugin.MENU_MUSIC))
+
+	printl("registering ... mixed", "__init__::loadPlexPlugins", "D")
+	registerPlugin(Plugin(pid="mixed", name=_("Mixed"), start=DP_LibMixed, where=Plugin.MENU_MIXED))
 
 	#printl("registering ... pictures", "__initgetBoxInformationt__::loadPlexPlugins", "D")
 	#registerPlugin(Plugin(pid="tvshows", name=_("Music"), start=DP_LibPictures, where=Plugin.MENU_PICTURES))
@@ -356,9 +357,43 @@ def getInstalledSkins():
 
 	printl("Found enigma2 skins \"%s\"" % str(mySkins), "__init__::getInstalledSkins", "D")
 
-	config.plugins.dreamplex.skins	= ConfigSelection(default = myDefaultSkin, choices = mySkins)
+	config.plugins.dreamplex.skin	= ConfigSelection(default = myDefaultSkin, choices = mySkins)
 
 	printl("", "__init__::getInstalledSkins", "C")
+
+#===============================================================================
+#
+#===============================================================================
+def getViewTypesForSettings():
+	printl("", "__init__::getExistingViews", "S")
+
+	# view settings
+	viewChoicesForMovies = getViewsByType("movies")
+	config.plugins.dreamplex.defaultMovieView = ConfigSelection(default = "0", choices = viewChoicesForMovies)
+
+	viewChoicesForShows = getViewsByType("shows")
+	config.plugins.dreamplex.defaultShowView = ConfigSelection(default = "0", choices = viewChoicesForShows)
+
+	viewChoicesForMusic = getViewsByType("music")
+	config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = viewChoicesForMusic)
+
+	printl("", "__init__::getExistingViews", "C")
+
+#===============================================================================
+#
+#===============================================================================
+def getViewsByType(myType):
+	printl("", "__init__::getViewsByType", "S")
+	views = getViews(myType)
+
+	viewChoices = []
+	i = 0
+	for view in views:
+		viewChoices.append((str(i), str(view[0])))
+		i += 1
+
+	printl("", "__init__::getViewsByType", "C")
+	return viewChoices
 
 #===============================================================================
 # 
@@ -381,13 +416,15 @@ def _(txt):
 # EXECUTE ON STARTUP
 #===============================================================================
 def prepareEnvironment():
+	# the order here is important
 	localeInit()
 	getInstalledSkins()
 	initBoxInformation()
 	printGlobalSettings()
 	initPlexServerConfig()
-	checkPlexEnvironment()
 	registerSkinParamsInstance()
+	getViewTypesForSettings()
+	checkPlexEnvironment()
 	registerPlexFonts()
 	loadPlexSkin()
 	loadPlexPlugins()

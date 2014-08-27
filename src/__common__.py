@@ -55,7 +55,9 @@ except ImportError:
 #===============================================================================
 # CONSTANTS
 #===============================================================================
+version = "0.1"
 gBoxType = None
+screens = []
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
@@ -138,6 +140,15 @@ def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
 
 		else:
 			print "[DreamPlex] " + "OLD CHARACTER CHANGE ME !!!!!" + "  " + str(out)
+
+#===============================================================================
+#
+#===============================================================================
+def getVersion():
+	#printl2("", "__common__::getVersion", "S")
+
+	#rintl2("", "__common__::getVersion", "C")
+	return version
 
 #===============================================================================
 # 
@@ -281,7 +292,7 @@ def registerPlexFonts():
 	printl2("adding fonts", "__common__::registerPlexFonts", "I")
 
 	tree = Singleton().getSkinParamsInstance()
-	#tree = getXmlContent("/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value +"/params")
+
 	for font in tree.findall('font'):
 		path = str(font.get('path'))
 		printl2("path: " + str(font.get('path')), "__common__::registerPlexFonts", "D")
@@ -308,9 +319,9 @@ def loadPlexSkin():
 	@return none
 	"""
 	printl2("", "__common__::loadPlexSkin", "S")
-	printl2("current skin: " + str(config.plugins.dreamplex.skins.value), "__common__::loadPlexSkin", "S")
+	printl2("current skin: " + str(config.plugins.dreamplex.skin.value), "__common__::loadPlexSkin", "S")
 
-	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/1280x720/skin.xml"
+	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
 
 	if skin:
 		loadSkin(skin)
@@ -635,7 +646,6 @@ def writeXmlContent(content, location):
 
 	printl2("", "__common__::getXmlContent", "C")
 
-
 #===========================================================================
 # 
 #===========================================================================
@@ -669,8 +679,20 @@ def indentXml(elem, level=0, more_sibs=False):
 	return elem
 
 #===========================================================================
+#
+#===========================================================================
+def durationToTime(duration):
+	printl2("", "__common__::durationToTime", "S")
+
+	m, s = divmod(int(duration)/1000, 60)
+	h, m = divmod(m, 60)
+
+	printl2("", "__common__::durationToTime", "C")
+	return "%d:%02d:%02d" % (h, m, s)
+
+#===========================================================================
 # 
-#===========================================================================	
+#===========================================================================
 def convertSize(size):
 	printl2("", "__common__::convertSize", "S")
 
@@ -710,29 +732,86 @@ def loadPicture(filename):
 #===========================================================================
 #
 #===========================================================================
-def getPlexHeader(g_sessionID, asString = True):
+def isValidSize(size):
+	printl2("", "__common__::isValidSize", "S")
+	valid = False
+	result = size / 16
+	if size % 16 == 0:
+		valid = True
+
+	printl2("", "__common__::isValidSize", "C")
+	return valid, result
+
+#===========================================================================
+#
+#===========================================================================
+def addNewScreen(screen):
+	printl2("", "__common__::addNewScreen", "S")
+
+	screens.append(screen)
+
+	printl2("", "__common__::addNewScreen", "C")
+
+#===========================================================================
+#
+#===========================================================================
+def closePlugin():
+	printl2("", "__common__::closePlugin", "S")
+
+	for screen in screens:
+		try:
+			screen.close()
+		except Exception:
+			# TODO check for memory usage if we are really free after close
+			# this could take place if the screen was closed already manually
+			pass
+
+	printl2("", "__common__::closePlugin", "C")
+
+#===========================================================================
+#
+#===========================================================================
+def getPlexHeader(g_sessionID, asDict = True):
 	printl2("", "__common__::getPlexHeader", "S")
 
 	boxData = getBoxInformation()
 
-	if asString:
-		plexHeader={'X-Plex-Platform': "Enigma2",
+	if asDict:
+		plexHeader={'X-Plex-Platform': "iOS",
 					'X-Plex-Platform-Version': boxData[3],
 					'X-Plex-Provides': "player",
 					'X-Plex-Product': "DreamPlex",
-					'X-Plex-Version': "1",
+					'X-Plex-Version': getVersion(),
 					'X-Plex-Device': boxData[0],
+					#'X-Plex-Device-Name': 'DDiPhone',
+					'X-Plex-Model': boxData[1],
 					'X-Plex-Client-Identifier': g_sessionID,
-					'X-Plex-Device-Name': boxData[1]}
+					'X-Plex-Client-Platform': "iOS"}
 	else:
 		plexHeader = []
-		plexHeader.append('X-Plex-Platform: Enigma2')
-		plexHeader.append('X-Plex-Platform-Version: ' + boxData[3])
-		plexHeader.append('X-Plex-Provides: player')
-		plexHeader.append('X-Plex-Product: DreamPlex')
-		plexHeader.append('X-Plex-Version: 1')
-		plexHeader.append('X-Plex-Device: ' +  boxData[0])
-		plexHeader.append('X-Plex-Client-Identifier: ' + g_sessionID)
+		plexHeader.append('X-Plex-Platform:iOS')# + boxData[2]) # arch
+		plexHeader.append('X-Plex-Platform-Version:' + boxData[3]) # version
+		plexHeader.append('X-Plex-Provides:player')
+		plexHeader.append('X-Plex-Product:DreamPlex')
+		plexHeader.append('X-Plex-Version:' + getVersion())
+		plexHeader.append('X-Plex-Device:' +  boxData[0]) # manu
+		#plexHeader.append("X-Plex-Device-Name:DDiPhone")
+		plexHeader.append("X-Plex-Model:" + boxData[1]) # model
+		plexHeader.append('X-Plex-Client-Identifier:' + g_sessionID)
+		plexHeader.append("X-Plex-Client-Platform:iOS")
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
+
+#===========================================================================
+#
+#===========================================================================
+def encodeThat(stringToEncode):
+	#printl2("", "__common__::encodeThat", "S")
+	try:
+		encodedString = stringToEncode.encode('utf-8', "ignore")
+	except:
+		encodedString = stringToEncode
+
+	#printl2("", "__common__::encodeThat", "C")
+	return encodedString

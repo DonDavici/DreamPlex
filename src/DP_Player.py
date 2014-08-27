@@ -23,34 +23,49 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import threading
-
+import time
 from time import sleep
 
-from Screens.InfoBar import MoviePlayer
+from enigma import ePicLoad, eTimer
+from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
+from Screens.ChoiceBox import ChoiceBox
+from Screens.HelpMenu import HelpableScreen
 
 #noinspection PyUnresolvedReferences
 from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation
 
 from Tools import Notifications
 
+from Components.AVSwitch import AVSwitch
 from Components.config import config
+from Components.Pixmap import Pixmap
+from Components.Label import Label
 from Components.ActionMap import ActionMap
 from Components.Slider import Slider
-from Components.Language import language
 from Components.Sources.StaticText import StaticText
-from Components.ServiceEventTracker import ServiceEventTracker
+from Components.Language import language
+from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
+
+from Screens.InfoBarGenerics import InfoBarShowHide, \
+	InfoBarSeek, InfoBarAudioSelection, \
+	InfoBarServiceNotifications, InfoBarSimpleEventView, \
+	InfoBarExtensions, InfoBarNotifications, \
+	InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarCueSheetSupport
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
 #
 #===============================================================================
-class DP_Player(MoviePlayer):
+class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
+		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
+		InfoBarServiceNotifications, InfoBarSimpleEventView,
+		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications):
 
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -69,7 +84,6 @@ class DP_Player(MoviePlayer):
 	mediaData = None
 	multiUser = False
 	
-	title = ""
 	tagline = ""
 	summary = ""
 	year = ""
@@ -86,135 +100,75 @@ class DP_Player(MoviePlayer):
 	switchedLanguage = False
 	timeshift_enabled = False
 	isVisible = False
+	playbackType = None
+	timelineWatcher = None
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, playerData, resume=False):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, poster):
 		printl("", self, "S")
+		printl("currentIndex: " + str(currentIndex), self, "D")
 		
 		self.session = session
-				
-		self.videoData = playerData['videoData']
-		self.mediaData = playerData['mediaData']
-		
-		# go through the data out of the function call
-		self.resume = resume
-		self.resumeStamp = int(playerData['resumeStamp']) / 1000 # plex stores seconds * 1000
-		self.server = str(playerData['server'])
-		self.id = str(playerData['id'])
-		self.multiUserServer = playerData['multiUserServer']
-		self.url = str(playerData['playUrl'])
-		self.transcodingSession = str(playerData['transcodingSession'])
-		self.playbackType = str(playerData['playbackType'])
-		self.connectionType = str(playerData['connectionType'])
-		self.universalTranscoder = playerData['universalTranscoder']
-		self.localAuth = playerData['localAuth']
-		
-		# lets prepare all additional data for a better experience :-)
-		self.title = str(self.videoData['title'])
-		self.tagline = str(self.videoData['tagline'])
-		self.summary = str(self.videoData['summary'])
-		self.year = str(self.videoData['year'])
-		self.studio = str(self.videoData['studio'])
-		self.duration = str(self.videoData['duration'])
-		self.contentRating = str(self.videoData['contentRating'])
-		
-		self.audioCodec = str(self.mediaData['audioCodec'])
-		self.videoCodec = str(self.mediaData['videoCodec'])
-		self.videoResolution = str(self.mediaData['videoResolution'])
-		self.videoFrameRate = str(self.mediaData['videoFrameRate'])
+		self.listViewList = listViewList
+		self.currentIndex = currentIndex
+		self.playerData = {}
+		self.listCount = len(self.listViewList)
+		self.autoPlayMode = autoPlayMode
+		self.resumeMode = resumeMode
+		self.playbackMode = playbackMode
+		self.whatPoster = poster
 
-		# check for playable services
-		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
-		
-		# lets built the sref for the movieplayer out of the gathered information
-		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-		
-		elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
-			
-		elif self.url[-5:] == ".m2ts":
-			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
-		
-		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
-			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
-				printl("we are able to stream over 4097", self, "I")
-				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
-			else:
-				# todo add errorhandler
-				raise Exception
+		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
-		
-		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
-		
-		sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
-		sref.setName(self.title)
-		
-		# lets call the movieplayer
-		MoviePlayer.__init__(self, session, sref)
-		
-		self.skinName = "DPS_PlexPlayer"
-		
-		self.service = sref
+		self.libraryName = libraryName
+		self["mediaTitle"] = StaticText()
+		Screen.__init__(self, session)
+
+		self.plexInstance = Singleton().getPlexInstance()
+
+		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
+				InfoBarAudioSelection, InfoBarSimpleEventView, \
+				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
+				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications:
+			printl("x: " + str(x), self, "D")
+			x.__init__(self)
+
+		if self.libraryName == "music":
+			self.skinName = "DPS_VideoPlayer"
+		else:
+			self.skinName = "DPS_MusicPlayer"
+
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
-		if self.playbackType == "2":
-			self["bufferslider"].setValue(100)
-		else:
-			self["bufferslider"].setValue(1)
-		self["mediaTitle"] = StaticText(self.title)
-		self["label_update"] = StaticText()
+
 		self.bufferSeconds = 0
 		self.bufferPercent = 0
 		self.bufferSecondsLeft = 0
 		self.bitrate = 0
 		self.endReached = False
 
-		self["actions"] = ActionMap(["OkCancelActions", "TvRadioActions", "InfobarSeekActions", "MediaPlayerActions"],
+		self["actions"] = ActionMap(["InfobarSeekActions", "DPS_Player"],
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
-		"keyTV": self.leavePlayer,
+		"keyTv": self.leavePlayer,
 		"stop": self.leavePlayer,
-		"leavePlayer": self.hide,
-		"next": self.seekManual,
-		"previous": self.seekManual,
-		"stopRunningRecords": self.leavePlayer
+		"seekManual": self.seekManual,
+		"playNext": self.playNextEntry,
+		"playPrevious": self.playPreviousEntry,
 		}, -2)
-		
+
+		self["poster"] = Pixmap()
+		self["shortDescription"] = Label()
+
+		# Poster
+		self.EXpicloadPoster = ePicLoad()
+
 		# it will stop up/down/movielist buttons opening standard movielist whilst playing movie in plex
 		if self.has_key('MovieListActions'):
 			self["MovieListActions"].setEnabled(False)
-		
-		service1 = self.session.nav.getCurrentService()
-		self.seek = service1 and service1.seek()
-
-		# if self.seek != None:
-		#	rLen = self.getPlayLength()
-		#	rPos = self.getPlayPosition()
-		#	printl("rLen: " + str(rLen), self, "I")
-		#	printl("rPos: " + str(rPos), self, "I")
-		#=======================================================================
-			
-		if self.resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
-			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
-			seekwatcherThread.start()
-
-		if self.multiUserServer:
-			printl("we are a multiuser server", self, "D")
-			if self.connectionType == "2" or (self.connectionType == "0" and self.localAuth):
-				printl("we are configured for multiuser", self, "D")
-				self.multiUser = True
-			
-		if self.multiUser:
-			self.timelinewatcherthread_stop = threading.Event()
-			self.timelinewatcherthread_wait = threading.Event()
-			self.timelinewatcherthread_stop.clear()
-			self.timelinewatcherthread_wait.clear()
-			self.timelinewatcherThread = threading.Thread(target=self.timelineWatcher,name="TimeLineWatcherThread", args=(self.timelinewatcherthread_stop, self.timelinewatcherthread_wait,))
-			self.timelinewatcherThread.daemon = True
 
 		self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
 		{
@@ -225,10 +179,331 @@ class DP_Player(MoviePlayer):
 			iPlayableService.evEOF: self.__evEOF,
 		})
 
-		if self.playbackType == "2":
-			self.bufferFull()
+		self.onLayoutFinish.append(self.setPoster)
+
+		# from here we go on
+		self.onFirstExecBegin.append(self.playMedia)
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def playMedia(self):
+		printl("", self, "S")
+
+		selection = self.listViewList[self.currentIndex]
+
+		self.media_id = selection[1]['ratingKey']
+		server = selection[1]['server']
+
+		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType=selection[1]['tagType'])
+
+		self.selectMedia(self.count, self.options, self.server)
+
 		printl("", self, "C")
-	
+
+	#===========================================================
+	#
+	#===========================================================
+	def selectMedia(self, count, options, server ):
+		printl("", self, "S")
+
+		#if we have two or more files for the same movie, then present a screen
+		self.options = options
+		self.server = server
+		self.dvdplayback=False
+
+		if count > 1:
+			printl("we have more than one playable part ...", self, "I")
+			indexCount=0
+			functionList = []
+
+			for items in self.options:
+				printl("item: " + str(items), self, "D")
+				if items[1] is not None:
+					name=items[1].split('/')[-1]
+				else:
+					size = convertSize(int(items[3]))
+					duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
+					# this is the case when there is no information of the real file name
+					name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
+
+				printl("name " + str(name), self, "D")
+				functionList.append((name ,indexCount, ))
+				indexCount+=1
+
+			self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
+
+		else:
+			self.setSelectedMedia()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setSelectedMedia(self, choice=None):
+		printl("", self, "S")
+		result = 0
+		printl("choice: " + str(choice), self, "D")
+
+		if choice is not None:
+			result = int(choice[1])
+
+		printl("result: " + str(result), self, "D")
+
+		mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
+		printl("We have selected media at " + mediaFileUrl, self, "I")
+
+		self.buildPlayerData(mediaFileUrl)
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def buildPlayerData(self, mediaFileUrl):
+		printl("", self, "S")
+
+		Singleton().getPlexInstance().setPlaybackType(str(self.playbackMode))
+
+		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, mediaFileUrl)
+
+		# populate addional data
+		self.setPlayerData()
+
+		self.playSelectedMedia()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def playSelectedMedia(self):
+		printl("", self, "S")
+
+		resumeStamp = self.playerData[self.currentIndex]['resumeStamp']
+		printl("resumeStamp: " + str(resumeStamp), self, "I")
+
+		if self.playerData[self.currentIndex]['fallback']:
+			message = _("Sorry I didn't find the file on the provided locations")
+			locations = _("Location:") + "\n " + self.playerData[self.currentIndex]['locations']
+			suggestion = _("Please verify you direct local settings")
+			fallback = _("I will now try to play the file via transcode.")
+
+			self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+		else:
+			self.checkResume(resumeStamp)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkResume(self, resumeStamp):
+		printl("", self, "S")
+
+		if resumeStamp > 0 and self.resumeMode:
+			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
+
+		else:
+			self.play()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def handleResume(self, confirm):
+		printl("", self, "S")
+
+		if confirm:
+			self.play(resume = True)
+
+		else:
+			self.play()
+
+		printl("", self, "C")
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def setPoster(self):
+		"""
+		set params for poster via ePicLoad object
+		"""
+		printl("", self, "S")
+
+		self.EXscale = (AVSwitch().getFramebufferScale())
+
+		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
+
+		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		ptr = self.EXpicloadPoster.getData()
+
+		self["poster"].instance.setPixmap(ptr)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setServiceReferenceData(self):
+		printl("", self, "S")
+
+		self["mediaTitle"].setText(self.title)
+
+		self.setEnigmaServiceId()
+
+		self.sref = eServiceReference(self.ENIGMA_SERVICE_ID, 0, self.url)
+		self.sref.setName(self.title)
+		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setEnigmaServiceId(self):
+		printl("", self, "S")
+
+		# check for playable services
+		printl( "Checking for usable gstreamer service (builtin)... ",self, "I")
+
+		# lets built the sref for the movieplayer out of the gathered information
+		if self.url[:4] == "http": #this means we are in streaming mode so we will use sref 4097
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+
+		elif self.url[-3:] == ".ts" or self.url[-4:] == ".iso": # seems like we have a real ts file ot a iso file so we will use sref 1
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICETS_ID
+
+		elif self.url[-5:] == ".m2ts":
+			self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVIDEM2_ID
+
+		else: # if we have a real file but no ts but for eg mkv we will use sref 4097
+			if self.isValidServiceId(self.ENIGMA_SERVICEGS_ID):
+				printl("we are able to stream over 4097", self, "I")
+				self.ENIGMA_SERVICE_ID = self.ENIGMA_SERVICEGS_ID
+			else:
+				raise Exception
+
+		printl("self.ENIGMA_SERVICE_ID = " + str(self.ENIGMA_SERVICE_ID), self, "I")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def playNextEntry(self):
+		printl("", self, "S")
+		# first we write back the state of the current file to the plex server
+		self.handleProgress()
+
+		# increase position
+		self.currentIndex += 1
+
+		# check if we are at the end of the list we start all over
+		if self.currentIndex > len(self.listViewList):
+			self.currentIndex = 0
+
+		# stop current playback if exists
+		self.session.nav.stopService()
+
+		# play
+		self.playMedia()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def playPreviousEntry(self):
+		printl("", self, "S")
+		# first we write back the state of the current file to the plex server
+		self.handleProgress()
+
+		self.currentIndex -= 1
+
+		# check if we are at the begining of the list we start at the end
+		if self.currentIndex < 0:
+			self.currentIndex = max(self.listViewList)
+
+		# stop current playback if exists
+		self.session.nav.stopService()
+
+		# play
+		self.playMedia()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def play(self, resume = False):
+		printl("", self, "S")
+
+		# populate self.sref with new data
+		self.setServiceReferenceData()
+
+		# start playback
+		self.session.nav.playService(self.sref)
+
+		service1 = self.session.nav.getCurrentService()
+		self.seek = service1 and service1.seek()
+
+		if resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
+			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
+			seekwatcherThread.start()
+
+		if self.multiUserServer:
+			printl("we are a multiuser server", self, "D")
+			self.multiUser = True
+			self.timelineWatcher = eTimer()
+			self.timelineWatcher.callback.append(self.updateTimeline)
+
+		if self.playbackType == "2":
+			self["bufferslider"].setValue(100)
+		else:
+			self["bufferslider"].setValue(1)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getTitle(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return str(self.playerData[self.currentIndex]['videoData']['title'])
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setPlayerData(self):
+		printl("", self, "S")
+
+		self.playbackData = self.playerData[self.currentIndex]
+		self.videoData = self.playerData[self.currentIndex]['videoData']
+
+		# not used for now
+		#self.mediaData = self.playerData[self.currentIndex]['mediaData']
+
+		# go through the data out of the function call
+		self.resumeStamp = int(self.playbackData['resumeStamp']) / 1000 # plex stores seconds * 1000
+		self.server = str(self.playbackData['server'])
+		self.id = str(self.playbackData['id'])
+		self.multiUserServer = self.playbackData['multiUserServer']
+		self.url = str(self.playbackData['playUrl'])
+		self.transcodingSession = str(self.playbackData['transcodingSession'])
+		self.playbackType = str(self.playbackData['playbackType'])
+		self.connectionType = str(self.playbackData['connectionType'])
+		self.universalTranscoder = self.playbackData['universalTranscoder']
+		self.localAuth = self.playbackData['localAuth']
+
+		self.title = encodeThat(self.videoData['title'])
+		self["shortDescription"].setText(encodeThat(self.videoData['summary']))
+
+		printl("", self, "C")
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -246,19 +521,24 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def __evUpdatedBufferInfo(self):
 		#printl("", self, "S")
-		
-		self.bufferInfo()
+
+		if self.playbackType == "2":
+			self.bufferFull()
+		else:
+			# we lock the infobar until the buffer is full for better feedback to user
+			self.lockShow()
+			self.bufferInfo()
 		
 		#printl("", self, "C")
-	
 
 	#===========================================================================
 	# 
 	#===========================================================================
 	def ok(self):
 		#printl("", self, "S")
-		
-		self.bufferInfo()
+
+		if self.playbackType != "2":
+			self.bufferInfo()
 
 		if self.shown:
 			self.hide()
@@ -272,29 +552,29 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def bufferInfo(self):
 		#printl("", self, "S")
-		
-		if self.playbackType == "2":
-			self.bufferFull() # redundant
-			return
-		bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
-		
-		self.bufferPercent = bufferInfo[0]
-		self.buffer1 = bufferInfo[1]
-		self.bufferAvgOutRate = bufferInfo[2]
-		self.buffer3 = bufferInfo[3]
-		self.buffersize = bufferInfo[4]
-		
-		if int(self.bufferPercent) > 10:
-			self["bufferslider"].setValue(int(self.bufferPercent))
-			#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
-		else:
-			self["bufferslider"].setValue(1)
 
-		if self.bufferPercent > 95:
-			self.bufferFull()
-				
-		if self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0):
-			self.bufferEmpty()
+		try:
+			bufferInfo = self.session.nav.getCurrentService().streamed().getBufferCharge()
+
+			self.bufferPercent = bufferInfo[0]
+			self.buffer1 = bufferInfo[1]
+			self.bufferAvgOutRate = bufferInfo[2]
+			self.buffer3 = bufferInfo[3]
+			self.buffersize = bufferInfo[4]
+
+			if int(self.bufferPercent) > 10:
+				self["bufferslider"].setValue(int(self.bufferPercent))
+				#printl("Buffersize[4]: %d BufferPercent[0]: %d Buffer[1]: %d Buffer[3]: %d BufferAvgOutRate[2]: %d" % (self.buffersize, self.bufferPercent, self.buffer1, self.buffer3, self.bufferAvgOutRate), self, "D")
+			else:
+				self["bufferslider"].setValue(1)
+
+			if self.bufferPercent > 95:
+				self.bufferFull()
+
+			if self.bufferPercent == 0 and not self.endReached and (bufferInfo[1] != 0 and bufferInfo[2] !=0):
+				self.bufferEmpty()
+		except:
+			pass
 
 		#printl("", self, "C")
 
@@ -418,16 +698,16 @@ class DP_Player(MoviePlayer):
 						
 						#time = length * self.start
 						#time = int(139144271)
-						time = self.resumeStamp * 90000
+						elapsed = self.resumeStamp * 90000
 						printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "I")
 						self.resumeStamp = None
-						if time < 90000:
+						if elapsed < 90000:
 							printl( "skip seeking < 10s", self, "I")
 							printl("", self, "C")
 							return
 						#if config.plugins.dreamplex.setBufferSize.value:
 							#self.session.nav.getCurrentService().streamed().setBufferSize(config.plugins.dreamplex.bufferSize.value)
-						self.doSeek(int(time))
+						self.doSeek(int(elapsed))
 		
 		except Exception, e:
 			printl("exception: " + str(e), self, "W")
@@ -445,15 +725,13 @@ class DP_Player(MoviePlayer):
 			self.setSeekState(self.SEEK_STATE_PLAY)
 	
 		if self.multiUser:
-			self.timelinewatcherthread_wait.clear()
-			if not self.timelinewatcherThread.isAlive():
-				self.timelinewatcherthread_stop.clear()
-				sleep(2)
-				try:
-					self.timelinewatcherThread.start()
-				except:
-					pass
-		
+			# because the buffer is full we start updating timeline
+			self.timelineWatcher.start(5000,False)
+
+		# now we unlock again so that the infobar can dismiss
+		self.unlockShow()
+		self.hide()
+
 		#printl("", self, "C")
 
 	#===========================================================================
@@ -465,6 +743,9 @@ class DP_Player(MoviePlayer):
 		if config.plugins.dreamplex.showInfobarOnBuffer.value:
 			#show infobar to indicate buffer is empty 
 			self.show()
+
+		if self.multiUser and self.timelineWatcher is not None:
+			self.timelineWatcher.stop()
 
 		#printl("", self, "C")
 		
@@ -495,12 +776,12 @@ class DP_Player(MoviePlayer):
 		printl("", self, "S")
 		
 		if answer:
-			if answer != 'EOF':
-				self.handleProgress()
-			else:
-				self.handleProgress(True)
+			self.handleProgress()
+
 			if self.playbackType == "1":
 				self.stopTranscoding()
+
+			self.session.nav.playService(self.currentService)
 			self.close()
 		
 		printl("", self, "C")
@@ -510,33 +791,58 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def doEofInternal(self, playing):
 		printl("", self, "S")
-		
-		self.leavePlayerConfirmed('EOF')
+
+		if self.autoPlayMode:
+			if not self.nextPlaylistEntryAvailable():
+				self.leavePlayerConfirmed(True)
+			else:
+				# first we write back the state of the current file to the plex server
+				self.handleProgress()
+
+				#start next file
+				self.playNextEntry()
+		else:
+			self.leavePlayerConfirmed(True)
 		
 		printl("", self, "C")
 
 	#===========================================================================
+	#
+	#===========================================================================
+	def nextPlaylistEntryAvailable(self):
+		printl("", self, "S")
+
+		if self.listCount > 1:
+			if (self.currentIndex + 1) < self.listCount:
+
+				printl("", self, "C")
+				return True
+
+		printl("", self, "C")
+		return False
+
+	#===========================================================================
 	# 
 	#===========================================================================
-	def handleProgress(self, EOF=False):
+	def handleProgress(self):
 		printl("", self, "S")
-		
+
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 
-		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
-			progress = currentTime / float(totalTime/100.0)
+		if currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+			progress = currentTime / (totalTime/100)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
-			progress = 100;
-			printl( "End of file reached", self, "I" )
+			progress = 0
 		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		
-		if self.multiUser:
-			plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "stopped", str(currentTime*1000), str(totalTime*1000))
-		
+		if self.multiUser and self.timelineWatcher is not None:
+			self.timelineWatcher.stop()
+
+			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
+			urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+			self.plexInstance.doRequest(urlPath)
+
 		#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
 		else:
 			if currentTime < 30:
@@ -545,36 +851,25 @@ class DP_Player(MoviePlayer):
 			#If we are less than 95% complete, store resume time
 			elif progress < 95:
 				printl("Less than 95% progress, will store resume time", self, "I" )
-				plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
+				self.plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
 
 			#Otherwise, mark as watched
 			else:
 				printl( "Movie marked as watched. Over 95% complete", self, "I")
-				plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
+				self.plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
-		if self.multiUser and self.timelinewatcherThread.isAlive():
-			self.timelinewatcherthread_wait.set()
-			self.timelinewatcherthread_stop.set()
-
-		printl("", self, "C")	   
+		printl("", self, "C")
 
 	#===========================================================================
-	# stopTranscoding
+	#
 	#===========================================================================
 	def stopTranscoding(self):
 		printl("", self, "S")
 		
-		if self.multiUser:
-			self.timelinewatcherthread_wait.set()
-			self.timelinewatcherthread_stop.set()
-		
-		instance = Singleton()
-		plexInstance = instance.getPlexInstance()
-		
 		if self.universalTranscoder:
-			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
+			self.plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/stop?session=" + self.transcodingSession)
 		else:
-			plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
+			self.plexInstance.doRequest("http://"+self.server+"/video/:/transcode/segmented/stop?session=" + self.transcodingSession)
 		
 		printl("", self, "C")
 	
@@ -615,32 +910,11 @@ class DP_Player(MoviePlayer):
 		printl("", self, "C")
 	
 	#===========================================================================
-	# timelineWatcher
-	#===========================================================================
-	def timelineWatcher(self, stop_event, wait_event):
-		printl("", self, "S")
-
-		while not stop_event.is_set():
-			while not wait_event.is_set():
-				ret = self.updateTimeline()
-				if ret:
-					wait_event.wait(3)
-					continue
-				else:
-					wait_event.wait(3)
-					break
-				
-			stop_event.wait(1)
-			continue
-		
-		printl("", self, "C")
-
-	#===========================================================================
 	# 
 	#===========================================================================
 	def updateTimeline(self):
 		printl("" ,self,"S")
-		try:	
+		try:
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
 			progress = int(( float(currentTime) / float(totalTime) ) * 100)
@@ -650,24 +924,31 @@ class DP_Player(MoviePlayer):
 			printl("currentTime: " + str(currentTime), self, "C")
 			printl("totalTime: " + str(totalTime), self, "C")
 
-			instance = Singleton()
-			plexInstance = instance.getPlexInstance()
+			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 
 			seekState = self.seekstate
 			if seekState == self.SEEK_STATE_PAUSE:
 				printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
-				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "paused", str(currentTime*1000), str(totalTime*1000))
+				urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
-			if seekState == self.SEEK_STATE_PLAY :
+			elif seekState == self.SEEK_STATE_PLAY :
 				printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
-				plexInstance.getTimelineURL(self.server, "/library/sections/onDeck", self.id, "playing", str(currentTime*1000), str(totalTime*1000))
+				urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+
+			# todo add buffering here if needed
+				#urlPath += "&state=buffering&time=" + str(currentTime*1000)
+
+			# todo add stopped here if needed
+				#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+
+			self.plexInstance.doRequest(urlPath)
 
 		except Exception, e:    
 			printl("exception: " + str(e), self, "E")
 			return False
 
 		printl("" ,self,"C")
-		return True		
+		return True
 			
 	#===========================================================================
 	# 
@@ -783,8 +1064,11 @@ class DP_Player(MoviePlayer):
 	#===========================================================================
 	def getPlayPosition(self):
 		printl("", self, "S")
-		
-		position = self.seek.getPlayPosition()
+
+		try:
+			position = self.seek.getPlayPosition()
+		except:
+			return None
 		
 		printl("", self, "C")
 		return position

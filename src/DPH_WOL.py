@@ -29,9 +29,8 @@ from __common__ import printl2 as printl
 #===============================================================================
 # 
 #===============================================================================
-def wake_on_lan(macaddress):
+def wake_on_lan(macaddress, broadcastIp):
 	printl ("", "DPH_WOL::wake_on_lan", "S")
-
 	printl ("using this mac ... " + macaddress, "DPH_WOL::wake_on_lan", "D")
 	
 	# Check macaddress format and try to compensate.
@@ -55,6 +54,6 @@ def wake_on_lan(macaddress):
 	# Broadcast it to the LAN.
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-	sock.sendto(send_data, ('<broadcast>', 7))
+	sock.sendto(send_data, (broadcastIp, 7))
 	
 	printl ("", "DPH_WOL::wake_on_lan", "C")

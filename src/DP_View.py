@@ -23,24 +23,22 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import math
-import time
 import os
 
 #noinspection PyUnresolvedReferences
 from enigma import eTimer
 
 from Components.ActionMap import HelpableActionMap
-from Components.Sources.List import List
 from Components.Label import Label
 from Components.config import config
-from Components.config import NumericalTextInput
 from Components.Pixmap import Pixmap, MultiPixmap
 from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
+from Components.Sources.List import List
+from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
-from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 
 from Tools.Directories import fileExists
@@ -51,51 +49,38 @@ from enigma import ePicLoad
 from urllib import quote_plus
 from twisted.web.client import downloadPage
 
-from DP_ViewFactory import getViews
 from DP_Player import DP_Player
+from DP_Settings import DPS_Settings
+from DP_Server import DPS_Server
 
+from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
+from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, convertSize, loadPicture
-from __plugin__ import getPlugins, Plugin
+from __common__ import printl2 as printl, loadPicture, durationToTime
+from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
-#===============================================================================
-#
-#===============================================================================
-def getViewClass():
-	"""
-	@param: none
-	@return: DP_View Class
-	"""
-	printl("", __name__, "S")
-
-	printl("", __name__, "C")
-	return DP_View
-
 #===========================================================================
 #
 #===========================================================================
-class DP_View(Screen, NumericalTextInput):
+class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextInput):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
 	ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE = 3
 
 	onNumberKeyLastChar             = "#"
-	activeSort                      = ("Default", None, False)
-	activeFilter                    = ("All", (None, False), "")
-	onEnterPrimaryKeys              = None
-	onLeavePrimaryKeyValuePair      = None
-	onLeaveSelectKeyValuePair       = None
-	currentKeyValuePair             = None
-
-	currentShowIndex                = None
-	currentSeasonIndex              = None
-	currentMovieIndex               = None
+	returnTo                        = None
+	currentEntryDataDict            = {}
+	currentIndexDict                = {}
+	currentTagTypeDict              = {}
 	showMedia                       = False
 	showDetail                      = False
-	isDirectory                     = False
+	isFolder                     = False
+	forceUpdate                     = False
+	lastTagType                     = None
 
 	backdrop_postfix                = ""
 	poster_postfix                  = ""
@@ -123,53 +108,75 @@ class DP_View(Screen, NumericalTextInput):
 	startPlaybackNow                = False
 	changePoster                    = True
 	changeBackdrop                  = True
-	resetGuiElements                = False
+	fastScroll                = False
 	viewStep                        = 0 # we use this to know the steps we did to store the changes form subviews
 	viewChangeStorage               = {} # we use this to save changed value if we have subViews
 	loadedStillPictureLib           = False # until we do not know if we can load the libs it will be false
 	usedStillPicture                = False
 	refreshTimer                    = None # initial value to stay agile in list of media
 	selection                       = None # this stores the current list entry of list
+	leaving                         = False # we use this to know if we are going deeper into the lib or leaving e.g. show - season - episode
+
+	playerData                      = {} # inital playerData dict
+	currentQueuePosition            = 0 # this is the current selection id
+	detailsPaneVisible              = False # is shortDescription or details visible
+	autoPlayMode                    = False
+	resumeMode                      = True
+	currentFunctionLevel            = "1"
+	currentService                  = None
+	miniTvInUse                     = False
+	keyOneDisabled                  = False
+	filterMode                      = False
+	playbackMode                    = "default"
+	themeMusicIsRunning             = False
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
+		"""
+		@param viewClass: is the screen session (eg DP_ViewShows)
+		@param libraryName: movie, show, music
+		@type loadLibraryFnc: is loadLibrary Function from Lib_class (eg DP_LibShows)
+		@param viewParams: are the params for dynamic screen handling from skin params
+		@return:
+		"""
 		printl("", self, "S")
-		Screen.__init__(self, session)
-		self.myParams = viewName[3]
+		DPH_Screen.__init__(self, viewClass)
+		DPH_ScreenHelper.__init__(self, forceMiniTv= True)
+		DPH_MultiColorFunctions.__init__(self)
 		NumericalTextInput.__init__(self)
 
-		printl("cache: " + str(cache), self, "D")
-		printl("viewName: "+ str(viewName), self, "I")
-		printl("myParams: " + str(viewName[3]), self, "D")
+		self.setMenuType(libraryName)
+		self.viewParams = viewParams
+
+		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
-		self.skinName = self.myParams["settings"]["screen"]
+		self.skinName = self.viewParams["settings"]["screen"]
 		printl("self.skinName: " + str(self.skinName), self, "D")
-		self.useBackdropVideos = self.myParams["settings"]["backdropVideos"]
-		self.select = select
-		self.cache = cache
-		self.onFirstExecSort = sort
-		self.onFirstExecFilter = myFilter
+
+		self.currentViewName = str(self.viewParams["settings"]["name"])
+		printl("self.currentViewName: " + str(self.currentViewName), self, "D")
+
+		self.stillPictureEnabledInView = self.viewParams["settings"]["backdropVideos"]
+		self.stillPictureEnabledInSettings = config.plugins.dreamplex.useBackdropVideos.value
+
+		self.plexInstance = Singleton().getPlexInstance()
 
 		self.libraryName = libraryName
-		self.loadLibrary = loadLibrary
-		self.viewName = viewName
-		self._playEntry = playEntry
+		self.loadLibrary = loadLibraryFnc
 
-		self.playerData = None
-
-		self.setListViewElementsCount(viewName)
+		self.setListViewElementsCount()
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
+
+		self.noneDirectoryElementsList = getNoneDirectoryElements()
+		self.directoryElementsList = getDefaultDirectoryElementsList()
 
 		# Initialise library list
 		myList = []
 		self["listview"] = List(myList, True)
-
-		self["number_key_popup"] = Label()
-		self["number_key_popup"].hide()
 
 		self.seenPng = None
 		self.unseenPng = None
@@ -188,19 +195,18 @@ class DP_View(Screen, NumericalTextInput):
 			"video":		(self.onKeyVideo, ""),
 			"audio":		(self.onKeyAudio, ""),
 			"red":			(self.onKeyRed, ""),
-			"green":	  	(self.onKeyGreen, ""),
 			"yellow":		(self.onKeyYellow, ""),
 			"blue":			(self.onKeyBlue, ""),
+			"green":		(self.closePlugin, ""),
 			"text":			(self.onKeyText, ""),
 			"red_long":		(self.onKeyRedLong, ""),
-			#"green_long":	(self.onKeyGreenLong, ""),
-			#"yellow_long":	(self.onKeyYellowLong, ""),
+			"yellow_long":	(self.onKeyYellowLong, ""),
 			"blue_long":	(self.onKeyBlueLong, ""),
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),
 
-			"1":			(self.onKey1, ""),
+		    "1":			(self.onKey1, ""),
 			"2":			(self.onKey2, ""),
 			"3":			(self.onKey3, ""),
 			"4":			(self.onKey4, ""),
@@ -213,53 +219,46 @@ class DP_View(Screen, NumericalTextInput):
 
 		}, -2)
 
-		# For number key input
-		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
-
-		self.onLayoutFinish.append(self.setCustomTitle)
-		self.onFirstExecBegin.append(self.onFirstExec)
-
-		self.getGuiElements()
+		self.guiElements = getGuiElements()
 
 		# set navigation values
 		#DP_View.setListViewElementsCount("DPS_ViewList")
 
 		# get needed config parameters
 		self.mediaPath = config.plugins.dreamplex.mediafolderpath.value
-		self.playTheme = config.plugins.dreamplex.playTheme.value
 		self.fastScroll = config.plugins.dreamplex.fastScroll.value
+		self.liveTvInViews = config.plugins.dreamplex.liveTvInViews.value
+		self.startWithFilterMode = config.plugins.dreamplex.startWithFilterMode.value
 
 		# get data from plex library
 		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
 
+		# get server config
+		self.serverConfig = Singleton().getPlexInstance().getServerConfig()
+
 		# init skin elements
-		self["functionsContainer"]  = Label()
+		self.setMultiLevelElements(levels=4)
+
+		self["totalLabel"] = Label()
+		self["totalLabel"].setText(_("Total:"))
+		self["total"] = Label()
+
+		self["number_key_popup"] = Label()
+		self["number_key_popup"].hide()
+
+		self["paginationLabel"] = Label()
+		self["paginationLabel"].setText(_("Pages:"))
+		self["pagination"] = Label()
 
 		self["btn_red"]			= Pixmap()
-		self["btn_blue"]		= Pixmap()
 		self["btn_yellow"]		= Pixmap()
-		self["btn_zero"]		= Pixmap()
-		self["btn_nine"]		= Pixmap()
-		self["btn_pvr"]			= Pixmap()
-		self["btn_menu"]		= Pixmap()
+		self["btn_blue"]		= Pixmap()
+		self["btn_green"]		= Pixmap()
 
-		self["txt_red"]			= Label()
-		self["txt_filter"]		= Label()
-		self["txt_yellow"]		= Label()
-		self["txt_blue"]		= Label()
-		self["txt_blue"].setText(_("toggle View ") + _("(current 'Default')"))
-
-
-		if self.fastScroll:
-			self["txt_yellow"].setText(_("fastScroll = On"))
-		else:
-			self["txt_yellow"].setText(_("fastScroll = Off"))
-
-		self["txt_pvr"] = Label()
-		self["txt_pvr"].setText(_("load additional data"))
-
-		self["txt_menu"] = Label()
-		self["txt_menu"].setText(_("show media functions"))
+		self["btn_redText"]			= Label()
+		self["btn_yellowText"]		= Label()
+		self["btn_blueText"]		= Label()
+		self["btn_greenText"]		= Label()
 
 		self["sound"] = MultiPixmap()
 
@@ -273,19 +272,37 @@ class DP_View(Screen, NumericalTextInput):
 
 		self["title"] = Label()
 		self["grandparentTitle"] = Label()
-		self["season"] = Label()
 
 		self["tag"] = Label()
+
+		self["cast"] = Label()
+		self["castLabel"] = Label()
+		self["castLabel"].setText(_("Cast:"))
 
 		self["shortDescription"] = ScrollLabel()
 
 		self["subtitles"] = Label()
+		self["subtitles"].setText(_("press 'Text'"))
 		self["subtitlesLabel"] = Label()
 		self["subtitlesLabel"].setText(_("Subtitles:"))
 
 		self["audio"] = Label()
+		self["audio"].setText(_("press 'Audio'"))
 		self["audioLabel"] = Label()
 		self["audioLabel"].setText(_("Audio:"))
+
+		self["info"] = Label()
+		self["info"].setText(_("press 'Info'"))
+		self["infoLabel"] = Label()
+		self["infoLabel"].setText(_("Info:"))
+
+		self["director"] = Label()
+		self["directorLabel"] = Label()
+		self["directorLabel"].setText(_("Director:"))
+
+		self["writer"] = Label()
+		self["writerLabel"] = Label()
+		self["writerLabel"].setText(_("Writer:"))
 
 		self["genre"] = Label()
 		self["genreLabel"] = Label()
@@ -295,49 +312,121 @@ class DP_View(Screen, NumericalTextInput):
 		self["yearLabel"] = Label()
 		self["yearLabel"].setText(_("Year:"))
 
-		self["runtime"] = Label()
-		self["runtimeLabel"] = Label()
-		self["runtimeLabel"].setText(_("Runtime:"))
+		self["leafCount"] = Label()
+		self["leafCountLabel"] = Label()
+		self["leafCountLabel"].setText(_("Medias:"))
 
-		self["total"] = Label()
+		self["unviewedLeafCount"] = Label()
+		self["unviewedLeafCountLabel"] = Label()
+		self["unviewedLeafCountLabel"].setText(_("Unseen:"))
 
-		self["current"] = Label()
+		self["viewedLeafCount"] = Label()
+		self["viewedLeafCountLabel"] = Label()
+		self["viewedLeafCountLabel"].setText(_("Seen:"))
+
+		self["childCount"] = Label()
+		self["childCountLabel"] = Label()
+		self["childCountLabel"].setText(_("Seasons:"))
+
+		self["studio"] = Label()
+		self["studioLabel"] = Label()
+		self["studioLabel"].setText(_("Studio:"))
+
+		self["duration"] = Label()
+		self["durationLabel"] = Label()
+		self["durationLabel"].setText(_("Runtime:"))
 
 		self["backdrop"] = Pixmap()
-		self["backdropVideo"] = Pixmap() # this is just to avoid greenscreen, maybe we find a better way
-		self["backdroptext"] = Label()
+
+		if self.liveTvInViews:
+			self["backdrop"].hide()
 
 		self["poster"] = Pixmap()
-		self["postertext"] = Label()
-
 		self["rating_stars"] = ProgressBar()
+
+		# media details
+		self["videoCodec"] = Label()
+		self["videoCodecLabel"] = Label()
+		self["videoCodecLabel"].setText(_("Video Codec:"))
+
+		self["bitrate"] = Label()
+		self["bitrateLabel"] = Label()
+		self["bitrateLabel"].setText(_("Bitrate:"))
+
+		self["videoFrameRate"] = Label()
+		self["videoFrameRateLabel"] = Label()
+		self["videoFrameRateLabel"].setText(_("Framerate:"))
+
+		self["audioChannels"] = Label()
+		self["audioChannelsLabel"] = Label()
+		self["audioChannelsLabel"].setText(_("Audio Channels:"))
+
+		self["aspectRatio"] = Label()
+		self["aspectRatioLabel"] = Label()
+		self["aspectRatioLabel"].setText(_("Aspect Ratio:"))
+
+		self["videoResolution"] = Label()
+		self["videoResolutionLabel"] = Label()
+		self["videoResolutionLabel"].setText(_("Resultion:"))
+
+		self["audioCodec"] = Label()
+		self["audioCodecLabel"] = Label()
+		self["audioCodecLabel"].setText(_("Audio Codec:"))
+
+		self["file"] = Label()
+		self["fileLabel"] = Label()
+		self["fileLabel"].setText(_("File:"))
+
+		self["casePic"] = Pixmap()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
-		self.poster_postfix = self.myParams["elements"]["poster"]["postfix"]
-		self.posterHeight = self.myParams["elements"]["poster"]["height"]
-		self.posterWidth = self.myParams["elements"]["poster"]["width"]
+		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
+		self.posterHeight = self.viewParams["elements"]["poster"]["height"]
+		self.posterWidth = self.viewParams["elements"]["poster"]["width"]
 
 		# Backdrops
 		self.EXpicloadBackdrop = ePicLoad()
-		self.backdrop_postfix = self.myParams["elements"]["backdrop"]["postfix"]
-		self.backdropHeight = self.myParams["elements"]["backdrop"]["height"]
-		self.backdropWidth = self.myParams["elements"]["backdrop"]["width"]
+		if self.currentViewName == "Backdrop":
+			self.backdrop_postfix = "_backdrop_1280x720_v2.jpg"
+			self.backdropHeight = "720"
+			self.backdropWidth = "1280"
+		else:
+			self.backdrop_postfix = self.viewParams["elements"]["backdrop"]["postfix"]
+			self.backdropHeight = self.viewParams["elements"]["backdrop"]["height"]
+			self.backdropWidth = self.viewParams["elements"]["backdrop"]["width"]
 
 		# now we try to enable stillPictureSupport
-		if config.plugins.dreamplex.useBackdropVideos.value and self.useBackdropVideos:
+		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
+			# if liveTv is not stopped on startup we have to do so now
+			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+				self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+				self.session.nav.stopService()
+
 			try:
-				from DPH_StillPicture import StillPicture
-				self["backdropVideo"] = StillPicture(session)
+				self["stillPicture"] = StillPicture(viewClass) # this is working over an renderer
+				# we use this to be able to resize the tv picture and show as backdrop
 				self.loadedStillPictureLib = True
+
 			except Exception, ex:
 				printl("Exception: " + str(ex), self, "D")
 				printl("was not able to import lib for stillpictures", self, "D")
+
+				# we need this as dummy
+				self["stillPicture"] = Label()
+		else:
+			# we need this as dummy
+			self["stillPicture"] = Label()
+
+		# for number key input
+		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
 
 		# on layout finish we have to do some stuff
 		self.onLayoutFinish.append(self.setPara)
 		self.onLayoutFinish.append(self.processGuiElements)
 		self.onLayoutFinish.append(self.finishLayout)
+		self.onLayoutFinish.append(self.setCustomTitle)
+		self.onFirstExecBegin.append(self.getViewListData)
 
 		printl("", self, "C")
 
@@ -347,7 +436,8 @@ class DP_View(Screen, NumericalTextInput):
 	def setCustomTitle(self):
 		printl("", self, "S")
 
-		self.setTitle(_(self.libraryName))
+		self.myTitle = _(self.libraryName)
+		self.setTitle(self.myTitle)
 
 		printl("", self, "C")
 
@@ -370,36 +460,10 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getGuiElements(self):
+	def setListViewElementsCount(self):
 		printl("", self, "S")
 
-		tree = Singleton().getSkinParamsInstance()
-
-		self.guiElements = {}
-		for guiElement in tree.findall('guiElement'):
-			name = str(guiElement.get('name'))
-			path = str(guiElement.get('path'))
-			self.guiElements[name] = path
-
-		printl("guiElements: " + str(self.guiElements), self, "D")
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setListViewElementsCount(self, viewName):
-		printl("", self, "S")
-
-		multiView = True
-
-		if multiView:
-			params = viewName[3]
-			self.itemsPerPage = int(params["settings"]['itemsPerPage'])
-		else:
-			tree = Singleton().getSkinParamsInstance()
-			for view in tree.findall('view'):
-				if view.get('name') == str(viewName[1]):
-					self.itemsPerPage = int(view.get('itemsPerPage'))
+		self.itemsPerPage = int(self.viewParams["settings"]['itemsPerPage'])
 
 		printl("self.itemsPerPage: " + str(self.itemsPerPage), self, "D")
 
@@ -408,49 +472,16 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onFirstExec(self):
+	def getViewListData(self):
 		printl("", self, "S")
 
-		if self.select is None: # Initial Start of View, select first entry in list
-			#sort = False
-			#if self.onFirstExecSort is not None:
-			#	self.activeSort = self.onFirstExecSort
-			#	sort = True
-			#myFilter = False
-			#if self.onFirstExecFilter is not None:
-			#	self.activeFilter = self.onFirstExecFilter
-			#	myFilter = True
-			# lets override this
-			myFilter = True
-			sort = True
+		# we have to initialize here as well
+		self.viewStep = 0
+		self.currentEntryDataDict = {}
+		self.currentIndexDict = {}
+		self.currentTagTypeDict = {}
 
-			self._load(ignoreSort=sort, ignoreFilter=myFilter)
-			self.refresh()
-		else: # changed views, reselect selected entry
-			printl("self.select: " +  str(self.select), self, "D")
-			sort = False
-			if self.onFirstExecSort is not None:
-				self.activeSort = self.onFirstExecSort
-				sort = True
-			myFilter = False
-			if self.onFirstExecFilter is not None:
-				self.activeFilter = self.onFirstExecFilter
-				myFilter = True
-
-			self._load(self.select[0], ignoreSort=sort, ignoreFilter=myFilter)
-			keys = self.select[1].keys()
-			listViewList = self["listview"].list
-			for i in range(len(listViewList)):
-				entry = listViewList[i]
-				found = True
-				for key in keys:
-					if entry[1][key] != self.select[1][key]:
-						found = False
-						break
-				if found:
-					self["listview"].setIndex(i)
-					break
-			self.refresh()
+		self._load()
 
 		printl("", self, "C")
 
@@ -471,162 +502,6 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		self["shortDescription"].pageDown()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey1(self):
-		printl("", self, "S")
-
-		self.onNumberKey(1)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey2(self):
-		printl("", self, "S")
-
-		self.onNumberKey(2)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey3(self):
-		printl("", self, "S")
-
-		self.onNumberKey(3)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey4(self):
-		printl("", self, "S")
-
-		self.onNumberKey(4)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey5(self):
-		printl("", self, "S")
-
-		self.onNumberKey(5)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey6(self):
-		printl("", self, "S")
-
-		self.onNumberKey(6)
-
-		printl("", self, "C")
-
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey7(self):
-		printl("", self, "S")
-
-		self.onNumberKey(7)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey8(self):
-		printl("", self, "S")
-
-		self.onNumberKey(8)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey9(self):
-		printl("", self, "S")
-
-		self.onNumberKey(9)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKey0(self):
-		printl("", self, "S")
-
-		self.onNumberKey(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKey(self, number):
-		printl("", self, "S")
-
-		printl(str(number), self, "I")
-
-		key = self.getKey(number)
-		if key is not None:
-			keyvalue = key.encode("utf-8")
-			if len(keyvalue) == 1:
-				self.onNumberKeyLastChar = keyvalue[0].upper()
-				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKeyPopup(self, value, visible):
-		printl("", self, "S")
-
-		if visible:
-			self["number_key_popup"].setText(value)
-			self["number_key_popup"].show()
-		else:
-			self["number_key_popup"].hide()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def timeout(self):
-		"""
-		onNumberKeyTimeout
-		"""
-		printl("", self, "S")
-
-		printl(self.onNumberKeyLastChar, self, "I")
-		if self.onNumberKeyLastChar != ' ':
-			self.activeFilter = ('Abc', ('title', False, 1), self.onNumberKeyLastChar)
-		else:
-			self.activeFilter = ("All", (None, False), ("All", ))
-		self.sort()
-		self.filter()
-
-		self.refresh()
-
-		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
-		NumericalTextInput.timeout(self)
 
 		printl("", self, "C")
 
@@ -656,7 +531,8 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyInfo(self):
 		printl("", self, "S")
 
-		self.showFunctions(not self.areFunctionsHidden)
+		self.showMedia = True
+		self.refresh()
 
 		printl("", self, "C")
 
@@ -666,7 +542,7 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyMenu(self):
 		printl("", self, "S")
 
-		self.displayOptionsMenu()
+		#self.displayOptionsMenu()
 
 		printl("", self, "C")
 
@@ -676,9 +552,8 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyVideo(self):
 		printl("", self, "S")
 
-		self.showMedia = True
-		self.resetGuiElements = True
-		self.refresh()
+		pass
+		#self.showFunctions(not self.areFunctionsHidden)
 
 		printl("", self, "C")
 
@@ -748,7 +623,256 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyRed(self):
 		printl("", self, "S")
 
-		self.onToggleSort()
+		func = self.getColorFunction("red", self.currentFunctionLevel)
+		if func:
+			func()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initColorFunctions(self):
+		printl("", self, "S")
+
+		self.setColorFunction(color="red", level="1", functionList=("", self.togglePlayMode))
+		self.setColorFunction(color="green", level="1", functionList=("", self.toggleResumeMode))
+		self.setColorFunction(color="yellow", level="1", functionList=("", self.executeLibraryFunction)) # name is empty because we set it dynamical
+		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), self.togglePlaybackMode))
+
+		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", self.onToggleView))
+		self.setColorFunction(color="green", level="2", functionList=("", self.toggleFastScroll)) # name is empty because we set it dynamical
+		self.setColorFunction(color="yellow", level="2", functionList=("refresh Library", self.initiateRefresh))
+		self.setColorFunction(color="blue", level="2", functionList=(_("show 'Details'"), self.toggleDetails))
+
+		self.setColorFunction(color="red", level="3", functionList=("Server Settings", self.showServerSettings))
+		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", self.showGeneralSettings))
+		self.setColorFunction(color="yellow", level="3", functionList=(_("delete Medias"), self.deleteMedias))
+		self.setColorFunction(color="blue", level="3", functionList=None)
+
+		self.setColorFunction(color="red", level="4", functionList=("", self.toggleFilterMode)) # name is empty because we set it dynamical
+		self.setColorFunction(color="green", level="4", functionList=None)
+		self.setColorFunction(color="yellow", level="4", functionList=None)
+		self.setColorFunction(color="blue", level="4", functionList=None)
+
+		self.alterColorFunctionNames(level="1")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def deleteMedias(self):
+		printl("", self, "S")
+		from os import remove
+
+		remove(self.whatPoster)
+		remove(self.whatBackdrop)
+
+		text = "Successfully removed images!"
+		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initPlayMode(self):
+		printl("", self, "S")
+
+		color = "red"
+
+		if self.autoPlayMode:
+			self["btn_"+ color + "Text"].setText(_("playmode 'multi'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def togglePlayMode(self):
+		printl("", self, "S")
+		color = "red"
+
+		if self.autoPlayMode:
+			self.autoPlayMode = False
+			self["btn_"+ color + "Text"].setText(_("playmode 'single'"))
+		else:
+			self.autoPlayMode = True
+			self["btn_"+ color + "Text"].setText(_("playmode 'multi'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initResumeMode(self):
+		printl("", self, "S")
+
+		color = "green"
+
+		if self.resumeMode:
+			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleResumeMode(self):
+		printl("", self, "S")
+		color = "green"
+
+		if self.resumeMode:
+			self.resumeMode = False
+			self["btn_"+ color + "Text"].setText(_("resume 'Off'"))
+		else:
+			self.resumeMode = True
+			self["btn_"+ color + "Text"].setText(_("resume 'On'"))
+
+		# we have to reset here to force changes on the screen that are fastscroll related
+		self.lastTagType = None
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initFastScroll(self):
+		printl("", self, "S")
+
+		color = "green"
+		if self.fastScroll:
+			self["btn_"+ color + "Text"].setText(_("fastScroll 'On'"))
+		else:
+			self["btn_"+ color + "Text"].setText(_("fastScroll 'Off'"))
+			self["info"].hide()
+			self["infoLabel"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFastScroll(self):
+		printl("", self, "S")
+
+		color = "green"
+
+		if self.fastScroll:
+			self.fastScroll = False
+			self["btn_" + color + "Text"].setText("fastScroll 'Off'")
+			self["info"].hide()
+			self["infoLabel"].hide()
+		else:
+			self.fastScroll = True
+			self["btn_" + color + "Text"].setText("fastScroll 'On'")
+			self["info"].show()
+			self["infoLabel"].show()
+			self["miniTv"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showServerSettings(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		self.session.open(DPS_Server)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initPlaybackMode(self):
+		printl("", self, "S")
+
+		self.playbackModes = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))]
+		self.configuredPlaybackMode = int(self.serverConfig.playbackType.value)
+		self.nextPlaybackMode = self.configuredPlaybackMode
+		self.lengthOfPlaybackModes = len(self.playbackModes)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def togglePlaybackMode(self):
+		printl("", self, "S")
+
+		color = "blue"
+
+		self.nextPlaybackMode += 1
+
+		if self.nextPlaybackMode >= self.lengthOfPlaybackModes:
+			self.nextPlaybackMode = 0
+
+		if self.configuredPlaybackMode == self.nextPlaybackMode:
+			myName = "default"
+		else:
+			myName = self.playbackModes[self.nextPlaybackMode][1]
+
+		self.playbackMode = self.nextPlaybackMode
+
+		self["btn_" + color + "Text"].setText("playback mode '" + myName + "'")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def initFilterMode(self):
+		printl("", self, "S")
+		color = "red"
+
+		self.filterMode = True
+		self["L1"].hide()
+		self["L2"].hide()
+		self["L3"].hide()
+
+		self["btn_"+ color + "Text"].setText(_("turn filter mode off"))
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleFilterMode(self, quit=False):
+		printl("", self, "S")
+
+		if self.filterMode or quit:
+			self.filterMode = False
+			self.onKey1() # we return to normal functions
+			self["L1"].show()
+			self["L2"].show()
+			self["L3"].show()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showGeneralSettings(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		self.session.open(DPS_Settings)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def executeLibraryFunction(self):
+		printl("", self, "S")
+
+		if self.seen:
+			self.markUnwatched()
+		else:
+			self.markWatched()
 
 		printl("", self, "C")
 
@@ -758,28 +882,6 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyRedLong(self):
 		printl("", self, "S")
 
-		self.onChooseSort()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKeyGreen(self):
-		printl("", self, "S")
-
-		self.onToggleFilter()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onKeyGreenLong(self):
-		printl("", self, "S")
-
-		self.onChooseFilter()
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -788,13 +890,17 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyYellow(self):
 		printl("", self, "S")
 
-		if self.fastScroll:
-			self.fastScroll = False
-			self["txt_yellow"].setText("fastScroll = Off")
-		else:
-			self.fastScroll = True
-			self["txt_yellow"].setText("fastScroll = On")
-			self.resetGuiElements = True
+		func = self.getColorFunction("yellow", self.currentFunctionLevel)
+		if func:
+			func()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyYellowLong(self):
+		printl("", self, "S")
 
 		printl("", self, "C")
 
@@ -804,7 +910,171 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyBlue(self):
 		printl("", self, "S")
 
-		self.onToggleView()
+		func = self.getColorFunction("blue", self.currentFunctionLevel)
+		if func:
+			func()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKeyGreen(self):
+		printl("", self, "S")
+
+		func = self.getColorFunction("green", self.currentFunctionLevel)
+		if func:
+			func()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey1(self, initial=False):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			if not self.keyOneDisabled:
+				self.setLevelActive(currentLevel="1")
+				self.alterColorFunctionNames(level="1")
+
+				if not initial:
+					self.refreshFunctionName()
+
+				self.lastTagType = None
+
+		else:
+			self.onNumberKey(1)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey2(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="2")
+			self.alterColorFunctionNames(level="2")
+
+			self.initFastScroll()
+
+		else:
+			self.onNumberKey(2)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey3(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="3")
+			self.alterColorFunctionNames(level="3")
+
+		else:
+			self.onNumberKey(3)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey4(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			self.setLevelActive(currentLevel="4")
+			self.alterColorFunctionNames(level="4")
+
+			self.initFilterMode()
+
+		else:
+			self.onNumberKey(4)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey5(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(5)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey6(self):
+		printl("", self, "S")
+
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(6)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey7(self):
+		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(7)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey8(self):
+		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(8)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey9(self):
+		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(9)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey0(self):
+		printl("", self, "S")
+		if not self.filterMode:
+			pass
+
+		else:
+			self.onNumberKey(0)
 
 		printl("", self, "C")
 
@@ -814,203 +1084,18 @@ class DP_View(Screen, NumericalTextInput):
 	def onKeyBlueLong(self):
 		printl("", self, "S")
 
-		self.displayViewMenu()
-
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def onToggleSort(self):
-		printl("", self, "S")
-
-		for i in range(len(self.onSortKeyValuePair)):
-			if self.activeSort[1] == self.onSortKeyValuePair[i][1]:
-				if (i+1) < len(self.onSortKeyValuePair):
-					self.activeSort = self.onSortKeyValuePair[i + 1]
-				else:
-					self.activeSort = self.onSortKeyValuePair[0]
-				break
-
-		self.sort()
-		self.filter()
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseSortCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			self.activeSort = choice[1]
-			self.sort()
-			self.filter()
-			self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseSort(self):
-		printl("", self, "S")
-
-		menu = []
-		for e in self.onSortKeyValuePair:
-			menu.append((_(e[0]), e, ))
-		selection = 0
-		for i in range(len(self.onSortKeyValuePair)):
-			if self.activeSort[1] == self.onSortKeyValuePair[i][1]:
-				selection = i
-				break
-		self.session.openWithCallback(self.onChooseSortCallback, ChoiceBox, title=_("Select sort"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onToggleFilter(self):
-		printl("", self, "S")
-
-		for i in range(len(self.onFilterKeyValuePair)):
-			if self.activeFilter[1][0] == self.onFilterKeyValuePair[i][1][0]:
-				# Genres == Genres
-
-				# Try to select the next genres subelement
-				found = False
-				y = None
-				subelements = self.onFilterKeyValuePair[i][2]
-				for j in range(len(subelements)):
-					if self.activeFilter[2] == subelements[j]:
-						# Action == Action
-						if (j+1) < len(subelements):
-							y = subelements[j + 1]
-							found = True
-							break
-
-				if found:
-					x = self.onFilterKeyValuePair[i]
-					self.activeFilter = (x[0], x[1], y, )
-				else:
-					# If we are at the end of all genres subelements select the next one
-					if (i+1) < len(self.onFilterKeyValuePair):
-						x = self.onFilterKeyValuePair[i + 1]
-					else:
-						x = self.onFilterKeyValuePair[0]
-					self.activeFilter = (x[0], x[1], x[2][0], )
-
-				break
-
-		self.sort()
-		self.filter()
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseFilterCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			self.activeFilter = choice[1]
-			self.sort()
-			self.filter()
-			self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseFilter(self):
-		printl("", self, "S")
-
-		menu = []
-
-		selection = 0
-		counter = 0
-
-		for i in range(len(self.onFilterKeyValuePair)):
-			x = self.onFilterKeyValuePair[i]
-			subelements = self.onFilterKeyValuePair[i][2]
-			for j in range(len(subelements)):
-				y = subelements[j]
-				text = "%s: %s" % (_(x[0]), _(y))
-				menu.append((text, (x[0], x[1], y, )))
-				if self.activeFilter[1][0] == self.onFilterKeyValuePair[i][1][0]:
-					if self.activeFilter[2] == subelements[j]:
-						selection = counter
-				counter += 1
-
-		self.session.openWithCallback(self.onChooseFilterCallback, ChoiceBox, title=_("Select filter"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onToggleView(self, forceUpdate=False):
+	def onToggleView(self):
 		printl("", self, "S")
 
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
-
-		select = None
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			params = {}
-			printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
-			for key in self.onEnterPrimaryKeys:
-				if key != "play" or key != "directMode":
-					params[key] = selection[1][key]
-			select = (self.currentKeyValuePair, params)
-
-		if forceUpdate:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW_FORCE_UPDATE, select, self.activeSort, self.activeFilter))
-		else:
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseView(self):
-		printl("", self, "S")
-
-		menu = getViews(self.libraryName)
-		selection = 0
-		for i in range(len(menu)):
-			if self.viewName[1] == menu[i][1]:
-				selection = i
-				break
-		self.session.openWithCallback(self.onChooseViewCallback, ChoiceBox, title=_("Select view"), list=menu, selection=selection)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onChooseViewCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is not None:
-			select = None
-			selection = self["listview"].getCurrent()
-			if selection is not None:
-				params = {}
-				printl( "self.onEnterPrimaryKeys:" + str(self.onEnterPrimaryKeys), self, "D")
-				for key in self.onEnterPrimaryKeys:
-					if key != "play" or key != "directMode":
-						params[key] = selection[1][key]
-				select = (self.currentKeyValuePair, params)
-			self.close((DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, select, self.activeSort, self.activeFilter, choice[1]))
+		cause = (DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, )
+		self.leaveNow(cause)
 
 		printl("", self, "C")
 
@@ -1067,89 +1152,166 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def onEnter(self):
+	def onNumberKey(self, number):
 		printl("", self, "S")
-		selection = self["listview"].getCurrent()
 
-		if selection is not None:
-			details		= selection[1]
-			extraData	= selection[2]
-			#image		= selection[3]
+		printl(str(number), self, "I")
 
-			#details
-			viewMode	= details['viewMode']
-			self.viewMode = self.details ["viewMode"]
-
-			server		= details['server']
-			printl("currentViewMode: " +str(viewMode), self, "D")
-			printl("server: " +str(server), self, "D")
-
-			#extraData
-			url_path	= extraData['key']
-			printl("url_path: " +str(url_path), self, "D")
-
-			if viewMode == "ShowSeasons":
-				self.viewStep += 1
-				printl("viewMode -> ShowSeasons", self, "I")
-
-				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
-
-				self.currentSeasonsParams = params
-				self.currentShowIndex = self["listview"].getIndex()
-
-				self._load(params)
-
-			elif viewMode == "ShowEpisodes":
-				self.viewStep += 1
-				printl("viewMode -> ShowEpisodes", self, "I")
-
-				params = {"viewMode": viewMode, "url": "http://" + server + url_path}
-
-				self.currentEpisodesParams = params
-				self.currentSeasonIndex = self["listview"].getIndex()
-
-				self._load(params)
-
-			elif viewMode == "play" or viewMode == "directMode":
-				printl("viewMode -> play", self, "I")
-				self.playEntry(selection)
-
-			elif viewMode == "directory":
-				printl("viewMode -> directory", self, "I")
-
-				params = {"viewMode": viewMode, "id": url_path}
-
-				self.currentMovieParams = params
-				self.currentMovieIndex = self["listview"].getIndex()
-
-				self._load(params)
-
-			else:
-				printl("SOMETHING WENT WRONG", self, "W")
-
-		self.refresh()
+		key = self.getKey(number)
+		if key is not None:
+			keyvalue = key.encode("utf-8")
+			if len(keyvalue) == 1:
+				self.onNumberKeyLastChar = keyvalue[0].upper()
+				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def showMediaDetail(self):
+	def onNumberKeyPopup(self, value, visible):
 		printl("", self, "S")
-		self.showDetail = True
+
+		if visible:
+			self["number_key_popup"].setText(value)
+			self["number_key_popup"].show()
+		else:
+			self["number_key_popup"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def timeout(self):
+		"""
+		onNumberKeyTimeout
+		"""
+		printl("", self, "S")
+
+		printl(self.onNumberKeyLastChar, self, "I")
+		if self.onNumberKeyLastChar != ' ':
+			pass
+			# filter
+		else:
+			pass
+			# reset filter
+
+		self.filter()
+
+		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
+		NumericalTextInput.timeout(self)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onEnter(self):
+		printl("", self, "S")
+		self.lastTagType = None
+
 		selection = self["listview"].getCurrent()
 
 		if selection is not None:
-			details			= selection[1]
+			entryData		= selection[1]
+			#context		= selection[2]
+			nextContentUrl = selection[4]
 
-			#details
-			viewMode		= details['viewMode']
+			# we extend details for provide the next data location
+			entryData["contentUrl"] = nextContentUrl
 
-			if viewMode == "play" or viewMode == "directMode":
-				printl("viewMode -> play", self, "I")
-				self.playEntry(selection)
+			self.currentViewMode	= entryData['currentViewMode']
+			printl("currentViewMode: " + str(self.currentViewMode), self, "D")
+
+			# we need this for onEnter-func in child lib
+
+			if entryData['tagType'] == "Track" or entryData['tagType'] == "Video":
+				if config.plugins.dreamplex.useBackdropVideos.value:
+					self.stopBackdropVideo()
+
+				currentIndex = self["listview"].getIndex()
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, self.whatPoster)
+
+			else:
+				# save index here because user moved around for sure
+				self.currentIndexDict[self.viewStep] = self["listview"].getIndex()
+
+				self.viewStep += 1
+				self._load(entryData)
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleDetails(self):
+		printl("", self, "S")
+
+		if self.detailsPaneVisible:
+			self.hideDetails()
+		else:
+			self.showDetails()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def hideDetails(self):
+		printl("", self, "S")
+
+		color = "blue"
+
+		self.detailsPaneVisible = False
+		self["shortDescription"].show()
+		self["btn_" + color + "Text"].setText(_("show 'Details'"))
+
+		self.toggleElementVisibilityWithLabel("videoCodec", "hide")
+		self.toggleElementVisibilityWithLabel("bitrate", "hide")
+		self.toggleElementVisibilityWithLabel("videoFrameRate", "hide")
+		self.toggleElementVisibilityWithLabel("audioChannels", "hide")
+		self.toggleElementVisibilityWithLabel("aspectRatio", "hide")
+		self.toggleElementVisibilityWithLabel("videoResolution", "hide")
+		self.toggleElementVisibilityWithLabel("audioCodec", "hide")
+		self.toggleElementVisibilityWithLabel("file", "hide")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def showDetails(self):
+		printl("", self, "S")
+
+		color = "blue"
+
+		self.detailsPaneVisible = True
+		self["shortDescription"].hide()
+		self["btn_"  + color + "Text"].setText(_("show 'Description'"))
+
+		self.toggleElementVisibilityWithLabel("videoCodec")
+		self.toggleElementVisibilityWithLabel("bitrate")
+		self.toggleElementVisibilityWithLabel("videoFrameRate")
+		self.toggleElementVisibilityWithLabel("audioChannels")
+		self.toggleElementVisibilityWithLabel("aspectRatio")
+		self.toggleElementVisibilityWithLabel("videoResolution")
+		self.toggleElementVisibilityWithLabel("audioCodec")
+		self.toggleElementVisibilityWithLabel("file")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def toggleElementVisibilityWithLabel(self, elementName, action="show"):
+
+		if action == "show":
+			self[elementName].show()
+			self[elementName+ "Label"].show()
+		elif action == "hide":
+			self[elementName].hide()
+			self[elementName+ "Label"].hide()
 
 	#===========================================================================
 	#
@@ -1157,227 +1319,158 @@ class DP_View(Screen, NumericalTextInput):
 	def onLeave(self):
 		printl("", self, "S")
 
+		# first decrease by one
 		self.viewStep -= 1
 
-		selectKeyValuePair = self.onLeaveSelectKeyValuePair
-		printl("selectKeyValuePair: " + str(selectKeyValuePair), self, "D")
+		printl("returnTo: " + str(self.returnTo), self, "D")
 
-		if config.plugins.dreamplex.useBackdropVideos.value:
-			self.stopBackdropVideo()
+		if self.detailsPaneVisible:
+			self.hideDetails()
 
 		if config.plugins.dreamplex.playTheme.value:
 			printl("stoping theme playback", self, "D")
-			self.session.nav.stopService()
+			if self.themeMusicIsRunning:
+				self.session.nav.stopService()
 
-		if selectKeyValuePair == "backToSeasons":
-			self._load(self.currentSeasonsParams)
-			self["listview"].setIndex(self.currentSeasonIndex)
+		if self.viewStep >= 0:
+			self["listview"].setList(self.currentEntryDataDict[self.viewStep])
+			self["listview"].setIndex(self.currentIndexDict[self.viewStep])
 
-		elif selectKeyValuePair == "backToShows":
-			self._load(ignoreSort=True)
-			self["listview"].setIndex(self.currentShowIndex)
+			if self.filterMode:
+				self.toggleFilterMode(quit=True)
 
-		elif selectKeyValuePair == "backToMovies":
-			self._load(ignoreSort=True)
-			self["listview"].setIndex(self.currentMovieIndex)
+			self.selection = self["listview"].getCurrent()
+			if self.selection is not None:
+				self.details 	= self.selection[1]
+				self.context	= self.selection[2]
 
+			if self.viewStep >= 1:
+				self.leaving = False
+			else:
+				self.leaving = True
 		else:
-			self.close()
-			printl("", self, "C")
-			return
-
-		self.refresh()
+			self.leaveNow()
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def _load(self, params=None, ignoreSort=False, ignoreFilter=False):
-		"""
-			e.g.
-			params = {}
-			params["viewMode"] = viewMode
-			params["url"] = "http://" + server + url_path
-			params["index"] = int
-		"""
+	def leaveNow(self, cause=None):
 		printl("", self, "S")
-		printl("params: " + str(params), self, "D")
-		printl("cache: " + str(self.cache), self, "D")
 
-		if params is None:
-			params = {}
-			params["viewMode"] = None
+		if self.loadedStillPictureLib:
+			self.stopBackdropVideo()
 
-		params["cache"] = self.cache
+		if self.currentService is not None:
+			self.restoreLiveTv()
 
-		library = self.loadLibrary(params)
-		#library for e.g. = return (library, ("viewMode", "ratingKey", ), None, "backToShows", sort, filter)
-		# (libraryArray, onEnterPrimaryKeys, onLeavePrimaryKeys, onLeaveSelectEntry
+		if cause is not None:
+			printl("", self, "C")
+			self.close(cause)
+		else:
+			printl("", self, "C")
+			self.close()
 
-		self.listViewList = library[0]
+	#===========================================================================
+	#
+	#===========================================================================
+	def _load(self, entryData = None):
+		printl("", self, "S")
+		printl("entryData: " + str(entryData), self, "D")
+
+		# loadLibrary is a function in each class that inherits from DP_LibMain (DP_LibMovies, DP_LibSHows, DP_LibMusic)
+		libraryDataArr = self.loadLibrary(entryData, self.forceUpdate)
+		self.forceUpdate=False
+
+		# this is the content for the list (must be tuple no dict)
+		self.libraryData = libraryDataArr[0]
+
+		# enable this only if you realy need the information for debuging
+		#printl("libraryData: " + str(self.libraryData), self, "D")
 
 		# we need to do this because since we save cache via pickle the seen pic object cant be saved anymore
-		# so we implement it here
-		self.newList = []
+		self.listViewList = self.alterViewStateInList(self.libraryData)
+		self.beforeFilterListViewList = self.listViewList
+
+		# mediaContainer on top of xml
+		self.mediaContainer = libraryDataArr[1]
+		printl("mediaContainer: " + str(self.mediaContainer), self, "D")
+
+		# we save the list to be able to restore
+		self.currentEntryDataDict[self.viewStep] = self.listViewList
+
+		# now just refresh list
+		self.updateList()
+
+		# now refresh
+		self.refresh()
+
+		# check in settings
+		if self.startWithFilterMode and self.filterableContent:
+			self.onKey4()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def alterViewStateInList(self, listViewList):
+		printl("", self, "S")
+		#printl("listViewList: " + str(listViewList), self, "S")
+		newList = []
 		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
 
-		for listView in self.listViewList:
-			if listView is not None:
-				printl("seenVisu location: " + str(listView[4]), self, "D")
-				if 'seen-fs8.png' == str(listView[4]):
-					seenVisu = self.seenPic
+		for listViewEntry in listViewList:
+			viewState = str(listViewEntry[3])
+			#printl("seenVisu location: " + str(listViewEntry[3]), self, "D")
 
-				elif 'started-fs8.png' == str(listView[4]):
-					seenVisu = self.startedPic
+			if listViewEntry is not None:
+				if viewState == 'seen':
+					viewState = self.seenPic
 
-				elif 'unseen-fs8.png' == str(listView[4]):
-					seenVisu = self.unseenPic
+				elif viewState == 'started':
+					viewState = self.startedPic
+
+				elif viewState == 'unseen':
+					viewState = self.unseenPic
 
 				else:
-					seenVisu = undefinedIcon
+					viewState = undefinedIcon
 
-				content = (listView[0], listView[1], listView[2], listView[3], seenVisu ,listView[5])
-				self.newList.append(content)
+			content = (listViewEntry[0], listViewEntry[1], listViewEntry[2], viewState ,listViewEntry[4])
+			newList.append(content)
 
-		self.listViewList = self.newList
-		self.origListViewList = self.newList
-
-		self.onEnterPrimaryKeys = library[1]
-		printl("onEnterPrimaryKeys: " + str(library[1]), self, "D")
-
-		self.onLeavePrimaryKeyValuePair = library[2]
-		printl("onLeavePrimaryKeyValuePair: " + str(library[2]), self, "D")
-
-		self.onLeaveSelectKeyValuePair = library[3]
-		printl("onLeaveSelectKeyValuePair: " + str(library[3]), self, "D")
-
-		self.onSortKeyValuePair = library[4]
-		printl("onSortKeyValuePair: " + str(library[4]), self, "D")
-
-		self.onFilterKeyValuePair = library[5]
-		printl("onFilterKeyValuePair: " + str(library[5]), self, "D")
-
-		if len(library) >= 7:
-			self.libraryFlags = library[6]
-		else:
-			self.libraryFlags = {}
-
-		if ignoreSort is False:
-			# After changing the lsit always return to the default sort
-			self.activeSort = self.onSortKeyValuePair[0]
-			self.sort()
-
-		if ignoreFilter is False:
-			# After changing the lsit always return to the default filter
-			x = self.onFilterKeyValuePair[0]
-			self.activeFilter = (x[0], x[1], x[2][0], )
-			#self.listViewList = self.filter()
-
-		self.updateList()
 		printl("", self, "C")
+		return newList
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def updateList(self):
+	def updateList(self, myIndex=None):
 		printl("", self, "S")
+		print "we are here"
+
 		self["listview"].setList(self.listViewList)
-		self["listview"].setIndex(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def resetList(self):
-		printl("", self, "S")
-
-		self.listViewList = self.origListViewList
-
-		printl("", self, "C")
-	#===========================================================================
-	#
-	#===========================================================================
-	def sort(self):
-		printl("", self, "S")
-		#printl("listViewList: " + str(self.listViewList), self, "D")
-
-		text = "toogle Sorting (sorted %s)" % (_(self.activeSort[0]))
-		self["txt_red"].setText(text)
-		self.areFunctionsHidden = True
-
-		try:
-			if self.activeSort[1] is None:
-				printl("sorting by default", self, "D")
-				self.listViewList.sort(key=lambda x: x[0], reverse=self.activeSort[2])
-				self.resetList()
-				self.updateList()
-			else:
-				printl("sorting by value in selection: " + str(self.activeSort[1]), self, "D")
-				self.listViewList.sort(key=lambda x: x[1][self.activeSort[1]], reverse=self.activeSort[2])
-		except Exception, ex:
-			printl("Exception(" + str(ex) + ")", self, "E")
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def filter(self):
-		printl("", self, "S")
-
-		printl( "self.activeFilter: " + str(self.activeFilter), self, "D")
-
-		if len(self.activeFilter[2]) > 0:
-			text = _("set Filter (set to '%s')") % (_(self.activeFilter[2]))
+		if myIndex is not None:
+			self["listview"].setIndex(myIndex)
 		else:
-			text = _("set Filter (set to '%s')") % (_(self.activeFilter[0]))
+			self["listview"].setIndex(0)
 
-		self["txt_filter"].setText(text)
+		# now we set the currentViewMode to be able to alter skin elements according to their settings in the params file
+		self.selection = self["listview"].getCurrent()
 
-		if self.activeFilter[1][0] is None:
-			listViewList = self.origListViewList
+		# none is possible if there is no data in the section
+		if self.selection is not None:
+			self.currentViewMode = self.selection[1]["currentViewMode"]
+			printl("currentViewMode: " + str(self.currentViewMode), self, "D")
+			self.processSubViewElements(myType=self.currentViewMode)
 		else:
-
-			testLength = None
-			if len(self.activeFilter[1]) >= 3:
-				testLength = self.activeFilter[1][2]
-
-			if self.activeFilter[1][1]:
-				listViewList = [x for x in self.origListViewList if self.activeFilter[2] in x[1][self.activeFilter[1][0]]]
-			else:
-				if testLength is None:
-					listViewList = [x for x in self.origListViewList if x[1][self.activeFilter[1][0]] == self.activeFilter[2]]
-				else:
-					listViewList = [x for x in self.origListViewList if x[1][self.activeFilter[1][0]].strip()[:testLength] == self.activeFilter[2].strip()[:testLength]]
-		self.listViewList = listViewList
-		self.updateList()
+			text = "You have no data in this section!"
+			self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+			self.leaveNow()
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setText(self, name, value, ignore=False, what=None):
-		#printl("", self, "S")
-		#printl("setting text for " + str(name) + " with value " + str(value), self, "D")
-		# todo lets check this. seems to be some kind of too much
-		try:
-			if self[name]:
-				if len(value) > 0:
-					self[name].setText(value)
-				elif ignore is False:
-					if what is None:
-						self[name].setText(_("Not available"))
-					else:
-						self[name].setText(what + ' ' + _("not available"))
-				else:
-					self[name].setText(" ")
-		except Exception, ex:
-			printl("Exception: " + str(ex), self)
-
-		#printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -1394,14 +1487,116 @@ class DP_View(Screen, NumericalTextInput):
 
 		if self.selection is not None:
 			printl("selection: " + str(self.selection), self, "D")
-			viewMode = self.selection[1]['viewMode']
-			self.selection = self.selection
+			self.tagType = self.selection[1]['tagType']
+			self.type = self.selection[1]['type']
 
-			self.isDirectory = False
-			if viewMode == "directory":
-				self.isDirectory = True
+			# we are a real folder on os level
+			if self.type == "Folder":
+				self.isFolder = True
+			else:
+				self.isFolder = False
+			printl("isFolder: " + str(self.isFolder), self, "D")
 
-		self._refresh()
+			# we are a xml directory tag
+			if self.tagType != "Directory":
+				self.handleViewStateInformation()
+
+		printl("fastScroll: " + str(self.fastScroll), self, "D")
+		printl("self.viewParams: " + str(self.viewParams), self, "D")
+
+		printl("showMedia: " + str(self.showMedia), self, "D")
+
+		if self.selection is not None:
+			self.details 	= self.selection[1]
+			self.context	= self.selection[2]
+
+			# navigation
+			self.handleNavigationData()
+
+			if not self.isFolder:
+				# if we are in fastScrollMode we have to reset some screen elements
+				if self.fastScroll:
+					self.resetGuiElementsInFastScrollMode()
+				else:
+					self.initFastScroll()
+
+				# to avoid unneeded skin changes we check here if the type is equal to the last one
+				if self.tagType != self.lastTagType:
+					# if we were are no folder anymore we switch back
+					self.unsetFromDirectoryMode()
+					if self.tagType == "Track" or self.tagType == "Video":
+						self.showMediaFunctions()
+
+				# now we go with the type related stuff like movie, music, etc.
+				self._refresh()
+
+			else:
+				self.changeBackdrop = False
+
+				# to avoid unneeded skin changes we check here if the type is equal to the last one
+				if self.tagType != self.lastTagType:
+					self.changePoster = True
+					self.resetPoster = True
+				else:
+					self.changePoster = False
+					self.resetPoster = False
+
+				# if we are a folder within a specific library we switch to folder mode
+				self.setToDirectoryMode()
+
+			# we save this to avoid extensive unnessary skin changes
+			self.lastTagType = self.tagType
+
+			# depending on the settings in params we reset all images that are needed to
+			self.resetCurrentImages()
+
+			# supress changing backdrop if we want liveTv in views via settings
+			if self.liveTvInViews:
+				self.changeBackdrop = False
+
+			# now go for it
+			self.handlePictures()
+
+		else:
+			self["title"].setText( "no data retrieved")
+			self["shortDescription"].setText("no data retrieved")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def handleViewStateInformation(self):
+		printl("", self, "S")
+
+		self.seen = False
+		if "viewCount" in self.selection[1]:
+			if "viewCount" > 0:
+				self.seen = True
+
+		if self.currentFunctionLevel == "1":
+			self.refreshFunctionName()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def refreshFunctionName(self, noInit=False):
+		printl("", self, "S")
+
+		color = "yellow"
+
+		if self.seen:
+			viewStateName = "set 'Unseen'"
+		else:
+			viewStateName = "set 'Seen'"
+
+		if not noInit:
+			self.initPlayMode()
+			self.initResumeMode()
+
+		self["btn_"+ color + "Text"].setText(viewStateName)
 
 		printl("", self, "C")
 
@@ -1411,107 +1606,215 @@ class DP_View(Screen, NumericalTextInput):
 	def _refresh(self):
 		printl("", self, "S")
 
-		printl("resetGuiElements: " + str(self.resetGuiElements), self, "D")
-		printl("self.myParams: " + str(self.myParams), self, "D")
+		printl("", self, "C")
 
-		if self.resetGuiElements:
-			self.resetGuiElementsInFastScrollMode()
+	#===============================================================================
+	#
+	#===============================================================================
+	def setDuration(self):
+		printl("", self, "S")
 
-		self.resetCurrentImages()
+		duration = str(self.details.get("duration", " - "))
 
-		printl("showMedia: " + str(self.showMedia), self, "D")
-
-		printl("isDirectory: " + str(self.isDirectory), self, "D")
-
-		if self.selection is not None:
-			self.details 		= self.selection[1]
-			self.extraData 		= self.selection[2]
-			self.context		= self.selection[3]
-
-			if self.isDirectory:
-				pass
-			else:
-				# lets get all data we need to show the needed pictures
-				# we also check if we want to play
-				self.getPictureInformationToLoad()
-
-				# lets set the urls for context functions of the selected entry
-				self.seenUrl = self.context.get("watchedURL", None)
-				self.unseenUrl = self.context.get("unwatchURL", None)
-				self.deleteUrl = self.context.get("deleteURL", None)
-				self.refreshUrl = self.context.get("libraryRefreshURL", None)
-				printl("seenUrl: " + str(self.seenUrl),self, "D")
-				printl("unseenUrl: " + str(self.unseenUrl),self, "D")
-				printl("deleteUrl: " + str(self.deleteUrl),self, "D")
-				printl("refreshUrl: " + str(self.refreshUrl),self, "D")
-
-				# if we are a show an if playtheme is enabled we start playback here
-				if self.playTheme:
-					if self.startPlaybackNow:
-						self.startThemePlayback()
-
-				self.setText("title", self.details.get("title", " "))
-				self.setText("grandparentTitle", self.details.get("grandparentTitle", " "))
-				self.setText("season", "Season " + self.details.get("season", " "))
-				self.setText("tag", self.details.get("tagline", " ").encode('utf8'), True)
-				self.setText("year", str(self.details.get("year", " - ")))
-				self.setText("genre", str(self.details.get("genre", " - ").encode('utf8')))
-				self.setText("subtitles", str(self.extraData.get("selectedSub", " - ").encode('utf8')))
-				self.setText("audio", str(self.extraData.get("selectedAudio", " - ").encode('utf8')))
-				self.setText("runtime", str(self.details.get("runtime", " - ")))
-				self.setText("shortDescription", str(self.details.get("summary", " ").encode('utf8')))
-
-				if self.fastScroll == False or self.showMedia == True:
-					# handle all pixmaps
-					self.handlePopularityPixmaps()
-					self.handleCodecPixmaps()
-					self.handleAspectPixmaps()
-					self.handleResolutionPixmaps()
-					self.handleRatedPixmaps()
-					self.handleSoundPixmaps()
-
-				# navigation
-				self.handleNavigationData()
-
-				# now lets switch images
-				if self.changePoster:
-					self.showPoster()
-
-				if not self.fastScroll or self.showMedia:
-					if self.changeBackdrop:
-						# check if showiframe lib loaded ...
-						if self.loadedStillPictureLib:
-							printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-							backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + ".m1v"
-							printl("backdrop: " + str(backdrop), self, "D")
-
-							# check if the backdrop file exists
-							if os.access(backdrop, os.F_OK):
-								printl("yes", self, "D")
-								self["backdropVideo"].setStillPicture(backdrop)
-								self["backdrop"].hide()
-								self.usedStillPicture = True
-							else:
-								printl("no", self, "D")
-								self["backdropVideo"].hide()
-								self["backdrop"].show()
-								# if not handle as normal backdrop
-								self.handleBackdrop()
-
-						else:
-							# if not handle as normal backdrop
-							self.handleBackdrop()
-
-				# toggle visible state of function box
-				self.showFunctions(False)
-
-				# we need those for fastScroll
-				# this prevents backdrop load on next item
-				self.showMedia = False
-
+		if duration == " - ":
+			self["duration"].setText(duration)
 		else:
-			self.setText("title", "no data retrieved")
-			self.setText("shortDescription", "no data retrieved")
+			self["duration"].setText(durationToTime(duration))
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def setMediaFunctions(self):
+		printl("", self, "S")
+
+		if self.context is not None:
+			# lets set the urls for context functions of the selected entry
+			self.seenUrl = self.context.get("watchedURL", None)
+			self.unseenUrl = self.context.get("unwatchURL", None)
+			self.deleteUrl = self.context.get("deleteURL", None)
+			self.refreshUrl = self.context.get("libraryRefreshURL", None)
+			printl("seenUrl: " + str(self.seenUrl),self, "D")
+			printl("unseenUrl: " + str(self.unseenUrl),self, "D")
+			printl("deleteUrl: " + str(self.deleteUrl),self, "D")
+			printl("refreshUrl: " + str(self.refreshUrl),self, "D")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def unsetFromDirectoryMode(self):
+		printl("", self, "S")
+
+		# we need those for fastScroll
+		# this prevents backdrop load on next item
+		self.showMedia = False
+		self.changeBackdrop = True
+
+		self["backdrop"].show()
+
+		if self.miniTvInUse:
+			self["miniTv"].show()
+		if self.lastTagType == "Directory":
+			self.toggleElementVisibilityWithLabel("audio")
+			self.toggleElementVisibilityWithLabel("subtitles")
+			self.toggleElementVisibilityWithLabel("genre")
+			self.toggleElementVisibilityWithLabel("duration")
+			self.toggleElementVisibilityWithLabel("year")
+
+		printl("", self, "C")
+	#===============================================================================
+	#
+	#===============================================================================
+	def setToDirectoryMode(self):
+		printl("", self, "S")
+
+		if self.tagType != self.lastTagType or self.tagType is None:
+			for element in self.noneDirectoryElementsList:
+				try:
+					self.toggleElementVisibilityWithLabel(element, "hide")
+				except: pass
+
+			self.hideMediaFunctions()
+			self.hideMediaPixmaps()
+
+			if self.miniTvInUse:
+				self["miniTv"].hide()
+
+		self["title"].setText("Directory")
+		self["tag"].setText("Name:")
+		self["shortDescription"].setText(self.details.get("title", " ").encode('utf-8'))
+
+		self.whatPoster = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/all/folder-fs8.png"
+		self["poster"].show()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def showVideoDetails(self):
+		printl("", self, "S")
+
+		self.toggleElementVisibilityWithLabel("writer")
+		self.toggleElementVisibilityWithLabel("director")
+		self.toggleElementVisibilityWithLabel("cast")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideVideoDetails(self):
+		printl("", self, "S")
+
+		self.toggleElementVisibilityWithLabel("writer", "hide")
+		self.toggleElementVisibilityWithLabel("director", "hide")
+		self.toggleElementVisibilityWithLabel("cast", "hide")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideMediaPixmaps(self):
+		printl("", self, "S")
+
+		self["rating_stars"].hide()
+		self["codec"].hide()
+		self["aspect"].hide()
+		self["resolution"].hide()
+		self["rated"].hide()
+		self["sound"].hide()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def handlePictures(self):
+		printl("", self, "S")
+
+		# now lets switch images
+		if self.changePoster:
+			self.showPoster()
+
+		if not self.fastScroll or self.showMedia:
+			if self.changeBackdrop:
+				# check if showiframe lib loaded ...
+				if self.loadedStillPictureLib and "ratingKey" in self.details:
+					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
+					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
+					printl("backdrop: " + str(backdrop), self, "D")
+
+					# check if the backdrop file exists
+					if os.access(backdrop, os.F_OK):
+						printl("yes", self, "D")
+						self["miniTv"].show()
+						self["stillPicture"].setStillPicture(backdrop)
+						self["backdrop"].hide()
+						self.usedStillPicture = True
+					else:
+						printl("no", self, "D")
+						self["miniTv"].hide()
+						self["backdrop"].show()
+
+						self["stillPicture"].finishStillPicture()
+
+						# if not handle as normal backdrop
+						self.handleBackdrop()
+
+				else:
+					# if not handle as normal backdrop
+					self.handleBackdrop()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideMediaFunctions(self):
+		printl("", self, "S")
+
+		self["btn_red"].hide()
+		self["btn_redText"].hide()
+		self["btn_yellow"].hide()
+		self["btn_yellowText"].hide()
+		self["btn_blue"].hide()
+		self["btn_blueText"].hide()
+		self["btn_green"].hide()
+		self["btn_greenText"].hide()
+
+		self.keyOneDisabled = True
+		if not self.filterMode:
+			self.onKey2()
+		self["L1"].hide()
+		#self["L2"].hide()
+		#self["L3"].hide()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def showMediaFunctions(self):
+		printl("", self, "S")
+
+		self["btn_red"].show()
+		self["btn_redText"].show()
+		self["btn_yellow"].show()
+		self["btn_yellowText"].show()
+		self["btn_blue"].show()
+		self["btn_blueText"].show()
+		self["btn_green"].show()
+		self["btn_greenText"].show()
+
+		self.keyOneDisabled = False
+		if not self.filterMode:
+			self.onKey1()
+			self["L1"].show()
 
 		printl("", self, "C")
 
@@ -1527,149 +1830,7 @@ class DP_View(Screen, NumericalTextInput):
 		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
 		self.refreshTimer = eTimer()
 		self.refreshTimer.callback.append(self.showBackdrop)
-		self.refreshTimer.start(1000, True)
-
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def playEntry(self, selection):
-		printl("", self, "S")
-
-		if config.plugins.dreamplex.useBackdropVideos.value:
-			self.stopBackdropVideo()
-
-		self.media_id = selection[1]['ratingKey']
-		server = selection[1]['server']
-
-		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False)
-
-		self.selectMedia(self.count, self.options, self.server)
-
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def stopBackdropVideo(self):
-		printl("", self, "S")
-
-		if self.loadedStillPictureLib and self.usedStillPicture:
-			# stop the m1v playback to avoid blocking the playback of the movie
-			self["backdropVideo"].finishStillPicture()
-
-		printl("", self, "C")
-
-	#===========================================================
-	#
-	#===========================================================
-	def selectMedia(self, count, options, server ):
-		printl("", self, "S")
-
-		#if we have two or more files for the same movie, then present a screen
-		self.options = options
-		self.server = server
-		self.dvdplayback=False
-
-		if count > 1:
-			printl("we have more than one playable part ...", self, "I")
-			indexCount=0
-			functionList = []
-
-			for items in self.options:
-				printl("item: " + str(items), self, "D")
-				if items[1] is not None:
-					name=items[1].split('/')[-1]
-				else:
-					size = convertSize(int(items[3]))
-					duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
-					# this is the case when there is no information of the real file name
-					name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
-
-				printl("name " + str(name), self, "D")
-				functionList.append((name ,indexCount, ))
-				indexCount+=1
-
-			self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
-
-		else:
-			self.setSelectedMedia()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setSelectedMedia(self, choice=None):
-		printl("", self, "S")
-		result = 0
-		printl("choice: " + str(choice), self, "D")
-
-		if choice is not None:
-			result = int(choice[1])
-
-		printl("result: " + str(result), self, "D")
-
-		self.mediaFileUrl = Singleton().getPlexInstance().mediaType({'key': self.options[result][0], 'file' : self.options[result][1]}, self.server)
-
-		self.playSelectedMedia()
-
-		printl("We have selected media at " + self.mediaFileUrl, self, "I")
-		printl("", self, "C")
-
-	#===============================================================================
-	#
-	#===============================================================================
-	def playSelectedMedia(self):
-		printl("", self, "S")
-
-		self.playerData = Singleton().getPlexInstance().playLibraryMedia(self.media_id, self.mediaFileUrl)
-
-		resumeStamp = self.playerData['resumeStamp']
-		printl("resumeStamp: " + str(resumeStamp), self, "I")
-
-		if self.showDetail:
-			currentFile = "Location:\n " + str(self.playerData['currentFile'])
-			self.session.open(MessageBox,_("%s") % currentFile, MessageBox.TYPE_INFO)
-			self.showDetail = False
-		else:
-			if self.playerData['fallback']:
-				message = _("Sorry I didn't find the file on the provided locations")
-				locations = _("Location:") + "\n " + self.playerData['locations']
-				suggestion = _("Please verify you direct local settings")
-				fallback = _("I will now try to play the file via transcode.")
-				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
-			else:
-				self.checkResume(resumeStamp)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def checkResume(self, resumeStamp):
-		printl("", self, "S")
-
-		if resumeStamp > 0:
-			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
-
-		else:
-			self.session.open(DP_Player, self.playerData)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def handleResume(self, confirm):
-		printl("", self, "S")
-
-		if confirm:
-			self.session.open(DP_Player, self.playerData, True)
-
-		else:
-			self.session.open(DP_Player, self.playerData)
+		self.refreshTimer.start(500, True)
 
 		printl("", self, "C")
 
@@ -1689,40 +1850,10 @@ class DP_View(Screen, NumericalTextInput):
 		pageTotal = int(math.ceil((itemsTotal / itemsPerPage) + correctionVal))
 		pageCurrent = int(math.ceil((self["listview"].getIndex() / itemsPerPage) + 0.5))
 
-		self.setText("total", _("Total:") + ' ' + str(itemsTotal))
-		self.setText("current", _("Pages:") + ' ' + str(pageCurrent) + "/" + str(pageTotal))
+		self["total"].setText(_(str(itemsTotal)))
+		self["pagination"].setText(_(str(pageCurrent) + "/" + str(pageTotal)))
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setDefaultView(self):
-		printl("", self, "S")
-
-		select = None
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			primaryKeyValuePair = {}
-			printl( "self.onEnterPrimaryKeys: " + str(self.onEnterPrimaryKeys), self, "D")
-			for key in self.onEnterPrimaryKeys:
-				if key != "play" or key != "directMode":
-					primaryKeyValuePair[key] = selection[1][key]
-			select = (self.currentKeyValuePair, primaryKeyValuePair)
-		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, select, self.activeSort, self.activeFilter))
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def clearDefaultView(self):
-		printl("", self, "S")
-
-		self.close((DP_View.ON_CLOSED_CAUSE_SAVE_DEFAULT, ))
-
-		printl("", self, "C")
-
 
 	#===========================================================================
 	#
@@ -1732,11 +1863,9 @@ class DP_View(Screen, NumericalTextInput):
 
 		functionList = []
 
-		functionList.append((_("Mark media unwatched"), Plugin("View", fnc=self.markUnwatched), ))
-		functionList.append((_("Mark media watched"), Plugin("View", fnc=self.markWatched), ))
-		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc=self.initiateRefresh), ))
-		functionList.append((_("Show media details"), Plugin("View", fnc=self.showMediaDetail), ))
-		functionList.append((_("Refresh this section"), Plugin("View", fnc=self.refreshSection), ))
+		functionList.append((_("Mark media unwatched"), Plugin("View", fnc = self.markUnwatched), ))
+		functionList.append((_("Mark media watched"), Plugin("View", fnc = self.markWatched), ))
+		functionList.append((_("Initiate Library refresh"), Plugin("View", fnc = self.initiateRefresh), ))
 		#functionList.append((_("Delete media from Library"), Plugin("View", fnc=self.deleteFromLibrary), ))
 
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Media Functions"), list=functionList)
@@ -1746,12 +1875,21 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	#
 	#===========================================================================
-	def refreshSection(self):
+	def displayOptionsMenuCallback(self, choice):
 		printl("", self, "S")
 
-		self.onToggleView(forceUpdate=True)
+		if choice is None or choice[1] is None:
+			printl("choice: None - we pressed exit", self, "D")
+			return
+
+		printl("choice: " + str(choice[1]), self, "D")
+
+		if choice[1].fnc:
+			printl("5", self, "D")
+			choice[1].fnc()
 
 		printl("", self, "C")
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -1787,7 +1925,7 @@ class DP_View(Screen, NumericalTextInput):
 				selection = i
 				break
 
-		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions\n\nPlease take note that switching the subtitles here will take only effect if you enable transcoding!"), list=functionList,selection=selection)
 
 		printl("", self, "C")
 
@@ -1826,7 +1964,7 @@ class DP_View(Screen, NumericalTextInput):
 				selection = i
 				break
 
-		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, title=_("Audio Functions"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displayAudioMenuCallback, ChoiceBox, title=_("Audio Functions\n\nPlease take note that switching the language here will take only effect if you enable transcoding!"), list=functionList,selection=selection)
 
 		printl("", self, "C")
 
@@ -1835,9 +1973,20 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def markUnwatched(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.unseenUrl)
-		self.showMessage()
+
+		currentIndex = self["listview"].getIndex()
+		currentSelection = self["listview"].getCurrent()
+		myList = list(currentSelection)
+		myList[3] = self.unseenPic
+		myList[1]["viewCount"] = 0
+		self["listview"].modifyEntry(currentIndex, tuple(myList))
+
+		self.seen = False
+
+		self.refreshFunctionName(noInit=True)
 
 		printl("", self, "C")
 
@@ -1846,9 +1995,20 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def markWatched(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.seenUrl)
-		self.showMessage()
+
+		currentIndex = self["listview"].getIndex()
+		currentSelection = self["listview"].getCurrent()
+		myList = list(currentSelection)
+		myList[3] = self.seenPic
+		myList[1]["viewCount"] = 1
+		self["listview"].modifyEntry(currentIndex, tuple(myList))
+
+		self.seen = True
+
+		self.refreshFunctionName(noInit=True)
 
 		printl("", self, "C")
 
@@ -1857,9 +2017,10 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def initiateRefresh(self):
 		printl("", self, "S")
+		self.forceUpdate = True
 
 		Singleton().getPlexInstance().doRequest(self.refreshUrl)
-		self.showMessage()
+		self.getViewListData()
 
 		printl("", self, "C")
 
@@ -1881,78 +2042,9 @@ class DP_View(Screen, NumericalTextInput):
 
 		if confirm:
 			Singleton().getPlexInstance().doRequest(self.deleteUrl)
-			self.showMessage()
+			self.getViewListData()
 		else:
 			self.session.open(MessageBox,_("Deleting aborted!"), MessageBox.TYPE_INFO)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def showMessage(self):
-		printl("", self, "S")
-
-		self.session.open(MessageBox,_("You have to reenter the section to see the changes!"), MessageBox.TYPE_INFO, timeout = 5)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def displayViewMenu(self):
-		printl("", self, "S")
-
-		pluginList = []
-
-		pluginList.append((_("Set view as default"), Plugin("View", fnc=self.setDefaultView), ))
-		pluginList.append((_("Clear default view"), Plugin("View", fnc=self.clearDefaultView), ))
-
-		plugins = getPlugins(where=Plugin.MENU_MOVIES_PLUGINS)
-		for plugin in plugins:
-			pluginList.append((plugin.name, plugin, ))
-
-		if len(pluginList) == 0:
-			pluginList.append((_("No plugins available"), None, ))
-
-		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Options"), list=pluginList)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	#noinspection PyUnusedLocal
-	def pluginCallback(self, args=None):
-		printl("", self, "S")
-
-		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def displayOptionsMenuCallback(self, choice):
-		printl("", self, "S")
-
-		if choice is None or choice[1] is None:
-			return
-
-		selection = self["listview"].getCurrent()
-		if selection is not None:
-			if choice[1].start:
-				if choice[1].supportStillPicture:
-					self.session.open(choice[1].start, selection[1])
-				else:
-					self.session.openWithCallback(self.pluginCallback, choice[1].start, selection[1])
-
-			elif choice[1].fnc:
-				printl("here", self, "D")
-				choice[1].fnc()
-				if choice[1].supportStillPicture is False and self.has_key("backdrop"):
-					printl("there", self, "D")
-					self.refresh()
 
 		printl("", self, "C")
 
@@ -1993,15 +2085,16 @@ class DP_View(Screen, NumericalTextInput):
 		printl("", self, "S")
 
 		printl("start pĺaying theme", self, "I")
-		accessToken = Singleton().getPlexInstance().get_aTokenForServer()#g_myplex_accessToken
-		theme = self.extraData["theme"]
+		theme = self.details["theme"]
 		server = self.details["server"]
+		accessToken = Singleton().getPlexInstance().get_aTokenForServer(server)
 		printl("theme: " + str(theme), self, "D")
-		url = "http://" + str(server) + str(theme) + str(accessToken) #"?X-Plex-Token=" + str(accessToken)
+		url = "http://" + str(server) + str(theme) + str(accessToken)
 		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
 		printl("sref: " + str(sref), self, "D")
 		self.session.nav.stopService()
 		self.session.nav.playService(eServiceReference(sref))
+		self.themeMusicIsRunning = True
 
 		printl("", self, "C")
 
@@ -2010,14 +2103,6 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def showPoster(self, forceShow = False):
 		printl("", self, "S")
-
-		#try:
-		#	del self.EXpicloadPoster
-		#except Exception:
-		#	pass
-		#finally:
-		#	self.EXpicloadPoster = ePicLoad()
-		#	self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
 		if forceShow:
 			if self.whatPoster is not None:
@@ -2051,14 +2136,6 @@ class DP_View(Screen, NumericalTextInput):
 	def showBackdrop(self, forceShow = False):
 		printl("", self, "S")
 
-		#try:
-		#	del self.EXpicloadBackdrop
-		#except Exception:
-		#	pass
-		#finally:
-		#	self.EXpicloadBackdrop = ePicLoad()
-		#	self.EXpicloadBackdrop.setPara([self["backdrop"].instance.size().width(), self["backdrop"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
-
 		if forceShow:
 			if self.whatBackdrop is not None:
 				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
@@ -2090,13 +2167,13 @@ class DP_View(Screen, NumericalTextInput):
 	def resetCurrentImages(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 
-		if self.myParams["elements"]["poster"]["visible"]:
+		if self.viewParams["elements"]["poster"]["visible"]:
 			if self.resetPoster:
 				self["poster"].instance.setPixmapFromFile(ptr)
 
-		if self.myParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
+		if self.viewParams["elements"]["backdrop"]["visible"] and not self.usedStillPicture:
 			if self.resetBackdrop:
 				self.resetBackdropImage()
 
@@ -2112,16 +2189,19 @@ class DP_View(Screen, NumericalTextInput):
 		printl("self.poster_postfix:" + str(self.poster_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.extraData["thumb"]
-		if download_url:
-			download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
-			printl( "download url " + download_url, self, "D")
-
-		if not download_url:
-			printl("no pic data available", self, "D")
+		if "thumb" in self.details:
+			if self.details["thumb"] != "":
+				download_url = self.details["thumb"]
+				download_url = download_url.replace('&width=999&height=999', '&width=' + self.posterWidth + '&height=' + self.posterHeight)
+				printl( "download url: " + download_url, self, "D")
+				printl("starting download", self, "D")
+				authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
+				printl("header: " + str(authHeader), self, "D")
+				downloadPage(str(download_url), self.whatPoster, headers=authHeader).addCallback(lambda _: self.showPoster(forceShow = True))
+			else:
+				self.noPicData()
 		else:
-			printl("starting download", self, "D")
-			downloadPage(str(download_url), self.whatPoster).addCallback(lambda _: self.showPoster(forceShow = True))
+			self.noPicData()
 
 		printl("", self, "C")
 
@@ -2135,19 +2215,28 @@ class DP_View(Screen, NumericalTextInput):
 		printl("self.backdrop_postfix:" + str(self.backdrop_postfix), self, "D")
 		printl("self.image_prefix:" + str(self.image_prefix), self, "D")
 
-		download_url = self.extraData["fanart_image"]
-		if download_url:
-			download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
-			printl( "download url " + download_url, self, "D")
-
-		if not download_url:
-			printl("no pic data available", self, "D")
+		if "art" in self.details:
+			if self.details["art"] != "":
+				download_url = self.details["art"]
+				download_url = download_url.replace('&width=999&height=999', '&width=' + self.backdropWidth + '&height=' + self.backdropHeight)
+				printl( "download url: " + download_url, self, "D")
+				printl("starting download", self, "D")
+				authHeader = self.plexInstance.get_hTokenForServer(self.details["server"])
+				printl("header: " + str(authHeader), self, "D")
+				downloadPage(download_url, self.whatBackdrop, headers=authHeader).addCallback(lambda _: self.showBackdrop(forceShow = True))
+			else:
+				self.noPicData()
 		else:
-			printl("starting download", self, "D")
-			downloadPage(download_url, self.whatBackdrop).addCallback(lambda _: self.showBackdrop(forceShow = True))
+			self.noPicData()
 
 		printl("", self, "C")
 
+	#==============================================================================
+	#
+	#==============================================================================
+	def noPicData(self):
+
+		printl("no pic data available", self, "D")
 	#==============================================================================
 	#
 	#==============================================================================
@@ -2157,22 +2246,59 @@ class DP_View(Screen, NumericalTextInput):
 		"""
 		printl("", self, "S")
 
+		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
+
+		self.initColorFunctions()
+
+		self.setLevelActive(currentLevel=1)
+
+		self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
+
+		# we do like we pressed the button to init the right names
+		self.onKey1(initial=True)
+
+		# we use this for override playback mode if wanted
+		self.initPlaybackMode()
+
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
-		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
-		self["btn_zero"].instance.setPixmapFromFile(self.guiElements["key_zero"])
-		self["btn_nine"].instance.setPixmapFromFile(self.guiElements["key_nine"])
-		self["btn_pvr"].instance.setPixmapFromFile(self.guiElements["key_pvr"])
-		self["btn_menu"].instance.setPixmapFromFile(self.guiElements["key_menu"])
+		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
 
-		# if we are in fastScrollMode we remove some gui elements
-		self.resetGuiElementsInFastScrollMode()
+		if self.libraryName == "music":
+			self["casePic"].instance.setPixmapFromFile(self.guiElements["musicCase"])
+			self.autoPlayMode = True
+			self.resumeMode = False
 
+		else:
+			self["casePic"].instance.setPixmapFromFile(self.guiElements["videoCase"])
+
+		if self.fastScroll:
+			# if we are in fastScrollMode we remove some gui elements
+			self.resetGuiElementsInFastScrollMode()
+
+		# now we set seen/unseen pictures
 		self.getSeenVisus()
 
-		printl("", self, "C")
+		# enable audio and subtitles information if we have transcoding active
+		if self.serverConfig.playbackType.value == "1":
+			printl("audio: " + str(self.viewParams["elements"]["audio"]),self, "D")
+			if self.viewParams["elements"]["audio"]["visible"]:
+				self.toggleElementVisibilityWithLabel("audio")
+			else:
+				self.toggleElementVisibilityWithLabel("audio", "hide")
 
+			if self.viewParams["elements"]["subtitles"]["visible"]:
+				self.toggleElementVisibilityWithLabel("subtitles")
+			else:
+				self.toggleElementVisibilityWithLabel("subtitles", "hide")
+
+		if not self.fastScroll:
+			self["info"].hide()
+			self["infoLabel"].hide()
+
+		printl("", self, "C")
 
 	#===============================================================================
 	#
@@ -2180,42 +2306,45 @@ class DP_View(Screen, NumericalTextInput):
 	def getSeenVisus(self):
 		printl("", self, "S")
 
-		tree = Singleton().getSkinParamsInstance()
+		self.seenPic = loadPicture(str(self.guiElements["seenPic"]))
+		printl("self.seenPic: " + str(self.seenPic), self, "D")
 
-		for seenPic in tree.findall('seenPic'):
-			self.seenPic = loadPicture(str(seenPic.get('path')))
-			printl("self.seenPic: " + str(self.seenPic), self, "D")
+		self.startedPic = loadPicture(str(self.guiElements["startedPic"]))
+		printl("self.startedPic: " + str(self.startedPic), self, "D")
 
-		for startedPic in tree.findall('startedPic'):
-			self.startedPic = loadPicture(str(startedPic.get('path')))
-			printl("self.startedPic: " + str(self.startedPic), self, "D")
-
-		for unseenPic in tree.findall('unseenPic'):
-			self.unseenPic = loadPicture(str(unseenPic.get('path')))
-			printl("self.unseenPic: " + str(self.unseenPic), self, "D")
+		self.unseenPic = loadPicture(str(self.guiElements["unseenPic"]))
+		printl("self.unseenPic: " + str(self.unseenPic), self, "D")
 
 		printl("", self, "C")
+
 	#===========================================================================
 	#
 	#===========================================================================
-	def processGuiElements(self, myType=None):
+	def processGuiElements(self):
 		printl("", self, "S")
 
 		# this is always the case when the view starts the first time
-		# in this case no need for look for subviews
-		if myType is None:
-			for element in self.myParams["elements"]:
-				printl("element:" + str(element), self, "D")
-				visibility = self.myParams["elements"][element]["visible"]
 
-				self.alterGuiElementVisibility(element, visibility)
+		for element in self.viewParams["elements"]:
+			printl("element:" + str(element), self, "D")
+			visibility = self.viewParams["elements"][element]["visible"]
 
-				# we do not alter positions here because this should be done in the skin.xml because we are the first view
+			self.alterGuiElementVisibility(element, visibility)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def processSubViewElements(self, myType):
+		printl("", self, "S")
+
+		printl("myType: " +  str(myType), self, "D")
 
 		# now we check if we are in a special subView with its own params
-		elif "subViews" in self.myParams:
-			if myType in self.myParams["subViews"]:
-				subViewParams = self.myParams["subViews"][myType]
+		if "subViews" in self.viewParams:
+			if myType in self.viewParams["subViews"]:
+				subViewParams = self.viewParams["subViews"][myType]
 				printl("subViewParams: " + str(subViewParams), self, "D")
 
 				self.viewChangeStorage[self.viewStep] = {}
@@ -2295,6 +2424,13 @@ class DP_View(Screen, NumericalTextInput):
 
 			except Exception, e:
 				printl("Exception: " + str(e), self, "D")
+
+			try:
+				if element == "btn_red" or element == "green" or element == "btn_yellow" or element == "btn_blue":
+					self[element + "Text"].show()
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
+
 		else:
 			self[element].hide()
 			try:
@@ -2303,6 +2439,12 @@ class DP_View(Screen, NumericalTextInput):
 				# additional changes
 				if element == "backdrop":
 					self[element+"Video"].hide()
+			except Exception, e:
+				printl("Exception: " + str(e), self, "D")
+
+			try:
+				if element == "btn_red" or element == "green" or element == "btn_yellow" or element == "btn_blue":
+					self[element + "Text"].hide()
 			except Exception, e:
 				printl("Exception: " + str(e), self, "D")
 
@@ -2366,7 +2508,7 @@ class DP_View(Screen, NumericalTextInput):
 	def resetBackdropImage(self):
 		printl("", self, "S")
 
-		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skins.value + "/all/picreset.png"
+		ptr = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/images/picreset.png"
 		self["backdrop"].instance.setPixmapFromFile(ptr)
 
 		printl("", self, "C")
@@ -2377,7 +2519,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleRatedPixmaps(self):
 		printl("", self, "S")
 
-		mpaa = self.extraData.get("contentRating", "unknown").upper()
+		mpaa = self.details.get("contentRating", "unknown").upper()
 		printl("contentRating: " + str(mpaa), self, "D")
 
 		if mpaa == "PG-13" or mpaa == "TV-14":
@@ -2400,9 +2542,25 @@ class DP_View(Screen, NumericalTextInput):
 			found = True
 			self["rated"].setPixmapNum(4)
 
-		elif mpaa == "NOT RATED" or mpaa == "DE/0" or mpaa == "G" or mpaa == "NR":
+		elif mpaa == "NOT RATED" or mpaa == "G" or mpaa == "NR":
 			found = True
 			self["rated"].setPixmapNum(5)
+
+		elif mpaa == "DE/6":
+			found = True
+			self["rated"].setPixmapNum(6)
+
+		elif mpaa == "DE/12":
+			found = True
+			self["rated"].setPixmapNum(7)
+
+		elif mpaa == "DE/16":
+			found = True
+			self["rated"].setPixmapNum(8)
+
+		elif mpaa == "DE/18":
+			found = True
+			self["rated"].setPixmapNum(9)
 
 		elif mpaa == "UNKNOWN" or mpaa == "UNKNOWN" or mpaa == "":
 			found = False
@@ -2424,7 +2582,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleSoundPixmaps(self):
 		printl("", self, "S")
 
-		audio = self.extraData.get("audioCodec", "unknown").upper()
+		audio = self.details["mediaDataArr"][0].get("audioCodec", "unknown").upper()
 		printl("audioCodec: " + str(audio), self, "D")
 
 		if audio == "DCA":
@@ -2463,7 +2621,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleResolutionPixmaps(self):
 		printl("", self, "S")
 
-		resolution = self.extraData.get("videoResolution", "unknown").upper()
+		resolution = self.details["mediaDataArr"][0].get("videoResolution", "unknown").upper()
 		printl("videoResolution: " + str(resolution), self, "D")
 
 		if resolution == "1080":
@@ -2498,7 +2656,7 @@ class DP_View(Screen, NumericalTextInput):
 	def handleAspectPixmaps(self):
 		printl("", self, "S")
 
-		aspect = self.extraData.get("aspectRatio", "unknown").upper()
+		aspect = self.details["mediaDataArr"][0].get("aspectRatio", "unknown").upper()
 		printl("aspectRatio: " + str(aspect), self, "D")
 
 		if aspect == "1.33":
@@ -2532,8 +2690,8 @@ class DP_View(Screen, NumericalTextInput):
 	#===========================================================================
 	def handleCodecPixmaps(self):
 		printl("", self, "S")
-
-		codec = self.extraData.get("videoCodec", "unknown").upper()
+		# we take always the first entry. later we have to chech which one is selected
+		codec = self.details["mediaDataArr"][0].get("videoCodec", "unknown").upper()
 		printl("videoCodec: " + str(codec), self, "D")
 
 		if codec == "VC1":
@@ -2589,6 +2747,20 @@ class DP_View(Screen, NumericalTextInput):
 	def getPictureInformationToLoad(self):
 		printl("", self, "S")
 
+		# if pic cache is not configured we set a name that will not exist to force download each time from server
+		if not self.usePicCache:
+			self.pname = "temp"
+			self.bname = "temp"
+			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
+
+		printl("bname: " + str(self.bname), self, "D")
+		printl("pname: " + str(self.pname), self, "D")
+		self.whatPoster = self.mediaPath + self.image_prefix + "_" + self.pname + self.poster_postfix
+		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + self.bname + self.backdrop_postfix
+
+		printl("self.whatPoster : " + str(self.whatPoster ), self, "D")
+		printl("self.whatBackdrop: " + str(self.whatBackdrop), self, "D")
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -2599,35 +2771,58 @@ class DP_View(Screen, NumericalTextInput):
 
 		self.areFunctionsHidden = visible
 
-		if visible:
-			self["functionsContainer"].show()
-			self["btn_red"].show()
-			self["btn_blue"].show()
-			self["btn_yellow"].show()
-			self["txt_red"].show()
-			self["txt_filter"].show()
-			self["txt_blue"].show()
-			self["txt_yellow"].show()
-			self["btn_zero"].show()
-			self["btn_nine"].show()
-			self["btn_pvr"].show()
-			self["txt_pvr"].show()
-			self["btn_menu"].show()
-			self["txt_menu"].show()
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def filter(self):
+		printl("", self, "S")
+
+		if self.onNumberKeyLastChar == " ":
+			self["listview"].setList(self.beforeFilterListViewList)
 		else:
-			self["functionsContainer"].hide()
-			self["btn_red"].hide()
-			self["btn_blue"].hide()
-			self["btn_yellow"].hide()
-			self["txt_red"].hide()
-			self["txt_filter"].hide()
-			self["txt_blue"].hide()
-			self["txt_yellow"].hide()
-			self["btn_zero"].hide()
-			self["btn_nine"].hide()
-			self["btn_pvr"].hide()
-			self["txt_pvr"].hide()
-			self["btn_menu"].hide()
-			self["txt_menu"].hide()
+			self.listViewList = [x for x in self.beforeFilterListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
+			self["listview"].setList(self.listViewList)
+
+		self.refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def closePlugin(self):
+		printl("", self, "S")
+
+		if config.plugins.dreamplex.useBackdropVideos.value:
+			self.stopBackdropVideo()
+
+		if self.currentService is not None:
+			self.restoreLiveTv()
+
+		super(DP_View,self).closePlugin()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def restoreLiveTv(self):
+		printl("", self, "S")
+
+		printl("restoring liveTv", self, "D")
+		self.session.nav.playService(self.currentService)
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def stopBackdropVideo(self):
+		printl("", self, "S")
+
+		# stop the m1v playback to avoid blocking the playback of the movie
+		self["stillPicture"].finishStillPicture()
 
 		printl("", self, "C")

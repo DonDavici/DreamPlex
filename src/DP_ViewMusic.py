@@ -26,7 +26,8 @@ from Components.config import config
 
 from DP_View import DP_View
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, encodeThat
+from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -42,75 +43,156 @@ def getViewClass():
 #===============================================================================
 class DPS_ViewMusic(DP_View):
 
+	parentSeasonId = None
+
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, libraryName, loadLibrary, playEntry, viewName, select=None, sort=None, myFilter=None, cache=None):
+	def __init__(self, viewClass, libraryName, loadLibraryFnc, viewParams):
 		printl("", self , "S")
 
-		self.session = session
-		DP_View.__init__(self, session, libraryName, loadLibrary, playEntry, viewName, select, sort, myFilter, cache)
+		DP_View.__init__(self, viewClass, libraryName, loadLibraryFnc, viewParams)
+
+		self.setTitle(_("Music"))
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getPictureInformationToLoad(self):
+	def _refresh(self):
 		printl("", self, "S")
 
-		if self.details ["viewMode"] == "ShowSeasons":
-			printl( "is ShowSeasons", self, "D")
-			self.parentSeasonId = self.details ["ratingKey"]
-			self.isTvShow = True
-			self.startPlaybackNow = True
-			bname = self.details["ratingKey"]
-			pname = self.details["ratingKey"]
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = True
-			self.resetBackdrop = True
+		# we use this for filtermode at startup
+		self.filterableContent = True
 
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] == "0":
-			printl( "is ShowEpisodes all entry", self, "D")
-			self.isTvShow = True
-			bname = self.parentSeasonId
-			pname = self.parentSeasonId
-			self.startPlaybackNow = False
-			self.changeBackdrop = True
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
+		if "type" in self.details:
+			if self.details["type"] == "folder":
+				self.fromDirectory = True
+			else:
+				self.fromDirectory = False
 
-		elif self.details ["viewMode"] == "ShowEpisodes" and self.details["ratingKey"] != "":
-			printl( "is ShowEpisodes special season",self, "D")
-			self.isTvShow = True
-			self.parentSeasonNr = self.details["ratingKey"]
-			bname = self.parentSeasonId
-			pname = self.details["ratingKey"]
-			self.startPlaybackNow = False
-			self.changeBackdrop = False
-			self.changePoster = True
-			self.resetPoster = False
-			self.resetBackdrop = False
+			# looks like we are just a directory
+			if self.details["type"] == "folder":
+				self.pname = "temp"
+				self.bname = "temp"
+				self.resetBackdrop = True
+				self.resetPoster = True
+				self.changePoster = False
+				self.changeBackdrop = False
+				self.fromDirectory = True
+			elif self.details["type"] == "album" or self.details["type"] == "artist":
+				if self.details["type"] == "album":
+					self["title"].setText(encodeThat(self.details.get("title", " ")))
+					self["leafCount"].setText(encodeThat(self.details.get("leafCount", " ")))
+
+					self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
+					self["year"].setText(str(self.details.get("year", " - ")))
+
+					self.toggleElementVisibilityWithLabel("year")
+					self.toggleElementVisibilityWithLabel("genre")
+					self["shortDescription"].show()
+
+					self.hideMediaFunctions()
+					self.hideMediaPixmaps()
+				else:
+					self["title"].setText(encodeThat(self.details.get("title", " ")))
+					self["shortDescription"].setText(encodeThat(self.details.get("summary", " ")))
+					self["genre"].setText(encodeThat(self.details.get("genre", " - ")))
+
+					self.toggleElementVisibilityWithLabel("genre")
+					self["shortDescription"].show()
+
+				self.changePoster = True
+				self.changeBackdrop = True
+				self.resetBackdrop = True
+				self.resetPoster = True
+				self.hideMediaFunctions()
+				self.hideMediaPixmaps()
+
+				if "ratingKey" in self.details:
+					self.pname = self.details["ratingKey"]
+					self.bname = self.details["ratingKey"]
+				else:
+					if "parentRatingKey" in self.details:
+						self.pname = self.details["parentRatingKey"]
+						self.bname = self.details["parentRatingKey"]
+					else:
+						self.pname = "temp"
+						self.bname = "temp"
+
+			elif self.details["type"] == "track":
+				self.resetBackdrop = False
+				self.resetPoster = False
+				self.setDuration()
+
+				# technical details
+				self.mediaDataArr = self.details["mediaDataArr"][0]
+				self.parts = self.mediaDataArr["Parts"][0]
+
+				self["bitrate"].setText(self.mediaDataArr.get("bitrate", " - "))
+				self["audioChannels"].setText(self.mediaDataArr.get("audioChannels", " - "))
+				self["audioCodec"].setText(self.mediaDataArr.get("audioCodec", " - "))
+				self["file"].setText(encodeThat(self.parts.get("file", " - ")))
+
+				# this is when we are coming from directory
+				if self.fromDirectory:
+					if "parentRatingKey" in self.details:
+						self.pname = self.details["parentRatingKey"]
+						self.bname = self.details["parentRatingKey"]
+					else:
+						self.pname = "temp"
+						self.bname = "temp"
+
+					self.changePoster = True
+					self.changeBackdrop = True
+				else:
+					self.pname = "temp"
+					self.bname = "temp"
+					self.changePoster = False
+					self.changeBackdrop = False
 
 		else:
-			printl( "is playable content",self, "D")
-			bname = self.details["ratingKey"]
-			self.startPlaybackNow = False
+			raise Exception
 
-			printl( "is episode",self, "D")
-			pname = self.parentSeasonId
-			# we dont want to have the same poster downloaded and used for each episode
-			self.changePoster = False
-			self.changeBackdrop = True
-
-		if not self.usePicCache:
-			pname = "temp"
-			bname = "temp"
-			self.mediaPath = config.plugins.dreamplex.logfolderpath.value
-
-		self.whatPoster = self.mediaPath + self.image_prefix + "_" + pname + self.poster_postfix
-		self.whatBackdrop = self.mediaPath + self.image_prefix + "_" + bname + self.backdrop_postfix
+		# now gather information for pictures
+		self.getPictureInformationToLoad()
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onLeave(self):
+		printl("", self, "S")
+
+		# first we have to turn off filtermode or the keypress that is needed to refresh function names will be interpreted as filter action
+		self.toggleFilterMode(quit=True)
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewMusic,self).onLeave()
+
+		# first restore Elements
+		self.restoreElementsInViewStep()
+
+		self.initFilterMode()
+
+		# we do the refresh here to be able to handle directory content
+		self.refresh()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onEnter(self):
+		printl("", self, "S")
+
+		# first we have to turn off filtermode or the keypress that is needed to refresh function names will be interpreted as filter action
+		self.toggleFilterMode(quit=True)
+
+		# first we call the the rest of the onEnter from super
+		super(DPS_ViewMusic,self).onEnter()
+
+		printl("", self, "C")
+

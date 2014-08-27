@@ -32,8 +32,8 @@ from enigma import eConsoleAppContainer
 
 from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
-from Components.Sources.StaticText import StaticText
 from Components.config import config
+from Components.Label import Label
 
 from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
@@ -69,28 +69,41 @@ class DPS_SystemCheck(Screen):
 		self.oeVersion = self.getBoxArch()
 
 		if self.oeVersion == "mipsel":
-			vlist.append((_("found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"), "oe16"))
+			vlist.append((_("Check for gst-plugin-fragmented"), "oe16"))
 
 		elif self.oeVersion == "mips32el":
-			vlist.append((_("found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"), "oe20"))
+			vlist.append((_("Check for gst-plugins-bad-fragmented"), "oe20"))
 
 		else:
 			printl("unknown oe version", self, "W")
-			vlist.append((_("Check for 'gst-plugin-fragmented if you are using OE16."), "oe16"))
-			vlist.append((_("Check for 'gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
+			vlist.append((_("Check for gst-plugin-fragmented if you are using OE16."), "oe16"))
+			vlist.append((_("Check for gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 
 		vlist.append((_("Check curl installation data."), "check_Curl"))
-		vlist.append((_("Check DreamPlex installation data."), "check_DP"))
+		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
+		vlist.append((_("Check python imaging installation data."), "check_Pil"))
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
 
+		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
-		self["key_red"] = StaticText(_("Exit"))
+		self.onLayoutFinish.append(self.finishLayout)
 
 		printl("", self, "C")
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def finishLayout(self):
+		printl("", self, "S")
+
+		self.setTitle(_("System - Systemcheck"))
+
+		self["header"].setText(_("Functions List:"))
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#
@@ -103,11 +116,14 @@ class DPS_SystemCheck(Screen):
 		if selection[1] == "oe16" or selection[1] == "oe20":
 			self.checkLib(selection[1])
 
-		if selection[1] == "check_DP":
-			self.checkDreamPlexInstallation()
-
 		if selection[1] == "check_Curl":
 			self.checkCurlInstallation()
+
+		if selection[1] == "check_jpegTools":
+			self.checkJpegToolsInstallation()
+
+		if selection[1] == "check_Pil":
+			self.checkPythonImagingInstallation()
 
 		if selection[1] == "check_Update":
 			self.checkForUpdate()
@@ -282,15 +298,30 @@ class DPS_SystemCheck(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def checkDreamPlexInstallation(self):
+	def checkJpegToolsInstallation(self):
 		printl("", self, "S")
 
-		command = "opkg status DreamPlex"
+		command = "opkg status mjpegtools"
 
-		self.check = "dreamplex"
-		self.executeCommand(command)
+		self.check = "jpegTools"
+		state = self.executeCommand(command)
 
 		printl("", self, "C")
+		return state
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkPythonImagingInstallation(self):
+		printl("", self, "S")
+
+		command = "opkg status python-imaging"
+
+		self.check = "pythonImaging"
+		state = self.executeCommand(command)
+
+		printl("", self, "C")
+		return state
 
 	#===============================================================================
 	#
@@ -334,7 +365,7 @@ class DPS_SystemCheck(Screen):
 				# plugin is installed
 				self.session.open(MessageBox, _("Information:\n") + data, MessageBox.TYPE_INFO)
 			else:
-				if override is False:
+				if override:
 					return False
 				# plugin is not install
 				if self.check == "gst":
@@ -343,9 +374,11 @@ class DPS_SystemCheck(Screen):
 				elif self.check == "curl":
 					self.session.openWithCallback(self.installCurlLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
-				elif self.check == "dreamplex":
-					# for now we do nothing at this point
-					pass
+				elif self.check == "jpegTools":
+					self.session.openWithCallback(self.installJpegToolsLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+
+				elif self.check == "pythonImaging":
+					self.session.openWithCallback(self.installPyhtonImagingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
 				else:
 					printl("no proper value i self.check", self, "W")
@@ -397,6 +430,61 @@ class DPS_SystemCheck(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
+	def installJpegToolsLibs(self, confirm):
+		printl("", self, "S")
+
+		command = ""
+
+		if confirm:
+			# User said 'Yes'
+
+			if self.oeVersion == "mipsel":
+				command = "opkg update; opkg install mjpegtools"
+
+			elif self.oeVersion == "mips32el":
+				command = "opkg update; opkg install mjpegtools"
+
+			else:
+				printl("something went wrong finding out the oe-version", self, "W")
+
+			self.executeInstallationCommand(command)
+		else:
+			# User said 'no'
+			self.cancel()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def installPyhtonImagingLibs(self, confirm):
+		printl("", self, "S")
+
+		command = ""
+
+		if confirm:
+			# User said 'Yes'
+
+			if self.oeVersion == "mipsel":
+				command = "opkg update; opkg install python-imaging"
+
+			elif self.oeVersion == "mips32el":
+				command = "opkg update; opkg install python-imaging"
+
+			else:
+				printl("something went wrong finding out the oe-version", self, "W")
+
+			self.executeInstallationCommand(command)
+
+		else:
+			# User said 'no'
+			self.cancel()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def installStreamingLibs(self, confirm):
 		printl("", self, "S")
 
@@ -414,24 +502,35 @@ class DPS_SystemCheck(Screen):
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
 
-			if not system(command):
-				# Successfully installed
-				#defaultServer = plexServerConfig.getDefaultServer()
-				#self.openSectionlist(defaultServer)
-				pass
-			else:
-				# Fail, try again and report the output...
-				pipe = popen(command)
-				if pipe is not None:
-					data = pipe.read(8192)
-					if data is None:
-						data = "Unknown Error"
-					pipe.close()
-					self.session.open(MessageBox, _("Could not install "+ command + ":\n") + data, MessageBox.TYPE_ERROR)
-				# Failed to install
-				self.cancel()
+			self.executeInstallationCommand(command)
+
 		else:
 			# User said 'no'
+			self.cancel()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def executeInstallationCommand(self, command):
+		printl("", self, "S")
+
+		if not system(command):
+			# Successfully installed
+			#defaultServer = plexServerConfig.getDefaultServer()
+			#self.openSectionlist(defaultServer)
+			pass
+		else:
+			# Fail, try again and report the output...
+			pipe = popen(command)
+			if pipe is not None:
+				data = pipe.read(8192)
+				if data is None:
+					data = "Unknown Error"
+				pipe.close()
+				self.session.open(MessageBox, _("Could not install "+ command + ":\n") + data, MessageBox.TYPE_ERROR)
+			# Failed to install
 			self.cancel()
 
 		printl("", self, "C")
