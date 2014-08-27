@@ -484,7 +484,9 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				if not self.g_wakeserver == "":
 					try:
 						printl("Waking server " + str(i) + " with MAC: " + self.g_wakeserver, self, "D")
-						wake_on_lan(self.g_wakeserver)
+						broadcastIp = "%d.%d.%d.255" % (self.g_serverConfig.ip.value[0], self.g_serverConfig.ip.value[1], self.g_serverConfig.ip.value[2])
+						printl("broadcast ip: " + broadcastIp, self, "D")
+						wake_on_lan(self.g_wakeserver, broadcastIp)
 					except ValueError:
 						printl("Incorrect MAC address format for server " + str(i), self, "D")
 					except Exception, e:
