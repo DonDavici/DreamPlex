@@ -309,10 +309,10 @@ class PlexLibrary(Screen):
 					# we have to do this because via myPlex there could be diffrent servers with other tokens
 					if str(entryData.get('address')) not in self.g_myplex_accessToken:
 						printl("section address" + str(entryData.get('address')), self, "D")
-						self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
+						#self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
 
 					# finally we set AccessTokenHeader
-					self.setAccessTokenHeader(str(entryData.get('serverVersion')))
+					self.setAccessTokenHeader(address=str(entryData.get('address')),accessToken=str(entryData.get('accessToken', None)),serverVersion=str(entryData.get('serverVersion')))
 				else:
 					entryData["path"] = "/library/sections/" + entryData.get('key')
 					entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
@@ -372,6 +372,9 @@ class PlexLibrary(Screen):
 
 				else:
 					raise Exception("we should not be here")
+
+		# now the tokenDict should be filled
+		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
 		onDeck = dict()
 		onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
@@ -918,18 +921,20 @@ class PlexLibrary(Screen):
 			self.g_myplex_accessTokenDict = {}
 
 			# just in case we use myPlex also in local Lan we have to set the token data
+			accessToken = None
+
 			if self.serverConfig_localAuth:
 				if self.serverConfig_myplexLocalToken:
 					# this is the token we get from myPlex if we are connected with a user that is not thw owner and should be limited to its sections as well
-					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexLocalToken
+					#self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexLocalToken
+					accessToken = self.serverConfig_myplexLocalToken
 				else:
 					# this is the normal owner token
-					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
-			else:
-				self.g_myplex_accessTokenDict[str(self.g_currentServer)] = None
+					#self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
+					accessToken = self.serverConfig_myplexToken
 
 			# now we genereate and store all headers that are needed
-			self.setAccessTokenHeader()
+			self.setAccessTokenHeader(address=str(self.g_currentServer), accessToken=accessToken)
 
 		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "D")
 		printl("", self, "C")
@@ -946,30 +951,27 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def setAccessTokenHeader(self, serverVersion = None):
+	def setAccessTokenHeader(self, address, accessToken, serverVersion = None):
 		printl("", self, "S")
 
-		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		self.g_myplex_accessTokenDict[address] = {}
 
-		for key, value in self.g_myplex_accessTokenDict.iteritems():
-			self.g_myplex_accessTokenDict[key] = {}
+		uToken = self.getAuthDetails({'token':accessToken})
+		#printl("uToken: " +  str(uToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["uToken"] = uToken
 
-			uToken = self.getAuthDetails({'token':value})
-			#printl("uToken: " +  str(uToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[key]["uToken"] = uToken
+		hToken = self.getAuthDetails({'token':accessToken}, False)
+		#printl("hToken: " +  str(hToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["hToken"] = hToken
 
-			hToken = self.getAuthDetails({'token':value}, False)
-			#printl("hToken: " +  str(hToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[key]["hToken"] = hToken
+		aToken = self.getAuthDetails({'token':accessToken}, prefix="?")
+		#printl("aToken: " +  str(aToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["aToken"] = aToken
 
-			aToken = self.getAuthDetails({'token':value}, prefix="?")
-			#printl("aToken: " +  str(aToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[key]["aToken"] = aToken
+		if serverVersion is not None:
+			self.g_myplex_accessTokenDict[address]["serverVersion"] = serverVersion
 
-			if serverVersion is not None:
-				self.g_myplex_accessTokenDict[key]["serverVersion"] = serverVersion
-
-		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
+		# we print the content of g_myplex_accesTokeDict later to not have it to often in logs
 
 		printl("", self, "C")
 
