@@ -466,8 +466,8 @@
 		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="890,635" size="160,30" font="OpenSans; 16" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="990,635" size="160,25" font="OpenSans; 16" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
-		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="890,550" size="160,30" font="OpenSans; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-        <widget name="info" transparent="1" zPosition="9" halign="left" position="990,550" size="160,25" font="OpenSans; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
+		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="210,225" size="160,30" font="OpenSans; 18" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+        <widget name="info" transparent="1" zPosition="9" halign="left" position="310,225" size="160,25" font="OpenSans; 18" foregroundColor="#ffffff" backgroundColor="#000000"/>
 		
 		<!-- detail pane -->
         <widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="245,488" size="160,30" font="OpenSans; 12" foregroundColor="#FF8C00" backgroundColor="#212121"/>
