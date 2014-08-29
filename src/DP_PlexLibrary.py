@@ -2522,7 +2522,7 @@ class PlexLibrary(Screen):
 	def getFullListEntry(self, entryData, url, viewState = None, isDirectory = False):
 		printl("", self, "S")
 
-		if not isDirectory:
+		if not isDirectory and "ratingKey" in entryData:
 			# build specific context menu entries
 			contextMenu = self.buildContextMenu(url, entryData['ratingKey'], entryData['server'])
 		else:
