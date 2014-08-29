@@ -289,6 +289,8 @@ class PlexLibrary(Screen):
 			entries = tree.findall('Directory')
 			counter = 0
 
+			printl("entries: " + str(entries),self, "D")
+
 			for entry in entries:
 				counter += 1
 				entryData = (dict(entry.items()))
@@ -918,8 +920,10 @@ class PlexLibrary(Screen):
 			# just in case we use myPlex also in local Lan we have to set the token data
 			if self.serverConfig_localAuth:
 				if self.serverConfig_myplexLocalToken:
+					# this is the token we get from myPlex if we are connected with a user that is not thw owner and should be limited to its sections as well
 					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexLocalToken
 				else:
+					# this is the normal owner token
 					self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
 			else:
 				self.g_myplex_accessTokenDict[str(self.g_currentServer)] = None
@@ -944,6 +948,8 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	def setAccessTokenHeader(self, serverVersion = None):
 		printl("", self, "S")
+
+		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
 		for key, value in self.g_myplex_accessTokenDict.iteritems():
 			self.g_myplex_accessTokenDict[key] = {}
