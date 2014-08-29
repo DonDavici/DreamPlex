@@ -2032,8 +2032,6 @@ class PlexLibrary(Screen):
 			printl("", self, "C")
 			return tree
 		except Exception:
-			self.lastError = "no xml as response: " + str(html)
-			printl("Error: " + str(html), self, "D")
 
 			printl("", self, "C")
 			return self.getFakeXml()
