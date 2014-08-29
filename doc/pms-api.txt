@@ -186,3 +186,19 @@ videoResolution=1920x1080&maxVideoBitrate=12000&videoQuality=90
 
 1920x1080, 20mbps
 videoResolution=1920x1080&maxVideoBitrate=20000&videoQuality=100
+
+Here are the headers that can be sent to myPlex:
+
+X-Plex-Platform (Platform name, eg iOS, MacOSX, Android, LG, etc)
+X-Plex-Platform-Version (Operating system version, eg 4.3.1, 10.6.7, 3.2)
+X-Plex-Provides (one or more of [player, controller, server])
+X-Plex-Product (Plex application name, eg Laika, Plex Media Server, Media Link)
+X-Plex-Version (Plex application version number)
+X-Plex-Device (Device name and model number, eg iPhone3,2, Motorola XOOM™, LG5200TV)
+X-Plex-Client-Identifier (UUID, serial number, or other number unique per device)
+
+Not all of them are required, but please try to send as many as you can so we can track what clients and devices are being used to access the service :)
+
+You should sign in by issuing a POST request to https://my.plexapp.c...rs/sign_in.xml. The username and password should be sent using HTTP Basic Auth. If the request is successful, you'll get XML back containing an auth token. Subsequent requests should append the token to the query string as the auth_token parameter.
+
+Once you're signed in, you can get the server list from https://my.plexapp.c...ms/servers.xml.
