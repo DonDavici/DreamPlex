@@ -198,11 +198,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			"red":			(self.onKeyRed, ""),
 			"yellow":		(self.onKeyYellow, ""),
 			"blue":			(self.onKeyBlue, ""),
-			"green":		(self.closePlugin, ""),
+			"green":		(self.onKeyGreen, ""),
 			"text":			(self.onKeyText, ""),
 			"red_long":		(self.onKeyRedLong, ""),
 			"yellow_long":	(self.onKeyYellowLong, ""),
 			"blue_long":	(self.onKeyBlueLong, ""),
+			"stop":	        (self.closePlugin, ""),
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),

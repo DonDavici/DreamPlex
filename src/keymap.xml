@@ -61,6 +61,7 @@
 		<key id="KEY_VIDEO" mapto="video" flags="m" />
 		<key id="KEY_AUDIO" mapto="audio" flags="m" />
 		<key id="KEY_TEXT" mapto="text" flags="m" />
+        <key id="KEY_STOP" mapto="stop" flags="m" />
 		
 		<key id="KEY_1" mapto="1" flags="m"/>
 		<key id="KEY_2" mapto="2" flags="m"/>
