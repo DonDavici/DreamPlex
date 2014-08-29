@@ -954,22 +954,23 @@ class PlexLibrary(Screen):
 	def setAccessTokenHeader(self, address, accessToken, serverVersion = None):
 		printl("", self, "S")
 
-		self.g_myplex_accessTokenDict[address] = {}
+		if address not in self.g_myplex_accessTokenDict:
+			self.g_myplex_accessTokenDict[address] = {}
 
-		uToken = self.getAuthDetails({'token':accessToken})
-		#printl("uToken: " +  str(uToken), self, "D", True, 6)
-		self.g_myplex_accessTokenDict[address]["uToken"] = uToken
+			uToken = self.getAuthDetails({'token':accessToken})
+			#printl("uToken: " +  str(uToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[address]["uToken"] = uToken
 
-		hToken = self.getAuthDetails({'token':accessToken}, False)
-		#printl("hToken: " +  str(hToken), self, "D", True, 6)
-		self.g_myplex_accessTokenDict[address]["hToken"] = hToken
+			hToken = self.getAuthDetails({'token':accessToken}, False)
+			#printl("hToken: " +  str(hToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[address]["hToken"] = hToken
 
-		aToken = self.getAuthDetails({'token':accessToken}, prefix="?")
-		#printl("aToken: " +  str(aToken), self, "D", True, 6)
-		self.g_myplex_accessTokenDict[address]["aToken"] = aToken
+			aToken = self.getAuthDetails({'token':accessToken}, prefix="?")
+			#printl("aToken: " +  str(aToken), self, "D", True, 6)
+			self.g_myplex_accessTokenDict[address]["aToken"] = aToken
 
-		if serverVersion is not None:
-			self.g_myplex_accessTokenDict[address]["serverVersion"] = serverVersion
+			if serverVersion is not None:
+				self.g_myplex_accessTokenDict[address]["serverVersion"] = serverVersion
 
 		# we print the content of g_myplex_accesTokeDict later to not have it to often in logs
 
