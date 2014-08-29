@@ -34,14 +34,12 @@ import cPickle as pickle
 
 from time import time
 from urllib import quote_plus
-from Tools import Notifications
 from base64 import b64encode, b64decode
 from Components.config import config
 from hashlib import sha256
 from urllib2 import urlopen, Request
 from random import seed
 
-from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 
 from __plugin__ import getPlugin, Plugin
@@ -327,9 +325,11 @@ class PlexLibrary(Screen):
 				detail = ""
 				if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
 					if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
-						detail = " ( " + entryData['sourceTitle'] + ")"
+						if "sourceTitle" in entryData:
+							detail = " ( " + entryData['sourceTitle'] + ")"
 					elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
-						detail = " (" + str(entryData['serverName']) + ")"
+						if "serverName" in entryData:
+							detail = " (" + str(entryData['serverName']) + ")"
 
 				entryName = _(entryData.get('title').encode('utf-8')) + detail
 
@@ -2026,12 +2026,6 @@ class PlexLibrary(Screen):
 
 		html = self.doRequest(url)
 
-		# enable only if we really need this
-		#printl("html: " + str(html), self, "D")
-		if html is False:
-			printl("", self, "C")
-			return False
-
 		try:
 			tree = etree.fromstring(html)
 
@@ -2040,8 +2034,21 @@ class PlexLibrary(Screen):
 		except Exception:
 			self.lastError = "no xml as response: " + str(html)
 			printl("Error: " + str(html), self, "D")
+
 			printl("", self, "C")
-			return False
+			return self.getFakeXml()
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def getFakeXml(self):
+		printl("", self, "S")
+
+		xml = "<xml></xml>"
+		tree = etree.fromstring(xml)
+
+		printl("", self, "C")
+		return tree
 
 	#===============================================================================
 	#
