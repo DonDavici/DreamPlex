@@ -129,6 +129,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	filterMode                      = False
 	playbackMode                    = "default"
 	themeMusicIsRunning             = False
+	lastPlayedTheme                 = None
 
 	#===========================================================================
 	#
@@ -2084,17 +2085,21 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def startThemePlayback(self):
 		printl("", self, "S")
 
-		printl("start pĺaying theme", self, "I")
-		theme = self.details["theme"]
-		server = self.details["server"]
-		accessToken = Singleton().getPlexInstance().get_aTokenForServer(server)
-		printl("theme: " + str(theme), self, "D")
-		url = "http://" + str(server) + str(theme) + str(accessToken)
-		sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
-		printl("sref: " + str(sref), self, "D")
-		self.session.nav.stopService()
-		self.session.nav.playService(eServiceReference(sref))
-		self.themeMusicIsRunning = True
+		if self.lastPlayedTheme != self.details["theme"]:
+			printl("start pĺaying theme", self, "D")
+			theme = self.details["theme"]
+			server = self.details["server"]
+			accessToken = Singleton().getPlexInstance().get_aTokenForServer(server)
+			printl("theme: " + str(theme), self, "D")
+			url = "http://" + str(server) + str(theme) + str(accessToken)
+			sref = "4097:0:0:0:0:0:0:0:0:0:%s" % quote_plus(url)
+			printl("sref: " + str(sref), self, "D")
+			self.session.nav.stopService()
+			self.session.nav.playService(eServiceReference(sref))
+			self.themeMusicIsRunning = True
+			self.lastPlayedTheme = self.details["theme"]
+		else:
+			printl("not starting theme for the same show again", self, "D")
 
 		printl("", self, "C")
 
