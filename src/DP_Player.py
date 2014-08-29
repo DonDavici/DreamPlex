@@ -136,9 +136,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			x.__init__(self)
 
 		if self.libraryName == "music":
-			self.skinName = "DPS_VideoPlayer"
-		else:
 			self.skinName = "DPS_MusicPlayer"
+		else:
+			self.skinName = "DPS_VideoPlayer"
 
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
