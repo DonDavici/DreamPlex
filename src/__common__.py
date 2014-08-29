@@ -775,6 +775,7 @@ def getPlexHeader(g_sessionID, asDict = True):
 	printl2("", "__common__::getPlexHeader", "S")
 
 	boxData = getBoxInformation()
+	boxName = config.plugins.dreamplex.boxName.value
 
 	if asDict:
 		plexHeader={'X-Plex-Platform': "iOS",
@@ -783,7 +784,7 @@ def getPlexHeader(g_sessionID, asDict = True):
 					'X-Plex-Product': "DreamPlex",
 					'X-Plex-Version': getVersion(),
 					'X-Plex-Device': boxData[0],
-					#'X-Plex-Device-Name': 'DDiPhone',
+					'X-Plex-Device-Name': boxName,
 					'X-Plex-Model': boxData[1],
 					'X-Plex-Client-Identifier': g_sessionID,
 					'X-Plex-Client-Platform': "iOS"}
@@ -795,7 +796,7 @@ def getPlexHeader(g_sessionID, asDict = True):
 		plexHeader.append('X-Plex-Product:DreamPlex')
 		plexHeader.append('X-Plex-Version:' + getVersion())
 		plexHeader.append('X-Plex-Device:' +  boxData[0]) # manu
-		#plexHeader.append("X-Plex-Device-Name:DDiPhone")
+		plexHeader.append("X-Plex-Device-Name:" + boxName)
 		plexHeader.append("X-Plex-Model:" + boxData[1]) # model
 		plexHeader.append('X-Plex-Client-Identifier:' + g_sessionID)
 		plexHeader.append("X-Plex-Client-Platform:iOS")

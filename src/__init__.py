@@ -80,6 +80,7 @@ config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
+config.plugins.dreamplex.boxName		            = ConfigText(default = "DreamPlex", visible_width = 50, fixed_size = False)
 
 if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
@@ -124,6 +125,7 @@ def printGlobalSettings():
 
 	printl("=== GLOBAL SETTINGS ===", "__init__::getBoxInformation", "I")
 	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::initGlobalSettings", "I")
+	printl("boxName: " + str(config.plugins.dreamplex.boxName.value), "__init__::initGlobalSettings", "I")
 	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("mediafolderpath: " + str(config.plugins.dreamplex.mediafolderpath.value), "__init__::initGlobalSettings", "I")
