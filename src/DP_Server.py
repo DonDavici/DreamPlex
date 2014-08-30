@@ -482,9 +482,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def addMyPlexSettings(self):
 		printl("", self, "S")
 
-		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need curl installed for this feature! Please check in System ...")))
-		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need curl installed for this feature! Please check in System ...")))
-		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need curl installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need openSSL installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need openSSL installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need openSSL installed for this feature! Please check in System ...")))
 
 		printl("", self, "C")
 

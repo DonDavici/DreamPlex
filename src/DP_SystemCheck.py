@@ -79,7 +79,7 @@ class DPS_SystemCheck(Screen):
 			vlist.append((_("Check for gst-plugin-fragmented if you are using OE16."), "oe16"))
 			vlist.append((_("Check for gst-plugins-bad-fragmented if you are using OE20."), "oe20"))
 
-		vlist.append((_("Check curl installation data."), "check_Curl"))
+		vlist.append((_("Check openSSL installation data."), "check_Curl"))
 		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
 		vlist.append((_("Check python imaging installation data."), "check_Pil"))
 
@@ -117,7 +117,7 @@ class DPS_SystemCheck(Screen):
 			self.checkLib(selection[1])
 
 		if selection[1] == "check_Curl":
-			self.checkCurlInstallation()
+			self.checkOpensslInstallation()
 
 		if selection[1] == "check_jpegTools":
 			self.checkJpegToolsInstallation()
@@ -136,12 +136,14 @@ class DPS_SystemCheck(Screen):
 	def checkForUpdate(self):
 		printl("", self, "S")
 
-		if testInetConnectivity() and self.checkCurlInstallation(True):
+		if testInetConnectivity() and self.checkOpensslInstallation(True):
 			printl( "Starting request", self, "D")
-			curl_string = 'curl -s -k "%s"' % "https://api.github.com/repos/DonDavici/DreamPlex/tags"
 
-			printl("curl_string: " + str(curl_string), self, "D")
-			self.response = popen(curl_string).read()
+			conn = httplib.HTTPSConnection("api.github.com",timeout=10, port=443)
+			conn.request(url="/repos/DonDavici/DreamPlex/tags", method="GET")
+			data = conn.getresponse()
+			self.response = data.read()
+
 			printl("response: " + str(self.response), self, "D")
 			starter = 19
 			closer = self.response.find('",', 0, 50)
@@ -166,7 +168,7 @@ class DPS_SystemCheck(Screen):
 				self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
 
 		else:
-			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available or curl is not installed!"), MessageBox.TYPE_INFO)
+			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available or openssl is not installed!"), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
@@ -284,12 +286,12 @@ class DPS_SystemCheck(Screen):
 	#===========================================================================
 	# override is used to get bool as answer and not the plugin information
 	#===========================================================================
-	def checkCurlInstallation(self, override=False):
+	def checkOpensslInstallation(self, override=False):
 		printl("", self, "S")
 
-		command = "opkg status curl"
+		command = "opkg status python-pyopenssl"
 
-		self.check = "curl"
+		self.check = "openssl"
 		state = self.executeCommand(command, override)
 
 		printl("", self, "C")
@@ -371,7 +373,7 @@ class DPS_SystemCheck(Screen):
 				if self.check == "gst":
 					self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
-				elif self.check == "curl":
+				elif self.check == "openssl":
 					self.session.openWithCallback(self.installCurlLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
 				elif self.check == "jpegTools":
@@ -397,10 +399,10 @@ class DPS_SystemCheck(Screen):
 			# User said 'Yes'
 
 			if self.oeVersion == "mipsel":
-				command = "opkg update; opkg install curl"
+				command = "opkg update; opkg install python-pyopenssl"
 
 			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install curl"
+				command = "opkg update; opkg install python-pyopenssl"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")

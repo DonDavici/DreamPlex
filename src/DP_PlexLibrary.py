@@ -22,18 +22,16 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import urllib
 import httplib
 import socket
 import sys
-import os
 import base64
 import hmac
 import uuid
 import cPickle as pickle
 
 from time import time
-from urllib import quote_plus
+from urllib import quote_plus, unquote
 from base64 import b64encode, b64decode
 from Components.config import config
 from hashlib import sha256
@@ -985,7 +983,7 @@ class PlexLibrary(Screen):
 		mainMenuList = []
 		mainMenuList.append((_("Press exit to return"), "", "messageEntry"))
 		mainMenuList.append((_("If you are using myPlex"), "", "messageEntry"))
-		mainMenuList.append((_("please check if curl is installed."), "", "messageEntry"))
+		mainMenuList.append((_("please check if python-pyopenssl is installed."), "", "messageEntry"))
 		mainMenuList.append((_("You can use Systemcheck in the menu."), "", "messageEntry"))
 
 		printl("", self, "C")
@@ -1159,31 +1157,6 @@ class PlexLibrary(Screen):
 				printl("", self, "C")
 				return {}
 
-	#=============================================================================
-	#
-	#=============================================================================
-	def getMyPlexToken(self, renew=False ):
-		"""
-		Get the myplex token. If the user ID stored with the token
-		does not match the current userid, then get new token.  This stops old token
-		being used if plex ID is changed. If token is unavailable, then get a new one
-		@input: whether to get new token
-		@return: myplex token
-		"""
-		printl("", self, "S")
-
-		try:
-			token = self.serverConfig_myplexToken
-		except:
-			token=""
-
-		if token == ""  or renew:
-			token = self.getNewMyPlexToken()
-
-		printl("Using token: " + str(token), self, "D", True, 8)
-		printl("", self, "C")
-		return token
-
 	#============================================================================
 	#
 	#============================================================================
@@ -1198,36 +1171,29 @@ class PlexLibrary(Screen):
 		printl("Getting new token", self, "I")
 
 		if ( self.g_myplex_username or self.g_myplex_password ) == "":
-			printl("Missing myplex details in config...", self, "I")
+			printl("Missing myplex details in config...", self, "D")
 
 			printl("", self, "C")
 			return False
 
 		base64string = base64.encodestring('%s:%s' % (self.g_myplex_username, self.g_myplex_password)).replace('\n', '')
-		token = None
 
-		myplex_header = getPlexHeader(self.g_sessionID, asDict=False)
-		myplex_header.append('Authorization: Basic ' + base64string)
-		myplex_header.append('X-Plex-Username: ' + self.g_myplex_username)
+		myplex_header = getPlexHeader(self.g_sessionID)
+		myplex_header['Authorization'] = "Basic %s" % base64string
+		myplex_header['X-Plex-Username'] = self.g_myplex_username
 
-		printl( "Starting auth request", self, "I")
-		curl_string = 'curl -s -k -X POST "%s"' % ("https://" + MYPLEX_SERVER + "/users/sign_in.xml")
-
-		for child in myplex_header:
-			curl_string += ' -H "' + child + '"'
-
-		printl("curl_string: " + str(curl_string), self, "D")
-		response = os.popen(curl_string).read()
+		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=10, port=443)
+		conn.request(url="/users/sign_in.xml", method="POST", headers=myplex_header)
+		data = conn.getresponse()
+		response = data.read()
 
 		try:
 			token = etree.fromstring(response).findtext('authentication-token')
 		except Exception:
-			pass
+			token = None
 
 		if token is None:
 			self.lastResponse = response
-			print self.lastResponse
-			raise Exception
 
 			printl("", self, "C")
 			return False
@@ -1476,7 +1442,7 @@ class PlexLibrary(Screen):
 		if self.currentType == "winfile" or self.currentType == "UNC":
 			myFile = myFile.replace("\\", "/")
 
-		myFile = urllib.unquote(myFile)
+		myFile = unquote(myFile)
 
 		# for some reason there might be double // in the string we remove them
 		myFile = myFile.replace("//", "/")
@@ -1999,12 +1965,14 @@ class PlexLibrary(Screen):
 		"""
 		printl("", self, "S")
 		printl("url = " + MYPLEX_SERVER + url, self, "D")
+		#
+		myplex_header = getPlexHeader(self.g_sessionID)
+		myplex_header['X-Plex-Token'] = str(self.serverConfig_myplexToken)
 
-		printl( "Starting request", self, "D")
-		curl_string = 'curl -s -k "%s"' % ("https://" + MYPLEX_SERVER + url + "?X-Plex-Token=" + str(self.serverConfig_myplexToken))
-
-		printl("curl_string: " + str(curl_string), self, "D", True, 10)
-		response = os.popen(curl_string).read()
+		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=10, port=443)
+		conn.request(url=url, method="GET", headers=myplex_header)
+		data = conn.getresponse()
+		response = data.read()
 
 		try:
 			tree = etree.fromstring(response)
@@ -2114,7 +2082,7 @@ class PlexLibrary(Screen):
 		transcode_url = None
 
 		if width is not None and height is not None:
-			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, urllib.quote_plus(url), width, height)
+			transcode_url = 'http://%s/photo/:/transcode?url=%s&width=%s&height=%s' % (server, quote_plus(url), width, height)
 			printl("transcode_url: " + str(transcode_url), self, "D")
 		else:
 			printl("unspecified width and height", self, "D")
@@ -2294,7 +2262,7 @@ class PlexLibrary(Screen):
 			#dts is not running for some reason
 			audioDecoders = "audioDecoders=mp3,aac"
 
-			self.g_capability = urllib.quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
+			self.g_capability = quote_plus(protocols + ";" + videoDecoders + ";" + audioDecoders)
 
 			printl("Plex Client Capability = " + self.g_capability, self, "I")
 			
