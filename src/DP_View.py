@@ -1214,6 +1214,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		selection = self["listview"].getCurrent()
 
+		# we turn off here to avoid mixed functions
+		self.toggleFilterMode(quit=True)
+
 		if selection is not None:
 			entryData		= selection[1]
 			#context		= selection[2]

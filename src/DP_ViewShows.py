@@ -108,7 +108,7 @@ class DPS_ViewShows(DP_View):
 			self.handleRatedPixmaps()
 
 			# we use this for filtermode at startup
-			self.filterableContent = False
+			self.filterableContent = True
 
 		elif self.details ["currentViewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons",self, "D")
