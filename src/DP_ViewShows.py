@@ -112,9 +112,14 @@ class DPS_ViewShows(DP_View):
 
 		elif self.details ["currentViewMode"] == "ShowSeasons":
 			printl( "is ShowSeasons",self, "D")
-			self.grandparentTitle = str(self.mediaContainer.get("title2", " "))
+			printl( "self.mediaContainer: " + str(self.mediaContainer),self, "D")
+
+			if self.mediaContainer["title2"] == self.details["title"]:
+				self.grandparentTitle = str(self.mediaContainer.get("title1", " "))
+			else:
+				self.grandparentTitle = str(self.mediaContainer.get("title2", " "))
+
 			self["grandparentTitle"].setText(self.grandparentTitle)
-			#self.setTitle(self.grandparentTitle)
 
 			self["leafCount"].setText(self.details.get("leafCount", " "))
 			self["viewedLeafCount"].setText(self.details.get("viewedLeafCount", " "))
