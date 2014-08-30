@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #=================================
 import sys
 import time
+import httplib
 
 from os import system, popen
 from Screens.Standby import TryQuitMainloop
@@ -39,7 +40,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Console import Console as SConsole
 
-from __common__ import printl2 as printl, testInetConnectivity
+from __common__ import printl2 as printl, testInetConnectivity, getUserAgentHeader
 
 from __init__ import getVersion, _ # _ is translation
 
@@ -140,7 +141,7 @@ class DPS_SystemCheck(Screen):
 			printl( "Starting request", self, "D")
 
 			conn = httplib.HTTPSConnection("api.github.com",timeout=10, port=443)
-			conn.request(url="/repos/DonDavici/DreamPlex/tags", method="GET")
+			conn.request(url="/repos/DonDavici/DreamPlex/tags", method="GET", headers=getUserAgentHeader())
 			data = conn.getresponse()
 			self.response = data.read()
 
@@ -231,11 +232,6 @@ class DPS_SystemCheck(Screen):
 			self.close()
 
 		printl("", self, "C")
-
-	def startPluginUpdate(self):
-		self.container=eConsoleAppContainer()
-		self.container.appClosed.append(self.finishupdate)
-		self.container.execute()
 
 	#===========================================================================
 	#
@@ -374,7 +370,7 @@ class DPS_SystemCheck(Screen):
 					self.session.openWithCallback(self.installStreamingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
 				elif self.check == "openssl":
-					self.session.openWithCallback(self.installCurlLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+					self.session.openWithCallback(self.installOpensslLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
 				elif self.check == "jpegTools":
 					self.session.openWithCallback(self.installJpegToolsLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
@@ -390,7 +386,7 @@ class DPS_SystemCheck(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def installCurlLibs(self, confirm):
+	def installOpensslLibs(self, confirm):
 		printl("", self, "S")
 
 		command = ""

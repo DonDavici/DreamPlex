@@ -807,11 +807,15 @@ def getPlexHeader(g_sessionID, asDict = True):
 #===========================================================================
 #
 #===========================================================================
-def getUserAgentHeader():
+def getUserAgentHeader(asDict = True):
 	printl2("", "__common__::getUserAgentHeader", "S")
 
-	#Create the standard header structure and load with a User Agent to ensure we get back a response.
-	header = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
+	if asDict:
+		#Create the standard header structure and load with a User Agent to ensure we get back a response.
+		header = {'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',}
+	else:
+		header = []
+		header.append('User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')
 
 	printl2("", "__common__::getUserAgentHeader", "C")
 	return header
