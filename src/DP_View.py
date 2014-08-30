@@ -130,6 +130,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	playbackMode                    = "default"
 	themeMusicIsRunning             = False
 	lastPlayedTheme                 = None
+	filterableContent               = False
 
 	#===========================================================================
 	#
