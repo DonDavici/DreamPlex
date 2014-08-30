@@ -108,7 +108,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	startPlaybackNow                = False
 	changePoster                    = True
 	changeBackdrop                  = True
-	fastScroll                = False
+	fastScroll                      = False
 	viewStep                        = 0 # we use this to know the steps we did to store the changes form subviews
 	viewChangeStorage               = {} # we use this to save changed value if we have subViews
 	loadedStillPictureLib           = False # until we do not know if we can load the libs it will be false
