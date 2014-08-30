@@ -78,7 +78,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	currentTagTypeDict              = {}
 	showMedia                       = False
 	showDetail                      = False
-	isFolder                     = False
+	isFolder                        = False
 	forceUpdate                     = False
 	lastTagType                     = None
 
@@ -2790,6 +2790,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		if self.onNumberKeyLastChar == " ":
 			self["listview"].setList(self.beforeFilterListViewList)
+
+			# we also have to reset the variable because this one is passed to player
+			self.listViewList = self.beforeFilterListViewList
 		else:
 			self.listViewList = [x for x in self.beforeFilterListViewList if x[1]["title"][0] == self.onNumberKeyLastChar]
 			self["listview"].setList(self.listViewList)
