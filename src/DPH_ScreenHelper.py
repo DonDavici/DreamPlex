@@ -36,7 +36,7 @@ from skin import parseColor
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl, addNewScreen, closePlugin
+from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv
 
 #===============================================================================
 #
@@ -270,6 +270,10 @@ class DPH_Screen(Screen):
 	#===============================================================================
 	def closePlugin(self):
 		printl("", self, "S")
+
+		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
+			printl("restoring liveTv", self, "D")
+			self.session.nav.playService(getLiveTv())
 
 		closePlugin()
 

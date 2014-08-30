@@ -44,7 +44,7 @@ from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
 
-from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity
+from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv, getLiveTv
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -100,7 +100,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			}, -2)
 		
 		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+			saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 			self.session.nav.stopService()
 
 		self.onFirstExecBegin.append(self.onExec)
@@ -283,10 +283,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def exit(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
-			printl("restoring liveTv", self, "D")
-			self.session.nav.playService(self.currentService)
-
+		# we call here explict to avoid memory blocking if there are still something
 		self.closePlugin()
 
 		printl("", self, "C")

@@ -58,7 +58,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime
+from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -203,7 +203,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			"red_long":		(self.onKeyRedLong, ""),
 			"yellow_long":	(self.onKeyYellowLong, ""),
 			"blue_long":	(self.onKeyBlueLong, ""),
-			"stop":	        (self.closePlugin, ""),
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),
@@ -402,7 +401,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
 			# if liveTv is not stopped on startup we have to do so now
 			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
-				self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
+				saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 				self.session.nav.stopService()
 
 			try:
@@ -1364,7 +1363,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 
-		if self.currentService is not None:
+		if getLiveTv() is not None:
 			self.restoreLiveTv()
 
 		if cause is not None:
@@ -2804,9 +2803,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if config.plugins.dreamplex.useBackdropVideos.value:
 			self.stopBackdropVideo()
 
-		if self.currentService is not None:
-			self.restoreLiveTv()
-
 		super(DP_View,self).closePlugin()
 
 		printl("", self, "C")
@@ -2818,7 +2814,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("", self, "S")
 
 		printl("restoring liveTv", self, "D")
-		self.session.nav.playService(self.currentService)
+		self.session.nav.playService(getLiveTv())
 
 		printl("", self, "C")
 

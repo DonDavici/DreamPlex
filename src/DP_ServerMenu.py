@@ -95,7 +95,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
 			    "red":		(self.onKeyRed, ""),
-			    "green":    (self.closePlugin, ""),
+			    "green":    (self.exit, ""),
 			}, -2)
 
 		self.onLayoutFinish.append(self.finishLayout)

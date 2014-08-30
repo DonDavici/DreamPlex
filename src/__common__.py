@@ -58,6 +58,7 @@ except ImportError:
 version = "0.1"
 gBoxType = None
 screens = []
+liveTv = None
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
@@ -741,6 +742,27 @@ def isValidSize(size):
 
 	printl2("", "__common__::isValidSize", "C")
 	return valid, result
+
+#===========================================================================
+#
+#===========================================================================
+def saveLiveTv(currentService):
+	printl2("", "__common__::saveLiveTv", "S")
+
+	global liveTv
+
+	liveTv = currentService
+
+	printl2("", "__common__::saveLiveTv", "C")
+
+#===========================================================================
+#
+#===========================================================================
+def getLiveTv():
+	printl2("", "__common__::restoreLiveTv", "S")
+
+	printl2("", "__common__::restoreLiveTv", "C")
+	return liveTv
 
 #===========================================================================
 #
