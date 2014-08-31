@@ -706,6 +706,7 @@ class BackgroundMediaSyncer(Thread):
 		import os
 		import math
 		import glob
+		import commands
 		#try:
 		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720_v2.jpg"))
 
@@ -768,13 +769,15 @@ class BackgroundMediaSyncer(Thread):
 							cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
 							printl("cmd: " + str(cmd), self, "D")
 
-							os.system(cmd)
+							response = commands.getstatusoutput(cmd)
 
-							if fileExists(videoLocation):
+							if fileExists(videoLocation) and response[0] == 0:
 								printl("finished rendering myFile: " + str(myFile),self, "D")
 							else:
 								printl("File does not exist after rendering!", self, "D")
-								self.messages.push((THREAD_WORKING, _("File does not exist after rendering!\nProcess aborted.") ))
+								printl("Error: " + str(response[1]), self, "D")
+
+								self.messages.push((THREAD_WORKING, _("Error: ") + str(response[1]) ))
 								self.messagePump.send(0)
 
 								sleep(1)
@@ -871,7 +874,7 @@ class BackgroundMediaSyncer(Thread):
 		contentQueue = {"movies": list(), "shows": list(),"seasons": list(),"episodes": list(),"artists": list(),"albums": list()}
 
 		try:
-			msg_text = _("\n\nReading section of the server ...")
+			msg_text = _("\n\nFetching complete library data. This could take a while ...")
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 
