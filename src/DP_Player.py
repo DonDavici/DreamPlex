@@ -469,6 +469,16 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
+	def unPauseService(self):
+		printl("", self, "S")
+		
+		self.hide()
+		self.setSeekState(self.SEEK_STATE_PLAY)
+
+		printl("", self, "S")
+	#===========================================================================
+	#
+	#===========================================================================
 	def getTitle(self):
 		printl("", self, "S")
 
