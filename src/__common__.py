@@ -162,23 +162,26 @@ def writeToLog(dmode, out):
 	@param out: message string
 	@return: none
 	"""
-	try:
-		instance = Singleton()
-		if instance.getLogFileInstance() is "":
-			openLogFile()
-			gLogFile = instance.getLogFileInstance()
-			gLogFile.truncate()
-		else:
-			gLogFile = instance.getLogFileInstance()
+	if config.plugins.dreamplex.writeDebugFile.value:
+		try:
+			instance = Singleton()
+			if instance.getLogFileInstance() is "":
+				openLogFile()
+				gLogFile = instance.getLogFileInstance()
+				gLogFile.truncate()
+			else:
+				gLogFile = instance.getLogFileInstance()
 
-		now = datetime.datetime.now()
-		gLogFile.write("%02d:%02d:%02d.%07d " % (now.hour, now.minute, now.second, now.microsecond) + " >>> " + str(
-			dmode) + " <<<  " + str(out) + "\n")
-		gLogFile.flush()
+			now = datetime.datetime.now()
+			gLogFile.write("%02d:%02d:%02d.%07d " % (now.hour, now.minute, now.second, now.microsecond) + " >>> " + str(
+				dmode) + " <<<  " + str(out) + "\n")
+			gLogFile.flush()
 
-	except Exception, ex:
-		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::writeToLog", "E")
+		except Exception, ex:
+			config.plugins.dreamplex.writeDebugFile.value = False
+			config.plugins.dreamplex.debugMode.save()
 
+			printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::writeToLog", "E")
 
 #===============================================================================
 # 
@@ -601,10 +604,18 @@ def checkXmlFile(location):
 	printl2("", "__common__::checkXmlFile", "S")
 
 	if not os.path.isfile(location):
-		printl2("xml file not found, generating ...", "__common__::checkXmlFile", "D")
-		with open(location, "a") as writefile:
-			writefile.write("<xml></xml>")
-			printl2("writing xml file done", "__common__::checkXmlFile", "D")
+
+		try:
+			printl2("xml file not found, generating ...", "__common__::checkXmlFile", "D")
+			with open(location, "a") as writefile:
+				writefile.write("<xml></xml>")
+				printl2("writing xml file done", "__common__::checkXmlFile", "D")
+
+		except IOError:
+			printl2("io error writing xml", "__common__::checkXmlFile", "D")
+
+		except Exception, e:
+			printl2("unknow error writing xml: " + str(e), "__common__::checkXmlFile", "D")
 
 	else:
 		printl2("found xml file, nothing to do", "__common__::checkXmlFile", "D")

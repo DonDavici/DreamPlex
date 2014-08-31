@@ -181,6 +181,9 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("Misc Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Debug Mode"), config.plugins.dreamplex.debugMode, _(" ")))
 
+		if config.plugins.dreamplex.debugMode.value:
+			self.cfglist.append(getConfigListEntry(_("> Write debugfile"), config.plugins.dreamplex.writeDebugFile, _("Without this option we just print to console.")))
+
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
 		

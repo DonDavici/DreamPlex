@@ -81,8 +81,18 @@ class DPS_Mappings(Screen):
 		
 		self.guiElements = getGuiElements()
 
-		self["content"] = DPS_MappingsEntryList([], serverID)
-		self.updateList()
+		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
+
+		checkXmlFile(self.location)
+
+		tree = getXmlContent(self.location)
+
+		if tree is not None:
+			self["content"] = DPS_MappingsEntryList([], serverID, tree)
+			self.updateList()
+			self.error = False
+		else:
+			self.error = True
 
 		self["btn_red"]			= Pixmap()
 		self["btn_redText"]		= Label()
@@ -90,7 +100,7 @@ class DPS_Mappings(Screen):
 		self["btn_green"]		= Pixmap()
 		self["btn_greenText"]   = Label()
 
-		self.onLayoutFinish.append(self.finishLayout)
+		self.onShown.append(self.finishLayout)
 		
 		printl("", self, "C")
 
@@ -105,6 +115,10 @@ class DPS_Mappings(Screen):
 
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_greenText"].setText(_("Add Entry"))
+
+		if self.error:
+			self.session.open(MessageBox,_("Something went wrong while opening mappings xml!"), MessageBox.TYPE_INFO)
+			self.close()
 
 		printl("", self, "C")
 
@@ -196,16 +210,14 @@ class DPS_MappingsEntryList(MenuList):
 	lastMappingId = 0 # we use this to find the next id if we add a new element
 	location = None
 	
-	def __init__(self, menuList, serverID, enableWrapAround = True):
+	def __init__(self, menuList, serverID, tree, enableWrapAround = True):
 		printl("", self, "S")
 		self.serverID = serverID
+		self.tree = tree
 		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
-		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
 
-		checkXmlFile(self.location)
-		
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -226,14 +238,12 @@ class DPS_MappingsEntryList(MenuList):
 		printl("", self, "S")
 		
 		self.list=[]
-		
-		tree = getXmlContent(self.location)
-		
+
 		printl("serverID: " + str(self.serverID), self, "D")
-		for server in tree.findall("server"):
+		for server in self.tree.findall("server"):
 			printl("servername: " + str(server.get('id')), self, "D")
 			if str(server.get('id')) == str(self.serverID):
-				
+
 				for mapping in server.findall('mapping'):
 					self.lastMappingId = mapping.attrib.get("id")
 					remotePathPart = mapping.attrib.get("remotePathPart")
@@ -241,19 +251,17 @@ class DPS_MappingsEntryList(MenuList):
 					printl("self.lastMappingId: " + str(self.lastMappingId), self, "D")
 					printl("remotePathPart: " + str(remotePathPart), self, "D")
 					printl("localPathPart: " + str(localPathPart), self, "D")
-					
+
 					res = [mapping]
 					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastMappingId)))
 					res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(localPathPart)))
 					res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(remotePathPart)))
-	
+
 					self.list.append(res)
-		
+
 		self.l.setList(self.list)
 		self.moveToIndex(0)
-		
-		#self.deleteSelectedMapping(1)
-				
+
 		printl("", self, "C")
 	
 	#===========================================================================

@@ -64,6 +64,7 @@ skins = []
 config.plugins.dreamplex = ConfigSubsection()
 config.plugins.dreamplex.about                  	= ConfigSelection(default = "1", choices = [("1", " ")]) # need this for seperator in settings
 config.plugins.dreamplex.debugMode         			= ConfigYesNo()
+config.plugins.dreamplex.writeDebugFile    			= ConfigYesNo()
 config.plugins.dreamplex.showInMainMenu	   			= ConfigYesNo(default = True)
 config.plugins.dreamplex.showFilter	   	   			= ConfigYesNo(default = True)
 config.plugins.dreamplex.autoLanguage      			= ConfigYesNo()
@@ -125,6 +126,7 @@ def printGlobalSettings():
 
 	printl("=== GLOBAL SETTINGS ===", "__init__::getBoxInformation", "I")
 	printl("debugMode: " + str(config.plugins.dreamplex.debugMode.value), "__init__::initGlobalSettings", "I")
+	printl("writeDebugFile: " + str(config.plugins.dreamplex.writeDebugFile.value), "__init__::initGlobalSettings", "I")
 	printl("boxName: " + str(config.plugins.dreamplex.boxName.value), "__init__::initGlobalSettings", "I")
 	printl("pluginfolderpath: " + str(config.plugins.dreamplex.pluginfolderpath.value), "__init__::initGlobalSettings", "I")
 	printl("logfolderpath: " + str(config.plugins.dreamplex.logfolderpath.value), "__init__::initGlobalSettings", "I")
