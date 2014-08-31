@@ -218,6 +218,8 @@ class DPS_MappingsEntryList(MenuList):
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
 
+		self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
+
 		printl("", self, "C")
 		
 	#===========================================================================
@@ -289,7 +291,7 @@ class DPS_MappingsEntryList(MenuList):
 		printl("", self, "S")
 
 		tree = getXmlContent(self.location)
-		
+
 		newId = int(self.lastMappingId) + 1
 		
 		printl("newId: " + str(newId), self, "D")
