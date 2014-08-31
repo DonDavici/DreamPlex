@@ -120,6 +120,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.playbackMode = playbackMode
 		self.whatPoster = poster
 
+		# we add this for vix images due to their long press button support
+		self.LongButtonPressed = False
+
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
 		self.libraryName = libraryName
