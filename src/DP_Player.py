@@ -785,8 +785,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def leavePlayerConfirmed(self, answer):
 		printl("", self, "S")
 		
-		if answer:
+		if answer != "EOF":
 			self.handleProgress()
+		else:
+			self.handleProgress(EOF=True)
 
 			if self.playbackType == "1":
 				self.stopTranscoding()
@@ -804,7 +806,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.autoPlayMode:
 			if not self.nextPlaylistEntryAvailable():
-				self.leavePlayerConfirmed(True)
+				self.leavePlayerConfirmed("EOF")
 			else:
 				# first we write back the state of the current file to the plex server
 				self.handleProgress()
@@ -812,7 +814,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				#start next file
 				self.playNextEntry()
 		else:
-			self.leavePlayerConfirmed(True)
+			self.leavePlayerConfirmed("EOF")
 		
 		printl("", self, "C")
 
@@ -834,17 +836,18 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	# 
 	#===========================================================================
-	def handleProgress(self):
+	def handleProgress(self, EOF=False):
 		printl("", self, "S")
 
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 
-		if currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
 			progress = currentTime / float(totalTime/100.0)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
 		else:
-			progress = 0
+			progress = 100
+			printl("End of file reached", self, "D")
 		
 		if self.multiUser and self.timelineWatcher is not None:
 			self.timelineWatcher.stop()
