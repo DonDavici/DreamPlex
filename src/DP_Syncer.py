@@ -770,7 +770,19 @@ class BackgroundMediaSyncer(Thread):
 
 							os.system(cmd)
 
-						printl("finished rendering myFile: " + str(myFile),self, "D")
+							if fileExists(videoLocation):
+								printl("finished rendering myFile: " + str(myFile),self, "D")
+							else:
+								printl("File does not exist after rendering!", self, "D")
+								self.messages.push((THREAD_WORKING, _("File does not exist after rendering!\nProcess aborted.") ))
+								self.messagePump.send(0)
+
+								sleep(1)
+
+								self.running = False
+								self.cancel = True
+								break
+
 				except Exception, e:
 					printl("Error: " + str(e), self, "D")
 					self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
