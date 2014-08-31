@@ -491,8 +491,8 @@
         <widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="245,608" size="160,30" font="OpenSans; 12" foregroundColor="#FF8C00" backgroundColor="#212121"/>
         <widget name="file" transparent="1" zPosition="9" halign="left"  position="350,608" size="550,60" font="OpenSans; 12" foregroundColor="#ffffff" backgroundColor="#212121"/>
                 
-        <widget name="casePic" zPosition="50" position="0,390" size="240,292" alphatest="blend" transparent="0"/>
-        <widget name="poster" transparent="1" zPosition="49" position="32,400" size="195,268" alphatest="blend"/>
+        <widget name="casePic" zPosition="49" position="0,390" size="240,292" alphatest="blend" transparent="0"/>
+        <widget name="poster" transparent="1" zPosition="50" position="32,400" size="195,268" alphatest="blend"/>
 
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/frame-fs8.png" position="0,0" zPosition="47" size="1280,720" alphatest="blend" transparent="1"/>
 		
@@ -644,8 +644,8 @@
         <widget name="info" transparent="1" zPosition="9" halign="left" position="893,388" size="160,25" font="OpenSans; 17" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		<!-- tv show specific ende-->
 		
-		<widget name="casePic" zPosition="50" position="543,236" size="240,292" alphatest="blend" transparent="0"/>
-		<widget name="poster" transparent="1" zPosition="49" position="576,246" size="195,268" alphatest="blend"/>
+		<widget name="casePic" zPosition="49" position="543,236" size="240,292" alphatest="blend" transparent="0"/>
+		<widget name="poster" transparent="1" zPosition="50" position="576,246" size="195,268" alphatest="blend"/>
                
 		<widget name="backdrop" transparent="0" zPosition="-3" position="0,0" size="1280,720" alphatest="blend"/>
 		<widget name="stillPicture" backgroundColor="#ff111111" zPosition="-30" position="0,0" size="1280,720"/>
