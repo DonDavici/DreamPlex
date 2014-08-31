@@ -471,7 +471,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def unPauseService(self):
 		printl("", self, "S")
-		
+
 		self.hide()
 		self.setSeekState(self.SEEK_STATE_PLAY)
 
@@ -535,9 +535,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType == "2":
 			self.bufferFull()
 		else:
-			# we lock the infobar until the buffer is full for better feedback to user
-			self.lockShow()
-			self.bufferInfo()
+			if config.plugins.dreamplex.showInfobarOnBuffer.value:
+				# we lock the infobar until the buffer is full for better feedback to user
+				self.lockShow()
+				self.bufferInfo()
 		
 		#printl("", self, "C")
 
@@ -750,10 +751,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def bufferEmpty(self):
 		#printl("", self, "S")
 		
-		if config.plugins.dreamplex.showInfobarOnBuffer.value:
-			#show infobar to indicate buffer is empty 
-			self.show()
-
 		if self.multiUser and self.timelineWatcher is not None:
 			self.timelineWatcher.stop()
 
