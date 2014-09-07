@@ -148,8 +148,7 @@ class DPS_ViewShows(DP_View):
 
 			if self.details["currentViewMode"] == "ShowEpisodesDirect":
 				self["tag"].setText("Season: " + encodeThat(self.details.get("parentIndex", " ")))
-				self["grandparentTitle"].setText(str(self.details.get("grandparentTitle", " ")))
-				#self.setTitle(str(self.details.get("grandparentTitle", " ")))
+				self["title"].setText(str(self.details.get("grandparentTitle", " ")))
 			else:
 				if self.grandparentTitle is not None:
 					self["grandparentTitle"].setText(self.grandparentTitle)
@@ -169,7 +168,10 @@ class DPS_ViewShows(DP_View):
 			self["file"].setText(encodeThat(self.parts.get("file", " - ")))
 
 			self.bname = self.details["ratingKey"]
-			self.pname = self.details["parentRatingKey"]
+			if self.details["currentViewMode"] == "ShowEpisodesDirect":
+				self.pname = self.details["grandparentRatingKey"]
+			else:
+				self.pname = self.details["parentRatingKey"]
 
 			if self.currentViewName == "Backdrop":
 				#we change this because the backdrops of episodes are low quality and will be very pixi

@@ -95,6 +95,30 @@
 			<element name="info" xCoord="990" yCoord="550" visible="True"/>
 			<element name="btn_yellow" visible="True"/>
 		</subView>
+
+		<subView name="ShowEpisodesDirect">
+			<element name="grandparentTitle" visible="False"/>
+			<element name="title" xCoord="245" yCoord="455" />
+			<element name="shortDescription" xCoord="245" yCoord="489"/>
+			<element name="studio" visible="False"/>
+			<element name="genre" visible="False"/>
+			<element name="year" visible="False"/>
+			<element name="writer" visible="True" xCoord="990" yCoord="516"/>
+			<element name="subtitles" visible="True" xCoord="990" yCoord="594"/>
+			<element name="audio" visible="True" xCoord="990" yCoord="620"/>
+			<element name="duration" visible="True" xCoord="990" yCoord="646"/>
+			<element name="codec" visible="True"/>
+			<element name="aspect" visible="True"/>
+			<element name="resolution" visible="True"/>
+			<element name="sound" visible="True"/>
+			<element name="childCount" visible="False"/>
+			<element name="leafCount" visible="False"/>
+			<element name="viewedLeafCount" visible="False"/>
+			<element name="unviewedLeafCount" visible="False"/>
+
+			<element name="info" xCoord="990" yCoord="550" visible="True"/>
+			<element name="btn_yellow" visible="True"/>
+		</subView>
 	</showView>
 
 	
@@ -117,8 +141,6 @@
 			
 			<element name="info" visible="False"/>
 			<element name="btn_yellow" visible="False"/>
-		   
-		    
 		</subView>
 
 		<subView name="ShowEpisodes">			
@@ -139,8 +161,28 @@
 			<element name="unviewedLeafCount" visible="False"/>
 			
 			<element name="info" visible="True"/>
-			<element name="btn_yellow" visible="True"/>	  
-		    
+			<element name="btn_yellow" visible="True"/>
+		</subView>
+
+		<subView name="ShowEpisodesDirect">
+			<element name="title" xCoord="793" yCoord="240" />
+			<element name="grandparentTitle" visible="False"/>
+			<element name="duration" xCoord="893" yCoord="464" visible="True"/>
+			<element name="audio" visible="True"/>
+			<element name="subtitles" visible="True"/>
+			<element name="codec" visible="True"/>
+			<element name="aspect" visible="True"/>
+			<element name="resolution" visible="True"/>
+			<element name="sound" visible="True"/>
+			<element name="writer" visible="True"/>
+		    <element name="rated" xCoord="1210" yCoord="474"/>
+
+			<element name="leafCount" visible="False"/>
+			<element name="viewedLeafCount" visible="False"/>
+			<element name="unviewedLeafCount" visible="False"/>
+
+			<element name="info" visible="True"/>
+			<element name="btn_yellow" visible="True"/>
 		</subView>
 	</showView>	
 	-->

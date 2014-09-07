@@ -439,7 +439,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("", self, "S")
 
 		self.myTitle = _(self.libraryName)
-		self.setTitle(self.myTitle)
+		self.myTitle = self.myTitle[0].upper() + self.myTitle[1:]
+		self.setTitle(_(self.myTitle))
 
 		printl("", self, "C")
 
