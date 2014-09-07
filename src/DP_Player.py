@@ -784,17 +784,18 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def leavePlayerConfirmed(self, answer):
 		printl("", self, "S")
-		
+
 		if answer != "EOF":
 			self.handleProgress()
+
 		else:
 			self.handleProgress(EOF=True)
 
-			if self.playbackType == "1":
-				self.stopTranscoding()
+		if self.playbackType == "1":
+			self.stopTranscoding()
 
-			self.session.nav.playService(self.currentService)
-			self.close()
+		self.session.nav.playService(self.currentService)
+		self.close()
 		
 		printl("", self, "C")
 
