@@ -277,7 +277,7 @@ class PlexLibrary(Screen):
 		tree = self.getAllSectionsXmlTree()
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			entries = tree.findall('Directory')
 			counter = 0
@@ -416,7 +416,7 @@ class PlexLibrary(Screen):
 		tree = self.getXmlTreeFromUrl(incomingEntryData["contentUrl"])
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall('Directory')
@@ -537,7 +537,7 @@ class PlexLibrary(Screen):
 		# find coressponding tags in xml
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			entries = tree.findall('Directory')
 
@@ -602,7 +602,7 @@ class PlexLibrary(Screen):
 		server = str(self.getServerFromURL(url))
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall('Directory')
@@ -705,7 +705,7 @@ class PlexLibrary(Screen):
 		server = str(self.getServerFromURL(url))
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall(tagType)
@@ -789,7 +789,7 @@ class PlexLibrary(Screen):
 		server = str(self.getServerFromURL(url))
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall("Directory")
@@ -1708,7 +1708,7 @@ class PlexLibrary(Screen):
 		selectedAudioOffset=-1
 
 		if not tree:
-			return False
+			return [], {}
 		else:
 			fromVideo = tree.find(myType) # Track or Video
 
