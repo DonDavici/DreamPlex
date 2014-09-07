@@ -1454,7 +1454,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	def updateList(self, myIndex=None):
 		printl("", self, "S")
-		print "we are here"
 
 		self["listview"].setList(self.listViewList)
 		if myIndex is not None:
@@ -1498,8 +1497,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			# we are a real folder on os level
 			if self.type == "Folder":
 				self.isFolder = True
+				if self.currentFunctionLevel == "2":
+					self.hideRefreshFunction()
 			else:
 				self.isFolder = False
+				if self.currentFunctionLevel == "2":
+					self.showRefreshFunction()
 			printl("isFolder: " + str(self.isFolder), self, "D")
 
 			# we are a xml directory tag
@@ -1718,6 +1721,28 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.toggleElementVisibilityWithLabel("writer", "hide")
 		self.toggleElementVisibilityWithLabel("director", "hide")
 		self.toggleElementVisibilityWithLabel("cast", "hide")
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def hideRefreshFunction(self):
+		printl("", self, "S")
+
+		self["btn_yellow"].hide()
+		self["btn_yellowText"].hide()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def showRefreshFunction(self):
+		printl("", self, "S")
+
+		self["btn_yellow"].show()
+		self["btn_yellowText"].show()
 
 		printl("", self, "C")
 
@@ -2024,8 +2049,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("", self, "S")
 		self.forceUpdate = True
 
-		Singleton().getPlexInstance().doRequest(self.refreshUrl)
-		self.getViewListData()
+		if not self.isFolder:
+			Singleton().getPlexInstance().doRequest(self.refreshUrl)
+			self.getViewListData()
 
 		printl("", self, "C")
 
