@@ -29,8 +29,6 @@ import httplib
 from os import system, popen
 from Screens.Standby import TryQuitMainloop
 
-from enigma import eConsoleAppContainer
-
 from Components.ActionMap import ActionMap
 from Components.MenuList import MenuList
 from Components.config import config
@@ -83,6 +81,7 @@ class DPS_SystemCheck(Screen):
 		vlist.append((_("Check openSSL installation data."), "check_Curl"))
 		vlist.append((_("Check mjpegtools intallation data."), "check_jpegTools"))
 		vlist.append((_("Check python imaging installation data."), "check_Pil"))
+		vlist.append((_("Check python textutils installation data."), "check_textutils"))
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
@@ -128,6 +127,9 @@ class DPS_SystemCheck(Screen):
 
 		if selection[1] == "check_Update":
 			self.checkForUpdate()
+
+		if selection[1] == "check_textutils":
+			self.checkPythonTextutils()
 
 		printl("", self, "C")
 
@@ -321,6 +323,20 @@ class DPS_SystemCheck(Screen):
 		printl("", self, "C")
 		return state
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkPythonTextutils(self):
+		printl("", self, "S")
+
+		command = "opkg status python-textutils"
+
+		self.check = "pythonTextutils"
+		state = self.executeCommand(command)
+
+		printl("", self, "C")
+		return state
+
 	#===============================================================================
 	#
 	#===============================================================================
@@ -377,6 +393,9 @@ class DPS_SystemCheck(Screen):
 
 				elif self.check == "pythonImaging":
 					self.session.openWithCallback(self.installPyhtonImagingLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
+
+				elif self.check == "pythonTextutils":
+					self.session.openWithCallback(self.installPyhtonTextutilsLibs, MessageBox, _("The selected plugin is not installed!\n Do you want to proceed to install?"), MessageBox.TYPE_YESNO)
 
 				else:
 					printl("no proper value i self.check", self, "W")
@@ -468,6 +487,34 @@ class DPS_SystemCheck(Screen):
 
 			elif self.oeVersion == "mips32el":
 				command = "opkg update; opkg install python-imaging"
+
+			else:
+				printl("something went wrong finding out the oe-version", self, "W")
+
+			self.executeInstallationCommand(command)
+
+		else:
+			# User said 'no'
+			self.cancel()
+
+		printl("", self, "C")
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def installPyhtonTextutilsLibs(self, confirm):
+		printl("", self, "S")
+
+		command = ""
+
+		if confirm:
+			# User said 'Yes'
+
+			if self.oeVersion == "mipsel":
+				command = "opkg update; opkg install python-textutils"
+
+			elif self.oeVersion == "mips32el":
+				command = "opkg update; opkg install python-textutils"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
