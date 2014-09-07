@@ -703,7 +703,6 @@ class BackgroundMediaSyncer(Thread):
 		msg_text = _("\n\nStarting to search for picture files with 1280x720 in its name ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
-		import os
 		import math
 		import glob
 		import commands
@@ -871,123 +870,24 @@ class BackgroundMediaSyncer(Thread):
 		self.artistCount = 0
 		self.albumCount = 0
 
-		contentQueue = {"movies": list(), "shows": list(),"seasons": list(),"episodes": list(),"artists": list(),"albums": list()}
-
 		try:
 			msg_text = _("\n\nFetching complete library data. This could take a while ...")
 			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 
-			for section in self.sectionList:
-				# interupt if needed
-				if self.cancel:
-					break
+			# in this run we gather only the information
+			self.cylceThroughLibrary()
 
-				if self.serverConfig.syncMovies.value:
-					if section[2] == "movieEntry":
-						printl("movie", self, "D")
-						movieUrl = section[3]["contentUrl"]
+			printl( "sectionCount " + str(self.sectionCount),self, "D")
+			printl("movieCount " + str(self.movieCount),self, "D")
+			printl("showCount  " + str(self.showCount),self, "D")
+			printl("seasonCount " + str(self.seasonCount),self, "D")
+			printl("episodeCount " + str(self.episodeCount),self, "D")
+			printl("artistCount "  + str(self.artistCount),self, "D")
+			printl("albumCount " + str(self.albumCount),self, "D")
 
-						if "/all" not in movieUrl:
-							movieUrl += "/all"
-
-						printl("movieUrl: " + str(movieUrl), self, "D")
-						library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
-						self.movieCount += len(library)
-
-						contentQueue["movies"].append(library)
-
-						#self.syncThrougMediaLibrary(library, myType="Movie")
-
-				if self.serverConfig.syncShows.value:
-					if section[2] == "showEntry":
-						printl("show: " + str(section))
-						showUrl = section[3]["contentUrl"]\
-
-						if "/all" not in showUrl:
-							showUrl += "/all"
-
-						printl("showUrl: " + str(showUrl), self, "D")
-						library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
-						self.showCount += len(library)
-						contentQueue["shows"].append(library)
-						#self.syncThrougMediaLibrary(library, myType="Show")
-
-						for seasons in library:
-							if self.cancel:
-								break
-							printl("seasons: " + str(seasons))
-
-							seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
-							printl("seasonsUrl: " + str(seasonsUrl), self, "D")
-							library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
-							self.seasonCount += len(library)
-							contentQueue["seasons"].append(library)
-							#self.syncThrougMediaLibrary(library, myType="Season")
-
-							for episodes in library:
-								if self.cancel:
-									break
-								printl("episode: " + str(episodes))
-
-								episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
-								printl("episodesUrl: " + str(episodesUrl), self, "D")
-								library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
-								self.episodeCount += len(library)
-								contentQueue["episodes"].append(library)
-								#self.syncThrougMediaLibrary(library, myType="Episode")
-
-				if self.serverConfig.syncMusic.value:
-					if section[2] == "musicEntry":
-						printl("music", self, "D")
-
-						# first we go through the artists
-						url = section[3]["contentUrl"]\
-
-						if "/all" not in url:
-							url += "/all"
-
-						printl("url: " + str(url), self, "D")
-						library, mediaContainer = self.plexInstance.getMusicByArtist(url)
-						self.artistCount += len(library)
-						contentQueue["artists"].append(library)
-						#self.syncThrougMediaLibrary(library, myType="Music")
-
-						# now we go through the albums
-						url = section[3]["contentUrl"] + "/albums"
-
-						printl("url: " + str(url), self, "D")
-						library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
-						self.albumCount += len(library)
-						contentQueue["albums"].append(library)
-						#self.syncThrougMediaLibrary(library, myType="Albums")
-
-			print "sectionCount " + str(self.sectionCount)
-			print "movieCount " + str(self.movieCount)
-			print "showCount  " + str(self.showCount)
-			print "seasonCount " + str(self.seasonCount)
-			print "episodeCount " + str(self.episodeCount)
-			print "artistCount "  + str(self.artistCount)
-			print "albumCount " + str(self.albumCount)
-
-			for library in contentQueue["movies"]:
-				self.syncThrougMediaLibrary(library, myType="Movie")
-
-			for library in contentQueue["shows"]:
-				self.syncThrougMediaLibrary(library, myType="Show")
-
-			for library in contentQueue["seasons"]:
-				self.syncThrougMediaLibrary(library, myType="Season")
-
-			for library in contentQueue["episodes"]:
-				self.syncThrougMediaLibrary(library, myType="Episode")
-
-			for library in contentQueue["artists"]:
-				self.syncThrougMediaLibrary(library, myType="Music")
-
-			for library in contentQueue["albums"]:
-				self.syncThrougMediaLibrary(library, myType="Albums")
-
+			# this run really fetches the data
+			self.cylceThroughLibrary(dryRun=False)
 
 			if self.cancel:
 				self.messages.push((THREAD_FINISHED, _("Process aborted.\nPress Exit to close.") ))
@@ -1000,6 +900,100 @@ class BackgroundMediaSyncer(Thread):
 			self.messagePump.send(0)
 
 		self.running = False
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def cylceThroughLibrary(self, dryRun=True):
+		printl("", self, "S")
+
+		for section in self.sectionList:
+			# interupt if needed
+			if self.cancel:
+				break
+
+			if self.serverConfig.syncMovies.value:
+				if section[2] == "movieEntry":
+					printl("movie", self, "D")
+					movieUrl = section[3]["contentUrl"]
+
+					if "/all" not in movieUrl:
+						movieUrl += "/all"
+
+					printl("movieUrl: " + str(movieUrl), self, "D")
+					library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
+					self.movieCount += len(library)
+
+					if not dryRun:
+						self.syncThrougMediaLibrary(library, myType="Movie")
+
+			if self.serverConfig.syncShows.value:
+				if section[2] == "showEntry":
+					printl("show: " + str(section))
+					showUrl = section[3]["contentUrl"]\
+
+					if "/all" not in showUrl:
+						showUrl += "/all"
+
+					printl("showUrl: " + str(showUrl), self, "D")
+					library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
+					self.showCount += len(library)
+
+					if not dryRun:
+						self.syncThrougMediaLibrary(library, myType="Show")
+
+					for seasons in library:
+						if self.cancel:
+							break
+						printl("seasons: " + str(seasons))
+
+						seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
+						printl("seasonsUrl: " + str(seasonsUrl), self, "D")
+						library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
+						self.seasonCount += len(library)
+
+						if not dryRun:
+							self.syncThrougMediaLibrary(library, myType="Season")
+
+						for episodes in library:
+							if self.cancel:
+								break
+							printl("episode: " + str(episodes))
+
+							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
+							printl("episodesUrl: " + str(episodesUrl), self, "D")
+							library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
+							self.episodeCount += len(library)
+
+							if not dryRun:
+								self.syncThrougMediaLibrary(library, myType="Episode")
+
+			if self.serverConfig.syncMusic.value:
+				if section[2] == "musicEntry":
+					printl("music", self, "D")
+
+					# first we go through the artists
+					url = section[3]["contentUrl"]\
+
+					if "/all" not in url:
+						url += "/all"
+
+					printl("url: " + str(url), self, "D")
+					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
+					self.artistCount += len(library)
+					if not dryRun:
+						self.syncThrougMediaLibrary(library, myType="Music")
+
+					# now we go through the albums
+					url = section[3]["contentUrl"] + "/albums"
+
+					printl("url: " + str(url), self, "D")
+					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
+					self.albumCount += len(library)
+					if not dryRun:
+						self.syncThrougMediaLibrary(library, myType="Albums")
 
 		printl("", self, "C")
 
