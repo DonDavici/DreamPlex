@@ -541,7 +541,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			if config.plugins.dreamplex.showInfobarOnBuffer.value:
 				# we lock the infobar until the buffer is full for better feedback to user
 				self.lockShow()
-				self.bufferInfo()
+
+			self.bufferInfo()
 		
 		#printl("", self, "C")
 
@@ -932,8 +933,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
 			progress = int(( float(currentTime) / float(totalTime) ) * 100)
-			if totalTime > 100000:
-				return True
+
+			# if totalTime > 100000:
+			# 	printl("returning because total time higher than 100000", self, "C") # but why
+			# 	printl("" ,self,"C")
+			# 	return True
 
 			printl("currentTime: " + str(currentTime), self, "C")
 			printl("totalTime: " + str(totalTime), self, "C")
@@ -957,7 +961,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 			self.plexInstance.doRequest(urlPath)
 
-		except Exception, e:    
+		except Exception, e:
 			printl("exception: " + str(e), self, "E")
 			return False
 
