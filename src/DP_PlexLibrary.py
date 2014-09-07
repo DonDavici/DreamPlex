@@ -535,54 +535,58 @@ class PlexLibrary(Screen):
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
 		# find coressponding tags in xml
-		entries = tree.findall('Directory')
 
-		# write global xml data to entryData
-		mediaContainer  = (dict(tree.items()))
-		printl("mediaContainer: " + str(mediaContainer), self, "D")
+		if not tree:
+			return False
+		else:
+			entries = tree.findall('Directory')
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
+			# write global xml data to entryData
+			mediaContainer  = (dict(tree.items()))
+			printl("mediaContainer: " + str(mediaContainer), self, "D")
 
-			entryData["currentViewMode"]	= "ShowShows"
-			entryData["nextViewMode"]		= "ShowSeasons"
-			entryData['server']			    = server
-			entryData['tagType']            = "Show"
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("entryData: " + str(entryData), self, "D")
 
-			if "type" not in entryData:
-				entryData["type"]           = "show"
+				entryData["currentViewMode"]	= "ShowShows"
+				entryData["nextViewMode"]		= "ShowSeasons"
+				entryData['server']			    = server
+				entryData['tagType']            = "Show"
 
-			entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
+				if "type" not in entryData:
+					entryData["type"]           = "show"
 
-			# now we populate entryData with the transcode data for images
-			entryData = self.getImageData(entryData, entry, server)
+				entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
 
-			entryData['token']			    = self.g_myplex_accessToken
+				# now we populate entryData with the transcode data for images
+				entryData = self.getImageData(entryData, entry, server)
 
-			if mediaContainer["title2"] != "By Folder":
-				viewState = self.getViewStateForShowEntry(entryData)
-				printl("viewState: " + str(viewState), self, "D")
+				entryData['token']			    = self.g_myplex_accessToken
 
-				if self.g_showUnSeenCounts:
-					entryData['title'] = entryData['title']# + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
-			else:
-				entryData['tagType']            = "Directory"
-				entryData["type"]               = "Folder"
-				viewState = None
+				if mediaContainer["title2"] != "By Folder":
+					viewState = self.getViewStateForShowEntry(entryData)
+					printl("viewState: " + str(viewState), self, "D")
 
-			#Create URL based on whether we are going to flatten the season view
-			if self.g_flattenShow:
-				printl("Flattening all shows", self, "I")
-				url = 'http://%s/%s'  % ( server, entryData['key'].replace("children","allLeaves"))
-			else:
-				url = 'http://%s/%s'  % ( server, entryData['key'])
+					if self.g_showUnSeenCounts:
+						entryData['title'] = entryData['title']# + " ("+ str(entryData["leafCount"]) + "/" + str(entryData["viewedLeafCount"]) + ")"
+				else:
+					entryData['tagType']            = "Directory"
+					entryData["type"]               = "Folder"
+					viewState = None
 
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState))
+				#Create URL based on whether we are going to flatten the season view
+				if self.g_flattenShow:
+					printl("Flattening all shows", self, "I")
+					url = 'http://%s/%s'  % ( server, entryData['key'].replace("children","allLeaves"))
+				else:
+					url = 'http://%s/%s'  % ( server, entryData['key'])
 
-		printl("", self, "C")
-		return fullList, mediaContainer
+				# add to fullList
+				fullList.append(self.getFullListEntry(entryData, url, viewState))
+
+			printl("", self, "C")
+			return fullList, mediaContainer
 
 	#===========================================================================
 	#
@@ -597,56 +601,59 @@ class PlexLibrary(Screen):
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
 
-		# find coressponding tags in xml
-		entries = tree.findall('Directory')
-		printl("entries: " + str(entries), self, "D")
+		if not tree:
+			return False
+		else:
+			# find coressponding tags in xml
+			entries = tree.findall('Directory')
+			printl("entries: " + str(entries), self, "D")
 
-		# write global xml data to entryData
-		mediaContainer  = (dict(tree.items()))
-		printl("mediaContainer: " + str(mediaContainer), self, "D")
+			# write global xml data to entryData
+			mediaContainer  = (dict(tree.items()))
+			printl("mediaContainer: " + str(mediaContainer), self, "D")
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("entryData: " + str(entryData), self, "D")
 
-			if self.g_flattenShow:
-				url='http://' + server + entryData["key"]
-				self.getEpisodesOfSeason(url)
-				return
+				if self.g_flattenShow:
+					url='http://' + server + entryData["key"]
+					self.getEpisodesOfSeason(url)
+					return
 
-			entryData["currentViewMode"]	= "ShowSeasons"
-			entryData["nextViewMode"]		= "ShowEpisodes"
-			entryData['server']			    = server
-			entryData['tagType']            = "Episodes"
+				entryData["currentViewMode"]	= "ShowSeasons"
+				entryData["nextViewMode"]		= "ShowEpisodes"
+				entryData['server']			    = server
+				entryData['tagType']            = "Episodes"
 
-			# this is the case for show all epsiodes of show without season number
-			if "type" not in entryData:
-				entryData["type"]               = "season"
+				# this is the case for show all epsiodes of show without season number
+				if "type" not in entryData:
+					entryData["type"]               = "season"
 
-			# now we populate entryData with the transcode data for images
-			entryData = self.getImageData(entryData, entry, server)
+				# now we populate entryData with the transcode data for images
+				entryData = self.getImageData(entryData, entry, server)
 
-			entryData['token']			    = self.g_myplex_accessToken
+				entryData['token']			    = self.g_myplex_accessToken
 
-			# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer but only if we are not in ByFolder mode
-			if "ratingKey" not in entryData and mediaContainer["title2"] != "By Folder":
-				entryData["ratingKey"] = mediaContainer["key"]
+				# if we are "all episodes" we do not have ratingKey - for this reason we set "key" as "ratingKey" form parent Mediacontainer but only if we are not in ByFolder mode
+				if "ratingKey" not in entryData and mediaContainer["title2"] != "By Folder":
+					entryData["ratingKey"] = mediaContainer["key"]
 
-			if mediaContainer["title2"] != "By Folder":
-				viewState = self.getViewStateForShowEntry(entryData)
-			else:
-				entryData['tagType']            = "Directory"
-				entryData["type"]               = "Folder"
-				viewState = None
+				if mediaContainer["title2"] != "By Folder":
+					viewState = self.getViewStateForShowEntry(entryData)
+				else:
+					entryData['tagType']            = "Directory"
+					entryData["type"]               = "Folder"
+					viewState = None
 
-			url = 'http://%s/%s'  % ( server, entryData['key'])
+				url = 'http://%s/%s'  % ( server, entryData['key'])
 
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, viewState))
+				# add to fullList
+				fullList.append(self.getFullListEntry(entryData, url, viewState))
 
-		printl("fullList: " + str(fullList), self, "C")
-		printl("", self, "C")
-		return fullList, mediaContainer
+			printl("fullList: " + str(fullList), self, "C")
+			printl("", self, "C")
+			return fullList, mediaContainer
 
 	#===============================================================================
 	#
@@ -696,75 +703,79 @@ class PlexLibrary(Screen):
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
-		# find coressponding tags in xml
-		entries = tree.findall(tagType)
 
-		# write global xml data to entryData
-		mediaContainer  = (dict(tree.items()))
-		printl("mediaContainer: " + str(mediaContainer), self, "D")
+		if not tree:
+			return False
+		else:
+			# find coressponding tags in xml
+			entries = tree.findall(tagType)
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
+			# write global xml data to entryData
+			mediaContainer  = (dict(tree.items()))
+			printl("mediaContainer: " + str(mediaContainer), self, "D")
 
-			entryData["currentViewMode"]	= currentViewMode
-			entryData["nextViewMode"]		= nextViewMode
-			entryData['server']			    = server
-			entryData['tagType']            = tagType
-			if "index" in entryData:
-				entryData['title']              = entryData["index"] + ". " + entryData["title"]
-			entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
-			entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
-			entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
-			entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
-			entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("entryData: " + str(entryData), self, "D")
 
-			# now we populate entryData with the transcode data for images
-			entryData = self.getImageData(entryData, entry, server, switchMedias)
+				entryData["currentViewMode"]	= currentViewMode
+				entryData["nextViewMode"]		= nextViewMode
+				entryData['server']			    = server
+				entryData['tagType']            = tagType
+				if "index" in entryData:
+					entryData['title']              = entryData["index"] + ". " + entryData["title"]
+				entryData['genre']			    = " / ".join(self.getListFromTag(entry, "Genre"))
+				entryData['director']			= " / ".join(self.getListFromTag(entry, "Director"))
+				entryData['cast']	            = " / ".join(self.getListFromTag(entry, "Role"))
+				entryData['writer']             = " / ".join(self.getListFromTag(entry, "Writer"))
+				entryData['country']            = " / ".join(self.getListFromTag(entry, "Country"))
 
-			entryData['token']			    = self.g_myplex_accessToken
+				# now we populate entryData with the transcode data for images
+				entryData = self.getImageData(entryData, entry, server, switchMedias)
 
-			# add part and media data to main data element
-			mediaDataArr= self.getPartAndMediaDataFromEntry(entry)
+				entryData['token']			    = self.g_myplex_accessToken
 
-			entryData["mediaDataArr"] = mediaDataArr
+				# add part and media data to main data element
+				mediaDataArr= self.getPartAndMediaDataFromEntry(entry)
 
-			# set seen state for picture handling in view
-			seenVisu = self.getViewStatefromViewCount(entryData)
+				entryData["mediaDataArr"] = mediaDataArr
 
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url, seenVisu))
+				# set seen state for picture handling in view
+				seenVisu = self.getViewStatefromViewCount(entryData)
 
-		# find coressponding tags in xml
-		entries = tree.findall('Directory')
+				# add to fullList
+				fullList.append(self.getFullListEntry(entryData, url, seenVisu))
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("directoryData: " + str(entryData), self, "D")
+			# find coressponding tags in xml
+			entries = tree.findall('Directory')
 
-			entryData['server'] 	        = str(server)
-			entryData['tagType']            = "Directory"
-			entryData["currentViewMode"]	= currentViewMode
-			entryData["nextViewMode"]	    = "ShowDirectory"
-			if "type" not in entryData:
-				entryData["type"]               = "Folder"
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("directoryData: " + str(entryData), self, "D")
 
-			# dirty workaround for music
-			if entryData["type"] == "album":
-				entryData["nextViewMode"]	    = "ShowTracks"
+				entryData['server'] 	        = str(server)
+				entryData['tagType']            = "Directory"
+				entryData["currentViewMode"]	= currentViewMode
+				entryData["nextViewMode"]	    = "ShowDirectory"
+				if "type" not in entryData:
+					entryData["type"]               = "Folder"
 
-			if entryData["type"] == "season":
-				entryData["nextViewMode"] = "ShowEpisodes"
-				entryData["title"] = entryData["parentTitle"] + " - " + _("Season") + " " + entryData["index"]
+				# dirty workaround for music
+				if entryData["type"] == "album":
+					entryData["nextViewMode"]	    = "ShowTracks"
 
-			# now we populate entryData with the transcode data for images
-			entryData = self.getImageData(entryData, entry, server)
+				if entryData["type"] == "season":
+					entryData["nextViewMode"] = "ShowEpisodes"
+					entryData["title"] = entryData["parentTitle"] + " - " + _("Season") + " " + entryData["index"]
 
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url))
+				# now we populate entryData with the transcode data for images
+				entryData = self.getImageData(entryData, entry, server)
 
-		printl("", self, "C")
-		return fullList, mediaContainer
+				# add to fullList
+				fullList.append(self.getFullListEntry(entryData, url))
+
+			printl("", self, "C")
+			return fullList, mediaContainer
 
 	#===============================================================================
 	#
@@ -776,37 +787,40 @@ class PlexLibrary(Screen):
 		# get xml from url
 		tree = self.getXmlTreeFromUrl(url)
 		server = str(self.getServerFromURL(url))
-		print str(tree)
-		# find coressponding tags in xml
-		entries = tree.findall("Directory")
 
-		# write global xml data to entryData
-		mediaContainer  = (dict(tree.items()))
-		printl("mediaContainer: " + str(mediaContainer), self, "D")
+		if not tree:
+			return False
+		else:
+			# find coressponding tags in xml
+			entries = tree.findall("Directory")
 
-		for entry in entries:
-			entryData = (dict(entry.items()))
-			printl("entryData: " + str(entryData), self, "D")
+			# write global xml data to entryData
+			mediaContainer  = (dict(tree.items()))
+			printl("mediaContainer: " + str(mediaContainer), self, "D")
 
-			entryData['server']				        = server
-			entryData['tagType']                    = "Directory"
-			entryData["currentViewMode"]		    = currentViewMode
-			entryData["nextViewMode"]			    = nextViewMode
+			for entry in entries:
+				entryData = (dict(entry.items()))
+				printl("entryData: " + str(entryData), self, "D")
 
-			# now we populate entryData with the transcode data for images
-			entryData = self.getImageData(entryData, entry, server)
+				entryData['server']				        = server
+				entryData['tagType']                    = "Directory"
+				entryData["currentViewMode"]		    = currentViewMode
+				entryData["nextViewMode"]			    = nextViewMode
 
-			if "type" in entryData:
-				if entryData["type"] == "album" or entryData["type"] == "artist":
-					entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
-			else:
-				entryData["type"] = "Folder"
+				# now we populate entryData with the transcode data for images
+				entryData = self.getImageData(entryData, entry, server)
 
-			# add to fullList
-			fullList.append(self.getFullListEntry(entryData, url))
+				if "type" in entryData:
+					if entryData["type"] == "album" or entryData["type"] == "artist":
+						entryData['genre']			= " / ".join(self.getListFromTag(entry, "Genre"))
+				else:
+					entryData["type"] = "Folder"
 
-		printl("", self, "C")
-		return fullList, mediaContainer
+				# add to fullList
+				fullList.append(self.getFullListEntry(entryData, url))
+
+			printl("", self, "C")
+			return fullList, mediaContainer
 
 	#===========================================================================
 	#
@@ -1693,95 +1707,98 @@ class PlexLibrary(Screen):
 		selectedSubOffset=-1
 		selectedAudioOffset=-1
 
-		fromVideo = tree.find(myType) # Track or Video
+		if not tree:
+			return False
+		else:
+			fromVideo = tree.find(myType) # Track or Video
 
-		videoData['title'] = fromVideo.get('title', "")
-		videoData['tagline'] = fromVideo.get('tagline', "")
-		videoData['summary'] = fromVideo.get('summary', "")
-		videoData['year'] = fromVideo.get('year', "")
-		videoData['studio'] = fromVideo.get('studio', "")
-		videoData['viewOffset']=fromVideo.get('viewOffset',0)
-		videoData['duration']=fromVideo.get('duration',0)
-		videoData['contentRating'] = fromVideo.get('contentRating', "")
+			videoData['title'] = fromVideo.get('title', "")
+			videoData['tagline'] = fromVideo.get('tagline', "")
+			videoData['summary'] = fromVideo.get('summary', "")
+			videoData['year'] = fromVideo.get('year', "")
+			videoData['studio'] = fromVideo.get('studio', "")
+			videoData['viewOffset']=fromVideo.get('viewOffset',0)
+			videoData['duration']=fromVideo.get('duration',0)
+			videoData['contentRating'] = fromVideo.get('contentRating', "")
 
-		mediaData['audioCodec'] = fromVideo.get('audioCodec', "")
-		mediaData['videoCodec'] = fromVideo.get('videoCodec', "")
-		mediaData['videoResolution'] = fromVideo.get('videoResolution', "")
-		mediaData['videoFrameRate'] = fromVideo.get('videoFrameRate', "")
+			mediaData['audioCodec'] = fromVideo.get('audioCodec', "")
+			mediaData['videoCodec'] = fromVideo.get('videoCodec', "")
+			mediaData['videoResolution'] = fromVideo.get('videoResolution', "")
+			mediaData['videoFrameRate'] = fromVideo.get('videoFrameRate', "")
 
-		fromParts = tree.getiterator('Part')
+			fromParts = tree.getiterator('Part')
 
-		contents="type"
+			contents="type"
 
-		#Get the Parts info for media type and source selection
-		for part in fromParts:
-			printl("part.attrib: " + str(part.attrib), self, "D")
+			#Get the Parts info for media type and source selection
+			for part in fromParts:
+				printl("part.attrib: " + str(part.attrib), self, "D")
 
-			try:
-				bits=part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
-				parts.append(bits)
-				partsCount += 1
-			except: pass
+				try:
+					bits=part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
+					parts.append(bits)
+					partsCount += 1
+				except: pass
 
-		if myType == "Video":
-			if self.g_streamControl == "1" or self.g_streamControl == "2":
+			if myType == "Video":
+				if self.g_streamControl == "1" or self.g_streamControl == "2":
 
-				contents="all"
-				fromStream = tree.getiterator('Stream')
-				printl("fromStream: " + str(fromStream), self, "D")
-				#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
+					contents="all"
+					fromStream = tree.getiterator('Stream')
+					printl("fromStream: " + str(fromStream), self, "D")
+					#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
 
-				for bits in fromStream:
-					printl("bits.attrib: " + str(bits.attrib), self, "D")
-					stream=dict(bits.items())
-					printl("stream: " + str(stream), self, "D")
-					if stream['streamType'] == '2': #audio
-						audioCount += 1
-						audioOffset += 1
-						try:
-							if stream['selected'] == "1":
-								printl("Found preferred audio id: " + str(stream['id']), self, "I" )
-								audio=stream
-								selectedAudioOffset=audioOffset
-						except: pass
-
-					elif stream['streamType'] == '3': #subtitle
-						subOffset += 1
-						try:
-							if stream['key']:
-								printl( "Found external subtitles id : " + str(stream['id']),self, "I")
-								external=stream
-								external['key']='http://'+server+external['key']
-						except:
-							#Otherwise it's probably embedded
+					for bits in fromStream:
+						printl("bits.attrib: " + str(bits.attrib), self, "D")
+						stream=dict(bits.items())
+						printl("stream: " + str(stream), self, "D")
+						if stream['streamType'] == '2': #audio
+							audioCount += 1
+							audioOffset += 1
 							try:
 								if stream['selected'] == "1":
-									printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
-									subCount += 1
-									subtitle=stream
-									selectedSubOffset=subOffset
+									printl("Found preferred audio id: " + str(stream['id']), self, "I" )
+									audio=stream
+									selectedAudioOffset=audioOffset
 							except: pass
 
-			else:
-					printl( "Stream selection is set OFF", self, "I")
+						elif stream['streamType'] == '3': #subtitle
+							subOffset += 1
+							try:
+								if stream['key']:
+									printl( "Found external subtitles id : " + str(stream['id']),self, "I")
+									external=stream
+									external['key']='http://'+server+external['key']
+							except:
+								#Otherwise it's probably embedded
+								try:
+									if stream['selected'] == "1":
+										printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
+										subCount += 1
+										subtitle=stream
+										selectedSubOffset=subOffset
+								except: pass
+
+				else:
+						printl( "Stream selection is set OFF", self, "I")
 
 
-		streamData={'contents'   : contents,
-					'audio'	  : audio,
-					'audioCount' : audioCount,
-					'subtitle'   : subtitle,
-					'subCount'   : subCount,
-					'external'   : external,
-					'parts'	  : parts,
-					'partsCount' : partsCount,
-					'videoData'  : videoData,
-					'mediaData'  : mediaData,
-					'subOffset'  : selectedSubOffset ,
-					'audioOffset': selectedAudioOffset }
+			streamData={'contents'   : contents,
+						'audio'	  : audio,
+						'audioCount' : audioCount,
+						'subtitle'   : subtitle,
+						'subCount'   : subCount,
+						'external'   : external,
+						'parts'	  : parts,
+						'partsCount' : partsCount,
+						'videoData'  : videoData,
+						'mediaData'  : mediaData,
+						'subOffset'  : selectedSubOffset ,
+						'audioOffset': selectedAudioOffset }
 
-		printl ("streamData = " + str(streamData), self, "D" )
-		printl("", self, "C")
-		return streamData
+			printl ("streamData = " + str(streamData), self, "D" )
+			printl("", self, "C")
+			return streamData
 
 	#========================================================================
 	#
@@ -1791,7 +1808,7 @@ class PlexLibrary(Screen):
 
 		self.getTranscodeSettings(override)
 		self.server = self.getServerFromURL(vids)
-		self.streams=self.getAudioSubtitlesMedia(self.server,myId, myType)
+		self.streams = self.getAudioSubtitlesMedia(self.server,myId, myType)
 
 		printl("partsCount: " + str(self.streams['partsCount']), self, "D")
 		printl("parts: " + str(self.streams['parts']), self, "D")

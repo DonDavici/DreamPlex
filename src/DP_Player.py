@@ -215,31 +215,35 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.server = server
 		self.dvdplayback=False
 
-		if count > 1:
-			printl("we have more than one playable part ...", self, "I")
-			indexCount=0
-			functionList = []
-
-			for items in self.options:
-				printl("item: " + str(items), self, "D")
-				if items[1] is not None:
-					name=items[1].split('/')[-1]
-				else:
-					size = convertSize(int(items[3]))
-					duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
-					# this is the case when there is no information of the real file name
-					name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
-
-				printl("name " + str(name), self, "D")
-				functionList.append((name ,indexCount, ))
-				indexCount+=1
-
-			self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
-
+		if not self.options:
+			response = Singleton().getPlexInstance().getLastResponse()
+			self.session.open(MessageBox,(_("Error:") + "\n%s") % response, MessageBox.TYPE_INFO)
 		else:
-			self.setSelectedMedia()
+			if count > 1:
+				printl("we have more than one playable part ...", self, "I")
+				indexCount=0
+				functionList = []
 
-		printl("", self, "C")
+				for items in self.options:
+					printl("item: " + str(items), self, "D")
+					if items[1] is not None:
+						name=items[1].split('/')[-1]
+					else:
+						size = convertSize(int(items[3]))
+						duration = time.strftime('%H:%M:%S', time.gmtime(int(items[4])))
+						# this is the case when there is no information of the real file name
+						name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
+
+					printl("name " + str(name), self, "D")
+					functionList.append((name ,indexCount, ))
+					indexCount+=1
+
+				self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
+
+			else:
+				self.setSelectedMedia()
+
+			printl("", self, "C")
 
 	#===========================================================================
 	#
