@@ -1708,7 +1708,7 @@ class PlexLibrary(Screen):
 		selectedAudioOffset=-1
 
 		if not tree:
-			return [], {}
+			return {}
 		else:
 			fromVideo = tree.find(myType) # Track or Video
 
