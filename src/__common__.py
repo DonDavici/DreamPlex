@@ -41,7 +41,7 @@ from DPH_Singleton import Singleton
 try:
 # Python 2.5
 	import xml.etree.cElementTree as etree
-#printl2("running with cElementTree on Python 2.5+", __name__, "D")
+	#printl2("running with cElementTree on Python 2.5+", __name__, "D")
 except ImportError:
 	try:
 		# Python 2.5
