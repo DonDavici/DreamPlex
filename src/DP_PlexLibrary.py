@@ -1239,7 +1239,7 @@ class PlexLibrary(Screen):
 		self.urlPath = urlPath
 
 		try:
-			conn = httplib.HTTPConnection(server,timeout=10)
+			conn = httplib.HTTPConnection(server,timeout=20)
 
 			# the very first time it is none
 			# we also have to check if the server that where used changed meanwhile
