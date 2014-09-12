@@ -29,6 +29,8 @@ from DPH_Singleton import Singleton
 
 
 class DPH_HorizontalMenu(object):
+	highlightedColor = "#e69405"
+	normalColor = "#ffffff"
 
 	#===============================================================================
 	#
@@ -39,8 +41,8 @@ class DPH_HorizontalMenu(object):
 
 		self.setRangeList()
 
-		highlighted = parseColor("#e69405")
-		normal = parseColor("#ffffff")
+		highlighted = parseColor(self.highlightedColor)
+		normal = parseColor(self.normalColor)
 
 		for i in self.rangeList:
 			self[str(i)] = MultiColorLabel()
@@ -154,6 +156,8 @@ class DPH_HorizontalMenu(object):
 				myType = str(orientation.get('type'))
 				if myType == "horizontal":
 					self.g_horizontal_menu = True
+					self.highlightedColor = str(orientation.get('highlighted'))
+					self.normalColor = str(orientation.get('normal'))
 
 		printl("", self, "C")
 

@@ -2,8 +2,8 @@
 <xml>
 
 	<!-- MAIN MENU ORIENTATION -->
-	<orientation name="main_menu" type="horizontal" />
-	<orientation name="server_menu" type="horizontal" />
+	<orientation name="main_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" />
+	<orientation name="server_menu" type="horizontal" highlighted="#e69405" normal="#ffffff"/>
 
 	<!-- MINI TV SIZE FOR NONE VIEW SCREENS -->
 	<miniTv name="main_menu" height="321" width="555" />
