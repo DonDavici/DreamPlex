@@ -526,13 +526,29 @@ def setBoxInformation():
 		manu = "Fortis"
 		model = "HdBox"
 		arch = "sh4"
+	elif box == "gbquad":
+		manu = "Gigablue"
+		model = "Quad"
+		arch = "mipsel"
+	elif box == "gbquadplus":
+		manu = "Gigablue"
+		model = "QuadPlus"
+		arch = "mipsel"
+	elif box == "gb800seplus":
+		manu = "Gigablue"
+		model = "800SEPlus"
+		arch = "mipsel"
+	elif box == "gb800ueplus":
+		manu = "Gigablue"
+		model = "800UEPlus"
+		arch = "mipsel"
 
 	if arch == "mipsel":
-		version = getBoxArch()
+		oeVersion = getBoxArch()
 	else:
-		version = "duckbox"
+		oeVersion = "duckbox"
 
-	boxData = (manu, model, arch, version)
+	boxData = (manu, model, arch, oeVersion)
 	printl2("", "__common__::_setBoxtype", "C")
 	return boxData
 
