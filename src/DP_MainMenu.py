@@ -117,7 +117,8 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		
 		self.setTitle(_("Main Menu"))
 
-		self.initMiniTv()
+		if self.miniTv:
+			self.initMiniTv()
 
 		# get all our servers as list
 		self.getServerList(self.allowOverride)

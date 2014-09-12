@@ -145,12 +145,19 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		"""
 		printl("", self, "S")
 		DPH_Screen.__init__(self, viewClass)
-		DPH_ScreenHelper.__init__(self, forceMiniTv= True)
+		self.viewParams = viewParams
+		self.miniTv = self.viewParams["settings"]["miniTv"]
+
+		if self.miniTv:
+			DPH_ScreenHelper.__init__(self, forceMiniTv= True)
+		else:
+			DPH_ScreenHelper.__init__(self)
+
 		DPH_MultiColorFunctions.__init__(self)
 		NumericalTextInput.__init__(self)
 
 		self.setMenuType(libraryName)
-		self.viewParams = viewParams
+
 
 		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")

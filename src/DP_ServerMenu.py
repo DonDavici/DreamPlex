@@ -112,7 +112,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self.setTitle(_("Server Menu"))
 
-		self.initMiniTv()
+		if self.miniTv:
+			self.initMiniTv()
 
 		printl("", self, "C")
 
