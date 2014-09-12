@@ -56,6 +56,7 @@ except ImportError:
 # CONSTANTS
 #===============================================================================
 version = "0.1"
+skinAuthors = ""
 gBoxType = None
 screens = []
 liveTv = None
@@ -150,6 +151,15 @@ def getVersion():
 
 	#rintl2("", "__common__::getVersion", "C")
 	return version
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinAuthors():
+	#printl2("", "__common__::getSkinAuthors", "S")
+
+	#rintl2("", "__common__::getSkinAuthors", "C")
+	return skinAuthors
 
 #===============================================================================
 # 
@@ -293,7 +303,7 @@ def registerPlexFonts():
 	"""
 	printl2("", "__common__::registerPlexFonts", "S")
 
-	printl2("adding fonts", "__common__::registerPlexFonts", "I")
+	printl2("adding fonts", "__common__::registerPlexFonts", "D")
 
 	tree = Singleton().getSkinParamsInstance()
 
@@ -308,9 +318,24 @@ def registerPlexFonts():
 		printl2("name: " + str(font.get('name')), "__common__::registerPlexFonts", "D")
 
 		addFont(path, name, size, False)
-		printl2("added => " + name, "__common__::registerPlexFonts", "I")
+		printl2("added => " + name, "__common__::registerPlexFonts", "D")
 
 	printl2("", "__common__::registerPlexFonts", "C")
+
+#===============================================================================
+#
+#===============================================================================
+def setSkinAuthors():
+	printl2("", "__common__::setSkinAuthors", "S")
+
+	tree = Singleton().getSkinParamsInstance()
+
+	for skinner in tree.findall("skinner"):
+		names = str(skinner.get('names'))
+		global skinAuthors
+		skinAuthors += names
+
+	printl2("", "__common__::setSkinAuthors", "C")
 
 #===============================================================================
 # 

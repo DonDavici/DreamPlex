@@ -41,7 +41,7 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_
 from DPH_Singleton import Singleton
 from DP_ViewFactory import getViews
 
-from __common__ import getVersion, registerPlexFonts, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
+from __common__ import getVersion, registerPlexFonts, setSkinAuthors, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 #===============================================================================
 #
@@ -430,6 +430,7 @@ def prepareEnvironment():
 	getViewTypesForSettings()
 	checkPlexEnvironment()
 	registerPlexFonts()
+	setSkinAuthors()
 	loadPlexSkin()
 	loadPlexPlugins()
 

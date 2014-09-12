@@ -13,6 +13,9 @@
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="OpenSans" />
+
+	<!-- SKINNER SECTION -->
+	<skinner names="Yipman alias Ipman" />
 	
 	<!-- GUI ELEMENTS -->
 	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />

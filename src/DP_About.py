@@ -27,8 +27,8 @@ from Components.Label import Label
 
 from Screens.Screen import Screen
 
-from __common__ import printl2 as printl
-from __init__ import getVersion, _ # _ is translation
+from __common__ import printl2 as printl, getVersion, getSkinAuthors
+from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -93,10 +93,11 @@ class DPS_About(Screen):
 		content += "Version: \t" + getVersion() + "\n\n"
 		content += "Autor: \t DonDavici\n"
 		content += "\n"
-		content += "Skin: \t Ipman alias Yipman\n"
+		content += "Skin: \t" + getSkinAuthors() + "\n"
 		content += "\n"
 		content += "Contributors: \t wezhunter\n"
 		content += "\t andyblac \n"
+		content += "\t rossi2000 \n"
 		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
 		
 		printl("", self, "C")
