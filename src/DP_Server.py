@@ -103,7 +103,7 @@ class DPS_Server(Screen, DPH_PlexScreen):
 		self["header"].setText(_("Server List:"))
 
 		if self.skinResolution == "FHD": # FHD is used for FULL HD Boxes with new framebuffer
-			self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
+			self["columnHeader"].setText(_("Name                                         IP/myPlex                                             Port/Email                                        Active"))
 		else:
 			self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
 
