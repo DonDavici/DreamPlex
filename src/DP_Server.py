@@ -54,6 +54,7 @@ class DPS_Server(Screen, DPH_PlexScreen):
 		printl("", self, "S")
 
 		Screen.__init__(self, session)
+		DPH_PlexScreen.__init__(self)
 		self.session = session
 		from Components.Sources.List import List
 
@@ -100,7 +101,11 @@ class DPS_Server(Screen, DPH_PlexScreen):
 		self.setColorFunctionIcons()
 
 		self["header"].setText(_("Server List:"))
-		self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
+
+		if self.skinResolution == "FHD": # FHD is used for FULL HD Boxes with new framebuffer
+			self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
+		else:
+			self["columnHeader"].setText(_("Name                                         IP/myPlex                                  Port/Email                                  Active"))
 
 		self["btn_redText"].setText(_("Delete"))
 		self["btn_greenText"].setText(_("Add"))
