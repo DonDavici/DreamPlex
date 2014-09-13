@@ -57,6 +57,8 @@ except ImportError:
 #===============================================================================
 version = "0.1"
 skinAuthors = ""
+skinResolution = "HD"
+skinCompatibility = "v2"
 gBoxType = None
 screens = []
 liveTv = None
@@ -147,19 +149,25 @@ def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
 #
 #===============================================================================
 def getVersion():
-	#printl2("", "__common__::getVersion", "S")
-
-	#rintl2("", "__common__::getVersion", "C")
 	return version
 
 #===============================================================================
 #
 #===============================================================================
 def getSkinAuthors():
-	#printl2("", "__common__::getSkinAuthors", "S")
-
-	#rintl2("", "__common__::getSkinAuthors", "C")
 	return skinAuthors
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinCompatibility():
+	return skinCompatibility
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinResolution():
+	return skinResolution
 
 #===============================================================================
 # 
@@ -325,17 +333,21 @@ def registerPlexFonts():
 #===============================================================================
 #
 #===============================================================================
-def setSkinAuthors():
-	printl2("", "__common__::setSkinAuthors", "S")
+def loadSkinParams():
+	printl2("", "__common__::loadSkinParams", "S")
+
+	global skinAuthors
+	global skinCompatibility
+	global skinResolution
 
 	tree = Singleton().getSkinParamsInstance()
 
-	for skinner in tree.findall("skinner"):
-		names = str(skinner.get('names'))
-		global skinAuthors
-		skinAuthors += names
+	for skinParams in tree.findall('skinParams'):
+		skinCompatibility = str(skinParams.get('compatibility'))
+		skinAuthors = str(skinParams.get('skinner'))
+		skinResolution = str(skinParams.get('resolution'))
 
-	printl2("", "__common__::setSkinAuthors", "C")
+	printl2("", "__common__::loadSkinParams", "C")
 
 #===============================================================================
 # 

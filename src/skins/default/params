@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <xml>
 
+	<skinParams resolution="HD" compatibility="v2" skinner="Yipman alias Ipman"/> <!-- typea => HD, FHD -->
+
 	<!-- MAIN MENU ORIENTATION -->
 	<menuScreen name="main_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" miniTv="True"/>
 	<menuScreen name="server_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" miniTv="True"/>
@@ -14,9 +16,6 @@
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="OpenSans" />
 
-	<!-- SKINNER SECTION -->
-	<skinner names="Yipman alias Ipman" />
-	
 	<!-- GUI ELEMENTS -->
 	<guiElement name="seenPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/seen-fs8.png" />
 	<guiElement name="startedPic" path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/icons/started-fs8.png" />

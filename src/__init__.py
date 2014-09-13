@@ -41,7 +41,7 @@ from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_
 from DPH_Singleton import Singleton
 from DP_ViewFactory import getViews
 
-from __common__ import getVersion, registerPlexFonts, setSkinAuthors, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
+from __common__ import getVersion, registerPlexFonts, loadSkinParams, loadPlexSkin, checkPlexEnvironment, getBoxInformation ,printl2 as printl, getXmlContent
 
 #===============================================================================
 #
@@ -369,7 +369,7 @@ def getInstalledSkins():
 #
 #===============================================================================
 def getViewTypesForSettings():
-	printl("", "__init__::getExistingViews", "S")
+	printl("", "__init__::getViewTypesForSettings", "S")
 
 	# view settings
 	viewChoicesForMovies = getViewsByType("movies")
@@ -381,7 +381,7 @@ def getViewTypesForSettings():
 	viewChoicesForMusic = getViewsByType("music")
 	config.plugins.dreamplex.defaultMusicView = ConfigSelection(default = "0", choices = viewChoicesForMusic)
 
-	printl("", "__init__::getExistingViews", "C")
+	printl("", "__init__::getViewTypesForSettings", "C")
 
 #===============================================================================
 #
@@ -430,7 +430,7 @@ def prepareEnvironment():
 	getViewTypesForSettings()
 	checkPlexEnvironment()
 	registerPlexFonts()
-	setSkinAuthors()
+	loadSkinParams()
 	loadPlexSkin()
 	loadPlexPlugins()
 

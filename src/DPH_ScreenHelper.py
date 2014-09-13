@@ -36,7 +36,7 @@ from skin import parseColor
 
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv
+from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv, getSkinResolution
 
 #===============================================================================
 #
@@ -120,6 +120,13 @@ class DPH_ScreenHelper(object):
 #
 #===============================================================================
 class DPH_PlexScreen(object):
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def __init__(self):
+
+		self.skinResolution = getSkinResolution()
 
 	#===============================================================================
 	#
