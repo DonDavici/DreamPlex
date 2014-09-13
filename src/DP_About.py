@@ -91,7 +91,7 @@ class DPS_About(Screen):
 		content += "Information\n\n"
 		content += "DreamPlex - a plex client for Enigma2 \n" 
 		content += "Version: \t" + getVersion() + "\n\n"
-		content += "Autor: \t DonDavici\n"
+		content += "Author: \t DonDavici\n"
 		content += "\n"
 		content += "Skin: \t" + getSkinAuthors() + "\n"
 		content += "\n"

@@ -542,6 +542,18 @@ def setBoxInformation():
 		manu = "Gigablue"
 		model = "800UEPlus"
 		arch = "mipsel"
+	elif box == "et8000":
+		manu = "Xtrend"
+		model = "8000"
+		arch = "mipsel"
+	elif box == "et10000":
+		manu = "Xtrend"
+		model = "10000"
+		arch = "mipsel"
+	elif box == "maram9":
+		manu = "Odin"
+		model = "M9"
+		arch = "mipsel"
 
 	if arch == "mipsel":
 		oeVersion = getBoxArch()
