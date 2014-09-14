@@ -43,8 +43,9 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
+from DPH_RemoteListener import HttpDeamon
 
-from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv, getLiveTv
+from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -103,7 +104,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 			self.session.nav.stopService()
 
-		self.onFirstExecBegin.append(self.onExec)
+		self.onLayoutFinish.append(self.onExec)
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onShown.append(self.checkSelectionOverride)
 
@@ -516,13 +517,44 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	def onExec(self):
 		printl("", self, "S")
-		
+
+		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
+		self.g_remotePlayer = g_remotePlayer.instance
+		self.g_remotePlayer.session = self.session
+		self.g_remotePlayer.setCallbacks(self.startPlayer)
+		self.g_remotePlayer.startDeamon()
+
 		# activate this to develop plex player via ios or android app
 		# state server is starting
 		# test over: 127.0.0.1:8000/version
 		# registration on plex server is working - player is showing up in handy app
 		# next step is to find out what should happen if a button is pressed. 
 		# for now we do not see any incoming traffic from the app :-(
-		#HttpDeamon().startDeamon()
-		
+		# self.httpDeamon = HttpDeamon(self.session)
+		# self.httpDeamon.setCallbacks(self.startPlayer)
+		# self.httpDeamon.startDeamon()
+
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startPlayer(self, data):
+		from DP_Player import DP_Player
+
+		listViewList    = data["listViewList"]
+		currentIndex    = data["currentIndex"]
+		libraryName     = data["libraryName"]
+		autoPlayMode    = data["autoPlayMode"]
+		resumeMode      = data["resumeMode"]
+		playbackMode    = data["playbackMode"]
+		whatPoster      = data["whatPoster"]
+
+		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
+
+# !!! important !!!!
+# this is a singleton implementation so that there is only one instance of this class
+# it can be also imported from other classes with from file import g_mediaSyncerInfo
+g_remotePlayer = HttpDeamon()
+
+#class remotePlayer(Thread):

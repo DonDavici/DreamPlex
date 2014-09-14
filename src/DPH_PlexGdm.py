@@ -112,7 +112,7 @@ class PlexGdm(object):
 	def client_update(self):
 		printl("", self, "S")
 
-		update_sock = socket.socket(socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+		update_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 
 		#Set socket reuse, may not work on all OSs.
 		try:
@@ -149,7 +149,7 @@ class PlexGdm(object):
 				pass
 			else:
 				if "M-SEARCH * HTTP/1." in data:
-					printl("Detected client discovery request from %s.  Replying" % addr, self, "D")
+					#printl("Detected client discovery request from %s.  Replying" % addr, self, "D")
 					try:
 						update_sock.sendto("HTTP/1.0 200 OK\n%s" % self.client_data, addr)
 					except:
