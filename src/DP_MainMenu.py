@@ -543,7 +543,10 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#
 	#===========================================================================
 	def startPlayer(self, data):
+		printl("", self, "S")
+
 		from DP_Player import DP_Player
+
 		listViewList    = data["listViewList"]
 		currentIndex    = data["currentIndex"]
 		libraryName     = data["libraryName"]
@@ -552,8 +555,6 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		playbackMode    = data["playbackMode"]
 		whatPoster      = data["whatPoster"]
 
-		print "startPlayer =>"
-		print currentThread()
-
+		printl("", self, "C")
 		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
 

@@ -22,16 +22,14 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import traceback
-import re
-import urllib
 from threading import currentThread
 from enigma import ePythonMessagePump
 
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
 from threading import Thread
 
 from DPH_PlexGdm import PlexGdm
+from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
 
 from __init__ import getVersion
@@ -50,13 +48,6 @@ class HttpDeamon(Thread):
 	def __init__(self):
 		self.playerData = ThreadQueue()
 		self.playerDataPump = ePythonMessagePump()
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def setCallbacks(self, playerCallback):
-
-		self.playerCallback = playerCallback
 
 	#===========================================================================
 	#
@@ -90,15 +81,14 @@ class HttpDeamon(Thread):
 
 		Thread.__init__(self)
 
-
-		self.HandlerClass = MyHandler
+		self.HandlerClass = RemoteHandler
 		self.ServerClass = HTTPServer
 		self.protocol = "HTTP/1.0"
 
 		self.start()
 
 		# this starts updatemechanism to show up as player in devices like ios
-		client = PlexGdm(debug=3)
+		client = PlexGdm(debug=False)
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
 		clientBox = "8000"
@@ -150,132 +140,4 @@ class HttpDeamon(Thread):
 
 		self.playerData.push((data,))
 		self.playerDataPump.send(0)
-
-#===============================================================================
-#
-#===============================================================================
-class MyHandler(BaseHTTPRequestHandler):
-	"""
-	Serves a HEAD request
-	"""
-	session = None
-	playerCallback = None
-
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def do_HEAD(self):
-		printl("", self, "S")
-
-		printl("Serving HEAD request...", self, "D")
-		self.answer_request()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def do_GET(self):
-		printl("", self, "S")
-
-		printl("Serving GET request...", self, "D")
-		self.answer_request()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def answer_request(self):
-		printl("", self, "S")
-
-		try:
-			self.send_response(200)
-			request_path=self.path[1:]
-			request_path=re.sub(r"\?.*","",request_path)
-			printl("request path is: [%s]" % request_path, self, "D")
-
-			if request_path=="version":
-				from DP_Player import DP_Player
-				#def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, poster):
-				self.session.open(DP_Player)
-				# self.end_headers()
-				# self.wfile.write("DreamPlex Helper Remote Redirector: Running\r\n")
-				# self.wfile.write("Version: 0.1")
-				# self.send_response(200)
-
-			elif request_path == "player/playback/playMedia":
-				from Components.config import config
-				self.g_serverConfig = config.plugins.dreamplex.Entries[0]
-				from DPH_Singleton import Singleton
-				from DP_PlexLibrary import PlexLibrary
-				self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-
-
-				from urlparse import urlparse, parse_qs
-				params = parse_qs(urlparse(self.path).query)
-
-				address = params["address"][0]
-				port = params["port"][0]
-				protocol = params["protocol"][0]
-				key = params["key"][0]
-
-
-				#response = self.plexInstance.doRequest(protocol + "://" + address + ":" + port + key)
-				listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
-
-				autoPlayMode = False
-				resumeMode = False
-				playbackMode = "0" # STREAMED
-				whatPoster = None
-				currentIndex = 0
-				libraryName = "test"
-
-				data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackMode, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
-
-
-				self.playerCallback(data)
-
-
-			elif request_path=="verify":
-				printl("DreamPlex Helper -> listener -> detected remote verification request", self, "D")
-				self.send_response(200)
-
-			elif request_path == "xbmcCmds/xbmcHttp":
-				self.wfile.write("<html><li>OK</html>")
-				self.send_response(200)
-				printl("DreamPlex Helper -> listener -> Detected remote application request", self, "D")
-				printl("Path: %s" % self.path, self, "D")
-				command_path=self.path.split('?')[1]
-
-				printl("Request: %s " % urllib.unquote(command_path), self, "D")
-
-				if command_path.split('=')[0] == 'command':
-					printl("Command: Sending a json to Plex", self, "D")
-			else:
-				self.send_response(200)
-		except:
-				traceback.print_exc()
-				self.wfile.close()
-
-				printl("", self, "C")
-				return
-		try:
-			self.wfile.close()
-		except:
-			pass
-
-		printl("", self, "C")
-	#===========================================================================
-	#
-	#===========================================================================
-	def address_string(self):
-		printl("", self, "S")
-
-		host, port = self.client_address[:2]
-		#return socket.getfqdn(host)
-
-		printl("", self, "C")
-		return host 
 

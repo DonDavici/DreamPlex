@@ -58,7 +58,7 @@ class PlexGdm(object):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, debug=0):
+	def __init__(self, debug=False):
 		printl("", self, "S")
 
 		self.discover_message = 'M-SEARCH * HTTP/1.0'
@@ -144,7 +144,8 @@ class PlexGdm(object):
 		while self._registration_is_running:
 			try:
 				data, addr = update_sock.recvfrom(1024)
-				printl("Recieved UDP packet from [%s] containing [%s]" % (addr, data.strip()), self, "D")
+				if self.debug:
+					printl("Recieved UDP packet from [%s] containing [%s]" % (addr, data.strip()), self, "D")
 			except socket.error:
 				pass
 			else:
@@ -155,7 +156,8 @@ class PlexGdm(object):
 					except:
 						printl("Error: Unable to send client update message", self, "D")
 
-					printl("Sending registration data: HTTP/1.0 200 OK\n%s" % self.client_data, self, "D")
+					if self.debug:
+						printl("Sending registration data: HTTP/1.0 200 OK\n%s" % self.client_data, self, "D")
 					self.client_registered = True
 			time.sleep(0.5)
 
