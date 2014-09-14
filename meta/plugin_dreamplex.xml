@@ -1,0 +1,16 @@
+<default>
+	  <prerequisites>
+                    <tag type="Extentions" />
+	  </prerequisites>
+          <info>
+                    <author>Don Davici</author>
+                    <name>DreamPlex</name>
+                    <packagename>enigma2-plugin-extentions-dreamplex</packagename>
+                    <shortdescription>Plex Client for Enigma2.</shortdescription>
+                    <description>Plex Client for Enigma2.</description>
+          </info>
+
+	  <files type="package"> <!-- without version, without .ipk -->
+		<file type="package" name="enigma2-plugin-extentions-dreamplex" />
+	</files>
+</default>

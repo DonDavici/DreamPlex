@@ -1,0 +1,754 @@
+# English translations for enigma2-plugin-extentions-dreamplex package.
+# Copyright (C) 2013 THE enigma2-plugin-extentions-dreamplex'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the enigma2-plugin-extentions-dreamplex package.
+# Automatically generated, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: enigma2-plugin-extentions-dreamplex 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-06 16:15+0100\n"
+"PO-Revision-Date: 2014-01-06 15:26+0100\n"
+"Last-Translator: Andy Blackburn <andyblac@icloud.com>\n"
+"Language-Team: none\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid " "
+msgstr " "
+
+msgid " > Autostart"
+msgstr " > Autostart"
+
+msgid " > Connection Type"
+msgstr " > Connection Type"
+
+msgid " > Name"
+msgstr " > Name"
+
+msgid " > Playback Type"
+msgstr " > Playback Type"
+
+msgid " > State"
+msgstr " > State"
+
+msgid " > Use Wake on Lan (WoL)"
+msgstr " > Use Wake on Lan (WoL)"
+
+msgid " >> DNS"
+msgstr " >> DNS"
+
+msgid " >> IP"
+msgstr " >> IP"
+
+msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
+msgstr " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
+
+msgid " >> Port"
+msgstr " >> Port"
+
+msgid " >> Segmentsize in seconds"
+msgstr " >> Segmentsize in seconds"
+
+msgid " >> Transcoding quality"
+msgstr " >> Transcoding quality"
+
+msgid " >> Use universal Transcoder"
+msgstr " >> Use universal Transcoder"
+
+msgid " >> Wait for server delay (max 180 seconds) only for WoL"
+msgstr " >> Wait for server delay (max 180 seconds) only for WoL"
+
+msgid " >> myPLEX Password"
+msgstr " >> myPLEX Password"
+
+msgid " >> myPLEX URL"
+msgstr " >> myPLEX URL"
+
+msgid " >> myPLEX Username"
+msgstr " >> myPLEX Username"
+
+msgid " >> myPLEX renew myPlex token"
+msgstr " >> myPLEX renew myPlex token"
+
+msgid ""
+" This file was partially played.\n"
+"\n"
+" Do you want to resume?"
+msgstr ""
+" This file was partially played.\n"
+"\n"
+" Do you want to resume?"
+
+#, python-format
+msgid "%s"
+msgstr "%s"
+
+msgid "(current 'Default')"
+msgstr "(current 'Default')"
+
+msgid "-"
+msgstr "-"
+
+msgid "1.5Mbps, 480p"
+msgstr "1.5Mbps, 480p"
+
+msgid "1024x768, 2mbps"
+msgstr "1024x768, 2mbps"
+
+msgid "10Mbps, 1080p"
+msgstr "10Mbps, 1080p"
+
+msgid "1280x720, 3mbps"
+msgstr "1280x720, 3mbps"
+
+msgid "1280x720, 4mbps"
+msgstr "1280x720, 4mbps"
+
+msgid "12Mbps, 1080p"
+msgstr "12Mbps, 1080p"
+
+msgid "1920x1080, 10mbps"
+msgstr "1920x1080, 10mbps"
+
+msgid "1920x1080, 12mbps"
+msgstr "1920x1080, 12mbps"
+
+msgid "1920x1080, 20mbps"
+msgstr "1920x1080, 20mbps"
+
+msgid "1920x1080, 8mbps"
+msgstr "1920x1080, 8mbps"
+
+msgid "208kbps, 160p, 15fps"
+msgstr "208kbps, 160p, 15fps"
+
+msgid "20Mbps, 1080p"
+msgstr "20Mbps, 1080p"
+
+msgid "2Mbps, 720p"
+msgstr "2Mbps, 720p"
+
+msgid "320kbps, 240p"
+msgstr "320kbps, 240p"
+
+msgid "3Mbps, 720p"
+msgstr "3Mbps, 720p"
+
+msgid "420x240, 320kbps"
+msgstr "420x240, 320kbps"
+
+msgid "4Mbps, 720p"
+msgstr "4Mbps, 720p"
+
+msgid "576x320, 720 kbps"
+msgstr "576x320, 720 kbps"
+
+msgid "64kbps, 128p, 3fps"
+msgstr "64kbps, 128p, 3fps"
+
+msgid "720kbps, 320p"
+msgstr "720kbps, 320p"
+
+msgid "720x480, 1,5mbps"
+msgstr "720x480, 1,5mbps"
+
+msgid "8Mbps, 1080p"
+msgstr "8Mbps, 1080p"
+
+msgid "96kbps, 128p, 12fps"
+msgstr "96kbps, 128p, 12fps"
+
+msgid "> Cache Folder Path"
+msgstr "> Cache Folder Path"
+
+msgid "> Check for updates on startup"
+msgstr "> Check for updates on startup"
+
+msgid "> Config Folder Path"
+msgstr "> Config Folder Path"
+
+msgid "> Debug Mode"
+msgstr "> Debug Mode"
+
+msgid "> Detail type for additional data"
+msgstr "> Detail type for additional data"
+
+msgid "> Log Folder Path"
+msgstr "> Log Folder Path"
+
+msgid "> Media Folder Path"
+msgstr "> Media Folder Path"
+
+msgid "> Player Temp Path"
+msgstr "> Player Temp Path"
+
+msgid "> Show Filter for Section"
+msgstr "> Show Filter for Section"
+
+msgid "> Show Infobar when buffer drained"
+msgstr "> Show Infobar when buffer drained"
+
+msgid "> Show Plugin in Main Menu"
+msgstr "> Show Plugin in Main Menu"
+
+msgid "> Show Seen/Unseen count in TvShows"
+msgstr "> Show Seen/Unseen count in TvShows"
+
+msgid "> Show additional data for myPlex sections"
+msgstr "> Show additional data for myPlex sections"
+
+msgid "> Stop Live TV on startup"
+msgstr "> Stop Live TV on startup"
+
+msgid "> Summerize Sections"
+msgstr "> Summerize Sections"
+
+msgid "> Updatetype"
+msgstr "> Updatetype"
+
+msgid "> Use Cache for Sections"
+msgstr "> Use Cache for Sections"
+
+msgid "> Use Picture Cache"
+msgstr "> Use Picture Cache"
+
+msgid "> Use fastScroll as default"
+msgstr "> Use fastScroll as default"
+
+msgid "> Used Skin"
+msgstr "> Used Skin"
+
+msgid ">> Play Themes in TV Shows"
+msgstr ">> Play Themes in TV Shows"
+
+msgid ">> Show Backdrops as Videos"
+msgstr ">> Show Backdrops as Videos"
+
+msgid "About"
+msgstr "About"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Add Entry"
+msgstr "Add Entry"
+
+msgid "Adding new mapping was not completed"
+msgstr "Adding new mapping was not completed"
+
+msgid "All"
+msgstr "All"
+
+msgid "All Filmy"
+msgstr "All Filmy"
+
+msgid "All Movies"
+msgstr "All Movies"
+
+msgid "All Shows"
+msgstr "All Shows"
+
+msgid "All episodes"
+msgstr "All episodes"
+
+msgid "Are you sure?"
+msgstr "Are you sure?"
+
+msgid "Audio Functions"
+msgstr "Audio Functions"
+
+msgid "Audio:"
+msgstr "Audio:"
+
+msgid "By Collection"
+msgstr "By Collection"
+
+msgid "By Content Rating"
+msgstr "By Content Rating"
+
+msgid "By Country"
+msgstr "By Country"
+
+msgid "By Decade"
+msgstr "By Decade"
+
+msgid "By Director"
+msgstr "By Director"
+
+msgid "By First Letter"
+msgstr "By First Letter"
+
+msgid "By Folder"
+msgstr "By Folder"
+
+msgid "By Genre"
+msgstr "By Genre"
+
+msgid "By Rating"
+msgstr "By Rating"
+
+msgid "By Resolution"
+msgstr "By Resolution"
+
+msgid "By Starring Actor"
+msgstr "By Starring Actor"
+
+msgid "By Year"
+msgstr "By Year"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Channels"
+msgstr "Channels"
+
+msgid "Check DreamPlex installation data."
+msgstr "Check DreamPlex installation data."
+
+msgid "Check curl installation data."
+msgstr "Check curl installation data."
+
+msgid "Check for 'gst-plugin-fragmented if you are using OE16."
+msgstr "Check for 'gst-plugin-fragmented if you are using OE16."
+
+msgid "Check for 'gst-plugins-bad-fragmented if you are using OE20."
+msgstr "Check for 'gst-plugins-bad-fragmented if you are using OE20."
+
+msgid "Check for update."
+msgstr "Check for update."
+
+msgid "Clear default view"
+msgstr "Clear default view"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Connection Settings"
+msgstr "Connection Settings"
+
+msgid "Could not install "
+msgstr "Could not install "
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Delete Entry"
+msgstr "Delete Entry"
+
+msgid "Deleting aborted!"
+msgstr "Deleting aborted!"
+
+msgid "Direct Local"
+msgstr "Direct Local"
+
+msgid "Discover"
+msgstr "Discover"
+
+msgid "DreamPlex"
+msgstr "DreamPlex"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid ""
+"Enigma2 must be restarted!\n"
+"Should Enigma2 now restart?"
+msgstr ""
+"Enigma2 must be restarted!\n"
+"Should Enigma2 now restart?"
+
+msgid "Enter this server automatically on startup."
+msgstr "Enter this server automatically on startup."
+
+msgid "Enter your remote path segment here:"
+msgstr "Enter your remote path segment here:"
+
+msgid "Exit"
+msgstr "Exit"
+
+msgid "General Settings"
+msgstr "General Settings"
+
+msgid "Genre:"
+msgstr "Genre:"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "I will now try to play the file via transcode."
+msgstr "I will now try to play the file via transcode."
+
+msgid "IP"
+msgstr "IP"
+
+msgid "If activated on each start we will check if there is a new version depending on your update type."
+msgstr "If activated on each start we will check if there is a new version depending on your update type."
+
+msgid "If you are using myPlex"
+msgstr "If you are using myPlex"
+
+msgid "If you change the skin you have to restart at least the GUI!"
+msgstr "If you change the skin you have to restart at least the GUI!"
+
+msgid "Information:\n"
+msgstr "Information:\n"
+
+msgid "Initiate Library refresh"
+msgstr "Initiate Library refresh"
+
+msgid "Invalid Location"
+msgstr "Invalid Location"
+
+msgid "Location:"
+msgstr "Location:"
+
+msgid "MYPLEX"
+msgstr "MYPLEX"
+
+msgid "Mappings"
+msgstr "Mappings"
+
+msgid "Mark media unwatched"
+msgstr "Mark media unwatched"
+
+msgid "Mark media watched"
+msgstr "Mark media watched"
+
+msgid "Media Functions"
+msgstr "Media Functions"
+
+msgid "Misc Settings"
+msgstr "Misc Settings"
+
+msgid "Movies"
+msgstr "Movies"
+
+msgid "Music"
+msgstr "Music"
+
+#, python-format
+msgid ""
+"MyPlex Token error:\n"
+"Check Username and Password.\n"
+"%s"
+msgstr ""
+"MyPlex Token error:\n"
+"Check Username and Password.\n"
+"%s"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "No internet connection available!"
+msgstr "No internet connection available!"
+
+msgid "No plugins available"
+msgstr "No plugins available"
+
+msgid "No update available"
+msgstr "No update available"
+
+msgid "Not available"
+msgstr "Not available"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "On Deck"
+msgstr "On Deck"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Pages:"
+msgstr "Pages:"
+
+msgid "Path Settings"
+msgstr "Path Settings"
+
+msgid "Pictures"
+msgstr "Pictures"
+
+msgid "Playback Settings"
+msgstr "Playback Settings"
+
+msgid "Please enter your search string!"
+msgstr "Please enter your search string!"
+
+msgid "Please verify you direct local settings"
+msgstr "Please verify you direct local settings"
+
+msgid ""
+"Plexserver seems to be offline. Please check your your settings or connection!\n"
+" Retry?"
+msgstr ""
+"Plexserver seems to be offline. Please check your your settings or connection!\n"
+" Retry?"
+
+msgid ""
+"Plexserver seems to be offline. Start with Wake on Lan settings? \n"
+"\n"
+"Please note: \n"
+"If you press yes the spinner will run for "
+msgstr ""
+"Plexserver seems to be offline. Start with Wake on Lan settings? \n"
+"\n"
+"Please note: \n"
+"If you press yes the spinner will run for "
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Press exit to return"
+msgstr "Press exit to return"
+
+msgid "Really delete this Server Entry?"
+msgstr "Really delete this Server Entry?"
+
+msgid "Recently Added"
+msgstr "Recently Added"
+
+msgid "Recently Aired"
+msgstr "Recently Aired"
+
+msgid "Recently Released"
+msgstr "Recently Released"
+
+msgid "Recently Viewed"
+msgstr "Recently Viewed"
+
+msgid "Recently Viewed Episodes"
+msgstr "Recently Viewed Episodes"
+
+msgid "Recently Viewed Shows"
+msgstr "Recently Viewed Shows"
+
+msgid "Refresh this section"
+msgstr "Refresh this section"
+
+msgid "Runtime:"
+msgstr "Runtime:"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Search Episodes..."
+msgstr "Search Episodes..."
+
+msgid "Search Shows..."
+msgstr "Search Shows..."
+
+msgid "Search..."
+msgstr "Search..."
+
+msgid "Select filter"
+msgstr "Select filter"
+
+msgid "Select media to play"
+msgstr "Select media to play"
+
+msgid "Select server"
+msgstr "Select server"
+
+msgid "Select sort"
+msgstr "Select sort"
+
+msgid "Select view"
+msgstr "Select view"
+
+msgid "Series"
+msgstr "Series"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Set view as default"
+msgstr "Set view as default"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Show media details"
+msgstr "Show media details"
+
+msgid "Shows"
+msgstr "Shows"
+
+msgid "Sorry I didn't find the file on the provided locations"
+msgstr "Sorry I didn't find the file on the provided locations"
+
+msgid "Sorry unable to perform action, something has failed!!"
+msgstr "Sorry unable to perform action, something has failed!!"
+
+msgid "State"
+msgstr "State"
+
+msgid "Streamed"
+msgstr "Streamed"
+
+msgid "Subtitle Functions"
+msgstr "Subtitle Functions"
+
+msgid "Subtitles:"
+msgstr "Subtitles:"
+
+msgid "System"
+msgstr "System"
+
+msgid "Systemcheck"
+msgstr "Systemcheck"
+
+msgid "TV Shows"
+msgstr "TV Shows"
+
+msgid ""
+"The selected plugin is not installed!\n"
+" Do you want to proceed to install?"
+msgstr ""
+"The selected plugin is not installed!\n"
+" Do you want to proceed to install?"
+
+#, python-format
+msgid "This Box can't decode %s streams!"
+msgstr "This Box can't decode %s streams!"
+
+msgid "Toggle state to on/off to show this server in lost or not."
+msgstr "Toggle state to on/off to show this server in lost or not."
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Transcoded"
+msgstr "Transcoded"
+
+msgid "Tv Shows"
+msgstr "Tv Shows"
+
+msgid "UNEXPECTED ERROR:"
+msgstr "UNEXPECTED ERROR:"
+
+#, python-format
+msgid ""
+"UNEXPECTED ERROR:\n"
+"This is the answer from the request ...\n"
+"%s"
+msgstr ""
+"UNEXPECTED ERROR:\n"
+"This is the answer from the request ...\n"
+"%s"
+
+msgid "Unwatched"
+msgstr "Unwatched"
+
+msgid "Use Beta only if you really want to help with testing"
+msgstr "Use Beta only if you really want to help with testing"
+
+msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
+msgstr "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
+
+msgid "Use this if you have m1v videos as backdrops"
+msgstr "Use this if you have m1v videos as backdrops"
+
+msgid "Userinterface Settings"
+msgstr "Userinterface Settings"
+
+msgid "Wake On Lan Settings"
+msgstr "Wake On Lan Settings"
+
+msgid "Warning:"
+msgstr "Warning:"
+
+msgid "Year:"
+msgstr "Year:"
+
+msgid "You can use Systemcheck in the menu."
+msgstr "You can use Systemcheck in the menu."
+
+msgid "You have to reenter the section to see the changes!"
+msgstr "You have to reenter the section to see the changes!"
+
+msgid "You need curl installed for this feature! Please check in System ..."
+msgstr "You need curl installed for this feature! Please check in System ..."
+
+msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
+msgstr "You need gstreamer_fragmented installed for this feature! Please check in System ... "
+
+#, python-format
+msgid ""
+"Your Box can't decode this video stream!\n"
+"%s"
+msgstr ""
+"Your Box can't decode this video stream!\n"
+"%s"
+
+msgid "Your current Version is "
+msgstr "Your current Version is "
+
+msgid "by Albums"
+msgstr "by Albums"
+
+msgid "by Artists"
+msgstr "by Artists"
+
+msgid "check myPlex Token"
+msgstr "check myPlex Token"
+
+msgid "fastScroll = Off"
+msgstr "fastScroll = Off"
+
+msgid "fastScroll = On"
+msgstr "fastScroll = On"
+
+msgid "for the user:"
+msgstr "for the user:"
+
+msgid "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
+msgstr "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
+
+msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
+msgstr "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
+
+msgid "load additional data"
+msgstr "load additional data"
+
+msgid "mappings"
+msgstr "mappings"
+
+msgid "myPlex Token:"
+msgstr "myPlex Token:"
+
+msgid "no xml as response - directory"
+msgstr "no xml as response - directory"
+
+msgid "no xml as response - tree"
+msgstr "no xml as response - tree"
+
+msgid "no xml as response - viewGroup"
+msgstr "no xml as response - viewGroup"
+
+msgid "not available"
+msgstr "not available"
+
+msgid "please check if curl is installed."
+msgstr "please check if curl is installed."
+
+msgid "plex client for enigma2"
+msgstr "plex client for enigma2"
+
+#, python-format
+msgid "set Filter (set to '%s')"
+msgstr "set Filter (set to '%s')"
+
+msgid "show media functions"
+msgstr "show media functions"
+
+msgid "toggle View "
+msgstr "toggle View "
+
