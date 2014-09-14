@@ -4,7 +4,6 @@ LANGS = ar bg ca cs da de el en en_GB es et fa fi fr fy he hr hu is it lt lv nl 
 LANGMO = $(LANGS:=.mo)
 LANGPO = $(LANGS:=.po)
 
-if UPDATE_PO
 # the TRANSLATORS: allows putting translation comments before the to-be-translated line.
 $(PLUGIN)-py.pot: $(srcdir)/../src/*.py
 	$(XGETTEXT) --no-wrap -L Python --from-code=UTF-8 -kpgettext:1c,2 --add-comments="TRANSLATORS:" -d $(PLUGIN) -s -o $@ $^
@@ -19,7 +18,6 @@ $(PLUGIN).pot: $(PLUGIN)-py.pot
 	else \
 		$(MSGINIT) -l $@ -o $@ -i $< --no-translator; \
 	fi
-endif
 
 .po.mo:
 	$(MSGFMT) -o $@ $<
