@@ -85,11 +85,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			elif request_path == "player/playback/playMedia":
 				from Components.config import config
-				self.g_serverConfig = config.plugins.dreamplex.Entries[0]
-				from DPH_Singleton import Singleton
-				from DP_PlexLibrary import PlexLibrary
-				self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
-
 
 				from urlparse import urlparse, parse_qs
 				params = parse_qs(urlparse(self.path).query)
@@ -98,17 +93,27 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				port = params["port"][0]
 				protocol = params["protocol"][0]
 				key = params["key"][0]
+				machineIdentifier = params["machineIdentifier"][0]
 
+				# TODO WE NEED TO FIND OUT HOW TO GET MACHINEIDENTIFIER
 
-				#response = self.plexInstance.doRequest(protocol + "://" + address + ":" + port + key)
+				for serverConfig in config.plugins.dreamplex.Entries:
+					if serverConfig.uuid.value == machineIdentifier:
+						self.g_serverConfig = serverConfig
+
+				from DPH_Singleton import Singleton
+				from DP_PlexLibrary import PlexLibrary
+
+				self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+
 				listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
 
 				autoPlayMode = False
 				resumeMode = False
-				playbackMode = "0" # STREAMED
+				playbackMode = self.g_serverConfig.playbackMode.value
 				whatPoster = None
 				currentIndex = 0
-				libraryName = "test"
+				libraryName = "Mixed"
 
 				data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackMode, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
 

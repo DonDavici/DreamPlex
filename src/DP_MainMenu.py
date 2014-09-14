@@ -519,10 +519,10 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
-		self.HttpDeamon = HttpDeamon()
-		self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
-		self.HttpDeamon.session = self.session
-		self.HttpDeamon.startDeamon()
+		# self.HttpDeamon = HttpDeamon()
+		# self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
+		# self.HttpDeamon.session = self.session
+		# self.HttpDeamon.startDeamon()
 
 		printl("", self, "C")
 
