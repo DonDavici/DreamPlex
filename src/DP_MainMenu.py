@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 import time
-
+from threading import currentThread
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
@@ -104,7 +104,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 			self.session.nav.stopService()
 
-		self.onLayoutFinish.append(self.onExec)
+		self.onFirstExecBegin.append(self.onExec)
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onShown.append(self.checkSelectionOverride)
 
@@ -519,20 +519,23 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
-		self.g_remotePlayer = g_remotePlayer.instance
-		self.g_remotePlayer.session = self.session
-		self.g_remotePlayer.setCallbacks(self.startPlayer)
-		self.g_remotePlayer.startDeamon()
+		self.HttpDeamon = HttpDeamon()
+		self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
+		self.HttpDeamon.session = self.session
+		self.HttpDeamon.startDeamon()
 
-		# activate this to develop plex player via ios or android app
-		# state server is starting
-		# test over: 127.0.0.1:8000/version
-		# registration on plex server is working - player is showing up in handy app
-		# next step is to find out what should happen if a button is pressed. 
-		# for now we do not see any incoming traffic from the app :-(
-		# self.httpDeamon = HttpDeamon(self.session)
-		# self.httpDeamon.setCallbacks(self.startPlayer)
-		# self.httpDeamon.startDeamon()
+		printl("", self, "C")
+
+	#===========================================================================
+	# msg as second params is needed -. do not remove even if it is not used
+	# form outside!!!!
+	#===========================================================================
+	# noinspection PyUnusedLocal
+	def gotThreadMsg(self, msg):
+		printl("", self, "S")
+
+		msg = self.HttpDeamon.PlayerData.pop()
+		self.startPlayer(msg[0])
 
 		printl("", self, "C")
 
@@ -541,7 +544,6 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	def startPlayer(self, data):
 		from DP_Player import DP_Player
-
 		listViewList    = data["listViewList"]
 		currentIndex    = data["currentIndex"]
 		libraryName     = data["libraryName"]
@@ -550,11 +552,8 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		playbackMode    = data["playbackMode"]
 		whatPoster      = data["whatPoster"]
 
+		print "startPlayer =>"
+		print currentThread()
+
 		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
 
-# !!! important !!!!
-# this is a singleton implementation so that there is only one instance of this class
-# it can be also imported from other classes with from file import g_mediaSyncerInfo
-g_remotePlayer = HttpDeamon()
-
-#class remotePlayer(Thread):

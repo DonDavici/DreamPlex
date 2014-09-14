@@ -25,11 +25,14 @@ You should have received a copy of the GNU General Public License
 import traceback
 import re
 import urllib
+from threading import currentThread
+from enigma import ePythonMessagePump
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 
 from DPH_PlexGdm import PlexGdm
+from DP_Syncer import ThreadQueue
 
 from __init__ import getVersion
 from __common__ import printl2 as printl, getBoxInformation
@@ -39,22 +42,45 @@ from __common__ import printl2 as printl, getBoxInformation
 #===============================================================================
 class HttpDeamon(Thread):
 
-	instance = None
 	session = None
 
 	#===========================================================================
 	#
 	#===========================================================================
 	def __init__(self):
-
-		assert not HttpDeamon.instance, "only one MediaSyncerInfo instance is allowed!"
-		HttpDeamon.instance = self # set instance
+		self.playerData = ThreadQueue()
+		self.playerDataPump = ePythonMessagePump()
 
 	#===========================================================================
 	#
 	#===========================================================================
 	def setCallbacks(self, playerCallback):
+
 		self.playerCallback = playerCallback
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerDataPump(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.playerDataPump
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerDataQueue(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.playerData
+
+	#===========================================================================
+	#PROPERTIES
+	#===========================================================================
+	PlayerDataPump = property(getPlayerDataPump)
+	PlayerData = property(getPlayerDataQueue)
 
 	#===========================================================================
 	#
@@ -62,7 +88,13 @@ class HttpDeamon(Thread):
 	def startDeamon(self):
 		printl("", self, "S")
 
-		Thread.__init__(self, target=runHttp, kwargs={"session": self.session, "playerCallback": self.playerCallback})
+		Thread.__init__(self)
+
+
+		self.HandlerClass = MyHandler
+		self.ServerClass = HTTPServer
+		self.protocol = "HTTP/1.0"
+
 		self.start()
 
 		# this starts updatemechanism to show up as player in devices like ios
@@ -79,7 +111,45 @@ class HttpDeamon(Thread):
 		else:
 			printl("Unsuccessfully registered", self, "D")
 
+
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	#def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
+	def run(self):
+		"""
+		Test the HTTP request handler class.
+
+		This runs an HTTP server on port 8000 (or the first command line
+		argument).
+		"""
+		printl("", __name__, "S")
+
+		port = 8000
+		server_address = ('', port)
+
+		self.HandlerClass.protocol_version = self.protocol
+		self.HandlerClass.session = self.session
+		self.HandlerClass.playerCallback = self.nowDoIt
+		httpd = self.ServerClass(server_address, self.HandlerClass)
+
+		sa = httpd.socket.getsockname()
+		printl("Serving HTTP on" + str(sa[0]) + "port " + str(sa[1]) + "...", __name__, "D")
+		httpd.serve_forever()
+
+		printl("", __name__, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def nowDoIt(self, data):
+		print "nowDoIt =>"
+		print currentThread()
+
+		self.playerData.push((data,))
+		self.playerDataPump.send(0)
 
 #===============================================================================
 #
@@ -164,6 +234,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
 				data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackMode, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
 
+
 				self.playerCallback(data)
 
 
@@ -208,28 +279,3 @@ class MyHandler(BaseHTTPRequestHandler):
 		printl("", self, "C")
 		return host 
 
-#===========================================================================
-#
-#===========================================================================
-def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
-		"""
-		Test the HTTP request handler class.
-	
-		This runs an HTTP server on port 8000 (or the first command line
-		argument).
-		"""
-		printl("", __name__, "S")
-
-		port = 8000
-		server_address = ('', port)
-	
-		HandlerClass.protocol_version = protocol
-		HandlerClass.session = session
-		HandlerClass.playerCallback = playerCallback
-		httpd = ServerClass(server_address, HandlerClass)
-	
-		sa = httpd.socket.getsockname()
-		printl("Serving HTTP on" + str(sa[0]) + "port " + str(sa[1]) + "...", __name__, "D")
-		httpd.serve_forever()
-
-		printl("", __name__, "C")

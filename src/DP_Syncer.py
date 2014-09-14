@@ -872,7 +872,7 @@ class BackgroundMediaSyncer(Thread):
 
 		try:
 			msg_text = _("\n\nFetching complete library data. This could take a while ...")
-			self.messages.push((THREAD_WORKING, msg_text))
+			self.messages.push((THREAD_WORKING, msg_teTHREAD_WORKINGxt))
 			self.messagePump.send(0)
 
 			# in this run we gather only the information
