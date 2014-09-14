@@ -39,7 +39,7 @@ src/skins/Makefile
 src/skins/default/Makefile
 src/skins/default/buttons/Makefile
 src/skins/default/icons/Makefile
-src/skins/default/images/buttons/Makefile
-src/skins/default/picons/images/Makefile
+src/skins/default/images/Makefile
+src/skins/default/picons/Makefile
 ])
 AC_OUTPUT
