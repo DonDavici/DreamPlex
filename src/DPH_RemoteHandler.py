@@ -25,9 +25,11 @@ You should have received a copy of the GNU General Public License
 from BaseHTTPServer import BaseHTTPRequestHandler
 import traceback
 import re
-import urllib
 
-from __common__ import printl2 as printl
+from DPH_Singleton import Singleton
+from DP_PlexLibrary import PlexLibrary
+
+from __common__ import printl2 as printl, getVersion
 
 #===============================================================================
 #
@@ -75,13 +77,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			printl("request path is: [%s]" % request_path, self, "D")
 
 			if request_path=="version":
-				from DP_Player import DP_Player
-				#def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, poster):
-				self.session.open(DP_Player)
-				# self.end_headers()
-				# self.wfile.write("DreamPlex Helper Remote Redirector: Running\r\n")
-				# self.wfile.write("Version: 0.1")
-				# self.send_response(200)
+				self.end_headers()
+				self.wfile.write("DreamPlex Helper Remote Redirector: Running\r\n")
+				self.wfile.write("Version: " + getVersion())
+				self.send_response(200)
 
 			elif request_path == "player/playback/playMedia":
 				from Components.config import config
@@ -94,48 +93,33 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				protocol = params["protocol"][0]
 				key = params["key"][0]
 				machineIdentifier = params["machineIdentifier"][0]
-
-				# TODO WE NEED TO FIND OUT HOW TO GET MACHINEIDENTIFIER
+				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
 				for serverConfig in config.plugins.dreamplex.Entries:
-					if serverConfig.uuid.value == machineIdentifier:
+					printl("current machineIdentifier: " + str(serverConfig.machineIdentifier.value), self, "D")
+
+					if serverConfig.machineIdentifier.value == machineIdentifier:
+						printl("we have a match ...", self, "D")
 						self.g_serverConfig = serverConfig
 
-				from DPH_Singleton import Singleton
-				from DP_PlexLibrary import PlexLibrary
+						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
 
-				self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
 
-				listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
+						autoPlayMode = False
+						resumeMode = False
+						playbackType = self.g_serverConfig.playbackType.value
+						whatPoster = None
+						currentIndex = 0
+						libraryName = "Mixed"
 
-				autoPlayMode = False
-				resumeMode = False
-				playbackMode = self.g_serverConfig.playbackMode.value
-				whatPoster = None
-				currentIndex = 0
-				libraryName = "Mixed"
+						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackType, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
 
-				data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackMode, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
+						self.playerCallback(data)
 
+					else:
+						printl("no match ...", self, "D")
 
-				self.playerCallback(data)
-
-
-			elif request_path=="verify":
-				printl("DreamPlex Helper -> listener -> detected remote verification request", self, "D")
-				self.send_response(200)
-
-			elif request_path == "xbmcCmds/xbmcHttp":
-				self.wfile.write("<html><li>OK</html>")
-				self.send_response(200)
-				printl("DreamPlex Helper -> listener -> Detected remote application request", self, "D")
-				printl("Path: %s" % self.path, self, "D")
-				command_path=self.path.split('?')[1]
-
-				printl("Request: %s " % urllib.unquote(command_path), self, "D")
-
-				if command_path.split('=')[0] == 'command':
-					printl("Command: Sending a json to Plex", self, "D")
 			else:
 				self.send_response(200)
 		except:

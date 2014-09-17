@@ -94,6 +94,9 @@ config.plugins.dreamplex.updateType					= ConfigSelection(default = "1", choices
 config.plugins.dreamplex.pluginfolderpath  		= ConfigDirectory(default = defaultPluginFolderPath)
 config.plugins.dreamplex.skinfolderpath			= ConfigDirectory(default = defaultSkinsFolderPath)
 
+config.plugins.dreamplex.remoteAgent	    = ConfigYesNo(default=True)
+config.plugins.dreamplex.remotePort         = ConfigInteger(default = 8090, limits=(1, 65555))
+
 config.plugins.dreamplex.logfolderpath     		= ConfigDirectory(default = defaultLogFolderPath, visible_width = 50)
 config.plugins.dreamplex.cachefolderpath  		= ConfigDirectory(default = defaultCacheFolderPath, visible_width = 50)
 config.plugins.dreamplex.mediafolderpath   		= ConfigDirectory(default = defaultMediaFolderPath, visible_width = 50)
@@ -170,6 +173,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].port 			= ConfigInteger(default = defaultPort, limits=(1, 65555))
 	config.plugins.dreamplex.Entries[i].playbackType	= ConfigSelection(default="0", choices = [("0", _("Streamed")),("1", _("Transcoded")), ("2", _("Direct Local"))])
 	config.plugins.dreamplex.Entries[i].localAuth	    = ConfigYesNo()
+	config.plugins.dreamplex.Entries[i].machineIdentifier = ConfigText(visible_width=50, fixed_size=False)
 
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )

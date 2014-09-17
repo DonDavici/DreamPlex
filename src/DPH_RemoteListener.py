@@ -33,7 +33,7 @@ from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
 
 from __init__ import getVersion
-from __common__ import printl2 as printl, getBoxInformation
+from __common__ import printl2 as printl, getBoxInformation, getMyIp
 
 #===============================================================================
 #
@@ -45,7 +45,8 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self):
+	def __init__(self, port):
+		self.port = port
 		self.playerData = ThreadQueue()
 		self.playerDataPump = ePythonMessagePump()
 
@@ -84,23 +85,22 @@ class HttpDeamon(Thread):
 		self.HandlerClass = RemoteHandler
 		self.ServerClass = HTTPServer
 		self.protocol = "HTTP/1.0"
+		self.myIp = getMyIp()
 
 		self.start()
 
 		# this starts updatemechanism to show up as player in devices like ios
-		client = PlexGdm(debug=False)
+		client = PlexGdm()
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
-		clientBox = "8000"
-		printl("clientBox: " + str(gBoxType), self, "D")
-		client.clientDetails(clientBox, "192.168.45.80", "8000", "DreamPlex", version)
+
+		client.clientDetails(self.port, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
 		client.start_registration()
 
 		if client.check_client_registration():
 			printl("Successfully registered", self, "D")
 		else:
 			printl("Unsuccessfully registered", self, "D")
-
 
 		printl("", self, "C")
 
@@ -109,16 +109,8 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
 	def run(self):
-		"""
-		Test the HTTP request handler class.
-
-		This runs an HTTP server on port 8000 (or the first command line
-		argument).
-		"""
 		printl("", __name__, "S")
-
-		port = 8000
-		server_address = ('', port)
+		server_address = (self.myIp, self.port)
 
 		self.HandlerClass.protocol_version = self.protocol
 		self.HandlerClass.session = self.session
@@ -126,7 +118,8 @@ class HttpDeamon(Thread):
 		httpd = self.ServerClass(server_address, self.HandlerClass)
 
 		sa = httpd.socket.getsockname()
-		printl("Serving HTTP on" + str(sa[0]) + "port " + str(sa[1]) + "...", __name__, "D")
+
+		printl("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + "...", __name__, "D")
 		httpd.serve_forever()
 
 		printl("", __name__, "C")
@@ -135,8 +128,6 @@ class HttpDeamon(Thread):
 	#
 	#===========================================================================
 	def nowDoIt(self, data):
-		print "nowDoIt =>"
-		print currentThread()
 
 		self.playerData.push((data,))
 		self.playerDataPump.send(0)

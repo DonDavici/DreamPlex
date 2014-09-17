@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License
 #IMPORT
 #=================================
 import time
-from threading import currentThread
+
 from Components.ActionMap import HelpableActionMap
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
@@ -518,11 +518,12 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def onExec(self):
 		printl("", self, "S")
 
-		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
-		# self.HttpDeamon = HttpDeamon()
-		# self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
-		# self.HttpDeamon.session = self.session
-		# self.HttpDeamon.startDeamon()
+		if config.plugins.dreamplex.remoteAgent.value:
+			# we use the global g_mediaSyncerInfo.instance to take care only having one instance
+			self.HttpDeamon = HttpDeamon(config.plugins.dreamplex.remotePort.value)
+			self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
+			self.HttpDeamon.session = self.session
+			self.HttpDeamon.startDeamon()
 
 		printl("", self, "C")
 
