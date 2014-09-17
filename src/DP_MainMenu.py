@@ -43,8 +43,9 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
+from DPH_RemoteListener import HttpDeamon
 
-from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv, getLiveTv
+from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -516,13 +517,45 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===========================================================================
 	def onExec(self):
 		printl("", self, "S")
-		
-		# activate this to develop plex player via ios or android app
-		# state server is starting
-		# test over: 127.0.0.1:8000/version
-		# registration on plex server is working - player is showing up in handy app
-		# next step is to find out what should happen if a button is pressed. 
-		# for now we do not see any incoming traffic from the app :-(
-		#HttpDeamon().startDeamon()
-		
+
+		if config.plugins.dreamplex.remoteAgent.value:
+			# we use the global g_mediaSyncerInfo.instance to take care only having one instance
+			self.HttpDeamon = HttpDeamon(config.plugins.dreamplex.remotePort.value)
+			self.HttpDeamon.PlayerDataPump.recv_msg.get().append(self.gotThreadMsg)
+			self.HttpDeamon.session = self.session
+			self.HttpDeamon.startDeamon()
+
 		printl("", self, "C")
+
+	#===========================================================================
+	# msg as second params is needed -. do not remove even if it is not used
+	# form outside!!!!
+	#===========================================================================
+	# noinspection PyUnusedLocal
+	def gotThreadMsg(self, msg):
+		printl("", self, "S")
+
+		msg = self.HttpDeamon.PlayerData.pop()
+		self.startPlayer(msg[0])
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startPlayer(self, data):
+		printl("", self, "S")
+
+		from DP_Player import DP_Player
+
+		listViewList    = data["listViewList"]
+		currentIndex    = data["currentIndex"]
+		libraryName     = data["libraryName"]
+		autoPlayMode    = data["autoPlayMode"]
+		resumeMode      = data["resumeMode"]
+		playbackMode    = data["playbackMode"]
+		whatPoster      = data["whatPoster"]
+
+		printl("", self, "C")
+		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
+

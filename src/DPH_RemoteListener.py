@@ -22,27 +22,57 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import traceback
-import re
-import urllib
+from threading import currentThread
+from enigma import ePythonMessagePump
 
-from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
 from threading import Thread
 
 from DPH_PlexGdm import PlexGdm
+from DPH_RemoteHandler import RemoteHandler
+from DP_Syncer import ThreadQueue
 
 from __init__ import getVersion
-from __common__ import printl2 as printl, getBoxInformation
+from __common__ import printl2 as printl, getBoxInformation, getMyIp
 
 #===============================================================================
 #
 #===============================================================================
-class HttpDeamon(object):
+class HttpDeamon(Thread):
+
+	session = None
+
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self):
-		pass
+	def __init__(self, port):
+		self.port = port
+		self.playerData = ThreadQueue()
+		self.playerDataPump = ePythonMessagePump()
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerDataPump(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.playerDataPump
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerDataQueue(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.playerData
+
+	#===========================================================================
+	#PROPERTIES
+	#===========================================================================
+	PlayerDataPump = property(getPlayerDataPump)
+	PlayerData = property(getPlayerDataQueue)
 
 	#===========================================================================
 	#
@@ -50,15 +80,21 @@ class HttpDeamon(object):
 	def startDeamon(self):
 		printl("", self, "S")
 
-		t = Thread(target=runHttp)
-		t.start()
+		Thread.__init__(self)
 
-		client = PlexGdm(debug=3)
+		self.HandlerClass = RemoteHandler
+		self.ServerClass = HTTPServer
+		self.protocol = "HTTP/1.0"
+		self.myIp = getMyIp()
+
+		self.start()
+
+		# this starts updatemechanism to show up as player in devices like ios
+		client = PlexGdm()
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
-		clientBox = "8000"
-		printl("clientBox: " + str(gBoxType), self, "D")
-		client.clientDetails(clientBox, "192.168.45.80", "8000", "DreamPlex", version)
+
+		client.clientDetails(self.port, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
 		client.start_registration()
 
 		if client.check_client_registration():
@@ -68,116 +104,31 @@ class HttpDeamon(object):
 
 		printl("", self, "C")
 
-#===============================================================================
-#
-#===============================================================================
-#noinspection PyClassicStyleClass
-class MyHandler(BaseHTTPRequestHandler):
-	"""
-	Serves a HEAD request
-	"""
-
 	#===========================================================================
 	#
 	#===========================================================================
-	def do_HEAD(self, s):
-		printl("", self, "S")
-
-		printl("Serving HEAD request...", self, "D")
-		s.answer_request(0)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def do_GET(self, s):
-		printl("", self, "S")
-
-		printl("Serving GET request...", self, "D")
-		s.answer_request(1)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def answer_request(self, s):
-		printl("", self, "S")
-
-		try:
-			#s.send_response(200)
-			request_path=s.path[1:]
-			request_path=re.sub(r"\?.*","",request_path)
-			printl("request path is: [%s]" % request_path, self, "D")
-
-			if request_path=="version":
-				#s.end_headers()
-				s.wfile.write("DreamPlex Helper Remote Redirector: Running\r\n")
-				s.wfile.write("Version: 0.1")
-				s.send_response(200)
-
-			elif request_path=="verify":
-				printl("DreamPlex Helper -> listener -> detected remote verification request", self, "D")
-				s.send_response(200)
-
-			elif request_path == "xbmcCmds/xbmcHttp":
-				s.wfile.write("<html><li>OK</html>")
-				s.send_response(200)
-				printl("DreamPlex Helper -> listener -> Detected remote application request", self, "D")
-				printl("Path: %s" % s.path, self, "D")
-				command_path=s.path.split('?')[1]
-
-				printl("Request: %s " % urllib.unquote(command_path), self, "D")
-
-				if command_path.split('=')[0] == 'command':
-					printl("Command: Sending a json to Plex", self, "D")
-			else:
-				s.send_response(200)
-		except:
-				traceback.print_exc()
-				s.wfile.close()
-
-				printl("", self, "C")
-				return
-		try:
-			s.wfile.close()
-		except:
-			pass
-
-		printl("", self, "C")
-	#===========================================================================
-	#
-	#===========================================================================
-	def address_string(self):
-		printl("", self, "S")
-
-		host, port = self.client_address[:2]
-		#return socket.getfqdn(host)
-
-		printl("", self, "C")
-		return host 
-
-#===========================================================================
-#
-#===========================================================================
-def runHttp(HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
-		"""
-		Test the HTTP request handler class.
-	
-		This runs an HTTP server on port 8000 (or the first command line
-		argument).
-		"""
+	#def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
+	def run(self):
 		printl("", __name__, "S")
+		server_address = (self.myIp, self.port)
 
-		port = 8000
-		server_address = ('', port)
-	
-		HandlerClass.protocol_version = protocol
-		httpd = ServerClass(server_address, HandlerClass)
-	
+		self.HandlerClass.protocol_version = self.protocol
+		self.HandlerClass.session = self.session
+		self.HandlerClass.playerCallback = self.nowDoIt
+		httpd = self.ServerClass(server_address, self.HandlerClass)
+
 		sa = httpd.socket.getsockname()
-		printl("Serving HTTP on" + sa[0] + "port " + sa[1] + "...", __name__, "D")
+
+		printl("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + "...", __name__, "D")
 		httpd.serve_forever()
 
 		printl("", __name__, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def nowDoIt(self, data):
+
+		self.playerData.push((data,))
+		self.playerDataPump.send(0)
+

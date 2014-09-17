@@ -2335,7 +2335,7 @@ class PlexLibrary(Screen):
 			self.g_multiUser = True
 		else:
 			self.g_multiUser = False
-			
+
 		printl("self.g_serverVersion: " + str(self.g_serverVersion), self, "D")
 		printl("self.g_multiUser: " + str(self.g_multiUser), self, "D")
 

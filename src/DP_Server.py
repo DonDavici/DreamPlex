@@ -429,7 +429,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 				self.cfglist.append(getConfigListEntry(_(" >> Transcoding quality"), self.current.uniQuality, _("You need gstreamer_fragmented installed for this feature! Please check in System ... ")))
 
 		elif self.current.playbackType.value == "2":
-			printl("i am here", self, "D")
 			self.useMappings = True
 
 		elif self.current.playbackType.value == "3":
@@ -571,6 +570,20 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		if self.newmode == 1:
 			config.plugins.dreamplex.entriescount.value += 1
 			config.plugins.dreamplex.entriescount.save()
+
+		#if self.current.machineIdentifier.value == "":
+		from DP_PlexLibrary import PlexLibrary
+		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
+
+		if self.current.connectionType.value == "2":
+			xmlResponse = self.plexInstance.getSharedServerForPlexUser()
+			self.current.machineIdentifier.value = xmlResponse.get("machineIdentifier")
+
+		else:
+			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + self.plexInstance.g_currentServer)
+			self.current.machineIdentifier.value = xmlResponse.get("machineIdentifier")
+
+		printl("machineIdentifier: " + str(self.current.machineIdentifier.value), self, "D")
 
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.save()

@@ -6,8 +6,6 @@ from Plugins.Plugin import PluginDescriptor
 
 from Components.config import config, configfile
 
-from DPH_Singleton import Singleton
-
 from __init__ import prepareEnvironment, _ # _ is translation
 
 #===============================================================================
