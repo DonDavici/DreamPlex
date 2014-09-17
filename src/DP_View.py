@@ -158,7 +158,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		self.setMenuType(libraryName)
 
-
 		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")
 
@@ -2295,7 +2294,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		self.setLevelActive(currentLevel=1)
 
-		self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
+		if self.miniTv:
+			self.initMiniTv(self.viewParams["settings"]["backdropVideoWidth"], self.viewParams["settings"]["backdropVideoHeight"])
 
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)
