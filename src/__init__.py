@@ -38,6 +38,7 @@ from Components.Language import language
 
 from Tools.Directories import resolveFilename, SCOPE_PLUGINS, SCOPE_SKIN, SCOPE_CURRENT_SKIN, SCOPE_LANGUAGE
 
+
 from DPH_Singleton import Singleton
 from DP_ViewFactory import getViews
 
@@ -437,4 +438,5 @@ def prepareEnvironment():
 	loadSkinParams()
 	loadPlexSkin()
 	loadPlexPlugins()
+
 

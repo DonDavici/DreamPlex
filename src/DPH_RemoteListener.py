@@ -22,7 +22,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from threading import currentThread
 from enigma import ePythonMessagePump
 
 from BaseHTTPServer import HTTPServer
@@ -32,7 +31,7 @@ from DPH_PlexGdm import PlexGdm
 from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
 
-from __init__ import getVersion
+#from __init__ import getVersion
 from __common__ import printl2 as printl, getBoxInformation, getMyIp
 
 #===============================================================================
@@ -69,6 +68,13 @@ class HttpDeamon(Thread):
 		return self.playerData
 
 	#===========================================================================
+	#
+	#===========================================================================
+	def setSession(self, session):
+		self.session = session
+		self.start()
+
+	#===========================================================================
 	#PROPERTIES
 	#===========================================================================
 	PlayerDataPump = property(getPlayerDataPump)
@@ -87,20 +93,29 @@ class HttpDeamon(Thread):
 		self.protocol = "HTTP/1.0"
 		self.myIp = getMyIp()
 
-		self.start()
-
 		# this starts updatemechanism to show up as player in devices like ios
-		client = PlexGdm()
-		version = str(getVersion())
+		self.client = PlexGdm()
+		version = "1"#str(getVersion())
 		gBoxType = getBoxInformation()
 
-		client.clientDetails(self.port, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
-		client.start_registration()
+		self.client.clientDetails(self.port, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
+		self.client.start_registration()
 
-		if client.check_client_registration():
+		if self.client.check_client_registration():
 			printl("Successfully registered", self, "D")
 		else:
 			printl("Unsuccessfully registered", self, "D")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def stopRemoteDeamon(self):
+		printl("", self, "S")
+
+		self.client.stop_all()
+		self.httpd.shutdown()
 
 		printl("", self, "C")
 
@@ -115,12 +130,12 @@ class HttpDeamon(Thread):
 		self.HandlerClass.protocol_version = self.protocol
 		self.HandlerClass.session = self.session
 		self.HandlerClass.playerCallback = self.nowDoIt
-		httpd = self.ServerClass(server_address, self.HandlerClass)
+		self.httpd = self.ServerClass(server_address, self.HandlerClass)
 
-		sa = httpd.socket.getsockname()
+		sa = self.httpd.socket.getsockname()
 
 		printl("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + "...", __name__, "D")
-		httpd.serve_forever()
+		self.httpd.serve_forever()
 
 		printl("", __name__, "C")
 

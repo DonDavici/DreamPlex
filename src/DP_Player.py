@@ -59,6 +59,22 @@ from DPH_Singleton import Singleton
 from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
 
+#===========================================================================
+#
+#===========================================================================
+def startPlayer(session, data):
+
+	listViewList    = data["listViewList"]
+	currentIndex    = data["currentIndex"]
+	libraryName     = data["libraryName"]
+	autoPlayMode    = data["autoPlayMode"]
+	resumeMode      = data["resumeMode"]
+	playbackMode    = data["playbackMode"]
+	whatPoster      = data["whatPoster"]
+
+	#printl("", self, "C")
+	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
+
 #===============================================================================
 #
 #===============================================================================
