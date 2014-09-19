@@ -78,7 +78,7 @@ def getNoneDirectoryElements():
 def getDefaultSettingsList():
 	printl("", "DP_ViewFactory::getDefaultSettingsList", "S")
 
-	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth", "miniTv"]
+	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth", "posterHeight", "posterWidth", "backdropHeight", "backdropWidth", "miniTv"]
 
 	printl("", "DP_ViewFactory::getDefaultSettingsList", "C")
 	return settingsList
@@ -247,13 +247,13 @@ def getMovieViewDefaults():
 	params["elements"]["file"]["visible"]                          = False
 
 	# add addional params in elements
-	params["elements"]["backdrop"]["height"]                       = "315"
-	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
+	# params["elements"]["backdrop"]["height"]                       = "315"
+	# params["elements"]["backdrop"]["width"]                        = "560"
+	#params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
-	params["elements"]["poster"]["height"]                         = "268"
-	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
+	# params["elements"]["poster"]["height"]                         = "268"
+	# params["elements"]["poster"]["width"]                          = "195"
+	#params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getMovieViewDefaults", "C")
 	return params
@@ -300,13 +300,13 @@ def getShowViewDefaults():
 	params["elements"]["sound"]["visible"]                          = False
 
 	# add addional params in elements
-	params["elements"]["backdrop"]["height"]                       = "315"
-	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
+	# params["elements"]["backdrop"]["height"]                       = "315"
+	# params["elements"]["backdrop"]["width"]                        = "560"
+	#params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
-	params["elements"]["poster"]["height"]                         = "268"
-	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
+	# params["elements"]["poster"]["height"]                         = "268"
+	# params["elements"]["poster"]["width"]                          = "195"
+	#params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getShowViewDefaults", "C")
 	return params
@@ -356,13 +356,13 @@ def getMusicViewDefaults():
 	params["elements"]["studio"]["visible"]                        = False
 
 	# add addional params in elements
-	params["elements"]["backdrop"]["height"]                       = "315"
-	params["elements"]["backdrop"]["width"]                        = "560"
-	params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
+	# params["elements"]["backdrop"]["height"]                       = "315"
+	# params["elements"]["backdrop"]["width"]                        = "560"
+	#params["elements"]["backdrop"]["postfix"]                      = "_backdrop_v2.jpg"
 
-	params["elements"]["poster"]["height"]                         = "268"
-	params["elements"]["poster"]["width"]                          = "195"
-	params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
+	# params["elements"]["poster"]["height"]                         = "268"
+	# params["elements"]["poster"]["width"]                          = "195"
+	#params["elements"]["poster"]["postfix"]                        = "_poster_v2.jpg"
 
 	printl("", "DP_ViewFactory::getMusicViewDefaults", "C")
 	return params

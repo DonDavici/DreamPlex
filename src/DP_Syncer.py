@@ -45,11 +45,11 @@ from Screens.Screen import Screen
 from Tools.Directories import fileExists
 
 from DP_PlexLibrary import PlexLibrary
-from DP_ViewFactory import getMovieViewDefaults
+from DP_ViewFactory import getViews
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, isValidSize, encodeThat
+from __common__ import printl2 as printl, isValidSize, encodeThat, getSkinResolution
 from __init__ import _ # _ is translation
 
 #===========================================================================
@@ -573,6 +573,8 @@ class BackgroundMediaSyncer(Thread):
 		self.progress = ThreadQueue()
 		self.progressPump = ePythonMessagePump()
 
+		self.resolution = getSkinResolution()
+
 		self.running = False
 
 	#===========================================================================
@@ -700,14 +702,25 @@ class BackgroundMediaSyncer(Thread):
 
 		self.running = True
 		self.cancel = False
-		msg_text = _("\n\nStarting to search for picture files with 1280x720 in its name ...")
+
+		if self.resolution == "FHD":
+			msg_text = _("\n\nStarting to search for picture files with 1920x1080 in its name ...")
+		else:
+			msg_text = _("\n\nStarting to search for picture files with 1280x720 in its name ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 		import math
 		import glob
 		import commands
 		#try:
-		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720_v2.jpg"))
+		if self.resolution == "FHD":
+			resolutionString = "*1920x1080_v2.jpg"
+			searchString = "1920x1080_v2.jpg"
+		else:
+			resolutionString = "*1280x720_v2.jpg"
+			searchString = "1280x720_v2.jpg"
+
+		self.count = len(glob.glob1(config.plugins.dreamplex.mediafolderpath.value,resolutionString))
 
 		msg_text = _("\n\nFiles found: ") + str(self.count)
 		self.messages.push((THREAD_WORKING, msg_text))
@@ -717,14 +730,14 @@ class BackgroundMediaSyncer(Thread):
 
 		if int(self.count) > 0:
 			self.currentIndex = 0
-			for myFile in glob.glob1(config.plugins.dreamplex.mediafolderpath.value,"*1280x720_v2.jpg"):
+			for myFile in glob.glob1(config.plugins.dreamplex.mediafolderpath.value,resolutionString):
 				sleep(0.2)
 				self.currentIndex += 1
 				if self.cancel:
 					break
 				try:
 					# firt we check for images in the right size
-					if "1280x720_v2.jpg" in myFile:
+					if searchString in myFile:
 						# if we got one we remove the .jpg at the end to check if there was a backdropmovie generated already
 						myFileWoExtension = myFile[:-4]
 						extension = str.upper(myFile[-3:])
@@ -765,7 +778,11 @@ class BackgroundMediaSyncer(Thread):
 
 							printl("started rendering : " + str(videoLocation),self, "D")
 
-							cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+							if self.resolution == "FHD":
+								cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+							else:
+								cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+
 							printl("cmd: " + str(cmd), self, "D")
 
 							response = commands.getstatusoutput(cmd)
@@ -822,23 +839,37 @@ class BackgroundMediaSyncer(Thread):
 	#===========================================================================
 	def prepareMediaVariants(self):
 		# get params
-		params = getMovieViewDefaults()
+		viewTypes = ["movies", "mixed", "shows", "music"]
+		self.backdropVariants = []
+		self.posterVariants = []
 
-		b_height = params["elements"]["backdrop"]["height"]
-		b_width = params["elements"]["backdrop"]["width"]
-		b_postfix = params["elements"]["backdrop"]["postfix"]
+		for viewType in viewTypes:
+			views = getViews(viewType)
+			for viewParams in views:
+				p_height = viewParams[2]["settings"]["posterHeight"]
+				p_width = viewParams[2]["settings"]["posterWidth"]
+				p_postfix = "_poster_" + p_width + "x" + p_height + "_v2.jpg"
+				variant = [p_height, p_width, p_postfix]
+				self.posterVariants.append(variant)
 
-		p_height = params["elements"]["poster"]["height"]
-		p_width = params["elements"]["poster"]["width"]
-		p_postfix = params["elements"]["poster"]["postfix"]
+				b_height = viewParams[2]["settings"]["backdropHeight"]
+				b_width = viewParams[2]["settings"]["backdropWidth"]
+				b_postfix = "_backdrop_" + b_width + "x" + b_height + "_v2.jpg"
+				variant = [b_height, b_width, b_postfix]
+				self.backdropVariants.append(variant)
 
-		# we use this for fullsize m1v backdrops that can be loaded to miniTv
-		l_height = "720"
-		l_width = "1280"
-		l_postfix = "_backdrop_1280x720_v2.jpg"
+		if self.resolution == "FHD":
+			l_height = "1080"
+			l_width = "1920"
+			l_postfix = "_backdrop_1920x1080_v2.jpg"
+		else:
+			# we use this for fullsize m1v backdrops that can be loaded to miniTv
+			l_height = "720"
+			l_width = "1280"
+			l_postfix = "_backdrop_1280x720_v2.jpg"
 
-		self.backdropVariants = [[b_height, b_width, b_postfix], [l_height, l_width, l_postfix]]
-		self.posterVariants = [[p_height, p_width, p_postfix]]
+		variant = [l_height, l_width, l_postfix]
+		self.backdropVariants.append(variant)
 
 	#===========================================================================
 	#
@@ -872,13 +903,13 @@ class BackgroundMediaSyncer(Thread):
 
 		try:
 			msg_text = _("\n\nFetching complete library data. This could take a while ...")
-			self.messages.push((THREAD_WORKING, msg_teTHREAD_WORKINGxt))
+			self.messages.push((THREAD_WORKING, msg_text))
 			self.messagePump.send(0)
 
 			# in this run we gather only the information
 			self.cylceThroughLibrary()
 
-			printl( "sectionCount " + str(self.sectionCount),self, "D")
+			printl("sectionCount " + str(self.sectionCount),self, "D")
 			printl("movieCount " + str(self.movieCount),self, "D")
 			printl("showCount  " + str(self.showCount),self, "D")
 			printl("seasonCount " + str(self.seasonCount),self, "D")

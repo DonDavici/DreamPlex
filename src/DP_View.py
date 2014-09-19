@@ -389,9 +389,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
-		self.poster_postfix = self.viewParams["elements"]["poster"]["postfix"]
-		self.posterHeight = self.viewParams["elements"]["poster"]["height"]
-		self.posterWidth = self.viewParams["elements"]["poster"]["width"]
+		self.posterHeight = self.viewParams["settings"]["posterHeight"]
+		self.posterWidth = self.viewParams["settings"]["posterWidth"]
+		self.poster_postfix = "_poster_" + self.posterWidth + "x" + self.posterHeight + "_v2.jpg"
 
 		# Backdrops
 		self.EXpicloadBackdrop = ePicLoad()
@@ -400,9 +400,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self.backdropHeight = "720"
 			self.backdropWidth = "1280"
 		else:
-			self.backdrop_postfix = self.viewParams["elements"]["backdrop"]["postfix"]
-			self.backdropHeight = self.viewParams["elements"]["backdrop"]["height"]
-			self.backdropWidth = self.viewParams["elements"]["backdrop"]["width"]
+			self.backdropHeight = self.viewParams["settings"]["backdropHeight"]
+			self.backdropWidth = self.viewParams["settings"]["backdropWidth"]
+			self.backdrop_postfix = "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + "_v2.jpg"
 
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
