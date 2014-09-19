@@ -25,6 +25,8 @@ You should have received a copy of the GNU General Public License
 from BaseHTTPServer import BaseHTTPRequestHandler
 import traceback
 import re
+import urllib
+from urlparse import urlparse, parse_qs
 
 from time import sleep
 
@@ -106,11 +108,20 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				self.wfile.write(xml)
 				# self.send_response(200)
 
+			elif request_path == "player/playback/setParameters":
+				params = parse_qs(urlparse(self.path).query)
+				volume = params["volume"][0]
+
+				url = "http://192.168.45.70/web/vol?set=set" + str(volume)
+				urllib.urlopen(url)
+				self.send_response(200)
+
+
 
 			elif request_path == "player/playback/playMedia":
 				from Components.config import config
 
-				from urlparse import urlparse, parse_qs
+
 				params = parse_qs(urlparse(self.path).query)
 
 				address = params["address"][0]
