@@ -26,10 +26,12 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import traceback
 import re
 
+from time import sleep
+
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getVersion
+from __common__ import printl2 as printl
 
 #===============================================================================
 #
@@ -67,20 +69,43 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	#===========================================================================
 	#
 	#===========================================================================
+	def do_OPTIONS(self):
+		printl("", self, "S")
+
+		printl("Serving OPTIONS request...", self, "D")
+		self.send_response(200)
+		self.send_header('Access-Control-Allow-Credentials', 'true')
+		self.send_header('Access-Control-Allow-Origin', '*')
+		self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+		self.send_header("Access-Control-Allow-Headers", "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def answer_request(self):
 		printl("", self, "S")
 
 		try:
 			self.send_response(200)
+			self.send_header('Access-Control-Allow-Credentials', 'true')
+			self.send_header('Access-Control-Allow-Origin', '*')
+			self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+			self.send_header("Access-Control-Allow-Headers", "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version")
 			request_path=self.path[1:]
 			request_path=re.sub(r"\?.*","",request_path)
 			printl("request path is: [%s]" % request_path, self, "D")
 
-			if request_path=="version":
+			if request_path == "player/timeline/poll":
+				sleep(10)
+				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
+				self.send_header('Content-type', 'text/xml; charset="utf-8"')
+				self.send_header('Content-Length', str(len(xml)))
 				self.end_headers()
-				self.wfile.write("DreamPlex Helper Remote Redirector: Running\r\n")
-				self.wfile.write("Version: " + getVersion())
-				self.send_response(200)
+				self.wfile.write(xml)
+				# self.send_response(200)
+
 
 			elif request_path == "player/playback/playMedia":
 				from Components.config import config

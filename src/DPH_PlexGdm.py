@@ -88,8 +88,18 @@ class PlexGdm(object):
 	#===========================================================================
 	def clientDetails(self, c_id, c_name, c_post, c_product, c_version):
 		printl("", self, "S")
+		c_id = "12345"
+		self.client_data = "Content-Type: plex/media-player\n"
+		self.client_data += "Resource-Identifier: %s\n" % c_id
+		self.client_data += "Name: %s\n" % c_name
+		self.client_data += "Port: %s\n" % c_post
+		self.client_data += "Product: %s\n" % c_product
+		self.client_data += "Version: %s\n" % c_version
+		self.client_data += "Protocol: plex\n"
+		self.client_data += "Protocol-Version: 1\n"
+		self.client_data += "Protocol-Capabilities: playback\n"
+		self.client_data += "Device-Class: stb\n"
 
-		self.client_data = "Content-Type: plex/media-player\nResource-Identifier: %s\nName: %s\nPort: %s\nProduct: %s\nVersion: %s" % ( c_id, c_name, c_post, c_product, c_version )
 		self.client_id = c_id
 
 		printl("", self, "C")

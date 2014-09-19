@@ -31,7 +31,7 @@ from DPH_PlexGdm import PlexGdm
 from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
 
-#from __init__ import getVersion
+from __init__ import getVersion
 from __common__ import printl2 as printl, getBoxInformation, getMyIp
 
 #===============================================================================
@@ -95,10 +95,10 @@ class HttpDeamon(Thread):
 
 		# this starts updatemechanism to show up as player in devices like ios
 		self.client = PlexGdm()
-		version = "1"#str(getVersion())
+		version = str(getVersion())
 		gBoxType = getBoxInformation()
 
-		self.client.clientDetails(self.port, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
+		self.client.clientDetails(gBoxType[0], gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
 		self.client.start_registration()
 
 		if self.client.check_client_registration():
