@@ -172,7 +172,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.bitrate = 0
 		self.endReached = False
 
-		self["actions"] = ActionMap(["MediaPlayerSeekActions", "DPS_Player"],
+		self["actions"] = ActionMap(["DPS_Player"],
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
