@@ -142,7 +142,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
 		self.libraryName = libraryName
-		self["mediaTitle"] = StaticText()
 		Screen.__init__(self, session)
 
 		self.plexInstance = Singleton().getPlexInstance()
@@ -156,8 +155,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.libraryName == "music":
 			self.skinName = "DPS_MusicPlayer"
+			self.calculateEndingTime = False
 		else:
 			self.skinName = "DPS_VideoPlayer"
+			self["endingTime"] = Label()
+			self.calculateEndingTime = True
 
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
@@ -168,7 +170,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.bitrate = 0
 		self.endReached = False
 
-		self["actions"] = ActionMap(["InfobarSeekActions", "DPS_Player"],
+		self["actions"] = ActionMap(["MediaPlayerSeekActions", "DPS_Player"],
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
@@ -181,6 +183,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self["poster"] = Pixmap()
 		self["shortDescription"] = Label()
+		self["mediaTitle"] = StaticText()
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -476,11 +479,12 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			seekwatcherThread.start()
 
+		self.timelineWatcher = eTimer()
+		self.timelineWatcher.callback.append(self.updateTimeline)
+
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")
 			self.multiUser = True
-			self.timelineWatcher = eTimer()
-			self.timelineWatcher.callback.append(self.updateTimeline)
 
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
@@ -864,6 +868,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
 
+
 		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
 			progress = currentTime / float(totalTime/100.0)
 			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
@@ -949,41 +954,47 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def updateTimeline(self):
 		printl("" ,self,"S")
-		try:
-			currentTime = self.getPlayPosition()[1] / 90000
-			totalTime = self.getPlayLength()[1] / 90000
-			progress = int(( float(currentTime) / float(totalTime) ) * 100)
 
-			# if totalTime > 100000:
-			# 	printl("returning because total time higher than 100000", self, "C") # but why
-			# 	printl("" ,self,"C")
-			# 	return True
+		currentTime = self.getPlayPosition()[1] / 90000
+		totalTime = self.getPlayLength()[1] / 90000
+		progress = int(( float(currentTime) / float(totalTime) ) * 100)
 
-			printl("currentTime: " + str(currentTime), self, "C")
-			printl("totalTime: " + str(totalTime), self, "C")
+		if self.calculateEndingTime:
+			endingTime = time.localtime(time.time() + (totalTime - currentTime))
+			self["endingTime"].setText(str(endingTime[3]) + ":" + str(endingTime[4]) + ":" + str(endingTime[5]))
 
-			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
+		if self.multiUserServer:
+			try:
+				# if totalTime > 100000:
+				# 	printl("returning because total time higher than 100000", self, "C") # but why
+				# 	printl("" ,self,"C")
+				# 	return True
 
-			seekState = self.seekstate
-			if seekState == self.SEEK_STATE_PAUSE:
-				printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
-				urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+				printl("currentTime: " + str(currentTime), self, "C")
+				printl("totalTime: " + str(totalTime), self, "C")
 
-			elif seekState == self.SEEK_STATE_PLAY :
-				printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
-				urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+				urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 
-			# todo add buffering here if needed
-				#urlPath += "&state=buffering&time=" + str(currentTime*1000)
+				seekState = self.seekstate
+				if seekState == self.SEEK_STATE_PAUSE:
+					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
+					urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
-			# todo add stopped here if needed
-				#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+				elif seekState == self.SEEK_STATE_PLAY :
+					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
+					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
-			self.plexInstance.doRequest(urlPath)
+				# todo add buffering here if needed
+					#urlPath += "&state=buffering&time=" + str(currentTime*1000)
 
-		except Exception, e:
-			printl("exception: " + str(e), self, "E")
-			return False
+				# todo add stopped here if needed
+					#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+
+				self.plexInstance.doRequest(urlPath)
+
+			except Exception, e:
+				printl("exception: " + str(e), self, "E")
+				return False
 
 		printl("" ,self,"C")
 		return True
