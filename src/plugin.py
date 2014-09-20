@@ -54,7 +54,8 @@ def Autostart(reason, session=None, **kwargs):
 		config.plugins.dreamplex.save()
 		configfile.save()
 
-		HttpDeamonThread.stopRemoteDeamon()
+		if config.plugins.dreamplex.remoteAgent.value:
+			HttpDeamonThread.stopRemoteDeamon()
 
 #===========================================================================
 #
@@ -86,7 +87,8 @@ def sessionStart(reason, session):
 	global global_session
 	global_session = session
 
-	HttpDeamonThread.setSession(session)
+	if config.plugins.dreamplex.remoteAgent.value:
+		HttpDeamonThread.setSession(session)
 
 #===============================================================================
 # plugins

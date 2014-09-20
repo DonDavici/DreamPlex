@@ -112,7 +112,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				params = parse_qs(urlparse(self.path).query)
 				volume = params["volume"][0]
 
-				url = "http://192.168.45.70/web/vol?set=set" + str(volume)
+				url = "http://localhost/web/vol?set=set" + str(volume)
 				urllib.urlopen(url)
 				self.send_response(200)
 
