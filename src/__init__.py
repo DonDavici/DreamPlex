@@ -435,8 +435,15 @@ def prepareEnvironment():
 	getViewTypesForSettings()
 	checkPlexEnvironment()
 	registerPlexFonts()
-	loadSkinParams()
-	loadPlexSkin()
 	loadPlexPlugins()
+	loadSkinParams()
+
+#===============================================================================
+#
+#===============================================================================
+def startEnvironment():
+	# we put load skin here to avoid bootloops if there is something wrong with the skin
+	loadPlexSkin()
+
 
 

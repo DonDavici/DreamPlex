@@ -6,7 +6,7 @@ from Plugins.Plugin import PluginDescriptor
 
 from Components.config import config, configfile
 
-from __init__ import prepareEnvironment, _ # _ is translation
+from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 
 #===============================================================================
 # GLOBALS
@@ -27,6 +27,7 @@ def main(session, **kwargs):
 #===========================================================================
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
+	startEnvironment()
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
 
 #===========================================================================
