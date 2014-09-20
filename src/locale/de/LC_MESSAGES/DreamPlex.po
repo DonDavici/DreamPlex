@@ -726,7 +726,7 @@ msgstr "playmode 'multi'"
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:672
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:685
 msgid "playmode 'single'"
-msgstr "plabmode 'single'"
+msgstr "playmode 'single'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:701
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:719
