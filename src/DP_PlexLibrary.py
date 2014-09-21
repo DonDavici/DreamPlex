@@ -142,7 +142,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, serverConfig=None, resolvedMyPlexAddress=None):
+	def __init__(self, session, serverConfig=None, resolvedMyPlexAddress=None, machineIdentifier=None):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -202,7 +202,7 @@ class PlexLibrary(Screen):
 			self.leaveOnError()
 		else:
 			#Fill serverdata to global g_serverDict
-			self.prepareServerDict(resolvedMyPlexAddress)
+			self.prepareServerDict(resolvedMyPlexAddress, machineIdentifier)
 
 		printl("", self, "C")
 
@@ -899,10 +899,12 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def prepareServerDict(self, resolvedMyPlexAddress):
+	def prepareServerDict(self, resolvedMyPlexAddress, machineIdentifier):
 		printl("", self, "S")
 
 		self.g_serverDict = {}
+
+		accessToken = None
 
 		if self.serverConfig_connectionType == "2": # MYPLEX
 			printl( "Adding myplex as server location", self, "D")
@@ -911,15 +913,14 @@ class PlexLibrary(Screen):
 				response = self.getSharedServerForPlexUser()
 				servers = response.findall("Server")
 				for server in servers:
-					completeAddress = server.get("address") + ":" + server.get("port")
-					if completeAddress == resolvedMyPlexAddress:
+					serverMachineIdentifier = server.get("machineIdentifier")
+					if machineIdentifier == serverMachineIdentifier:
 						accessToken = server.get("accessToken")
 
 				self.g_serverDict = {'serverName':'MYPLEX', 'address':resolvedMyPlexAddress, 'discovery':'myplex', 'token':None, 'uuid':None, 'role':'master'}
 				self.g_currentServer = resolvedMyPlexAddress
 			else:
 				self.g_serverDict = {'serverName':'MYPLEX', 'address':"my.plex.app", 'discovery':'myplex', 'token':None, 'uuid':None, 'role':'master'}
-				accessToken = None
 
 		else:
 			if not self.g_host or self.g_host == "<none>":

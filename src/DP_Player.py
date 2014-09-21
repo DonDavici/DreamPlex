@@ -368,7 +368,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
 		ptr = self.EXpicloadPoster.getData()
 
-		self["poster"].instance.setPixmap(ptr)
+		try:
+			self["poster"].instance.setPixmap(ptr)
+		except:
+			pass
 
 		printl("", self, "C")
 

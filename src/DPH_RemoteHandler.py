@@ -124,7 +124,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			elif request_path == "player/playback/playMedia":
 				from Components.config import config
 
-
 				params = parse_qs(urlparse(self.path).query)
 
 				address = params["address"][0]
@@ -143,7 +142,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						printl("we have a match ...", self, "D")
 						self.g_serverConfig = serverConfig
 
-						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, completeAddress))
+						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, completeAddress, machineIdentifier))
 
 						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
 
