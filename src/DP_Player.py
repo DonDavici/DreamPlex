@@ -972,11 +972,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.multiUserServer:
 			try:
-				# if totalTime > 100000:
-				# 	printl("returning because total time higher than 100000", self, "C") # but why
-				# 	printl("" ,self,"C")
-				# 	return True
-
 				printl("currentTime: " + str(currentTime), self, "C")
 				printl("totalTime: " + str(totalTime), self, "C")
 
