@@ -468,9 +468,12 @@ def setBoxInformation():
 	printl2("", "__common__::_setBoxtype", "C")
 
 	try:
-		filePointer = open("/proc/stb/info/model")
+		filePointer = open("/proc/stb/info/vumodel")
 	except:
-		filePointer = open("/hdd/model")
+		try:
+			filePointer = open("/proc/stb/info/model")
+		except:
+			filePointer = open("/hdd/model")
 
 	box = filePointer.readline().strip()
 	filePointer.close()
@@ -487,6 +490,26 @@ def setBoxInformation():
 		manu = "Kathrein"
 		model = "UFS-922"
 		arch = "sh4"
+	elif box == "solo":
+		manu = "VU+"
+		model = "Solo"
+		arch = "mipsel"
+	elif box == "duo":
+		manu = "VU+"
+		model = "Duo"
+		arch = "mipsel"
+	elif box == "solo2":
+		manu = "VU+"
+		model = "Solo2"
+		arch = "mipsel"
+	elif box == "duo2":
+		manu = "VU+"
+		model = "Duo2"
+		arch = "mipsel"
+	elif box == "ultimo":
+		manu = "VU+"
+		model = "Ultimo"
+		arch = "mipsel"
 	elif box == "tf7700hdpvr":
 		manu = "Topfield"
 		model = "HDPVR-7700"
