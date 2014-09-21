@@ -22,18 +22,21 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-from BaseHTTPServer import BaseHTTPRequestHandler
 import traceback
 import re
 import urllib
-from urlparse import urlparse, parse_qs
 
 from time import sleep
+from urlparse import urlparse, parse_qs
+from BaseHTTPServer import BaseHTTPRequestHandler
+
+from Screens.MessageBox import MessageBox
 
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
 from __common__ import printl2 as printl
+from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -131,10 +134,13 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				machineIdentifier = params["machineIdentifier"][0]
 				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
+				noMatch = True
+
 				for serverConfig in config.plugins.dreamplex.Entries:
 					printl("current machineIdentifier: " + str(serverConfig.machineIdentifier.value), self, "D")
 
-					if serverConfig.machineIdentifier.value == machineIdentifier:
+					if machineIdentifier in serverConfig.machineIdentifier.value:
+						noMatch = False
 						printl("we have a match ...", self, "D")
 						self.g_serverConfig = serverConfig
 
@@ -155,6 +161,9 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 					else:
 						printl("no match ...", self, "D")
+
+				if noMatch:
+					self.session.open(MessageBox,_("No Match found for machineIdentifier") + "\n" + machineIdentifier, MessageBox.TYPE_INFO)
 
 			else:
 				self.send_response(200)

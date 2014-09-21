@@ -27,7 +27,7 @@ import socket
 import sys
 import base64
 import hmac
-import uuid
+# import uuid
 import cPickle as pickle
 
 from time import time
@@ -40,6 +40,7 @@ from random import seed
 
 from Screens.Screen import Screen
 
+from plugin import getGlobalUuid
 from __plugin__ import getPlugin, Plugin
 from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeThat
 from __init__ import _ # _ is translation
@@ -155,7 +156,7 @@ class PlexLibrary(Screen):
 		# global settings
 		self.g_useFilterSections = config.plugins.dreamplex.showFilter.value
 		self.g_showUnSeenCounts = config.plugins.dreamplex.showUnSeenCounts.value
-		self.g_sessionID = str(uuid.uuid4())
+		self.g_sessionID = getGlobalUuid()#str(uuid.uuid4())
 		
 		# server settings
 		self.serverConfig_Name = str(self.g_serverConfig.name.value)
@@ -1248,8 +1249,8 @@ class PlexLibrary(Screen):
 				authHeaderPartOne = self.get_hTokenForServer(server)
 				self.lastHeaderForServer = server
 
-				if self.g_sessionID is None:
-					self.g_sessionID=str(uuid.uuid4())
+				# if self.g_sessionID is None:
+				# 	self.g_sessionID=str(uuid.uuid4())
 
 				authHeaderPartTwo = getPlexHeader(self.g_sessionID)
 
@@ -1987,6 +1988,7 @@ class PlexLibrary(Screen):
 		conn.request(url=url, method="GET", headers=myplex_header)
 		data = conn.getresponse()
 		response = data.read()
+		printl("response: " + response, self, "D")
 
 		try:
 			tree = etree.fromstring(response)
@@ -2030,6 +2032,14 @@ class PlexLibrary(Screen):
 		printl("", self, "C")
 		return tree
 
+	#===============================================================================
+	#
+	#===============================================================================
+	def sessionID(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.g_sessionID
 	#===============================================================================
 	#
 	#===============================================================================

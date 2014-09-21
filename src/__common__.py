@@ -474,9 +474,6 @@ def setBoxInformation():
 
 	box = filePointer.readline().strip()
 	filePointer.close()
-	manu = "Unknown"
-	model = box # "UNKNOWN" # Fallback to internal string
-	arch = "sh4" # "unk" # Its better so set the arch by default to unkown so no wrong update information will be displayed
 
 	if box == "ufs910":
 		manu = "Kathrein"
@@ -566,6 +563,10 @@ def setBoxInformation():
 		manu = "Odin"
 		model = "M9"
 		arch = "mipsel"
+	else:
+		manu = "unknown"
+		arch = "unknown"
+		model = "unkown"
 
 	if arch == "mipsel":
 		oeVersion = getBoxArch()

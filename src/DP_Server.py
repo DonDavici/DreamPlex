@@ -575,14 +575,22 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		from DP_PlexLibrary import PlexLibrary
 		self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
 
+		machineIdentifiers = ""
+
 		if self.current.connectionType.value == "2":
 			xmlResponse = self.plexInstance.getSharedServerForPlexUser()
-			self.current.machineIdentifier.value = xmlResponse.get("machineIdentifier")
+			machineIdentifiers += xmlResponse.get("machineIdentifier")
+
+			servers = xmlResponse.findall("Server")
+			for server in servers:
+				machineIdentifiers += ", " + server.get("machineIdentifier")
 
 		else:
 			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + self.plexInstance.g_currentServer)
-			self.current.machineIdentifier.value = xmlResponse.get("machineIdentifier")
+			machineIdentifiers += xmlResponse.get("machineIdentifier")
 
+
+		self.current.machineIdentifier.value = machineIdentifiers
 		printl("machineIdentifier: " + str(self.current.machineIdentifier.value), self, "D")
 
 		config.plugins.dreamplex.entriescount.save()
