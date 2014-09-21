@@ -14,6 +14,7 @@ from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 # GLOBALS
 #===============================================================================
 HttpDeamonThread = None
+HttpDeamonStarted = False
 global_session = None
 g_uuid = None
 
@@ -61,7 +62,7 @@ def Autostart(reason, session=None, **kwargs):
 		config.plugins.dreamplex.save()
 		configfile.save()
 
-		if config.plugins.dreamplex.remoteAgent.value:
+		if config.plugins.dreamplex.remoteAgent.value and HttpDeamonStarted:
 			HttpDeamonThread.stopRemoteDeamon()
 
 #===========================================================================
@@ -70,11 +71,15 @@ def Autostart(reason, session=None, **kwargs):
 def startRemoteDeamon():
 	from DPH_RemoteListener import HttpDeamon
 	global HttpDeamonThread
+	global HttpDeamonStarted
 
 	# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 	HttpDeamonThread = HttpDeamon(config.plugins.dreamplex.remotePort.value, g_uuid)
 	HttpDeamonThread.PlayerDataPump.recv_msg.get().append(gotThreadMsg)
 	HttpDeamonThread.startDeamon()
+
+	# we need this to avoid gs if users sets remoteplayer on and restarts. in this case there is false and we do not try to stop
+	HttpDeamonStarted = True
 
 #===========================================================================
 # msg as second params is needed -. do not remove even if it is not used
