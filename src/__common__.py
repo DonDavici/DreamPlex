@@ -467,129 +467,137 @@ def getBoxInformation():
 def setBoxInformation():
 	printl2("", "__common__::_setBoxtype", "C")
 
+	success = False
 	try:
 		filePointer = open("/proc/stb/info/vumodel")
+		success = True
 	except:
 		try:
 			filePointer = open("/proc/stb/info/model")
+			success = True
 		except:
-			filePointer = open("/hdd/model")
+			try:
+				filePointer = open("/hdd/model")
+				success = True
+			except:
+				pass
 
-	box = filePointer.readline().strip()
-	filePointer.close()
+	manu = "unknown"
+	arch = "unknown"
+	model = "unkown"
 
-	if box == "ufs910":
-		manu = "Kathrein"
-		model = "UFS-910"
-		arch = "sh4"
-	elif box == "ufs912":
-		manu = "Kathrein"
-		model = "UFS-912"
-		arch = "sh4"
-	elif box == "ufs922":
-		manu = "Kathrein"
-		model = "UFS-922"
-		arch = "sh4"
-	elif box == "solo":
-		manu = "VU+"
-		model = "Solo"
-		arch = "mipsel"
-	elif box == "duo":
-		manu = "VU+"
-		model = "Duo"
-		arch = "mipsel"
-	elif box == "solo2":
-		manu = "VU+"
-		model = "Solo2"
-		arch = "mipsel"
-	elif box == "duo2":
-		manu = "VU+"
-		model = "Duo2"
-		arch = "mipsel"
-	elif box == "ultimo":
-		manu = "VU+"
-		model = "Ultimo"
-		arch = "mipsel"
-	elif box == "tf7700hdpvr":
-		manu = "Topfield"
-		model = "HDPVR-7700"
-		arch = "sh4"
-	elif box == "dm800":
-		manu = "Dreambox"
-		model = "800"
-		arch = "mipsel"
-	elif box == "dm800se":
-		manu = "Dreambox"
-		model = "800se"
-		arch = "mipsel"
-	elif box == "dm8000":
-		manu = "Dreambox"
-		model = "8000"
-		arch = "mipsel"
-	elif box == "dm500hd":
-		manu = "Dreambox"
-		model = "500hd"
-		arch = "mipsel"
-	elif box == "dm7025":
-		manu = "Dreambox"
-		model = "7025"
-		arch = "mipsel"
-	elif box == "dm7020hd":
-		manu = "Dreambox"
-		model = "7020hd"
-		arch = "mipsel"
-	elif box == "elite":
-		manu = "Azbox"
-		model = "Elite"
-		arch = "mipsel"
-	elif box == "premium":
-		manu = "Azbox"
-		model = "Premium"
-		arch = "mipsel"
-	elif box == "premium+":
-		manu = "Azbox"
-		model = "Premium+"
-		arch = "mipsel"
-	elif box == "cuberevo-mini":
-		manu = "Cubarevo"
-		model = "Mini"
-		arch = "sh4"
-	elif box == "hdbox":
-		manu = "Fortis"
-		model = "HdBox"
-		arch = "sh4"
-	elif box == "gbquad":
-		manu = "Gigablue"
-		model = "Quad"
-		arch = "mipsel"
-	elif box == "gbquadplus":
-		manu = "Gigablue"
-		model = "QuadPlus"
-		arch = "mipsel"
-	elif box == "gb800seplus":
-		manu = "Gigablue"
-		model = "800SEPlus"
-		arch = "mipsel"
-	elif box == "gb800ueplus":
-		manu = "Gigablue"
-		model = "800UEPlus"
-		arch = "mipsel"
-	elif box == "et8000":
-		manu = "Xtrend"
-		model = "8000"
-		arch = "mipsel"
-	elif box == "et10000":
-		manu = "Xtrend"
-		model = "10000"
-		arch = "mipsel"
-	elif box == "maram9":
-		manu = "Odin"
-		model = "M9"
-		arch = "mipsel"
-	else:
-		manu = "unknown"
-		arch = "unknown"
-		model = "unkown"
+	if success:
+		box = filePointer.readline().strip()
+		filePointer.close()
+
+		if box == "ufs910":
+			manu = "Kathrein"
+			model = "UFS-910"
+			arch = "sh4"
+		elif box == "ufs912":
+			manu = "Kathrein"
+			model = "UFS-912"
+			arch = "sh4"
+		elif box == "ufs922":
+			manu = "Kathrein"
+			model = "UFS-922"
+			arch = "sh4"
+		elif box == "solo":
+			manu = "VU+"
+			model = "Solo"
+			arch = "mipsel"
+		elif box == "duo":
+			manu = "VU+"
+			model = "Duo"
+			arch = "mipsel"
+		elif box == "solo2":
+			manu = "VU+"
+			model = "Solo2"
+			arch = "mipsel"
+		elif box == "duo2":
+			manu = "VU+"
+			model = "Duo2"
+			arch = "mipsel"
+		elif box == "ultimo":
+			manu = "VU+"
+			model = "Ultimo"
+			arch = "mipsel"
+		elif box == "tf7700hdpvr":
+			manu = "Topfield"
+			model = "HDPVR-7700"
+			arch = "sh4"
+		elif box == "dm800":
+			manu = "Dreambox"
+			model = "800"
+			arch = "mipsel"
+		elif box == "dm800se":
+			manu = "Dreambox"
+			model = "800se"
+			arch = "mipsel"
+		elif box == "dm8000":
+			manu = "Dreambox"
+			model = "8000"
+			arch = "mipsel"
+		elif box == "dm500hd":
+			manu = "Dreambox"
+			model = "500hd"
+			arch = "mipsel"
+		elif box == "dm7025":
+			manu = "Dreambox"
+			model = "7025"
+			arch = "mipsel"
+		elif box == "dm7020hd":
+			manu = "Dreambox"
+			model = "7020hd"
+			arch = "mipsel"
+		elif box == "elite":
+			manu = "Azbox"
+			model = "Elite"
+			arch = "mipsel"
+		elif box == "premium":
+			manu = "Azbox"
+			model = "Premium"
+			arch = "mipsel"
+		elif box == "premium+":
+			manu = "Azbox"
+			model = "Premium+"
+			arch = "mipsel"
+		elif box == "cuberevo-mini":
+			manu = "Cubarevo"
+			model = "Mini"
+			arch = "sh4"
+		elif box == "hdbox":
+			manu = "Fortis"
+			model = "HdBox"
+			arch = "sh4"
+		elif box == "gbquad":
+			manu = "Gigablue"
+			model = "Quad"
+			arch = "mipsel"
+		elif box == "gbquadplus":
+			manu = "Gigablue"
+			model = "QuadPlus"
+			arch = "mipsel"
+		elif box == "gb800seplus":
+			manu = "Gigablue"
+			model = "800SEPlus"
+			arch = "mipsel"
+		elif box == "gb800ueplus":
+			manu = "Gigablue"
+			model = "800UEPlus"
+			arch = "mipsel"
+		elif box == "et8000":
+			manu = "Xtrend"
+			model = "8000"
+			arch = "mipsel"
+		elif box == "et10000":
+			manu = "Xtrend"
+			model = "10000"
+			arch = "mipsel"
+		elif box == "maram9":
+			manu = "Odin"
+			model = "M9"
+			arch = "mipsel"
 
 	if arch == "mipsel":
 		oeVersion = getBoxArch()
