@@ -26,7 +26,6 @@ import threading
 import time
 from time import sleep
 
-from enigma import ePicLoad, eTimer
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
@@ -34,7 +33,7 @@ from Screens.ChoiceBox import ChoiceBox
 from Screens.HelpMenu import HelpableScreen
 
 #noinspection PyUnresolvedReferences
-from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation
+from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation, ePicLoad
 
 from Tools import Notifications
 
@@ -493,6 +492,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
+
+			# we start here too because it seems that direct local does not hit the buffer full function
+			self.timelineWatcher.start(5000,False)
 		else:
 			self["bufferslider"].setValue(1)
 
@@ -769,10 +771,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.seekstate != self.SEEK_STATE_PLAY :
 			printl( "Buffer filled start playing", self, "I")
 			self.setSeekState(self.SEEK_STATE_PLAY)
-	
-		if self.multiUser:
-			# because the buffer is full we start updating timeline
-			self.timelineWatcher.start(5000,False)
+
+		self.timelineWatcher.start(5000,False)
 
 		# now we unlock again so that the infobar can dismiss
 		self.unlockShow()
@@ -1113,7 +1113,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		length = self.seek.getLength()
 		
 		printl("", self, "C")
-		return length	
+		return length
 	
 	#===========================================================================
 	# 
