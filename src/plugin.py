@@ -2,6 +2,8 @@
 #===============================================================================
 # IMPORT
 #===============================================================================
+import uuid
+
 from Plugins.Plugin import PluginDescriptor
 
 from Components.config import config, configfile
@@ -13,6 +15,7 @@ from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 #===============================================================================
 HttpDeamonThread = None
 global_session = None
+g_uuid = None
 
 #===============================================================================
 # main
@@ -44,8 +47,11 @@ def menu_dreamplex(menuid, **kwargs):
 #===========================================================================
 #noinspection PyUnusedLocal
 def Autostart(reason, session=None, **kwargs):
+	global g_uuid
+
 	if reason == 0:
 		prepareEnvironment()
+		g_uuid = str(uuid.uuid4())
 
 		if config.plugins.dreamplex.remoteAgent.value:
 			startRemoteDeamon()
@@ -66,7 +72,7 @@ def startRemoteDeamon():
 	global HttpDeamonThread
 
 	# we use the global g_mediaSyncerInfo.instance to take care only having one instance
-	HttpDeamonThread = HttpDeamon(config.plugins.dreamplex.remotePort.value)
+	HttpDeamonThread = HttpDeamon(config.plugins.dreamplex.remotePort.value, g_uuid)
 	HttpDeamonThread.PlayerDataPump.recv_msg.get().append(gotThreadMsg)
 	HttpDeamonThread.startDeamon()
 
@@ -106,3 +112,9 @@ def Plugins(**kwargs):
 		myList.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
 
 	return myList
+
+#===========================================================================
+#
+#===========================================================================
+def getGlobalUuid():
+	return g_uuid

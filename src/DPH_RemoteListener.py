@@ -44,8 +44,9 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, port):
+	def __init__(self, port, g_uuid):
 		self.port = port
+		self.g_uuid = g_uuid
 		self.playerData = ThreadQueue()
 		self.playerDataPump = ePythonMessagePump()
 
@@ -98,7 +99,7 @@ class HttpDeamon(Thread):
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
 
-		self.client.clientDetails(gBoxType[0], gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
+		self.client.clientDetails(self.g_uuid, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
 		self.client.start_registration()
 
 		if self.client.check_client_registration():
