@@ -589,7 +589,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + self.plexInstance.g_currentServer)
 			machineIdentifiers += xmlResponse.get("machineIdentifier")
 
-
 		self.current.machineIdentifier.value = machineIdentifiers
 		printl("machineIdentifier: " + str(self.current.machineIdentifier.value), self, "D")
 

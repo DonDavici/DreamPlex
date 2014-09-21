@@ -129,22 +129,21 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 				address = params["address"][0]
 				port = params["port"][0]
+				completeAddress = address+":"+port
 				protocol = params["protocol"][0]
 				key = params["key"][0]
 				machineIdentifier = params["machineIdentifier"][0]
 				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
-				noMatch = True
-
 				for serverConfig in config.plugins.dreamplex.Entries:
 					printl("current machineIdentifier: " + str(serverConfig.machineIdentifier.value), self, "D")
 
 					if machineIdentifier in serverConfig.machineIdentifier.value:
-						noMatch = False
+
 						printl("we have a match ...", self, "D")
 						self.g_serverConfig = serverConfig
 
-						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig))
+						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, completeAddress))
 
 						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
 
@@ -161,9 +160,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 					else:
 						printl("no match ...", self, "D")
-
-				if noMatch:
-					self.session.open(MessageBox,_("No Match found for machineIdentifier") + "\n" + machineIdentifier, MessageBox.TYPE_INFO)
 
 			else:
 				self.send_response(200)

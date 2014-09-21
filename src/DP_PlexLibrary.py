@@ -142,7 +142,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	# 
 	#===========================================================================
-	def __init__(self, session, serverConfig=None):
+	def __init__(self, session, serverConfig=None, resolvedMyPlexAddress=None):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
@@ -202,7 +202,7 @@ class PlexLibrary(Screen):
 			self.leaveOnError()
 		else:
 			#Fill serverdata to global g_serverDict
-			self.prepareServerDict()
+			self.prepareServerDict(resolvedMyPlexAddress)
 
 		printl("", self, "C")
 
@@ -899,14 +899,27 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def prepareServerDict(self):
+	def prepareServerDict(self, resolvedMyPlexAddress):
 		printl("", self, "S")
 
 		self.g_serverDict = {}
 
 		if self.serverConfig_connectionType == "2": # MYPLEX
 			printl( "Adding myplex as server location", self, "D")
-			self.g_serverDict = {'serverName':'MYPLEX', 'address':"my.plex.app", 'discovery':'myplex', 'token':None, 'uuid':None, 'role':'master'}
+
+			if resolvedMyPlexAddress is not None: # this is the case if we come from remote player
+				response = self.getSharedServerForPlexUser()
+				servers = response.findall("Server")
+				for server in servers:
+					completeAddress = server.get("address") + ":" + server.get("port")
+					if completeAddress == resolvedMyPlexAddress:
+						accessToken = server.get("accessToken")
+
+				self.g_serverDict = {'serverName':'MYPLEX', 'address':resolvedMyPlexAddress, 'discovery':'myplex', 'token':None, 'uuid':None, 'role':'master'}
+				self.g_currentServer = resolvedMyPlexAddress
+			else:
+				self.g_serverDict = {'serverName':'MYPLEX', 'address':"my.plex.app", 'discovery':'myplex', 'token':None, 'uuid':None, 'role':'master'}
+				accessToken = None
 
 		else:
 			if not self.g_host or self.g_host == "<none>":
@@ -943,8 +956,8 @@ class PlexLibrary(Screen):
 					#self.g_myplex_accessTokenDict[str(self.g_currentServer)] = self.serverConfig_myplexToken
 					accessToken = self.serverConfig_myplexToken
 
-			# now we genereate and store all headers that are needed
-			self.setAccessTokenHeader(address=str(self.g_currentServer), accessToken=accessToken)
+		# now we genereate and store all headers that are needed
+		self.setAccessTokenHeader(address=str(self.g_currentServer), accessToken=accessToken)
 
 		printl("DreamPlex -> serverList is " + str(self.g_serverDict), self, "D")
 		printl("", self, "C")
