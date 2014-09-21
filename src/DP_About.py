@@ -24,11 +24,13 @@ You should have received a copy of the GNU General Public License
 #=================================
 from Components.ActionMap import ActionMap
 from Components.Label import Label
+from Components.config import config
 
 from Screens.Screen import Screen
 
 from __common__ import printl2 as printl, getVersion, getSkinAuthors
 from __init__ import _ # _ is translation
+from plugin import getHttpDeamonInformation
 
 #===============================================================================
 #
@@ -86,6 +88,9 @@ class DPS_About(Screen):
 	#===========================================================================
 	def getLeftText(self):
 		printl("", self, "S")
+
+		if config.plugins.dreamplex.remoteAgent.value:
+			state, information = getHttpDeamonInformation()
 		
 		content = ""
 		content += "Information\n\n"
@@ -99,7 +104,10 @@ class DPS_About(Screen):
 		content += "\t andyblac \n"
 		content += "\t rossi2000 \n"
 		content += "\n\nIf you like my work you can buy me a beer :-) \n\ndondavici@gmail.com"
-		
+
+		if config.plugins.dreamplex.remoteAgent.value:
+			content += "\n\nRemotePlayer: " + str(information)
+
 		printl("", self, "C")
 		return content
 

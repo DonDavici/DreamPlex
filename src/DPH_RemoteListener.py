@@ -103,11 +103,22 @@ class HttpDeamon(Thread):
 		self.client.start_registration()
 
 		if self.client.check_client_registration():
+			self.registered = True
 			printl("Successfully registered", self, "D")
 		else:
+			self.registered = False
 			printl("Unsuccessfully registered", self, "D")
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getDeamonState(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return self.registered, self.remoteListenerInformation
 
 	#===========================================================================
 	#
@@ -135,7 +146,9 @@ class HttpDeamon(Thread):
 
 		sa = self.httpd.socket.getsockname()
 
-		printl("Serving HTTP on " + str(sa[0]) + " port " + str(sa[1]) + "...", __name__, "D")
+		self.remoteListenerInformation = "Serving HTTP on " + str(sa[0]) + " port " + str(sa[1])
+
+		printl(self.remoteListenerInformation, __name__, "D")
 		self.httpd.serve_forever()
 
 		printl("", __name__, "C")

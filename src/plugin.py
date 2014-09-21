@@ -82,6 +82,12 @@ def startRemoteDeamon():
 	HttpDeamonStarted = True
 
 #===========================================================================
+#
+#===========================================================================
+def getHttpDeamonInformation():
+	return HttpDeamonThread.getDeamonState()
+
+#===========================================================================
 # msg as second params is needed -. do not remove even if it is not used
 # form outside!!!!
 #===========================================================================
