@@ -30,13 +30,12 @@ from time import sleep
 from urlparse import urlparse, parse_qs
 from BaseHTTPServer import BaseHTTPRequestHandler
 
-from Screens.MessageBox import MessageBox
+from Components.config import config
 
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
 from __common__ import printl2 as printl
-from __init__ import _ # _ is translation
 
 #===============================================================================
 #
@@ -119,10 +118,32 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				urllib.urlopen(url)
 				self.send_response(200)
 
+			elif request_path == "player/playback/stop":
+				url = "http://localhost/web/remotecontrol?command=377"
+				urllib.urlopen(url)
+				self.send_response(200)
 
+			elif request_path == "player/playback/skipNext":
+				url = "http://localhost/web/remotecontrol?command=407"
+				urllib.urlopen(url)
+				self.send_response(200)
+
+			elif request_path == "player/playback/stepForward":
+				url = "http://localhost/web/remotecontrol?command=10"
+				urllib.urlopen(url)
+				self.send_response(200)
+
+			elif request_path == "player/playback/stepBack":
+				url = "http://localhost/web/remotecontrol?command=8"
+				urllib.urlopen(url)
+				self.send_response(200)
+
+			elif request_path == "player/playback/skipPrevious":
+				url = "http://localhost/web/remotecontrol?command=412"
+				urllib.urlopen(url)
+				self.send_response(200)
 
 			elif request_path == "player/playback/playMedia":
-				from Components.config import config
 
 				params = parse_qs(urlparse(self.path).query)
 
