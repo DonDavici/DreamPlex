@@ -78,7 +78,7 @@ class DPS_MainMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
 		self.session = session
 
-		self.setMenuType("main_menu")
+		self.initScreen("main_menu")
 		self.initMenu()
 
 		if self.g_horizontal_menu:

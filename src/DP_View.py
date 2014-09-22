@@ -156,7 +156,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		DPH_MultiColorFunctions.__init__(self)
 		NumericalTextInput.__init__(self)
 
-		self.setMenuType(libraryName)
+		self.initScreen(libraryName)
 
 		printl("viewParams: " + str(self.viewParams), self, "D")
 		printl("libraryName: " + str(libraryName), self, "D")

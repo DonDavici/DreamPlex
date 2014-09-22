@@ -75,7 +75,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.g_serverConfig = g_serverConfig
 		self.plexInstance = Singleton().getPlexInstance()
 
-		self.setMenuType("server_menu")
+		self.initScreen("server_menu")
 		self.initMenu()
 
 		if self.g_horizontal_menu:

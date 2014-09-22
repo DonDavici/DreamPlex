@@ -64,7 +64,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
 
-		self.setMenuType("syncer")
+		self.initScreen("syncer")
 		self.serverConfig = serverConfig
 
 		if serverConfig is not None:

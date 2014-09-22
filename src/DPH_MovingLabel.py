@@ -26,8 +26,6 @@ from Components.Label import MultiColorLabel
 from skin import parseColor
 from __common__ import printl2 as printl
 from DPH_Singleton import Singleton
-from DP_ViewFactory import translateValues
-
 
 class DPH_HorizontalMenu(object):
 	highlightedColor = "#e69405"
@@ -153,9 +151,8 @@ class DPH_HorizontalMenu(object):
 
 		for menuScreen in tree.findall('menuScreen'):
 			name = str(menuScreen.get('name'))
-			self.miniTv = translateValues(str(menuScreen.get('miniTv')))
 
-			if name == self.menuType:
+			if name == self.screenName:
 				myType = str(menuScreen.get('type'))
 				if myType == "horizontal":
 					self.g_horizontal_menu = True

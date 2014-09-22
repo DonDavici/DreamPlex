@@ -4,14 +4,15 @@
 	<skinParams resolution="HD" compatibility="v2" skinner="Yipman alias Ipman"/> <!-- typea => HD, FHD -->
 
 	<!-- MAIN MENU ORIENTATION -->
-	<menuScreen name="main_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" miniTv="True"/>
-	<menuScreen name="server_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" miniTv="True"/>
+	<menuScreen name="main_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" />
+	<menuScreen name="server_menu" type="horizontal" highlighted="#e69405" normal="#ffffff"/>
 
-	<!-- MINI TV SIZE FOR NONE VIEW SCREENS -->
-	<miniTv name="main_menu" height="321" width="555" />
-	<miniTv name="server_menu" height="321" width="555" />	
-	<miniTv name="syncer" height="321" width="555" />
-    <miniTv name="input_box" height="321" width="555" />
+	<!-- SCREEN OPTIONS -->
+	<!-- if miniTv = False you can delete height and width -->
+	<screen name="main_menu" miniTv="True" height="321" width="555" />
+	<screen name="server_menu" miniTv="True" height="321" width="555" />
+	<screen name="syncer" miniTv="True" height="321" width="555" />
+    <screen name="input_box" miniTv="True" height="321" width="555" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="OpenSans" />

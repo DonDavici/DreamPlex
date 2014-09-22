@@ -35,6 +35,7 @@ from Screens.Screen import Screen
 from skin import parseColor
 
 from DPH_Singleton import Singleton
+from DP_ViewFactory import translateValues
 
 from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv, getSkinResolution
 
@@ -42,7 +43,8 @@ from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv, 
 #
 #===============================================================================
 class DPH_ScreenHelper(object):
-
+	width = None
+	height = None
 	#===============================================================================
 	#
 	#===============================================================================
@@ -91,16 +93,13 @@ class DPH_ScreenHelper(object):
 	def getMiniTvParams(self):
 		printl("", self, "S")
 
-		tree = Singleton().getSkinParamsInstance()
 		width = 400
 		height = 225
-		printl("menuType: " + str(self.menuType), self, "D")
+		printl("screenName: " + str(self.screenName), self, "D")
 
-		for miniTv in tree.findall('miniTv'):
-			name = str(miniTv.get('name'))
-			if name == self.menuType:
-				width = miniTv.get('width')
-				height = miniTv.get('height')
+		if self.height is not None and self.width is not None:
+			height = self.height
+			width = self.width
 
 		printl("width: " + str(width) + " - height: " + str(height), self, "D")
 		printl("", self, "C")
@@ -109,10 +108,21 @@ class DPH_ScreenHelper(object):
 	#===============================================================================
 	#
 	#===============================================================================
-	def setMenuType(self, menuType):
+	def initScreen(self, screenName):
 		printl("", self, "S")
 
-		self.menuType = menuType
+		tree = Singleton().getSkinParamsInstance()
+
+		self.screenName = screenName
+
+		for screen in tree.findall('screen'):
+			name = str(screen.get('name'))
+
+			if name == self.screenName:
+				self.miniTv = translateValues(str(screen.get('miniTv')))
+				if self.miniTv:
+					self.width = screen.get('width')
+					self.height = screen.get('height')
 
 		printl("", self, "C")
 
