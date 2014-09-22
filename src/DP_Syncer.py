@@ -122,7 +122,8 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		self.setTitle("Server - Syncer")
 
-		self.initMiniTv()
+		if self.miniTv:
+			self.initMiniTv()
 
 		if self._mode == "sync":
 			self.mediaSyncerInfo.setPlexInstance(self.plexInstance)
