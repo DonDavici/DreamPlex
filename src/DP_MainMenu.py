@@ -43,7 +43,6 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DPH_WOL import wake_on_lan
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
-from DPH_RemoteListener import HttpDeamon
 
 from __common__ import printl2 as printl, testPlexConnectivity, testInetConnectivity, saveLiveTv
 from __plugin__ import Plugin

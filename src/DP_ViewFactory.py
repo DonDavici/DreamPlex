@@ -23,11 +23,16 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import copy
+from Screens.MessageBox import MessageBox
+
+from Tools import Notifications
+from Components.config import config, configfile
+
+from __common__ import closePlugin
 
 from DPH_Singleton import Singleton
 
 from __common__ import printl2 as printl
-
 
 #===========================================================================
 #
@@ -165,7 +170,13 @@ def getViewsFromSkinParams(myType):
 			# check if this value is mandatory
 			# if we are mandatory we stop here
 			if defaultParams["settings"][setting] == "mandatory" and value is None:
-				raise Exception
+				if config.plugins.dreamplex.skin.value != "default":
+					config.plugins.dreamplex.skin.value = "default"
+					config.plugins.dreamplex.skin.save()
+					configfile.save()
+					Notifications.AddNotification(MessageBox, "DreamPlex crashed due to a skin error!\nSwitching back to default in settings.\n", type=MessageBox.TYPE_INFO, timeout=10)
+				else:
+					raise Exception
 			else:
 				currentParams["settings"][setting] = translateValues(value)
 
