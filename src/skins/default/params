@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xml>
-
-	<skinParams resolution="HD" compatibility="v2" skinner="Yipman alias Ipman"/> <!-- typea => HD, FHD -->
+	<!-- debugMode True prevents switching back default skin when raise condition in skin occurs -->
+	<skinParams resolution="HD" compatibility="v2" skinner="Yipman alias Ipman" debugMode="False"/> <!-- typea => HD, FHD -->
 
 	<!-- MAIN MENU ORIENTATION -->
 	<menuScreen name="main_menu" type="horizontal" highlighted="#e69405" normal="#ffffff" />

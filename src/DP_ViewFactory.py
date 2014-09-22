@@ -28,11 +28,9 @@ from Screens.MessageBox import MessageBox
 from Tools import Notifications
 from Components.config import config, configfile
 
-from __common__ import closePlugin
-
 from DPH_Singleton import Singleton
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, getSkinDebugMode
 
 #===========================================================================
 #
@@ -170,7 +168,8 @@ def getViewsFromSkinParams(myType):
 			# check if this value is mandatory
 			# if we are mandatory we stop here
 			if defaultParams["settings"][setting] == "mandatory" and value is None:
-				if config.plugins.dreamplex.skin.value != "default":
+				skinDebugMode = translateValues(getSkinDebugMode())
+				if config.plugins.dreamplex.skin.value != "default" and not skinDebugMode:
 					config.plugins.dreamplex.skin.value = "default"
 					config.plugins.dreamplex.skin.save()
 					configfile.save()

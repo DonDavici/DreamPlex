@@ -59,6 +59,7 @@ version = "0.1"
 skinAuthors = ""
 skinResolution = "HD"
 skinCompatibility = "v2"
+skinDebugMode = False
 gBoxType = None
 screens = []
 liveTv = None
@@ -162,6 +163,12 @@ def getSkinAuthors():
 #===============================================================================
 def getSkinCompatibility():
 	return skinCompatibility
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinDebugMode():
+	return skinDebugMode
 
 #===============================================================================
 #
@@ -339,6 +346,7 @@ def loadSkinParams():
 	global skinAuthors
 	global skinCompatibility
 	global skinResolution
+	global skinDebugMode
 
 	tree = Singleton().getSkinParamsInstance()
 
@@ -346,6 +354,7 @@ def loadSkinParams():
 		skinCompatibility = str(skinParams.get('compatibility'))
 		skinAuthors = str(skinParams.get('skinner'))
 		skinResolution = str(skinParams.get('resolution'))
+		skinDebugMode = str(skinParams.get('debugMode'))
 
 	printl2("", "__common__::loadSkinParams", "C")
 
