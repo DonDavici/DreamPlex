@@ -887,8 +887,6 @@ class BackgroundMediaSyncer(Thread):
 		printl("posterVariants: " + str(self.posterVariants), self, "D")
 		printl("backdropVariants: " + str(self.backdropVariants), self, "D")
 
-		raise Exception
-
 	#===========================================================================
 	#
 	#===========================================================================
