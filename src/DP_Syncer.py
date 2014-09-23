@@ -851,13 +851,21 @@ class BackgroundMediaSyncer(Thread):
 				p_width = viewParams[2]["settings"]["posterWidth"]
 				p_postfix = "_poster_" + p_width + "x" + p_height + "_v2.jpg"
 				variant = [p_height, p_width, p_postfix]
-				self.posterVariants.append(variant)
+
+				if variant in self.posterVariants:
+					printl("variant already exists", self, "D")
+				else:
+					self.posterVariants.append(variant)
 
 				b_height = viewParams[2]["settings"]["backdropHeight"]
 				b_width = viewParams[2]["settings"]["backdropWidth"]
 				b_postfix = "_backdrop_" + b_width + "x" + b_height + "_v2.jpg"
 				variant = [b_height, b_width, b_postfix]
-				self.backdropVariants.append(variant)
+
+				if variant in self.backdropVariants:
+					printl("variant already exists", self, "D")
+				else:
+					self.backdropVariants.append(variant)
 
 		if self.resolution == "FHD":
 			l_height = "1080"
@@ -870,7 +878,16 @@ class BackgroundMediaSyncer(Thread):
 			l_postfix = "_backdrop_1280x720_v2.jpg"
 
 		variant = [l_height, l_width, l_postfix]
-		self.backdropVariants.append(variant)
+
+		if variant in self.backdropVariants:
+			printl("variant already exists", self, "D")
+		else:
+			self.backdropVariants.append(variant)
+
+		printl("posterVariants: " + str(self.posterVariants), self, "D")
+		printl("backdropVariants: " + str(self.backdropVariants), self, "D")
+
+		raise Exception
 
 	#===========================================================================
 	#
