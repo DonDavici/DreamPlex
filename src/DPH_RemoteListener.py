@@ -27,6 +27,8 @@ from enigma import ePythonMessagePump
 from BaseHTTPServer import HTTPServer
 from threading import Thread
 
+from Components.config import config
+
 from DPH_PlexGdm import PlexGdm
 from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
@@ -98,8 +100,9 @@ class HttpDeamon(Thread):
 		self.client = PlexGdm()
 		version = str(getVersion())
 		gBoxType = getBoxInformation()
+		boxName = config.plugins.dreamplex.boxName.value
 
-		self.client.clientDetails(self.g_uuid, gBoxType[1], self.port , "DreamPlex (" + str(self.myIp) +")", version)
+		self.client.clientDetails(self.g_uuid, boxName, self.port , gBoxType[1] + " (" + str(self.myIp) +")", version)
 		self.client.start_registration()
 
 		if self.client.check_client_registration():
