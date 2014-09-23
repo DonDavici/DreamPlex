@@ -110,6 +110,14 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				self.wfile.write(xml)
 				# self.send_response(200)
 
+			elif request_path == "resources":
+				xml = "<MediaContainer size='0' content='plugins'></MediaContainer>"
+				self.send_header('Content-type', 'text/xml; charset="utf-8"')
+				self.send_header('Content-Length', str(len(xml)))
+				self.end_headers()
+				self.wfile.write(xml)
+				self.send_response(200)
+
 			elif request_path == "player/playback/setParameters":
 				params = parse_qs(urlparse(self.path).query)
 				volume = params["volume"][0]
