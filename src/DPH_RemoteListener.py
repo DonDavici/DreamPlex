@@ -140,7 +140,7 @@ class HttpDeamon(Thread):
 	#def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
 	def run(self):
 		printl("", __name__, "S")
-		server_address = (self.myIp, self.port)
+		server_address = ("", self.port)#(self.myIp, self.port)
 
 		self.HandlerClass.protocol_version = self.protocol
 		self.HandlerClass.session = self.session
