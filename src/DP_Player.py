@@ -847,7 +847,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType == "1":
 			self.stopTranscoding()
 
-		if config.plugins.dreamplex.externalPoster.value:
+		if config.plugins.dreamplex.lcd4linux.value:
 			remove(self.tempPoster)
 
 		self.session.nav.playService(self.currentService)
@@ -1167,7 +1167,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if not fileExists(self.whatPoster):
 			self.downloadPoster()
 
-		if config.plugins.dreamplex.externalPoster.value:
+		if config.plugins.dreamplex.lcd4linux.value:
 			self.preparePosterForExternalUsage()
 
 		printl("", self, "C")

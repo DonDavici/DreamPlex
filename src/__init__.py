@@ -83,7 +83,7 @@ config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 config.plugins.dreamplex.boxName		            = ConfigText(default = "DreamPlex", visible_width = 50, fixed_size = False)
-config.plugins.dreamplex.externalPoster 			= ConfigYesNo()
+config.plugins.dreamplex.lcd4linux 			        = ConfigYesNo()
 
 if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
