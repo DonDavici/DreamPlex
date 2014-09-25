@@ -760,5 +760,42 @@
         <widget name="bufferslider" position="37,15" size="500,8" zPosition="10" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/progress-fs8.png" />
 
     </screen>
+    <!-- LCD screen -->
+    <screen name="DreamPlexPlayerSummary" position="0,0" size="132,64" id="1">
+        <!-- Movie name -->
+        <widget source="session.CurrentService" render="Label" position="1,1" size="130,37" font="Regular;16" halign="center">
+        <convert type="ServiceName">Name</convert>
+        </widget>
+        <!-- Current time -->
+        <widget source="global.CurrentTime" render="Label" position="1,44" size="58,20" font="Regular;17" halign="center">
+        <convert type="ClockToText">Format:%H:%M</convert>
+        </widget>
+        <!-- Remaining movie time -->
+        <widget source="session.CurrentService" render="Label" position="60,44" size="72,20" font="Regular;17" halign="center">
+        <convert type="ServicePosition">Remaining,Negate</convert>
+        <!--convert type="ServicePosition">Summary</convert-->
+        </widget>
+    </screen>
+
+    <!-- OLED screen DM800se Color display -->
+    <screen name="DreamPlexPlayerSummary" position="0,0" size="96,64" id="2">
+        <!-- Movie name -->
+        <widget source="session.CurrentService" render="Label" position="0,-3" size="96,40" font="Regular;17" foregroundColor="#FFFF00" halign="center" valign="top" >
+        <convert type="ServiceName">Name</convert>
+        </widget>
+        <!-- Progress border -->
+        <eLabel position="0,39" size="96,1" backgroundColor="#3D3DFF" />
+        <eLabel position="0,39" size="1,8" backgroundColor="#3D3DFF" />
+        <eLabel position="95,39" size="1,8" backgroundColor="#3D3DFF" />
+        <eLabel position="0,47" size="96,1" backgroundColor="#3D3DFF" />
+        <!-- Current time -->
+        <widget source="global.CurrentTime" render="Label" position="0,48" size="48,16" font="Regular;16" halign="left" >
+        <convert type="ClockToText">Default</convert>
+        </widget>
+        <!-- Remaining movie time -->
+        <widget source="session.CurrentService" render="Label" position="48,48" size="48,16" font="Regular;16" foregroundColor="#FFFF00" halign="right">
+        <convert type="ServicePosition">Remaining,Negate,ShowHours,ShowNoSeconds</convert>
+        </widget>
+</screen>
 
 </skins>

@@ -54,6 +54,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarCueSheetSupport
 
 from DPH_Singleton import Singleton
+from DP_Summary import DreamplexPlayerSummary
 
 from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
@@ -206,6 +207,15 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		# from here we go on
 		self.onFirstExecBegin.append(self.playMedia)
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def createSummary(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return DreamplexPlayerSummary
 
 	#==============================================================================
 	#
