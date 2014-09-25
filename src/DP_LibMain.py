@@ -269,9 +269,12 @@ class DP_LibMain(Screen):
 	def generateCacheForSection(self, library):
 		printl ("", self, "S")
 
-		pickleData = library
-		fd = open(self.pickleName, "wb")
-		pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
-		fd.close()
+		try:
+			pickleData = library
+			fd = open(self.pickleName, "wb")
+			pickle.dump(pickleData, fd, 2) #pickle.HIGHEST_PROTOCOL
+			fd.close()
+		except Exception, e:
+			printl("Error while saving cache file: " + str(e), self, "D")
 
 		printl ("", self, "C")
