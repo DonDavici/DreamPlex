@@ -123,6 +123,11 @@ class DPH_ScreenHelper(object):
 				if self.miniTv:
 					self.width = screen.get('width')
 					self.height = screen.get('height')
+				else:
+					self.Poster= translateValues(str(screen.get('usePoster')))
+					if self.Poster:
+						self.width = screen.get('width')
+						self.height = screen.get('height')
 
 		printl("", self, "C")
 

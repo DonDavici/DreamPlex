@@ -13,6 +13,9 @@
 	<screen name="server_menu" miniTv="True" height="321" width="555" />
 	<screen name="syncer" miniTv="True" height="321" width="555" />
     <screen name="input_box" miniTv="True" height="321" width="555" />
+    <!-- we use height and width for the poster size here -->
+    <screen name="DPS_MusicPlayer" miniTv="False" usePoster="True" height="268" width="195" />
+    <screen name="DPS_VideoPlayer" miniTv="False" usePoster="True" height="268" width="195" />
 
 	<!-- FONTS SECTION -->
 	<font path="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/OpenSans.ttf" size="100" name="OpenSans" />

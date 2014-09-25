@@ -183,11 +183,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						autoPlayMode = False
 						resumeMode = False
 						playbackType = self.g_serverConfig.playbackType.value
-						whatPoster = None
 						currentIndex = 0
 						libraryName = "Mixed"
 
-						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackType, "whatPoster": whatPoster, "currentIndex": currentIndex, "libraryName": libraryName}
+						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackType, "currentIndex": currentIndex, "libraryName": libraryName}
 
 						self.playerCallback(data)
 

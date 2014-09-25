@@ -23,8 +23,9 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import threading
-import time
-from time import sleep
+
+from os import remove
+from time import sleep, localtime, time
 
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
@@ -36,6 +37,7 @@ from Screens.HelpMenu import HelpableScreen
 from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation, ePicLoad
 
 from Tools import Notifications
+from Tools.Directories import fileExists
 
 from Components.AVSwitch import AVSwitch
 from Components.config import config
@@ -55,6 +57,7 @@ from Screens.InfoBarGenerics import InfoBarShowHide, \
 
 from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
+from DPH_ScreenHelper import DPH_ScreenHelper
 
 from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
@@ -70,10 +73,9 @@ def startPlayer(session, data):
 	autoPlayMode    = data["autoPlayMode"]
 	resumeMode      = data["resumeMode"]
 	playbackMode    = data["playbackMode"]
-	whatPoster      = data["whatPoster"]
 
 	#printl("", self, "C")
-	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, whatPoster)
+	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode)
 
 #===============================================================================
 #
@@ -81,7 +83,7 @@ def startPlayer(session, data):
 class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
-		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications):
+		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, DPH_ScreenHelper):
 
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -120,11 +122,12 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	isVisible = False
 	playbackType = None
 	timelineWatcher = None
+	whatPoster = None
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, poster):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode):
 		printl("", self, "S")
 		printl("currentIndex: " + str(currentIndex), self, "D")
 		
@@ -136,7 +139,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.autoPlayMode = autoPlayMode
 		self.resumeMode = resumeMode
 		self.playbackMode = playbackMode
-		self.whatPoster = poster
 
 		# we add this for vix images due to their long press button support
 		self.LongButtonPressed = False
@@ -162,6 +164,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.skinName = "DPS_VideoPlayer"
 			self["endingTime"] = Label()
 			self.calculateEndingTime = True
+
+		self.initScreen(self.skinName)
 
 		self.bufferslider = Slider(0, 100)
 		self["bufferslider"] = self.bufferslider
@@ -203,10 +207,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			iPlayableService.evEOF: self.__evEOF,
 		})
 
-		self.onLayoutFinish.append(self.setPoster)
-
 		# from here we go on
 		self.onFirstExecBegin.append(self.playMedia)
+
+		#self.onLayoutFinish.append()
 
 	#==============================================================================
 	#
@@ -226,7 +230,10 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		selection = self.listViewList[self.currentIndex]
 
 		self.media_id = selection[1]['ratingKey']
+		self.selection = selection
 		server = selection[1]['server']
+
+		self.setPoster()
 
 		self.count, self.options, self.server = Singleton().getPlexInstance().getMediaOptionsToPlay(self.media_id, server, False, myType=selection[1]['tagType'])
 
@@ -374,7 +381,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.EXpicloadPoster.setPara([self["poster"].instance.size().width(), self["poster"].instance.size().height(), self.EXscale[0], self.EXscale[1], 0, 1, "#002C2C39"])
 
+		if self.whatPoster is None:
+			self.buildPosterData()
+
 		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+
 		ptr = self.EXpicloadPoster.getData()
 
 		try:
@@ -836,6 +847,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType == "1":
 			self.stopTranscoding()
 
+		if config.plugins.dreamplex.externalPoster.value:
+			remove(self.tempPoster)
+
 		self.session.nav.playService(self.currentService)
 		self.close()
 		
@@ -977,7 +991,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		progress = int(( float(currentTime) / float(totalTime) ) * 100)
 
 		if self.calculateEndingTime:
-			endingTime = time.localtime(time.time() + (totalTime - currentTime))
+			endingTime = localtime(time() + (totalTime - currentTime))
 			self["endingTime"].setText(str(endingTime[3]) + ":" + str(endingTime[4]) + ":" + str(endingTime[5]))
 
 		if self.multiUserServer:
@@ -1133,3 +1147,65 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		
 		printl("", self, "C")
 		return position
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def buildPosterData(self):
+		printl("", self, "S")
+
+		mediaPath = config.plugins.dreamplex.mediafolderpath.value
+		image_prefix = Singleton().getPlexInstance().getServerName().lower()
+
+		self.poster_postfix = "_poster_" + self.width + "x" + self.height + "_v2.jpg"
+
+		self.whatPoster = mediaPath + image_prefix + "_" + self.media_id + self.poster_postfix
+		printl( "what poster: " + self.whatPoster, self, "D")
+
+		printl("builded poster data: " + str(self.whatPoster), self, "D")
+
+		if not fileExists(self.whatPoster):
+			self.downloadPoster()
+
+		if config.plugins.dreamplex.externalPoster.value:
+			self.preparePosterForExternalUsage()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def downloadPoster(self):
+		printl("", self, "S")
+		printl("self.width:" + str(self.width), self, "D")
+		printl("self.height:" + str(self.height), self, "D")
+
+		download_url = self.selection[1]["thumb"]
+		download_url = download_url.replace('&width=999&height=999', '&width=' + self.width + '&height=' + self.height)
+
+		printl( "download url: " + download_url, self, "D")
+		printl( "what poster: " + self.whatPoster, self, "D")
+
+		response = self.plexInstance.doRequest(download_url)
+
+		printl("starting download", self, "D")
+		with open(self.whatPoster, "wb") as local_file:
+			local_file.write(response)
+			local_file.close()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def preparePosterForExternalUsage(self):
+		printl("", self, "S")
+
+		tempPath = config.plugins.dreamplex.logfolderpath.value
+		self.tempPoster = tempPath + "dreamplex.jpg"
+
+		from shutil import copy2
+
+		copy2(self.whatPoster, self.tempPoster)
+
+		printl("", self, "C")
