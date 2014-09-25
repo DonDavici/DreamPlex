@@ -126,6 +126,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				urllib.urlopen(url)
 				self.send_response(200)
 
+			elif request_path == "/player/playback/pause":
+				url = "http://localhost/web/remotecontrol?command=207"
+				urllib.urlopen(url)
+				self.send_response(200)
+
 			elif request_path == "player/playback/stop":
 				url = "http://localhost/web/remotecontrol?command=377"
 				urllib.urlopen(url)
