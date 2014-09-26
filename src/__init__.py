@@ -97,7 +97,7 @@ config.plugins.dreamplex.pluginfolderpath  		= ConfigDirectory(default = default
 config.plugins.dreamplex.skinfolderpath			= ConfigDirectory(default = defaultSkinsFolderPath)
 
 config.plugins.dreamplex.remoteAgent	    = ConfigYesNo()
-config.plugins.dreamplex.remotePort         = ConfigInteger(default = 8090, limits=(1, 65555))
+config.plugins.dreamplex.remotePort         = ConfigInteger(default = 32400, limits=(1, 65555))
 
 config.plugins.dreamplex.logfolderpath     		= ConfigDirectory(default = defaultLogFolderPath, visible_width = 50)
 config.plugins.dreamplex.cachefolderpath  		= ConfigDirectory(default = defaultCacheFolderPath, visible_width = 50)

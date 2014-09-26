@@ -27,6 +27,7 @@ import os
 import datetime
 import shutil
 import math
+import uuid
 
 from enigma import addFont, loadPNG, loadJPG
 from skin import loadSkin
@@ -63,6 +64,7 @@ skinDebugMode = False
 gBoxType = None
 screens = []
 liveTv = None
+g_uuid = None
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
@@ -150,7 +152,7 @@ def printl2(string, parent=None, dmode="U", obfuscate=False, steps=4):
 #
 #===============================================================================
 def getVersion():
-	return version
+	return str(version)
 
 #===============================================================================
 #
@@ -457,7 +459,7 @@ def getBoxInformation():
 	"""
 	@return: manu, model, arch, version
 	"""
-	printl2("", "__common__::getBoxtype", "C")
+	printl2("", "__common__::getBoxtype", "S")
 	global gBoxType
 
 	if gBoxType is not None:
@@ -469,6 +471,19 @@ def getBoxInformation():
 
 		printl2("", "__common__::getBoxtype", "C")
 		return gBoxType
+
+#===============================================================================
+#
+#===============================================================================
+def getUUID():
+	printl2("", "__common__::getUUID", "S")
+	global g_uuid
+
+	if g_uuid is None:
+		g_uuid = str(uuid.uuid4())
+
+	printl2("", "__common__::getUUID", "C")
+	return str(g_uuid)
 
 #===============================================================================
 # 
@@ -984,4 +999,4 @@ def getMyIp():
 	myIp = s.getsockname()[0]
 
 	#printl2("", "__common__::getMyIp", "S")
-	return myIp
+	return str(myIp)

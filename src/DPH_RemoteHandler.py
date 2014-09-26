@@ -35,7 +35,7 @@ from Components.config import config
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp
 
 #===============================================================================
 #
@@ -78,10 +78,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		printl("Serving OPTIONS request...", self, "D")
 		self.send_response(200)
-		self.send_header('Access-Control-Allow-Credentials', 'true')
-		self.send_header('Access-Control-Allow-Origin', '*')
-		self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-		self.send_header("Access-Control-Allow-Headers", "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version")
+		self.setAccessControlHeaders()
 
 		printl("", self, "C")
 
@@ -93,56 +90,69 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		try:
 			self.send_response(200)
-			self.send_header('Access-Control-Allow-Credentials', 'true')
-			self.send_header('Access-Control-Allow-Origin', '*')
-			self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-			self.send_header("Access-Control-Allow-Headers", "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version")
+			self.setAccessControlHeaders()
+
 			request_path=self.path[1:]
 			request_path=re.sub(r"\?.*","",request_path)
+
 			printl("request path is: [%s]" % request_path, self, "D")
 
 			if request_path == "player/timeline/poll":
 				sleep(10)
 				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
-				self.send_header('Content-type', 'text/xml; charset="utf-8"')
-				self.send_header('Content-Length', str(len(xml)))
+				self.setXmlHeader(xml)
 				self.end_headers()
 				self.wfile.write(xml)
-				# self.send_response(200)
 
 			elif request_path == "resources":
-				xml = "<MediaContainer size='0' content='plugins'></MediaContainer>"
-				self.send_header('Content-type', 'text/xml; charset="utf-8"')
-				self.send_header('Content-Length', str(len(xml)))
+				xml = self.getResourceXml()
+				self.setXmlHeader(xml)
 				self.end_headers()
 				self.wfile.write(xml)
-				self.send_response(200)
+
+			elif request_path == "player/timeline/subscribe":
+				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
+				self.setXmlHeader(xml)
+				self.end_headers()
+				self.wfile.write(xml)
+
+			elif request_path == "player/playback/seekTo":
+				params = self.getParams()
+				offset =  params["offset"][0]
 
 			elif request_path == "player/playback/setParameters":
-				params = parse_qs(urlparse(self.path).query)
+				params = self.getParams()
 				volume = params["volume"][0]
 
 				url = "http://localhost/web/vol?set=set" + str(volume)
+
 				urllib.urlopen(url)
 				self.send_response(200)
 
 			elif request_path == "/player/playback/pause":
-				url = "http://localhost/web/remotecontrol?command=207"
+				url = "http://localhost/web/remotecontrol?command=400"
+
 				urllib.urlopen(url)
-				self.send_response(200)
+				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='paused' time='0' type='music' /><Timeline state='paused' time='0' type='video' /><Timeline state='paused' time='0' type='photo' /></MediaContainer>"
+				self.setXmlHeader(xml)
+				self.end_headers()
+				self.wfile.write(xml)
 
 			elif request_path == "player/playback/stop":
 				url = "http://localhost/web/remotecontrol?command=377"
+
 				urllib.urlopen(url)
 				self.send_response(200)
 
 			elif request_path == "player/playback/skipNext":
 				url = "http://localhost/web/remotecontrol?command=407"
+
 				urllib.urlopen(url)
 				self.send_response(200)
 
 			elif request_path == "player/playback/stepForward":
 				url = "http://localhost/web/remotecontrol?command=10"
+
 				urllib.urlopen(url)
 				self.send_response(200)
 
@@ -153,12 +163,13 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			elif request_path == "player/playback/skipPrevious":
 				url = "http://localhost/web/remotecontrol?command=412"
+
 				urllib.urlopen(url)
 				self.send_response(200)
 
 			elif request_path == "player/playback/playMedia":
 
-				params = parse_qs(urlparse(self.path).query)
+				params = self.getParams()
 
 				address = params["address"][0]
 				port = params["port"][0]
@@ -190,6 +201,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 						self.playerCallback(data)
 
+						xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
+						self.setXmlHeader(xml)
+						self.end_headers()
+						self.wfile.write(xml)
+
 					else:
 						printl("no match ...", self, "D")
 
@@ -207,6 +223,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			pass
 
 		printl("", self, "C")
+
 	#===========================================================================
 	#
 	#===========================================================================
@@ -218,3 +235,47 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		printl("", self, "C")
 		return host
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getResourceXml(self):
+		printl("", self, "S")
+
+		xml = "<MediaContainer><Player protocolCapabilities='playback, navigation' product='"+ getMyIp() +"' platformVersion='"+ getVersion() +"' platform='Enigma2' machineIdentifier='"+ getUUID() +"' title='"+ config.plugins.dreamplex.boxName.value +"' protocolVersion='1' deviceClass='stb'/></MediaContainer>"
+
+		printl("", self, "C")
+		return xml
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setXmlHeader(self, xml):
+		printl("", self, "S")
+
+		self.send_header('Content-type', 'text/xml; charset="utf-8"')
+		self.send_header('Content-Length', str(len(xml)))
+
+		printl("", self, "S")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setAccessControlHeaders(self):
+		printl("", self, "S")
+
+		self.send_header('Access-Control-Allow-Credentials', 'true')
+		self.send_header('Access-Control-Allow-Origin', '*')
+		self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+		self.send_header("Access-Control-Allow-Headers", "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version")
+
+		printl("", self, "S")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getParams(self):
+		printl("", self, "S")
+
+		printl("", self, "C")
+		return parse_qs(urlparse(self.path).query)

@@ -40,9 +40,8 @@ from random import seed
 
 from Screens.Screen import Screen
 
-from plugin import getGlobalUuid
 from __plugin__ import getPlugin, Plugin
-from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeThat
+from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeThat, getUUID
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -156,7 +155,7 @@ class PlexLibrary(Screen):
 		# global settings
 		self.g_useFilterSections = config.plugins.dreamplex.showFilter.value
 		self.g_showUnSeenCounts = config.plugins.dreamplex.showUnSeenCounts.value
-		self.g_sessionID = getGlobalUuid()#str(uuid.uuid4())
+		self.g_sessionID = getUUID()
 		
 		# server settings
 		self.serverConfig_Name = str(self.g_serverConfig.name.value)

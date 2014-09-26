@@ -33,8 +33,7 @@ from DPH_PlexGdm import PlexGdm
 from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
 
-from __init__ import getVersion
-from __common__ import printl2 as printl, getBoxInformation, getMyIp
+from __common__ import printl2 as printl, getMyIp
 
 #===============================================================================
 #
@@ -46,9 +45,7 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, port, g_uuid):
-		self.port = port
-		self.g_uuid = g_uuid
+	def __init__(self):
 		self.playerData = ThreadQueue()
 		self.playerDataPump = ePythonMessagePump()
 
@@ -98,11 +95,7 @@ class HttpDeamon(Thread):
 
 		# this starts updatemechanism to show up as player in devices like ios
 		self.client = PlexGdm()
-		version = str(getVersion())
-		gBoxType = getBoxInformation()
-		boxName = config.plugins.dreamplex.boxName.value
-
-		self.client.clientDetails(self.g_uuid, boxName, self.port , gBoxType[1] + " (" + str(self.myIp) +")", version)
+		self.client.setClientDetails()
 		self.client.start_registration()
 
 		if self.client.check_client_registration():
@@ -140,7 +133,7 @@ class HttpDeamon(Thread):
 	#def runHttp(session, playerCallback, HandlerClass = MyHandler,ServerClass = HTTPServer, protocol="HTTP/1.0"):
 	def run(self):
 		printl("", __name__, "S")
-		server_address = ("", self.port)#(self.myIp, self.port)
+		server_address = ("", config.plugins.dreamplex.remotePort.value)
 
 		self.HandlerClass.protocol_version = self.protocol
 		self.HandlerClass.session = self.session

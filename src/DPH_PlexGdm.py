@@ -27,7 +27,7 @@ MA 02110-1301, USA.
 Example usage
 if __name__ == '__main__':
 	client = PlexGdm(debug=3)
-	client.clientDetails("Test-Name", "Test Client", "3003", "Test-App", "1.2.3")
+	client.setClientDetails("Test-Name", "Test Client", "3003", "Test-App", "1.2.3")
 	client.start_all()
 	while not client.discovery_complete:
 		print "Waiting for results"
@@ -49,7 +49,9 @@ import threading
 import time
 import urllib2
 
-from __common__ import printl2 as printl
+from Components.config import config
+
+from __common__ import printl2 as printl, getUUID, getBoxInformation, getVersion, getMyIp
 
 #===============================================================================
 #
@@ -86,21 +88,22 @@ class PlexGdm(object):
 	#===========================================================================
 	#
 	#===========================================================================
-	def clientDetails(self, c_id, c_name, c_post, c_product, c_version):
+	def setClientDetails(self):
 		printl("", self, "S")
 
+		gBoxType = getBoxInformation()
+		self.client_id = str(getUUID())
+
 		self.client_data = "Content-Type: plex/media-player\n"
-		self.client_data += "Resource-Identifier: %s\n" % c_id
-		self.client_data += "Name: %s\n" % c_name
-		self.client_data += "Port: %s\n" % c_post
-		self.client_data += "Product: %s\n" % c_product
-		self.client_data += "Version: %s\n" % c_version
+		self.client_data += "Resource-Identifier: %s\n" % self.client_id
+		self.client_data += "Name: %s\n" % config.plugins.dreamplex.boxName.value
+		self.client_data += "Port: %s\n" % config.plugins.dreamplex.remotePort.value
+		self.client_data += "Product: %s\n" % gBoxType[1] + " (" + str(getMyIp()) +")"
+		self.client_data += "Version: %s\n" % str(getVersion())
 		self.client_data += "Protocol: plex\n"
 		self.client_data += "Protocol-Version: 1\n"
-		self.client_data += "Protocol-Capabilities: playback\n"
+		self.client_data += "Protocol-Capabilities: playback, navigation\n"
 		self.client_data += "Device-Class: stb\n"
-
-		self.client_id = c_id
 
 		printl("", self, "C")
 
@@ -111,7 +114,7 @@ class PlexGdm(object):
 		printl("", self, "S")
 
 		if not self.client_data:
-			printl("Client data has not been initialised.  Please use PlexGDM.clientDetails()", self, "D")
+			printl("Client data has not been initialised.  Please use PlexGDM.setClientDetails()", self, "D")
 
 		printl("", self, "C")
 		return self.client_data

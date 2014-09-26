@@ -250,12 +250,8 @@ class DPS_Server(Screen, DPH_PlexScreen):
 	def keyBlue(self):
 		printl("", self, "S")
 
-		client = PlexGdm(debug=3)
-		version = str(getVersion())
-		gBoxType = getBoxInformation()
-		clientBox = gBoxType[1]
-		printl("clientBox: " + str(gBoxType), self, "D")
-		client.clientDetails(clientBox, "DreamPlex Client", "3003", "DreamPlex", version)
+		client = PlexGdm()
+		client.setClientDetails()
 
 		client.start_discovery()
 		while not client.discovery_complete:
