@@ -506,8 +506,8 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.seek = service1 and service1.seek()
 
 		if resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
-			seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
-			seekwatcherThread.start()
+			self.seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
+			self.seekwatcherThread.start()
 
 		self.timelineWatcher = eTimer()
 		self.timelineWatcher.callback.append(self.updateTimeline)
@@ -736,7 +736,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				self.seekToStartPos()
 				sleep(1)
 		except Exception, e:
-			printl("exception: " + str(e), self, "W")
+			printl("stopping due to exception in seektostartpos, eg. stopped playback before ready ..." + str(e), self, "W")
 		
 		printl( "seekWatcher finished ", self, "I")
 		printl("", self, "C")
@@ -785,6 +785,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		
 		except Exception, e:
 			printl("exception: " + str(e), self, "W")
+			raise Exception # this will stop thread as well
 			
 		printl("", self, "C")
 
