@@ -1003,7 +1003,12 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		progress = int(( float(currentTime) / float(totalTime) ) * 100)
 
 		if self.calculateEndingTime:
-			endingTime = localtime(time() + (totalTime - currentTime))
+			try:
+				endingTime = localtime(time() + (totalTime - currentTime))
+			except Exception, e:
+				printl("something went wrong with ending time -> " + str(e), self, "D")
+				endingTime = time()
+
 			self["endingTime"].setText(str(endingTime[3]) + ":" + str(endingTime[4]) + ":" + str(endingTime[5]))
 
 		if self.multiUserServer:
