@@ -2,8 +2,6 @@
 #===============================================================================
 # IMPORT
 #===============================================================================
-import uuid
-
 from Plugins.Plugin import PluginDescriptor
 
 from Components.config import config, configfile

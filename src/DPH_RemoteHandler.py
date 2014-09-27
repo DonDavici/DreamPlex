@@ -169,6 +169,9 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			elif request_path == "player/playback/playMedia":
 
+				url = "http://localhost/web/powerstate?newstate=4"
+				urllib.urlopen(url)
+
 				params = self.getParams()
 
 				address = params["address"][0]
