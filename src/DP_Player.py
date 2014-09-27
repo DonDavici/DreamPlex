@@ -1191,12 +1191,15 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl( "download url: " + download_url, self, "D")
 		printl( "what poster: " + self.whatPoster, self, "D")
 
-		response = self.plexInstance.doRequest(download_url)
+		if download_url != "":
+			response = self.plexInstance.doRequest(download_url)
 
-		printl("starting download", self, "D")
-		with open(self.whatPoster, "wb") as local_file:
-			local_file.write(response)
-			local_file.close()
+			printl("starting download", self, "D")
+			with open(self.whatPoster, "wb") as local_file:
+				local_file.write(response)
+				local_file.close()
+		else:
+			printl("no posterdata in xml response, skipping ...", self, "D")
 
 		printl("", self, "C")
 
