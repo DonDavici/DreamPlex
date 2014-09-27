@@ -73,9 +73,10 @@ def startPlayer(session, data):
 	autoPlayMode    = data["autoPlayMode"]
 	resumeMode      = data["resumeMode"]
 	playbackMode    = data["playbackMode"]
+	forceResume     = data["forceResume"]
 
 	#printl("", self, "C")
-	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode)
+	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 #===============================================================================
 #
@@ -127,7 +128,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False):
 		printl("", self, "S")
 		printl("currentIndex: " + str(currentIndex), self, "D")
 		
@@ -138,6 +139,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.listCount = len(self.listViewList)
 		self.autoPlayMode = autoPlayMode
 		self.resumeMode = resumeMode
+		self.forceResume = forceResume # we use this to able to resume out of android or ios
 		self.playbackMode = playbackMode
 
 		# we add this for vix images due to their long press button support
@@ -348,6 +350,9 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if resumeStamp > 0 and self.resumeMode:
 			self.session.openWithCallback(self.handleResume, MessageBox, _(" This file was partially played.\n\n Do you want to resume?"), MessageBox.TYPE_YESNO)
+
+		elif self.forceResume:
+			self.play(resume = True)
 
 		else:
 			self.play()

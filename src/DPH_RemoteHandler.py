@@ -177,6 +177,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				protocol = params["protocol"][0]
 				key = params["key"][0]
 				machineIdentifier = params["machineIdentifier"][0]
+				offset = int(params["offset"][0])
 				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
 				for serverConfig in config.plugins.dreamplex.Entries:
@@ -192,12 +193,19 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
 
 						autoPlayMode = False
-						resumeMode = False
+
+						if offset > 0:
+							forceResume = True
+						else:
+							forceResume = False
+
+						resumeMode = False # this is always false because the ios and android app ask itself if we want to resume :-) no need to ask second time
+
 						playbackType = self.g_serverConfig.playbackType.value
 						currentIndex = 0
 						libraryName = "Mixed"
 
-						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "resumeMode": resumeMode, "playbackMode": playbackType, "currentIndex": currentIndex, "libraryName": libraryName}
+						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackType, "currentIndex": currentIndex, "libraryName": libraryName}
 
 						self.playerCallback(data)
 
