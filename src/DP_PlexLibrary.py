@@ -1488,7 +1488,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getStreamDataById(self, server, myId):
+	def getStreamDataById(self, server, myId, loadExtraData):
 		printl("", self, "S")
 
 		printl("Gather media stream info", self, "I" )
@@ -1496,11 +1496,14 @@ class PlexLibrary(Screen):
 		#get metadata for audio and subtitle
 		suburl="http://"+server+"/library/metadata/"+myId
 
+		if loadExtraData:
+			suburl += "?checkFiles=1&includeExtras=1&includeRelated=1&includeRelatedCount=0"
+
 		self.g_currentServer = server
 		printl("g_currentServer: " + str(self.g_currentServer), self, "D")
 
 		html=self.doRequest(suburl)
-		#printl("retrived html: " + str(html), self, "D")
+		printl("retrived html: " + str(html), self, "D")
 
 		tree = None
 
@@ -1696,7 +1699,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getAudioSubtitlesMedia(self, server, myId, myType ):
+	def getAudioSubtitlesMedia(self, server, myId, myType, loadExtraData):
 		"""
 		Cycle through the Parts sections to find all "selected" audio and subtitle streams
 		If a stream is marked as selected=1 then we will record it in the dict
@@ -1705,7 +1708,7 @@ class PlexLibrary(Screen):
 		"""
 		printl("", self, "S")
 
-		tree = self.getStreamDataById(server, myId)
+		tree = self.getStreamDataById(server, myId, loadExtraData)
 
 		parts=[]
 		partsCount=0
@@ -1803,7 +1806,7 @@ class PlexLibrary(Screen):
 						'subtitle'   : subtitle,
 						'subCount'   : subCount,
 						'external'   : external,
-						'parts'	  : parts,
+						'parts'	     : parts,
 						'partsCount' : partsCount,
 						'videoData'  : videoData,
 						'mediaData'  : mediaData,
@@ -1817,12 +1820,12 @@ class PlexLibrary(Screen):
 	#========================================================================
 	#
 	#========================================================================
-	def getMediaOptionsToPlay(self, myId, vids, override=False, myType="Video" ):
+	def getMediaOptionsToPlay(self, myId, vids, override=False, myType="Video", loadExtraData=False ):
 		printl("", self, "S")
 
 		self.getTranscodeSettings(override)
 		self.server = self.getServerFromURL(vids)
-		self.streams = self.getAudioSubtitlesMedia(self.server,myId, myType)
+		self.streams = self.getAudioSubtitlesMedia(self.server,myId, myType, loadExtraData)
 
 		printl("partsCount: " + str(self.streams['partsCount']), self, "D")
 		printl("parts: " + str(self.streams['parts']), self, "D")

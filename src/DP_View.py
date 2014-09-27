@@ -561,8 +561,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onKeyVideo(self):
 		printl("", self, "S")
 
-		pass
-		#self.showFunctions(not self.areFunctionsHidden)
+		# if config.plugins.dreamplex.loadExtraData.value:
+		# 	self.onEnter(loadExtraData=True)
 
 		printl("", self, "C")
 
@@ -1216,7 +1216,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	#
 	#===========================================================================
-	def onEnter(self):
+	def onEnter(self, loadExtraData=False):
 		printl("", self, "S")
 		self.lastTagType = None
 
@@ -1243,7 +1243,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode)
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, loadExtraData=loadExtraData)
 
 			else:
 				# save index here because user moved around for sure
