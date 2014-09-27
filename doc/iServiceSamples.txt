@@ -1,0 +1,23 @@
+	# Events
+self.__event_tracker = ServiceEventTracker(screen=self, eventmap=
+{
+# Disabled for tests
+# If we enable them, the sound will be delayed for about 2 seconds ?
+iPlayableService.evStart: self.__serviceStarted,
+iPlayableService.evStopped: self.__serviceStopped,
+#iPlayableService.evEnd: self.__evEnd,
+#iPlayableService.evEOF: self.__evEOF,
+#iPlayableService.evUser: self.__timeUpdated,
+#iPlayableService.evUser+1: self.__statePlay,
+#iPlayableService.evUser+2: self.__statePause,
+iPlayableService.evUser+3: self.__osdFFwdInfoAvail,
+iPlayableService.evUser+4: self.__osdFBwdInfoAvail,
+#iPlayableService.evUser+5: self.__osdStringAvail,
+iPlayableService.evUser+6: self.__osdAudioInfoAvail,
+iPlayableService.evUser+7: self.__osdSubtitleInfoAvail,
+iPlayableService.evUser+8: self.__chapterUpdated,
+iPlayableService.evUser+9: self.__titleUpdated,
+iPlayableService.evUser+11: self.__menuOpened,
+iPlayableService.evUser+12: self.__menuClosed,
+iPlayableService.evUser+13: self.__osdAngleInfoAvail
+})

@@ -215,7 +215,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		#self.onLayoutFinish.append()
 
 	#==============================================================================
-	#
+	# is called automatically
 	#==============================================================================
 	def createSummary(self):
 		printl("", self, "S")
