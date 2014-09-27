@@ -179,8 +179,13 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				completeAddress = address+":"+port
 				protocol = params["protocol"][0]
 				key = params["key"][0]
+
+				if "offset" in params:
+					offset = int(params["offset"][0])
+				else:
+					offset = 0
+
 				machineIdentifier = params["machineIdentifier"][0]
-				offset = int(params["offset"][0])
 				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
 				for serverConfig in config.plugins.dreamplex.Entries:

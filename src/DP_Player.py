@@ -230,6 +230,13 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 
 		selection = self.listViewList[self.currentIndex]
+		printl("selection: " + str(selection), self, "D")
+
+		if "parentRatingKey" in selection[1]: # this is the case with shows
+			self.show_id = selection[1]['parentRatingKey']
+			self.isShow = True
+		else:
+			self.isShow = False
 
 		self.media_id = selection[1]['ratingKey']
 		self.selection = selection
@@ -785,8 +792,7 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		
 		except Exception, e:
 			printl("exception: " + str(e), self, "W")
-			raise Exception # this will stop thread as well
-			
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -1165,7 +1171,12 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.poster_postfix = "_poster_" + self.width + "x" + self.height + "_v2.jpg"
 
-		self.whatPoster = mediaPath + image_prefix + "_" + self.media_id + self.poster_postfix
+
+		if self.isShow:
+			self.whatPoster = mediaPath + image_prefix + "_" + self.show_id + self.poster_postfix
+		else:
+			self.whatPoster = mediaPath + image_prefix + "_" + self.media_id + self.poster_postfix
+
 		printl( "what poster: " + self.whatPoster, self, "D")
 
 		printl("builded poster data: " + str(self.whatPoster), self, "D")
@@ -1186,7 +1197,11 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("self.width:" + str(self.width), self, "D")
 		printl("self.height:" + str(self.height), self, "D")
 
-		download_url = self.selection[1]["thumb"]
+		if self.isShow:
+			download_url = self.selection[1]["art"]
+		else:
+			download_url = self.selection[1]["thumb"]
+
 		download_url = download_url.replace('&width=999&height=999', '&width=' + self.width + '&height=' + self.height)
 
 		printl( "download url: " + download_url, self, "D")
