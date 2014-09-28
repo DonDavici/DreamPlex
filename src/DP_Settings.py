@@ -28,7 +28,7 @@ from Components.ActionMap import ActionMap
 from Components.ConfigList import ConfigListScreen
 from Components.MenuList import MenuList
 from Components.Sources.StaticText import StaticText
-from Components.config import config, getConfigListEntry
+from Components.config import config, getConfigListEntry, configfile
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 
@@ -283,7 +283,10 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	def keySave(self):
 		printl("", self, "S")
 
-		self.saveAll()
+		config.plugins.dreamplex.entriescount.save()
+		config.plugins.dreamplex.Entries.save()
+		config.plugins.dreamplex.save()
+		configfile.save()
 		self.close(None)
 		
 		printl("", self, "C")
