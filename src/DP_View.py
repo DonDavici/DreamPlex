@@ -583,7 +583,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		#if we have two or more extras then present a screen
 		self.options = options
 		self.server = server
-		self.dvdplayback=False
 
 		if not self.options:
 			response = Singleton().getPlexInstance().getLastResponse()
