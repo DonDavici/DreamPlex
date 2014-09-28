@@ -584,8 +584,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.options = options
 		self.server = server
 		if not self.options:
-			response = Singleton().getPlexInstance().getLastResponse()
-			self.session.open(MessageBox,(_("No extras found ...\n\nPress exit to return.")) % response, MessageBox.TYPE_INFO)
+			self.session.open(MessageBox,(_("No extras found ...\n\nPress exit to return.")), MessageBox.TYPE_INFO)
 		else:
 			if count > 1:
 				printl("we have more than one playable part ...", self, "I")
