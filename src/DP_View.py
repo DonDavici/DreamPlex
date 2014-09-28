@@ -583,10 +583,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		#if we have two or more extras then present a screen
 		self.options = options
 		self.server = server
-
 		if not self.options:
 			response = Singleton().getPlexInstance().getLastResponse()
-			self.session.open(MessageBox,(_("Error:") + "\n%s") % response, MessageBox.TYPE_INFO)
+			self.session.open(MessageBox,(_("No extras found ...\n\nPress exit to return.")) % response, MessageBox.TYPE_INFO)
 		else:
 			if count > 1:
 				printl("we have more than one playable part ...", self, "I")
@@ -619,25 +618,24 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	def setSelectedMedia(self, choice=None):
 		printl("", self, "S")
-		result = 0
 		printl("choice: " + str(choice), self, "D")
 
 		if choice is not None:
 			result = int(choice[1])
 
-		printl("result: " + str(result), self, "D")
+			printl("result: " + str(result), self, "D")
 
-		ratingKey = self.options[result][5]
+			ratingKey = self.options[result][5]
 
-		listViewList, mediaContainer = self.plexInstance.getMoviesFromSection( "http://"+ self.server +"/library/metadata/" + ratingKey)
-		autoPlayMode = False
-		resumeMode = False # this is always false because we are in extradata here
-		playbackMode = self.serverConfig.playbackType.value
-		currentIndex = 0
-		libraryName = "Mixed"
-		forceResume = False
+			listViewList, mediaContainer = self.plexInstance.getMoviesFromSection( "http://"+ self.server +"/library/metadata/" + ratingKey)
+			autoPlayMode = False
+			resumeMode = False # this is always false because we are in extradata here
+			playbackMode = self.serverConfig.playbackType.value
+			currentIndex = 0
+			libraryName = "Mixed"
+			forceResume = False
 
-		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 		printl("", self, "C")
 
