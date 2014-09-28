@@ -209,11 +209,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 						resumeMode = False # this is always false because the ios and android app ask itself if we want to resume :-) no need to ask second time
 
-						playbackType = self.g_serverConfig.playbackType.value
+						playbackMode = self.g_serverConfig.playbackType.value
 						currentIndex = 0
 						libraryName = "Mixed"
 
-						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackType, "currentIndex": currentIndex, "libraryName": libraryName}
+						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName}
 
 						self.playerCallback(data)
 

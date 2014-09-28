@@ -1699,6 +1699,138 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
+	def getExtraData(self, server, myId, myType, loadExtraData):
+		"""
+		Cycle through the Parts sections to find all "selected" audio and subtitle streams
+		If a stream is marked as selected=1 then we will record it in the dict
+		Any that are not, are ignored as we do not need to set them
+		We also record the media locations for playback decision later on
+		"""
+		printl("", self, "S")
+
+		tree = self.getStreamDataById(server, myId, loadExtraData)
+
+		parts=[]
+		partsCount=0
+		subtitle={}
+		subCount=0
+		audio={}
+		audioCount=0
+		external={}
+		videoData={}
+		mediaData={}
+		subOffset=-1
+		audioOffset=-1
+		selectedSubOffset=-1
+		selectedAudioOffset=-1
+
+		if not tree:
+			return {}
+		else:
+			fromVideo = tree.find(myType) # Track or Video
+
+			videoData['title'] = fromVideo.get('title', "")
+			videoData['tagline'] = fromVideo.get('tagline', "")
+			videoData['summary'] = fromVideo.get('summary', "")
+			videoData['year'] = fromVideo.get('year', "")
+			videoData['studio'] = fromVideo.get('studio', "")
+			videoData['viewOffset']=fromVideo.get('viewOffset',0)
+			videoData['duration']=fromVideo.get('duration',0)
+			videoData['contentRating'] = fromVideo.get('contentRating', "")
+
+			mediaData['audioCodec'] = fromVideo.get('audioCodec', "")
+			mediaData['videoCodec'] = fromVideo.get('videoCodec', "")
+			mediaData['videoResolution'] = fromVideo.get('videoResolution', "")
+			mediaData['videoFrameRate'] = fromVideo.get('videoFrameRate', "")
+
+			contents = "type"
+
+			if loadExtraData:
+				try:
+					extraContent = tree.find('Video/Extras') # extra content
+					for video in extraContent.findall("Video"):
+						for media in video.findall("Media"):
+							for part in media.findall("Part"):
+								try:
+									bits = part.get('key'), video.get("type") + ": " + video.get("title") + " (" + media.get("width") + "x" + media.get("height") + ")", part.get('container'), video.get("type"), video.get("duration")
+									parts.append(bits)
+									partsCount += 1
+								except: pass
+				except Exception: pass
+			else:
+				mainContent = tree.find('Video/Media') # main content
+				#Get the Parts info for media type and source selection
+				for part in mainContent.findall("Part"):
+					printl("part.attrib: " + str(part.attrib), self, "D")
+
+					try:
+						bits = part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
+						parts.append(bits)
+						partsCount += 1
+					except: pass
+
+					if myType == "Video":
+						if self.g_streamControl == "1" or self.g_streamControl == "2":
+
+							contents = "all"
+							fromStream = part.getiterator('Stream')
+							printl("fromStream: " + str(fromStream), self, "D")
+							#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
+
+							for bits in fromStream:
+								printl("bits.attrib: " + str(bits.attrib), self, "D")
+								stream=dict(bits.items())
+								printl("stream: " + str(stream), self, "D")
+								if stream['streamType'] == '2': #audio
+									audioCount += 1
+									audioOffset += 1
+									try:
+										if stream['selected'] == "1":
+											printl("Found preferred audio id: " + str(stream['id']), self, "I" )
+											audio=stream
+											selectedAudioOffset=audioOffset
+									except: pass
+
+								elif stream['streamType'] == '3': #subtitle
+									subOffset += 1
+									try:
+										if stream['key']:
+											printl( "Found external subtitles id : " + str(stream['id']),self, "I")
+											external = stream
+											external['key']='http://'+server+external['key']
+									except:
+										#Otherwise it's probably embedded
+										try:
+											if stream['selected'] == "1":
+												printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
+												subCount += 1
+												subtitle = stream
+												selectedSubOffset=subOffset
+										except: pass
+						else:
+								printl( "Stream selection is set OFF", self, "I")
+
+
+			streamData={'contents'   : contents,
+						'audio'	     : audio,
+						'audioCount' : audioCount,
+						'subtitle'   : subtitle,
+						'subCount'   : subCount,
+						'external'   : external,
+						'parts'	     : parts,
+						'partsCount' : partsCount,
+						'videoData'  : videoData,
+						'mediaData'  : mediaData,
+						'subOffset'  : selectedSubOffset ,
+						'audioOffset': selectedAudioOffset }
+
+			printl ("streamData = " + str(streamData), self, "D" )
+			printl("", self, "C")
+			return streamData
+
+		#===========================================================================
+	#
+	#===========================================================================
 	def getAudioSubtitlesMedia(self, server, myId, myType, loadExtraData):
 		"""
 		Cycle through the Parts sections to find all "selected" audio and subtitle streams
@@ -1743,65 +1875,74 @@ class PlexLibrary(Screen):
 			mediaData['videoResolution'] = fromVideo.get('videoResolution', "")
 			mediaData['videoFrameRate'] = fromVideo.get('videoFrameRate', "")
 
-			fromParts = tree.getiterator('Part')
+			contents = "type"
 
-			contents="type"
-
-			#Get the Parts info for media type and source selection
-			for part in fromParts:
-				printl("part.attrib: " + str(part.attrib), self, "D")
-
-				try:
-					bits=part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
-					parts.append(bits)
-					partsCount += 1
-				except: pass
-
-			if myType == "Video":
-				if self.g_streamControl == "1" or self.g_streamControl == "2":
-
-					contents="all"
-					fromStream = tree.getiterator('Stream')
-					printl("fromStream: " + str(fromStream), self, "D")
-					#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
-
-					for bits in fromStream:
-						printl("bits.attrib: " + str(bits.attrib), self, "D")
-						stream=dict(bits.items())
-						printl("stream: " + str(stream), self, "D")
-						if stream['streamType'] == '2': #audio
-							audioCount += 1
-							audioOffset += 1
+			if loadExtraData:
+				extraContent = tree.find('Video/Extras') # extra content
+				for video in extraContent.findall("Video"):
+					for media in video.findall("Media"):
+						for part in media.findall("Part"):
 							try:
-								if stream['selected'] == "1":
-									printl("Found preferred audio id: " + str(stream['id']), self, "I" )
-									audio=stream
-									selectedAudioOffset=audioOffset
+								bits = part.get('key'), video.get("type") + ": " + video.get("title") + " (" + media.get("width") + "x" + media.get("height") + ")", part.get('container'), video.get("type"), video.get("duration"), video.get("ratingKey")
+								parts.append(bits)
+								partsCount += 1
 							except: pass
+			else:
+				mainContent = tree.find('Video/Media') # main content
+				#Get the Parts info for media type and source selection
+				for part in mainContent.findall("Part"):
+					printl("part.attrib: " + str(part.attrib), self, "D")
 
-						elif stream['streamType'] == '3': #subtitle
-							subOffset += 1
-							try:
-								if stream['key']:
-									printl( "Found external subtitles id : " + str(stream['id']),self, "I")
-									external=stream
-									external['key']='http://'+server+external['key']
-							except:
-								#Otherwise it's probably embedded
-								try:
-									if stream['selected'] == "1":
-										printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
-										subCount += 1
-										subtitle=stream
-										selectedSubOffset=subOffset
-								except: pass
+					try:
+						bits = part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
+						parts.append(bits)
+						partsCount += 1
+					except: pass
 
-				else:
-						printl( "Stream selection is set OFF", self, "I")
+					if myType == "Video":
+						if self.g_streamControl == "1" or self.g_streamControl == "2":
+
+							contents = "all"
+							fromStream = part.getiterator('Stream')
+							printl("fromStream: " + str(fromStream), self, "D")
+							#streamType: The type of media stream/track it is (1 = video, 2 = audio, 3 = subtitle)
+
+							for bits in fromStream:
+								printl("bits.attrib: " + str(bits.attrib), self, "D")
+								stream=dict(bits.items())
+								printl("stream: " + str(stream), self, "D")
+								if stream['streamType'] == '2': #audio
+									audioCount += 1
+									audioOffset += 1
+									try:
+										if stream['selected'] == "1":
+											printl("Found preferred audio id: " + str(stream['id']), self, "I" )
+											audio=stream
+											selectedAudioOffset=audioOffset
+									except: pass
+
+								elif stream['streamType'] == '3': #subtitle
+									subOffset += 1
+									try:
+										if stream['key']:
+											printl( "Found external subtitles id : " + str(stream['id']),self, "I")
+											external = stream
+											external['key']='http://'+server+external['key']
+									except:
+										#Otherwise it's probably embedded
+										try:
+											if stream['selected'] == "1":
+												printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
+												subCount += 1
+												subtitle = stream
+												selectedSubOffset=subOffset
+										except: pass
+						else:
+								printl( "Stream selection is set OFF", self, "I")
 
 
 			streamData={'contents'   : contents,
-						'audio'	  : audio,
+						'audio'	     : audio,
 						'audioCount' : audioCount,
 						'subtitle'   : subtitle,
 						'subCount'   : subCount,

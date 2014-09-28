@@ -24,6 +24,7 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 import math
 import os
+from time import strftime, gmtime
 
 #noinspection PyUnresolvedReferences
 from enigma import eTimer
@@ -58,7 +59,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv
+from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv, convertSize
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -561,8 +562,83 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onKeyVideo(self):
 		printl("", self, "S")
 
-		# if config.plugins.dreamplex.loadExtraData.value:
-		# 	self.onEnter(loadExtraData=True)
+		if config.plugins.dreamplex.loadExtraData.value:
+			#self.onEnter(loadExtraData=True)
+			selection = self["listview"].getCurrent()
+			media_id = selection[1]['ratingKey']
+			server = selection[1]['server']
+
+			count, options, server = Singleton().getPlexInstance().getMediaOptionsToPlay(media_id, server, False, myType=selection[1]['tagType'], loadExtraData=True)
+
+			self.selectMedia(count, options, server)
+
+		printl("", self, "C")
+
+	#===========================================================
+	#
+	#===========================================================
+	def selectMedia(self, count, options, server ):
+		printl("", self, "S")
+
+		#if we have two or more extras then present a screen
+		self.options = options
+		self.server = server
+		self.dvdplayback=False
+
+		if not self.options:
+			response = Singleton().getPlexInstance().getLastResponse()
+			self.session.open(MessageBox,(_("Error:") + "\n%s") % response, MessageBox.TYPE_INFO)
+		else:
+			if count > 1:
+				printl("we have more than one playable part ...", self, "I")
+				indexCount=0
+				functionList = []
+
+				for items in self.options:
+					printl("item: " + str(items), self, "D")
+					if items[1] is not None:
+						name=items[1].split('/')[-1]
+					else:
+						size = convertSize(int(items[3]))
+						duration = strftime('%H:%M:%S', gmtime(int(items[4])))
+						# this is the case when there is no information of the real file name
+						name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
+
+					printl("name " + str(name), self, "D")
+					functionList.append((name ,indexCount, ))
+					indexCount+=1
+
+				self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
+
+			else:
+				self.setSelectedMedia()
+
+			printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def setSelectedMedia(self, choice=None):
+		printl("", self, "S")
+		result = 0
+		printl("choice: " + str(choice), self, "D")
+
+		if choice is not None:
+			result = int(choice[1])
+
+		printl("result: " + str(result), self, "D")
+
+		ratingKey = self.options[result][5]
+
+		listViewList, mediaContainer = self.plexInstance.getMoviesFromSection( "http://"+ self.server +"/library/metadata/" + ratingKey)
+		autoPlayMode = False
+		resumeMode = False # this is always false because we are in extradata here
+		playbackMode = self.serverConfig.playbackType.value
+		currentIndex = 0
+		libraryName = "Mixed"
+		forceResume = False
+
+		self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 		printl("", self, "C")
 
@@ -1216,7 +1292,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	#
 	#===========================================================================
-	def onEnter(self, loadExtraData=False):
+	def onEnter(self):
 		printl("", self, "S")
 		self.lastTagType = None
 
@@ -1243,7 +1319,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, loadExtraData=loadExtraData)
+				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode)
 
 			else:
 				# save index here because user moved around for sure
