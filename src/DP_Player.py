@@ -62,22 +62,6 @@ from DPH_ScreenHelper import DPH_ScreenHelper
 from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
 
-#===========================================================================
-#
-#===========================================================================
-def startPlayer(session, data):
-
-	listViewList    = data["listViewList"]
-	currentIndex    = data["currentIndex"]
-	libraryName     = data["libraryName"]
-	autoPlayMode    = data["autoPlayMode"]
-	resumeMode      = data["resumeMode"]
-	playbackMode    = data["playbackMode"]
-	forceResume     = data["forceResume"]
-
-	#printl("", self, "C")
-	session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
-
 #===============================================================================
 #
 #===============================================================================
@@ -132,6 +116,14 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
+		if libraryName == "music":
+			self.skinName = "DPS_MusicPlayer"
+			self.calculateEndingTime = False
+		else:
+			self.skinName = "DPS_VideoPlayer"
+			self["endingTime"] = Label()
+			self.calculateEndingTime = True
+
 		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
 				InfoBarAudioSelection, InfoBarSimpleEventView, \
 				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
@@ -157,21 +149,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.libraryName = libraryName
 
 		self.plexInstance = Singleton().getPlexInstance()
-
-		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
-				InfoBarAudioSelection, InfoBarSimpleEventView, \
-				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
-				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications:
-			printl("x: " + str(x), self, "D")
-			x.__init__(self)
-
-		if self.libraryName == "music":
-			self.skinName = "DPS_MusicPlayer"
-			self.calculateEndingTime = False
-		else:
-			self.skinName = "DPS_VideoPlayer"
-			self["endingTime"] = Label()
-			self.calculateEndingTime = True
 
 		self.initScreen(self.skinName)
 

@@ -6,6 +6,8 @@ from Plugins.Plugin import PluginDescriptor
 
 from Components.config import config, configfile
 
+from DP_Player import DP_Player
+
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 from __common__ import getUUID
 
@@ -29,7 +31,10 @@ def main(session, **kwargs):
 #===========================================================================
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
+
+	# this loads the skin
 	startEnvironment()
+
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
 
 #===========================================================================
@@ -90,20 +95,35 @@ def getHttpDeamonInformation():
 #===========================================================================
 # noinspection PyUnusedLocal
 def gotThreadMsg(msg):
-	from DP_Player import startPlayer
-
 	msg = HttpDeamonThread.PlayerData.pop()
-	startPlayer(global_session, msg[0])
+
+	data = msg[0]
+
+	listViewList    = data["listViewList"]
+	currentIndex    = data["currentIndex"]
+	libraryName     = data["libraryName"]
+	autoPlayMode    = data["autoPlayMode"]
+	resumeMode      = data["resumeMode"]
+	playbackMode    = data["playbackMode"]
+	forceResume     = data["forceResume"]
+
+	# load skin data here as well
+	startEnvironment()
+
+	# now we start the player
+	global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 #===========================================================================
 #
 #===========================================================================
-def sessionStart(reason, session):
-	global global_session
-	global_session = session
+def sessionStart(reason, **kwargs):
 
-	if config.plugins.dreamplex.remoteAgent.value:
-		HttpDeamonThread.setSession(session)
+	if "session" in kwargs:
+		global global_session
+		global_session = kwargs["session"]
+
+		if config.plugins.dreamplex.remoteAgent.value:
+			HttpDeamonThread.setSession(global_session)
 
 #===============================================================================
 # plugins
