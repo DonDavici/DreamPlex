@@ -34,9 +34,8 @@ from plugin import getHttpDeamonInformation
 
 #===============================================================================
 #
-#===============================================================================		
+#===============================================================================
 class DPS_About(Screen):
-	_session = None
 
 	#===========================================================================
 	#
@@ -45,8 +44,6 @@ class DPS_About(Screen):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
-		
-		self._session = session
 		
 		self["leftText"] = Label()
 		self["rightText"] = Label()

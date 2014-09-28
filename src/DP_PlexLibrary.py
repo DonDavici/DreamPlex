@@ -145,7 +145,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
-		self.g_session = session
+
 		self.g_error = False
 		printl("running on " + str(sys.version_info), self, "I")
 		

@@ -49,7 +49,6 @@ class DP_LibMain(Screen):
 		printl("libraryName: " + str(libraryName), self, "D")
 		
 		Screen.__init__(self, session)
-		self._session = session
 		self._libraryName = libraryName
 		
 		self._views = getViews(libraryName)
@@ -78,7 +77,7 @@ class DP_LibMain(Screen):
 
 		viewParams = self._views[self.currentViewIndex][2]
 		m = __import__(self._views[self.currentViewIndex][1], globals(), locals(), [])
-		self._session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, viewParams)
+		self.session.openWithCallback(self.onViewClosed, m.getViewClass(), self._libraryName, self.loadLibrary, viewParams)
 		
 		printl("", self, "C")
 

@@ -58,7 +58,6 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist = []
 		ConfigListScreen.__init__(self, self.cfglist, session, on_change = self._changed)
 		
-		self._session = session
 		self._hasChanged = False
 
 		self["txt_green"] = Label()

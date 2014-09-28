@@ -81,10 +81,10 @@ def startPlayer(session, data):
 #===============================================================================
 #
 #===============================================================================
-class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
+class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
-		InfoBarSubtitleSupport, Screen, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, DPH_ScreenHelper):
+		InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, DPH_ScreenHelper):
 
 	ENIGMA_SERVICE_ID = None
 	ENIGMA_SERVICETS_ID = 0x1		#1
@@ -130,9 +130,16 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False):
 		printl("", self, "S")
+		Screen.__init__(self, session)
+
+		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
+				InfoBarAudioSelection, InfoBarSimpleEventView, \
+				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
+				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications:
+			printl("x: " + str(x), self, "D")
+			x.__init__(self)
 		printl("currentIndex: " + str(currentIndex), self, "D")
 		
-		self.session = session
 		self.listViewList = listViewList
 		self.currentIndex = currentIndex
 		self.playerData = {}
@@ -148,7 +155,6 @@ class DP_Player(InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
 		self.libraryName = libraryName
-		Screen.__init__(self, session)
 
 		self.plexInstance = Singleton().getPlexInstance()
 

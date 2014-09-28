@@ -55,7 +55,7 @@ class DPS_Server(Screen, DPH_PlexScreen):
 
 		Screen.__init__(self, session)
 		DPH_PlexScreen.__init__(self)
-		self.session = session
+
 		from Components.Sources.List import List
 
 		self.guiElements = getGuiElements()
@@ -302,7 +302,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def __init__(self, session, entry, data = None):
 		printl("", self, "S")
 
-		self.session = session
 		Screen.__init__(self, session)
 
 		self.guiElements = getGuiElements()

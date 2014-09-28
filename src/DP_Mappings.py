@@ -70,7 +70,6 @@ class DPS_Mappings(Screen):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
-		self.session = session
 		self["actions"] = ActionMap(["ColorActions", "SetupActions" ],
 		{
 		#"ok": self.startSelection,

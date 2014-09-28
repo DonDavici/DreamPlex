@@ -69,7 +69,7 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 
 		if serverConfig is not None:
 			# now that we know the server we establish global plexInstance
-			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self._session, self.serverConfig))
+			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.serverConfig))
 
 		# we are "sync" or "render"
 		self._mode = mode
@@ -77,7 +77,6 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 		self.mediaSyncerInfo = g_mediaSyncerInfo.instance
 
-		self._session = session
 		self["output"] = ScrollLabel()
 		self["progress"] = Label()
 
