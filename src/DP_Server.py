@@ -574,15 +574,21 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		if self.current.connectionType.value == "2":
 			xmlResponse = self.plexInstance.getSharedServerForPlexUser()
-			machineIdentifiers += xmlResponse.get("machineIdentifier")
+			machineIdentifier = xmlResponse.get("machineIdentifier")
+			if machineIdentifier is not None:
+				machineIdentifiers += machineIdentifier
 
 			servers = xmlResponse.findall("Server")
 			for server in servers:
-				machineIdentifiers += ", " + server.get("machineIdentifier")
+				machineIdentifier = server.get("machineIdentifier")
+				if machineIdentifier is not None:
+					machineIdentifiers += ", " + machineIdentifier
 
 		else:
 			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + self.plexInstance.g_currentServer)
-			machineIdentifiers += xmlResponse.get("machineIdentifier")
+			machineIdentifier = xmlResponse.get("machineIdentifier")
+			if machineIdentifier is not None:
+				machineIdentifiers += xmlResponse.get("machineIdentifier")
 
 		self.current.machineIdentifier.value = machineIdentifiers
 		printl("machineIdentifier: " + str(self.current.machineIdentifier.value), self, "D")
