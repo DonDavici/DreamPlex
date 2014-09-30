@@ -25,7 +25,7 @@ You should have received a copy of the GNU General Public License
 import threading
 
 from os import remove
-from time import sleep, localtime, time
+from time import sleep, localtime, time, strftime
 
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
@@ -990,9 +990,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				endingTime = localtime(time() + (totalTime - currentTime))
 			except Exception, e:
 				printl("something went wrong with ending time -> " + str(e), self, "D")
-				endingTime = time()
+				endingTime = localtime()
 
-			self["endingTime"].setText(str(endingTime[3]) + ":" + str(endingTime[4]) + ":" + str(endingTime[5]))
+			self["endingTime"].setText(strftime("%H:%M:%S", endingTime))
 
 		if self.multiUserServer:
 			try:
