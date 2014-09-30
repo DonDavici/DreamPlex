@@ -4,6 +4,7 @@
 #===============================================================================
 from Plugins.Plugin import PluginDescriptor
 
+from Components.Network import iNetwork
 from Components.config import config, configfile
 
 from DP_Player import DP_Player
@@ -122,8 +123,17 @@ def sessionStart(reason, **kwargs):
 		global global_session
 		global_session = kwargs["session"]
 
-		if config.plugins.dreamplex.remoteAgent.value:
-			HttpDeamonThread.setSession(global_session)
+#===========================================================================
+#
+#===========================================================================
+def networkStart(reason, **kwargs):
+	if reason is True and config.plugins.dreamplex.remoteAgent.value:
+		try:
+			for adaptername in iNetwork.ifaces:
+				if iNetwork.ifaces[adaptername]['up'] is True:
+					HttpDeamonThread.setSession(global_session)
+		except Exception:
+			pass
 
 #===============================================================================
 # plugins
@@ -135,7 +145,8 @@ def Plugins(**kwargs):
 	myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc = Autostart))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_SESSIONSTART, fnc = sessionStart))
-		
+	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_NETWORKCONFIG_READ, fnc = networkStart))
+
 	if config.plugins.dreamplex.showInMainMenu.value:
 		myList.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
 
