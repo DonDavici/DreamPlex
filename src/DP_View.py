@@ -82,6 +82,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	isFolder                        = False
 	forceUpdate                     = False
 	lastTagType                     = None
+	sessionData                     = False
 
 	backdrop_postfix                = ""
 	poster_postfix                  = ""
@@ -643,6 +644,23 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			forceResume = False
 
 			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, isExtraData=True)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def myCallback(self, stillPlaying):
+		printl("", self, "S")
+
+		if stillPlaying[0]: # Bool
+			self.sessionData = stillPlaying[1] # is list with data
+			currentIndex = int(self.sessionData[3])
+			self["listview"].setIndex(currentIndex)
+			self.refresh()
+
+		else:
+			self.sessionData = False
 
 		printl("", self, "C")
 
@@ -1323,7 +1341,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
-				self.session.open(DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode)
+
+				if self.sessionData and str(self.sessionData[2]) == str(self.listViewList[int(currentIndex)][1]['ratingKey']):
+					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
+				else:
+					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode)
 
 			else:
 				# save index here because user moved around for sure
@@ -1454,7 +1476,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 
-		if getLiveTv() is not None and cause is None:
+		if (getLiveTv() is not None and cause is None) or (self.stillPlaying and cause is None):
 			self.restoreLiveTv()
 
 		if cause is not None:

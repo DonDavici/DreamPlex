@@ -59,7 +59,7 @@ from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, convertSize, encodeThat
+from __common__ import printl2 as printl, convertSize, encodeThat, getLiveTv
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -112,7 +112,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False, sessionData=None):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
@@ -131,7 +131,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl("x: " + str(x), self, "D")
 			x.__init__(self)
 		printl("currentIndex: " + str(currentIndex), self, "D")
-		
+
 		self.listViewList = listViewList
 		self.currentIndex = currentIndex
 		self.playerData = {}
@@ -141,11 +141,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.forceResume = forceResume # we use this to able to resume out of android or ios
 		self.playbackMode = playbackMode
 		self.isExtraData = isExtraData
+		self.sessionData = sessionData
 
 		# we add this for vix images due to their long press button support
 		self.LongButtonPressed = False
-
-		self.currentService = self.session.nav.getCurrentlyPlayingServiceReference()
 
 		self.libraryName = libraryName
 
@@ -166,6 +165,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
+		"searchWhilePlaying": self.searchWhilePlaying,
 		"keyTv": self.leavePlayer,
 		"stop": self.leavePlayer,
 		"seekManual": self.seekManual,
@@ -193,10 +193,35 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			iPlayableService.evEOF: self.__evEOF,
 		})
 
-		# from here we go on
-		self.onFirstExecBegin.append(self.playMedia)
+		if not sessionData:
+			# from here we go on
+			self.onFirstExecBegin.append(self.playMedia)
+		else:
+			service1 = self.session.nav.getCurrentService()
+			self.seek = service1 and service1.seek()
+			self.setSeekState(self.SEEK_STATE_PLAY)
 
-		#self.onLayoutFinish.append()
+			self.onLayoutFinish.append(self.resumePlayerData)
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def resumePlayerData(self):
+		printl("", self, "S")
+
+		self.playerData = self.sessionData[0]
+
+		self.ptr = self.sessionData[1]
+
+		self.renderPoster()
+
+		self.setPlayerData()
+
+		self.startTimelineWatcher()
+		self.timelineWatcher.start(5000,False)
+
+		printl("", self, "C")
+
 
 	#==============================================================================
 	# is called automatically
@@ -385,22 +410,29 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
 
-		ptr = self.EXpicloadPoster.getData()
+		self.ptr = self.EXpicloadPoster.getData()
+
+		self.renderPoster()
+
+		printl("", self, "C")
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def renderPoster(self):
+		printl("", self, "S")
 
 		try:
-			self["poster"].instance.setPixmap(ptr)
+			self["poster"].instance.setPixmap(self.ptr)
 		except:
 			pass
 
 		printl("", self, "C")
-
 	#===========================================================================
 	#
 	#===========================================================================
 	def setServiceReferenceData(self):
 		printl("", self, "S")
-
-		self["mediaTitle"].setText(self.title)
 
 		self.setEnigmaServiceId()
 
@@ -490,6 +522,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def play(self, resume = False):
 		printl("", self, "S")
 
+		self.session.nav.stopService()
+
 		# populate self.sref with new data
 		self.setServiceReferenceData()
 
@@ -503,12 +537,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
 			self.seekwatcherThread.start()
 
-		self.timelineWatcher = eTimer()
-		self.timelineWatcher.callback.append(self.updateTimeline)
-
-		if self.multiUserServer:
-			printl("we are a multiuser server", self, "D")
-			self.multiUser = True
+		self.startTimelineWatcher()
 
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
@@ -517,6 +546,21 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.timelineWatcher.start(5000,False)
 		else:
 			self["bufferslider"].setValue(1)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startTimelineWatcher(self):
+		printl("", self, "S")
+
+		self.timelineWatcher = eTimer()
+		self.timelineWatcher.callback.append(self.updateTimeline)
+
+		if self.multiUserServer:
+			printl("we are a multiuser server", self, "D")
+			self.multiUser = True
 
 		printl("", self, "C")
 
@@ -564,7 +608,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.localAuth = self.playbackData['localAuth']
 
 		self.title = encodeThat(self.videoData['title'])
-		self["shortDescription"].setText(encodeThat(self.videoData['summary']))
+		self["mediaTitle"].setText(self.title)
+
+		self.shortDescription = encodeThat(self.videoData['summary'])
+		self["shortDescription"].setText(self.shortDescription)
 
 		printl("", self, "C")
 
@@ -811,16 +858,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		#printl("", self, "C")
 		
-	#===========================================================================
-	# 
-	#===========================================================================
-	def setSeekState(self, state, unknow=False):
-		printl("", self, "S")
-		
-		super(DP_Player, self).setSeekState(state)
 
-		printl("", self, "C")
-	
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -829,6 +867,16 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		
 		self.leavePlayerConfirmed(True)
 		
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def searchWhilePlaying(self):
+		printl("", self, "S")
+
+		self.close((True, (self.playerData,self.ptr, self.id, self.currentIndex)))
+
 		printl("", self, "C")
 
 	#===========================================================================
@@ -849,8 +897,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if config.plugins.dreamplex.lcd4linux.value:
 			remove(self.tempPoster)
 
-		self.session.nav.playService(self.currentService)
-		self.close()
+		self.session.nav.playService(getLiveTv())
+		self.close((False, ))
 		
 		printl("", self, "C")
 
@@ -1003,6 +1051,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 
 				seekState = self.seekstate
+				print seekState
+				sleep(2)
 				if seekState == self.SEEK_STATE_PAUSE:
 					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
 					urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
