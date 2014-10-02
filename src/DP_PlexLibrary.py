@@ -275,7 +275,6 @@ class PlexLibrary(Screen):
 
 		# sections tree
 		tree = self.getAllSectionsXmlTree()
-		print tree
 
 		if not tree:
 			return [], {}
