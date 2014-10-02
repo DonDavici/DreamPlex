@@ -59,7 +59,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv, convertSize
+from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv, convertSize, encodeThat
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -562,7 +562,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onKeyVideo(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.loadExtraData.value:
+		if self.serverConfig.loadExtraData.value == "1":
 			#self.onEnter(loadExtraData=True)
 			selection = self["listview"].getCurrent()
 			media_id = selection[1]['ratingKey']
@@ -571,6 +571,13 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			count, options, server = Singleton().getPlexInstance().getMediaOptionsToPlay(media_id, server, False, myType=selection[1]['tagType'], loadExtraData=True)
 
 			self.selectMedia(count, options, server)
+		elif self.serverConfig.loadExtraData.value == "2":
+			try:
+				from Plugins.Extensions.YTTrailer.plugin import YTTrailer
+				ytTrailer = YTTrailer(self.session)
+				ytTrailer.showTrailer(encodeThat(self.details.get("title", " ")))
+			except Exception:
+				printl("YTTrailer not found", self, "D")
 
 		printl("", self, "C")
 

@@ -387,6 +387,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("Toggle state to on/off to show this server in lost or not.")))
 		self.cfglist.append(getConfigListEntry(_(" > Autostart"), self.current.autostart, _("Enter this server automatically on startup.")))
 		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Trailer"), self.current.loadExtraData, _(" ")))
 
 		##
 		self.cfglist.append(getConfigListEntry(_("Connection Settings") + separator, config.plugins.dreamplex.about, _(" ")))
