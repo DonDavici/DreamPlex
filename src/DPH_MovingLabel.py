@@ -118,7 +118,7 @@ class DPH_HorizontalMenu(object):
 					self[self.translatePositionToName(-i)].setText(content[secondResult][0])
 		except Exception:
 			self[self.translatePositionToName(0)].setText(_("no Data"))
-
+			count = 1
 		self[self.translatePositionToName(0)].setForegroundColorNum(0)
 
 		self.hideUnusedElementsFromMenu(count)

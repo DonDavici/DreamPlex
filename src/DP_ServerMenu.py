@@ -187,7 +187,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		printl("selection = " + str(selection), self, "D")
 
-		if selection is not None:
+		if selection is not None and selection:
 
 			self.selectedEntry = selection[1]
 			printl("selected entry " + str(self.selectedEntry), self, "D")
@@ -234,7 +234,11 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 					self.executeSelectedEntry(entryData)
 
 			self.refreshMenu()
-			printl("", self, "C")
+		else:
+			printl("no data, leaving ...", self, "D")
+			self.cancel()
+
+		printl("", self, "C")
 
 	#===========================================================================
 	#
