@@ -448,7 +448,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		# check if we are at the end of the list we start all over
 		if self.currentIndex > len(self.listViewList):
-			self.currentIndex = 0
+			self.currentIndex = min(self.listViewList)
 
 		# stop current playback if exists
 		self.session.nav.stopService()
