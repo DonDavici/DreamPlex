@@ -860,9 +860,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			if not self.nextPlaylistEntryAvailable():
 				self.leavePlayerConfirmed("EOF")
 			else:
-				# first we write back the state of the current file to the plex server
-				self.handleProgress()
-
 				#start next file
 				self.playNextEntry()
 		else:
