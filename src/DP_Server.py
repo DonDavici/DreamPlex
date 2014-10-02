@@ -396,13 +396,13 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		if self.current.connectionType.value == "0" or self.current.connectionType.value == "1": # IP or DNS
 			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _("For currentlyRunning feature just activate.\nFor section management you have to connect your server successfully to myPlex once.\nAfter that just disable your Portforwarding policy.")))
-			self.addIpSettings()
+			if self.current.connectionType.value == "0":
+				self.addIpSettings()
+			else:
+				self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
 			if self.current.localAuth.value:
 				self.addMyPlexSettings()
-
-		elif self.current.connectionType.value == "1": # DNS
-			self.cfglist.append(getConfigListEntry(_(" >> DNS"), self.current.dns, _(" ")))
-			self.cfglist.append(getConfigListEntry(_(" >> Port"), self.current.port, _(" ")))
 
 		elif self.current.connectionType.value == "2": # MYPLEX
 			self.addMyPlexSettings()
