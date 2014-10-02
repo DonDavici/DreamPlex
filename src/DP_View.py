@@ -406,11 +406,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self.backdropWidth = self.viewParams["settings"]["backdropWidth"]
 			self.backdrop_postfix = "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + "_v2.jpg"
 
+		saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
+
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
 			# if liveTv is not stopped on startup we have to do so now
 			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
-				saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 				self.session.nav.stopService()
 
 			try:
@@ -661,6 +662,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		else:
 			self.sessionData = False
+			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+				self.restoreLiveTv()
 
 		printl("", self, "C")
 
