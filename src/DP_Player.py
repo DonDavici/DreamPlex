@@ -112,7 +112,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
@@ -140,6 +140,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.resumeMode = resumeMode
 		self.forceResume = forceResume # we use this to able to resume out of android or ios
 		self.playbackMode = playbackMode
+		self.isExtraData = isExtraData
 
 		# we add this for vix images due to their long press button support
 		self.LongButtonPressed = False
@@ -301,6 +302,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 
 		Singleton().getPlexInstance().setPlaybackType(str(self.playbackMode))
+
+		if self.isExtraData:
+			Singleton().getPlexInstance().setPlaybackType(str(1))
 
 		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, mediaFileUrl)
 

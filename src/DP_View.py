@@ -571,6 +571,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			count, options, server = Singleton().getPlexInstance().getMediaOptionsToPlay(media_id, server, False, myType=selection[1]['tagType'], loadExtraData=True)
 
 			self.selectMedia(count, options, server)
+
 		elif self.serverConfig.loadExtraData.value == "2":
 			try:
 				from Plugins.Extensions.YTTrailer.plugin import YTTrailer
@@ -641,7 +642,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			libraryName = "Mixed"
 			forceResume = False
 
-			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, isExtraData=True)
 
 		printl("", self, "C")
 
