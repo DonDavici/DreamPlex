@@ -275,6 +275,7 @@ class PlexLibrary(Screen):
 
 		# sections tree
 		tree = self.getAllSectionsXmlTree()
+		print tree
 
 		if not tree:
 			return [], {}
@@ -313,7 +314,7 @@ class PlexLibrary(Screen):
 				if not self.g_useFilterSections and entryData.get('type') != 'artist':
 					entryData["path"] += '/all'
 
-				entryData["serverName"] = self.serverConfig_Name.encode()
+				#entryData["serverName"] = self.serverConfig_Name.encode()
 				entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
 
 				# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
@@ -321,10 +322,12 @@ class PlexLibrary(Screen):
 				if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
 					if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
 						if "sourceTitle" in entryData:
-							detail = " ( " + entryData['sourceTitle'] + ")"
+							detail = " \n( " + entryData['sourceTitle'] + ")"
+						else:
+							detail = " \n(" + str(entryData['serverName']) + ")"
 					elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
 						if "serverName" in entryData:
-							detail = " (" + str(entryData['serverName']) + ")"
+							detail = " \n(" + str(entryData['serverName']) + ")"
 
 				entryName = _(entryData.get('title').encode('utf-8')) + detail
 
