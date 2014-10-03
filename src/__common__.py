@@ -61,6 +61,8 @@ skinAuthors = ""
 skinResolution = "HD"
 skinCompatibility = "v2"
 skinDebugMode = False
+skinHighlightedColor = "#e69405"
+skinNormalColor = "#ffffff"
 gBoxType = None
 screens = []
 liveTv = None
@@ -159,6 +161,18 @@ def getVersion():
 #===============================================================================
 def getSkinAuthors():
 	return skinAuthors
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinHighlightedColor():
+	return skinHighlightedColor
+
+#===============================================================================
+#
+#===============================================================================
+def getSkinNormalColor():
+	return skinNormalColor
 
 #===============================================================================
 #
@@ -349,6 +363,8 @@ def loadSkinParams():
 	global skinCompatibility
 	global skinResolution
 	global skinDebugMode
+	global skinHighlightedColor
+	global skinNormalColor
 
 	tree = Singleton().getSkinParamsInstance()
 
@@ -357,6 +373,8 @@ def loadSkinParams():
 		skinAuthors = str(skinParams.get('skinner'))
 		skinResolution = str(skinParams.get('resolution'))
 		skinDebugMode = str(skinParams.get('debugMode'))
+		skinHighlightedColor = str(skinParams.get('highlighted'))
+		skinNormalColor = str(skinParams.get('normal'))
 
 	printl2("", "__common__::loadSkinParams", "C")
 

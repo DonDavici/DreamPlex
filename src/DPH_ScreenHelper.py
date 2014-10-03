@@ -37,7 +37,7 @@ from skin import parseColor
 from DPH_Singleton import Singleton
 from DP_ViewFactory import translateValues
 
-from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv, getSkinResolution
+from __common__ import printl2 as printl, addNewScreen, closePlugin, getLiveTv, getSkinResolution, getSkinHighlightedColor, getSkinNormalColor
 
 #===============================================================================
 #
@@ -227,8 +227,8 @@ class DPH_MultiColorFunctions(object):
 		printl("", self, "S")
 		self.levels = levels
 
-		highlighted = parseColor("#e69405")
-		normal = parseColor("#ffffff")
+		highlighted = parseColor(getSkinHighlightedColor())
+		normal = parseColor(getSkinNormalColor())
 
 		for i in range(1,int(levels)+1):
 			self["L"+str(i)] = MultiColorLabel()
