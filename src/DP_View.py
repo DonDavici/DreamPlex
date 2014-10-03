@@ -1479,7 +1479,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 
-		if (getLiveTv() is not None and cause is None) or (self.stillPlaying and cause is None):
+		if (getLiveTv() is not None and cause is None):
 			self.restoreLiveTv()
 
 		if cause is not None:
