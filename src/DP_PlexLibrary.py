@@ -1490,7 +1490,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getStreamDataById(self, server, myId, loadExtraData):
+	def getStreamDataById(self, server, myId, loadExtraData=False):
 		printl("", self, "S")
 
 		printl("Gather media stream info", self, "I" )
