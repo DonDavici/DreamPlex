@@ -1880,7 +1880,7 @@ class PlexLibrary(Screen):
 			contents = "type"
 
 			if loadExtraData:
-				extraContent = tree.find('Video/Extras') # extra content
+				extraContent = tree.find(myType+'/Extras') # extra content
 				for video in extraContent.findall("Video"):
 					for media in video.findall("Media"):
 						for part in media.findall("Part"):
@@ -1890,7 +1890,7 @@ class PlexLibrary(Screen):
 								partsCount += 1
 							except: pass
 			else:
-				mainContent = tree.find('Video/Media') # main content
+				mainContent = tree.find(myType+'/Media') # main content
 				#Get the Parts info for media type and source selection
 				for part in mainContent.findall("Part"):
 					printl("part.attrib: " + str(part.attrib), self, "D")
