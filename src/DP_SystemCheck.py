@@ -136,7 +136,7 @@ class DPS_SystemCheck(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def checkForUpdate(self):
+	def checkForUpdate(self, silent=False):
 		printl("", self, "S")
 
 		if testInetConnectivity() and self.checkOpensslInstallation(True):
@@ -168,10 +168,12 @@ class DPS_SystemCheck(Screen):
 				self.session.openWithCallback(self.startUpdate, MessageBox,_("Your current Version is " + str(installedVersion) + "\nUpdate to revision " + str(latestVersion) + " found!\n\nDo you want to update now?"), MessageBox.TYPE_YESNO)
 
 			else:
-				self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
+				if not silent:
+					self.session.openWithCallback(self.close, MessageBox,_("No update available"), MessageBox.TYPE_INFO)
 
 		else:
-			self.session.openWithCallback(self.close, MessageBox,_("No internet connection available or openssl is not installed!"), MessageBox.TYPE_INFO)
+			if not silent:
+				self.session.openWithCallback(self.close, MessageBox,_("No internet connection available or openssl is not installed!"), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
