@@ -793,7 +793,7 @@ class BackgroundMediaSyncer(Thread):
 								printl("File does not exist after rendering!", self, "D")
 								printl("Error: " + str(response[1]), self, "D")
 
-								self.messages.push((THREAD_WORKING, _("Error: ") + str(response[1]) ))
+								self.messages.push((THREAD_WORKING, _("Error: ") + str(response[1]) + "Location: " + imageLocation ))
 								self.messagePump.send(0)
 
 								sleep(1)
