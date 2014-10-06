@@ -479,12 +479,20 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		# first we write back the state of the current file to the plex server
 		self.handleProgress()
 
+		printl("currentIndex: " + self.currentIndex, self, "D")
 		# increase position
 		self.currentIndex += 1
+
+		printl("nextIndex: " + self.currentIndex, self, "D")
+		printl("length of self.listViewList: " + len(self.listViewList), self, "D")
+		printl("min of self.listViewList: " + min(self.listViewList), self, "D")
+		printl("max of self.listViewList: " + max(self.listViewList), self, "D")
 
 		# check if we are at the end of the list we start all over
 		if self.currentIndex > len(self.listViewList):
 			self.currentIndex = min(self.listViewList)
+
+		printl("finalIndex: " + self.currentIndex, self, "D")
 
 		# stop current playback if exists
 		self.session.nav.stopService()
