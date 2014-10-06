@@ -1536,7 +1536,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("", self, "S")
 		#printl("listViewList: " + str(listViewList), self, "S")
 		newList = []
-		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/all/picreset.png')
+		undefinedIcon = loadPicture('/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/picreset.png')
 
 		for listViewEntry in listViewList:
 			viewState = str(listViewEntry[3])
