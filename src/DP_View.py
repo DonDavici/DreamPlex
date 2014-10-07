@@ -748,7 +748,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.setColorFunction(color="red", level="1", functionList=("", self.togglePlayMode))
 		self.setColorFunction(color="green", level="1", functionList=("", self.toggleResumeMode))
 		self.setColorFunction(color="yellow", level="1", functionList=("", self.executeLibraryFunction)) # name is empty because we set it dynamical
-		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode 'default'"), self.togglePlaybackMode))
+		self.setColorFunction(color="blue", level="1", functionList=(_("playback mode '" + self.playbackModes[self.configuredPlaybackMode][1] + "'"), self.togglePlaybackMode))
 
 		self.setColorFunction(color="red", level="2", functionList=(_("View '") + str(self.currentViewName) + " '", self.onToggleView))
 		self.setColorFunction(color="green", level="2", functionList=("", self.toggleFastScroll)) # name is empty because we set it dynamical
@@ -922,10 +922,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if self.nextPlaybackMode >= self.lengthOfPlaybackModes:
 			self.nextPlaybackMode = 0
 
-		if self.configuredPlaybackMode == self.nextPlaybackMode:
-			myName = "default"
-		else:
-			myName = self.playbackModes[self.nextPlaybackMode][1]
+		myName = self.playbackModes[self.nextPlaybackMode][1]
 
 		self.playbackMode = self.nextPlaybackMode
 
@@ -2395,6 +2392,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		printl("guiElements_key_red" +self.guiElements["key_red"], self, "D")
 
+		# we use this for override playback mode if wanted
+		self.initPlaybackMode()
+
 		self.initColorFunctions()
 
 		self.setLevelActive(currentLevel=1)
@@ -2404,9 +2404,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		# we do like we pressed the button to init the right names
 		self.onKey1(initial=True)
-
-		# we use this for override playback mode if wanted
-		self.initPlaybackMode()
 
 		# first we set the pics for buttons
 		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
