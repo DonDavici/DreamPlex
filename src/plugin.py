@@ -79,10 +79,13 @@ def startRemoteDeamon():
 	# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 	HttpDeamonThread = HttpDeamon()
 	HttpDeamonThread.PlayerDataPump.recv_msg.get().append(gotThreadMsg)
-	HttpDeamonThread.startDeamon()
+	runningWithoutErrors = HttpDeamonThread.startDeamon()
 
-	# we need this to avoid gs if users sets remoteplayer on and restarts. in this case there is false and we do not try to stop
-	HttpDeamonStarted = True
+	if not runningWithoutErrors:
+		HttpDeamonStarted = False
+	else:
+		# we need this to avoid gs if users sets remoteplayer on and restarts. in this case there is false and we do not try to stop
+		HttpDeamonStarted = True
 
 #===========================================================================
 #
@@ -136,7 +139,7 @@ def sessionStart(reason, **kwargs):
 #
 #===========================================================================
 def networkStart(reason, **kwargs):
-	if reason is True and config.plugins.dreamplex.remoteAgent.value:
+	if reason is True and config.plugins.dreamplex.remoteAgent.value and HttpDeamonStarted:
 		try:
 			for adaptername in iNetwork.ifaces:
 				if iNetwork.ifaces[adaptername]['up'] is True:

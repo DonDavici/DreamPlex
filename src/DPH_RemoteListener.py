@@ -93,10 +93,16 @@ class HttpDeamon(Thread):
 		self.protocol = "HTTP/1.0"
 		self.myIp = getMyIp()
 
-		# this starts updatemechanism to show up as player in devices like ios
-		self.client = PlexGdm()
-		self.client.setClientDetails()
-		self.client.start_registration()
+		if not self.myIp:
+			return False
+
+		try:
+			# this starts updatemechanism to show up as player in devices like ios
+			self.client = PlexGdm()
+			self.client.setClientDetails()
+			self.client.start_registration()
+		except:
+			return False
 
 		if self.client.check_client_registration():
 			self.registered = True
@@ -106,6 +112,7 @@ class HttpDeamon(Thread):
 			printl("Unsuccessfully registered", self, "D")
 
 		printl("", self, "C")
+		return True
 
 	#===========================================================================
 	#

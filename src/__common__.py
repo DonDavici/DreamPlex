@@ -1012,9 +1012,13 @@ def getMyIp():
 	#printl2("", "__common__::getMyIp", "S")
 	import socket
 
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.connect(('google.com', 0))
-	myIp = s.getsockname()[0]
+	try:
+		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		s.connect(('google.com', 0))
+		myIp = s.getsockname()[0]
 
-	#printl2("", "__common__::getMyIp", "S")
-	return str(myIp)
+		#printl2("", "__common__::getMyIp", "S")
+		return str(myIp)
+	except Exception:
+		#printl2("", "__common__::getMyIp", "S")
+		return False
