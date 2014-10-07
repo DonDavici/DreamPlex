@@ -10,7 +10,7 @@ from Components.config import config, configfile
 from DP_Player import DP_Player
 
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
-from __common__ import getUUID
+from __common__ import getUUID, saveLiveTv, getLiveTv
 
 #===============================================================================
 # GLOBALS
@@ -111,8 +111,17 @@ def gotThreadMsg(msg):
 	# load skin data here as well
 	startEnvironment()
 
+	# save liveTvData
+	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
+
 	# now we start the player
-	global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+	global_session.openWithCallback(restoreLiveTv, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+
+#===========================================================================
+#
+#===========================================================================
+def restoreLiveTv(retval):
+	global_session.nav.playService(getLiveTv())
 
 #===========================================================================
 #

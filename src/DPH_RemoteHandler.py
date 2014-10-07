@@ -35,7 +35,7 @@ from Components.config import config
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getUUID, getVersion, getMyIp
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, saveLiveTv
 
 #===============================================================================
 #
