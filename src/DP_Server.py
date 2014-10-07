@@ -395,7 +395,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
 
 		if self.current.connectionType.value == "0" or self.current.connectionType.value == "1": # IP or DNS
-			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _("For currentlyRunning feature just activate.\nFor section management you have to connect your server successfully to myPlex once.\nAfter that just disable your Portforwarding policy.")))
+			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _(" ")))
 			if self.current.connectionType.value == "0":
 				self.addIpSettings()
 			else:
