@@ -134,8 +134,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.listViewList = listViewList
 		self.currentIndex = currentIndex
+		self.listCount = len(self.listViewList) - 1# list starts counting with 0
 		self.playerData = {}
-		self.listCount = len(self.listViewList)
 		self.autoPlayMode = autoPlayMode
 		self.resumeMode = resumeMode
 		self.forceResume = forceResume # we use this to able to resume out of android or ios
@@ -479,20 +479,18 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		# first we write back the state of the current file to the plex server
 		self.handleProgress()
 
-		printl("currentIndex: " + self.currentIndex, self, "D")
+		printl("currentIndex: " + str(self.currentIndex), self, "D")
 		# increase position
 		self.currentIndex += 1
 
-		printl("nextIndex: " + self.currentIndex, self, "D")
-		printl("length of self.listViewList: " + len(self.listViewList), self, "D")
-		printl("min of self.listViewList: " + min(self.listViewList), self, "D")
-		printl("max of self.listViewList: " + max(self.listViewList), self, "D")
+		printl("nextIndex: " + str(self.currentIndex), self, "D")
+		printl("self.listCount: " + str(self.listCount), self, "D")
 
 		# check if we are at the end of the list we start all over
-		if self.currentIndex > len(self.listViewList):
-			self.currentIndex = min(self.listViewList)
+		if self.currentIndex > self.listCount:
+			self.currentIndex = 0
 
-		printl("finalIndex: " + self.currentIndex, self, "D")
+		printl("finalIndex: " + str(self.currentIndex), self, "D")
 
 		# stop current playback if exists
 		self.session.nav.stopService()
@@ -514,7 +512,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		# check if we are at the begining of the list we start at the end
 		if self.currentIndex < 0:
-			self.currentIndex = max(self.listViewList)
+			self.currentIndex = self.listCount
 
 		# stop current playback if exists
 		self.session.nav.stopService()
@@ -905,7 +903,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if config.plugins.dreamplex.lcd4linux.value:
 			remove(self.tempPoster)
 
-		self.session.nav.playService(getLiveTv())
+		# self.session.nav.playService(getLiveTv())
 		self.close((False, ))
 		
 		printl("", self, "C")
