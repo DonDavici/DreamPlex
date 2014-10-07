@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-10 10:55+0100\n"
-"PO-Revision-Date: 2014-08-10 10:55+0100\n"
+"POT-Creation-Date: 2014-10-07 22:19+0100\n"
+"PO-Revision-Date: 2014-10-07 22:19+0100\n"
 "Last-Translator: DonDavici <dondavici@gmail.com>\n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: \n"
@@ -14,33 +14,37 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: /hdd/workspaces/DreamPlex/src\n"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:72
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:71
 msgid "Check for gst-plugin-fragmented"
 msgstr "Auf gst-plugin-fragemented prüfen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:75
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:74
 msgid "Check for gst-plugins-bad-fragmented"
 msgstr "Auf gst-plugin-fragemented prüfen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:79
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:78
 msgid "Check for gst-plugin-fragmented if you are using OE16."
 msgstr "Auf gst-plugin-fragemented prüfen bei O16."
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:80
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:79
 msgid "Check for gst-plugins-bad-fragmented if you are using OE20."
 msgstr "Auf gst-plugin-fragemented prüfen bei O20."
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:82
-msgid "Check curl installation data."
-msgstr "curl Installationsdaten überprüfen?"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:81
+msgid "Check openSSL installation data."
+msgstr "openSSL Installationsdaten überprüfen?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:83
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:82
 msgid "Check mjpegtools intallation data."
 msgstr "Mjpegtools Installation überprüfen?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:84
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:83
 msgid "Check python imaging installation data."
 msgstr "Python imaging Installation überprüfen?"
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:84
+msgid "Check python textutils installation data."
+msgstr "Python textutils Installation überprüfen?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:87
 msgid "Check for update."
@@ -54,19 +58,19 @@ msgstr "Systemcheck"
 msgid "Functions List:"
 msgstr "Medien Funktionen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:163
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:168
 msgid "Your current Version is "
 msgstr "Ihre aktuelle Version lautet"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:166
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:172
 msgid "No update available"
 msgstr "Kein Update verfügbar"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:169
-msgid "No internet connection available or curl is not installed!"
-msgstr "Es ist keine Internetverbindung verfügbar oder curl ist nicht installiert!"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:176
+msgid "No internet connection available or openssl is not installed!"
+msgstr "Es ist keine Internetverbindung verfügbar oder openSSL ist nicht installiert!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:262
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:264
 msgid ""
 "Enigma2 must be restarted!\n"
 "Should Enigma2 now restart?"
@@ -74,15 +78,16 @@ msgstr ""
 "Enigma2 muss neu gestaret werden!\n"
 "Soll der Neustart durchgeführt werden?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:278
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:366
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:280
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:382
 msgid "Information:\n"
 msgstr "Information:\n"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:372
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:375
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:378
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:381
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:388
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:391
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:394
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:397
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:400
 msgid ""
 "The selected plugin is not installed!\n"
 " Do you want to proceed to install?"
@@ -90,32 +95,32 @@ msgstr ""
 "Das ausgewählte Plugin ist nicht installiert!\n"
 "Soll die Installation nun durchgeführt werden?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:421
-#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:532
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:440
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:579
 msgid "Could not install "
 msgstr "Installation konnte nicht durchgeführt werden"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:173
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
 msgid "IP"
 msgstr "IP"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:173
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
 msgid "DNS"
 msgstr "DNS"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:173
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
 msgid "MYPLEX"
 msgstr "MYPLEX"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:177
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
 msgid "Streamed"
 msgstr "Streamed"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:177
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
 msgid "Transcoded"
 msgstr "Transcoded"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:177
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
 msgid "Direct Local"
 msgstr "Direct Local"
 
@@ -211,45 +216,75 @@ msgstr "1920x1080, 12mbps"
 msgid "1920x1080, 20mbps"
 msgstr "1920x1080, 20mbps"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:295
+#: /hdd/workspaces/DreamPlex/src/__init__.py:301
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:248
 msgid "Movies"
 msgstr "Filme"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:298
+#: /hdd/workspaces/DreamPlex/src/__init__.py:304
 msgid "TV Shows"
 msgstr "Serien"
 
-#: /hdd/workspaces/DreamPlex/src/__init__.py:301
+#: /hdd/workspaces/DreamPlex/src/__init__.py:307
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:250
 #: /hdd/workspaces/DreamPlex/src/DP_ViewMusic.py:56
 msgid "Music"
 msgstr "Musik"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:310
+msgid "Mixed"
+msgstr "Mixed"
 
 #: /hdd/workspaces/DreamPlex/src/DP_HelperScreens.py:51
 msgid "Search ..."
 msgstr "Suche..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:355
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:432
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:249
+msgid "Tv Shows"
+msgstr "Serien"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:255
+msgid "Pictures"
+msgstr "Bilder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:256
+msgid "Channels"
+msgstr "Kanäle"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:381
+msgid "onDeck"
+msgstr "onDeck"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:388
+msgid "New"
+msgstr "Neu"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:395
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:472
 msgid "No data in this section!"
 msgstr "Keine Daten in dieser Sektion!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:922
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:771
+msgid "Season"
+msgstr "Staffel"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1011
 msgid "Press exit to return"
 msgstr "Exit drücken für Zurück"
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:923
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1012
 msgid "If you are using myPlex"
 msgstr "Wenn myPlex verwendet wird"
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:924
-msgid "please check if curl is installed."
-msgstr "überprüfen Sie Ihre curl-Installation."
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1013
+msgid "please check if python-pyopenssl is installed."
+msgstr "überprüfen Sie Ihre openSSL-Installation."
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:925
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1014
 msgid "You can use Systemcheck in the menu."
 msgstr "Verwenden Sie dazu den Systemcheck im Hauptmenü."
 
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1014
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1103
 #, python-format
 msgid ""
 "MyPlex Token error:\n"
@@ -259,11 +294,6 @@ msgstr ""
 "myPlex Token Fehler:\n"
 "Überprüfen Sie Benutzernamen und Kennwort.\n"
 "%s"
-
-#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:2095
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:338
-msgid "UNEXPECTED ERROR:"
-msgstr "UNERWARTETER FEHLER:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:90
 msgid "Cancel"
@@ -285,40 +315,44 @@ msgstr "Pfadselector"
 msgid "Invalid Location"
 msgstr "ungültiger Ort"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:104
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:113
 msgid "Delete Entry"
 msgstr "Eintrag löschen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:107
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:116
 msgid "Add Entry"
 msgstr "Eintrag hinzufügen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:152
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:119
+msgid "Something went wrong while opening mappings xml!"
+msgstr "Beim Laden der mappings xml Datei ist ein Fehler aufgetreten!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:165
 msgid "Enter your remote path segment here:"
 msgstr "Tragen Sie den Remotepfad Teil hier ein:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:154
-#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:169
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:167
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:182
 msgid "Adding new mapping was not completed"
 msgstr "Hinzüfügen des neuen Mappings ist fehlgeschlagen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:87
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:88
 msgid "Start Sync"
 msgstr "Sync starten"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:89
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:90
 msgid "Start Rendering"
 msgstr "Rendering starten"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:93
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:94
 msgid "Background"
 msgstr "Hintergrund"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:97
-msgid "Abort Sync"
-msgstr "Sync abbrechen"
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:98
+msgid "Abort"
+msgstr "Abbrechen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:137
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:143
 #, python-format
 msgid ""
 "\n"
@@ -327,7 +361,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:158
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:164
 msgid ""
 "Please note to run at least once the sync media function within the server menu.\n"
 "This will download the needed files in the right size of 1280x720."
@@ -335,7 +369,7 @@ msgstr ""
 "Bitte beachten Sie, dass Sie zumindest einmal ihre Medien vom Server syncen.\n"
 "Dadurch werden erst die nötigen Bilder mit der Auflösung von 1280x720 heruntergeladen."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:161
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:167
 msgid ""
 "This will download all medias from the selected server.\n"
 "\n"
@@ -345,11 +379,11 @@ msgstr ""
 "\n"
 "Zusätzlich dazu werden die Bilder in einer Qualität von 1280x720 für hochauflösende Backdrops heruntergeladen."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:163
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:169
 msgid "Reconnecting to background task ...\n"
 msgstr "Verbindung zum Backdrop Task wird aufgebaut ...\n"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:298
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:314
 msgid ""
 "\n"
 "\n"
@@ -359,11 +393,17 @@ msgstr ""
 "\n"
 "Beendet"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:314
-msgid "Cancelled!"
-msgstr "Abgebrochen"
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:330
+msgid ""
+"\n"
+"\n"
+"Cancelled!"
+msgstr ""
+"\n"
+"\n"
+"Abgebrochen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:327
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:343
 msgid ""
 "Sync or Renderer is still running!\n"
 "Continue in background?"
@@ -371,15 +411,25 @@ msgstr ""
 "Sync oder Renderer läuft noch!\n"
 "Im Hintergrund fortsetzen?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:464
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:534
 msgid "DreamPlex: Rendering finished!\n"
 msgstr "DreamPlex: Rendering abgeschlossen!\n"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:466
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:536
 msgid "DreamPlex: Mediasync finished!\n"
 msgstr "DreamPlex: Mediasync abgeschlossen!\n"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:590
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:707
+msgid ""
+"\n"
+"\n"
+"Starting to search for picture files with 1920x1080 in its name ..."
+msgstr ""
+"\n"
+"\n"
+"Starte die Suche nach Bilder mit 1280x720 im Namen ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:709
 msgid ""
 "\n"
 "\n"
@@ -389,7 +439,7 @@ msgstr ""
 "\n"
 "Starte die Suche nach Bilder mit 1280x720 im Namen ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:599
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:725
 msgid ""
 "\n"
 "\n"
@@ -399,15 +449,19 @@ msgstr ""
 "\n"
 "Files gefunden:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:626
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:752
 msgid "backdrop video exists under the location "
 msgstr "Backdrop Video existiert bereits"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:631
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:757
 msgid "trying to render backdrop now ...: "
 msgstr "versuche das Backdropvideo zu rendern ...:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:663
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:796
+msgid "Error: "
+msgstr "Fehler:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:807
 #, python-format
 msgid ""
 "Error!\n"
@@ -416,7 +470,7 @@ msgstr ""
 "Fehler!\n"
 "Fehlermeldung:%s"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:666
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:810
 msgid ""
 "\n"
 "\n"
@@ -426,8 +480,8 @@ msgstr ""
 "\n"
 "Keine Files gefunden. Nichts zu tun!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:673
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:823
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:817
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:939
 msgid ""
 "Process aborted.\n"
 "Press Exit to close."
@@ -435,7 +489,7 @@ msgstr ""
 "Prozess abgebrochen.\n"
 "Drücken Sie exit zum Verlassen."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:675
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:819
 msgid ""
 "\n"
 "\n"
@@ -445,19 +499,31 @@ msgstr ""
 "\n"
 "Fertig!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:724
-msgid "starting ..."
-msgstr "starte ..."
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:897
+msgid ""
+"\n"
+"\n"
+"starting ..."
+msgstr ""
+"\n"
+"\n"
+"starte ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:739
-msgid "Reading section of the server ..."
-msgstr "lese section vom server ..."
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:920
+msgid ""
+"\n"
+"\n"
+"Fetching complete library data. This could take a while ..."
+msgstr ""
+"\n"
+"\n"
+"Lade die gesamte Bibliothek. Dies kann einige Zeit in Anspruch nehmen ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:825
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:941
 msgid "We did it :-)"
 msgstr "Geschafft :-)"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:828
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:944
 #, python-format
 msgid ""
 "Error!\n"
@@ -468,77 +534,78 @@ msgstr ""
 "Fehlermeldung:%s\n"
 "Drücke Exit um zu schließen."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:844
-msgid "checking for medias with ratingKey: "
-msgstr "prüfe auf Medias mit dem ratingKey:"
-
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:847
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1059
 msgid "title: "
 msgstr "Titel:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:870
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1078
 msgid "found backdrop - size("
 msgstr "Hintegrundbild gefunden - Größe("
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:876
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1084
 msgid "backdrop not found, trying to download ..."
 msgstr "Hintergrundbild nicht gefunden, versuche es herunterzuladen ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:896
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1104
 msgid "found poster - size("
 msgstr "Poster gefunden - Größe("
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:902
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1110
 msgid "poster not found, trying to download ..."
 msgstr "poster nicht gefunden, versuche es herunterzuladen ..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:926
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1173
 msgid "... success"
 msgstr "... erfolgreich"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:932
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1179
 msgid "... failed"
 msgstr "... fehlgeschlagen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ViewShows.py:57
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:60
 msgid "Shows"
 msgstr "Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:118
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:304
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:302
 msgid "Main Menu"
 msgstr "Hauptmenü"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:177
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:397
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:178
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:395
 msgid "System"
 msgstr "System"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:350
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:336
+msgid "UNEXPECTED ERROR:"
+msgstr "UNERWARTETER FEHLER:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:348
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:351
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:349
 msgid "Server"
 msgstr "Server"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:352
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:350
 msgid "Systemcheck"
 msgstr "Systemcheck"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:353
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:351
 msgid "Backdrops"
 msgstr "Hintergründe"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:398
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:396
 msgid "LiveTv"
 msgstr "LiveTv"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:399
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:397
 msgid "About"
 msgstr "Über"
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:459
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:457
 msgid ""
 "Plexserver seems to be offline. Start with Wake on Lan settings? \n"
 "\n"
@@ -546,235 +613,258 @@ msgid ""
 "If you press yes the spinner will run for "
 msgstr " "
 
-#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:469
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:467
 msgid ""
 "Plexserver seems to be offline. Please check your your settings or connection!\n"
 " Retry?"
 msgstr "Der Plexserver ist nicht erreichbar, bitte Verbindung prüfen.  Wiederholen?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:231
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:275
+msgid "Error:"
+msgstr "Fehler:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:296
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:618
 msgid "Select media to play"
 msgstr "Medien zum Abspielen auswählen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:285
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:353
 msgid "Sorry I didn't find the file on the provided locations"
 msgstr "Datei an der angegebenen Position nicht gefunden"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:286
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:354
 msgid "Location:"
 msgstr "Position:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:287
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:355
 msgid "Please verify you direct local settings"
 msgstr "Bitte lokale Einstellungen übeprüfen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:288
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:356
 msgid "I will now try to play the file via transcode."
 msgstr "Versuche die Datei via Transcode abzuspielen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:290
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:358
 msgid "Warning:"
 msgstr "Warnung:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:303
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:371
 msgid ""
 " This file was partially played.\n"
 "\n"
 " Do you want to resume?"
 msgstr "Fortsetzen (Ja) oder  Neustart (Nein) ?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:585
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:602
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:712
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:729
 #, python-format
 msgid "This Box can't decode %s streams!"
 msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:619
-#: /hdd/workspaces/DreamPlex/src/DP_Player.py:639
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:746
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:766
 #, python-format
 msgid ""
 "Your Box can't decode this video stream!\n"
 "%s"
 msgstr "Dieses Video (%s) kann nicht dekodiert/wiedergegeben werden"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:244
+#: /hdd/workspaces/DreamPlex/src/DPH_MovingLabel.py:120
+msgid "no Data"
+msgstr "keine Daten"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:253
 msgid "Total:"
 msgstr "Total:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:251
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:260
 msgid "Pages:"
 msgstr "Seiten:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:281
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:290
 msgid "Cast:"
 msgstr "Cast:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:286
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:295
 msgid "press 'Text'"
 msgstr "drücke 'Text'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:288
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:297
 msgid "Subtitles:"
 msgstr "Untertitel:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:291
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:300
 msgid "press 'Audio'"
 msgstr "drücke 'Audio'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:293
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:302
 msgid "Audio:"
 msgstr "Audio:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:296
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:305
 msgid "press 'Info'"
 msgstr "drücke 'Info'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:298
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:307
 msgid "Info:"
 msgstr "Info:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:302
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:311
 msgid "Director:"
 msgstr "Regisseur:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:306
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:315
 msgid "Writer:"
 msgstr "Autor:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:310
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:319
 msgid "Genre:"
 msgstr "Genre:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:314
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:323
 msgid "Year:"
 msgstr "Jahr:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:318
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:327
 msgid "Medias:"
 msgstr "Medias:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:322
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:331
 msgid "Unseen:"
 msgstr "Ungesehen:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:326
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:335
 msgid "Seen:"
 msgstr "Gesehen:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:330
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:339
 msgid "Seasons:"
 msgstr "Staffel:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:334
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:343
 msgid "Studio:"
 msgstr "Studio:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:338
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:347
 msgid "Runtime:"
 msgstr "Laufzeit:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:351
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:360
 msgid "Video Codec:"
 msgstr "Video Codec:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:355
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:364
 msgid "Bitrate:"
 msgstr "Bitrate:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:359
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:368
 msgid "Framerate:"
 msgstr "Framerate:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:363
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:372
 msgid "Audio Channels:"
 msgstr "Audio Kanäle"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:367
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:376
 msgid "Aspect Ratio:"
 msgstr "Aspect Ratio:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:371
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:380
 msgid "Resultion:"
 msgstr "Auflösung:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:375
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:384
 msgid "Audio Codec:"
 msgstr "Audio Codec:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:379
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:388
 msgid "File:"
 msgstr "File:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:640
-msgid "playback mode 'default'"
-msgstr "playback mode 'default'"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:597
+msgid ""
+"No extras found ...\n"
+"\n"
+"Press exit to return."
+msgstr ""
+"keine Extras gefunden ... \n"
+"\n"
+"Exit drücken."
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:642
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:751
+msgid "playback mode '"
+msgstr "playback mode '"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:753
 msgid "View '"
 msgstr "View '"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:645
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1246
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:756
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:1382
 msgid "show 'Details'"
 msgstr "Zeige Details"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:670
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:688
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:760
+msgid "delete Medias"
+msgstr "Medias löschen"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:796
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:814
 msgid "playmode 'multi'"
 msgstr "playmode 'multi'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:672
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:685
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:798
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:811
 msgid "playmode 'single'"
 msgstr "playmode 'single'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:701
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:719
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:827
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:845
 msgid "resume 'On'"
 msgstr "resume 'On'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:703
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:716
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:829
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:842
 msgid "resume 'Off'"
 msgstr "resume 'Off'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:734
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:860
 msgid "fastScroll 'On'"
 msgstr "fastScroll = Ein"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:736
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:862
 msgid "fastScroll 'Off'"
 msgstr "fastScroll = Aus"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:822
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:945
 msgid "turn filter mode off"
 msgstr "Filtermodus beenden"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1269
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:1405
 msgid "show 'Description'"
 msgstr "zeige 'Beschreibung'"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1846
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:1993
 msgid "/"
 msgstr "/"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1858
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2005
 msgid "Mark media unwatched"
 msgstr "Markiere Medien als ungesehen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1859
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2006
 msgid "Mark media watched"
 msgstr "Markiere Medien als gesehen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1860
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2007
 msgid "Initiate Library refresh"
 msgstr "Initiiere Bibliotheksaktualisierung"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1863
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2010
 msgid "Media Functions"
 msgstr "Medien Funktionen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1920
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2067
 msgid ""
 "Subtitle Functions\n"
 "\n"
@@ -784,7 +874,7 @@ msgstr ""
 "\n"
 "Bitte beachten Sie, dass die Änderung nur aktiv wird wenn als Abspielmodus transkodieren verwenden!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:1959
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2106
 msgid ""
 "Audio Functions\n"
 "\n"
@@ -794,11 +884,11 @@ msgstr ""
 "\n"
 "Bitte beachten Sie, dass die Änderung nur aktiv wird wenn als Abspielmodus transkodieren verwenden!"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:2025
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2173
 msgid "Are you sure?"
 msgstr "Sicher ?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_View.py:2039
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2187
 msgid "Deleting aborted!"
 msgstr "Löschen abgebrochen!"
 
@@ -918,67 +1008,86 @@ msgstr "Suche Episoden"
 msgid "Series"
 msgstr "Serien"
 
-#: /hdd/workspaces/DreamPlex/src/plugin.py:28
+#: /hdd/workspaces/DreamPlex/src/plugin.py:47
 msgid "DreamPlex"
 msgstr "DreamPlex"
 
-#: /hdd/workspaces/DreamPlex/src/plugin.py:51
+#: /hdd/workspaces/DreamPlex/src/plugin.py:163
 msgid "plex client for enigma2"
 msgstr "Plex-Client für Enigma2"
 
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:112
+#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:113
 msgid "Server Menu"
 msgstr "Server Menu"
 
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:230
+#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:231
 msgid "Please enter your search string: "
 msgstr "Bitte geben Sie Ihren Suchbegriff ein:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:441
-msgid "Tv Shows"
-msgstr "Serien"
-
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:448
-msgid "Pictures"
-msgstr "Bilder"
-
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:449
-msgid "Channels"
-msgstr "Kanäle"
-
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:109
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:385
 msgid "General Settings"
 msgstr "Generelle Einstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:109
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:112
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:113
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:115
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:121
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:122
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:123
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:137
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:147
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:149
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:151
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:153
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:156
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:126
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:129
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:138
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:148
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:150
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:152
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:154
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:157
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:158
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:159
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:162
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:164
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:167
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:170
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:173
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:176
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:180
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:160
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:163
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:165
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:168
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:171
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:174
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:177
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:181
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:182
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:184
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:187
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:188
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:389
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:393
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:395
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:398
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:402
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:403
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:411
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:414
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:438
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:440
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:443
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:444
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:447
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:449
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:450
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:451
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:474
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:475
 msgid " "
 msgstr " "
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+msgid "> Boxname"
+msgstr "> Boxname"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+msgid "Enter the name of your box, e.g. Livingroom."
+msgstr "Geben Sie den Namen ihrer box ein, z.b. Wohnzimmer."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:111
 msgid "> Used Skin"
@@ -1008,301 +1117,373 @@ msgstr "Verwende diese Einstellung wenn nicht genügend phys. Speicher vorhanden
 msgid "> Show Infobar when buffer drained"
 msgstr "> Zeige Infobar wenn der Puffer leer ist"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:118
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
+msgid "> Show Player Poster on external LCD"
+msgstr "> Zeige das Player Poster am externen LCD Display an"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
+msgid "e.g. lcd4linux"
+msgstr "z.b. lcd4linux"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
 msgid "> Check for updates on startup"
 msgstr "> Beim Start nach Updates prüfen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:118
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
 msgid "If activated on each start we will check if there is a new version depending on your update type."
 msgstr "Wenn aktiviert, wird anhand des Update-Typs auf eine neue Version beim Start geprüft"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:120
 msgid "> Updatetype"
 msgstr "> Update-Typ"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:120
 msgid "Use Beta only if you really want to help with testing"
 msgstr "Nutze nur Betas (Test-Hilfestellung für den Entwickler)"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:121
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:122
 msgid "Userinterface Settings"
 msgstr "Einstellungen Benutzeroberfläche"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:122
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:123
 msgid "> Summerize Sections"
 msgstr "> Fasse Bereiche zusammen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:123
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124
 msgid "> Show Filter for Section"
 msgstr "> Zeige Filter für Bereiche"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
 msgid "> Show Seen/Unseen count in TvShows"
 msgstr "> Zeige Gesehen/Ungesehen Statistik bei TV-Shows"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:126
 msgid "> Start with Filtermode"
 msgstr "> mit Filtermodus starten"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:127
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
 msgid "> Show Backdrops as Videos"
 msgstr "> Zeige Hintergründe als Video"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:127
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
 msgid "Use this if you have m1v videos as backdrops"
 msgstr "Verwende diese Einstellung bei m1v-Hintergrundvideos"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:129
 msgid "> Stop Live TV on startup"
 msgstr "> Stoppe Live-TV beim Start"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:137
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:138
 msgid ">> Play Themes in TV Shows"
 msgstr ">> Spiele Themen ab bei TV Shows"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:147
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:148
 msgid "> Use fastScroll as default"
 msgstr "> Nutze FastScroll als Voreinstellung"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:149
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:150
 msgid "> Show liveTv in Views instead of backdrops"
 msgstr "> Zeige liveTv statt Hintergrundbilder"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:151
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:152
 msgid "> Show additional data for myPlex sections"
 msgstr "> Zeige zusätzliche Daten für den myPlex Bereich"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:153
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:154
 msgid "> Detail type for additional data"
 msgstr "> Detaillierter Typ für zusätzliche Daten"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:156
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:162
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:157
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:163
 msgid "Path Settings"
 msgstr "Verzeichniseinstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:157
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:158
 msgid "> Default View for Movies"
 msgstr "> Standardansicht für Filme"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:158
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:159
 msgid "> Default View for Shows"
 msgstr "> Standardansicht für Serien"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:159
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:160
 msgid "> Default View for Music"
 msgstr "> Standardansicht für Musik"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:164
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:165
 msgid "> Media Folder Path"
 msgstr "> Medien-Verzeichnis"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:167
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:168
 msgid "> Config Folder Path"
 msgstr "> Konfigurations-Verzeichnis"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:170
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:171
 msgid "> Cache Folder Path"
 msgstr "> Cache-Verzeichnis"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:173
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:174
 msgid "> Player Temp Path"
 msgstr "> Player-Temp-Verzeichnis"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:176
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:177
 msgid "> Log Folder Path"
 msgstr "> Log-Verzeichnis"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:180
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:181
+msgid "Remote Settings"
+msgstr "Remoteeinstellungen"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:182
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:184
+msgid "> Activate Remote Player"
+msgstr "> Remote Player Dienst aktivieren"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:187
 msgid "Misc Settings"
 msgstr "Sonstige Einstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:181
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:188
 msgid "> Debug Mode"
 msgstr "> Debug Modus"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:197
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:191
+msgid "> Write debugfile"
+msgstr "> Debugfile schreiben"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:191
+msgid "Without this option we just print to console."
+msgstr "Ohne diese Option werden die Logmeldungen nur in der Console angezeigt."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:207
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:509
 msgid "Save"
 msgstr "Speichern"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:102
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:103
 msgid "Server List:"
 msgstr "Serverliste:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:103
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:106
+msgid "Name                                         IP/myPlex                                             Port/Email                                        Active"
+msgstr "Name                                         IP/myPlex                                  Port/Email                                  Aktiv"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:108
 msgid "Name                                         IP/myPlex                                  Port/Email                                  Active"
 msgstr "Name                                         IP/myPlex                                  Port/Email                                  Aktiv"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:105
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:110
 msgid "Delete"
 msgstr "Löschen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:106
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:111
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:107
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:112
 msgid "Sync Media"
 msgstr "Sync Medias"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:108
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:113
 msgid "Discover"
 msgstr "Erkennen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:184
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:189
 msgid "Really delete this Server Entry?"
 msgstr "Wirklich diesen Server-Eintrag löschen ?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:270
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:271
 msgid "Select server"
 msgstr "Server auswählen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:388
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:385
 msgid "-"
 msgstr "-"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:387
 msgid " > State"
 msgstr "> Status"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:387
 msgid "Toggle state to on/off to show this server in lost or not."
 msgstr "Server in Liste anzeigen?"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:391
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:388
 msgid " > Autostart"
 msgstr " > Autostart"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:391
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:388
 msgid "Enter this server automatically on startup."
 msgstr "Diesen Server automatisch beim Start benutzen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:392
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:389
 msgid " > Name"
 msgstr " > Name"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:395
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+msgid " > Trailer"
+msgstr "> Trailer"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:393
 msgid "Connection Settings"
 msgstr "Verbindungseinstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:397
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:395
 msgid " > Connection Type"
 msgstr " > Verbindungstyp"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:400
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:398
 msgid " > Local Authentication"
 msgstr "> Lokale Authentifizierung"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:400
-msgid "Toggle state to on/off"
-msgstr "Statuswechsel on/off"
-
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:406
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:402
 msgid " >> DNS"
 msgstr " >> DNS"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:407
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:471
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:403
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:475
 msgid " >> Port"
 msgstr " >> Port"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:413
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:411
 msgid "Playback Settings"
 msgstr "Wiedergabe Einstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:416
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:414
 msgid " > Playback Type"
 msgstr "> Wiedergabe Typ"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:422
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:420
 msgid " >> Use universal Transcoder"
 msgstr " >> Nutze universellen Transcoder"
 
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:420
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:422
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:424
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:423
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:425
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:427
 msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
 msgstr "Für dieses Feature wird gstreamer_fragmented benötigt ! Bitte installieren/System prüfen..."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:424
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:427
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:422
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:425
 msgid " >> Transcoding quality"
 msgstr " >> Transcoding Qualität"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:425
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:423
 msgid " >> Segmentsize in seconds"
 msgstr " >> Segmentsize in Sekunden"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:441
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:438
 msgid "Wake On Lan Settings"
 msgstr "Wake On Lan Einstellungen"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:443
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:440
 msgid " > Use Wake on Lan (WoL)"
 msgstr "> Nutze Wake on Lan (WoL)"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:446
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:443
 msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
 msgstr " >> Mac Addresse (Größe: 12 alphanumerische ohne Seperator) nur für WoL"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:447
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:444
 msgid " >> Wait for server delay (max 180 seconds) only for WoL"
 msgstr " >> Warte auf Server Delay (max. 280 Sekunden) nur für WoL"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:470
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:447
+msgid "Sync Settings"
+msgstr "Sync Einstellungen"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:449
+msgid " > Sync Movies Medias"
+msgstr "> Sync Film Medias"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:450
+msgid " > Sync Shows Medias"
+msgstr "> Sync Show Medias"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:451
+msgid " > Sync Music Medias"
+msgstr "> Sync Music Medias"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:474
 msgid " >> IP"
 msgstr " >> IP"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:481
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:485
 msgid " >> myPLEX URL"
 msgstr ">> myPlex URL"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:481
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:482
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:483
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:484
-msgid "You need curl installed for this feature! Please check in System ..."
-msgstr "Für dieses Feature wird curl benötigt ! Bitte installieren das Plugin."
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:485
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:486
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:487
+msgid "You need openSSL installed for this feature! Please check in System ..."
+msgstr "Für dieses Feature wird openSSl benötigt ! Bitte installieren das Plugin."
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:482
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:486
 msgid " >> myPLEX Username"
 msgstr " >> myPLEX Benutzername"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:483
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:487
 msgid " >> myPLEX Password"
 msgstr " >> myPLEX Passwort"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:484
-msgid " >> myPLEX renew myPlex token"
-msgstr " >> myPlex Token erneuern"
-
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:509
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:512
 msgid "Mappings"
 msgstr "Mappings"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:517
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:516
+msgid "get local auth Token"
+msgstr "local auth Token holen"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:524
 msgid "check myPlex Token"
 msgstr "prüfe myPlex Token"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:518
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:525
 msgid "(re)create myPlex Token"
 msgstr "prüfe/erstelle myPlex Token"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:607
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:620
-msgid "myPlex Token:"
-msgstr "myPlex Token:"
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:639
+msgid "Local Token:"
+msgstr "Local Token:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:607
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:610
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:620
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:639
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:642
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:658
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:661
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:671
 msgid "for the user:"
 msgstr "für den Benutzer:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_Server.py:610
-msgid "Error:"
-msgstr "Fehler:"
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:658
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:671
+msgid "myPlex Token:"
+msgstr "myPlex Token:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:671
+msgid "myPlex Localtoken:"
+msgstr "myPlex  Localtoken:"
+
+#~ msgid ""
+#~ "For currentlyRunning feature just activate.\n"
+#~ "For section management you have to connect your server successfully to "
+#~ "myPlex once.\n"
+#~ "After that just disable your Portforwarding policy."
+#~ msgstr ""
+#~ "Für currentlyRunning einfach aktivieren.\n"
+#~ "Für Sektionenmanagement muss einmal mittels"
+
+#~ msgid "Reading section of the server ..."
+#~ msgstr "lese section vom server ..."
+
+#~ msgid "checking for medias with ratingKey: "
+#~ msgstr "prüfe auf Medias mit dem ratingKey:"
+
+#~ msgid "Toggle state to on/off"
+#~ msgstr "Statuswechsel on/off"
+
+#~ msgid " >> myPLEX renew myPlex token"
+#~ msgstr " >> myPlex Token erneuern"
 
 #~ msgid ""
 #~ "Process aborted.\n"
