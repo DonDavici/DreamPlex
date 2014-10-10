@@ -954,8 +954,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		if self.filterMode or quit:
 			self.filterMode = False
-			self.onKey1() # we return to normal functions
-			self["L1"].show()
+			if self.keyOneDisabled:
+				self.onKey2()
+			else:
+				self.onKey1() # we return to normal functions
+				self["L1"].show()
+
 			self["L2"].show()
 			self["L3"].show()
 
