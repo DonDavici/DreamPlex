@@ -845,7 +845,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl( "Buffer filled start playing", self, "I")
 			self.setSeekState(self.SEEK_STATE_PLAY)
 
-		self.timelineWatcher.start(5000,False)
+		self.timelineWatcher.start(10000,False)
 
 		# now we unlock again so that the infobar can dismiss
 		self.unlockShow()
