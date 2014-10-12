@@ -78,7 +78,7 @@ msgid ""
 "Should Enigma2 now restart?"
 msgstr ""
 "Enigma2 doit être redémarré!\n"
-"Enigma2 doit-il redémarré maintenant?"
+"Enigma2 doit-il redémarrer maintenant?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:280
 #: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:382
@@ -284,7 +284,7 @@ msgstr "Vérifiez si python-pyopenssl est installé"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1014
 msgid "You can use Systemcheck in the menu."
-msgstr "Vous pouvez utiliser Systemcheck in the menu"
+msgstr "Vous pouvez utiliser Systemcheck dans le menu"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1103
 #, python-format
@@ -293,8 +293,8 @@ msgid ""
 "Check Username and Password.\n"
 "%s"
 msgstr ""
-"myPlex Token Fehler:\n"
-"Vérifiez login et mot de passe.\n"
+"Erreur de Token myPlex:\n"
+"Vérifiez le login et le mot de passe.\n"
 "%s"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:90
