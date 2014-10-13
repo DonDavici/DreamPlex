@@ -2947,7 +2947,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def closePlugin(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.useBackdropVideos.value:
+		if config.plugins.dreamplex.useBackdropVideos.value and self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 
 		super(DP_View,self).closePlugin()
@@ -2960,7 +2960,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def restoreLiveTv(self):
 		printl("", self, "S")
 
-		if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+		if not self.liveTvInViews:
 			printl("restoring liveTv", self, "D")
 			self.session.nav.playService(getLiveTv())
 

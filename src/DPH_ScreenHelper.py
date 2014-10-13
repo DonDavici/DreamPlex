@@ -293,7 +293,7 @@ class DPH_Screen(Screen):
 	def closePlugin(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.stopLiveTvOnStartup.value:
+		if getLiveTv() is not None:
 			printl("restoring liveTv", self, "D")
 			self.session.nav.playService(getLiveTv())
 
