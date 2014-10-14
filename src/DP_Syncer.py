@@ -40,6 +40,8 @@ from Components.Pixmap import Pixmap
 
 import urllib
 
+from PIL import Image
+
 from Screens.Screen import Screen
 
 from Tools.Directories import fileExists
@@ -698,8 +700,6 @@ class BackgroundMediaSyncer(Thread):
 	def renderBackdrops(self):
 		printl("", self, "S")
 
-		from PIL import Image
-
 		self.running = True
 		self.cancel = False
 
@@ -726,7 +726,7 @@ class BackgroundMediaSyncer(Thread):
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
 		from time import sleep
-		sleep(1)
+		sleep(0.5)
 
 		if int(self.count) > 0:
 			self.currentIndex = 0
@@ -757,11 +757,29 @@ class BackgroundMediaSyncer(Thread):
 							msg_text = _("trying to render backdrop now ...: ") + self.getCounter()
 							self.messages.push((THREAD_WORKING, msg_text))
 							self.messagePump.send(0)
+
+							# now we check if we are are jpeg or png
 							imageLocation = config.plugins.dreamplex.mediafolderpath.value + myFile
 
 							i = Image.open(imageLocation)
+
 							data = i.size
 							printl("data: " + str(data), self, "D")
+
+							myType = i.format
+							printl("myType: " + str(myType), self, "D")
+
+							if myType == "JPEG":
+								renderCommand = "jpeg2yuv"
+
+							elif myType == "PNG":
+								renderCommand = "png2yuv"
+
+							else:
+								msg_text = _("skipping because unsupported image type. ") + self.getCounter()
+								self.messages.push((THREAD_WORKING, msg_text))
+								self.messagePump.send(0)
+								continue
 
 							xValid, xResult = isValidSize(i.size[0])
 							yValid, yResult = isValidSize(i.size[1])
@@ -779,9 +797,9 @@ class BackgroundMediaSyncer(Thread):
 							printl("started rendering : " + str(videoLocation),self, "D")
 
 							if self.resolution == "FHD":
-								cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+								cmd = renderCommand + " -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1920 -y 1080 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
 							else:
-								cmd = "jpeg2yuv -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
+								cmd = renderCommand + " -v 0 -f 25 -n1 -I p -j " + imageLocation + " | mpeg2enc -v 0 -f 12 -x 1280 -y 720 -a 3 -4 1 -2 1 -q 1 -H --level high -o " + videoLocation
 
 							printl("cmd: " + str(cmd), self, "D")
 
@@ -970,10 +988,11 @@ class BackgroundMediaSyncer(Thread):
 
 					printl("movieUrl: " + str(movieUrl), self, "D")
 					library, mediaContainer = self.plexInstance.getMoviesFromSection(movieUrl)
-					self.movieCount += len(library)
 
 					if not dryRun:
 						self.syncThrougMediaLibrary(library, myType="Movie")
+					else:
+						self.movieCount += len(library)
 
 			if self.serverConfig.syncShows.value:
 				if section[2] == "showEntry":
@@ -985,10 +1004,11 @@ class BackgroundMediaSyncer(Thread):
 
 					printl("showUrl: " + str(showUrl), self, "D")
 					library, mediaContainer = self.plexInstance.getShowsFromSection(showUrl)
-					self.showCount += len(library)
 
 					if not dryRun:
 						self.syncThrougMediaLibrary(library, myType="Show")
+					else:
+						self.showCount += len(library)
 
 					for seasons in library:
 						if self.cancel:
@@ -998,10 +1018,11 @@ class BackgroundMediaSyncer(Thread):
 						seasonsUrl = seasons[1]["server"] +  seasons[1]["key"]
 						printl("seasonsUrl: " + str(seasonsUrl), self, "D")
 						library, mediaContainer = self.plexInstance.getSeasonsOfShow(seasonsUrl)
-						self.seasonCount += len(library)
 
 						if not dryRun:
 							self.syncThrougMediaLibrary(library, myType="Season")
+						else:
+							self.seasonCount += len(library)
 
 						for episodes in library:
 							if self.cancel:
@@ -1011,10 +1032,11 @@ class BackgroundMediaSyncer(Thread):
 							episodesUrl = episodes[1]["server"] +  episodes[1]["key"]
 							printl("episodesUrl: " + str(episodesUrl), self, "D")
 							library, mediaContainer = self.plexInstance.getEpisodesOfSeason(episodesUrl)
-							self.episodeCount += len(library)
 
 							if not dryRun:
 								self.syncThrougMediaLibrary(library, myType="Episode")
+							else:
+								self.episodeCount += len(library)
 
 			if self.serverConfig.syncMusic.value:
 				if section[2] == "musicEntry":
@@ -1028,18 +1050,22 @@ class BackgroundMediaSyncer(Thread):
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByArtist(url)
-					self.artistCount += len(library)
+
 					if not dryRun:
 						self.syncThrougMediaLibrary(library, myType="Music")
+					else:
+						self.artistCount += len(library)
 
 					# now we go through the albums
 					url = section[3]["contentUrl"] + "/albums"
 
 					printl("url: " + str(url), self, "D")
 					library, mediaContainer = self.plexInstance.getMusicByAlbum(url)
-					self.albumCount += len(library)
+
 					if not dryRun:
 						self.syncThrougMediaLibrary(library, myType="Albums")
+					else:
+						self.albumCount += len(library)
 
 		printl("", self, "C")
 
