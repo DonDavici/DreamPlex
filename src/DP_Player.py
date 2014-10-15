@@ -881,7 +881,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def searchWhilePlaying(self):
 		printl("", self, "S")
 
-		self.close((True, (self.playerData,self.ptr, self.id, self.currentIndex)))
+		if config.plugins.dreamplex.searchWhilePlaying.value:
+			self.close((True, (self.playerData,self.ptr, self.id, self.currentIndex)))
 
 		printl("", self, "C")
 
