@@ -901,7 +901,8 @@ def saveLiveTv(currentService):
 
 	global liveTv
 
-	liveTv = currentService
+	if liveTv is None:
+		liveTv = currentService
 
 	printl2("", "__common__::saveLiveTv", "C")
 
