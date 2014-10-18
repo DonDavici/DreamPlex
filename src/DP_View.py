@@ -639,7 +639,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			listViewList, mediaContainer = self.plexInstance.getMoviesFromSection( "http://"+ self.server +"/library/metadata/" + ratingKey)
 			autoPlayMode = False
 			resumeMode = False # this is always false because we are in extradata here
-			playbackMode = self.serverConfig.playbackType.value
+			playbackMode = str(1) #because we are a trailer we override to streamed self.serverConfig.playbackType.value
 			currentIndex = 0
 			libraryName = "Mixed"
 			forceResume = False
