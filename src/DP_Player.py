@@ -901,6 +901,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if config.plugins.dreamplex.lcd4linux.value:
 			remove(self.tempPoster)
 
+		# we stop playback here
+		self.session.nav.stopService()
+
 		# self.session.nav.playService(getLiveTv())
 		self.close((False, ))
 		
@@ -946,7 +949,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		currentTime = self.getPlayPosition()[1] / 90000
 		totalTime = self.getPlayLength()[1] / 90000
-
 
 		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
 			progress = currentTime / float(totalTime/100.0)
