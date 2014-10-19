@@ -718,6 +718,7 @@ class BackgroundMediaSyncer(Thread):
 			printl("Error: " + str(e), self, "D")
 			self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
 			self.messagePump.send(0)
+			return
 
 		#try:
 		if self.resolution == "FHD":
