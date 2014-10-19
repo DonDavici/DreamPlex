@@ -560,6 +560,10 @@ def setBoxInformation():
 			manu = "VU+"
 			model = "Duo2"
 			arch = "mipsel"
+		elif box == "uno":
+			manu = "VU+"
+			model = "Uno"
+			arch = "mipsel"
 		elif box == "ultimo":
 			manu = "VU+"
 			model = "Ultimo"
@@ -640,6 +644,8 @@ def setBoxInformation():
 			manu = "Odin"
 			model = "M9"
 			arch = "mipsel"
+		else:
+			printl2("Unknown box: " + str(box), "__common__::_setBoxtype", "D")
 
 	if arch == "mipsel":
 		oeVersion = getBoxArch()
