@@ -40,8 +40,6 @@ from Components.Pixmap import Pixmap
 
 import urllib
 
-from PIL import Image
-
 from Screens.Screen import Screen
 
 from Tools.Directories import fileExists
@@ -709,9 +707,18 @@ class BackgroundMediaSyncer(Thread):
 			msg_text = _("\n\nStarting to search for picture files with 1280x720 in its name ...")
 		self.messages.push((THREAD_WORKING, msg_text))
 		self.messagePump.send(0)
+
 		import math
 		import glob
 		import commands
+
+		try:
+			from PIL import Image
+		except Exception, e:
+			printl("Error: " + str(e), self, "D")
+			self.messages.push((THREAD_WORKING, _("Error!\nError-message:%s" % e) ))
+			self.messagePump.send(0)
+
 		#try:
 		if self.resolution == "FHD":
 			resolutionString = "*1920x1080_v2.jpg"
