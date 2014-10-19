@@ -46,6 +46,7 @@ class Showiframe(object):
 		printl("", self , "S")
 
 		self.boxInformation = getBoxInformation()
+		printl("boxInformation: " + str(self.boxInformation), self, "D")
 
 		try:
 			self.load()
