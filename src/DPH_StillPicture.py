@@ -63,7 +63,7 @@ class Showiframe(object):
 
 		# we append here to have ctype.so also for sh4 boxes
 		libsFolder = config.plugins.dreamplex.pluginfolderpath.value + "libs"
-		libname = None
+		libname = ""
 
 		if self.boxInformation[2] == "sh4":
 			sys.path.append(libsFolder)
