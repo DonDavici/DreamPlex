@@ -580,11 +580,32 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
+	def pauseService(self):
+		printl("", self, "S")
+
+		if self.playbackType == "1"  and self.universalTranscoder:
+			self.transcoderHeartbeat = eTimer()
+			self.transcoderHeartbeat.callback.append(self.keepTranscoderAlive)
+			self.transcoderHeartbeat.start(10000,False)
+
+		self.timelineWatcher.stop()
+
+		super(DP_Player,self).pauseService()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def unPauseService(self):
 		printl("", self, "S")
 
 		self.hide()
 		self.setSeekState(self.SEEK_STATE_PLAY)
+
+		self.transcoderHeartbeat.stop()
+
+		self.timelineWatcher.start(5000,False)
 
 		printl("", self, "S")
 	#===========================================================================
@@ -997,6 +1018,16 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
+	def keepTranscoderAlive(self):
+		printl("", self, "S")
+
+		self.plexInstance.doRequest("http://"+self.server+"/video/:/transcode/universal/ping?session=" + self.transcodingSession)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def stopTranscoding(self):
 		printl("", self, "S")
 		
@@ -1062,21 +1093,25 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 			self["endingTime"].setText(strftime("%H:%M:%S", endingTime))
 
+		print "0"
 		if self.multiUserServer:
+			print "a"
 			try:
+				print "1"
 				printl("currentTime: " + str(currentTime), self, "C")
 				printl("totalTime: " + str(totalTime), self, "C")
 
 				urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
 
 				seekState = self.seekstate
-				print seekState
-				sleep(2)
+
 				if seekState == self.SEEK_STATE_PAUSE:
+					print "2"
 					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
 					urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
 				elif seekState == self.SEEK_STATE_PLAY :
+					print "3"
 					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
 					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
@@ -1085,8 +1120,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 				# todo add stopped here if needed
 					#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
-
+				print "4"
 				self.plexInstance.doRequest(urlPath)
+				print "5"
 
 			except Exception, e:
 				printl("exception: " + str(e), self, "E")

@@ -2029,13 +2029,10 @@ class PlexLibrary(Screen):
 			if not (self.g_transcode == "true" ):
 				self.setAudioSubtitles(self.streams)
 
-		multiUserServer = False
 		# multiuser works only if the server is compatible
 		self.setServerDetails()
-		if self.g_serverVersion >= "0.9.8.0" and self.g_multiUser:
-			multiUserServer = True
 
-		printl("multiUserServer (version): " + str(multiUserServer),self,"I")
+		printl("multiUserServer (version): " + str(self.g_multiUser) + "(" + self.g_serverVersion + ")",self,"D")
 
 		printl("PLAYURL => " + playurl, self, "I")
 		printl("RESUME => " + str(resume), self, "I")
@@ -2046,7 +2043,7 @@ class PlexLibrary(Screen):
 		playerData["resumeStamp"] = resume
 		playerData["server"] = self.server
 		playerData["id"] = myId
-		playerData["multiUserServer"] = multiUserServer
+		playerData["multiUserServer"] = self.g_multiUser
 		playerData["playbackType"] = self.serverConfig_playbackType
 		playerData["connectionType"] = self.serverConfig_connectionType
 		playerData["localAuth"] = self.serverConfig_localAuth
