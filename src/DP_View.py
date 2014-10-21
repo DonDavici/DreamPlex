@@ -59,7 +59,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, saveLiveTv, getLiveTv, convertSize, encodeThat
+from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, convertSize, encodeThat
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -405,8 +405,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self.backdropHeight = self.viewParams["settings"]["backdropHeight"]
 			self.backdropWidth = self.viewParams["settings"]["backdropWidth"]
 			self.backdrop_postfix = "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + "_v2.jpg"
-
-		saveLiveTv(self.session.nav.getCurrentlyPlayingServiceReference())
 
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:

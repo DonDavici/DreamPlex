@@ -33,6 +33,9 @@ def main(session, **kwargs):
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
 
+	# save liveTvData
+	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
+
 	# this loads the skin
 	startEnvironment()
 

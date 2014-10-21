@@ -293,10 +293,6 @@ class DPH_Screen(Screen):
 	def closePlugin(self):
 		printl("", self, "S")
 
-		if getLiveTv() is not None:
-			printl("restoring liveTv", self, "D")
-			self.session.nav.playService(getLiveTv())
-
-		closePlugin()
+		closePlugin(self.session)
 
 		printl("", self, "C")

@@ -918,6 +918,8 @@ def saveLiveTv(currentService):
 def getLiveTv():
 	printl2("", "__common__::restoreLiveTv", "S")
 
+	printl2("liveTv: " + str(liveTv), "__common__::restoreLiveTv", "D")
+
 	printl2("", "__common__::restoreLiveTv", "C")
 	return liveTv
 
@@ -934,7 +936,7 @@ def addNewScreen(screen):
 #===========================================================================
 #
 #===========================================================================
-def closePlugin():
+def closePlugin(session):
 	printl2("", "__common__::closePlugin", "S")
 
 	for screen in screens:
@@ -944,6 +946,8 @@ def closePlugin():
 			# TODO check for memory usage if we are really free after close
 			# this could take place if the screen was closed already manually
 			pass
+		finally:
+			session.nav.playService(getLiveTv())
 
 	printl2("", "__common__::closePlugin", "C")
 
