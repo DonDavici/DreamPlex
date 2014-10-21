@@ -165,7 +165,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		{
 		"ok": self.ok,
 		"cancel": self.hide,
-		"searchWhilePlaying": self.searchWhilePlaying,
+		"exitFunction": self.exitFunction,
 		"keyTv": self.leavePlayer,
 		"stop": self.leavePlayer,
 		"seekManual": self.seekManual,
@@ -194,8 +194,13 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		})
 
 		if not sessionData:
-			# from here we go on
-			self.onFirstExecBegin.append(self.playMedia)
+			if self.isExtraData:
+				self.media_id = "125629"
+				mediaFileUrl = "http://92.60.8.106:34400/services/iva/assets/853333/video.mp4?bitrate=1500"
+				self.buildPlayerData(mediaFileUrl)
+			else:
+				# from here we go on
+				self.onFirstExecBegin.append(self.playMedia)
 		else:
 			service1 = self.session.nav.getCurrentService()
 			self.seek = service1 and service1.seek()
@@ -343,18 +348,23 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def playSelectedMedia(self):
 		printl("", self, "S")
 
-		resumeStamp = self.playerData[self.currentIndex]['resumeStamp']
-		printl("resumeStamp: " + str(resumeStamp), self, "I")
-
-		if self.playerData[self.currentIndex]['fallback']:
-			message = _("Sorry I didn't find the file on the provided locations")
-			locations = _("Location:") + "\n " + self.playerData[self.currentIndex]['locations']
-			suggestion = _("Please verify you direct local settings")
-			fallback = _("I will now try to play the file via transcode.")
-
-			self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+		if self.isExtraData:
+			self.play()
 		else:
-			self.checkResume(resumeStamp)
+			resumeStamp = self.playerData[self.currentIndex]['resumeStamp']
+			printl("resumeStamp: " + str(resumeStamp), self, "I")
+
+
+
+			if self.playerData[self.currentIndex]['fallback']:
+				message = _("Sorry I didn't find the file on the provided locations")
+				locations = _("Location:") + "\n " + self.playerData[self.currentIndex]['locations']
+				suggestion = _("Please verify you direct local settings")
+				fallback = _("I will now try to play the file via transcode.")
+
+				self.session.openWithCallback(self.checkResume, MessageBox,_("Warning:") + "\n%s\n\n%s\n\n%s\n\n%s" % (message, locations, suggestion, fallback), MessageBox.TYPE_ERROR)
+			else:
+				self.checkResume(resumeStamp)
 
 		printl("", self, "C")
 
@@ -875,11 +885,14 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def searchWhilePlaying(self):
+	def exitFunction(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.searchWhilePlaying.value:
+		if config.plugins.dreamplex.exitFunction.value == "2":
 			self.close((True, (self.playerData,self.ptr, self.id, self.currentIndex)))
+
+		elif config.plugins.dreamplex.exitFunction.value == "1":
+			self.leavePlayer()
 
 		printl("", self, "C")
 

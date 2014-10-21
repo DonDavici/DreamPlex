@@ -84,7 +84,7 @@ config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
 config.plugins.dreamplex.boxName		            = ConfigText(default = "DreamPlex", visible_width = 50, fixed_size = False)
 config.plugins.dreamplex.lcd4linux 			        = ConfigYesNo()
-config.plugins.dreamplex.searchWhilePlaying 		= ConfigYesNo()
+config.plugins.dreamplex.exitFunction 		        = ConfigSelection(default = "0", choices = [("0", "Nothing"), ("1", "stop playback, return to library"), ("2", "search library while playing")])
 
 if source != "ipk":
 	config.plugins.dreamplex.showUpdateFunction		= ConfigYesNo()
