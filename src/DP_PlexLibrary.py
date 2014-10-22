@@ -266,7 +266,8 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 		printl("myFilter: " + str(myFilter), self, "D")
 
-		fullList=[]
+		fullList = []
+		entryData = None
 
 		self.sectionCacheLoaded = False
 		if config.plugins.dreamplex.useCache.value:
@@ -373,22 +374,23 @@ class PlexLibrary(Screen):
 		# now the tokenDict should be filled
 		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
-		onDeck = dict()
-		onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
-		onDeck["type"] = "movie"
-		onDeck["currentViewMode"] = "movie"
-		onDeck["nextViewMode"] = "mixed"
-		fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
+		if entryData is not None:
+			onDeck = dict()
+			onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
+			onDeck["type"] = "movie"
+			onDeck["currentViewMode"] = "movie"
+			onDeck["nextViewMode"] = "mixed"
+			fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
-		recentlyAdded = dict()
-		recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
-		recentlyAdded["type"] = "movie"
-		recentlyAdded["currentViewMode"] = "movie"
-		recentlyAdded["nextViewMode"] = "mixed"
-		fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
+			recentlyAdded = dict()
+			recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
+			recentlyAdded["type"] = "movie"
+			recentlyAdded["currentViewMode"] = "movie"
+			recentlyAdded["nextViewMode"] = "mixed"
+			fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
 
-		if config.plugins.dreamplex.useCache.value:
-			self.saveSectionCache()
+			if config.plugins.dreamplex.useCache.value:
+				self.saveSectionCache()
 
 		# as a last step we check if there where any content
 		if counter == 0:

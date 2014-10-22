@@ -393,7 +393,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			serverData = self.plexInstance.getAllSections(filterBy)
 
 		if not serverData:
-			self.showNoDataMessage()
+			self.showNsoDataMessage()
 		else:
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
