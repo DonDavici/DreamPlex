@@ -59,7 +59,7 @@ from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, convertSize, encodeThat, getLiveTv
+from __common__ import printl2 as printl, convertSize, encodeThat
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -353,8 +353,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		else:
 			resumeStamp = self.playerData[self.currentIndex]['resumeStamp']
 			printl("resumeStamp: " + str(resumeStamp), self, "I")
-
-
 
 			if self.playerData[self.currentIndex]['fallback']:
 				message = _("Sorry I didn't find the file on the provided locations")
@@ -1093,11 +1091,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 			self["endingTime"].setText(strftime("%H:%M:%S", endingTime))
 
-		print "0"
+
 		if self.multiUserServer:
-			print "a"
 			try:
-				print "1"
 				printl("currentTime: " + str(currentTime), self, "C")
 				printl("totalTime: " + str(totalTime), self, "C")
 
@@ -1106,12 +1102,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				seekState = self.seekstate
 
 				if seekState == self.SEEK_STATE_PAUSE:
-					print "2"
 					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
 					urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
 				elif seekState == self.SEEK_STATE_PLAY :
-					print "3"
 					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
 					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 
@@ -1120,9 +1114,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 				# todo add stopped here if needed
 					#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
-				print "4"
+
 				self.plexInstance.doRequest(urlPath)
-				print "5"
 
 			except Exception, e:
 				printl("exception: " + str(e), self, "E")

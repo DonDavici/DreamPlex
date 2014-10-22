@@ -37,6 +37,7 @@ from Components.config import config
 from hashlib import sha256
 from urllib2 import urlopen, Request
 from random import seed
+from Tools.Directories import fileExists, copyfile
 
 from Screens.Screen import Screen
 
@@ -1984,6 +1985,7 @@ class PlexLibrary(Screen):
 	#========================================================================
 	def playLibraryMedia(self, myId, url):
 		printl("", self, "S")
+		subtitleFileTemp = None
 
 		printl("playLibraryMediaUrl: " + str(url), self, "D")
 
@@ -2001,8 +2003,32 @@ class PlexLibrary(Screen):
 
 		#alter playurl if needed
 		if protocol == "file":
-			printl( "We are playing a local file", self, "I")
+			printl( "We are playing a local file", self, "D")
 			playurl=url.split(':',1)[1]
+
+			if self.g_serverConfig.subtitlesForDirectLocal.value:
+				myFile = url.split('/')[-1]
+				myFileWoExtension = myFile[:-4]
+				extension = myFile[-3:]
+				path = playurl[:-len(myFile)]
+				language = self.g_serverConfig.subtitlesLanguage.value
+
+				printl("path " + str(path),self, "D")
+				printl("myFileWoExtension " + str(myFileWoExtension),self, "D")
+				printl("extension " + str(extension),self, "D")
+				printl("myFile " + str(myFile),self, "D")
+
+				subtitleFileOrig = path + myFileWoExtension + "." + language + ".srt"
+				printl("subtitleFileOrig " + str(subtitleFileOrig),self, "D")
+
+				#check if there is a srt file with specific language
+				if fileExists(subtitleFileOrig):
+					subtitleFileTemp = path + myFileWoExtension + ".srt"
+					if not fileExists(subtitleFileTemp):
+						printl("copying to subtitleFileTemp " + str(subtitleFileTemp),self, "D")
+						copyfile(subtitleFileOrig, subtitleFileTemp)
+					else:
+						printl("using existing srt file ...")
 
 		elif protocol == "http":
 			printl( "We are playing a stream", self, "I")
@@ -2055,6 +2081,7 @@ class PlexLibrary(Screen):
 		playerData["fallback"] = self.fallback
 		playerData["locations"] = self.locations
 		playerData["currentFile"] = self.currentFile
+		playerData["subtitleFileTemp"] = subtitleFileTemp
 		playerData["universalTranscoder"] = self.g_serverConfig.universalTranscoder.value
 		
 		return playerData

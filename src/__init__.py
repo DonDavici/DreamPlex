@@ -179,6 +179,10 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].machineIdentifier = ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].loadExtraData 	= ConfigSelection(default="0", choices = [("0", "None"),("1", "Plex Pass"), ("2", "YTTrailer")])
 
+	config.plugins.dreamplex.Entries[i].subtitlesForDirectLocal	= ConfigYesNo()
+	config.plugins.dreamplex.Entries[i].subtitlesLanguage       = ConfigText(default = "de", visible_width = 2)
+
+
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
 	printl("Server Settings: ","__init__::initServerEntryConfig", "D" )
 	printl("id: " + str(config.plugins.dreamplex.Entries[i].id.value), "__init__::initServerEntryConfig", "D")

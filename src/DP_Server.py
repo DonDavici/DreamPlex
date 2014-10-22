@@ -434,6 +434,14 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			#self.cfglist.append(getConfigListEntry(_(">> Server override IP"), self.current.nasOverrideIp))
 			#self.cfglist.append(getConfigListEntry(_(">> Servers root"), self.current.nasRoot))
 
+		if self.current.playbackType.value == "2":
+			##
+			self.cfglist.append(getConfigListEntry(_("Subtitle Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+			##
+			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.subtitlesForDirectLocal, _(" ")))
+			if self.current.subtitlesForDirectLocal.value:
+				self.cfglist.append(getConfigListEntry(_(" >> Target subtitle language"), self.current.subtitlesLanguage, _(" ")))
+
 		##
 		self.cfglist.append(getConfigListEntry(_("Wake On Lan Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
