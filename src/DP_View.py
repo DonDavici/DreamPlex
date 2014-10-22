@@ -603,14 +603,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					printl("item: " + str(items), self, "D")
 					if items[1] is not None:
 						name=items[1].split('/')[-1]
-					else:
-						size = convertSize(int(items[3]))
-						duration = strftime('%H:%M:%S', gmtime(int(items[4])))
-						# this is the case when there is no information of the real file name
-						name = items[0] + " (" + items[2] + " / " + size + " / " + duration + ")"
+						url = items[0]
+						ratingKey = items[5]
 
 					printl("name " + str(name), self, "D")
-					functionList.append((name ,indexCount, ))
+					functionList.append((name ,indexCount, url, ratingKey))
 					indexCount+=1
 
 				self.session.openWithCallback(self.setSelectedMedia, ChoiceBox, title=_("Select media to play"), list=functionList)
@@ -628,11 +625,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("choice: " + str(choice), self, "D")
 
 		if choice is not None:
-			result = int(choice[1])
+			url = "http://"+ self.server + choice[2]
+			ratingKey = choice[3]
 
-			printl("result: " + str(result), self, "D")
-
-			ratingKey = self.options[result][5]
+			printl("url: " + str(url), self, "D")
+			printl("ratingKey: " + str(ratingKey), self, "D")
+			isExtraData = ratingKey, url
 
 			listViewList, mediaContainer = self.plexInstance.getMoviesFromSection( "http://"+ self.server +"/library/metadata/" + ratingKey)
 			autoPlayMode = False
@@ -642,7 +640,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			libraryName = "Mixed"
 			forceResume = False
 
-			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, isExtraData=True)
+			self.session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, isExtraData=isExtraData)
 
 		printl("", self, "C")
 

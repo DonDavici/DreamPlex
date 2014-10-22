@@ -138,7 +138,8 @@ class PlexLibrary(Screen):
 	lastHeaderForServer = None
 	lastResponse = None
 	lastError = None
-	
+	fallback = ""
+
 	#===========================================================================
 	# 
 	#===========================================================================
@@ -1351,7 +1352,6 @@ class PlexLibrary(Screen):
 
 		self.currentFile = myFile
 		self.currentType = myType
-		self.fallback = ""
 
 		# 0 is linux local mount override
 		if self.g_stream == "0":
@@ -1983,7 +1983,7 @@ class PlexLibrary(Screen):
 	#========================================================================
 	#
 	#========================================================================
-	def playLibraryMedia(self, myId, url):
+	def playLibraryMedia(self, myId, url, isExtraData=False):
 		printl("", self, "S")
 		subtitleFileTemp = None
 
@@ -2078,10 +2078,11 @@ class PlexLibrary(Screen):
 		playerData["transcodingSession"] = self.g_sessionID
 		playerData["videoData"] = self.streams['videoData']
 		playerData["mediaData"] = self.streams['mediaData']
-		playerData["fallback"] = self.fallback
-		playerData["locations"] = self.locations
-		playerData["currentFile"] = self.currentFile
-		playerData["subtitleFileTemp"] = subtitleFileTemp
+		if not isExtraData:
+			playerData["fallback"] = self.fallback
+			playerData["locations"] = self.locations
+			playerData["currentFile"] = self.currentFile
+			playerData["subtitleFileTemp"] = subtitleFileTemp
 		playerData["universalTranscoder"] = self.g_serverConfig.universalTranscoder.value
 		
 		return playerData

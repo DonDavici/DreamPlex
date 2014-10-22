@@ -195,9 +195,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if not sessionData:
 			if self.isExtraData:
-				self.media_id = "125629"
-				mediaFileUrl = "http://92.60.8.106:34400/services/iva/assets/853333/video.mp4?bitrate=1500"
-				self.buildPlayerData(mediaFileUrl)
+				self.media_id = isExtraData[0] #"125629"
+				mediaFileUrl = isExtraData[1] #"http://92.60.8.106:34400/services/iva/assets/853333/video.mp4?bitrate=1500"
+				self.buildPlayerData(mediaFileUrl, isExtraData=True)
 			else:
 				# from here we go on
 				self.onFirstExecBegin.append(self.playMedia)
@@ -330,10 +330,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===============================================================================
 	#
 	#===============================================================================
-	def buildPlayerData(self, mediaFileUrl):
+	def buildPlayerData(self, mediaFileUrl, isExtraData=False):
 		printl("", self, "S")
 
-		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, mediaFileUrl)
+		self.playerData[self.currentIndex] = Singleton().getPlexInstance().playLibraryMedia(self.media_id, mediaFileUrl, isExtraData=isExtraData)
 
 		# populate addional data
 		self.setPlayerData()
@@ -1090,7 +1090,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				endingTime = localtime()
 
 			self["endingTime"].setText(strftime("%H:%M:%S", endingTime))
-
 
 		if self.multiUserServer:
 			try:
