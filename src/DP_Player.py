@@ -83,6 +83,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	url = None
 	transcodingSession = None
 	universalTranscoder = False
+	transcoderHeartbeat = None
 	videoData = None
 	mediaData = None
 	multiUser = False
@@ -601,7 +602,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.hide()
 		self.setSeekState(self.SEEK_STATE_PLAY)
 
-		if self.playbackType == "1"  and self.universalTranscoder:
+		if self.transcoderHeartbeat is not None:
 			self.transcoderHeartbeat.stop()
 
 		self.timelineWatcher.start(5000,False)
