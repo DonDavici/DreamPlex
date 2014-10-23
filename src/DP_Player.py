@@ -601,7 +601,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.hide()
 		self.setSeekState(self.SEEK_STATE_PLAY)
 
-		self.transcoderHeartbeat.stop()
+		if self.playbackType == "1"  and self.universalTranscoder:
+			self.transcoderHeartbeat.stop()
 
 		self.timelineWatcher.start(5000,False)
 
