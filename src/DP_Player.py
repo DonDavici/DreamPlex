@@ -668,10 +668,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType == "2":
 			self.bufferFull()
 		else:
-			if config.plugins.dreamplex.showInfobarOnBuffer.value:
-				# we lock the infobar until the buffer is full for better feedback to user
-				self.lockShow()
-
 			self.bufferInfo()
 		
 		#printl("", self, "C")
@@ -867,10 +863,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.setSeekState(self.SEEK_STATE_PLAY)
 
 		self.timelineWatcher.start(10000,False)
-
-		# now we unlock again so that the infobar can dismiss
-		self.unlockShow()
-		self.hide()
 
 		#printl("", self, "C")
 
