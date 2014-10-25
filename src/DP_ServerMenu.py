@@ -36,7 +36,7 @@ from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
 
-from __common__ import printl2 as printl
+from __common__ import printl2 as printl, getLiveTv
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -270,7 +270,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		if self.selectedEntry.start is not None:
 			printl("we are startable ...", self, "D")
-			self.session.open(self.selectedEntry.start, entryData)
+			self.session.openWithCallback(self.myCallback, self.selectedEntry.start, entryData)
 
 		elif self.selectedEntry.fnc is not None:
 			printl("we are a function ...", self, "D")
@@ -278,6 +278,17 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		if config.plugins.dreamplex.showFilter.value:
 			self.selectedEntry = Plugin.MENU_FILTER # we overwrite this now to handle correct menu jumps with exit/cancel button
+
+		printl("", self, "C")
+
+	#==========================================================================
+	#
+	#==========================================================================
+	def myCallback(self):
+		printl("", self, "S")
+
+		if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+			self.session.nav.playService(getLiveTv(), forceRestart=True)
 
 		printl("", self, "C")
 
