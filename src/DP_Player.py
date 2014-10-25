@@ -931,7 +931,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		# we stop playback here
 		self.session.nav.stopService()
 
-		# self.session.nav.playService(getLiveTv())
 		self.close((False, ))
 		
 		printl("", self, "C")
