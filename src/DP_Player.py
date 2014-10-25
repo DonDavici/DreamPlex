@@ -95,8 +95,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	duration = ""
 	contentRating = ""
 
-	infobarShown = False
-	
 	audioCodec = ""
 	videoCodec = ""
 	videoResolution = ""
@@ -687,12 +685,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType != "2":
 			self.bufferInfo()
 
-		if self.infobarShown:
-			self.hide()
-			self.infobarShown = False
-		else:
-			self.show()
-			self.infobarShown = True
+		self.toggleShow()
 
 		#printl("", self, "C")
 	
