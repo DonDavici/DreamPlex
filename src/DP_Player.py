@@ -32,6 +32,8 @@ from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
 from Screens.ChoiceBox import ChoiceBox
 from Screens.HelpMenu import HelpableScreen
+from Screens.AudioSelection import AudioSelection
+from Tools.ISO639 import LanguageCodes
 
 #noinspection PyUnresolvedReferences
 from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation, ePicLoad
@@ -48,6 +50,7 @@ from Components.Slider import Slider
 from Components.Sources.StaticText import StaticText
 from Components.Language import language
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
+from Components.Sources.List import List
 
 from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
@@ -107,11 +110,13 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	playbackType = None
 	timelineWatcher = None
 	whatPoster = None
+	subtitleStreams = None
+	subtitleLanguageCode = None
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False, sessionData=None):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False, sessionData=None, subtitleData=None):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
@@ -141,6 +146,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.playbackMode = playbackMode
 		self.isExtraData = isExtraData
 		self.sessionData = sessionData
+		self.subtitleData = subtitleData
 
 		# we add this for vix images due to their long press button support
 		self.LongButtonPressed = False
@@ -549,13 +555,109 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.startTimelineWatcher()
 
+		if self.subtitleData == "forced" or self.subtitleData:
+			self.startSubtitleWatcher()
+
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
 
 			# we start here too because it seems that direct local does not hit the buffer full function
 			self.timelineWatcher.start(5000,False)
+			self.subtitleWatcher.start(10000,False)
+
 		else:
 			self["bufferslider"].setValue(1)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def startSubtitleWatcher(self):
+		printl("", self, "S")
+
+		self.subtitleWatcher = eTimer()
+		self.subtitleWatcher.callback.append(self.subtitleChecker)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def subtitleChecker(self):
+		printl("", self, "S")
+
+		try:
+			subtitles = self.getCurrentServiceSubtitle()
+			subtitlelist = subtitles.getSubtitleList()
+			subtitleStreams = []
+			printl("subtitles: " + str(subtitles), self, "D")
+			printl("what: " + str(subtitlelist), self, "D")
+
+			if len(subtitlelist):
+				for x in subtitlelist:
+					number = str(x[1])
+					description = "?"
+					myLanguage = _("<unknown>")
+					selected = ""
+
+					if x[4] != "und":
+						if LanguageCodes.has_key(x[4]):
+							myLanguage = LanguageCodes[x[4]][0]
+						else:
+							myLanguage = x[4]
+
+					if x[0] == 0:
+						description = "DVB"
+						number = "%x" % (x[1])
+
+					elif x[0] == 1:
+						description = "TTX"
+						number = "%x%02x" % (x[3],x[2])
+
+					elif x[0] == 2:
+						types = (_("<unknown>"), "UTF-8 text", "SSA", "AAS", ".SRT file", "VOB", "PGS (unsupported)")
+						description = types[x[2]]
+
+					subs = (x, "", number, description, myLanguage, selected)
+
+					if self.subtitleData == "forced":
+						self.enableSubtitle(subs[0])
+						self.subtitleWatcher.stop()
+
+					elif self.subtitleData in myLanguage:
+						self.enableSubtitle(subs[0])
+						self.subtitleWatcher.stop()
+
+					else:
+						print self.subtitleData
+						print myLanguage
+						raise Exception
+
+					# just for debugging
+					subtitleStreams.append((x, "", number, description, myLanguage, selected))
+
+					# currentStream = subtitleStreams[0]
+					# self.enableSubtitle(currentStream[0])
+
+			printl("subtitleStreams: " + str(subtitleStreams), self, "D")
+
+		except Exception, e:
+			printl("Subtitle Message: " + str(e), self, "D")
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def enableSubtitle(self, subtitles):
+		printl("", self, "S")
+
+		if self.selected_subtitle != subtitles:
+			self.subtitles_enabled = False
+			self.selected_subtitle = subtitles
+			if subtitles:
+				self.subtitles_enabled = True
 
 		printl("", self, "C")
 
@@ -862,7 +964,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl( "Buffer filled start playing", self, "I")
 			self.setSeekState(self.SEEK_STATE_PLAY)
 
-		self.timelineWatcher.start(10000,False)
+		self.timelineWatcher.start(5000,False)
 
 		#printl("", self, "C")
 
@@ -1145,8 +1247,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				printl("audioTrack exception: " + str(e), self, "W") 
 		
 		printl("", self, "C")   
-		
-	
+
 	#===========================================================================
 	# tryAudioEnable
 	#===========================================================================

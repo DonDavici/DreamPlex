@@ -24,7 +24,6 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 import math
 import os
-from time import strftime, gmtime
 
 #noinspection PyUnresolvedReferences
 from enigma import eTimer
@@ -59,7 +58,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, convertSize, encodeThat
+from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -133,6 +132,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	themeMusicIsRunning             = False
 	lastPlayedTheme                 = None
 	filterableContent               = False
+	subtitlesList                   = None
 
 	#===========================================================================
 	#
@@ -669,7 +669,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onKeyAudio(self):
 		printl("", self, "S")
 
-		self.displayAudioMenu()
+		#self.displayAudioMenu()
+		self.displaySubtitleMenu()
 
 		printl("", self, "C")
 
@@ -1212,6 +1213,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onNextEntry(self):
 		printl("", self, "S")
 
+		# reset subtitlesList
+		self.subtitlesList = None
+
 		self.refresh()
 
 		printl("", self, "C")
@@ -1221,6 +1225,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	def onPreviousEntry(self):
 		printl("", self, "S")
+
+		# reset subtitlesList
+		self.subtitlesList = None
 
 		self.refresh()
 
@@ -1237,6 +1244,10 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if index >= itemsTotal:
 			index = itemsTotal - 1
 		self["listview"].setIndex(index)
+
+		# reset subtitlesList
+		self.subtitlesList = None
+
 		self.refresh()
 
 		printl("", self, "C")
@@ -1251,6 +1262,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		if index < 0:
 			index = 0
 		self["listview"].setIndex(index)
+
+		# reset subtitlesList
+		self.subtitlesList = None
 
 		self.refresh()
 
@@ -1345,7 +1359,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 				if self.sessionData and str(self.sessionData[2]) == str(self.listViewList[int(currentIndex)][1]['ratingKey']):
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
 				else:
-					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode)
+					subtitleData = self.getSubtitleInformation()
+					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=subtitleData)
 
 			else:
 				# save index here because user moved around for sure
@@ -2032,31 +2047,91 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	#===========================================================================
 	#
 	#===========================================================================
+	def getSubtitleList(self):
+		printl("", self, "S")
+
+		if self.subtitlesList is None:
+			selection = self["listview"].getCurrent()
+
+			self.media_id = selection[1]['ratingKey']
+			self.server = selection[1]['server']
+
+			self.subtitlesList = Singleton().getPlexInstance().getSubtitlesById(self.server, self.media_id)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSubtitleInformation(self):
+		printl("", self, "S")
+
+		self.getSubtitleList()
+
+		printl("subtitlesList: " + str(self.subtitlesList), self, "D")
+
+		for item in self.subtitlesList:
+
+			selected = item.get('selected', "")
+			language = item.get('language', "")
+			forced = item.get('forced', "")
+
+			if language == "None":
+				subtitleData = False
+
+			elif forced:
+				subtitleData = "forced"
+
+			elif selected:
+				subtitleData = language
+
+			elif not selected:
+				printl("we are not selected ..." + str(language), self, "D")
+
+			else:
+				printl("unsupported case, please check", self, "D")
+
+		printl("enableSubtitles: " + str(subtitleData), self, "C")
+		return subtitleData
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def displaySubtitleMenu(self):
 		printl("", self, "S")
 
-		selection = self["listview"].getCurrent()
-
-		media_id = selection[1]['ratingKey']
-		server = selection[1]['server']
+		self.getSubtitleList()
 
 		functionList = []
 
-		subtitlesList = Singleton().getPlexInstance().getSubtitlesById(server, media_id)
 
-		for item in subtitlesList:
-
-			selected = item.get('selected', "")
-			if selected == "1":
-				name = item.get('language').encode("utf-8", "") + " [Currently Enabled]"
+		for item in self.subtitlesList:
+			languageText = item.get('language').encode("utf-8", "")
+			myFormat = item.get("myFormat", None)
+			if myFormat:
+				formatText = " (" + myFormat + ")"
 			else:
-				name = item.get('language').encode("utf-8", "")
+				formatText = ""
+
+			forced = item['forced']
+			if forced:
+				forcedText = " forced"
+			else:
+				forcedText = ""
+
+			selected = item.get('selected', None)
+			if selected:
+				enabledText = " => enabled"
+			else:
+				enabledText = ""
+
+			name = languageText + formatText + forcedText + enabledText
 
 			sub_id = item.get('id', "")
 			languageCode = item.get('languageCode', "")
 			part_id = item.get('partid', "")
 
-			functionList.append((name, media_id, languageCode, sub_id, server, part_id, selected))
+			functionList.append((name, self.media_id, languageCode, sub_id, self.server, part_id, selected))
 
 		selection = 0
 		for i in range(len(functionList)):
@@ -2064,7 +2139,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 				selection = i
 				break
 
-		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions\n\nPlease take note that switching the subtitles here will take only effect if you enable transcoding!"), list=functionList,selection=selection)
+		self.session.openWithCallback(self.displaySubtitleMenuCallback, ChoiceBox, title=_("Subtitle Functions\n\nPlease take note that switching the subtitles here will take only effect if you use direct local or transcoding!"), list=functionList,selection=selection)
 
 		printl("", self, "C")
 

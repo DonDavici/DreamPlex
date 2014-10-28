@@ -1596,32 +1596,51 @@ class PlexLibrary(Screen):
 		tags=tree.getiterator('Stream')
 
 
-		subtitle = {	'id': -1,
-						'index': 		-1,
-						'language':	 	"None",
-						'languageCode': "NA",
-						'format': 		"None",
-						'partid' : 	partitem[0]
+		subtitle = {	'id': 0,
+		                'language':     "None",
+						'partid' : 	partitem[0],
+		                'forced' : False
 					}
 
 		subtitlesList.append(subtitle)
 		for bits in tags:
 			stream=dict(bits.items())
 			if stream['streamType'] == '3': #subtitle
-				try:
-					subtitle = {		'id': stream.get('id',-1),
-										'index': 		stream.get('index',-1),
-										'language':	 	stream.get('language','Unknown'),
-										'languageCode': stream.get('languageCode','Ukn'),
-										'format' : 		stream.get('format', 'UKN'),
-										'partid' : 	partitem[0],
-										'selected' : stream.get('selected',0)
-								}
+				# <Stream id="217871" streamType="3" selected="1" default="1" forced="1" codec="srt" index="2" language="Deutsch" languageCode="ger" codecID="S_TEXT/UTF8" format="srt" title="" />
+				# <Stream id="217865" key="/library/streams/217865" streamType="3" selected="1" codec="srt" format="srt" />
 
-					subtitlesList.append(subtitle)
-				except:
-					printl ("Unable to set subtitles due to XML parsing error", self, "E" )
-					pass
+				# try:
+				subtitleId = stream['id']
+				codec = stream['codec']
+				myFormat = stream['format']
+				partid = partitem[0]
+
+				selected = stream.get('selected', False)
+				language = stream.get('language', 'unbekannt')
+				languageCode = stream.get('languageCode', 'Unknown')
+				index = stream.get('index', None)
+				default = stream.get('index', None)
+
+				forced = stream.get('forced', False)
+				if forced == "1":
+					forced = True
+
+				subtitle = {		'id': subtitleId,
+									'index': 		index,
+									'language':	 	language,
+									'languageCode': languageCode,
+									'myFormat' :	myFormat,
+									'partid' : 	    partid,
+									'selected' :    selected,
+									'codec':        codec,
+									'default':      default,
+				                    'forced':       forced
+							}
+
+				subtitlesList.append(subtitle)
+				# except:
+				# 	printl ("Unable to set subtitles due to XML parsing error", self, "E" )
+				# 	pass
 
 		printl ("subtitlesList = " + str(subtitlesList), self, "D" )
 
