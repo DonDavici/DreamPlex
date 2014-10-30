@@ -426,6 +426,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		elif self.current.playbackType.value == "2":
 			self.useMappings = True
+			self.cfglist.append(getConfigListEntry(_("> Search and use forced subtitles"), self.current.useForcedSubtitles, _(" ")))
 
 		elif self.current.playbackType.value == "3":
 			self.useMappings = False

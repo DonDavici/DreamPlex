@@ -1360,7 +1360,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 				if self.sessionData and str(self.sessionData[2]) == str(self.listViewList[int(currentIndex)][1]['ratingKey']):
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
 				else:
-					if config.plugins.dreamplex.useForcedSubtitles.value and self.serverConfig.playbackType.value == "2":
+					if self.serverConfig.useForcedSubtitles.value and self.serverConfig.playbackType.value == "2":
 						self.subtitleData = self.getSubtitleInformation()
 
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=self.subtitleData)

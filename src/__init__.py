@@ -78,7 +78,6 @@ config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = True)
 config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
-config.plugins.dreamplex.useForcedSubtitles			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
@@ -148,7 +147,6 @@ def printGlobalSettings():
 	printl("summerizeSections: " + str(config.plugins.dreamplex.summerizeSections.value), "__init__::initGlobalSettings", "I")
 	printl("useCache: " + str(config.plugins.dreamplex.useCache.value), "__init__::initGlobalSettings", "I")
 	printl("usePicCache: " + str(config.plugins.dreamplex.usePicCache.value), "__init__::initGlobalSettings", "I")
-	printl("useForcedSubtitles: " + str(config.plugins.dreamplex.useForcedSubtitles.value), "__init__::initGlobalSettings", "I")
 
 	printl("", "__init__::initPlexSettings", "C")
 
@@ -181,6 +179,7 @@ def initServerEntryConfig():
 
 	config.plugins.dreamplex.Entries[i].subtitlesForDirectLocal	= ConfigYesNo()
 	config.plugins.dreamplex.Entries[i].subtitlesLanguage       = ConfigText(default = "de", visible_width = 2)
+	config.plugins.dreamplex.Entries[i].useForcedSubtitles			= ConfigYesNo(default = True)
 
 
 	printl("=== SERVER SETTINGS ===", "__init__::initServerEntryConfig", "D")
@@ -233,6 +232,7 @@ def initServerEntryConfig():
 
 	# DIRECT LOCAL
 	printl("=== DIRECT LOCAL ===", "__init__::initServerEntryConfig", "D")
+	printl("use forced subtitles: " + str(config.plugins.dreamplex.Entries[i].useForcedSubtitles.value), "__init__::initServerEntryConfig", "D")
 
 	# DIRECT REMOTE
 	config.plugins.dreamplex.Entries[i].smbUser = ConfigText(visible_width=50, fixed_size=False)
