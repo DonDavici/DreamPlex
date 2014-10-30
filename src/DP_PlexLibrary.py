@@ -1868,6 +1868,7 @@ class PlexLibrary(Screen):
 
 		parts=[]
 		partsCount=0
+		contents = ""
 		subtitle={}
 		subCount=0
 		audio={}
@@ -1880,8 +1881,21 @@ class PlexLibrary(Screen):
 		selectedSubOffset=-1
 		selectedAudioOffset=-1
 
+		streamData={'contents'   : contents,
+					'audio'	     : audio,
+					'audioCount' : audioCount,
+					'subtitle'   : subtitle,
+					'subCount'   : subCount,
+					'external'   : external,
+					'parts'	     : parts,
+					'partsCount' : partsCount,
+					'videoData'  : videoData,
+					'mediaData'  : mediaData,
+					'subOffset'  : selectedSubOffset ,
+					'audioOffset': selectedAudioOffset }
+
 		if not tree:
-			return {}
+			return streamData
 		else:
 			fromVideo = tree.find(myType) # Track or Video
 
@@ -1921,7 +1935,8 @@ class PlexLibrary(Screen):
 						bits = part.get('key'), part.get('file'), part.get('container'), part.get('size'), part.get('duration')
 						parts.append(bits)
 						partsCount += 1
-					except: pass
+					except Exception, e:
+						printl("Error: " + str(e), self, "D")
 
 					if myType == "Video":
 						if self.g_streamControl == "1" or self.g_streamControl == "2":
@@ -1943,7 +1958,8 @@ class PlexLibrary(Screen):
 											printl("Found preferred audio id: " + str(stream['id']), self, "I" )
 											audio=stream
 											selectedAudioOffset=audioOffset
-									except: pass
+									except Exception, e:
+										printl("Error: " + str(e), self, "D")
 
 								elif stream['streamType'] == '3': #subtitle
 									subOffset += 1
@@ -1952,15 +1968,16 @@ class PlexLibrary(Screen):
 											printl( "Found external subtitles id : " + str(stream['id']),self, "I")
 											external = stream
 											external['key']='http://'+server+external['key']
-									except:
-										#Otherwise it's probably embedded
+									except Exception, e:
+										printl("Error: " + str(e) + " maybe we are embedded?", self, "D")
 										try:
 											if stream['selected'] == "1":
 												printl( "Found preferred subtitles id : " + str(stream['id']), self, "I")
 												subCount += 1
 												subtitle = stream
 												selectedSubOffset=subOffset
-										except: pass
+										except Exception, e:
+											printl("even not embedded ...: " + str(e), self, "D")
 						else:
 								printl( "Stream selection is set OFF", self, "I")
 
