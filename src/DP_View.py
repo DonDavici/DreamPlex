@@ -659,7 +659,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		else:
 			self.sessionData = False
-			if not config.plugins.dreamplex.stopLiveTvOnStartup.value:
+			if not config.plugins.dreamplex.stopLiveTvOnStartup.value and self.liveTvInViews:
 				self.restoreLiveTv()
 
 		printl("", self, "C")
@@ -1361,9 +1361,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
 				else:
 					if config.plugins.dreamplex.useForcedSubtitles.value and self.serverConfig.playbackType.value == "2":
-						subtitleData = self.getSubtitleInformation()
+						self.subtitleData = self.getSubtitleInformation()
 
-					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=subtitleData)
+					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=self.subtitleData)
 
 			else:
 				# save index here because user moved around for sure
