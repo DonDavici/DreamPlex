@@ -50,7 +50,6 @@ from Components.Slider import Slider
 from Components.Sources.StaticText import StaticText
 from Components.Language import language
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
-from Components.Sources.List import List
 
 from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
@@ -636,9 +635,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 					# just for debugging
 					subtitleStreams.append((x, "", number, description, myLanguage, selected))
-
-					# currentStream = subtitleStreams[0]
-					# self.enableSubtitle(currentStream[0])
 
 			printl("subtitleStreams: " + str(subtitleStreams), self, "D")
 
