@@ -78,6 +78,7 @@ config.plugins.dreamplex.summerizeSections 			= ConfigYesNo(default = True)
 config.plugins.dreamplex.stopLiveTvOnStartup 		= ConfigYesNo()
 config.plugins.dreamplex.useCache			 		= ConfigYesNo(default = True)
 config.plugins.dreamplex.usePicCache			 	= ConfigYesNo(default = True)
+config.plugins.dreamplex.useForcedSubtitles			= ConfigYesNo(default = True)
 config.plugins.dreamplex.useBackdropVideos		 	= ConfigYesNo()
 config.plugins.dreamplex.showDetailsInList          = ConfigYesNo()
 config.plugins.dreamplex.showDetailsInListDetailType = ConfigSelection(default = "1", choices = [("1", "user"), ("2", "server")])
@@ -147,6 +148,7 @@ def printGlobalSettings():
 	printl("summerizeSections: " + str(config.plugins.dreamplex.summerizeSections.value), "__init__::initGlobalSettings", "I")
 	printl("useCache: " + str(config.plugins.dreamplex.useCache.value), "__init__::initGlobalSettings", "I")
 	printl("usePicCache: " + str(config.plugins.dreamplex.usePicCache.value), "__init__::initGlobalSettings", "I")
+	printl("useForcedSubtitles: " + str(config.plugins.dreamplex.useForcedSubtitles.value), "__init__::initGlobalSettings", "I")
 
 	printl("", "__init__::initPlexSettings", "C")
 

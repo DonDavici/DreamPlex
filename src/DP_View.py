@@ -133,6 +133,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	lastPlayedTheme                 = None
 	filterableContent               = False
 	subtitlesList                   = None
+	subtitleData                    = None
 
 	#===========================================================================
 	#
@@ -1359,7 +1360,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 				if self.sessionData and str(self.sessionData[2]) == str(self.listViewList[int(currentIndex)][1]['ratingKey']):
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
 				else:
-					subtitleData = self.getSubtitleInformation()
+					if config.plugins.dreamplex.useForcedSubtitles.value and self.serverConfig.playbackType.value == "2":
+						subtitleData = self.getSubtitleInformation()
+
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=subtitleData)
 
 			else:
@@ -2502,13 +2505,14 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.getSeenVisus()
 
 		# enable audio and subtitles information if we have transcoding active
-		if self.serverConfig.playbackType.value == "1":
+		if self.serverConfig.playbackType.value == "1": # transcoded
 			printl("audio: " + str(self.viewParams["elements"]["audio"]),self, "D")
 			if self.viewParams["elements"]["audio"]["visible"]:
 				self.toggleElementVisibilityWithLabel("audio")
 			else:
 				self.toggleElementVisibilityWithLabel("audio", "hide")
 
+		if self.serverConfig.playbackType.value == "2" or self.serverConfig.playbackType.value == "1":  # direct local and transcoded
 			if self.viewParams["elements"]["subtitles"]["visible"]:
 				self.toggleElementVisibilityWithLabel("subtitles")
 			else:
