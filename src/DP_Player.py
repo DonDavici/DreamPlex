@@ -111,6 +111,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	whatPoster = None
 	subtitleStreams = None
 	subtitleLanguageCode = None
+	subtitleWatcher = None
 
 	#===========================================================================
 	#
@@ -562,7 +563,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 			# we start here too because it seems that direct local does not hit the buffer full function
 			self.timelineWatcher.start(5000,False)
-			self.subtitleWatcher.start(10000,False)
+			if self.subtitleWatcher is not None:
+				self.subtitleWatcher.start(10000,False)
 
 		else:
 			self["bufferslider"].setValue(1)
