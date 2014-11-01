@@ -1611,10 +1611,10 @@ class PlexLibrary(Screen):
 
 				# try:
 				subtitleId = stream['id']
-				codec = stream['codec']
 				myFormat = stream['format']
 				partid = partitem[0]
 
+				codec = stream.get('codec', None)
 				selected = stream.get('selected', False)
 				language = stream.get('language', 'unbekannt')
 				languageCode = stream.get('languageCode', 'Unknown')
