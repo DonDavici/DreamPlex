@@ -580,6 +580,10 @@ def setBoxInformation():
 			manu = "Dreambox"
 			model = "800se"
 			arch = "mipsel"
+		elif box == "dm7080":
+			manu = "Dreambox"
+			model = "7080"
+			arch = "mipsel"
 		elif box == "dm8000":
 			manu = "Dreambox"
 			model = "8000"
