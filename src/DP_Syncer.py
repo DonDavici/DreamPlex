@@ -49,7 +49,7 @@ from DP_ViewFactory import getViews
 from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, isValidSize, encodeThat, getSkinResolution
+from __common__ import printl2 as printl, isValidSize, encodeThat, getSkinResolution, getOeVersion
 from __init__ import _ # _ is translation
 
 #===========================================================================
@@ -387,8 +387,13 @@ class MediaSyncerInfo(object):
 
 		if not self.running:
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
-			self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
-			self.backgroundMediaSyncer.ProgressPump.recv_msg.get().append(self.gotThreadProgressMsg)
+			if getOeVersion() != "oe22":
+				self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
+				self.backgroundMediaSyncer.ProgressPump.recv_msg.get().append(self.gotThreadProgressMsg)
+			else:
+				self.backgroundMediaSyncerConn = self.backgroundMediaSyncer.MessagePump.recv_msg.connect(self.gotThreadMsg)
+				self.backgroundMediaSyncerConn = self.backgroundMediaSyncer.ProgressPump.recv_msg.connect(self.gotThreadProgressMsg)
+
 			self.backgroundMediaSyncer.setMode(self.mode)
 
 			if self.mode == "sync":
@@ -413,7 +418,11 @@ class MediaSyncerInfo(object):
 
 		if msg[0] == THREAD_FINISHED:
 			# clean up
-			self.backgroundMediaSyncer.MessagePump.recv_msg.get().remove(self.gotThreadMsg)
+			if getOeVersion() != "oe22":
+				self.backgroundMediaSyncer.MessagePump.recv_msg.get().remove(self.gotThreadMsg)
+			else:
+				self.backgroundMediaSyncerConn = None
+
 			self.callback = None
 			#self.backgroundMediaSyncer = None # this throws a green screen. dont know why
 			self.running = False

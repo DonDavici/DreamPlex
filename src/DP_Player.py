@@ -32,7 +32,6 @@ from Screens.MessageBox import MessageBox
 from Screens.MinuteInput import MinuteInput
 from Screens.ChoiceBox import ChoiceBox
 from Screens.HelpMenu import HelpableScreen
-from Screens.AudioSelection import AudioSelection
 from Tools.ISO639 import LanguageCodes
 
 #noinspection PyUnresolvedReferences
@@ -61,7 +60,7 @@ from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, convertSize, encodeThat
+from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -418,7 +417,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.whatPoster is None:
 			self.buildPosterData()
 
-		self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		if getOeVersion() != "oe22":
+			self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		else:
+			self.EXpicloadPoster.startDecode(self.whatPoster,False)
 
 		self.ptr = self.EXpicloadPoster.getData()
 
@@ -578,7 +580,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 
 		self.subtitleWatcher = eTimer()
-		self.subtitleWatcher.callback.append(self.subtitleChecker)
+
+		if getOeVersion() != "oe22":
+			self.subtitleWatcher.callback.append(self.subtitleChecker)
+		else:
+			self.subtitleWatcherConn = self.subtitleWatcher.timeout.connect(self.subtitleChecker)
 
 		printl("", self, "C")
 
@@ -666,7 +672,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 
 		self.timelineWatcher = eTimer()
-		self.timelineWatcher.callback.append(self.updateTimeline)
+
+		if getOeVersion() != "oe22":
+			self.timelineWatcher.callback.append(self.updateTimeline)
+		else:
+			self.timelineWatcherConn = self.timelineWatcher.timeout.connect(self.updateTimeline)
 
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")
@@ -682,7 +692,12 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		if self.playbackType == "1"  and self.universalTranscoder:
 			self.transcoderHeartbeat = eTimer()
-			self.transcoderHeartbeat.callback.append(self.keepTranscoderAlive)
+
+			if getOeVersion() != "oe22":
+				self.transcoderHeartbeat.callback.append(self.keepTranscoderAlive)
+			else:
+				self.transcoderHeartbeatConn = self.transcoderHeartbeat.timeout.connect(self.keepTranscoderAlive)
+
 			self.transcoderHeartbeat.start(10000,False)
 
 		self.timelineWatcher.stop()

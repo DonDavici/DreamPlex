@@ -38,7 +38,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Console import Console as SConsole
 
-from __common__ import printl2 as printl, testInetConnectivity, getUserAgentHeader
+from __common__ import printl2 as printl, testInetConnectivity, getUserAgentHeader, getBoxArch, getOeVersion
 
 from __init__ import getVersion, _ # _ is translation
 
@@ -47,7 +47,7 @@ from __init__ import getVersion, _ # _ is translation
 #===============================================================================
 class DPS_SystemCheck(Screen):
 
-	oeVersion = None
+	archVersion = None
 	check = None
 	latestVersion = None
 
@@ -65,12 +65,12 @@ class DPS_SystemCheck(Screen):
 
 		vlist = []
 
-		self.oeVersion = self.getBoxArch()
+		self.archVersion = getBoxArch()
 
-		if self.oeVersion == "mipsel":
+		if self.archVersion == "mipsel":
 			vlist.append((_("Check for gst-plugin-fragmented"), "oe16"))
 
-		elif self.oeVersion == "mips32el":
+		elif self.archVersion == "mips32el":
 			vlist.append((_("Check for gst-plugins-bad-fragmented"), "oe20"))
 
 		else:
@@ -243,9 +243,12 @@ class DPS_SystemCheck(Screen):
 	def updateToLatestVersion(self):
 		printl("", self, "S")
 
-		remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
-
-		cmd = "opkg install --force-overwrite --force-depends " + str(remoteUrl)
+		if getOeVersion() != "oe22":
+			remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
+			cmd = "opkg install --force-overwrite --force-depends " + str(remoteUrl)
+		else:
+			remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb?direct"
+			cmd = "dpkg --install " + str(remoteUrl) + " && apt-get update && apt-get -f install"
 
 		printl("remoteUrl: " + str(remoteUrl), self, "D")
 		printl("cmd: " + str(cmd), self, "D")
@@ -289,7 +292,10 @@ class DPS_SystemCheck(Screen):
 	def checkOpensslInstallation(self, override=False):
 		printl("", self, "S")
 
-		command = "opkg status python-pyopenssl"
+		if getOeVersion() != "oe22":
+			command = "opkg status python-pyopenssl"
+		else:
+			command = "dpkg -s python-pyopenssl"
 
 		self.check = "openssl"
 		state = self.executeCommand(command, override)
@@ -303,7 +309,10 @@ class DPS_SystemCheck(Screen):
 	def checkJpegToolsInstallation(self):
 		printl("", self, "S")
 
-		command = "opkg status mjpegtools"
+		if getOeVersion() != "oe22":
+			command = "opkg status mjpegtools"
+		else:
+			command = "dpkg -s mjpegtools"
 
 		self.check = "jpegTools"
 		state = self.executeCommand(command)
@@ -317,7 +326,10 @@ class DPS_SystemCheck(Screen):
 	def checkPythonImagingInstallation(self):
 		printl("", self, "S")
 
-		command = "opkg status python-imaging"
+		if getOeVersion() != "oe22":
+			command = "opkg status python-imaging"
+		else:
+			command = "dpkg -s python-imaging"
 
 		self.check = "pythonImaging"
 		state = self.executeCommand(command)
@@ -331,7 +343,10 @@ class DPS_SystemCheck(Screen):
 	def checkPythonTextutils(self):
 		printl("", self, "S")
 
-		command = "opkg status python-textutils"
+		if getOeVersion() != "oe22":
+			command = "opkg status python-textutils"
+		else:
+			command = "dpkg -s python-textutils"
 
 		self.check = "pythonTextutils"
 		state = self.executeCommand(command)
@@ -349,11 +364,14 @@ class DPS_SystemCheck(Screen):
 
 		if arch == "oe16":
 			command = "opkg status gst-plugin-fragmented"
-			self.oeVersion = "mipsel"
+			self.archVersion = "mipsel"
 
 		elif arch == "oe20":
-			command = "opkg status gst-plugins-bad-fragmented"
-			self.oeVersion = "mips32el"
+			if getOeVersion() != "oe22":
+				command = "opkg status gst-plugins-bad-fragmented"
+			else:
+				command = "dpkg -s gst-plugins-bad-fragmented"
+			self.archVersion = "mips32el"
 
 		else:
 			printl("someting went wrong with arch type", self, "W")
@@ -415,11 +433,15 @@ class DPS_SystemCheck(Screen):
 		if confirm:
 			# User said 'Yes'
 
-			if self.oeVersion == "mipsel":
+			if self.archVersion == "mipsel":
 				command = "opkg update; opkg install python-pyopenssl"
 
-			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install python-pyopenssl"
+			elif self.archVersion == "mips32el":
+
+				if getOeVersion() != "oe22":
+					command = "opkg update; opkg install python-pyopenssl"
+				else:
+					command = "apt-get update && apt-get install python-pyopenssl --force-yes -y"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
@@ -457,11 +479,14 @@ class DPS_SystemCheck(Screen):
 		if confirm:
 			# User said 'Yes'
 
-			if self.oeVersion == "mipsel":
+			if self.archVersion == "mipsel":
 				command = "opkg update; opkg install mjpegtools"
 
-			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install mjpegtools"
+			elif self.archVersion == "mips32el":
+				if getOeVersion() != "oe22":
+					command = "opkg update; opkg install mjpegtools"
+				else:
+					command = "apt-get update && apt-get install mjpegtools --force-yes -y"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
@@ -484,11 +509,14 @@ class DPS_SystemCheck(Screen):
 		if confirm:
 			# User said 'Yes'
 
-			if self.oeVersion == "mipsel":
+			if self.archVersion == "mipsel":
 				command = "opkg update; opkg install python-imaging"
 
-			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install python-imaging"
+			elif self.archVersion == "mips32el":
+				if getOeVersion() != "oe22":
+					command = "opkg update; opkg install python-imaging"
+				else:
+					command = "apt-get update && apt-get install python-imaging --force-yes -y"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
@@ -512,11 +540,14 @@ class DPS_SystemCheck(Screen):
 		if confirm:
 			# User said 'Yes'
 
-			if self.oeVersion == "mipsel":
+			if self.archVersion == "mipsel":
 				command = "opkg update; opkg install python-textutils"
 
-			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install python-textutils"
+			elif self.archVersion == "mips32el":
+				if getOeVersion() != "oe22":
+					command = "opkg update; opkg install python-textutils"
+				else:
+					command = "apt-get update && apt-get install python-textutils --force-yes -y"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
@@ -540,11 +571,14 @@ class DPS_SystemCheck(Screen):
 		if confirm:
 			# User said 'Yes'
 
-			if self.oeVersion == "mipsel":
+			if self.archVersion == "mipsel":
 				command = "opkg update; opkg install gst-plugin-fragmented"
 
-			elif self.oeVersion == "mips32el":
-				command = "opkg update; opkg install gst-plugins-bad-fragmented"
+			elif self.archVersion == "mips32el":
+				if getOeVersion() != "oe22":
+					command = "opkg update; opkg install gst-plugins-bad-fragmented"
+				else:
+					command = "apt-get update && apt-get install gst-plugins-bad-fragmented --force-yes -y"
 
 			else:
 				printl("something went wrong finding out the oe-version", self, "W")
@@ -563,22 +597,7 @@ class DPS_SystemCheck(Screen):
 	def executeInstallationCommand(self, command):
 		printl("", self, "S")
 
-		if not system(command):
-			# Successfully installed
-			#defaultServer = plexServerConfig.getDefaultServer()
-			#self.openSectionlist(defaultServer)
-			pass
-		else:
-			# Fail, try again and report the output...
-			pipe = popen(command)
-			if pipe is not None:
-				data = pipe.read(8192)
-				if data is None:
-					data = "Unknown Error"
-				pipe.close()
-				self.session.open(MessageBox, _("Could not install "+ command + ":\n") + data, MessageBox.TYPE_ERROR)
-			# Failed to install
-			self.cancel()
+		self.session.open(SConsole,"Excecuting command:", [command] , self.finishupdate)
 
 		printl("", self, "C")
 
@@ -591,20 +610,3 @@ class DPS_SystemCheck(Screen):
 		self.close(False,self.session)
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getBoxArch(self):
-		printl("", self, "S")
-
-		ARCH = "unknown"
-
-		if (2, 6, 8) > sys.version_info > (2, 6, 6):
-			ARCH = "mipsel"
-
-		if (2, 7, 4) > sys.version_info > (2, 7, 0):
-			ARCH = "mips32el"
-
-		printl("", self, "C")
-		return ARCH

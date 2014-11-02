@@ -63,10 +63,12 @@ skinCompatibility = "v2"
 skinDebugMode = False
 skinHighlightedColor = "#e69405"
 skinNormalColor = "#ffffff"
-gBoxType = None
+g_boxData = None
 screens = []
 liveTv = None
 g_uuid = None
+g_oeVersion = None
+g_archType = None
 STARTING_MESSAGE = ">>>>>>>>>>"
 CLOSING_MESSAGE = "<<<<<<<<<<"
 #===============================================================================
@@ -478,17 +480,12 @@ def getBoxInformation():
 	@return: manu, model, arch, version
 	"""
 	printl2("", "__common__::getBoxtype", "S")
-	global gBoxType
 
-	if gBoxType is not None:
+	if g_boxData is  None:
+		setBoxInformation()
 
-		printl2("", "__common__::getBoxtype", "C")
-		return gBoxType
-	else:
-		gBoxType = setBoxInformation()
-
-		printl2("", "__common__::getBoxtype", "C")
-		return gBoxType
+	printl2("", "__common__::getBoxtype", "C")
+	return g_boxData
 
 #===============================================================================
 #
@@ -525,7 +522,6 @@ def setBoxInformation():
 				pass
 
 	manu = "unknown"
-	arch = "unknown"
 	model = "unkown"
 
 	if success:
@@ -535,147 +531,172 @@ def setBoxInformation():
 		if box == "ufs910":
 			manu = "Kathrein"
 			model = "UFS-910"
-			arch = "sh4"
 		elif box == "ufs912":
 			manu = "Kathrein"
 			model = "UFS-912"
-			arch = "sh4"
 		elif box == "ufs922":
 			manu = "Kathrein"
 			model = "UFS-922"
-			arch = "sh4"
 		elif box == "solo":
 			manu = "VU+"
 			model = "Solo"
-			arch = "mipsel"
 		elif box == "duo":
 			manu = "VU+"
 			model = "Duo"
-			arch = "mipsel"
 		elif box == "solo2":
 			manu = "VU+"
 			model = "Solo2"
-			arch = "mipsel"
 		elif box == "duo2":
 			manu = "VU+"
 			model = "Duo2"
-			arch = "mipsel"
 		elif box == "uno":
 			manu = "VU+"
 			model = "Uno"
-			arch = "mipsel"
 		elif box == "ultimo":
 			manu = "VU+"
 			model = "Ultimo"
-			arch = "mipsel"
 		elif box == "tf7700hdpvr":
 			manu = "Topfield"
 			model = "HDPVR-7700"
-			arch = "sh4"
 		elif box == "dm800":
 			manu = "Dreambox"
 			model = "800"
-			arch = "mipsel"
 		elif box == "dm800se":
 			manu = "Dreambox"
 			model = "800se"
-			arch = "mipsel"
 		elif box == "dm7080":
 			manu = "Dreambox"
 			model = "7080"
-			arch = "mipsel"
 		elif box == "dm8000":
 			manu = "Dreambox"
 			model = "8000"
-			arch = "mipsel"
 		elif box == "dm500hd":
 			manu = "Dreambox"
 			model = "500hd"
-			arch = "mipsel"
 		elif box == "dm7025":
 			manu = "Dreambox"
 			model = "7025"
-			arch = "mipsel"
 		elif box == "dm7020hd":
 			manu = "Dreambox"
 			model = "7020hd"
-			arch = "mipsel"
 		elif box == "elite":
 			manu = "Azbox"
 			model = "Elite"
-			arch = "mipsel"
 		elif box == "premium":
 			manu = "Azbox"
 			model = "Premium"
-			arch = "mipsel"
 		elif box == "premium+":
 			manu = "Azbox"
 			model = "Premium+"
-			arch = "mipsel"
 		elif box == "cuberevo-mini":
 			manu = "Cubarevo"
 			model = "Mini"
-			arch = "sh4"
 		elif box == "hdbox":
 			manu = "Fortis"
 			model = "HdBox"
-			arch = "sh4"
 		elif box == "gbquad":
 			manu = "Gigablue"
 			model = "Quad"
-			arch = "mipsel"
 		elif box == "gbquadplus":
 			manu = "Gigablue"
 			model = "QuadPlus"
-			arch = "mipsel"
 		elif box == "gb800seplus":
 			manu = "Gigablue"
 			model = "800SEPlus"
-			arch = "mipsel"
 		elif box == "gb800ueplus":
 			manu = "Gigablue"
 			model = "800UEPlus"
-			arch = "mipsel"
 		elif box == "et8000":
 			manu = "Xtrend"
 			model = "8000"
-			arch = "mipsel"
 		elif box == "et10000":
 			manu = "Xtrend"
 			model = "10000"
-			arch = "mipsel"
 		elif box == "maram9":
 			manu = "Odin"
 			model = "M9"
-			arch = "mipsel"
 		else:
 			printl2("Unknown box: " + str(box), "__common__::_setBoxtype", "D")
 
-	if arch == "mipsel":
-		oeVersion = getBoxArch()
-	else:
-		oeVersion = "duckbox"
+	# set arch for later processing
+	getBoxArch()
 
-	boxData = (manu, model, arch, oeVersion)
+	# set oe version
+	getOeVersion()
+
+	global g_boxData
+	g_boxData = (manu, model, g_archType, g_oeVersion)
+
 	printl2("", "__common__::_setBoxtype", "C")
-	return boxData
 
-#===============================================================================
-# 
-#===============================================================================
+#===========================================================================
+#
+#===========================================================================
 def getBoxArch():
-	printl2("", "__common__::getBoxArch", "S")
+	printl2("", "__common__::setBoxArch", "S")
 
-	ARCH = "unknown"
+	if g_archType is None:
+		setBoxArch()
+
+	printl2("", "__common__::setBoxArch", "C")
+	return g_archType
+
+#===========================================================================
+#
+#===========================================================================
+def setBoxArch():
+	printl2("", "__common__::setBoxArch", "S")
+
+	archType = "unknown"
 
 	if (2, 6, 8) > sys.version_info > (2, 6, 6):
-		ARCH = "oe16"
+		archType = "mipsel"
+
+	elif (2, 7, 4) > sys.version_info > (2, 7, 0):
+		archType = "mips32el"
+
+	global g_archType
+	g_archType = archType
+
+	printl2("", "__common__::setBoxArch", "C")
+
+#===============================================================================
+#
+#===============================================================================
+def getOeVersion():
+	printl2("", "__common__::getOeVersion", "S")
+
+	if g_oeVersion is None:
+		setOeVersion()
+
+	printl2("", "__common__::getOeVersion", "C")
+	return g_oeVersion
+
+#===============================================================================
+#
+#===============================================================================
+def  setOeVersion():
+	printl2("", "__common__::getBoxArch", "S")
+
+	oeVersion = "unknown"
+
+	if (2, 6, 8) > sys.version_info > (2, 6, 6):
+		oeVersion = "oe16"
 
 	if (2, 7, 4) > sys.version_info > (2, 7, 0):
-		ARCH = "oe20"
+		oeVersion = "oe20"
+
+		# check for new oe2.2
+		try:
+			from enigma import eMediaDatabase
+			oeVersion = "oe22"
+		except:
+			pass
+
+	global g_oeVersion
+	g_oeVersion = oeVersion
 
 	printl2("", "__common__::getBoxArch", "C")
-	return ARCH
 
 #===============================================================================
 #

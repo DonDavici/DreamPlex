@@ -4,18 +4,23 @@
 #===============================================================================
 from Plugins.Plugin import PluginDescriptor
 
-from Components.Network import iNetwork
+try:
+	from Components.Network import iNetworkInfo
+except:
+	from Components.Network import iNetwork
+
 from Components.config import config, configfile
 
 from DP_Player import DP_Player
 
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
-from __common__ import getUUID, saveLiveTv, getLiveTv
+from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion
 
 #===============================================================================
 # GLOBALS
 #===============================================================================
 HttpDeamonThread = None
+HttpDeamonThreadConn = None
 HttpDeamonStarted = False
 global_session = None
 
@@ -81,7 +86,13 @@ def startRemoteDeamon():
 
 	# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 	HttpDeamonThread = HttpDeamon()
-	HttpDeamonThread.PlayerDataPump.recv_msg.get().append(gotThreadMsg)
+
+	if getOeVersion() != "oe22":
+		HttpDeamonThread.PlayerDataPump.recv_msg.get().append(gotThreadMsg)
+	else:
+		global HttpDeamonThreadConn
+		HttpDeamonThreadConn = HttpDeamonThread.PlayerDataPump.recv_msg.connect(gotThreadMsg)
+
 	runningWithoutErrors = HttpDeamonThread.startDeamon()
 
 	if not runningWithoutErrors:
@@ -142,11 +153,16 @@ def sessionStart(reason, **kwargs):
 #
 #===========================================================================
 def networkStart(reason, **kwargs):
+
 	if reason is True and config.plugins.dreamplex.remoteAgent.value and HttpDeamonStarted:
 		try:
 			for adaptername in iNetwork.ifaces:
-				if iNetwork.ifaces[adaptername]['up'] is True:
-					HttpDeamonThread.setSession(global_session)
+				if getOeVersion() != "oe22":
+					if iNetwork.ifaces[adaptername]['up'] is True:
+						HttpDeamonThread.setSession(global_session)
+				else:
+					if iNetworkInfo.ifaces[adaptername]['up'] is True:
+						HttpDeamonThread.setSession(global_session)
 		except Exception:
 			pass
 

@@ -58,7 +58,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat
+from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -1986,7 +1986,12 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		printl("showing backdrop with timeout ...", self, "D")
 		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
 		self.refreshTimer = eTimer()
-		self.refreshTimer.callback.append(self.showBackdrop)
+
+		if getOeVersion() != "oe22":
+			self.refreshTimer.callback.append(self.showBackdrop)
+		else:
+			self.refreshTimerConn = self.refreshTimer.timeout.connect(self.showBackdrop)
+
 		self.refreshTimer.start(500, True)
 
 		printl("", self, "C")
@@ -2328,7 +2333,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		if forceShow:
 			if self.whatPoster is not None:
-				self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				if getOeVersion() != "oe22":
+					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+				else:
+					self.EXpicloadPoster.startDecode(self.whatPoster,False)
+
 				ptr = self.EXpicloadPoster.getData()
 
 				if ptr is not None:
@@ -2338,7 +2347,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			if fileExists(self.whatPoster):
 
 				if self.whatPoster is not None:
-					self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+					if getOeVersion() != "oe22":
+						self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+					else:
+						self.EXpicloadPoster.startDecode(self.whatPoster,False)
+
 					ptr = self.EXpicloadPoster.getData()
 
 					if ptr is not None:
@@ -2360,7 +2373,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 		if forceShow:
 			if self.whatBackdrop is not None:
-				self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				if getOeVersion() != "oe22":
+					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+				else:
+					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,False)
+
 				ptr = self.EXpicloadBackdrop.getData()
 
 				if ptr is not None:
@@ -2370,7 +2387,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			if fileExists(self.whatBackdrop):
 
 				if self.whatBackdrop is not None:
-					self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+					if getOeVersion() != "oe22":
+						self.EXpicloadBackdrop.startDecode(self.whatBackdrop,0,0,False)
+					else:
+						self.EXpicloadBackdrop.startDecode(self.whatBackdrop,False)
+
 					ptr = self.EXpicloadBackdrop.getData()
 
 					if ptr is not None:

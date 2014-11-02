@@ -30,7 +30,7 @@ from Components.Renderer.Renderer import Renderer
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 from Components.config import config
 
-from __common__ import printl2 as printl, getBoxInformation
+from __common__ import printl2 as printl, getBoxInformation, getOeVersion
 
 #===============================================================================
 #
@@ -188,7 +188,11 @@ class StillPicture(Renderer, InfoBarBase):
 		self.showiframe = Showiframe()
 		self.session = session
 		self.poll_timer = eTimer()
-		self.poll_timer.callback.append(self.poll)
+
+		if getOeVersion() != "oe22":
+			self.poll_timer.callback.append(self.poll)
+		else:
+			self.poll_timerConn = self.poll_timer.timeout.connect(self.poll)
 
 		printl("", self, "C")
 
