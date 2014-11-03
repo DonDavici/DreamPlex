@@ -227,12 +227,12 @@ class DPH_MultiColorFunctions(object):
 		printl("", self, "S")
 		self.levels = levels
 
-		highlighted = parseColor(getSkinHighlightedColor())
-		normal = parseColor(getSkinNormalColor())
+		dp_highlighted = parseColor(getSkinHighlightedColor())
+		dp_normal = parseColor(getSkinNormalColor())
 
 		for i in range(1,int(levels)+1):
 			self["L"+str(i)] = MultiColorLabel()
-			self["L"+str(i)].foreColors = [highlighted, normal]
+			self["L"+str(i)].foreColors = [dp_highlighted, dp_normal]
 			self["L"+str(i)].setText(str(i))
 
 		printl("", self, "C")
