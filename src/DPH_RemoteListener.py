@@ -41,6 +41,8 @@ from __common__ import printl2 as printl, getMyIp
 class HttpDeamon(Thread):
 
 	session = None
+	httpd = None
+	deamonState = None
 
 	#===========================================================================
 	#
@@ -83,7 +85,7 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def startDeamon(self):
+	def prepareDeamon(self):
 		printl("", self, "S")
 
 		Thread.__init__(self)
@@ -94,7 +96,8 @@ class HttpDeamon(Thread):
 		self.myIp = getMyIp()
 
 		if not self.myIp:
-			return False
+			self.deamonState = False
+			return
 
 		try:
 			# this starts updatemechanism to show up as player in devices like ios
@@ -102,7 +105,8 @@ class HttpDeamon(Thread):
 			self.client.setClientDetails()
 			self.client.start_registration()
 		except:
-			return False
+			self.deamonState = False
+			return
 
 		if self.client.check_client_registration():
 			self.registered = True
@@ -111,8 +115,9 @@ class HttpDeamon(Thread):
 			self.registered = False
 			printl("Unsuccessfully registered", self, "D")
 
+		self.deamonState = True
+
 		printl("", self, "C")
-		return True
 
 	#===========================================================================
 	#
@@ -121,7 +126,7 @@ class HttpDeamon(Thread):
 		printl("", self, "S")
 
 		printl("", self, "C")
-		return self.registered, self.remoteListenerInformation
+		return self.registered, self.deamonState
 
 	#===========================================================================
 	#
@@ -130,7 +135,9 @@ class HttpDeamon(Thread):
 		printl("", self, "S")
 
 		self.client.stop_all()
-		self.httpd.shutdown()
+
+		if self.httpd is not None:
+			self.httpd.shutdown()
 
 		printl("", self, "C")
 

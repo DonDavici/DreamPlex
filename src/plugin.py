@@ -93,13 +93,9 @@ def startRemoteDeamon():
 		global HttpDeamonThreadConn
 		HttpDeamonThreadConn = HttpDeamonThread.PlayerDataPump.recv_msg.connect(gotThreadMsg)
 
-	runningWithoutErrors = HttpDeamonThread.startDeamon()
-
-	if not runningWithoutErrors:
-		HttpDeamonStarted = False
-	else:
-		# we need this to avoid gs if users sets remoteplayer on and restarts. in this case there is false and we do not try to stop
-		HttpDeamonStarted = True
+	HttpDeamonThread.prepareDeamon()
+	HttpDeamonThread.start()
+	HttpDeamonStarted = HttpDeamonThread.getDeamonState()[1]
 
 #===========================================================================
 #
@@ -153,7 +149,6 @@ def sessionStart(reason, **kwargs):
 #
 #===========================================================================
 def networkStart(reason, **kwargs):
-
 	if reason is True and config.plugins.dreamplex.remoteAgent.value and HttpDeamonStarted:
 		try:
 			for adaptername in iNetwork.ifaces:
