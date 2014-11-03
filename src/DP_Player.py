@@ -1080,8 +1080,13 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def handleProgress(self, EOF=False):
 		printl("", self, "S")
 
-		currentTime = self.getPlayPosition()[1] / 90000
-		totalTime = self.getPlayLength()[1] / 90000
+		try:
+			currentTime = self.getPlayPosition()[1] / 90000
+			totalTime = self.getPlayLength()[1] / 90000
+			self.processProgress(EOF, currentTime, totalTime)
+		except:
+			printl("no progress data maybe playback never started, returning ...", self, "D")
+			return
 
 		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
 			progress = currentTime / float(totalTime/100.0)
