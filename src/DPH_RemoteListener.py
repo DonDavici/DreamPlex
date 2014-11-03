@@ -136,8 +136,7 @@ class HttpDeamon(Thread):
 
 		self.client.stop_all()
 
-		if self.httpd is not None:
-			self.httpd.shutdown()
+		self.httpd.shutdown()
 
 		printl("", self, "C")
 
