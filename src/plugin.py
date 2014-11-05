@@ -96,8 +96,6 @@ def startRemoteDeamon():
 
 	if HttpDeamonStarted:
 		HttpDeamonThread.setSession(global_session)
-	else:
-		HttpDeamonThread.stopRemoteDeamon()
 
 #===========================================================================
 #
