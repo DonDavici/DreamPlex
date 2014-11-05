@@ -65,8 +65,6 @@ def Autostart(reason, session=None, **kwargs):
 		prepareEnvironment()
 		getUUID()
 
-		if config.plugins.dreamplex.remoteAgent.value:
-			startRemoteDeamon()
 	else:
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.save()
@@ -93,9 +91,13 @@ def startRemoteDeamon():
 		global HttpDeamonThreadConn
 		HttpDeamonThreadConn = HttpDeamonThread.PlayerDataPump.recv_msg.connect(gotThreadMsg)
 
-	HttpDeamonThread.prepareDeamon()
-	HttpDeamonThread.start()
+	HttpDeamonThread.prepareDeamon() # we just prepare. we are starting only on networkStart with HttpDeamonThread.setSession
 	HttpDeamonStarted = HttpDeamonThread.getDeamonState()[1]
+
+	if HttpDeamonStarted:
+		HttpDeamonThread.setSession(global_session)
+	else:
+		HttpDeamonThread.stopRemoteDeamon()
 
 #===========================================================================
 #
@@ -145,21 +147,8 @@ def sessionStart(reason, **kwargs):
 		global global_session
 		global_session = kwargs["session"]
 
-#===========================================================================
-#
-#===========================================================================
-def networkStart(reason, **kwargs):
-	if reason is True and config.plugins.dreamplex.remoteAgent.value and HttpDeamonStarted:
-		try:
-			for adaptername in iNetwork.ifaces:
-				if getOeVersion() != "oe22":
-					if iNetwork.ifaces[adaptername]['up'] is True:
-						HttpDeamonThread.setSession(global_session)
-				else:
-					if iNetworkInfo.ifaces[adaptername]['up'] is True:
-						HttpDeamonThread.setSession(global_session)
-		except Exception:
-			pass
+		if config.plugins.dreamplex.remoteAgent.value:
+			startRemoteDeamon()
 
 #===============================================================================
 # plugins
@@ -171,7 +160,6 @@ def Plugins(**kwargs):
 	myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc = Autostart))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_SESSIONSTART, fnc = sessionStart))
-	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_NETWORKCONFIG_READ, fnc = networkStart))
 
 	if config.plugins.dreamplex.showInMainMenu.value:
 		myList.append(PluginDescriptor(name="DreamPlex", description=_("plex client for enigma2"), where = [PluginDescriptor.WHERE_MENU], fnc=menu_dreamplex))
