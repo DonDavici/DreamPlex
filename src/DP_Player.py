@@ -1035,6 +1035,12 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if config.plugins.dreamplex.lcd4linux.value:
 			remove(self.tempPoster)
 
+		# we destroy here all variables to be sure that they are away
+		if getOeVersion() != "oe22":
+			self.timelineWatcher.stop()
+		else:
+			self.timelineWatcherConn = None
+
 		# we stop playback here
 		self.session.nav.stopService()
 
