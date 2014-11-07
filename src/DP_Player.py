@@ -1215,18 +1215,18 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				if seekState == self.SEEK_STATE_PAUSE:
 					printl( "Movies PAUSED time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress), self,"D" )
 					urlPath += "&state=paused&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+					self.plexInstance.doRequest(urlPath)
 
 				elif seekState == self.SEEK_STATE_PLAY :
 					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
 					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+					self.plexInstance.doRequest(urlPath)
 
 				# todo add buffering here if needed
 					#urlPath += "&state=buffering&time=" + str(currentTime*1000)
 
 				# todo add stopped here if needed
 					#urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
-
-				self.plexInstance.doRequest(urlPath)
 
 			except Exception, e:
 				printl("exception: " + str(e), self, "E")

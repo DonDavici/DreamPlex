@@ -23,6 +23,7 @@ HttpDeamonThread = None
 HttpDeamonThreadConn = None
 HttpDeamonStarted = False
 global_session = None
+playbackIsRunning = False
 
 #===============================================================================
 # main
@@ -110,31 +111,38 @@ def getHttpDeamonInformation():
 # noinspection PyUnusedLocal
 def gotThreadMsg(msg):
 	msg = HttpDeamonThread.PlayerData.pop()
+	global playbackIsRunning
 
-	data = msg[0]
+	if not playbackIsRunning:
+		data = msg[0]
 
-	listViewList    = data["listViewList"]
-	currentIndex    = data["currentIndex"]
-	libraryName     = data["libraryName"]
-	autoPlayMode    = data["autoPlayMode"]
-	resumeMode      = data["resumeMode"]
-	playbackMode    = data["playbackMode"]
-	forceResume     = data["forceResume"]
+		listViewList    = data["listViewList"]
+		currentIndex    = data["currentIndex"]
+		libraryName     = data["libraryName"]
+		autoPlayMode    = data["autoPlayMode"]
+		resumeMode      = data["resumeMode"]
+		playbackMode    = data["playbackMode"]
+		forceResume     = data["forceResume"]
 
-	# load skin data here as well
-	startEnvironment()
+		# load skin data here as well
+		startEnvironment()
 
-	# save liveTvData
-	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
+		# save liveTvData
+		saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
 
-	# now we start the player
-	global_session.openWithCallback(restoreLiveTv, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+		playbackIsRunning = True
+
+		# now we start the player
+		global_session.openWithCallback(restoreLiveTv2, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 #===========================================================================
 #
 #===========================================================================
-def restoreLiveTv(retval):
+def restoreLiveTv2(*retval):
+	global playbackIsRunning
+
 	global_session.nav.playService(getLiveTv())
+	playbackIsRunning = False
 
 #===========================================================================
 #
