@@ -927,15 +927,12 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "S")
 		try:
 			if self.resumeStamp is not None:
-				print "here"
 				service = self.session.nav.getCurrentService()
 				seek = service and service.seek()
 				if seek is not None:
-					print "there"
 
 					r = seek.getLength()
 					if not r[0]:
-						print "here now"
 						printl ("got duration", self, "D")
 						if r[1] == 0:
 							printl( "duration 0", self, "D")
