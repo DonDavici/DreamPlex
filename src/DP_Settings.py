@@ -181,7 +181,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("Remote Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Activate Remote Player"), config.plugins.dreamplex.remoteAgent, _(" ")))
 		if config.plugins.dreamplex.remoteAgent.value:
-			self.cfglist.append(getConfigListEntry(_("> Activate Remote Player"), config.plugins.dreamplex.remotePort, _(" ")))
+			self.cfglist.append(getConfigListEntry(_("> Remote Player Port"), config.plugins.dreamplex.remotePort, _(" ")))
 
 		# MISC
 		self.cfglist.append(getConfigListEntry(_("Misc Settings") + separator, config.plugins.dreamplex.about, _(" ")))
