@@ -925,43 +925,45 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def seekToStartPos(self):
 		printl("", self, "S")
-		
 		try:
 			if self.resumeStamp is not None:
+				print "here"
 				service = self.session.nav.getCurrentService()
 				seek = service and service.seek()
 				if seek is not None:
+					print "there"
+
 					r = seek.getLength()
 					if not r[0]:
-						printl ("got duration", self, "I")
+						print "here now"
+						printl ("got duration", self, "D")
 						if r[1] == 0:
-							printl( "duration 0", self, "I")
+							printl( "duration 0", self, "D")
 							return
 						length = r[1]
-						r = seek.getPlayPosition()
-						if not r[0]:
-							printl( "playbacktime " + str(r[1]), self, "I")
-							if r[1] < 90000:# ~2 sekunden
-								printl( "do not seek yet " + str(r[1]), self, "I")
-								printl("", self, "C")
-								return
-						else:
+
+					r = seek.getPlayPosition()
+					if not r[0]:
+						printl( "playbacktime " + str(r[1]), self, "D")
+						if r[1] < 90000:# ~2 sekunden
+							printl( "do not seek yet " + str(r[1]), self, "D")
 							printl("", self, "C")
 							return
-						
-						#time = length * self.start
-						#time = int(139144271)
-						elapsed = self.resumeStamp * 90000
-						printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "I")
-						self.resumeStamp = None
-						if elapsed < 90000:
-							printl( "skip seeking < 10s", self, "I")
-							printl("", self, "C")
-							return
-						#if config.plugins.dreamplex.setBufferSize.value:
-							#self.session.nav.getCurrentService().streamed().setBufferSize(config.plugins.dreamplex.bufferSize.value)
-						self.doSeek(int(elapsed))
-		
+					else:
+						printl("", self, "C")
+						return
+
+					elapsed = self.resumeStamp * 90000
+					printl( "seeking to " + str(time) + " length " + str(length) + " ", self, "D")
+
+					if elapsed < 90000:
+						printl( "skip seeking < 10s", self, "D")
+						printl("", self, "C")
+						return
+
+					self.doSeek(int(elapsed))
+					self.resumeStamp = None
+
 		except Exception, e:
 			printl("exception: " + str(e), self, "W")
 
