@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import threading
+import urllib
 
 from os import remove
 from time import sleep, localtime, time, strftime
@@ -1220,6 +1221,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 					printl( "Movies PLAYING time: %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self,"D" )
 					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 					self.plexInstance.doRequest(urlPath)
+
+					# here we answer back to our remotecontroler our progress if needed
+					url = "http://localhost:" + str(config.plugins.dreamplex.remotePort.value) + "/playerProgress?progress=" + str(currentTime*1000)
+					urllib.urlopen(url)
 
 				# todo add buffering here if needed
 					#urlPath += "&state=buffering&time=" + str(currentTime*1000)

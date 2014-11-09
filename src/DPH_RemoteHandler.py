@@ -22,9 +22,12 @@ You should have received a copy of the GNU General Public License
 #===============================================================================
 # IMPORT
 #===============================================================================
-import traceback
 import re
 import urllib
+import threading
+import httplib
+import traceback
+import string
 
 from time import sleep
 from urlparse import urlparse, parse_qs
@@ -35,7 +38,7 @@ from Components.config import config
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getUUID, getVersion, getMyIp
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, getBoxInformation, timeToMillis
 
 #===============================================================================
 #
@@ -46,7 +49,9 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	"""
 	session = None
 	playerCallback = None
-
+	progress = None
+	currentCommandId = 0
+	protocol_version = 'HTTP/1.1'
 
 	#===========================================================================
 	#
@@ -79,8 +84,33 @@ class RemoteHandler(BaseHTTPRequestHandler):
 		printl("Serving OPTIONS request...", self, "D")
 		self.send_response(200)
 		self.setAccessControlHeaders()
+		self.end_headers()
+		self.wfile.close()
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def response(self, body, headers = {}, code = 200):
+		printl("", self, "S")
+
+		try:
+			self.send_response(code)
+			for key in headers:
+				self.send_header(key, headers[key])
+
+			self.send_header('Content-Length', len(body))
+			self.send_header('Connection', "close")
+
+			self.end_headers()
+			self.wfile.write(body)
+			self.wfile.close()
+		except:
+			pass
+
+		printl("", self, "C")
+
 
 	#===========================================================================
 	#
@@ -97,32 +127,50 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			printl("request path is: [%s]" % request_path, self, "D")
 
-			if request_path == "player/timeline/poll":
-				sleep(10)
-				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
-				self.setXmlHeader(xml)
-				self.end_headers()
-				self.wfile.write(xml)
+			# first we get all params form url
+			params = self.getParams()
+
+			subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
+
+			if request_path == "player/timeline/subscribe":
+				self.response(getOKMsg(), getPlexHeaders())
+
+				protocol = params.get('protocol', False)
+				host = self.client_address[0]
+				port = params.get('port', False)
+				uuid = self.headers.get('X-Plex-Client-Identifier', "")
+				commandID = params.get('commandID', 0)
+				subMgr.addSubscriber(protocol, host, port, uuid, commandID)
+
+			elif "player/timeline/unsubscribe" in request_path:
+				self.response(getOKMsg(), getPlexHeaders())
+				uuid = self.headers.get('X-Plex-Client-Identifier', False) or self.client_address[0]
+				subMgr.removeSubscriber(uuid)
 
 			elif request_path == "resources":
-				xml = self.getResourceXml()
-				self.setXmlHeader(xml)
-				self.end_headers()
-				self.wfile.write(xml)
+				responseContent = getXMLHeader()
+				responseContent += str(self.getResourceXml())
+				self.response(responseContent, getPlexHeaders())
 
-			elif request_path == "player/timeline/subscribe":
-				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
-				self.setXmlHeader(xml)
-				self.end_headers()
-				self.wfile.write(xml)
+			elif request_path == "player/timeline/poll":
+				if params.get('wait', False) == '1':
+					sleep(950)
+				commandID = params.get('commandID', 0)
+				self.response(re.sub(r"INSERTCOMMANDID", str(commandID), subMgr.msg(getPlayers())), {
+				'X-Plex-Client-Identifier': getUUID(),
+				'Access-Control-Expose-Headers': 'X-Plex-Client-Identifier',
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'text/xml'
+				})
+
+			elif request_path == "playerProgress":
+				self.progress = params['progress']
 
 			elif request_path == "player/playback/seekTo":
-				params = self.getParams()
-				offset =  params["offset"][0]
+				offset =  params["offset"]
 
 			elif request_path == "player/playback/setParameters":
-				params = self.getParams()
-				volume = params["volume"][0]
+				volume = params["volume"]
 
 				url = "http://localhost/web/vol?set=set" + str(volume)
 
@@ -172,20 +220,18 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				url = "http://localhost/web/powerstate?newstate=4"
 				urllib.urlopen(url)
 
-				params = self.getParams()
-
-				address = params["address"][0]
-				port = params["port"][0]
+				address = params["address"]
+				port = params["port"]
 				completeAddress = address+":"+port
-				protocol = params["protocol"][0]
-				key = params["key"][0]
+				protocol = params["protocol"]
+				key = params["key"]
 
 				if "offset" in params:
-					offset = int(params["offset"][0])
+					offset = int(params["offset"])
 				else:
 					offset = 0
 
-				machineIdentifier = params["machineIdentifier"][0]
+				machineIdentifier = params["machineIdentifier"]
 				printl("target machineIdentifier: " + str(machineIdentifier), self, "D")
 
 				for serverConfig in config.plugins.dreamplex.Entries:
@@ -280,6 +326,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	def setAccessControlHeaders(self):
 		printl("", self, "S")
 
+		self.send_header('Content-Length', '0')
+		self.send_header('X-Plex-Client-Identifier', getUUID())
+		self.send_header('Content-Type', 'text/plain')
+		self.send_header('Connection', 'close')
+		self.send_header('Access-Control-Max-Age', '1209600')
 		self.send_header('Access-Control-Allow-Credentials', 'true')
 		self.send_header('Access-Control-Allow-Origin', '*')
 		self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
@@ -293,5 +344,447 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	def getParams(self):
 		printl("", self, "S")
 
+		params = {}
+		paramarrays = parse_qs(urlparse(self.path).query)
+
+		for key in paramarrays:
+			params[key] = paramarrays[key][0]
+
 		printl("", self, "C")
-		return parse_qs(urlparse(self.path).query)
+		return params
+
+#===========================================================================
+#
+#===========================================================================
+class SubscriptionManager:
+	def __init__(self):
+		self.subscribers = {}
+		self.info = {}
+		self.lastkey = ""
+		self.volume = 0
+		self.guid = ""
+		self.server = ""
+		self.protocol = "http"
+		self.port = ""
+		self.playerprops = {}
+		self.sentstopped = True
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getVolume(self):
+		pass
+		#self.volume = getVolume()
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def msg(self, players):
+		msg = getXMLHeader()
+		msg += '<MediaContainer commandID="INSERTCOMMANDID"'
+
+		if players:
+			self.getVolume()
+			maintype = "music"
+			for p in players.values():
+				maintype = p.get('type')
+			self.mainlocation = "fullScreen" + maintype[0:1].upper() + maintype[1:].lower()
+		else:
+			self.mainlocation = "navigation"
+		msg += ' location="%s">' % self.mainlocation
+
+		msg += self.getTimelineXML(getAudioPlayerId(players), "music")
+		msg += self.getTimelineXML(getPhotoPlayerId(players), "photo")
+		msg += self.getTimelineXML(getVideoPlayerId(players), "video")
+		msg += "\r\n</MediaContainer>"
+		return msg
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getTimelineXML(self, playerid, ptype):
+		if playerid > 0:
+			info = self.getPlayerProperties(playerid)
+			# save this info off so the server update can use it too
+			self.playerprops[playerid] = info;
+			state = info['state']
+			time = info['time']
+		else:
+			state = "stopped"
+			time = 0
+		ret = "\r\n"+'<Timeline location="%s" state="%s" time="%s" type="%s"' % (self.mainlocation, state, time, ptype)
+		if playerid > 0:
+			pbmc_server = ""#str(WINDOW.getProperty('plexbmc.nowplaying.server'))
+			keyid = ""#str(WINDOW.getProperty('plexbmc.nowplaying.id'))
+			raise Exception
+			if keyid:
+				self.lastkey = "/library/metadata/%s"%keyid
+				if pbmc_server:
+					(self.server, self.port) = pbmc_server.split(':')
+			serv = {}#getServerByHost(self.server)
+			ret += ' duration="%s"' % info['duration']
+			ret += ' seekRange="0-%s"' % info['duration']
+			ret += ' controllable="%s"' % self.controllable()
+			ret += ' machineIdentifier="%s"' % serv.get('uuid', "")
+			ret += ' protocol="%s"' % serv.get('protocol', "http")
+			ret += ' address="%s"' % serv.get('server', self.server)
+			ret += ' port="%s"' % serv.get('port', self.port)
+			ret += ' guid="%s"' % info['guid']
+			ret += ' containerKey="%s"' % (self.lastkey or "/library/metadata/900000")
+			ret += ' key="%s"' % (self.lastkey or "/library/metadata/900000")
+			m = re.search(r'(\d+)$', self.lastkey)
+			if m:
+				ret += ' ratingKey="%s"' % m.group()
+			ret += ' volume="%s"' % info['volume']
+			ret += ' shuffle="%s"' % info['shuffle']
+
+		ret += '/>'
+		return ret
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def updateCommandID(self, uuid, commandID):
+		if commandID and self.subscribers.get(uuid, False):
+			self.subscribers[uuid].commandID = int(commandID)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def notify(self, event = False):
+		self.cleanup()
+		players = getPlayers()
+		# fetch the message, subscribers or not, since the server
+		# will need the info anyway
+		msg = self.msg(players)
+		if self.subscribers:
+			with threading.RLock():
+				for sub in self.subscribers.values():
+					sub.send_update(msg, len(players)==0)
+		self.notifyServer(players)
+		return True
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def notifyServer(self, players):
+		if not players and self.sentstopped: return True
+		params = {'state': 'stopped'}
+
+		for p in players.values():
+			info = self.playerprops[p.get('playerid')]
+			params = {}
+			params['containerKey'] = (self.lastkey or "/library/metadata/900000")
+			params['key'] = (self.lastkey or "/library/metadata/900000")
+			m = re.search(r'(\d+)$', self.lastkey)
+			if m:
+				params['ratingKey'] = m.group()
+			params['state'] = info['state']
+			params['time'] = info['time']
+			params['duration'] = info['duration']
+
+		serv = {}#getServerByHost(self.server)
+		requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders(), serv.get('protocol', 'http'))
+		printl("sent server notification with state = %s" % params['state'], self, "D")
+
+		if players:
+			self.sentstopped = False
+		else:
+			self.sentstopped = True
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def controllable(self):
+		return "playPause,play,stop,skipPrevious,skipNext,volume,stepBack,stepForward,seekTo"
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def addSubscriber(self, protocol, host, port, uuid, commandID):
+		sub = Subscriber(protocol, host, port, uuid, commandID)
+		with threading.RLock():
+			self.subscribers[sub.uuid] = sub
+		return sub
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def removeSubscriber(self, uuid):
+		with threading.RLock():
+			for sub in self.subscribers.values():
+				if sub.uuid == uuid or sub.host == uuid:
+					sub.cleanup()
+					del self.subscribers[sub.uuid]
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def cleanup(self):
+		with threading.RLock():
+			for sub in self.subscribers.values():
+				if sub.age > 30:
+					sub.cleanup()
+					del self.subscribers[sub.uuid]
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerProperties(self, playerid):
+		info = {}
+		try:
+			# get info from the player
+			props = {}#jsonrpc("Player.GetProperties", {"playerid": playerid, "properties": ["time", "totaltime", "speed", "shuffled"]})
+			info['time'] = timeToMillis(props['time'])
+			info['duration'] = timeToMillis(props['totaltime'])
+			info['state'] = ("paused", "playing")[int(props['speed'])]
+			info['shuffle'] = ("0","1")[props.get('shuffled', False)]
+		except:
+			info['time'] = 0
+			info['duration'] = 0
+			info['state'] = "stopped"
+			info['shuffle'] = False
+		# get the volume from the application
+		info['volume'] = self.volume
+		info['guid'] = self.guid
+
+		return info
+
+#===========================================================================
+#
+#===========================================================================
+class Subscriber:
+	#===========================================================================
+	#
+	#===========================================================================
+	def __init__(self, protocol, host, port, uuid, commandID):
+		self.protocol = protocol or "http"
+		self.host = host
+		self.port = port or 32400
+		self.uuid = uuid or host
+		self.commandID = int(commandID) or 0
+		self.navlocationsent = False
+		self.age = 0
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def __eq__(self, other):
+		return self.uuid == other.uuid
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def tostr(self):
+		return "uuid=%s,commandID=%i" % (self.uuid, self.commandID)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def cleanup(self):
+		requests.closeConnection(self.protocol, self.host, self.port)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def send_update(self, msg, is_nav):
+		self.age += 1
+		if not is_nav:
+			self.navlocationsent = False
+		elif self.navlocationsent:
+			return True
+		else:
+			self.navlocationsent = True
+		msg = re.sub(r"INSERTCOMMANDID", str(self.commandID), msg)
+		printl("sending xml to subscriber %s: %s" % (self.tostr(), msg), self, "D")
+
+		if not requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol):
+			subMgr.removeSubscriber(self.uuid)
+
+subMgr = SubscriptionManager()
+
+#===========================================================================
+#
+#===========================================================================
+class RequestMgr:
+	def __init__(self):
+		self.conns = {}
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getConnection(self, protocol, host, port):
+		conn = self.conns.get(protocol+host+str(port), False)
+		if not conn:
+			if protocol=="https":
+				conn = httplib.HTTPSConnection(host, port)
+			else:
+				conn = httplib.HTTPConnection(host, port)
+		return conn
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def closeConnection(self, protocol, host, port):
+		conn = self.conns.get(protocol+host+str(port), False)
+		if conn:
+			conn.close()
+			self.conns.pop(protocol+host+str(port), None)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def dumpConnections(self):
+		for conn in self.conns.values():
+			conn.close()
+		self.conns = {}
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def post(self, host, port, path, body, header={}, protocol="http"):
+		conn = None
+		try:
+			conn = self.getConnection(protocol, host, port)
+			header['Connection'] = "keep-alive"
+			conn.request("POST", path, body, header)
+			data = conn.getresponse()
+			if int(data.status) >= 400:
+				print "HTTP response error: " + str(data.status)
+				# this should return false, but I'm hacking it since iOS returns 404 no matter what
+				return data.read() or True
+			else:
+				return data.read() or True
+		except:
+			print "Unable to connect to %s\nReason:" % host
+			traceback.print_exc()
+			self.conns.pop(protocol+host+str(port), None)
+			if conn:
+				conn.close()
+			return False
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getwithparams(self, host, port, path, params, header={}, protocol="http"):
+		newpath = path + '?'
+		pairs = []
+		for key in params:
+			pairs.append(str(key)+'='+str(params[key]))
+		newpath += string.join(pairs, '&')
+		return self.get(host, port, newpath, header, protocol)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def get(self, host, port, path, header={}, protocol="http"):
+		try:
+			conn = self.getConnection(protocol, host, port)
+			header['Connection'] = "keep-alive"
+			conn.request("GET", path, headers=header)
+			data = conn.getresponse()
+			if int(data.status) >= 400:
+				print "HTTP response error: " + str(data.status)
+				return False
+			else:
+				return data.read() or True
+		except:
+			print "Unable to connect to %s\nReason: %s" % (host, traceback.print_exc())
+			self.conns.pop(protocol+host+str(port), None)
+			conn.close()
+			return False
+
+requests = RequestMgr()
+
+#===========================================================================
+#
+#===========================================================================
+def getXMLHeader():
+	printl("", "getXMLHeader", "S")
+
+	printl("", "getXMLHeader", "C")
+	return '<?xml version="1.0" encoding="utf-8"?>'+"\r\n"
+
+#===========================================================================
+#
+#===========================================================================
+def getOKMsg():
+	printl("", "getOKMsg", "S")
+
+	printl("", "getOKMsg", "C")
+	return getXMLHeader() + '<Response code="200" status="OK" />'
+
+#===========================================================================
+#
+#===========================================================================
+def getPlexHeaders():
+	printl("", "getPlexHeaders", "S")
+
+	plexHeader = {
+		"Content-type": "application/x-www-form-urlencoded",
+		"Access-Control-Allow-Origin": "*",
+		"X-Plex-Version": getVersion(),
+		"X-Plex-Client-Identifier": getUUID(),
+		"X-Plex-Provides": "player",
+		"X-Plex-Product": "DreamPlex",
+		"X-Plex-Device-Name": config.plugins.dreamplex.boxName.value,
+		"X-Plex-Platform": "XBMC",
+		"X-Plex-Model": "Enigma2",
+		"X-Plex-Device": "PC",
+	}
+	# if settings['myplex_user']:
+	# plexHeader["X-Plex-Username"] = settings['myplex_user']
+
+	printl("", "getPlexHeaders", "C")
+	return plexHeader
+
+#===========================================================================
+#
+#===========================================================================
+def getPlayers():
+	info = []
+	ret = {}
+
+	for player in info:
+		player['playerid'] = int(1)
+		ret[player['type']] = "video"
+
+	return ret
+
+#===========================================================================
+#
+#===========================================================================
+def getPlayerIds():
+	ret = []
+
+	for player in getPlayers().values():
+		ret.append(player['playerid'])
+
+	return ret
+
+#===========================================================================
+#
+#===========================================================================
+def getVideoPlayerId(players = False):
+	if players is None:
+		players = getPlayers()
+
+	return players.get("video", {}).get('playerid', 0)
+
+#===========================================================================
+#
+#===========================================================================
+def getAudioPlayerId(players = False):
+	if players is None:
+		players = getPlayers()
+
+	return players.get("music", {}).get('playerid', 0)
+
+#===========================================================================
+#
+#===========================================================================
+def getPhotoPlayerId(players = False):
+	if players is None:
+		players = getPlayers()
+
+	return players.get("photo", {}).get('playerid', 0)

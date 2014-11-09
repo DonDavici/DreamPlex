@@ -1058,3 +1058,22 @@ def getMyIp():
 	except Exception:
 		#printl2("", "__common__::getMyIp", "S")
 		return False
+
+#===========================================================================
+#
+#===========================================================================
+def timeToMillis(time):
+	return (time['hours']*3600 + time['minutes']*60 + time['seconds'])*1000 + time['milliseconds']
+
+#===========================================================================
+#
+#===========================================================================
+def millisToTime(t):
+	millis = int(t)
+	seconds = millis / 1000
+	minutes = seconds / 60
+	hours = minutes / 60
+	seconds %= 60
+	minutes %= 60
+	millis %= 1000
+	return {'hours':hours,'minutes':minutes,'seconds':seconds,'milliseconds':millis}
