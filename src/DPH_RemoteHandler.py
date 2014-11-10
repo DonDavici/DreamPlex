@@ -97,6 +97,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		try:
 			self.send_response(code)
+
 			for key in headers:
 				self.send_header(key, headers[key])
 
@@ -164,13 +165,14 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				})
 
 			elif request_path == "playerProgress":
-				self.progress = params['progress']
-
-				# seems that we have to send via params :-(
-				subMgr.lastkey = self.currentKey
-				subMgr.server = self.currentServer
-				subMgr.port = self.currentPort
-				subMgr.protocol = self.currentProtocol
+				# subMgr.lastkey = self.currentKey
+				# subMgr.server = self.currentServer
+				# subMgr.port = self.currentPort
+				# subMgr.protocol = self.currentProtocol
+				subMgr.progressFromEnigma2 = params['progress']
+				subMgr.playerStateFromEnigma2 = params["state"]
+				subMgr.durationFromEnigma2 = params["duration"]
+				subMgr.lastkey = params["lastKey"]
 				subMgr.notify()
 
 			elif request_path == "player/playback/seekTo":
@@ -378,13 +380,16 @@ class SubscriptionManager:
 		self.port = ""
 		self.playerprops = {}
 		self.sentstopped = True
+		self.progressFromEnigma2 = 0
+		self.playerStateFromEnigma2 = "stopped"
+		self.durationFromEnigma2 = 0
 
 	#===========================================================================
 	#
 	#===========================================================================
 	def getVolume(self):
-		pass
-		#self.volume = getVolume()
+
+		self.volume = 100
 
 	#===========================================================================
 	#
@@ -414,39 +419,34 @@ class SubscriptionManager:
 	#===========================================================================
 	def getTimelineXML(self, playerid, ptype):
 		if playerid > 0:
-			info = self.getPlayerProperties(playerid)
+			#info = self.getPlayerProperties(playerid)
 			# save this info off so the server update can use it too
-			self.playerprops[playerid] = info;
-			state = info['state']
-			time = info['time']
+			#self.playerprops[playerid] = info;
+			state = "playing"
+			time = self.progressFromEnigma2
 		else:
 			state = "stopped"
 			time = 0
+
 		ret = "\r\n"+'<Timeline location="%s" state="%s" time="%s" type="%s"' % (self.mainlocation, state, time, ptype)
+
 		if playerid > 0:
-			pbmc_server = ""#str(WINDOW.getProperty('plexbmc.nowplaying.server'))
-			keyid = ""#str(WINDOW.getProperty('plexbmc.nowplaying.id'))
-			raise Exception
-			if keyid:
-				self.lastkey = "/library/metadata/%s"%keyid
-				if pbmc_server:
-					(self.server, self.port) = pbmc_server.split(':')
-			serv = {}#getServerByHost(self.server)
-			ret += ' duration="%s"' % info['duration']
-			ret += ' seekRange="0-%s"' % info['duration']
+			#serv = {}#getServerByHost(self.server)
+			ret += ' duration="%s"' % self.progressFromEnigma2
+			ret += ' seekRange="0-%s"' % self.progressFromEnigma2
 			ret += ' controllable="%s"' % self.controllable()
-			ret += ' machineIdentifier="%s"' % serv.get('uuid', "")
-			ret += ' protocol="%s"' % serv.get('protocol', "http")
-			ret += ' address="%s"' % serv.get('server', self.server)
-			ret += ' port="%s"' % serv.get('port', self.port)
-			ret += ' guid="%s"' % info['guid']
+			ret += ' machineIdentifier="%s"' % getUUID() #serv.get('uuid', "")
+			ret += ' protocol="%s"' % "http" #serv.get('protocol', "http")
+			ret += ' address="%s"' % "192.168.45.5"#serv.get('server', self.server)
+			ret += ' port="%s"' % 32400 #serv.get('port', self.port)
+			ret += ' guid="%s"' % 11111 #info['guid']
 			ret += ' containerKey="%s"' % (self.lastkey or "/library/metadata/900000")
 			ret += ' key="%s"' % (self.lastkey or "/library/metadata/900000")
 			m = re.search(r'(\d+)$', self.lastkey)
 			if m:
 				ret += ' ratingKey="%s"' % m.group()
-			ret += ' volume="%s"' % info['volume']
-			ret += ' shuffle="%s"' % info['shuffle']
+			ret += ' volume="%s"' % 100
+			ret += ' shuffle="%s"' % 0
 
 		ret += '/>'
 		return ret
@@ -467,6 +467,7 @@ class SubscriptionManager:
 		# fetch the message, subscribers or not, since the server
 		# will need the info anyway
 		msg = self.msg(players)
+
 		if self.subscribers:
 			with threading.RLock():
 				for sub in self.subscribers.values():
@@ -484,19 +485,18 @@ class SubscriptionManager:
 		params = {'state': 'stopped'}
 
 		for p in players.values():
-			info = self.playerprops[p.get('playerid')]
 			params = {}
 			params['containerKey'] = (self.lastkey or "/library/metadata/900000")
 			params['key'] = (self.lastkey or "/library/metadata/900000")
 			m = re.search(r'(\d+)$', self.lastkey)
 			if m:
 				params['ratingKey'] = m.group()
-			params['state'] = info['state']
-			params['time'] = info['time']
-			params['duration'] = info['duration']
+			params['state'] = self.playerStateFromEnigma2
+			params['time'] = self.progressFromEnigma2
+			params['duration'] = self.durationFromEnigma2
 
-		serv = {}#getServerByHost(self.server)
-		requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders(), serv.get('protocol', 'http'))
+		#requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders())
+		requests.getwithparams("192.168.45.5", "32400", "/:/timeline", params, getPlexHeaders())
 		printl("sent server notification with state = %s" % params['state'], self, "D")
 
 		if players:
@@ -740,10 +740,15 @@ def getPlexHeaders():
 		"X-Plex-Provides": "player",
 		"X-Plex-Product": "DreamPlex",
 		"X-Plex-Device-Name": config.plugins.dreamplex.boxName.value,
-		"X-Plex-Platform": "XBMC",
+		"X-Plex-Platform": "Enigma2",
 		"X-Plex-Model": "Enigma2",
-		"X-Plex-Device": "PC",
+		"X-Plex-Device": "stb",
+	    "Access-Control-Max-Age": "1209600",
+		"Access-Control-Allow-Credentials": "true",
+		"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+		"Access-Control-Allow-Headers": "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version"
 	}
+
 	# if settings['myplex_user']:
 	# plexHeader["X-Plex-Username"] = settings['myplex_user']
 
@@ -754,12 +759,12 @@ def getPlexHeaders():
 #
 #===========================================================================
 def getPlayers():
-	info = []
+	player = {}
 	ret = {}
 
-	for player in info:
-		player['playerid'] = int(1)
-		ret[player['type']] = "video"
+	player['playerid'] = int(1)
+	player['type'] = "video"
+	ret["video"] = player
 
 	return ret
 
