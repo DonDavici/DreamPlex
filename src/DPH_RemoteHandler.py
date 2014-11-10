@@ -166,6 +166,13 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			elif request_path == "playerProgress":
 				self.progress = params['progress']
 
+				# seems that we have to send via params :-(
+				subMgr.lastkey = self.currentKey
+				subMgr.server = self.currentServer
+				subMgr.port = self.currentPort
+				subMgr.protocol = self.currentProtocol
+				subMgr.notify()
+
 			elif request_path == "player/playback/seekTo":
 				offset =  params["offset"]
 
@@ -216,15 +223,17 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				self.send_response(200)
 
 			elif request_path == "player/playback/playMedia":
+				self.response(getOKMsg(), getPlexHeaders())
 
 				url = "http://localhost/web/powerstate?newstate=4"
 				urllib.urlopen(url)
 
-				address = params["address"]
-				port = params["port"]
-				completeAddress = address+":"+port
-				protocol = params["protocol"]
-				key = params["key"]
+				self.currentAddress = params.get('address', self.client_address[0])
+				self.currentKey = params['key']
+				self.currentServer = getMyIp()
+				self.currentPort = params['port']
+				self.currentProtocol = params.get('protocol', "http")
+				self.currentCompleteAddress = self.currentAddress + ":" + self.currentPort
 
 				if "offset" in params:
 					offset = int(params["offset"])
@@ -242,9 +251,9 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						printl("we have a match ...", self, "D")
 						self.g_serverConfig = serverConfig
 
-						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, completeAddress, machineIdentifier))
+						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, self.currentCompleteAddress, machineIdentifier))
 
-						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(protocol + "://" + address + ":" + port + key)
+						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(self.currentProtocol + "://" + self.currentAddress + ":" + self.currentPort + self.currentKey)
 
 						autoPlayMode = False
 
@@ -263,10 +272,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 						self.playerCallback(data)
 
-						xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='stopped' time='0' type='music' /><Timeline state='stopped' time='0' type='video' /><Timeline state='stopped' time='0' type='photo' /></MediaContainer>"
-						self.setXmlHeader(xml)
-						self.end_headers()
-						self.wfile.write(xml)
+						subMgr.lastkey = self.currentKey
+						subMgr.server = self.currentServer
+						subMgr.port = self.currentPort
+						subMgr.protocol = self.currentProtocol
+						subMgr.notify()
 
 					else:
 						printl("no match ...", self, "D")
@@ -468,7 +478,9 @@ class SubscriptionManager:
 	#
 	#===========================================================================
 	def notifyServer(self, players):
-		if not players and self.sentstopped: return True
+		if not players and self.sentstopped:
+			return True
+
 		params = {'state': 'stopped'}
 
 		for p in players.values():
