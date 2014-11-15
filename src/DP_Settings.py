@@ -182,6 +182,8 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(getConfigListEntry(_("> Activate Remote Player"), config.plugins.dreamplex.remoteAgent, _(" ")))
 		if config.plugins.dreamplex.remoteAgent.value:
 			self.cfglist.append(getConfigListEntry(_("> Remote Player Port"), config.plugins.dreamplex.remotePort, _(" ")))
+			self.cfglist.append(getConfigListEntry(_("> Enigma Webinterface installed"), config.plugins.dreamplex.webifInstalled, _("We need this to handle commands!")))
+
 
 		# MISC
 		self.cfglist.append(getConfigListEntry(_("Misc Settings") + separator, config.plugins.dreamplex.about, _(" ")))
