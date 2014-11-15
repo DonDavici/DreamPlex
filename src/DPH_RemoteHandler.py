@@ -38,7 +38,7 @@ from Components.config import config
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, getBoxInformation, timeToMillis
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, timeToMillis
 
 #===============================================================================
 #
@@ -52,6 +52,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	progress = None
 	currentCommandId = 0
 	protocol_version = 'HTTP/1.1'
+	webifInstalled = config.plugins.dreamplex.webifInstalled.value
 
 	#===========================================================================
 	#
@@ -104,6 +105,8 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			self.send_header('Content-Length', len(body))
 			self.send_header('Connection', "close")
 
+			self.setAccessControlHeaders()
+
 			self.end_headers()
 			self.wfile.write(body)
 			self.wfile.close()
@@ -121,7 +124,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		try:
 			self.send_response(200)
-			self.setAccessControlHeaders()
 
 			request_path=self.path[1:]
 			request_path=re.sub(r"\?.*","",request_path)
@@ -158,9 +160,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 					sleep(950)
 				commandID = params.get('commandID', 0)
 				self.response(re.sub(r"INSERTCOMMANDID", str(commandID), subMgr.msg(getPlayers())), {
-				'X-Plex-Client-Identifier': getUUID(),
 				'Access-Control-Expose-Headers': 'X-Plex-Client-Identifier',
-				'Access-Control-Allow-Origin': '*',
 				'Content-Type': 'text/xml'
 				})
 
@@ -181,58 +181,61 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			elif request_path == "player/playback/setParameters":
 				volume = params["volume"]
 
-				url = "http://localhost/web/vol?set=set" + str(volume)
-
-				urllib.urlopen(url)
-				self.send_response(200)
+				if self.webifInstalled:
+					self.response(getOKMsg(), getPlexHeaders())
+					url = "http://localhost/web/vol?set=set" + str(volume)
+					urllib.urlopen(url)
 
 			elif request_path == "/player/playback/pause":
-				url = "http://localhost/web/remotecontrol?command=400"
+				self.response(getOKMsg(), getPlexHeaders())
 
-				urllib.urlopen(url)
-				xml = "<MediaContainer location='navigation' commandID='10'><Timeline state='paused' time='0' type='music' /><Timeline state='paused' time='0' type='video' /><Timeline state='paused' time='0' type='photo' /></MediaContainer>"
-				self.setXmlHeader(xml)
-				self.end_headers()
-				self.wfile.write(xml)
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=400"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/stop":
-				url = "http://localhost/web/remotecontrol?command=377"
+				self.response(getOKMsg(), getPlexHeaders())
 
-				urllib.urlopen(url)
-				self.send_response(200)
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=377"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/skipNext":
-				url = "http://localhost/web/remotecontrol?command=407"
+				self.response(getOKMsg(), getPlexHeaders())
 
-				urllib.urlopen(url)
-				self.send_response(200)
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=407"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/stepForward":
-				url = "http://localhost/web/remotecontrol?command=10"
+				self.response(getOKMsg(), getPlexHeaders())
 
-				urllib.urlopen(url)
-				self.send_response(200)
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=10"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/stepBack":
-				url = "http://localhost/web/remotecontrol?command=8"
-				urllib.urlopen(url)
-				self.send_response(200)
+				self.response(getOKMsg(), getPlexHeaders())
+
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=8"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/skipPrevious":
-				url = "http://localhost/web/remotecontrol?command=412"
-
-				urllib.urlopen(url)
-				self.send_response(200)
+				self.response(getOKMsg(), getPlexHeaders())
+				if self.webifInstalled:
+					url = "http://localhost/web/remotecontrol?command=412"
+					urllib.urlopen(url)
 
 			elif request_path == "player/playback/playMedia":
 				self.response(getOKMsg(), getPlexHeaders())
 
-				url = "http://localhost/web/powerstate?newstate=4"
-				urllib.urlopen(url)
+				if self.webifInstalled:
+					url = "http://localhost/web/powerstate?newstate=4"
+					urllib.urlopen(url)
 
 				self.currentAddress = params.get('address', self.client_address[0])
 				self.currentKey = params['key']
-				self.currentServer = getMyIp()
 				self.currentPort = params['port']
 				self.currentProtocol = params.get('protocol', "http")
 				self.currentCompleteAddress = self.currentAddress + ":" + self.currentPort
@@ -275,7 +278,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						self.playerCallback(data)
 
 						subMgr.lastkey = self.currentKey
-						subMgr.server = self.currentServer
+						subMgr.server = self.currentAddress
 						subMgr.port = self.currentPort
 						subMgr.protocol = self.currentProtocol
 						subMgr.notify()
@@ -338,10 +341,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	def setAccessControlHeaders(self):
 		printl("", self, "S")
 
-		self.send_header('Content-Length', '0')
 		self.send_header('X-Plex-Client-Identifier', getUUID())
-		self.send_header('Content-Type', 'text/plain')
-		self.send_header('Connection', 'close')
 		self.send_header('Access-Control-Max-Age', '1209600')
 		self.send_header('Access-Control-Allow-Credentials', 'true')
 		self.send_header('Access-Control-Allow-Origin', '*')
@@ -436,9 +436,9 @@ class SubscriptionManager:
 			ret += ' seekRange="0-%s"' % self.progressFromEnigma2
 			ret += ' controllable="%s"' % self.controllable()
 			ret += ' machineIdentifier="%s"' % getUUID() #serv.get('uuid', "")
-			ret += ' protocol="%s"' % "http" #serv.get('protocol', "http")
-			ret += ' address="%s"' % "192.168.45.5"#serv.get('server', self.server)
-			ret += ' port="%s"' % 32400 #serv.get('port', self.port)
+			ret += ' protocol="%s"' % self.protocol
+			ret += ' address="%s"' % self.server
+			ret += ' port="%s"' % self.port
 			ret += ' guid="%s"' % 11111 #info['guid']
 			ret += ' containerKey="%s"' % (self.lastkey or "/library/metadata/900000")
 			ret += ' key="%s"' % (self.lastkey or "/library/metadata/900000")
@@ -472,7 +472,9 @@ class SubscriptionManager:
 			with threading.RLock():
 				for sub in self.subscribers.values():
 					sub.send_update(msg, len(players)==0)
-		self.notifyServer(players)
+
+		# we do not use this because our player is informing the server
+		#self.notifyServer(players)
 		return True
 
 	#===========================================================================
@@ -495,8 +497,7 @@ class SubscriptionManager:
 			params['time'] = self.progressFromEnigma2
 			params['duration'] = self.durationFromEnigma2
 
-		#requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders())
-		requests.getwithparams("192.168.45.5", "32400", "/:/timeline", params, getPlexHeaders())
+		requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders())
 		printl("sent server notification with state = %s" % params['state'], self, "D")
 
 		if players:
@@ -611,6 +612,7 @@ class Subscriber:
 		printl("sending xml to subscriber %s: %s" % (self.tostr(), msg), self, "D")
 
 		if not requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol):
+			printl("removing subcriber ...", self, "D")
 			subMgr.removeSubscriber(self.uuid)
 
 subMgr = SubscriptionManager()
@@ -661,10 +663,14 @@ class RequestMgr:
 			header['Connection'] = "keep-alive"
 			conn.request("POST", path, body, header)
 			data = conn.getresponse()
+
 			if int(data.status) >= 400:
 				print "HTTP response error: " + str(data.status)
 				# this should return false, but I'm hacking it since iOS returns 404 no matter what
-				return data.read() or True
+				return data or True
+			elif int(data.status) == 200:
+				print "got 200 OK"
+				print "data: " + str(data.read())
 			else:
 				return data.read() or True
 		except:
@@ -734,7 +740,6 @@ def getPlexHeaders():
 
 	plexHeader = {
 		"Content-type": "application/x-www-form-urlencoded",
-		"Access-Control-Allow-Origin": "*",
 		"X-Plex-Version": getVersion(),
 		"X-Plex-Client-Identifier": getUUID(),
 		"X-Plex-Provides": "player",
@@ -743,10 +748,6 @@ def getPlexHeaders():
 		"X-Plex-Platform": "Enigma2",
 		"X-Plex-Model": "Enigma2",
 		"X-Plex-Device": "stb",
-	    "Access-Control-Max-Age": "1209600",
-		"Access-Control-Allow-Credentials": "true",
-		"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-		"Access-Control-Allow-Headers": "x-plex-client-identifier,x-plex-device,x-plex-device-name,x-plex-platform,x-plex-platform-version,x-plex-product,x-plex-target-client-identifier,x-plex-username,x-plex-version"
 	}
 
 	# if settings['myplex_user']:
