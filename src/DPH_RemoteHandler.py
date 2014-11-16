@@ -84,6 +84,9 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		printl("Serving OPTIONS request...", self, "D")
 		self.send_response(200)
+		self.send_header('Content-Length', '0')
+		self.send_header('Content-Type', 'text/plain')
+		self.send_header('Connection', 'close')
 		self.setAccessControlHeaders()
 		self.end_headers()
 		self.wfile.close()
@@ -143,6 +146,13 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				port = params.get('port', False)
 				uuid = self.headers.get('X-Plex-Client-Identifier', "")
 				commandID = params.get('commandID', 0)
+
+				print "host: " + str(host)
+				print "protocol: " + str(protocol)
+				print "port: " + str(port)
+				print "uuid: " + str(uuid)
+				print "commandID: " + str(commandID)
+
 				subMgr.addSubscriber(protocol, host, port, uuid, commandID)
 
 			elif "player/timeline/unsubscribe" in request_path:
@@ -277,11 +287,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 						self.playerCallback(data)
 
-						subMgr.lastkey = self.currentKey
-						subMgr.server = self.currentAddress
-						subMgr.port = self.currentPort
-						subMgr.protocol = self.currentProtocol
-						subMgr.notify()
+						# subMgr.lastkey = self.currentKey
+						# subMgr.server = self.currentAddress
+						# subMgr.port = self.currentPort
+						# subMgr.protocol = self.currentProtocol
+						# subMgr.notify()
 
 					else:
 						printl("no match ...", self, "D")
@@ -432,7 +442,7 @@ class SubscriptionManager:
 
 		if playerid > 0:
 			#serv = {}#getServerByHost(self.server)
-			ret += ' duration="%s"' % self.progressFromEnigma2
+			ret += ' duration="%s"' % self.durationFromEnigma2
 			ret += ' seekRange="0-%s"' % self.progressFromEnigma2
 			ret += ' controllable="%s"' % self.controllable()
 			ret += ' machineIdentifier="%s"' % getUUID() #serv.get('uuid', "")
@@ -610,10 +620,10 @@ class Subscriber:
 			self.navlocationsent = True
 		msg = re.sub(r"INSERTCOMMANDID", str(self.commandID), msg)
 		printl("sending xml to subscriber %s: %s" % (self.tostr(), msg), self, "D")
-
-		if not requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol):
-			printl("removing subcriber ...", self, "D")
-			subMgr.removeSubscriber(self.uuid)
+		requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol)
+		# if not requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol):
+		# 	printl("removing subcriber ...", self, "D")
+		# 	subMgr.removeSubscriber(self.uuid)
 
 subMgr = SubscriptionManager()
 

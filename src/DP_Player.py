@@ -1223,7 +1223,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 					self.plexInstance.doRequest(urlPath)
 
 					# here we answer back to our remotecontroler our progress if needed
-					url = "http://localhost:" + str(config.plugins.dreamplex.remotePort.value) + "/playerProgress?progress=" + str(currentTime*1000) + "&lastKey=/library/metadata/" + str(self.id) + "&state=playing&duration=" + str(totalTime)
+					url = "http://localhost:" + str(config.plugins.dreamplex.remotePort.value) + "/playerProgress?progress=" + str(currentTime*1000) + "&lastKey=/library/metadata/" + str(self.id) + "&state=playing&duration=" + str(totalTime*1000)
 					urllib.urlopen(url)
 
 				# todo add buffering here if needed
