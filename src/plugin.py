@@ -133,12 +133,12 @@ def gotThreadMsg(msg):
 		playbackIsRunning = True
 
 		# now we start the player
-		global_session.openWithCallback(restoreLiveTv2, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+		global_session.openWithCallback(restoreLiveTv, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
 #===========================================================================
 #
 #===========================================================================
-def restoreLiveTv2(*retval):
+def restoreLiveTv(*retval):
 	global playbackIsRunning
 
 	global_session.nav.playService(getLiveTv())
