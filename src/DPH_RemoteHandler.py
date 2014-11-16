@@ -185,57 +185,51 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				subMgr.lastkey = params["lastKey"]
 				subMgr.notify()
 
-			elif request_path == "player/playback/seekTo":
-				offset =  params["offset"]
-
 			elif request_path == "player/playback/setParameters":
 				volume = params["volume"]
+				data = {"command": "setVolume", "volume": volume}
+				self.playerCallback(data)
 
-				if self.webifInstalled:
-					self.response(getOKMsg(), getPlexHeaders())
-					url = "http://localhost/web/vol?set=set" + str(volume)
-					urllib.urlopen(url)
-
-			elif request_path == "/player/playback/pause":
+			elif request_path == "player/playback/pause":
 				self.response(getOKMsg(), getPlexHeaders())
+				data = {"command": "pause"}
+				self.playerCallback(data)
 
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=400"
-					urllib.urlopen(url)
+			elif request_path == "player/playback/play":
+				self.response(getOKMsg(), getPlexHeaders())
+				data = {"command": "play"}
+				self.playerCallback(data)
 
 			elif request_path == "player/playback/stop":
 				self.response(getOKMsg(), getPlexHeaders())
-
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=377"
-					urllib.urlopen(url)
+				data = {"command": "stop"}
+				self.playerCallback(data)
 
 			elif request_path == "player/playback/skipNext":
 				self.response(getOKMsg(), getPlexHeaders())
-
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=407"
-					urllib.urlopen(url)
-
-			elif request_path == "player/playback/stepForward":
-				self.response(getOKMsg(), getPlexHeaders())
-
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=10"
-					urllib.urlopen(url)
-
-			elif request_path == "player/playback/stepBack":
-				self.response(getOKMsg(), getPlexHeaders())
-
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=8"
-					urllib.urlopen(url)
+				data = {"command": "skipNext"}
+				self.playerCallback(data)
 
 			elif request_path == "player/playback/skipPrevious":
 				self.response(getOKMsg(), getPlexHeaders())
-				if self.webifInstalled:
-					url = "http://localhost/web/remotecontrol?command=412"
-					urllib.urlopen(url)
+				data = {"command": "skipPrevious"}
+				self.playerCallback(data)
+
+			elif request_path == "player/playback/stepForward":
+				self.response(getOKMsg(), getPlexHeaders())
+				data = {"command": "stepForward"}
+				self.playerCallback(data)
+
+			elif request_path == "player/playback/stepBack":
+				self.response(getOKMsg(), getPlexHeaders())
+				data = {"command": "stepBack"}
+				self.playerCallback(data)
+
+			elif request_path == "player/playback/seekTo":
+				self.response(getOKMsg(), getPlexHeaders())
+				offset =  params["offset"]
+				data = {"command": "seekTo", "offset": offset}
+				self.playerCallback(data)
 
 			elif request_path == "player/playback/playMedia":
 				self.response(getOKMsg(), getPlexHeaders())

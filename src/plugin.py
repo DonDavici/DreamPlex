@@ -113,9 +113,9 @@ def gotThreadMsg(msg):
 	msg = HttpDeamonThread.PlayerData.pop()
 	global playbackIsRunning
 
-	if not playbackIsRunning:
-		data = msg[0]
+	data = msg[0]
 
+	if not playbackIsRunning:
 		listViewList    = data["listViewList"]
 		currentIndex    = data["currentIndex"]
 		libraryName     = data["libraryName"]
@@ -133,16 +133,46 @@ def gotThreadMsg(msg):
 		playbackIsRunning = True
 
 		# now we start the player
-		global_session.openWithCallback(restoreLiveTv, DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+		global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
 
-#===========================================================================
-#
-#===========================================================================
-def restoreLiveTv(*retval):
-	global playbackIsRunning
+	else:
+		if "command" in data:
+			command = data["command"]
 
-	global_session.nav.playService(getLiveTv())
-	playbackIsRunning = False
+			if command == "pause":
+				global_session.current_dialog.pauseService()
+
+			elif command == "play":
+				global_session.current_dialog.unPauseService()
+
+			elif command == "skipNext":
+				pass
+
+			elif command == "skipPrevious":
+				pass
+
+			elif command == "stepForward":
+				pass
+
+			elif command == "stepBack":
+				pass
+
+			elif command == "setVolume":
+				global_session.current_dialog.setVolume(data["volume"])
+
+			elif command == "stop":
+				global playbackIsRunning
+
+				global_session.current_dialog.leavePlayerConfirmed(True)
+				global_session.nav.playService(getLiveTv())
+
+				playbackIsRunning = False
+
+			else:
+				# not handled command
+				print command
+				raise Exception
+
 
 #===========================================================================
 #

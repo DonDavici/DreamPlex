@@ -36,7 +36,7 @@ from Screens.HelpMenu import HelpableScreen
 from Tools.ISO639 import LanguageCodes
 
 #noinspection PyUnresolvedReferences
-from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation, ePicLoad
+from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eTimer, eServiceCenter, iServiceInformation, ePicLoad, eDVBVolumecontrol
 
 from Tools import Notifications
 from Tools.Directories import fileExists
@@ -182,6 +182,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self["shortDescription"] = Label()
 		self["mediaTitle"] = StaticText()
 
+		# init volume object
+		self.volumeHandler= eDVBVolumecontrol.getInstance()
+
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
 
@@ -241,6 +244,27 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		printl("", self, "C")
 		return DreamplexPlayerSummary
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def getVolume(self):
+		printl("", self, "S")
+
+		currentVolume = self.volumeHandler.getVolume()
+
+		printl("", self, "C")
+		return currentVolume
+
+	#==============================================================================
+	#
+	#==============================================================================
+	def setVolume(self, volume):
+		printl("", self, "S")
+
+		self.volumeHandler.setVolume(volume)
+
+		printl("", self, "C")
 
 	#==============================================================================
 	#
