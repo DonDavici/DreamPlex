@@ -1361,7 +1361,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, sessionData=self.sessionData)
 				else:
 					if self.serverConfig.useForcedSubtitles.value and self.serverConfig.playbackType.value == "2":
-						self.subtitleData = self.getSubtitleInformation()
+						self.subtitleData = Singleton().getPlexInstance().getSelectedSubtitleDataById(entryData["server"], entryData["ratingKey"])
 
 					self.session.openWithCallback(self.myCallback, DP_Player, self.listViewList, currentIndex, self.libraryName, self.autoPlayMode, self.resumeMode, self.playbackMode, subtitleData=self.subtitleData)
 
@@ -2067,40 +2067,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			self.subtitlesList = Singleton().getPlexInstance().getSubtitlesById(self.server, self.media_id)
 
 		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getSubtitleInformation(self):
-		printl("", self, "S")
-
-		self.getSubtitleList()
-
-		printl("subtitlesList: " + str(self.subtitlesList), self, "D")
-
-		for item in self.subtitlesList:
-
-			selected = item.get('selected', "")
-			language = item.get('language', "")
-			forced = item.get('forced', "")
-
-			if language == "None":
-				subtitleData = False
-
-			elif forced:
-				subtitleData = "forced"
-
-			elif selected:
-				subtitleData = language
-
-			elif not selected:
-				printl("we are not selected ..." + str(language), self, "D")
-
-			else:
-				printl("unsupported case, please check", self, "D")
-
-		printl("enableSubtitles: " + str(subtitleData), self, "C")
-		return subtitleData
 
 	#===========================================================================
 	#

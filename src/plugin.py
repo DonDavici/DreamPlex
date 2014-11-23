@@ -128,6 +128,7 @@ def gotThreadMsg(msg):
 		resumeMode      = data["resumeMode"]
 		playbackMode    = data["playbackMode"]
 		forceResume     = data["forceResume"]
+		subtitleData    = data["subtitleData"]
 
 		# load skin data here as well
 		startEnvironment()
@@ -138,7 +139,7 @@ def gotThreadMsg(msg):
 		playbackIsRunning = True
 
 		# now we start the player
-		global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume)
+		global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
 
 	else:
 		if "command" in data:

@@ -178,7 +178,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				subMgr.playerStateFromEnigma2 = params["state"]
 				subMgr.durationFromEnigma2 = params["duration"]
 				subMgr.lastkey = params["lastKey"]
-				subMgr.notify()
+				#subMgr.notify()
 
 			elif request_path == "player/playback/setParameters":
 				volume = params["volume"]
@@ -275,8 +275,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						playbackMode = self.g_serverConfig.playbackType.value
 						currentIndex = 0
 						libraryName = "Mixed"
+						splittedData = self.currentKey.split("/")
+						subtitleData = self.plexInstance.getSelectedSubtitleDataById(self.currentCompleteAddress, splittedData[-1])
 
-						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName}
+						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName, "subtitleData": subtitleData }
 
 						self.playerCallback(data)
 

@@ -61,7 +61,7 @@ from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion
+from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion, getLiveTv
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -116,7 +116,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False, sessionData=None, subtitleData=None):
+	def __init__(self, session, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=False, isExtraData=False, sessionData=None, subtitleData=None, startedByRemotePlayer=False):
 		printl("", self, "S")
 		Screen.__init__(self, session)
 
@@ -147,6 +147,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.isExtraData = isExtraData
 		self.sessionData = sessionData
 		self.subtitleData = subtitleData
+		self.startedByRemotePlayer = startedByRemotePlayer
 
 		# we add this for vix images due to their long press button support
 		self.LongButtonPressed = False
@@ -582,7 +583,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.startTimelineWatcher()
 
-		if self.subtitleData == "forced" or self.subtitleData:
+		if self.subtitleData["id"] != -1:
+			printl("starting subtitleWatcher ...")
 			self.startSubtitleWatcher()
 
 		if self.playbackType == "2":
@@ -653,11 +655,15 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 					subs = (x, "", number, description, myLanguage, selected)
 
-					if self.subtitleData == "forced":
-						self.enableSubtitle(subs[0])
-						self.subtitleWatcher.stop()
+					myLanguageFromPlex = self.subtitleData["languageCode"]
 
-					elif self.subtitleData in myLanguage:
+					if LanguageCodes.has_key(myLanguageFromPlex):
+						myLanguageFromPlex = LanguageCodes[myLanguageFromPlex][0]
+
+					printl("myLanguage: " + str(myLanguage) + " / myLanguageFromPlex: " + str(myLanguageFromPlex), self, "D")
+
+					if myLanguageFromPlex == myLanguage:
+						printl("we have a match ...", self, "D")
 						self.enableSubtitle(subs[0])
 						self.subtitleWatcher.stop()
 
@@ -1068,8 +1074,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		# we stop playback here
 		self.session.nav.stopService()
 
+		if self.startedByRemotePlayer:
+			self.session.nav.playService(getLiveTv())
+
 		self.close((False, ))
-		
+
 		printl("", self, "C")
 
 	#===========================================================================
