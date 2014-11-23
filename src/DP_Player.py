@@ -1255,10 +1255,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 					urlPath += "&state=playing&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
 					self.plexInstance.doRequest(urlPath)
 
-					# here we answer back to our remotecontroler our progress if needed
-					url = "http://localhost:" + str(config.plugins.dreamplex.remotePort.value) + "/playerProgress?progress=" + str(currentTime*1000) + "&lastKey=/library/metadata/" + str(self.id) + "&state=playing&duration=" + str(totalTime*1000)
-					urllib.urlopen(url)
-
 				# todo add buffering here if needed
 					#urlPath += "&state=buffering&time=" + str(currentTime*1000)
 
@@ -1271,7 +1267,57 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		printl("" ,self,"C")
 		return True
-			
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerState(self):
+		printl("" ,self,"S")
+		params = {}
+
+		try:
+			currentTime = self.getPlayPosition()[1] / 90000
+			totalTime = self.getPlayLength()[1] / 90000
+
+			params["duration"] = str(totalTime*1000)
+
+			params["progress"] = str(currentTime*1000)
+
+			if self.seekstate == self.SEEK_STATE_PAUSE:
+				params["state"] = "paused"
+			elif self.seekstate == self.SEEK_STATE_PLAY:
+				params["state"] = "playing"
+			elif self.seekstate == self.SEEK_STATE_STOP:
+				params["state"] = "stopped"
+			else:
+				raise Exception
+
+			params["lastKey"] = "/library/metadata/" + str(self.id)
+
+			printl("" ,self,"C")
+			return params
+
+		except:
+
+			printl("" ,self,"C")
+			return False
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayer(self):
+		printl("" ,self,"S")
+		ret = {}
+
+		if self.seekstate == self.SEEK_STATE_PAUSE or self.seekstate == self.SEEK_STATE_PLAY:
+			player = {}
+			player['playerid'] = int(1)
+			player['type'] = "video"
+			ret["video"] = player
+
+		printl("" ,self,"C")
+		return ret
+
 	#===========================================================================
 	# 
 	#===========================================================================

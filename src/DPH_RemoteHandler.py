@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import re
-import urllib
 import threading
 import httplib
 import traceback
@@ -165,13 +164,22 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				self.response(responseContent, getPlexHeaders())
 
 			elif request_path == "player/timeline/poll":
-				if params.get('wait', False) == '1':
-					sleep(950)
 				commandID = params.get('commandID', 0)
-				self.response(re.sub(r"INSERTCOMMANDID", str(commandID), subMgr.msg(getPlayers())), {
-				'Access-Control-Expose-Headers': 'X-Plex-Client-Identifier',
-				'Content-Type': 'text/xml'
-				})
+				try:
+					e2params = self.session.current_dialog.getPlayerState()
+					if e2params:
+						print "we have params"
+						subMgr.progressFromEnigma2 = e2params['progress']
+						subMgr.playerStateFromEnigma2 = e2params["state"]
+						subMgr.durationFromEnigma2 = e2params["duration"]
+						subMgr.lastkey = e2params["lastKey"]
+
+					self.answerPoll(commandID)
+					sleep(1)
+				except:
+					print "no params"
+					self.answerPoll(commandID)
+					sleep(10)
 
 			elif request_path == "playerProgress":
 				subMgr.progressFromEnigma2 = params['progress']
@@ -303,6 +311,15 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	#===========================================================================
 	#
 	#===========================================================================
+	def answerPoll(self, commandID):
+		self.response(re.sub(r"INSERTCOMMANDID", str(commandID), subMgr.msg(self.getPlayers())), {
+			'Access-Control-Expose-Headers': 'X-Plex-Client-Identifier',
+			'Content-Type': 'text/xml'
+			})
+
+	#===========================================================================
+	#
+	#===========================================================================
 	def address_string(self):
 		printl("", self, "S")
 
@@ -407,9 +424,9 @@ class SubscriptionManager:
 			self.mainlocation = "navigation"
 		msg += ' location="%s">' % self.mainlocation
 
-		msg += self.getTimelineXML(getAudioPlayerId(players), "music")
-		msg += self.getTimelineXML(getPhotoPlayerId(players), "photo")
-		msg += self.getTimelineXML(getVideoPlayerId(players), "video")
+		msg += self.getTimelineXML(self.getAudioPlayerId(players), "music")
+		msg += self.getTimelineXML(self.getPhotoPlayerId(players), "photo")
+		msg += self.getTimelineXML(self.getVideoPlayerId(players), "video")
 		msg += "\r\n</MediaContainer>"
 		return msg
 
@@ -462,7 +479,7 @@ class SubscriptionManager:
 	#===========================================================================
 	def notify(self, event = False):
 		self.cleanup()
-		players = getPlayers()
+		players = self.getPlayers()
 		# fetch the message, subscribers or not, since the server
 		# will need the info anyway
 		msg = self.msg(players)
@@ -561,6 +578,53 @@ class SubscriptionManager:
 		info['guid'] = self.guid
 
 		return info
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayers(self):
+
+		ret = self.session.current_dialog.getPlayer()
+
+		return ret
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayerIds(self):
+		ret = []
+
+		for player in self.getPlayers().values():
+			ret.append(player['playerid'])
+
+		return ret
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getVideoPlayerId(self, players = False):
+		if players is None:
+			players = self.getPlayers()
+
+		return players.get("video", {}).get('playerid', 0)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getAudioPlayerId(self, players = False):
+		if players is None:
+			players = self.getPlayers()
+
+		return players.get("music", {}).get('playerid', 0)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPhotoPlayerId(self, players = False):
+		if players is None:
+			players = self.getPlayers()
+
+		return players.get("photo", {}).get('playerid', 0)
 
 #===========================================================================
 #
@@ -754,54 +818,3 @@ def getPlexHeaders():
 
 	printl("", "getPlexHeaders", "C")
 	return plexHeader
-
-#===========================================================================
-#
-#===========================================================================
-def getPlayers():
-	player = {}
-	ret = {}
-
-	player['playerid'] = int(1)
-	player['type'] = "video"
-	ret["video"] = player
-
-	return ret
-
-#===========================================================================
-#
-#===========================================================================
-def getPlayerIds():
-	ret = []
-
-	for player in getPlayers().values():
-		ret.append(player['playerid'])
-
-	return ret
-
-#===========================================================================
-#
-#===========================================================================
-def getVideoPlayerId(players = False):
-	if players is None:
-		players = getPlayers()
-
-	return players.get("video", {}).get('playerid', 0)
-
-#===========================================================================
-#
-#===========================================================================
-def getAudioPlayerId(players = False):
-	if players is None:
-		players = getPlayers()
-
-	return players.get("music", {}).get('playerid', 0)
-
-#===========================================================================
-#
-#===========================================================================
-def getPhotoPlayerId(players = False):
-	if players is None:
-		players = getPlayers()
-
-	return players.get("photo", {}).get('playerid', 0)
