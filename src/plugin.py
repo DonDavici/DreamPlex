@@ -3,6 +3,7 @@
 # IMPORT
 #===============================================================================
 from Plugins.Plugin import PluginDescriptor
+from Screens.Standby import inStandby
 
 try:
 	from Components.Network import iNetworkInfo
@@ -114,6 +115,10 @@ def gotThreadMsg(msg):
 	global playbackIsRunning
 
 	data = msg[0]
+
+	# first we check if we are standby and exit this if needed
+	if inStandby is not None:
+		inStandby.Power()
 
 	if not playbackIsRunning:
 		listViewList    = data["listViewList"]

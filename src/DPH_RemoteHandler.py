@@ -52,7 +52,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	progress = None
 	currentCommandId = 0
 	protocol_version = 'HTTP/1.1'
-	webifInstalled = config.plugins.dreamplex.webifInstalled.value
 
 	#===========================================================================
 	#
@@ -147,11 +146,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				uuid = self.headers.get('X-Plex-Client-Identifier', "")
 				commandID = params.get('commandID', 0)
 
-				print "host: " + str(host)
-				print "protocol: " + str(protocol)
-				print "port: " + str(port)
-				print "uuid: " + str(uuid)
-				print "commandID: " + str(commandID)
+				printl("host: " + str(host), self, "D")
+				printl("protocol: " + str(protocol), self, "D")
+				printl("port: " + str(port), self, "D")
+				printl("uuid: " + str(uuid), self, "D")
+				printl("commandID: " + str(commandID), self, "D")
 
 				subMgr.addSubscriber(protocol, host, port, uuid, commandID)
 
@@ -175,10 +174,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				})
 
 			elif request_path == "playerProgress":
-				# subMgr.lastkey = self.currentKey
-				# subMgr.server = self.currentServer
-				# subMgr.port = self.currentPort
-				# subMgr.protocol = self.currentProtocol
 				subMgr.progressFromEnigma2 = params['progress']
 				subMgr.playerStateFromEnigma2 = params["state"]
 				subMgr.durationFromEnigma2 = params["duration"]
@@ -188,21 +183,25 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			elif request_path == "player/playback/setParameters":
 				volume = params["volume"]
 				data = {"command": "setVolume", "volume": volume}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/pause":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "pause"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/play":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "play"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/stop":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stop"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/skipNext":
@@ -213,30 +212,30 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			elif request_path == "player/playback/skipPrevious":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "skipPrevious"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/stepForward":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stepForward"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/stepBack":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stepBack"}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/seekTo":
 				self.response(getOKMsg(), getPlexHeaders())
 				offset =  params["offset"]
 				data = {"command": "seekTo", "offset": offset}
+
 				self.playerCallback(data)
 
 			elif request_path == "player/playback/playMedia":
 				self.response(getOKMsg(), getPlexHeaders())
-
-				if self.webifInstalled:
-					url = "http://localhost/web/powerstate?newstate=4"
-					urllib.urlopen(url)
 
 				self.currentAddress = params.get('address', self.client_address[0])
 				self.currentKey = params['key']
@@ -280,12 +279,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName}
 
 						self.playerCallback(data)
-
-						# subMgr.lastkey = self.currentKey
-						# subMgr.server = self.currentAddress
-						# subMgr.port = self.currentPort
-						# subMgr.protocol = self.currentProtocol
-						# subMgr.notify()
 
 					else:
 						printl("no match ...", self, "D")
