@@ -179,14 +179,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				except:
 					print "no params"
 					self.answerPoll(commandID)
-					sleep(10)
-
-			elif request_path == "playerProgress":
-				subMgr.progressFromEnigma2 = params['progress']
-				subMgr.playerStateFromEnigma2 = params["state"]
-				subMgr.durationFromEnigma2 = params["duration"]
-				subMgr.lastkey = params["lastKey"]
-				#subMgr.notify()
+					sleep(1)
 
 			elif request_path == "player/playback/setParameters":
 				volume = params["volume"]
@@ -381,6 +374,20 @@ class RemoteHandler(BaseHTTPRequestHandler):
 		printl("", self, "C")
 		return params
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def getPlayers(self):
+
+		ret = {}
+
+		try:
+			ret = self.session.current_dialog.getPlayer()
+		except:
+			pass
+
+		return ret
+
 #===========================================================================
 #
 #===========================================================================
@@ -435,10 +442,7 @@ class SubscriptionManager:
 	#===========================================================================
 	def getTimelineXML(self, playerid, ptype):
 		if playerid > 0:
-			#info = self.getPlayerProperties(playerid)
-			# save this info off so the server update can use it too
-			#self.playerprops[playerid] = info;
-			state = "playing"
+			state = self.playerStateFromEnigma2
 			time = self.progressFromEnigma2
 		else:
 			state = "stopped"
@@ -447,7 +451,6 @@ class SubscriptionManager:
 		ret = "\r\n"+'<Timeline location="%s" state="%s" time="%s" type="%s"' % (self.mainlocation, state, time, ptype)
 
 		if playerid > 0:
-			#serv = {}#getServerByHost(self.server)
 			ret += ' duration="%s"' % self.durationFromEnigma2
 			ret += ' seekRange="0-%s"' % self.progressFromEnigma2
 			ret += ' controllable="%s"' % self.controllable()
@@ -477,9 +480,9 @@ class SubscriptionManager:
 	#===========================================================================
 	#
 	#===========================================================================
-	def notify(self, event = False):
+	def notify(self, players, event = False):
 		self.cleanup()
-		players = self.getPlayers()
+
 		# fetch the message, subscribers or not, since the server
 		# will need the info anyway
 		msg = self.msg(players)
@@ -582,48 +585,19 @@ class SubscriptionManager:
 	#===========================================================================
 	#
 	#===========================================================================
-	def getPlayers(self):
-
-		ret = self.session.current_dialog.getPlayer()
-
-		return ret
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getPlayerIds(self):
-		ret = []
-
-		for player in self.getPlayers().values():
-			ret.append(player['playerid'])
-
-		return ret
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getVideoPlayerId(self, players = False):
-		if players is None:
-			players = self.getPlayers()
-
+	def getVideoPlayerId(self, players):
 		return players.get("video", {}).get('playerid', 0)
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getAudioPlayerId(self, players = False):
-		if players is None:
-			players = self.getPlayers()
-
+	def getAudioPlayerId(self, players):
 		return players.get("music", {}).get('playerid', 0)
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def getPhotoPlayerId(self, players = False):
-		if players is None:
-			players = self.getPlayers()
-
+	def getPhotoPlayerId(self, players):
 		return players.get("photo", {}).get('playerid', 0)
 
 #===========================================================================

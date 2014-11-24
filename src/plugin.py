@@ -167,8 +167,6 @@ def gotThreadMsg(msg):
 				global_session.current_dialog.setVolume(data["volume"])
 
 			elif command == "stop":
-				global playbackIsRunning
-
 				global_session.current_dialog.leavePlayerConfirmed(True)
 				global_session.nav.playService(getLiveTv())
 

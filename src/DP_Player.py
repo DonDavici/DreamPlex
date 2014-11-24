@@ -1310,13 +1310,26 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		ret = {}
 
 		if self.seekstate == self.SEEK_STATE_PAUSE or self.seekstate == self.SEEK_STATE_PLAY:
-			player = {}
-			player['playerid'] = int(1)
-			player['type'] = "video"
-			ret["video"] = player
+			if self.getMediaType() == "video":
+				player = {}
+				player['playerid'] = int(1)
+				player['type'] = "video"
+				ret["video"] = player
 
 		printl("" ,self,"C")
 		return ret
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getMediaType(self):
+		printl("" ,self,"S")
+
+		# todo someday there might be music and photo if needed
+		mediaType = "video"
+
+		printl("" ,self,"C")
+		return mediaType
 
 	#===========================================================================
 	# 
