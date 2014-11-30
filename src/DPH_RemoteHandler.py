@@ -32,12 +32,14 @@ from time import sleep
 from urlparse import urlparse, parse_qs
 from BaseHTTPServer import BaseHTTPRequestHandler
 
+from enigma import eTimer
+
 from Components.config import config
 
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, timeToMillis
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, timeToMillis, getOeVersion, getPlexHeaders, getOKMsg, getXMLHeader
 
 #===============================================================================
 #
@@ -116,6 +118,11 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 		printl("", self, "C")
 
+	#===========================================================================
+	#
+	#===========================================================================
+	def notifySubscribers(self):
+		subMgr.notify()
 
 	#===========================================================================
 	#
@@ -153,10 +160,15 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 				subMgr.addSubscriber(protocol, host, port, uuid, commandID)
 
+				data = {"command": "startNotifier"}
+
+				self.playerCallback(data)
+
 			elif "player/timeline/unsubscribe" in request_path:
 				self.response(getOKMsg(), getPlexHeaders())
 				uuid = self.headers.get('X-Plex-Client-Identifier', False) or self.client_address[0]
 				subMgr.removeSubscriber(uuid)
+
 
 			elif request_path == "resources":
 				responseContent = getXMLHeader()
@@ -406,6 +418,7 @@ class SubscriptionManager:
 		self.progressFromEnigma2 = 0
 		self.playerStateFromEnigma2 = "stopped"
 		self.durationFromEnigma2 = 0
+		self.players = None
 
 	#===========================================================================
 	#
@@ -750,45 +763,3 @@ class RequestMgr:
 			return False
 
 requests = RequestMgr()
-
-#===========================================================================
-#
-#===========================================================================
-def getXMLHeader():
-	printl("", "getXMLHeader", "S")
-
-	printl("", "getXMLHeader", "C")
-	return '<?xml version="1.0" encoding="utf-8"?>'+"\r\n"
-
-#===========================================================================
-#
-#===========================================================================
-def getOKMsg():
-	printl("", "getOKMsg", "S")
-
-	printl("", "getOKMsg", "C")
-	return getXMLHeader() + '<Response code="200" status="OK" />'
-
-#===========================================================================
-#
-#===========================================================================
-def getPlexHeaders():
-	printl("", "getPlexHeaders", "S")
-
-	plexHeader = {
-		"Content-type": "application/x-www-form-urlencoded",
-		"X-Plex-Version": getVersion(),
-		"X-Plex-Client-Identifier": getUUID(),
-		"X-Plex-Provides": "player",
-		"X-Plex-Product": "DreamPlex",
-		"X-Plex-Device-Name": config.plugins.dreamplex.boxName.value,
-		"X-Plex-Platform": "Enigma2",
-		"X-Plex-Model": "Enigma2",
-		"X-Plex-Device": "stb",
-	}
-
-	# if settings['myplex_user']:
-	# plexHeader["X-Plex-Username"] = settings['myplex_user']
-
-	printl("", "getPlexHeaders", "C")
-	return plexHeader

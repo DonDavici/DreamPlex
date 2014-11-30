@@ -1077,3 +1077,45 @@ def millisToTime(t):
 	minutes %= 60
 	millis %= 1000
 	return {'hours':hours,'minutes':minutes,'seconds':seconds,'milliseconds':millis}
+
+#===========================================================================
+#
+#===========================================================================
+def getXMLHeader():
+	#printl("", "getXMLHeader", "S")
+
+	#printl("", "getXMLHeader", "C")
+	return '<?xml version="1.0" encoding="utf-8"?>'+"\r\n"
+
+#===========================================================================
+#
+#===========================================================================
+def getOKMsg():
+	#printl("", "getOKMsg", "S")
+
+	#printl("", "getOKMsg", "C")
+	return getXMLHeader() + '<Response code="200" status="OK" />'
+
+#===========================================================================
+#
+#===========================================================================
+def getPlexHeaders():
+	#printl("", "getPlexHeaders", "S")
+
+	plexHeader = {
+		"Content-type": "application/x-www-form-urlencoded",
+		"X-Plex-Version": getVersion(),
+		"X-Plex-Client-Identifier": getUUID(),
+		"X-Plex-Provides": "player",
+		"X-Plex-Product": "DreamPlex",
+		"X-Plex-Device-Name": config.plugins.dreamplex.boxName.value,
+		"X-Plex-Platform": "Enigma2",
+		"X-Plex-Model": "Enigma2",
+		"X-Plex-Device": "stb",
+	}
+
+	# if settings['myplex_user']:
+	# plexHeader["X-Plex-Username"] = settings['myplex_user']
+
+	#printl("", "getPlexHeaders", "C")
+	return plexHeader

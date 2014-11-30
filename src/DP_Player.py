@@ -23,7 +23,6 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import threading
-import urllib
 
 from os import remove
 from time import sleep, localtime, time, strftime

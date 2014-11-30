@@ -13,6 +13,7 @@ except:
 from Components.config import config, configfile
 
 from DP_Player import DP_Player
+from enigma import eTimer
 
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion
@@ -25,6 +26,8 @@ HttpDeamonThreadConn = None
 HttpDeamonStarted = False
 global_session = None
 playbackIsRunning = False
+notifyWatcher = None
+notifyWatcherConn = None
 
 #===============================================================================
 # main
@@ -121,25 +124,30 @@ def gotThreadMsg(msg):
 		inStandby.Power()
 
 	if not playbackIsRunning:
-		listViewList    = data["listViewList"]
-		currentIndex    = data["currentIndex"]
-		libraryName     = data["libraryName"]
-		autoPlayMode    = data["autoPlayMode"]
-		resumeMode      = data["resumeMode"]
-		playbackMode    = data["playbackMode"]
-		forceResume     = data["forceResume"]
-		subtitleData    = data["subtitleData"]
+		if "command" in data:
+			if data["command"] == "startNotifier":
+				startNotifier()
 
-		# load skin data here as well
-		startEnvironment()
+		else:
+			listViewList    = data["listViewList"]
+			currentIndex    = data["currentIndex"]
+			libraryName     = data["libraryName"]
+			autoPlayMode    = data["autoPlayMode"]
+			resumeMode      = data["resumeMode"]
+			playbackMode    = data["playbackMode"]
+			forceResume     = data["forceResume"]
+			subtitleData    = data["subtitleData"]
 
-		# save liveTvData
-		saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
+			# load skin data here as well
+			startEnvironment()
 
-		playbackIsRunning = True
+			# save liveTvData
+			saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
 
-		# now we start the player
-		global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
+			playbackIsRunning = True
+
+			# now we start the player
+			global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
 
 	else:
 		if "command" in data:
@@ -172,11 +180,52 @@ def gotThreadMsg(msg):
 
 				playbackIsRunning = False
 
+			elif command == "startNotifier":
+				startNotifier()
+
+			elif command == "stopNotifier":
+				pass
+
 			else:
 				# not handled command
 				print command
 				raise Exception
 
+#===========================================================================
+#
+#===========================================================================
+def startNotifier():
+	global notifyWatcher
+	global notifyWatcherConn
+	notifyWatcher = eTimer()
+
+	if getOeVersion() != "oe22":
+		notifyWatcher.callback.append(notifySubscribers)
+	else:
+		notifyWatcherConn = notifyWatcher.timeout.connect(notifySubscribers)
+
+	notifyWatcher.start(1,False)
+
+#===========================================================================
+#
+#===========================================================================
+def notifySubscribers():
+	if getPlayer is not None:
+		HttpDeamonThread.notifySubscribers(getPlayer)
+
+#===========================================================================
+#
+#===========================================================================
+def getPlayer():
+	ret = None
+
+	try:
+		ret = {}
+		ret = global_session.current_dialog.getPlayer()
+	except:
+		pass
+
+	return ret
 
 #===========================================================================
 #
