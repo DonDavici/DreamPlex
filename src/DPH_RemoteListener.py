@@ -32,6 +32,7 @@ from Components.config import config
 from DPH_PlexGdm import PlexGdm
 from DPH_RemoteHandler import RemoteHandler
 from DP_Syncer import ThreadQueue
+from DPH_SubscriptionManager import SubscriptionManager
 
 from __common__ import printl2 as printl, getMyIp
 
@@ -50,6 +51,7 @@ class HttpDeamon(Thread):
 	def __init__(self):
 		self.playerData = ThreadQueue()
 		self.playerDataPump = ePythonMessagePump()
+		self.subMgr = SubscriptionManager()
 
 	#===========================================================================
 	#
@@ -85,8 +87,26 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	#
 	#===========================================================================
-	def notifySubscribers(self):
-		self.HandlerClass.notifySubscribers()
+	def notifySubscribers(self, players):
+		self.subMgr.notify(players)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def addSubscriber(self, protocol, host, port, uuid, commandID):
+		self.subMgr.addSubscriber(protocol, host, port, uuid, commandID)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def removeSubscriber(self, uuid):
+		self.subMgr.removeSubscriber(uuid)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def updateCommandID(self, uuid, commandID):
+		self.subMgr.updateCommandID(uuid, commandID)
 
 	#===========================================================================
 	#
@@ -145,9 +165,6 @@ class HttpDeamon(Thread):
 		self.httpd.shutdown()
 
 		printl("", self, "C")
-
-	def startNotifier(self):
-		self.HandlerClass.star
 
 	#===========================================================================
 	#

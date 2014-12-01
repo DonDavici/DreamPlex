@@ -23,23 +23,18 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import re
-import threading
-import httplib
 import traceback
-import string
 
 from time import sleep
 from urlparse import urlparse, parse_qs
 from BaseHTTPServer import BaseHTTPRequestHandler
-
-from enigma import eTimer
 
 from Components.config import config
 
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
 
-from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, timeToMillis, getOeVersion, getPlexHeaders, getOKMsg, getXMLHeader
+from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, getPlexHeaders, getOKMsg, getXMLHeader
 
 #===============================================================================
 #
@@ -121,12 +116,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	#===========================================================================
 	#
 	#===========================================================================
-	def notifySubscribers(self):
-		subMgr.notify()
-
-	#===========================================================================
-	#
-	#===========================================================================
 	def answer_request(self):
 		printl("", self, "S")
 
@@ -141,7 +130,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			# first we get all params form url
 			params = self.getParams()
 
-			subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
+			data = {"command": "updateCommandId", "uuid": self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), "commandID": params.get('commandID', False)}
+			#subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
+
+			self.playerCallback(data)
 
 			if request_path == "player/timeline/subscribe":
 				self.response(getOKMsg(), getPlexHeaders())
@@ -158,16 +150,16 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				printl("uuid: " + str(uuid), self, "D")
 				printl("commandID: " + str(commandID), self, "D")
 
-				subMgr.addSubscriber(protocol, host, port, uuid, commandID)
-
-				data = {"command": "startNotifier"}
+				data = {"command": "addSubscriber", "protocol": protocol, "host": host, "port": port, "uuid": uuid, "commandID": commandID}
+				#subMgr.addSubscriber(protocol, host, port, uuid, commandID)
 
 				self.playerCallback(data)
 
 			elif "player/timeline/unsubscribe" in request_path:
 				self.response(getOKMsg(), getPlexHeaders())
 				uuid = self.headers.get('X-Plex-Client-Identifier', False) or self.client_address[0]
-				subMgr.removeSubscriber(uuid)
+				data = {"command": "removeSubscriber", "uuid": uuid}
+				#subMgr.removeSubscriber(uuid)
 
 
 			elif request_path == "resources":
@@ -399,367 +391,3 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			pass
 
 		return ret
-
-#===========================================================================
-#
-#===========================================================================
-class SubscriptionManager:
-	def __init__(self):
-		self.subscribers = {}
-		self.info = {}
-		self.lastkey = ""
-		self.volume = 0
-		self.guid = ""
-		self.server = ""
-		self.protocol = "http"
-		self.port = ""
-		self.playerprops = {}
-		self.sentstopped = True
-		self.progressFromEnigma2 = 0
-		self.playerStateFromEnigma2 = "stopped"
-		self.durationFromEnigma2 = 0
-		self.players = None
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getVolume(self):
-
-		self.volume = 100
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def msg(self, players):
-		msg = getXMLHeader()
-		msg += '<MediaContainer commandID="INSERTCOMMANDID"'
-
-		if players:
-			self.getVolume()
-			maintype = "music"
-			for p in players.values():
-				maintype = p.get('type')
-			self.mainlocation = "fullScreen" + maintype[0:1].upper() + maintype[1:].lower()
-		else:
-			self.mainlocation = "navigation"
-		msg += ' location="%s">' % self.mainlocation
-
-		msg += self.getTimelineXML(self.getAudioPlayerId(players), "music")
-		msg += self.getTimelineXML(self.getPhotoPlayerId(players), "photo")
-		msg += self.getTimelineXML(self.getVideoPlayerId(players), "video")
-		msg += "\r\n</MediaContainer>"
-		return msg
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getTimelineXML(self, playerid, ptype):
-		if playerid > 0:
-			state = self.playerStateFromEnigma2
-			time = self.progressFromEnigma2
-		else:
-			state = "stopped"
-			time = 0
-
-		ret = "\r\n"+'<Timeline location="%s" state="%s" time="%s" type="%s"' % (self.mainlocation, state, time, ptype)
-
-		if playerid > 0:
-			ret += ' duration="%s"' % self.durationFromEnigma2
-			ret += ' seekRange="0-%s"' % self.progressFromEnigma2
-			ret += ' controllable="%s"' % self.controllable()
-			ret += ' machineIdentifier="%s"' % getUUID() #serv.get('uuid', "")
-			ret += ' protocol="%s"' % self.protocol
-			ret += ' address="%s"' % self.server
-			ret += ' port="%s"' % self.port
-			ret += ' guid="%s"' % 11111 #info['guid']
-			ret += ' containerKey="%s"' % (self.lastkey or "/library/metadata/900000")
-			ret += ' key="%s"' % (self.lastkey or "/library/metadata/900000")
-			m = re.search(r'(\d+)$', self.lastkey)
-			if m:
-				ret += ' ratingKey="%s"' % m.group()
-			ret += ' volume="%s"' % 100
-			ret += ' shuffle="%s"' % 0
-
-		ret += '/>'
-		return ret
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def updateCommandID(self, uuid, commandID):
-		if commandID and self.subscribers.get(uuid, False):
-			self.subscribers[uuid].commandID = int(commandID)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def notify(self, players, event = False):
-		self.cleanup()
-
-		# fetch the message, subscribers or not, since the server
-		# will need the info anyway
-		msg = self.msg(players)
-
-		if self.subscribers:
-			with threading.RLock():
-				for sub in self.subscribers.values():
-					sub.send_update(msg, len(players)==0)
-
-		# we do not use this because our player is informing the server
-		#self.notifyServer(players)
-		return True
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def notifyServer(self, players):
-		if not players and self.sentstopped:
-			return True
-
-		params = {'state': 'stopped'}
-
-		for p in players.values():
-			params = {}
-			params['containerKey'] = (self.lastkey or "/library/metadata/900000")
-			params['key'] = (self.lastkey or "/library/metadata/900000")
-			m = re.search(r'(\d+)$', self.lastkey)
-			if m:
-				params['ratingKey'] = m.group()
-			params['state'] = self.playerStateFromEnigma2
-			params['time'] = self.progressFromEnigma2
-			params['duration'] = self.durationFromEnigma2
-
-		requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders())
-		printl("sent server notification with state = %s" % params['state'], self, "D")
-
-		if players:
-			self.sentstopped = False
-		else:
-			self.sentstopped = True
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def controllable(self):
-		return "playPause,play,stop,skipPrevious,skipNext,volume,stepBack,stepForward,seekTo"
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def addSubscriber(self, protocol, host, port, uuid, commandID):
-		sub = Subscriber(protocol, host, port, uuid, commandID)
-		with threading.RLock():
-			self.subscribers[sub.uuid] = sub
-		return sub
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def removeSubscriber(self, uuid):
-		with threading.RLock():
-			for sub in self.subscribers.values():
-				if sub.uuid == uuid or sub.host == uuid:
-					sub.cleanup()
-					del self.subscribers[sub.uuid]
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def cleanup(self):
-		with threading.RLock():
-			for sub in self.subscribers.values():
-				if sub.age > 30:
-					sub.cleanup()
-					del self.subscribers[sub.uuid]
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getPlayerProperties(self, playerid):
-		info = {}
-		try:
-			# get info from the player
-			props = {}#jsonrpc("Player.GetProperties", {"playerid": playerid, "properties": ["time", "totaltime", "speed", "shuffled"]})
-			info['time'] = timeToMillis(props['time'])
-			info['duration'] = timeToMillis(props['totaltime'])
-			info['state'] = ("paused", "playing")[int(props['speed'])]
-			info['shuffle'] = ("0","1")[props.get('shuffled', False)]
-		except:
-			info['time'] = 0
-			info['duration'] = 0
-			info['state'] = "stopped"
-			info['shuffle'] = False
-		# get the volume from the application
-		info['volume'] = self.volume
-		info['guid'] = self.guid
-
-		return info
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getVideoPlayerId(self, players):
-		return players.get("video", {}).get('playerid', 0)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getAudioPlayerId(self, players):
-		return players.get("music", {}).get('playerid', 0)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getPhotoPlayerId(self, players):
-		return players.get("photo", {}).get('playerid', 0)
-
-#===========================================================================
-#
-#===========================================================================
-class Subscriber:
-	#===========================================================================
-	#
-	#===========================================================================
-	def __init__(self, protocol, host, port, uuid, commandID):
-		self.protocol = protocol or "http"
-		self.host = host
-		self.port = port or 32400
-		self.uuid = uuid or host
-		self.commandID = int(commandID) or 0
-		self.navlocationsent = False
-		self.age = 0
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def __eq__(self, other):
-		return self.uuid == other.uuid
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def tostr(self):
-		return "uuid=%s,commandID=%i" % (self.uuid, self.commandID)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def cleanup(self):
-		requests.closeConnection(self.protocol, self.host, self.port)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def send_update(self, msg, is_nav):
-		self.age += 1
-		if not is_nav:
-			self.navlocationsent = False
-		elif self.navlocationsent:
-			return True
-		else:
-			self.navlocationsent = True
-		msg = re.sub(r"INSERTCOMMANDID", str(self.commandID), msg)
-		printl("sending xml to subscriber %s: %s" % (self.tostr(), msg), self, "D")
-		requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol)
-		# if not requests.post(self.host, self.port, "/:/timeline", msg, getPlexHeaders(), self.protocol):
-		# 	printl("removing subcriber ...", self, "D")
-		# 	subMgr.removeSubscriber(self.uuid)
-
-subMgr = SubscriptionManager()
-
-#===========================================================================
-#
-#===========================================================================
-class RequestMgr:
-	def __init__(self):
-		self.conns = {}
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getConnection(self, protocol, host, port):
-		conn = self.conns.get(protocol+host+str(port), False)
-		if not conn:
-			if protocol=="https":
-				conn = httplib.HTTPSConnection(host, port)
-			else:
-				conn = httplib.HTTPConnection(host, port)
-		return conn
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def closeConnection(self, protocol, host, port):
-		conn = self.conns.get(protocol+host+str(port), False)
-		if conn:
-			conn.close()
-			self.conns.pop(protocol+host+str(port), None)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def dumpConnections(self):
-		for conn in self.conns.values():
-			conn.close()
-		self.conns = {}
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def post(self, host, port, path, body, header={}, protocol="http"):
-		conn = None
-		try:
-			conn = self.getConnection(protocol, host, port)
-			header['Connection'] = "keep-alive"
-			conn.request("POST", path, body, header)
-			data = conn.getresponse()
-
-			if int(data.status) >= 400:
-				print "HTTP response error: " + str(data.status)
-				# this should return false, but I'm hacking it since iOS returns 404 no matter what
-				return data or True
-			elif int(data.status) == 200:
-				print "got 200 OK"
-				print "data: " + str(data.read())
-			else:
-				return data.read() or True
-		except:
-			print "Unable to connect to %s\nReason:" % host
-			traceback.print_exc()
-			self.conns.pop(protocol+host+str(port), None)
-			if conn:
-				conn.close()
-			return False
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def getwithparams(self, host, port, path, params, header={}, protocol="http"):
-		newpath = path + '?'
-		pairs = []
-		for key in params:
-			pairs.append(str(key)+'='+str(params[key]))
-		newpath += string.join(pairs, '&')
-		return self.get(host, port, newpath, header, protocol)
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def get(self, host, port, path, header={}, protocol="http"):
-		try:
-			conn = self.getConnection(protocol, host, port)
-			header['Connection'] = "keep-alive"
-			conn.request("GET", path, headers=header)
-			data = conn.getresponse()
-			if int(data.status) >= 400:
-				print "HTTP response error: " + str(data.status)
-				return False
-			else:
-				return data.read() or True
-		except:
-			print "Unable to connect to %s\nReason: %s" % (host, traceback.print_exc())
-			self.conns.pop(protocol+host+str(port), None)
-			conn.close()
-			return False
-
-requests = RequestMgr()

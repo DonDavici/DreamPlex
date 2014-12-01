@@ -180,11 +180,26 @@ def gotThreadMsg(msg):
 
 				playbackIsRunning = False
 
-			elif command == "startNotifier":
+			elif command == "addSubscriber":
+				protocol= data["protocol"]
+				host = data["host"]
+				port = data["port"]
+				uuid = data["uuid"]
+				commandID = data["commandID"]
+
+				HttpDeamonThread.addSubscriber(protocol, host, port, uuid, commandID)
 				startNotifier()
 
-			elif command == "stopNotifier":
-				pass
+			elif command == "removeSubscriber":
+				uuid = data["uuid"]
+
+				HttpDeamonThread.removeSubscriber(uuid)
+				stopNotifier()
+
+			elif command == "updateCommandId":
+				uuid = data["uuid"]
+				commandID = data["commandID"]
+				HttpDeamonThread.updateCommandID(uuid, commandID)
 
 			else:
 				# not handled command
@@ -196,12 +211,13 @@ def gotThreadMsg(msg):
 #===========================================================================
 def startNotifier():
 	global notifyWatcher
-	global notifyWatcherConn
+
 	notifyWatcher = eTimer()
 
 	if getOeVersion() != "oe22":
 		notifyWatcher.callback.append(notifySubscribers)
 	else:
+		global notifyWatcherConn
 		notifyWatcherConn = notifyWatcher.timeout.connect(notifySubscribers)
 
 	notifyWatcher.start(1,False)
@@ -209,9 +225,16 @@ def startNotifier():
 #===========================================================================
 #
 #===========================================================================
+def stopNotifier():
+	pass
+
+#===========================================================================
+#
+#===========================================================================
 def notifySubscribers():
-	if getPlayer is not None:
-		HttpDeamonThread.notifySubscribers(getPlayer)
+	players = getPlayer()
+	if players is not None:
+		HttpDeamonThread.notifySubscribers(players)
 
 #===========================================================================
 #
