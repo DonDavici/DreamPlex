@@ -49,6 +49,7 @@ class SubscriptionManager:
 		self.playerStateFromEnigma2 = "stopped"
 		self.durationFromEnigma2 = 0
 		self.players = None
+		self.session = None
 
 	#===========================================================================
 	#
@@ -62,6 +63,7 @@ class SubscriptionManager:
 	#===========================================================================
 	def msg(self, players):
 		msg = getXMLHeader()
+		self.updatePlayerState()
 		msg += '<MediaContainer commandID="INSERTCOMMANDID"'
 
 		if players:
@@ -79,6 +81,20 @@ class SubscriptionManager:
 		msg += self.getTimelineXML(self.getVideoPlayerId(players), "video")
 		msg += "\r\n</MediaContainer>"
 		return msg
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def updatePlayerState(self):
+		try:
+			e2params = self.session.current_dialog.getPlayerState()
+			if e2params:
+				self.progressFromEnigma2 = e2params['progress']
+				self.playerStateFromEnigma2 = e2params["state"]
+				self.durationFromEnigma2 = e2params["duration"]
+				self.lastkey = e2params["lastKey"]
+		except:
+			pass
 
 	#===========================================================================
 	#
@@ -181,6 +197,12 @@ class SubscriptionManager:
 		with threading.RLock():
 			self.subscribers[sub.uuid] = sub
 		return sub
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSubscribersList(self):
+		return self.subscribers
 
 	#===========================================================================
 	#

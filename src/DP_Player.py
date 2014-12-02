@@ -1306,9 +1306,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	def getPlayer(self):
 		printl("" ,self,"S")
-		ret = {}
+		ret = None
 
 		if self.seekstate == self.SEEK_STATE_PAUSE or self.seekstate == self.SEEK_STATE_PLAY:
+			ret = {}
 			if self.getMediaType() == "video":
 				player = {}
 				player['playerid'] = int(1)

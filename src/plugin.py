@@ -123,88 +123,103 @@ def gotThreadMsg(msg):
 	if inStandby is not None:
 		inStandby.Power()
 
-	if not playbackIsRunning:
-		if "command" in data:
-			if data["command"] == "startNotifier":
-				startNotifier()
+	if "command" in data:
+		command = data["command"]
+		if command == "startNotifier":
+			startNotifier()
+
+		elif command == "playMedia" and not playbackIsRunning:
+			startPlayback(data)
+
+
+		elif command == "playMedia" and playbackIsRunning:
+			stopPlayback()
+			startPlayback(data)
+
+		elif command == "pause":
+			global_session.current_dialog.pauseService()
+
+		elif command == "play":
+			global_session.current_dialog.unPauseService()
+
+		elif command == "skipNext":
+			pass
+
+		elif command == "skipPrevious":
+			pass
+
+		elif command == "stepForward":
+			pass
+
+		elif command == "stepBack":
+			pass
+
+		elif command == "setVolume":
+			global_session.current_dialog.setVolume(data["volume"])
+
+		elif command == "stop":
+			stopPlayback()
+
+		elif command == "addSubscriber":
+			print "subscriber"
+			protocol= data["protocol"]
+			host = data["host"]
+			port = data["port"]
+			uuid = data["uuid"]
+			commandID = data["commandID"]
+
+			HttpDeamonThread.addSubscriber(protocol, host, port, uuid, commandID)
+			startNotifier()
+
+		elif command == "removeSubscriber":
+			print "remove subscriber"
+			uuid = data["uuid"]
+
+			HttpDeamonThread.removeSubscriber(uuid)
+			stopNotifier()
+
+		elif command == "updateCommandId":
+			uuid = data["uuid"]
+			commandID = data["commandID"]
+			HttpDeamonThread.updateCommandID(uuid, commandID)
 
 		else:
-			listViewList    = data["listViewList"]
-			currentIndex    = data["currentIndex"]
-			libraryName     = data["libraryName"]
-			autoPlayMode    = data["autoPlayMode"]
-			resumeMode      = data["resumeMode"]
-			playbackMode    = data["playbackMode"]
-			forceResume     = data["forceResume"]
-			subtitleData    = data["subtitleData"]
+			# not handled command
+			print command
+			raise Exception
 
-			# load skin data here as well
-			startEnvironment()
+#===========================================================================
+#
+#===========================================================================
+def startPlayback(data):
+	listViewList    = data["listViewList"]
+	currentIndex    = data["currentIndex"]
+	libraryName     = data["libraryName"]
+	autoPlayMode    = data["autoPlayMode"]
+	resumeMode      = data["resumeMode"]
+	playbackMode    = data["playbackMode"]
+	forceResume     = data["forceResume"]
+	subtitleData    = data["subtitleData"]
 
-			# save liveTvData
-			saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
+	# load skin data here as well
+	startEnvironment()
 
-			playbackIsRunning = True
+	# save liveTvData
+	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
 
-			# now we start the player
-			global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
+	playbackIsRunning = True
 
-	else:
-		if "command" in data:
-			command = data["command"]
+	# now we start the player
+	global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
 
-			if command == "pause":
-				global_session.current_dialog.pauseService()
+#===========================================================================
+#
+#===========================================================================
+def stopPlayback():
+	global_session.current_dialog.leavePlayerConfirmed(True)
+	global_session.nav.playService(getLiveTv())
 
-			elif command == "play":
-				global_session.current_dialog.unPauseService()
-
-			elif command == "skipNext":
-				pass
-
-			elif command == "skipPrevious":
-				pass
-
-			elif command == "stepForward":
-				pass
-
-			elif command == "stepBack":
-				pass
-
-			elif command == "setVolume":
-				global_session.current_dialog.setVolume(data["volume"])
-
-			elif command == "stop":
-				global_session.current_dialog.leavePlayerConfirmed(True)
-				global_session.nav.playService(getLiveTv())
-
-				playbackIsRunning = False
-
-			elif command == "addSubscriber":
-				protocol= data["protocol"]
-				host = data["host"]
-				port = data["port"]
-				uuid = data["uuid"]
-				commandID = data["commandID"]
-
-				HttpDeamonThread.addSubscriber(protocol, host, port, uuid, commandID)
-				startNotifier()
-
-			elif command == "removeSubscriber":
-				uuid = data["uuid"]
-
-				HttpDeamonThread.removeSubscriber(uuid)
-				stopNotifier()
-
-			elif command == "updateCommandId":
-				uuid = data["uuid"]
-				commandID = data["commandID"]
-				HttpDeamonThread.updateCommandID(uuid, commandID)
-
-			else:
-				# not handled command
-				print command
-				raise Exception
+	playbackIsRunning = False
 
 #===========================================================================
 #
@@ -220,20 +235,28 @@ def startNotifier():
 		global notifyWatcherConn
 		notifyWatcherConn = notifyWatcher.timeout.connect(notifySubscribers)
 
-	notifyWatcher.start(1,False)
+	notifyWatcher.start(1000,False)
 
 #===========================================================================
 #
 #===========================================================================
 def stopNotifier():
-	pass
+	players = getPlayer()
+	if not players:
+		if getOeVersion() != "oe22":
+			notifyWatcher.stop()
+		else:
+			global notifyWatcherConn
+			notifyWatcherConn = None
 
 #===========================================================================
 #
 #===========================================================================
 def notifySubscribers():
 	players = getPlayer()
-	if players is not None:
+	print "subscribers: " + str(HttpDeamonThread.getSubscribersList())
+
+	if players:
 		HttpDeamonThread.notifySubscribers(players)
 
 #===========================================================================

@@ -33,6 +33,7 @@ from Components.config import config
 
 from DPH_Singleton import Singleton
 from DP_PlexLibrary import PlexLibrary
+from DPH_SubscriptionManager import SubscriptionManager
 
 from __common__ import printl2 as printl, getUUID, getVersion, getMyIp, getPlexHeaders, getOKMsg, getXMLHeader
 
@@ -132,7 +133,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			data = {"command": "updateCommandId", "uuid": self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), "commandID": params.get('commandID', False)}
 			#subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
-
 			self.playerCallback(data)
 
 			if request_path == "player/timeline/subscribe":
@@ -152,7 +152,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 				data = {"command": "addSubscriber", "protocol": protocol, "host": host, "port": port, "uuid": uuid, "commandID": commandID}
 				#subMgr.addSubscriber(protocol, host, port, uuid, commandID)
-
 				self.playerCallback(data)
 
 			elif "player/timeline/unsubscribe" in request_path:
@@ -160,7 +159,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				uuid = self.headers.get('X-Plex-Client-Identifier', False) or self.client_address[0]
 				data = {"command": "removeSubscriber", "uuid": uuid}
 				#subMgr.removeSubscriber(uuid)
-
+				self.playerCallback(data)
 
 			elif request_path == "resources":
 				responseContent = getXMLHeader()
@@ -169,14 +168,14 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 			elif request_path == "player/timeline/poll":
 				commandID = params.get('commandID', 0)
+				self.subMgr = SubscriptionManager()
 				try:
 					e2params = self.session.current_dialog.getPlayerState()
 					if e2params:
-						print "we have params"
-						subMgr.progressFromEnigma2 = e2params['progress']
-						subMgr.playerStateFromEnigma2 = e2params["state"]
-						subMgr.durationFromEnigma2 = e2params["duration"]
-						subMgr.lastkey = e2params["lastKey"]
+						self.subMgr.progressFromEnigma2 = e2params['progress']
+						self.subMgr.playerStateFromEnigma2 = e2params["state"]
+						self.subMgr.durationFromEnigma2 = e2params["duration"]
+						self.subMgr.lastkey = e2params["lastKey"]
 
 					self.answerPoll(commandID)
 					sleep(1)
@@ -283,7 +282,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						splittedData = self.currentKey.split("/")
 						subtitleData = self.plexInstance.getSelectedSubtitleDataById(self.currentCompleteAddress, splittedData[-1])
 
-						data = {"listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName, "subtitleData": subtitleData }
+						data = {"command": "playMedia", "listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName, "subtitleData": subtitleData }
 
 						self.playerCallback(data)
 
@@ -309,7 +308,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	#
 	#===========================================================================
 	def answerPoll(self, commandID):
-		self.response(re.sub(r"INSERTCOMMANDID", str(commandID), subMgr.msg(self.getPlayers())), {
+		self.response(re.sub(r"INSERTCOMMANDID", str(commandID), self.subMgr.msg(self.getPlayers())), {
 			'Access-Control-Expose-Headers': 'X-Plex-Client-Identifier',
 			'Content-Type': 'text/xml'
 			})
@@ -382,7 +381,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 	#
 	#===========================================================================
 	def getPlayers(self):
-
 		ret = {}
 
 		try:

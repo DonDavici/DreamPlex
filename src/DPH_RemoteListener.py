@@ -76,6 +76,7 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	def setSession(self, session):
 		self.session = session
+		self.subMgr.session = session
 		self.start()
 
 	#===========================================================================
@@ -95,6 +96,12 @@ class HttpDeamon(Thread):
 	#===========================================================================
 	def addSubscriber(self, protocol, host, port, uuid, commandID):
 		self.subMgr.addSubscriber(protocol, host, port, uuid, commandID)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getSubscribersList(self):
+		return self.subMgr.getSubscribersList()
 
 	#===========================================================================
 	#
