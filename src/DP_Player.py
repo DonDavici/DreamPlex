@@ -1073,8 +1073,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		# we stop playback here
 		self.session.nav.stopService()
 
-		if self.startedByRemotePlayer:
-			self.session.nav.playService(getLiveTv())
+		# if self.startedByRemotePlayer:
+		# 	self.session.nav.playService(getLiveTv())
 
 		self.close((False, ))
 
@@ -1222,9 +1222,12 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def updateTimeline(self):
 		printl("" ,self,"S")
 
-		currentTime = self.getPlayPosition()[1] / 90000
-		totalTime = self.getPlayLength()[1] / 90000
-		progress = int(( float(currentTime) / float(totalTime) ) * 100)
+		try:
+			currentTime = self.getPlayPosition()[1] / 90000
+			totalTime = self.getPlayLength()[1] / 90000
+			progress = int(( float(currentTime) / float(totalTime) ) * 100)
+		except:
+			return
 
 		if self.calculateEndingTime:
 			try:
