@@ -121,8 +121,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 		printl("", self, "S")
 
 		try:
-			self.send_response(200)
-
 			request_path=self.path[1:]
 			request_path=re.sub(r"\?.*","",request_path)
 
@@ -134,6 +132,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			data = {"command": "updateCommandId", "uuid": self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), "commandID": params.get('commandID', False)}
 			#subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
 			self.playerCallback(data)
+			self.resetCallback()
 
 			if request_path == "player/timeline/subscribe":
 				self.response(getOKMsg(), getPlexHeaders())
@@ -153,6 +152,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				data = {"command": "addSubscriber", "protocol": protocol, "host": host, "port": port, "uuid": uuid, "commandID": commandID}
 				#subMgr.addSubscriber(protocol, host, port, uuid, commandID)
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif "player/timeline/unsubscribe" in request_path:
 				self.response(getOKMsg(), getPlexHeaders())
@@ -160,6 +160,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				data = {"command": "removeSubscriber", "uuid": uuid}
 				#subMgr.removeSubscriber(uuid)
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "resources":
 				responseContent = getXMLHeader()
@@ -189,47 +190,55 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				data = {"command": "setVolume", "volume": volume}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/pause":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "pause"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/play":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "play"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/stop":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stop"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/skipNext":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "skipNext"}
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/skipPrevious":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "skipPrevious"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/stepForward":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stepForward"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/stepBack":
 				self.response(getOKMsg(), getPlexHeaders())
 				data = {"command": "stepBack"}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/seekTo":
 				self.response(getOKMsg(), getPlexHeaders())
@@ -237,6 +246,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 				data = {"command": "seekTo", "offset": offset}
 
 				self.playerCallback(data)
+				self.resetCallback()
 
 			elif request_path == "player/playback/playMedia":
 				self.response(getOKMsg(), getPlexHeaders())
@@ -282,9 +292,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						splittedData = self.currentKey.split("/")
 						subtitleData = self.plexInstance.getSelectedSubtitleDataById(self.currentCompleteAddress, splittedData[-1])
 
-						data = {"command": "playMedia", "listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName, "subtitleData": subtitleData }
+						data = {"command": "playMedia", "currentKey": self.currentKey, "listViewList": listViewList, "mediaContainer": mediaContainer, "autoPlayMode": autoPlayMode, "forceResume":  forceResume, "resumeMode": resumeMode, "playbackMode": playbackMode, "currentIndex": currentIndex, "libraryName": libraryName, "subtitleData": subtitleData }
 
 						self.playerCallback(data)
+						self.resetCallback()
 
 					else:
 						printl("no match ...", self, "D")
@@ -303,6 +314,14 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			pass
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def resetCallback(self):
+		# we do this due to the fact that the messagepump is triggered mor often than we want to via playercallback for this reason we set to idle so that for example playMedia command is not called more than once
+		data = {"command": "idle"}
+		self.playerCallback(data)
 
 	#===========================================================================
 	#

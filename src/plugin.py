@@ -25,7 +25,6 @@ HttpDeamonThread = None
 HttpDeamonThreadConn = None
 HttpDeamonStarted = False
 global_session = None
-playbackIsRunning = False
 notifyWatcher = None
 notifyWatcherConn = None
 
@@ -87,7 +86,6 @@ def startRemoteDeamon():
 	global HttpDeamonThread
 	global HttpDeamonStarted
 
-	# we use the global g_mediaSyncerInfo.instance to take care only having one instance
 	HttpDeamonThread = HttpDeamon()
 
 	if getOeVersion() != "oe22":
@@ -108,6 +106,7 @@ def startRemoteDeamon():
 def getHttpDeamonInformation():
 	return HttpDeamonThread.getDeamonState()
 
+lastKey = None
 #===========================================================================
 # msg as second params is needed -. do not remove even if it is not used
 # form outside!!!!
@@ -115,9 +114,10 @@ def getHttpDeamonInformation():
 # noinspection PyUnusedLocal
 def gotThreadMsg(msg):
 	msg = HttpDeamonThread.PlayerData.pop()
-	global playbackIsRunning
 
 	data = msg[0]
+	print "data ==>"
+	print str(data)
 
 	# first we check if we are standby and exit this if needed
 	if inStandby is not None:
@@ -128,19 +128,22 @@ def gotThreadMsg(msg):
 		if command == "startNotifier":
 			startNotifier()
 
-		elif command == "playMedia" and not playbackIsRunning:
-			startPlayback(data)
+		elif command == "playMedia":
+			global lastKey
+			if data["currentKey"] != lastKey:
+				startPlayback(data)
+			else:
+				print "dropping mediaplay command ..."
 
-
-		elif command == "playMedia" and playbackIsRunning:
-			stopPlayback()
-			startPlayback(data)
+			lastKey = data["currentKey"]
 
 		elif command == "pause":
-			global_session.current_dialog.pauseService()
+			if isinstance(global_session.current_dialog, DP_Player):
+				global_session.current_dialog.pauseService()
 
 		elif command == "play":
-			global_session.current_dialog.unPauseService()
+			if isinstance(global_session.current_dialog, DP_Player):
+				global_session.current_dialog.unPauseService()
 
 		elif command == "skipNext":
 			pass
@@ -155,10 +158,13 @@ def gotThreadMsg(msg):
 			pass
 
 		elif command == "setVolume":
-			global_session.current_dialog.setVolume(data["volume"])
+			if isinstance(global_session.current_dialog, DP_Player):
+				global_session.current_dialog.setVolume(data["volume"])
 
 		elif command == "stop":
-			stopPlayback()
+			global lastKey
+			lastKey = None
+			stopPlayback(restartLiveTv=True)
 
 		elif command == "addSubscriber":
 			print "subscriber"
@@ -183,6 +189,9 @@ def gotThreadMsg(msg):
 			commandID = data["commandID"]
 			HttpDeamonThread.updateCommandID(uuid, commandID)
 
+		elif command == "idle":
+			pass
+
 		else:
 			# not handled command
 			print command
@@ -191,7 +200,7 @@ def gotThreadMsg(msg):
 #===========================================================================
 #
 #===========================================================================
-def startPlayback(data):
+def startPlayback(data, stopPlaybackFirst=False):
 	listViewList    = data["listViewList"]
 	currentIndex    = data["currentIndex"]
 	libraryName     = data["libraryName"]
@@ -201,25 +210,33 @@ def startPlayback(data):
 	forceResume     = data["forceResume"]
 	subtitleData    = data["subtitleData"]
 
-	# load skin data here as well
-	startEnvironment()
+	if stopPlaybackFirst:
+		stopPlayback()
 
 	# save liveTvData
 	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
 
-	playbackIsRunning = True
-
-	# now we start the player
-	global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
+	if not isinstance(global_session.current_dialog, DP_Player):
+		# now we start the player
+		global_session.open(DP_Player, listViewList, currentIndex, libraryName, autoPlayMode, resumeMode, playbackMode, forceResume=forceResume, subtitleData=subtitleData, startedByRemotePlayer=True)
 
 #===========================================================================
 #
 #===========================================================================
-def stopPlayback():
-	global_session.current_dialog.leavePlayerConfirmed(True)
-	global_session.nav.playService(getLiveTv())
+def stopPlayback(restartLiveTv=False):
 
-	playbackIsRunning = False
+	if isinstance(global_session.current_dialog, DP_Player):
+		global_session.current_dialog.leavePlayerConfirmed(True)
+		global_session.current_dialog.close((True,))
+
+	if restartLiveTv:
+		restartLiveTvNow()
+
+#===========================================================================
+#
+#===========================================================================
+def restartLiveTvNow():
+	global_session.nav.playService(getLiveTv())
 
 #===========================================================================
 #
@@ -241,13 +258,14 @@ def startNotifier():
 #
 #===========================================================================
 def stopNotifier():
-	players = getPlayer()
-	if not players:
-		if getOeVersion() != "oe22":
-			notifyWatcher.stop()
-		else:
-			global notifyWatcherConn
-			notifyWatcherConn = None
+	if notifyWatcher is not None:
+		players = getPlayer()
+		if not players:
+			if getOeVersion() != "oe22":
+				notifyWatcher.stop()
+			else:
+				global notifyWatcherConn
+				notifyWatcherConn = None
 
 #===========================================================================
 #
@@ -284,6 +302,9 @@ def sessionStart(reason, **kwargs):
 
 		if config.plugins.dreamplex.remoteAgent.value:
 			startRemoteDeamon()
+
+		# load skin data here as well
+		startEnvironment()
 
 #===============================================================================
 # plugins

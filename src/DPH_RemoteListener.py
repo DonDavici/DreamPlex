@@ -199,7 +199,10 @@ class HttpDeamon(Thread):
 	#
 	#===========================================================================
 	def nowDoIt(self, data):
+		printl("", __name__, "S")
 
 		self.playerData.push((data,))
 		self.playerDataPump.send(0)
+
+		printl("", __name__, "C")
 

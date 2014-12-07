@@ -149,39 +149,10 @@ class SubscriptionManager:
 		if self.subscribers:
 			with threading.RLock():
 				for sub in self.subscribers.values():
+					pass
 					sub.send_update(msg, len(players)==0)
 
-		# we do not use this because our player is informing the server
-		#self.notifyServer(players)
 		return True
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def notifyServer(self, players):
-		if not players and self.sentstopped:
-			return True
-
-		params = {'state': 'stopped'}
-
-		for p in players.values():
-			params = {}
-			params['containerKey'] = (self.lastkey or "/library/metadata/900000")
-			params['key'] = (self.lastkey or "/library/metadata/900000")
-			m = re.search(r'(\d+)$', self.lastkey)
-			if m:
-				params['ratingKey'] = m.group()
-			params['state'] = self.playerStateFromEnigma2
-			params['time'] = self.progressFromEnigma2
-			params['duration'] = self.durationFromEnigma2
-
-		requests.getwithparams(self.server, self.port, "/:/timeline", params, getPlexHeaders())
-		printl("sent server notification with state = %s" % params['state'], self, "D")
-
-		if players:
-			self.sentstopped = False
-		else:
-			self.sentstopped = True
 
 	#===========================================================================
 	#
