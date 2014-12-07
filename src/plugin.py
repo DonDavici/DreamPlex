@@ -18,6 +18,8 @@ from enigma import eTimer
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion
 
+from enigma import getDesktop
+
 #===============================================================================
 # GLOBALS
 #===============================================================================
@@ -312,8 +314,12 @@ def sessionStart(reason, **kwargs):
 #===============================================================================
 #noinspection PyUnusedLocal
 def Plugins(**kwargs):
+	screenwidth = getDesktop(0).size().width()
 	myList = []
-	myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main))
+	if screenwidth and screenwidth == 1920:
+		myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogoHD.png", fnc=main))
+	else:
+		myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_AUTOSTART, fnc = Autostart))
 	myList.append(PluginDescriptor(where = PluginDescriptor.WHERE_SESSIONSTART, fnc = sessionStart))
 
