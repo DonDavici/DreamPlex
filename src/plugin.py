@@ -148,16 +148,20 @@ def gotThreadMsg(msg):
 				global_session.current_dialog.unPauseService()
 
 		elif command == "skipNext":
-			pass
+			global_session.current_dialog.playNextEntry()
 
 		elif command == "skipPrevious":
-			pass
+			global_session.current_dialog.playPreviousEntry()
 
 		elif command == "stepForward":
 			pass
 
 		elif command == "stepBack":
 			pass
+
+		elif command == "seekTo":
+			offset = int(data["offset"]) / 1000
+			global_session.current_dialog.doSeek(offset)
 
 		elif command == "setVolume":
 			if isinstance(global_session.current_dialog, DP_Player):
@@ -184,7 +188,7 @@ def gotThreadMsg(msg):
 			uuid = data["uuid"]
 
 			HttpDeamonThread.removeSubscriber(uuid)
-			stopNotifier()
+			updateNotifier()
 
 		elif command == "updateCommandId":
 			uuid = data["uuid"]
@@ -259,7 +263,7 @@ def startNotifier():
 #===========================================================================
 #
 #===========================================================================
-def stopNotifier():
+def updateNotifier():
 	if notifyWatcher is not None:
 		players = getPlayer()
 		if not players:
