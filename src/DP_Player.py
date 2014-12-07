@@ -40,6 +40,7 @@ from enigma import eServiceReference, eConsoleAppContainer, iPlayableService, eT
 from Tools import Notifications
 from Tools.Directories import fileExists
 
+from Components.VolumeControl import VolumeControl
 from Components.AVSwitch import AVSwitch
 from Components.config import config
 from Components.Pixmap import Pixmap
@@ -184,6 +185,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		# init volume object
 		self.volumeHandler= eDVBVolumecontrol.getInstance()
+		# only images >= 05.08.2010, must use try/except
+		try: self.volumeControlInstance = VolumeControl.instance
+		except: pass
 
 		# Poster
 		self.EXpicloadPoster = ePicLoad()
@@ -262,7 +266,12 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def setVolume(self, volume):
 		printl("", self, "S")
 
-		self.volumeHandler.setVolume(volume)
+		# set new volume
+		self.volumeHandler.setVolume(volume, volume)
+		if self.volumeControlInstance is not None:
+			self.volumeControlInstance.volumeDialog.setValue(volume) # update progressbar value
+			self.volumeControlInstance.volumeDialog.show()
+			self.volumeControlInstance.hideVolTimer.start(3000, True)
 
 		printl("", self, "C")
 

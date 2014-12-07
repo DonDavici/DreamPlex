@@ -56,7 +56,7 @@ class SubscriptionManager:
 	#===========================================================================
 	def getVolume(self):
 
-		self.volume = 100
+		self.volume = self.session.current_dialog.getVolume()
 
 	#===========================================================================
 	#
@@ -76,8 +76,8 @@ class SubscriptionManager:
 			self.mainlocation = "navigation"
 		msg += ' location="%s">' % self.mainlocation
 
-		msg += self.getTimelineXML(self.getAudioPlayerId(players), "music")
-		msg += self.getTimelineXML(self.getPhotoPlayerId(players), "photo")
+		msg += "<Timeline seekRange='0-0' state='stopped' time='0' type='music'></Timeline>"
+		msg += "<Timeline seekRange='0-0' state='stopped' time='0' type='photo'></Timeline>"
 		msg += self.getTimelineXML(self.getVideoPlayerId(players), "video")
 		msg += "\r\n</MediaContainer>"
 		return msg

@@ -154,10 +154,10 @@ def gotThreadMsg(msg):
 			global_session.current_dialog.playPreviousEntry()
 
 		elif command == "stepForward":
-			pass
+			global_session.current_dialog.seekFwd()
 
 		elif command == "stepBack":
-			pass
+			global_session.current_dialog.seekBack()
 
 		elif command == "seekTo":
 			offset = int(data["offset"]) / 1000
@@ -165,7 +165,7 @@ def gotThreadMsg(msg):
 
 		elif command == "setVolume":
 			if isinstance(global_session.current_dialog, DP_Player):
-				global_session.current_dialog.setVolume(data["volume"])
+				global_session.current_dialog.setVolume(int(data["volume"]))
 
 		elif command == "stop":
 			global lastKey

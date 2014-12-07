@@ -130,7 +130,6 @@ class RemoteHandler(BaseHTTPRequestHandler):
 			params = self.getParams()
 
 			data = {"command": "updateCommandId", "uuid": self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), "commandID": params.get('commandID', False)}
-			#subMgr.updateCommandID(self.headers.get('X-Plex-Client-Identifier', self.client_address[0]), params.get('commandID', False))
 			self.playerCallback(data)
 			self.resetCallback()
 
@@ -301,7 +300,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 						printl("no match ...", self, "D")
 
 			else:
-				self.send_response(200)
+				self.response(getOKMsg(), getPlexHeaders())
 		except:
 				traceback.print_exc()
 				self.wfile.close()
