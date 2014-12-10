@@ -199,11 +199,11 @@ class PlexLibrary(Screen):
 				printl("trying fallback to ip", self, "I")
 				self.g_host = "%d.%d.%d.%d" % tuple(self.g_serverConfig.ip.value)
 
-		if self.g_error is True:
-			self.leaveOnError()
-		else:
-			#Fill serverdata to global g_serverDict
-			self.prepareServerDict(resolvedMyPlexAddress, machineIdentifier)
+		# if self.g_error is True:
+		# 	self.leaveOnError()
+		# else:
+		#Fill serverdata to global g_serverDict
+		self.prepareServerDict(resolvedMyPlexAddress, machineIdentifier)
 
 		printl("", self, "C")
 

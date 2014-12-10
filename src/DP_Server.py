@@ -595,13 +595,27 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 					machineIdentifiers += ", " + machineIdentifier
 
 		else:
-			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + self.plexInstance.g_currentServer)
+			xmlResponse = self.plexInstance.getXmlTreeFromUrl("http://" + str(self.plexInstance.g_host) + ":" + str(self.plexInstance.serverConfig_port))
 			machineIdentifier = xmlResponse.get("machineIdentifier")
+
 			if machineIdentifier is not None:
 				machineIdentifiers += xmlResponse.get("machineIdentifier")
 
 		self.current.machineIdentifier.value = machineIdentifiers
 		printl("machineIdentifier: " + str(self.current.machineIdentifier.value), self, "D")
+
+		if self.current.connectionType.value == "2" or self.current.localAuth.value:
+			self.keyBlue()
+		else:
+			self.saveNow(stayOpen)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def saveNow(self, stayOpen = False):
+		printl("", self, "S")
 
 		config.plugins.dreamplex.entriescount.save()
 		config.plugins.dreamplex.Entries.save()
@@ -668,6 +682,8 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		else:
 			response = self.plexInstance.getLastResponse()
 			self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+
+		self.saveNow()
 
 		printl("", self, "C")
 
