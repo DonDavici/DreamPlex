@@ -137,8 +137,12 @@ class DP_LibMain(Screen):
 		url = entryData["contentUrl"]
 
 		if entryData.has_key("source"):
-			source = entryData["source"]
-			uuid = entryData["uuid"]
+			try:
+				source = entryData["source"]
+				uuid = entryData["uuid"]
+			except:
+				source = "plex"
+				uuid = None
 		else:
 			source = "plex"
 			uuid = None
