@@ -670,8 +670,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 	def onKeyAudio(self):
 		printl("", self, "S")
 
-		#self.displayAudioMenu()
-		self.displaySubtitleMenu()
+		self.displayAudioMenu()
 
 		printl("", self, "C")
 
