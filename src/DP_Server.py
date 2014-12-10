@@ -340,7 +340,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 				self.current.name.value = data.get("serverName")
 				self.current.ip.value = [int(ipBlocks[0]),int(ipBlocks[1]),int(ipBlocks[2]),int(ipBlocks[3])]
 				self.current.port.value = int(data.get("port"))
-				self.keySave(True)
 
 		else:
 			self.newmode = 0
@@ -569,7 +568,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def keySave(self, stayOpen = False):
+	def keySave(self):
 		printl("", self, "S")
 
 		if self.newmode == 1:
@@ -607,14 +606,14 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		if self.current.connectionType.value == "2" or self.current.localAuth.value:
 			self.keyBlue()
 		else:
-			self.saveNow(stayOpen)
+			self.saveNow()
 
 		printl("", self, "C")
 
 	#===========================================================================
 	#
 	#===========================================================================
-	def saveNow(self, stayOpen = False):
+	def saveNow(self, retval=None):
 		printl("", self, "S")
 
 		config.plugins.dreamplex.entriescount.save()
@@ -622,8 +621,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		config.plugins.dreamplex.save()
 		configfile.save()
 
-		if not stayOpen:
-			self.close()
+		self.close()
 
 		printl("", self, "C")
 
@@ -678,12 +676,10 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		token = self.plexInstance.getNewMyPlexToken()
 
 		if token:
-			self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+			self.session.openWithCallback(self.saveNow, MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 		else:
 			response = self.plexInstance.getLastResponse()
-			self.session.open(MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
-
-		self.saveNow()
+			self.session.openWithCallback(self.saveNow, MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
