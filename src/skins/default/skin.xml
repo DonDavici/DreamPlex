@@ -276,6 +276,33 @@
         <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="OpenSans;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
+    <!-- DPS_Users -->
+    <screen name="DPS_Users" position="0,0" size="1280,720" title=" " backgroundColor="#000000" flags="wfNoBorder">
+        <!-- background -->
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/background2-fs8.png" position="0,0" zPosition="1" size="1280,720" transparent="0"/>
+
+        <!-- title -->
+        <widget source="Title" text="Mappings" render="Label" transparent="1" zPosition="4" valign="center" position="33,12" size="190,30" font="OpenSans; 18" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" halign="left"/>
+
+        <!-- content -->
+        <widget name="content" zPosition="3" position="125,100" size="1025,600" transparent="1" itemHeight="35" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/focus_settings-fs8.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/sel_bg-fs8.png"/>
+
+        <!-- clock -->
+        <widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
+            <convert type="ClockToText">default</convert>
+        </widget>
+        <widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
+            <convert type="ClockToText">Date</convert>
+        </widget>
+
+        <!-- functions -->
+        <widget name="btn_red" zPosition="6" position="100,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_redText" position="120,677" zPosition="9" size="231,37" font="OpenSans;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+
+        <widget name="btn_green" zPosition="6" position="380,687" size="12,17" alphatest="blend"/>
+        <widget name="btn_greenText" position="400,677" zPosition="9" size="231,37" font="OpenSans;16" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+    </screen>
+
     <!-- DPS_Syncer -->
     <screen name="DPS_Syncer" position="0,0" size="1280,720" title=" " backgroundColor="#000000" flags="wfNoBorder">
         <!-- background -->

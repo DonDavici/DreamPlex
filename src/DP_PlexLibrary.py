@@ -1129,6 +1129,28 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
+	def getHomeUsersFromPlex(self):
+		printl("", self, "S")
+
+		xmlResponse = self.getXmlTreeFromPlex('/api/home/users')
+
+		printl("", self, "C")
+		return xmlResponse
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def switchHomeUser(self, userId, pin=""):
+		printl("", self, "S")
+
+		xmlResponse = self.getXmlTreeFromPlex('/api/home/users/' + str(userId) + '/switch?pin=' + str(pin), requestType="POST")
+
+		printl("", self, "C")
+		return xmlResponse
+
+	#===============================================================================
+	#
+	#===============================================================================
 	def getPlexUserTokenForLocalServerAuthentication(self, ipInConfig):
 		printl("", self, "S")
 
@@ -1139,8 +1161,6 @@ class PlexLibrary(Screen):
 			entryData = (dict(server.items()))
 			localIp = entryData["localAddresses"]
 			if localIp == ipInConfig:
-				print str(entryData)
-
 				printl("", self, "C")
 				return entryData["accessToken"]
 
@@ -2192,7 +2212,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def getXmlTreeFromPlex(self, url):
+	def getXmlTreeFromPlex(self, url, requestType="GET"):
 		"""
 		Connect to the my.plexapp.com service and get an XML pages
 		A seperate function is required as interfacing into myplex
@@ -2207,7 +2227,7 @@ class PlexLibrary(Screen):
 		myplex_header['X-Plex-Token'] = str(self.serverConfig_myplexToken)
 
 		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=20, port=443)
-		conn.request(url=url, method="GET", headers=myplex_header)
+		conn.request(url=url, method=requestType, headers=myplex_header)
 		data = conn.getresponse()
 		response = data.read()
 		printl("response: " + response, self, "D")

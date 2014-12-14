@@ -35,11 +35,12 @@ from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
 from Screens.Screen import Screen
 
-from __common__ import printl2 as printl, getBoxInformation
-from __init__ import initServerEntryConfig, getVersion, _ # _ is translation
+from __common__ import printl2 as printl
+from __init__ import initServerEntryConfig, _ # _ is translation
 
 from DP_PlexLibrary import PlexLibrary
 from DP_Mappings import DPS_Mappings
+from DP_Users import DPS_Users
 from DP_Syncer import DPS_Syncer
 from DPH_PlexGdm import PlexGdm
 from DPH_ScreenHelper import DPH_PlexScreen
@@ -529,7 +530,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self["btn_yellow"].hide()
 
 		if (self.current.localAuth.value or self.current.connectionType.value == "2") and self.newmode == 0:
-			self["btn_redText"].setText(_("check myPlex Token"))
+			self["btn_redText"].setText(_("Home Users"))
 			self["btn_blueText"].setText(_("(re)create myPlex Token"))
 			self["btn_redText"].show()
 			self["btn_red"].show()
@@ -689,7 +690,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("myPlex Localtoken:") + "\n%s \n"+ _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexLocalToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+		serverID = self.currentId
+		plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
+		self.session.open(DPS_Users, serverID, plexInstance)
+
+		#self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("myPlex Localtoken:") + "\n%s \n"+ _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexLocalToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 
