@@ -591,9 +591,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.startTimelineWatcher()
 
-		if self.subtitleData["id"] != -1:
-			printl("starting subtitleWatcher ...")
-			self.startSubtitleWatcher()
+		if self.subtitleData is not None:
+			if self.subtitleData["id"] != -1:
+				printl("starting subtitleWatcher ...")
+				self.startSubtitleWatcher()
 
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
