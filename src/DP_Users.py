@@ -161,7 +161,7 @@ class DPS_Users(Screen):
 		
 		if callback is not None and len(callback):
 			printl("username: " + str(callback), self, "D")
-			self.username = "Melina"#str(callback)
+			self.username = str(callback)
 			self.session.openWithCallback(self.setPinCallback, VirtualKeyBoard, title = (_("Enter the pin here:")), text = "")
 		else:
 			self.session.open(MessageBox,_("Adding new user was not completed"), MessageBox.TYPE_INFO)
