@@ -160,7 +160,7 @@ def gotThreadMsg(msg):
 			global_session.current_dialog.seekBack()
 
 		elif command == "seekTo":
-			offset = int(data["offset"]) / 1000
+			offset = int(data["offset"]) * 90000
 			global_session.current_dialog.doSeek(offset)
 
 		elif command == "setVolume":
