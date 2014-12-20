@@ -299,6 +299,7 @@ class DPS_Server(Screen, DPH_PlexScreen):
 class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 	useMappings = False
+	useHomeUsers = False
 
 	def __init__(self, session, entry, data = None):
 		printl("", self, "S")
@@ -470,6 +471,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
 
+		if self.current.myplexHomeUsers.value:
+			self.useHomeUsers = True
+		else:
+			self.useHomeUsers = False
+
 		self.setKeyNames()
 
 		printl("", self, "C")
@@ -494,6 +500,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need openSSL installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Home Users"), self.current.myplexHomeUsers, _("Use Home Users?")))
 
 		printl("", self, "C")
 
@@ -530,10 +537,16 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self["btn_yellow"].hide()
 
 		if (self.current.localAuth.value or self.current.connectionType.value == "2") and self.newmode == 0:
-			self["btn_redText"].setText(_("Home Users"))
+			if self.useHomeUsers:
+				self["btn_redText"].setText(_("Home Users"))
+				self["btn_redText"].show()
+				self["btn_red"].show()
+			else:
+				self["btn_redText"].hide()
+				self["btn_red"].hide()
+
 			self["btn_blueText"].setText(_("(re)create myPlex Token"))
-			self["btn_redText"].show()
-			self["btn_red"].show()
+
 			self["btn_blueText"].show()
 			self["btn_blue"].show()
 		else:
@@ -690,9 +703,10 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def keyRed(self):
 		printl("", self, "S")
 
-		serverID = self.currentId
-		plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
-		self.session.open(DPS_Users, serverID, plexInstance)
+		if self.useHomeUsers:
+			serverID = self.currentId
+			plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.current))
+			self.session.open(DPS_Users, serverID, plexInstance)
 
 		#self.session.open(MessageBox,(_("myPlex Token:") + "\n%s \n" + _("myPlex Localtoken:") + "\n%s \n"+ _("for the user:") + "\n%s") % (self.current.myplexToken.value, self.current.myplexLocalToken.value, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
 

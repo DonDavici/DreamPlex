@@ -27,6 +27,8 @@ from Components.Input import Input
 from Components.Sources.List import List
 from Components.Sources.StaticText import StaticText
 from Components.config import config
+from Components.Pixmap import Pixmap
+from Components.Label import Label
 
 from Screens.MessageBox import MessageBox
 
@@ -34,7 +36,9 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
+from DP_Users import DPS_Users
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
+from DP_ViewFactory import getGuiElements
 
 from __common__ import printl2 as printl, getLiveTv
 from __plugin__ import Plugin
@@ -74,6 +78,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self.g_serverConfig = g_serverConfig
 		self.plexInstance = Singleton().getPlexInstance()
+		self.guiElements = getGuiElements()
 
 		self.initScreen("server_menu")
 		self.initMenu()
@@ -95,8 +100,14 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				"down":		(self.down, ""),
 				"cancel":	(self.cancel, ""),
 			    "red":		(self.onKeyRed, ""),
-			    "green":    (self.exit, ""),
+			    "green":    (self.onKeyGreen, ""),
 			}, -2)
+
+		self["btn_green"]		= Pixmap()
+		self["btn_greenText"]   = Label()
+
+		self["text_HomeUserLabel"]   = Label()
+		self["text_HomeUser"]   = Label()
 
 		self.onLayoutFinish.append(self.finishLayout)
 		self.onLayoutFinish.append(self.getInitialData)
@@ -114,6 +125,12 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		if self.miniTv:
 			self.initMiniTv()
+
+		if self.g_serverConfig.myplexHomeUsers.value:
+			self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+			self["btn_greenText"].setText(_("Switch User"))
+			self["text_HomeUserLabel"].setText(_("Current User:"))
+			self["text_HomeUser"].setText(_("Dave"))
 
 		printl("", self, "C")
 
@@ -157,6 +174,16 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self.session.open(DPS_Syncer, "sync", self.g_serverConfig,)
+
+		printl("", self, "C")
+
+	#===============================================================
+	#
+	#===============================================================
+	def onKeyGreen(self):
+		printl("", self, "S")
+
+		self.session.open(DPS_Users, "user", self.g_serverConfig,)
 
 		printl("", self, "C")
 

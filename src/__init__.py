@@ -202,6 +202,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].myplexToken				= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexLocalToken		= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexTokenUsername		= ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexHomeUsers		= ConfigYesNo()
 
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")

@@ -62,8 +62,7 @@ except ImportError:
 #===============================================================================
 class DPS_Users(Screen):
 	
-	remotePath = None
-	localPath = None
+	editMode = False
 	
 	def __init__(self, session, serverID, plexInstance):
 		printl("", self, "S")
@@ -75,6 +74,7 @@ class DPS_Users(Screen):
 		"cancel": self.cancel,
 		"red": self.redKey,
 		"green": self.greenKey,
+		"yellow": self.yellowKey,
 		}, -1)
 		
 		self.guiElements = getGuiElements()
@@ -99,6 +99,9 @@ class DPS_Users(Screen):
 		self["btn_green"]		= Pixmap()
 		self["btn_greenText"]   = Label()
 
+		self["btn_yellow"]		= Pixmap()
+		self["btn_yellowText"]   = Label()
+
 		self.onShown.append(self.finishLayout)
 		
 		printl("", self, "C")
@@ -114,6 +117,9 @@ class DPS_Users(Screen):
 
 		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_greenText"].setText(_("Add User"))
+
+		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
+		self["btn_yellowText"].setText(_("Edit User"))
 
 		if self.error:
 			self.session.open(MessageBox,_("Something went wrong while opening users xml!"), MessageBox.TYPE_INFO)
@@ -150,6 +156,20 @@ class DPS_Users(Screen):
 		self.session.openWithCallback(self.setUsernameCallback, VirtualKeyBoard, title = (_("Enter the username here:")), text = "")
 		
 		printl("", self, "C")
+
+	#===================================================================
+	#
+	#===================================================================
+	def yellowKey(self):
+		printl("", self, "S")
+
+		content = self["content"].getCurrent()
+		currentName = content[2][7]
+		self.editMode = True
+
+		self.session.openWithCallback(self.setUsernameCallback, VirtualKeyBoard, title = (_("Enter the username here:")), text = currentName)
+
+		printl("", self, "C")
 		
 	
 	#===================================================================
@@ -162,7 +182,13 @@ class DPS_Users(Screen):
 		if callback is not None and len(callback):
 			printl("username: " + str(callback), self, "D")
 			self.username = str(callback)
-			self.session.openWithCallback(self.setPinCallback, VirtualKeyBoard, title = (_("Enter the pin here:")), text = "")
+
+			if self.editMode:
+				content = self["content"].getCurrent()
+				currentPin = content[3][7]
+			else:
+				currentPin = ""
+			self.session.openWithCallback(self.setPinCallback, VirtualKeyBoard, title = (_("Enter the pin here:")), text = currentPin)
 		else:
 			self.session.open(MessageBox,_("Adding new user was not completed"), MessageBox.TYPE_INFO)
 			self.close()
@@ -206,7 +232,13 @@ class DPS_Users(Screen):
 	def finishUserEntry(self):
 		printl("", self, "S")
 
+		content = self["content"].getCurrent()
+		currentId = content[1][7]
+		self["content"].deleteSelectedUser(currentId)
+
 		self["content"].addNewUser(self.username, self.pin, self.authenticationToken)
+
+		self.editMode = False
 
 		self.close()
 
