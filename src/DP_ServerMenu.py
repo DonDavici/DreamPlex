@@ -260,6 +260,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def switchUser(self):
 		printl("", self, "S")
 
+		# TODO add use saved values if we have no internet connection
+
 		xmlResponse = self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
 
 		entryData = (dict(xmlResponse.items()))
