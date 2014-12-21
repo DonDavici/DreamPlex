@@ -30,10 +30,14 @@ from Components.Sources.StaticText import StaticText
 from Components.Label import Label
 from Components.Pixmap import Pixmap
 from Components.config import config, getConfigListEntry, configfile
+from Components.Input import Input
 
 from Screens.MessageBox import MessageBox
 from Screens.ChoiceBox import ChoiceBox
+from Screens.InputBox import InputBox
 from Screens.Screen import Screen
+
+from Tools import Notifications
 
 from __common__ import printl2 as printl
 from __init__ import initServerEntryConfig, _ # _ is translation
@@ -300,6 +304,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 	useMappings = False
 	useHomeUsers = False
+	authenticated = False
 
 	def __init__(self, session, entry, data = None):
 		printl("", self, "S")
@@ -352,11 +357,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist = []
 		ConfigListScreen.__init__(self, self.cfglist, session)
 
-		self.createSetup()
-
 		self["config"].onSelectionChanged.append(self.updateHelp)
 
 		self.onLayoutFinish.append(self.finishLayout)
+
+		self.onShown.append(self.checkForPinUsage)
 
 		printl("", self, "C")
 
@@ -365,11 +370,52 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	#===========================================================================
 	def finishLayout(self):
 		printl("", self, "S")
+		print "here"
 
 		# first we set the pics for buttons
 		self.setColorFunctionIcons()
 
 		self.setKeyNames()
+
+		#self.checkForPinUsage()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkForPinUsage(self):
+		printl("", self, "S")
+
+		self.onShown = []
+
+		if not self.authenticated:
+			if self.current.protectSettings.value:
+				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") , type=Input.PIN)
+			else:
+				self.authenticated = True
+				self.createSetup()
+		else:
+			self.createSetup()
+
+		printl("", self, "C")
+
+	#===============================================================
+	#
+	#===============================================================
+	def askForPin(self, enteredPin):
+		printl("", self, "S")
+
+		if enteredPin is None:
+			pass
+		else:
+			if int(enteredPin) == int(self.current.settingsPin.value):
+				#self.session.open(MessageBox,"The pin was correct!", MessageBox.TYPE_INFO)
+				self.authenticated = True
+				self.createSetup()
+			else:
+				self.session.open(MessageBox,"The pin was wrong! Returning ...", MessageBox.TYPE_INFO)
+				self.close()
 
 		printl("", self, "C")
 
@@ -500,10 +546,16 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need openSSL installed for this feature! Please check in System ...")))
-		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pin Protection"), self.current.myplexPinProtect, _("Use Pinprotection for switch back to myPlex user?")))
-		if self.current.myplexPinProtect.value:
-			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pincode"), self.current.myplexPin, _("Pincode for switching back from any home user.")))
+
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Home Users"), self.current.myplexHomeUsers, _("Use Home Users?")))
+		if self.current.myplexHomeUsers.value:
+			self.cfglist.append(getConfigListEntry(_(" >> Use Settings Protection"), self.current.protectSettings, _("Ask for pin?")))
+			if self.current.protectSettings.value:
+				self.cfglist.append(getConfigListEntry(_(" >> Settings Pincode"), self.current.settingsPin, _("Pincode for changing settings")))
+
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pin Protection"), self.current.myplexPinProtect, _("Use Pinprotection for switch back to myPlex user?")))
+			if self.current.myplexPinProtect.value:
+				self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pincode"), self.current.myplexPin, _("Pincode for switching back from any home user.")))
 
 		printl("", self, "C")
 

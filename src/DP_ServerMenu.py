@@ -64,6 +64,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	menuStep = 0 # vaule how many steps we made to restore navigation data
 	currentMenuDataDict = {}
 	currentIndexDict = {}
+	isHomeUser = False
 
 	#===========================================================================
 	#
@@ -106,6 +107,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			}, -2)
 
 		self["btn_green"]		= Pixmap()
+		self["btn_green"].hide()
 		self["btn_greenText"]   = Label()
 
 		self["text_HomeUserLabel"]   = Label()
@@ -130,6 +132,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		if self.g_serverConfig.myplexHomeUsers.value:
 			self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+			self["btn_green"].show()
 			self["btn_greenText"].setText(_("Switch User"))
 			self["text_HomeUserLabel"].setText(_("Current User:"))
 			currentHomeUser = self.g_serverConfig.myplexCurrentHomeUser.value
@@ -202,7 +205,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		functionList = []
 
 		# add myPlex User as first one
-		functionList.append((self.g_serverConfig.myplexTokenUsername.value, self.g_serverConfig.myplexPin.value, self.g_serverConfig.myplexToken.value, "myPlex"))
+		functionList.append((self.g_serverConfig.myplexTokenUsername.value, self.g_serverConfig.myplexPin.value, self.g_serverConfig.myplexToken.value, False))
 
 		# now add all home users
 		homeUsersObject = DPS_Users(self.session, self.g_serverConfig.id.value, self.plexInstance)
@@ -214,7 +217,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.currentPin = user.attrib.get("pin")
 			self.currentHomeUserToken = user.attrib.get("token")
 
-		functionList.append((self.currentHomeUsername, self.currentPin, self.currentHomeUserToken, "homeUser"))
+		functionList.append((self.currentHomeUsername, self.currentPin, self.currentHomeUserToken, True))
 
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Home Users"), list=functionList)
 
@@ -231,15 +234,45 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			return
 
 		printl("choice: " + str(choice), self, "D")
+		self.isHomeUser = choice[3]
 
-		if choice[1] != "" and choice[3] == "homeUser":
+		if choice[1] != "" and self.isHomeUser:
 			printl(choice[1], self, "D")
 			self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") ,type=Input.PIN)
 		else:
-			self.g_serverConfig.myplexCurrentHomeUser.value = ""
-			self.g_serverConfig.myplexCurrentHomeUserToken.value = ""
-			self.g_serverConfig.save()
-			self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
+			if self.g_serverConfig.myplexPinProtect.value:
+				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") , type=Input.PIN)
+				self.currentPin = self.g_serverConfig.myplexPin.value
+			else:
+				self.switchToMyPlexUser()
+
+		printl("", self, "C")
+
+	#===============================================================
+	#
+	#===============================================================
+	def switchToMyPlexUser(self):
+		printl("", self, "S")
+
+		self.g_serverConfig.myplexCurrentHomeUser.value = ""
+		self.g_serverConfig.myplexCurrentHomeUserToken.value = ""
+		self.g_serverConfig.save()
+
+		self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
+
+		printl("", self, "C")
+
+	#===============================================================
+	#
+	#===============================================================
+	def switchToHomeUser(self):
+		printl("", self, "S")
+
+		self.g_serverConfig.myplexCurrentHomeUser.value = self.currentHomeUsername
+		self.g_serverConfig.myplexCurrentHomeUserToken.value = self.currentHomeUserToken
+		self.g_serverConfig.save()
+
+		self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
 
 		printl("", self, "C")
 
@@ -248,17 +281,18 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===============================================================
 	def askForPin(self, enteredPin):
 		printl("", self, "S")
+		print self.currentPin
+		print enteredPin
 
 		if enteredPin is None:
 			pass
 		else:
-			if enteredPin == self.currentPin:
+			if int(enteredPin) == int(self.currentPin):
 				self.session.open(MessageBox,"The pin was correct! Switching user.", MessageBox.TYPE_INFO)
-				self.g_serverConfig.myplexCurrentHomeUser.value = self.currentHomeUsername
-				self.g_serverConfig.myplexCurrentHomeUserToken.value = self.currentHomeUserToken
-				self.g_serverConfig.save()
-
-				self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
+				if self.isHomeUser:
+					self.switchToHomeUser()
+				else:
+					self.switchToMyPlexUser()
 			else:
 				self.session.open(MessageBox,"The pin was wrong! Abort user switiching.", MessageBox.TYPE_INFO)
 
