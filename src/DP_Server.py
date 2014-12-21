@@ -500,6 +500,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX URL"), self.current.myplexUrl, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Username"), self.current.myplexUsername, _("You need openSSL installed for this feature! Please check in System ...")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Password"), self.current.myplexPassword, _("You need openSSL installed for this feature! Please check in System ...")))
+		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pin Protection"), self.current.myplexPinProtect, _("Use Pinprotection for switch back to myPlex user?")))
+		if self.current.myplexPinProtect.value:
+			self.cfglist.append(getConfigListEntry(_(" >> myPLEX Pincode"), self.current.myplexPin, _("Pincode for switching back from any home user.")))
 		self.cfglist.append(getConfigListEntry(_(" >> myPLEX Home Users"), self.current.myplexHomeUsers, _("Use Home Users?")))
 
 		printl("", self, "C")

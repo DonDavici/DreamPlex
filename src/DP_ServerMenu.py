@@ -31,14 +31,16 @@ from Components.Pixmap import Pixmap
 from Components.Label import Label
 
 from Screens.MessageBox import MessageBox
+from Screens.ChoiceBox import ChoiceBox
+from Screens.InputBox import InputBox
 
 from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
-from DP_Users import DPS_Users
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
 from DP_ViewFactory import getGuiElements
+from DP_Users import DPS_Users
 
 from __common__ import printl2 as printl, getLiveTv
 from __plugin__ import Plugin
@@ -130,7 +132,11 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 			self["btn_greenText"].setText(_("Switch User"))
 			self["text_HomeUserLabel"].setText(_("Current User:"))
-			self["text_HomeUser"].setText(_("Dave"))
+			currentHomeUser = self.g_serverConfig.myplexCurrentHomeUser.value
+			if currentHomeUser != "":
+				self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
+			else:
+				self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
 
 		printl("", self, "C")
 
@@ -183,7 +189,78 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def onKeyGreen(self):
 		printl("", self, "S")
 
-		self.session.open(DPS_Users, "user", self.g_serverConfig,)
+		self.displayOptionsMenu()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def displayOptionsMenu(self):
+		printl("", self, "S")
+
+		functionList = []
+
+		# add myPlex User as first one
+		functionList.append((self.g_serverConfig.myplexTokenUsername.value, self.g_serverConfig.myplexPin.value, self.g_serverConfig.myplexToken.value, "myPlex"))
+
+		# now add all home users
+		homeUsersObject = DPS_Users(self.session, self.g_serverConfig.id.value, self.plexInstance)
+		homeUsersFromServer = homeUsersObject["content"].getHomeUsersFromServer()
+
+		for user in homeUsersFromServer.findall('user'):
+			self.lastUserId = user.attrib.get("id")
+			self.currentHomeUsername = user.attrib.get("username")
+			self.currentPin = user.attrib.get("pin")
+			self.currentHomeUserToken = user.attrib.get("token")
+
+		functionList.append((self.currentHomeUsername, self.currentPin, self.currentHomeUserToken, "homeUser"))
+
+		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Home Users"), list=functionList)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def displayOptionsMenuCallback(self, choice):
+		printl("", self, "S")
+
+		if choice is None or choice[1] is None:
+			printl("choice: None - we pressed exit", self, "D")
+			return
+
+		printl("choice: " + str(choice), self, "D")
+
+		if choice[1] != "" and choice[3] == "homeUser":
+			printl(choice[1], self, "D")
+			self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") ,type=Input.PIN)
+		else:
+			self.g_serverConfig.myplexCurrentHomeUser.value = ""
+			self.g_serverConfig.myplexCurrentHomeUserToken.value = ""
+			self.g_serverConfig.save()
+			self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
+
+		printl("", self, "C")
+
+	#===============================================================
+	#
+	#===============================================================
+	def askForPin(self, enteredPin):
+		printl("", self, "S")
+
+		if enteredPin is None:
+			pass
+		else:
+			if enteredPin == self.currentPin:
+				self.session.open(MessageBox,"The pin was correct! Switching user.", MessageBox.TYPE_INFO)
+				self.g_serverConfig.myplexCurrentHomeUser.value = self.currentHomeUsername
+				self.g_serverConfig.myplexCurrentHomeUserToken.value = self.currentHomeUserToken
+				self.g_serverConfig.save()
+
+				self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
+			else:
+				self.session.open(MessageBox,"The pin was wrong! Abort user switiching.", MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
 

@@ -298,33 +298,44 @@ class DPS_UsersEntryList(MenuList):
 		
 		self.list=[]
 
-		printl("serverID: " + str(self.serverID), self, "D")
-		for server in self.tree.findall("server"):
-			printl("servername: " + str(server.get('id')), self, "D")
-			if str(server.get('id')) == str(self.serverID):
+		homeUsersFromServer = self.getHomeUsersFromServer()
 
-				for user in server.findall('user'):
-					self.lastUserId = user.attrib.get("id")
-					username = user.attrib.get("username")
-					pin = user.attrib.get("pin")
-					token = user.attrib.get("token")
-					printl("self.lastUserId: " + str(self.lastUserId), self, "D")
-					printl("username: " + str(username), self, "D")
-					printl("pin: " + str(pin), self, "D")
-					printl("token: " + str(token), self, "D")
+		for user in homeUsersFromServer.findall('user'):
+			self.lastUserId = user.attrib.get("id")
+			username = user.attrib.get("username")
+			pin = user.attrib.get("pin")
+			token = user.attrib.get("token")
+			printl("self.lastUserId: " + str(self.lastUserId), self, "D")
+			printl("username: " + str(username), self, "D")
+			printl("pin: " + str(pin), self, "D")
+			printl("token: " + str(token), self, "D")
 
-					res = [user]
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastUserId)))
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(username)))
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(pin)))
-					res.append((eListboxPythonMultiContent.TYPE_TEXT, 655, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(token)))
+			res = [user]
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastUserId)))
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(username)))
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(pin)))
+			res.append((eListboxPythonMultiContent.TYPE_TEXT, 655, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(token)))
 
-					self.list.append(res)
+			self.list.append(res)
 
 		self.l.setList(self.list)
 		self.moveToIndex(0)
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def getHomeUsersFromServer(self):
+		printl("", self, "S")
+
+		printl("serverID: " + str(self.serverID), self, "D")
+		for server in self.tree.findall("server"):
+			printl("servername: " + str(server.get('id')), self, "D")
+			if str(server.get('id')) == str(self.serverID):
+
+				printl("", self, "C")
+				return server
 	
 	#===========================================================================
 	# 
