@@ -260,18 +260,24 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	def switchUser(self):
 		printl("", self, "S")
 
-		self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
-
 		xmlResponse = self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
 
 		entryData = (dict(xmlResponse.items()))
 		myId = entryData['id']
 		token = entryData['authenticationToken']
+		title = entryData['title']
 
 		self.plexInstance.serverConfig_myplexToken = token
-		accessToken = self.plexInstance.getPlexUserTokenForLocalServerAuthentication("192.168.45.190")
+		accessToken = self.plexInstance.getPlexUserTokenForLocalServerAuthentication(self.plexInstance.g_host)
 
-		self.plexInstance.setAccessTokenHeader("192.168.45.190:32400", accessToken)
+		self.g_serverConfig.myplexCurrentHomeUser.value = title
+		self.g_serverConfig.myplexCurrentHomeUserAccessToken.value = accessToken
+		self.g_serverConfig.myplexCurrentHomeUserId.value = myId
+		self.g_serverConfig.save()
+
+		self.plexInstance.setAccessTokenHeader(self.plexInstance.g_currentServer, accessToken)
+
+		self["text_HomeUser"].setText(title)
 
 		printl("", self, "C")
 
@@ -280,8 +286,6 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 	#===============================================================
 	def askForPin(self, enteredPin):
 		printl("", self, "S")
-		print self.currentPin
-		print enteredPin
 
 		if enteredPin is None:
 			pass
@@ -289,9 +293,9 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			if int(enteredPin) == int(self.currentPin):
 				self.session.open(MessageBox,"The pin was correct! Switching user.", MessageBox.TYPE_INFO)
 				if self.isHomeUser:
-					self.switchToHomeUser()
+					self.switchUser()
 				else:
-					self.switchToMyPlexUser()
+					self.switchUser()
 			else:
 				self.session.open(MessageBox,"The pin was wrong! Abort user switiching.", MessageBox.TYPE_INFO)
 

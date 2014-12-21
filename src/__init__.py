@@ -211,7 +211,8 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].settingsPin                 = ConfigPIN(default=0000)
 	config.plugins.dreamplex.Entries[i].myplexCurrentHomeUser		= ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexCurrentHomeUserPin	= ConfigText(visible_width=4)
-	config.plugins.dreamplex.Entries[i].myplexCurrentHomeUserToken	= ConfigText(visible_width=4)
+	config.plugins.dreamplex.Entries[i].myplexCurrentHomeUserAccessToken	= ConfigText(visible_width=4)
+	config.plugins.dreamplex.Entries[i].myplexCurrentHomeUserId	    = ConfigInteger(default=0, limits=(1, 999999999999))
 
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
