@@ -244,45 +244,34 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 				printl(choice[1], self, "D")
 				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") ,type=Input.PIN)
 			else:
-				self.switchToHomeUser()
+				self.switchUser()
 		else:
 			if self.g_serverConfig.myplexPinProtect.value:
 				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") , type=Input.PIN)
 				self.currentPin = self.g_serverConfig.myplexPin.value
 			else:
-				self.switchToMyPlexUser()
+				self.switchUser()
 
 		printl("", self, "C")
 
 	#===============================================================
 	#
 	#===============================================================
-	def switchToMyPlexUser(self):
+	def switchUser(self):
 		printl("", self, "S")
-
-		self.g_serverConfig.myplexCurrentHomeUser.value = ""
-		self.g_serverConfig.myplexCurrentHomeUserToken.value = ""
-		self.g_serverConfig.save()
 
 		self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
 
-		self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
+		xmlResponse = self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
 
-		printl("", self, "C")
+		entryData = (dict(xmlResponse.items()))
+		myId = entryData['id']
+		token = entryData['authenticationToken']
 
-	#===============================================================
-	#
-	#===============================================================
-	def switchToHomeUser(self):
-		printl("", self, "S")
+		self.plexInstance.serverConfig_myplexToken = token
+		accessToken = self.plexInstance.getPlexUserTokenForLocalServerAuthentication("192.168.45.190")
 
-		self.g_serverConfig.myplexCurrentHomeUser.value = self.currentHomeUsername
-		self.g_serverConfig.myplexCurrentHomeUserToken.value = self.currentHomeUserToken
-		self.g_serverConfig.save()
-
-		self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
-
-		self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
+		self.plexInstance.setAccessTokenHeader("192.168.45.190:32400", accessToken)
 
 		printl("", self, "C")
 

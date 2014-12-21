@@ -983,23 +983,23 @@ class PlexLibrary(Screen):
 	def setAccessTokenHeader(self, address, accessToken, serverVersion = None):
 		printl("", self, "S")
 
-		if address not in self.g_myplex_accessTokenDict:
-			self.g_myplex_accessTokenDict[address] = {}
+		#if address not in self.g_myplex_accessTokenDict:
+		self.g_myplex_accessTokenDict[address] = {}
 
-			uToken = self.getAuthDetails({'token':accessToken})
-			#printl("uToken: " +  str(uToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[address]["uToken"] = uToken
+		uToken = self.getAuthDetails({'token':accessToken})
+		#printl("uToken: " +  str(uToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["uToken"] = uToken
 
-			hToken = self.getAuthDetails({'token':accessToken}, False)
-			#printl("hToken: " +  str(hToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[address]["hToken"] = hToken
+		hToken = self.getAuthDetails({'token':accessToken}, False)
+		#printl("hToken: " +  str(hToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["hToken"] = hToken
 
-			aToken = self.getAuthDetails({'token':accessToken}, prefix="?")
-			#printl("aToken: " +  str(aToken), self, "D", True, 6)
-			self.g_myplex_accessTokenDict[address]["aToken"] = aToken
+		aToken = self.getAuthDetails({'token':accessToken}, prefix="?")
+		#printl("aToken: " +  str(aToken), self, "D", True, 6)
+		self.g_myplex_accessTokenDict[address]["aToken"] = aToken
 
-			if serverVersion is not None:
-				self.g_myplex_accessTokenDict[address]["serverVersion"] = serverVersion
+		if serverVersion is not None:
+			self.g_myplex_accessTokenDict[address]["serverVersion"] = serverVersion
 
 		# we print the content of g_myplex_accesTokeDict later to not have it to often in logs
 
@@ -1140,7 +1140,7 @@ class PlexLibrary(Screen):
 	#===============================================================================
 	#
 	#===============================================================================
-	def switchHomeUser(self, userId, pin=""):
+	def switchHomeUser(self, userId, pin):
 		printl("", self, "S")
 
 		xmlResponse = self.getXmlTreeFromPlex('/api/home/users/' + str(userId) + '/switch?pin=' + str(pin), requestType="POST")
@@ -1292,17 +1292,18 @@ class PlexLibrary(Screen):
 
 			# the very first time it is none
 			# we also have to check if the server that where used changed meanwhile
-			if self.authHeader is None or server != self.lastHeaderForServer:
+			#if self.authHeader is None or server != self.lastHeaderForServer:
 
-				authHeaderPartOne = self.get_hTokenForServer(server)
-				self.lastHeaderForServer = server
+			authHeaderPartOne = self.get_hTokenForServer(server)
+			print "authHeaderPartOne " + str(authHeaderPartOne)
+			self.lastHeaderForServer = server
 
-				# if self.g_sessionID is None:
-				# 	self.g_sessionID=str(uuid.uuid4())
+			# if self.g_sessionID is None:
+			# 	self.g_sessionID=str(uuid.uuid4())
 
-				authHeaderPartTwo = getPlexHeader(self.g_sessionID)
+			authHeaderPartTwo = getPlexHeader(self.g_sessionID)
 
-				self.authHeader = dict(authHeaderPartOne.items() + authHeaderPartTwo.items())
+			self.authHeader = dict(authHeaderPartOne.items() + authHeaderPartTwo.items())
 
 			#printl("header: " + str(self.authHeader), self, "D")
 			conn.request(myType, urlPath, headers=self.authHeader)
