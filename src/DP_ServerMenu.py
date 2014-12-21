@@ -205,19 +205,20 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		functionList = []
 
 		# add myPlex User as first one
-		functionList.append((self.g_serverConfig.myplexTokenUsername.value, self.g_serverConfig.myplexPin.value, self.g_serverConfig.myplexToken.value, False))
+		functionList.append((self.g_serverConfig.myplexTokenUsername.value, self.g_serverConfig.myplexPin.value, self.g_serverConfig.myplexToken.value, False, self.g_serverConfig.myplexId.value))
 
 		# now add all home users
-		homeUsersObject = DPS_Users(self.session, self.g_serverConfig.id.value, self.plexInstance)
-		homeUsersFromServer = homeUsersObject["content"].getHomeUsersFromServer()
+		self.homeUsersObject = DPS_Users(self.session, self.g_serverConfig.id.value, self.plexInstance)
+		homeUsersFromServer = self.homeUsersObject["content"].getHomeUsersFromServer()
 
-		for user in homeUsersFromServer.findall('user'):
-			self.lastUserId = user.attrib.get("id")
-			self.currentHomeUsername = user.attrib.get("username")
-			self.currentPin = user.attrib.get("pin")
-			self.currentHomeUserToken = user.attrib.get("token")
+		if homeUsersFromServer is not None:
+			for user in homeUsersFromServer.findall('user'):
+				self.lastUserId = user.attrib.get("id")
+				self.currentHomeUsername = user.attrib.get("username")
+				self.currentPin = user.attrib.get("pin")
+				self.currentHomeUserToken = user.attrib.get("token")
 
-		functionList.append((self.currentHomeUsername, self.currentPin, self.currentHomeUserToken, True))
+				functionList.append((self.currentHomeUsername, self.currentPin, self.currentHomeUserToken, True, self.lastUserId))
 
 		self.session.openWithCallback(self.displayOptionsMenuCallback, ChoiceBox, title=_("Home Users"), list=functionList)
 
@@ -235,10 +236,15 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		printl("choice: " + str(choice), self, "D")
 		self.isHomeUser = choice[3]
+		self.currentHomeUserId = choice[4]
+		self.currentHomeUserPin = choice[1]
 
-		if choice[1] != "" and self.isHomeUser:
-			printl(choice[1], self, "D")
-			self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") ,type=Input.PIN)
+		if self.isHomeUser:
+			if choice[1] != "":
+				printl(choice[1], self, "D")
+				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") ,type=Input.PIN)
+			else:
+				self.switchToHomeUser()
 		else:
 			if self.g_serverConfig.myplexPinProtect.value:
 				self.session.openWithCallback(self.askForPin, InputBox, title=_("Please enter the pincode!") , type=Input.PIN)
@@ -260,6 +266,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 
 		self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
 
+		self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
+
 		printl("", self, "C")
 
 	#===============================================================
@@ -273,6 +281,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		self.g_serverConfig.save()
 
 		self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
+
+		self.plexInstance.switchHomeUser(self.currentHomeUserId, self.currentHomeUserPin)
 
 		printl("", self, "C")
 

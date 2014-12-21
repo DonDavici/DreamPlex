@@ -208,21 +208,23 @@ class DPS_Users(Screen):
 
 		xmlResponse = self.plexInstance.getHomeUsersFromPlex()
 
-		users = xmlResponse.findall('User')
+		if xmlResponse is not False:
+			users = xmlResponse.findall('User')
 
-		for user in users:
-			entryData = (dict(user.items()))
-			title = entryData["title"]
-			if self.username == title:
-				printl("", self, "C")
-				userId = entryData["id"]
+			for user in users:
+				entryData = (dict(user.items()))
+				title = entryData["title"]
+				if self.username == title:
+					printl("", self, "C")
+					userId = entryData["id"]
 
-				xmlResponse = self.plexInstance.switchHomeUser(userId, self.pin)
+					xmlResponse = self.plexInstance.switchHomeUser(userId, self.pin)
 
-				entryData = (dict(xmlResponse.items()))
-				self.authenticationToken = entryData["authenticationToken"]
+					entryData = (dict(xmlResponse.items()))
+					self.authenticationToken = entryData["authenticationToken"]
+					self.myId = entryData["id"]
 
-				self.finishUserEntry()
+					self.finishUserEntry()
 
 		printl("", self, "C")
 
@@ -232,11 +234,12 @@ class DPS_Users(Screen):
 	def finishUserEntry(self):
 		printl("", self, "S")
 
-		content = self["content"].getCurrent()
-		currentId = content[1][7]
-		self["content"].deleteSelectedUser(currentId)
+		if self.editMode:
+			content = self["content"].getCurrent()
+			currentId = content[1][7]
+			self["content"].deleteSelectedUser(currentId)
 
-		self["content"].addNewUser(self.username, self.pin, self.authenticationToken)
+		self["content"].addNewUser(self.username, self.pin, self.authenticationToken, self.myId)
 
 		self.editMode = False
 
@@ -271,6 +274,7 @@ class DPS_UsersEntryList(MenuList):
 		printl("", self, "S")
 		self.serverID = serverID
 		self.tree = tree
+
 		MenuList.__init__(self, menuList, enableWrapAround, eListboxPythonMultiContent)
 		self.l.setFont(0, gFont("Regular", 20))
 		self.l.setFont(1, gFont("Regular", 18))
@@ -299,28 +303,29 @@ class DPS_UsersEntryList(MenuList):
 		self.list=[]
 
 		homeUsersFromServer = self.getHomeUsersFromServer()
+		if homeUsersFromServer is not None:
+			for user in homeUsersFromServer.findall('user'):
+				self.lastUserId = user.attrib.get("id")
+				username = user.attrib.get("username")
+				pin = user.attrib.get("pin")
+				token = user.attrib.get("token")
+				printl("self.lastUserId: " + str(self.lastUserId), self, "D")
+				printl("username: " + str(username), self, "D")
+				printl("pin: " + str(pin), self, "D")
+				printl("token: " + str(token), self, "D")
 
-		for user in homeUsersFromServer.findall('user'):
-			self.lastUserId = user.attrib.get("id")
-			username = user.attrib.get("username")
-			pin = user.attrib.get("pin")
-			token = user.attrib.get("token")
-			printl("self.lastUserId: " + str(self.lastUserId), self, "D")
-			printl("username: " + str(username), self, "D")
-			printl("pin: " + str(pin), self, "D")
-			printl("token: " + str(token), self, "D")
+				res = [user]
+				res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastUserId)))
+				res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(username)))
+				res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(pin)))
+				res.append((eListboxPythonMultiContent.TYPE_TEXT, 655, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(token)))
 
-			res = [user]
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 5, 0, 200, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(self.lastUserId)))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 50, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(username)))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 355, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(pin)))
-			res.append((eListboxPythonMultiContent.TYPE_TEXT, 655, 0, 300, 20, 1, RT_HALIGN_LEFT|RT_VALIGN_CENTER, str(token)))
+				self.list.append(res)
 
-			self.list.append(res)
-
-		self.l.setList(self.list)
-		self.moveToIndex(0)
-
+			self.l.setList(self.list)
+			self.moveToIndex(0)
+		else:
+			pass
 		printl("", self, "C")
 
 	#===========================================================================
@@ -333,9 +338,10 @@ class DPS_UsersEntryList(MenuList):
 		for server in self.tree.findall("server"):
 			printl("servername: " + str(server.get('id')), self, "D")
 			if str(server.get('id')) == str(self.serverID):
-
 				printl("", self, "C")
 				return server
+
+		return None
 	
 	#===========================================================================
 	# 
@@ -358,12 +364,12 @@ class DPS_UsersEntryList(MenuList):
 	#===========================================================================
 	# 
 	#===========================================================================	
-	def addNewUser(self, username, pin, authenticationToken):
+	def addNewUser(self, username, pin, authenticationToken, myId):
 		printl("", self, "S")
 
 		tree = getXmlContent(self.location)
 
-		newId = int(self.lastMappingId) + 1
+		newId = myId#int(self.lastMappingId) + 1
 
 		printl("newId: " + str(newId), self, "D")
 		printl("username: " + str(username), self, "D")
@@ -386,6 +392,6 @@ class DPS_UsersEntryList(MenuList):
 			writeXmlContent(tree, self.location)
 			
 			# now lets go through the xml again to add the mapping to the server
-			self.addNewUser(username, pin, authenticationToken)
+			self.addNewUser(username, pin, authenticationToken, newId)
 
 		printl("", self, "C")

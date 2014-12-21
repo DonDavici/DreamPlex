@@ -199,6 +199,7 @@ def initServerEntryConfig():
 	# myPlex
 	config.plugins.dreamplex.Entries[i].myplexUrl		            = ConfigText(default = "my.plexapp.com", visible_width = 50, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].myplexUsername			    = ConfigText(visible_width=50, fixed_size=False)
+	config.plugins.dreamplex.Entries[i].myplexId			        = ConfigInteger(default=0, limits=(1, 999999999999))
 	config.plugins.dreamplex.Entries[i].myplexPassword			    = ConfigText(visible_width=50, fixed_size=False)
 	config.plugins.dreamplex.Entries[i].myplexPinProtect	        = ConfigYesNo()
 	config.plugins.dreamplex.Entries[i].myplexPin                   = ConfigPIN(default=0000)
@@ -215,6 +216,7 @@ def initServerEntryConfig():
 	printl("=== myPLEX ===", "__init__::initServerEntryConfig", "D")
 	printl("myplexUrl: " + str(config.plugins.dreamplex.Entries[i].myplexUrl.value), "__init__::initServerEntryConfig", "D")
 	printl("myplexUsername: " + str(config.plugins.dreamplex.Entries[i].myplexUsername.value), "__init__::initServerEntryConfig", "D", True, 8)
+	printl("myplexId: " + str(config.plugins.dreamplex.Entries[i].myplexId.value), "__init__::initServerEntryConfig", "D", True, 8)
 	printl("myplexPassword: " + str(config.plugins.dreamplex.Entries[i].myplexPassword.value), "__init__::initServerEntryConfig", "D", True, 6)
 	printl("myplexPinProtect: " + str(config.plugins.dreamplex.Entries[i].myplexPinProtect.value), "__init__::initServerEntryConfig", "D")
 	printl("myplexPin: " + str(config.plugins.dreamplex.Entries[i].myplexPin.value), "__init__::initServerEntryConfig", "D")

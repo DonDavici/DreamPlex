@@ -1239,23 +1239,32 @@ class PlexLibrary(Screen):
 		response = data.read()
 
 		try:
-			token = etree.fromstring(response).findtext('authentication-token')
+			xmlResult = etree.fromstring(response)
+			entryData = (dict(xmlResult.items()))
+			myId = entryData['id']
+			token = entryData['authenticationToken']
+
 		except Exception:
 			token = None
+			myId = None
 
-		if token is None:
+		if token is None or myId is None:
 			self.lastResponse = response
 
 			printl("", self, "C")
 			return False
 		else:
 			self.serverConfig_myplexToken = token
+			self.serverConfig_myplexId = myId
 			self.g_serverConfig.myplexTokenUsername.value = self.g_myplex_username
 			self.g_serverConfig.myplexTokenUsername.save()
 			self.g_serverConfig.myplexToken.value = self.serverConfig_myplexToken
 			self.g_serverConfig.myplexToken.save()
+			self.g_serverConfig.myplexId.value = self.serverConfig_myplexId
+			self.g_serverConfig.myplexId.save()
 
 		printl ("token: " + token, self, "D", True, 8)
+		printl ("id: " + str(myId), self, "D")
 		printl("", self, "C")
 		return token
 

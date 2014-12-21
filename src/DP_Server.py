@@ -377,8 +377,6 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		self.setKeyNames()
 
-		#self.checkForPinUsage()
-
 		printl("", self, "C")
 
 	#===========================================================================
@@ -745,7 +743,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		token = self.plexInstance.getNewMyPlexToken()
 
 		if token:
-			self.session.openWithCallback(self.saveNow, MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s") % (token, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
+			self.session.openWithCallback(self.saveNow, MessageBox,(_("myPlex Token:") + "\n%s \n" + _("for the user:") + "\n%s \n" + _("with the id:") + "\n%s") % (token, self.current.myplexTokenUsername.value, self.current.myplexId.value), MessageBox.TYPE_INFO)
 		else:
 			response = self.plexInstance.getLastResponse()
 			self.session.openWithCallback(self.saveNow, MessageBox,(_("Error:") + "\n%s \n" + _("for the user:") + "\n%s") % (response, self.current.myplexTokenUsername.value), MessageBox.TYPE_INFO)
