@@ -242,10 +242,10 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.startWithFilterMode = config.plugins.dreamplex.startWithFilterMode.value
 
 		# get data from plex library
-		self.image_prefix = Singleton().getPlexInstance().getServerName().lower()
+		self.image_prefix = self.plexInstance.getServerName().lower()
 
 		# get server config
-		self.serverConfig = Singleton().getPlexInstance().getServerConfig()
+		self.serverConfig = self.plexInstance.getServerConfig()
 
 		# init skin elements
 		self.setMultiLevelElements(levels=4)
