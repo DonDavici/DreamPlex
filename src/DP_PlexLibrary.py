@@ -378,14 +378,14 @@ class PlexLibrary(Screen):
 
 		if entryData is not None:
 			onDeck = dict()
-			onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck") # former t_url
+			onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck")
 			onDeck["type"] = "movie"
 			onDeck["currentViewMode"] = "movie"
 			onDeck["nextViewMode"] = "mixed"
 			fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
 			recentlyAdded = dict()
-			recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded") # former t_url
+			recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded")
 			recentlyAdded["type"] = "movie"
 			recentlyAdded["currentViewMode"] = "movie"
 			recentlyAdded["nextViewMode"] = "mixed"
