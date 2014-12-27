@@ -190,41 +190,58 @@ class DPS_Users(Screen):
 				currentPin = ""
 			self.session.openWithCallback(self.setPinCallback, VirtualKeyBoard, title = (_("Enter the pin here:")), text = currentPin)
 		else:
-			self.session.open(MessageBox,_("Adding new user was not completed"), MessageBox.TYPE_INFO)
-			self.close()
+			self.abortUserConfiguration()
 	
 	#===================================================================
 	# 
 	#===================================================================
 	def setPinCallback(self, callback = None):
 		printl("", self, "S")
-		
+		foundMatchingUser = False
+
 		if callback is not None:
 			self.pin = str(callback)
+			printl("pin: " + str(self.pin), self, "D")
+
+			xmlResponse = self.plexInstance.getHomeUsersFromPlex()
+
+			if xmlResponse is not False:
+				users = xmlResponse.findall('User')
+
+				for user in users:
+					entryData = (dict(user.items()))
+					title = entryData["title"]
+					if self.username == title:
+						printl("", self, "C")
+						userId = entryData["id"]
+
+						xmlResponse = self.plexInstance.switchHomeUser(userId, self.pin)
+
+						entryData = (dict(xmlResponse.items()))
+						self.authenticationToken = entryData["authenticationToken"]
+						self.myId = entryData["id"]
+
+						foundMatchingUser = True
+						break
+
+			if not foundMatchingUser:
+				self.session.open(MessageBox,_("The user was not found!"), MessageBox.TYPE_INFO)
+			else:
+				self.finishUserEntry()
+
 		else:
-			self.pin = ""
+			self.abortUserConfiguration()
 
-		printl("pin: " + str(self.pin), self, "D")
+		printl("", self, "C")
 
-		xmlResponse = self.plexInstance.getHomeUsersFromPlex()
+	#===================================================================
+	#
+	#===================================================================
+	def abortUserConfiguration(self):
+		printl("", self, "S")
 
-		if xmlResponse is not False:
-			users = xmlResponse.findall('User')
-
-			for user in users:
-				entryData = (dict(user.items()))
-				title = entryData["title"]
-				if self.username == title:
-					printl("", self, "C")
-					userId = entryData["id"]
-
-					xmlResponse = self.plexInstance.switchHomeUser(userId, self.pin)
-
-					entryData = (dict(xmlResponse.items()))
-					self.authenticationToken = entryData["authenticationToken"]
-					self.myId = entryData["id"]
-
-					self.finishUserEntry()
+		self.session.open(MessageBox,_("Adding new user was not completed"), MessageBox.TYPE_INFO)
+		#self.close()
 
 		printl("", self, "C")
 
@@ -233,6 +250,7 @@ class DPS_Users(Screen):
 	#===================================================================
 	def finishUserEntry(self):
 		printl("", self, "S")
+		self.session.open(MessageBox,_("Confirmed User from Plex was configured!"), MessageBox.TYPE_INFO)
 
 		if self.editMode:
 			content = self["content"].getCurrent()
@@ -242,8 +260,6 @@ class DPS_Users(Screen):
 		self["content"].addNewUser(self.username, self.pin, self.authenticationToken, self.myId)
 
 		self.editMode = False
-
-		self.close()
 
 		printl("", self, "C")
 	#===================================================================
