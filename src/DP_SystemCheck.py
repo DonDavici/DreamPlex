@@ -253,11 +253,13 @@ class DPS_SystemCheck(Screen):
 			#remoteUrl = "http://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk"
 			remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/ipk/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk/download"
 			cmd = "opkg install --force-overwrite --force-depends " + str(remoteUrl)
+
 		else:
 			#remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb?direct"
 			#remoteUrl = "http://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb"
 			remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/deb/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb/download"
-			cmd = "dpkg --install " + str(remoteUrl) + " && apt-get update && apt-get -f install"
+			#cmd = "dpkg --install " + str(remoteUrl) + " && apt-get update && apt-get -f install"
+			cmd = "URL='" + str(remoteUrl)+ "'; FILE=`mktemp`; wget $URL -qO $FILE && dpkg -i $FILE; rm $FILE"
 
 		printl("remoteUrl: " + str(remoteUrl), self, "D")
 		printl("cmd: " + str(cmd), self, "D")
