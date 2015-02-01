@@ -29,6 +29,7 @@ from Components.ActionMap import HelpableActionMap
 from Components.VideoWindow import VideoWindow
 from Components.Label import Label
 from Components.Label import MultiColorLabel
+from Components.config import NumericalTextInput
 
 from Screens.Screen import Screen
 
@@ -293,5 +294,214 @@ class DPH_Screen(Screen):
 		printl("", self, "S")
 
 		closePlugin(self.session)
+
+		printl("", self, "C")
+
+#===============================================================================
+#
+#===============================================================================
+class DPH_Filter(NumericalTextInput):
+
+	#===============================================================================
+	#
+	#===============================================================================
+	def __init__(self):
+		printl("", self, "S")
+
+		NumericalTextInput.__init__(self)
+
+		self["number_key_popup"] = Label()
+		self["number_key_popup"].hide()
+
+		self["filterActions"] = HelpableActionMap(self, "DP_FilterMenuActions",
+			{
+			"1":			(self.onKey1, ""),
+			"2":			(self.onKey2, ""),
+			"3":			(self.onKey3, ""),
+			"4":			(self.onKey4, ""),
+			"5":			(self.onKey5, ""),
+			"6":			(self.onKey6, ""),
+			"7":			(self.onKey7, ""),
+			"8":			(self.onKey8, ""),
+			"9":			(self.onKey9, ""),
+			"0":			(self.onKey0, ""),
+			}, -2)
+
+		# for number key input
+		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey1(self):
+		printl("", self, "S")
+
+		self.onNumberKey(1)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey2(self):
+		printl("", self, "S")
+
+		self.onNumberKey(2)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey3(self):
+		printl("", self, "S")
+
+		self.onNumberKey(3)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey4(self):
+		printl("", self, "S")
+
+		self.onNumberKey(4)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey5(self):
+		printl("", self, "S")
+
+		self.onNumberKey(5)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey6(self):
+		printl("", self, "S")
+
+		self.onNumberKey(6)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey7(self):
+		printl("", self, "S")
+
+		self.onNumberKey(7)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey8(self):
+		printl("", self, "S")
+
+		self.onNumberKey(8)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey9(self):
+		printl("", self, "S")
+
+		self.onNumberKey(9)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onKey0(self):
+		printl("", self, "S")
+
+		self.onNumberKey(0)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onNumberKey(self, number):
+		printl("", self, "S")
+
+		printl(str(number), self, "I")
+
+		key = self.getKey(number)
+		if key is not None:
+			keyvalue = key.encode("utf-8")
+			if len(keyvalue) == 1:
+				self.onNumberKeyLastChar = keyvalue[0].upper()
+				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def onNumberKeyPopup(self, value, visible):
+		printl("", self, "S")
+
+		if visible:
+			self["number_key_popup"].setText(value)
+			self["number_key_popup"].show()
+		else:
+			self["number_key_popup"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def timeout(self):
+		"""
+		onNumberKeyTimeout
+		"""
+		printl("", self, "S")
+
+		printl(self.onNumberKeyLastChar, self, "I")
+		if self.onNumberKeyLastChar != ' ':
+			pass
+			# filter
+		else:
+			pass
+			# reset filter
+
+		self.filter()
+
+		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
+		NumericalTextInput.timeout(self)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def filter(self):
+		printl("", self, "S")
+
+		if self.onNumberKeyLastChar == " ":
+			self["menu"].setList(self.beforeFilterListViewList)
+
+			# we also have to reset the variable because this one is passed to player
+			self.listViewList = self.beforeFilterListViewList
+		else:
+			self.listViewList = [x for x in self.beforeFilterListViewList if x[0][0] == self.onNumberKeyLastChar]
+			self["menu"].setList(self.listViewList)
+
+		self.refreshMenu()
 
 		printl("", self, "C")

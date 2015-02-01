@@ -55,7 +55,7 @@ from DP_Server import DPS_Server
 
 from DPH_StillPicture import StillPicture
 from DPH_Singleton import Singleton
-from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen, DPH_Filter
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
 from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion
@@ -65,7 +65,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTextInput):
+class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter):
 
 	ON_CLOSED_CAUSE_CHANGE_VIEW = 1
 	ON_CLOSED_CAUSE_SAVE_DEFAULT = 2
@@ -157,7 +157,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 			DPH_ScreenHelper.__init__(self)
 
 		DPH_MultiColorFunctions.__init__(self)
-		NumericalTextInput.__init__(self)
+		DPH_Filter.__init__(self)
+
+		#NumericalTextInput.__init__(self)
 
 		self.initScreen(libraryName)
 
@@ -216,17 +218,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 
 			"bouquet_up":	(self.bouquetUp, ""),
 			"bouquet_down":	(self.bouquetDown, ""),
-
-		    "1":			(self.onKey1, ""),
-			"2":			(self.onKey2, ""),
-			"3":			(self.onKey3, ""),
-			"4":			(self.onKey4, ""),
-			"5":			(self.onKey5, ""),
-			"6":			(self.onKey6, ""),
-			"7":			(self.onKey7, ""),
-			"8":			(self.onKey8, ""),
-			"9":			(self.onKey9, ""),
-			"0":			(self.onKey0, ""),
 
 		}, -2)
 
@@ -427,9 +418,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		else:
 			# we need this as dummy
 			self["stillPicture"] = Label()
-
-		# for number key input
-		self.setUseableChars(u' 1234567890abcdefghijklmnopqrstuvwxyz')
 
 		# on layout finish we have to do some stuff
 		self.onLayoutFinish.append(self.setPara)
@@ -1267,61 +1255,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, NumericalTe
 		self.subtitlesList = None
 
 		self.refresh()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKey(self, number):
-		printl("", self, "S")
-
-		printl(str(number), self, "I")
-
-		key = self.getKey(number)
-		if key is not None:
-			keyvalue = key.encode("utf-8")
-			if len(keyvalue) == 1:
-				self.onNumberKeyLastChar = keyvalue[0].upper()
-				self.onNumberKeyPopup(self.onNumberKeyLastChar, True)
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def onNumberKeyPopup(self, value, visible):
-		printl("", self, "S")
-
-		if visible:
-			self["number_key_popup"].setText(value)
-			self["number_key_popup"].show()
-		else:
-			self["number_key_popup"].hide()
-
-		printl("", self, "C")
-
-	#===========================================================================
-	#
-	#===========================================================================
-	def timeout(self):
-		"""
-		onNumberKeyTimeout
-		"""
-		printl("", self, "S")
-
-		printl(self.onNumberKeyLastChar, self, "I")
-		if self.onNumberKeyLastChar != ' ':
-			pass
-			# filter
-		else:
-			pass
-			# reset filter
-
-		self.filter()
-
-		self.onNumberKeyPopup(self.onNumberKeyLastChar, False)
-		NumericalTextInput.timeout(self)
 
 		printl("", self, "C")
 

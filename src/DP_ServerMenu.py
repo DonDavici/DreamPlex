@@ -38,7 +38,7 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
-from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen, DPH_Filter
 from DP_ViewFactory import getGuiElements
 from DP_Users import DPS_Users
 
@@ -49,7 +49,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
+class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filter):
 
 	g_horizontal_menu = False
 
@@ -73,7 +73,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		printl("", self, "S")
 		DPH_Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
-
+		DPH_Filter.__init__(self)
 
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
@@ -516,6 +516,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		if self.menuStep >= 0:
 			self.g_serverDataMenu = self.currentMenuDataDict[self.menuStep]
 			self["menu"].setList(self.g_serverDataMenu)
+			self.beforeFilterListViewList = self.g_serverDataMenu
 			self["menu"].setIndex(self.currentIndexDict[self.menuStep])
 			self.refreshMenu()
 
@@ -552,6 +553,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 			self.g_serverDataMenu = serverData #lets save the menu to call it when cancel is pressed
 
 			self["menu"].setList(serverData)
+			self.beforeFilterListViewList = self.g_serverDataMenu
 			self.refreshMenu()
 
 		printl("", self, "C")
@@ -571,6 +573,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper):
 		else:
 			self["menu"].setList(menuData)
 			self.g_serverDataMenu = menuData #lets save the menu to call it when cancel is pressed
+			self.beforeFilterListViewList = self.g_serverDataMenu
 			self.refreshMenu()
 
 		printl("", self, "S")

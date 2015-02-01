@@ -384,6 +384,9 @@
             <convert type="ConditionalShowHide" />
         </widget>
 
+        <!-- filter -->
+        <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="501,310" size="75,80" font="OpenSans;70" foregroundColor="#FF8C00" transparent="1"/>
+
         <!-- clock -->
         <widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
             <convert type="ClockToText">default</convert>
