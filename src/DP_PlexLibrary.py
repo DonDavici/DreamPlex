@@ -2120,8 +2120,8 @@ class PlexLibrary(Screen):
 				printl("", self, "C")
 				return
 
-			if not (self.g_transcode == "true" ):
-				self.setAudioSubtitles(self.streams)
+		if not (self.g_transcode == "true" ):
+			self.setAudioSubtitles(self.streams)
 
 		# multiuser works only if the server is compatible
 		self.setServerDetails()
