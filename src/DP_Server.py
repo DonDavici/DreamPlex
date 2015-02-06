@@ -484,8 +484,8 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			##
 			self.cfglist.append(getConfigListEntry(_("Subtitle Settings") + separator, config.plugins.dreamplex.about, _(" ")))
 			##
-			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.subtitlesForDirectLocal, _(" ")))
-			if self.current.subtitlesForDirectLocal.value:
+			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.srtRenamingForDirectLocal, _(" ")))
+			if self.current.srtRenamingForDirectLocal.value:
 				self.cfglist.append(getConfigListEntry(_(" >> Target subtitle language"), self.current.subtitlesLanguage, _(" ")))
 
 		##

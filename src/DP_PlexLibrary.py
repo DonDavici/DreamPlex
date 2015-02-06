@@ -2072,7 +2072,7 @@ class PlexLibrary(Screen):
 			printl( "We are playing a local file", self, "D")
 			playurl=url.split(':',1)[1]
 
-			if self.g_serverConfig.subtitlesForDirectLocal.value:
+			if self.g_serverConfig.srtRenamingForDirectLocal.value:
 				myFile = url.split('/')[-1]
 				myFileWoExtension = myFile[:-4]
 				extension = myFile[-3:]
