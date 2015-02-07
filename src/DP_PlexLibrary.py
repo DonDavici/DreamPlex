@@ -1154,7 +1154,10 @@ class PlexLibrary(Screen):
 	def getPlexUserTokenForLocalServerAuthentication(self, ipInConfig):
 		printl("", self, "S")
 
+		printl("ipInConfig = " + str(ipInConfig), self, "D")
 		xmlResponse = self.getSharedServerForPlexUser()
+
+		printl("xmlResponse: "  + str(xmlResponse), self, "D")
 		servers = xmlResponse.findall('Server')
 
 		for server in servers:
@@ -1164,6 +1167,7 @@ class PlexLibrary(Screen):
 				printl("", self, "C")
 				return entryData["accessToken"]
 
+		printl("No ip match!!!!!!", self, "D")
 		printl("", self, "C")
 		return False
 

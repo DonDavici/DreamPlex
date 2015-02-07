@@ -272,14 +272,17 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 		self.plexInstance.serverConfig_myplexToken = token
 		accessToken = self.plexInstance.getPlexUserTokenForLocalServerAuthentication(self.plexInstance.g_host)
 
-		self.g_serverConfig.myplexCurrentHomeUser.value = title
-		self.g_serverConfig.myplexCurrentHomeUserAccessToken.value = accessToken
-		self.g_serverConfig.myplexCurrentHomeUserId.value = myId
-		self.g_serverConfig.save()
+		if not accessToken:
+			self.session.open(MessageBox,"Something went wrong while switching user. Aborting ...", MessageBox.TYPE_INFO)
+		else:
+			self.g_serverConfig.myplexCurrentHomeUser.value = title
+			self.g_serverConfig.myplexCurrentHomeUserAccessToken.value = accessToken
+			self.g_serverConfig.myplexCurrentHomeUserId.value = myId
+			self.g_serverConfig.save()
 
-		self.plexInstance.setAccessTokenHeader(self.plexInstance.g_currentServer, accessToken)
+			self.plexInstance.setAccessTokenHeader(self.plexInstance.g_currentServer, accessToken)
 
-		self["text_HomeUser"].setText(title)
+			self["text_HomeUser"].setText(title)
 
 		printl("", self, "C")
 
