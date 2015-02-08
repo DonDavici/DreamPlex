@@ -243,25 +243,26 @@ class DPS_SystemCheck(Screen):
 	def updateToLatestVersion(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.updateType.value == "1":
-			updateType = "Stable"
-		else:
-			updateType = "Beta"
+		# if config.plugins.dreamplex.updateType.value == "1":
+		# 	updateType = "Stable"
+		# else:
+		# 	updateType = "Beta"
 
 		if getOeVersion() != "oe22":
 			#remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk?direct"
 			#remoteUrl = "http://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk"
-			remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/ipk/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk/download"
-			cmd = "opkg install --force-overwrite --force-depends " + str(remoteUrl)
+			#remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/ipk/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk/download"
+			#cmd = "opkg install --force-overwrite --force-depends " + str(remoteUrl)
+			cmd = "curl -o /tmp/temp.ipk -L -k https://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.ipk && opkg install /tmp/temp.ipk; rm /tmp/temp.ipk"
 
 		else:
 			#remoteUrl = "http://dl.bintray.com/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb?direct"
 			#remoteUrl = "http://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb"
-			remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/deb/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb/download"
+			#remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/deb/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb/download"
 			#cmd = "dpkg --install " + str(remoteUrl) + " && apt-get update && apt-get -f install"
-			cmd = "URL='" + str(remoteUrl)+ "'; FILE=`mktemp`; wget $URL -qO $FILE && dpkg -i $FILE; rm $FILE"
+			#cmd = "URL='" + str(remoteUrl)+ "'; FILE=`mktemp`; wget $URL -qO $FILE && dpkg -i $FILE; rm $FILE"
+			cmd = "curl -o /tmp/temp.deb -L -k https://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.dep && dpkg -i /tmp/temp.deb; rm /tmp/temp.deb"
 
-		printl("remoteUrl: " + str(remoteUrl), self, "D")
 		printl("cmd: " + str(cmd), self, "D")
 
 		self.session.open(SConsole,"Excecuting command:", [cmd] , self.finishupdate)
