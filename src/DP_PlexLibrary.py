@@ -289,12 +289,9 @@ class PlexLibrary(Screen):
 
 			printl("entries: " + str(entries),self, "D")
 
-			if self.serverConfig_connectionType == "2":
-				summerizeServers = config.plugins.dreamplex.summerizeServers.value
-			else:
-				summerizeServers = False
+			summerizeServers = config.plugins.dreamplex.summerizeServers.value
 
-			if summerizeServers and not serverFilterActive:
+			if summerizeServers and not serverFilterActive and self.serverConfig_connectionType == "2":
 
 				for entry in entries:
 					counter += 1
