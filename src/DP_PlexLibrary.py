@@ -289,7 +289,10 @@ class PlexLibrary(Screen):
 
 			printl("entries: " + str(entries),self, "D")
 
-			summerizeServers = config.plugins.dreamplex.summerizeServers.value
+			if self.serverConfig_connectionType == "2":
+				summerizeServers = config.plugins.dreamplex.summerizeServers.value
+			else:
+				summerizeServers = False
 
 			if summerizeServers and not serverFilterActive:
 
