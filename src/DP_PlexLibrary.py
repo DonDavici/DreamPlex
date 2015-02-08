@@ -269,6 +269,7 @@ class PlexLibrary(Screen):
 		printl("myFilter: " + str(myFilter), self, "D")
 
 		fullList = []
+		sharedServersCount = []
 		entryData = None
 
 		self.sectionCacheLoaded = False
@@ -331,6 +332,11 @@ class PlexLibrary(Screen):
 						if "serverName" in entryData:
 							detail = " \n(" + str(entryData['serverName']) + ")"
 
+				if self.serverConfig_connectionType == "2":
+					if "serverName" in entryData:
+						if str(entryData['serverName']) not in sharedServersCount:
+							sharedServersCount.append(str(entryData['serverName']))
+
 				entryName = _(entryData.get('title').encode('utf-8')) + detail
 
 				if entryData.get('type') == 'show':
@@ -376,23 +382,24 @@ class PlexLibrary(Screen):
 		# now the tokenDict should be filled
 		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
-		if entryData is not None:
-			onDeck = dict()
-			onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck")
-			onDeck["type"] = "movie"
-			onDeck["currentViewMode"] = "movie"
-			onDeck["nextViewMode"] = "mixed"
-			fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
+		if len(sharedServersCount) <= 1:
+			if entryData is not None:
+				onDeck = dict()
+				onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck")
+				onDeck["type"] = "movie"
+				onDeck["currentViewMode"] = "movie"
+				onDeck["nextViewMode"] = "mixed"
+				fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
-			recentlyAdded = dict()
-			recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded")
-			recentlyAdded["type"] = "movie"
-			recentlyAdded["currentViewMode"] = "movie"
-			recentlyAdded["nextViewMode"] = "mixed"
-			fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
+				recentlyAdded = dict()
+				recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded")
+				recentlyAdded["type"] = "movie"
+				recentlyAdded["currentViewMode"] = "movie"
+				recentlyAdded["nextViewMode"] = "mixed"
+				fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
 
-			if config.plugins.dreamplex.useCache.value:
-				self.saveSectionCache()
+				if config.plugins.dreamplex.useCache.value:
+					self.saveSectionCache()
 
 		# as a last step we check if there where any content
 		if counter == 0:
