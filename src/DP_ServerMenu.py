@@ -395,9 +395,9 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 
 		if searchString is not None:
 			if "origContentUrl" in entryData[0]:
-				searchUrl = entryData[0]["origContentUrl"] + "&local=1&query=" + searchString
+				searchUrl = entryData[0]["origContentUrl"] + "&query=" + searchString
 			else:
-				searchUrl = entryData[0]["contentUrl"] + "&local=1&query=" + searchString
+				searchUrl = entryData[0]["contentUrl"] + "&query=" + searchString
 				entryData[0]["origContentUrl"] = entryData[0]["contentUrl"]
 
 			printl("searchUrl: " + str(searchUrl), self, "D")
