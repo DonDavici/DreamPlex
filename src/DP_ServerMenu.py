@@ -138,6 +138,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 			currentHomeUser = self.g_serverConfig.myplexCurrentHomeUser.value
 			if currentHomeUser != "":
 				self["text_HomeUser"].setText(self.g_serverConfig.myplexCurrentHomeUser.value)
+				self.plexInstance.setAccessTokenHeader(self.plexInstance.g_currentServer, self.g_serverConfig.myplexCurrentHomeUserAccessToken.value)
 			else:
 				self["text_HomeUser"].setText(self.g_serverConfig.myplexTokenUsername.value)
 
