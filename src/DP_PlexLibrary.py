@@ -1157,7 +1157,6 @@ class PlexLibrary(Screen):
 		printl("ipInConfig = " + str(ipInConfig), self, "D")
 		xmlResponse = self.getSharedServerForPlexUser()
 
-		printl("xmlResponse: "  + str(xmlResponse), self, "D")
 		servers = xmlResponse.findall('Server')
 
 		for server in servers:

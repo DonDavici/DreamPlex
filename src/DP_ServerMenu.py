@@ -274,7 +274,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 		accessToken = self.plexInstance.getPlexUserTokenForLocalServerAuthentication(self.plexInstance.g_host)
 
 		if not accessToken:
-			self.session.open(MessageBox,"Something went wrong while switching user. Aborting ...", MessageBox.TYPE_INFO)
+			# we get all the restriction data from plex and not from the local server this means that if we ar not connected no data is coming to check, means no restction
+			self.session.open(MessageBox,"No accessToken! Check plex.tv connection and plexPass status.", MessageBox.TYPE_INFO)
 		else:
 			self.g_serverConfig.myplexCurrentHomeUser.value = title
 			self.g_serverConfig.myplexCurrentHomeUserAccessToken.value = accessToken
