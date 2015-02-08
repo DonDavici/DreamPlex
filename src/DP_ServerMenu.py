@@ -359,11 +359,8 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 					printl("found Plugin.MENU_FILTER", self, "D")
 					self.getFilterData(selection[3])
 
-				# elif self.selectedEntry == Plugin.MENU_FILTER_VERT:
-				# 	printl("found Plugin.MENU_FILTER_VERT", self, "D")
-				# 	self.getFilterData(selection[3])
-				#
-				# 	self.session.open(DPS_ServerMenu, self.g_serverConfig)
+				elif self.selectedEntry == Plugin.MENU_SERVERFILTER:
+					self.getServerData(filterBy=selection[3]['myCurrentFilterData'], serverFilterActive=selection[3]['serverName'])
 
 			else:
 				printl("selected entry is executable", self, "D")
@@ -544,13 +541,13 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 	#===========================================================================
 	#
 	#===========================================================================
-	def getServerData(self, filterBy=None):
+	def getServerData(self, filterBy=None, serverFilterActive=False):
 		printl("", self, "S")
 
 		if config.plugins.dreamplex.summerizeSections.value and filterBy is None:
 			serverData = self.plexInstance.getSectionTypes()
 		else:
-			serverData = self.plexInstance.getAllSections(filterBy)
+			serverData = self.plexInstance.getAllSections(myFilter=filterBy, serverFilterActive=serverFilterActive)
 
 		if not serverData:
 			self.showNoDataMessage()

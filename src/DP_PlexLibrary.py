@@ -264,11 +264,12 @@ class PlexLibrary(Screen):
 	#============================================================================
 	#
 	#============================================================================
-	def getAllSections(self, myFilter=None ):
+	def getAllSections(self, myFilter=None, serverFilterActive=False):
 		printl("", self, "S")
 		printl("myFilter: " + str(myFilter), self, "D")
 
 		fullList = []
+		serverList = []
 		sharedServersCount = []
 		entryData = None
 
@@ -288,122 +289,151 @@ class PlexLibrary(Screen):
 
 			printl("entries: " + str(entries),self, "D")
 
-			for entry in entries:
-				counter += 1
-				entryData = (dict(entry.items()))
+			summerizeServers = config.plugins.dreamplex.summerizeServers.value
 
-				# set the source for the section data
-				source = "plex"
-				if config.plugins.dreamplex.useCache.value:
-					source = self.updateSectionCache(entryData)
+			if summerizeServers and not serverFilterActive:
 
-				entryData["source"] =source
+				for entry in entries:
+					counter += 1
+					entryData = (dict(entry.items()))
 
-				# add specific data to entryData if needed
-				if self.serverConfig_connectionType == "2": # MYPLEX
-					entryData["address"] = entryData['address'] + ":" + entryData['port']
-
-					# we have to do this because via myPlex there could be diffrent servers with other tokens
-					if str(entryData.get('address')) not in self.g_myplex_accessToken:
-						printl("section address" + str(entryData.get('address')), self, "D")
-						#self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
-
-					# finally we set AccessTokenHeader
-					self.setAccessTokenHeader(address=str(entryData.get('address')),accessToken=str(entryData.get('accessToken', None)),serverVersion=str(entryData.get('serverVersion')))
-				else:
-					entryData["path"] = "/library/sections/" + entryData.get('key')
-					entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
-
-				if not self.g_useFilterSections and entryData.get('type') != 'artist':
-					entryData["path"] += '/all'
-
-				#entryData["serverName"] = self.serverConfig_Name.encode()
-				entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
-
-				# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
-				detail = ""
-				if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
-					if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
-						if "sourceTitle" in entryData:
-							detail = " \n( " + entryData['sourceTitle'] + ")"
-						else:
-							detail = " \n(" + str(entryData['serverName']) + ")"
-					elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
+					# first we check if there are more servers over sharing involed
+					if self.serverConfig_connectionType == "2":
 						if "serverName" in entryData:
-							detail = " \n(" + str(entryData['serverName']) + ")"
+							if str(entryData['serverName']) not in sharedServersCount:
+								sharedServersCount.append(str(entryData['serverName']))
 
-				if self.serverConfig_connectionType == "2":
-					if "serverName" in entryData:
-						if str(entryData['serverName']) not in sharedServersCount:
-							sharedServersCount.append(str(entryData['serverName']))
+								if "sourceTitle" in entryData:
+									serverName = str(entryData['sourceTitle'])
+								else:
+									serverName = str(entryData['serverName'])
+								entryData["myCurrentFilterData"] = myFilter
+								serverList.append((serverName, Plugin.MENU_SERVERFILTER, "serverFilter", entryData))
 
-				entryName = _(entryData.get('title').encode('utf-8')) + detail
+				return serverList
 
-				if entryData.get('type') == 'show':
-					printl( "_MODE_TVSHOWS detected", self, "D")
-					if myFilter is not None and myFilter != "tvshow":
-						continue
+			else:
+				for entry in entries:
+					counter += 1
+					entryData = (dict(entry.items()))
 
-					if self.g_useFilterSections:
-						fullList.append((entryName, Plugin.MENU_FILTER, "showEntry", entryData))
+					# first we check if there are more servers over sharing involed
+					if self.serverConfig_connectionType == "2":
+						if "serverName" in entryData:
+							if str(entryData['serverName']) not in sharedServersCount:
+								sharedServersCount.append(str(entryData['serverName']))
+
+					if summerizeServers and serverFilterActive:
+						if str(entryData['serverName']) != serverFilterActive:
+							continue
+
+					# set the source for the section data
+					source = "plex"
+					if config.plugins.dreamplex.useCache.value:
+						source = self.updateSectionCache(entryData)
+
+					entryData["source"] =source
+
+					# add specific data to entryData if needed
+					if self.serverConfig_connectionType == "2": # MYPLEX
+						entryData["address"] = entryData['address'] + ":" + entryData['port']
+
+						# we have to do this because via myPlex there could be diffrent servers with other tokens
+						if str(entryData.get('address')) not in self.g_myplex_accessToken:
+							printl("section address" + str(entryData.get('address')), self, "D")
+							#self.g_myplex_accessTokenDict[str(entryData.get('address'))] = str(entryData.get('accessToken', None))
+
+						# finally we set AccessTokenHeader
+						self.setAccessTokenHeader(address=str(entryData.get('address')),accessToken=str(entryData.get('accessToken', None)),serverVersion=str(entryData.get('serverVersion')))
 					else:
-						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+						entryData["path"] = "/library/sections/" + entryData.get('key')
+						entryData["address"] = str(self.g_host + ":" + self.serverConfig_port)
 
-				elif entryData.get('type') == 'movie':
-					printl( "_MODE_MOVIES detected", self, "D")
-					if (myFilter is not None) and (myFilter != "movies"):
-						continue
+					if not self.g_useFilterSections and entryData.get('type') != 'artist':
+						entryData["path"] += '/all'
 
-					if self.g_useFilterSections:
-						fullList.append((entryName, Plugin.MENU_FILTER, "movieEntry", entryData))
+					#entryData["serverName"] = self.serverConfig_Name.encode()
+					entryData["contentUrl"] = self.getContentUrl(entryData['address'], entryData['path']) # former t_url
+
+					# if this is a myPlex connection we look if we should provide more information for better overview since myplex combines all servers and shares
+					detail = ""
+					if config.plugins.dreamplex.showDetailsInList.value and self.serverConfig_connectionType == "2":
+						if config.plugins.dreamplex.showDetailsInListDetailType.value == "1":
+							if "sourceTitle" in entryData:
+								detail = " \n( " + entryData['sourceTitle'] + ")"
+							else:
+								detail = " \n(" + str(entryData['serverName']) + ")"
+						elif config.plugins.dreamplex.showDetailsInListDetailType.value == "2":
+							if "serverName" in entryData:
+								detail = " \n(" + str(entryData['serverName']) + ")"
+
+					entryName = _(entryData.get('title').encode('utf-8')) + detail
+
+					if entryData.get('type') == 'show':
+						printl( "_MODE_TVSHOWS detected", self, "D")
+						if myFilter is not None and myFilter != "tvshow":
+							continue
+
+						if self.g_useFilterSections:
+							fullList.append((entryName, Plugin.MENU_FILTER, "showEntry", entryData))
+						else:
+							fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("tvshows", Plugin.MENU_TVSHOWS), "showEntry", entryData))
+
+					elif entryData.get('type') == 'movie':
+						printl( "_MODE_MOVIES detected", self, "D")
+						if (myFilter is not None) and (myFilter != "movies"):
+							continue
+
+						if self.g_useFilterSections:
+							fullList.append((entryName, Plugin.MENU_FILTER, "movieEntry", entryData))
+						else:
+							fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
+
+					elif entryData.get('type') == 'artist':
+						printl( "_MODE_ARTISTS detected", self, "D")
+						if (myFilter is not None) and (myFilter != "music"):
+							continue
+
+						# in case of music we use always filters
+						fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
+
+					elif entryData.get('type') == 'photo':
+						printl( "_MODE_PHOTOS detected but excluded", self, "D")
+						# if (myFilter is not None) and (myFilter != "photos"):
+						# 	continue
+						# if self.g_useFilterSections:
+						# 	fullList.append((entryName, Plugin.MENU_FILTER, "pictureEntry", entryData))
+						# else:
+						# 	fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("pictures", Plugin.MENU_PICTURES), "movieEntry", entryData))
+
 					else:
-						fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("movies", Plugin.MENU_MOVIES), "movieEntry", entryData))
+						raise Exception("we should not be here")
 
-				elif entryData.get('type') == 'artist':
-					printl( "_MODE_ARTISTS detected", self, "D")
-					if (myFilter is not None) and (myFilter != "music"):
-						continue
+			# now the tokenDict should be filled
+			printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
 
-					# in case of music we use always filters
-					fullList.append((entryName, Plugin.MENU_FILTER, "musicEntry", entryData))
+			if len(sharedServersCount) <= 1:
+				if entryData is not None:
+					onDeck = dict()
+					onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck")
+					onDeck["type"] = "movie"
+					onDeck["currentViewMode"] = "movie"
+					onDeck["nextViewMode"] = "mixed"
+					fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
 
-				elif entryData.get('type') == 'photo':
-					printl( "_MODE_PHOTOS detected but excluded", self, "D")
-					# if (myFilter is not None) and (myFilter != "photos"):
-					# 	continue
-					# if self.g_useFilterSections:
-					# 	fullList.append((entryName, Plugin.MENU_FILTER, "pictureEntry", entryData))
-					# else:
-					# 	fullList.append((_(entryData.get('title').encode('utf-8')), getPlugin("pictures", Plugin.MENU_PICTURES), "movieEntry", entryData))
+					recentlyAdded = dict()
+					recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded")
+					recentlyAdded["type"] = "movie"
+					recentlyAdded["currentViewMode"] = "movie"
+					recentlyAdded["nextViewMode"] = "mixed"
+					fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
 
-				else:
-					raise Exception("we should not be here")
+					if config.plugins.dreamplex.useCache.value:
+						self.saveSectionCache()
 
-		# now the tokenDict should be filled
-		printl("g_myplex_accessTokenDict: " + str(self.g_myplex_accessTokenDict), self, "D")
-
-		if len(sharedServersCount) <= 1:
-			if entryData is not None:
-				onDeck = dict()
-				onDeck["contentUrl"] = self.getContentUrl(entryData['address'], "/library/onDeck")
-				onDeck["type"] = "movie"
-				onDeck["currentViewMode"] = "movie"
-				onDeck["nextViewMode"] = "mixed"
-				fullList.append((_("onDeck"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", onDeck))
-
-				recentlyAdded = dict()
-				recentlyAdded["contentUrl"] = self.getContentUrl(entryData['address'], "/library/recentlyAdded")
-				recentlyAdded["type"] = "movie"
-				recentlyAdded["currentViewMode"] = "movie"
-				recentlyAdded["nextViewMode"] = "mixed"
-				fullList.append((_("New"), getPlugin("mixed", Plugin.MENU_MIXED), "mixedEntry", recentlyAdded))
-
-				if config.plugins.dreamplex.useCache.value:
-					self.saveSectionCache()
-
-		# as a last step we check if there where any content
-		if counter == 0:
-			self.lastError = _("No data in this section!")
+			# as a last step we check if there where any content
+			if counter == 0:
+				self.lastError = _("No data in this section!")
 
 		printl("", self, "C")
 		return fullList

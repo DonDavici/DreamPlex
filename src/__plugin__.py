@@ -99,6 +99,7 @@ class Plugin(object):
 	MENU_FILTER = 8
 	MENU_CHANNELS = 9
 	MENU_MIXED = 10
+	MENU_SERVERFILTER = 11
 
 	pid = None
 	name = None
