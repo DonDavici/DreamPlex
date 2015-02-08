@@ -261,7 +261,7 @@ class DPS_SystemCheck(Screen):
 			#remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/deb/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb/download"
 			#cmd = "dpkg --install " + str(remoteUrl) + " && apt-get update && apt-get -f install"
 			#cmd = "URL='" + str(remoteUrl)+ "'; FILE=`mktemp`; wget $URL -qO $FILE && dpkg -i $FILE; rm $FILE"
-			cmd = "curl -o /tmp/temp.deb -L -k https://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.dep && dpkg -i /tmp/temp.deb; rm /tmp/temp.deb"
+			cmd = "curl -o /tmp/temp.deb -L -k https://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb && dpkg -i /tmp/temp.deb; rm /tmp/temp.deb"
 
 		printl("cmd: " + str(cmd), self, "D")
 
