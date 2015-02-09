@@ -61,7 +61,7 @@ from DPH_Singleton import Singleton
 from DP_Summary import DreamplexPlayerSummary
 from DPH_ScreenHelper import DPH_ScreenHelper
 
-from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion, getLiveTv
+from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -135,6 +135,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl("x: " + str(x), self, "D")
 			x.__init__(self)
 		printl("currentIndex: " + str(currentIndex), self, "D")
+
+		# we need this for subtitle screen working properly with autoselected subs
+		self.infobar = self.session.infobar
 
 		self.listViewList = listViewList
 		self.currentIndex = currentIndex
@@ -625,7 +628,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "C")
 
 	#===========================================================================
-	#
+	# parts from AudioSelction.py from fillList()
 	#===========================================================================
 	def subtitleChecker(self):
 		printl("", self, "S")
@@ -692,16 +695,16 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "C")
 
 	#===========================================================================
-	#
+	# same as enableSubtitles() in AudioSelection.py
 	#===========================================================================
 	def enableSubtitle(self, subtitles):
 		printl("", self, "S")
 
-		if self.selected_subtitle != subtitles:
-			self.subtitles_enabled = False
-			self.selected_subtitle = subtitles
+		if self.infobar.selected_subtitle != subtitles:
+			self.infobar.subtitles_enabled = False
+			self.infobar.selected_subtitle = subtitles
 			if subtitles:
-				self.subtitles_enabled = True
+				self.infobar.subtitles_enabled = True
 
 		printl("", self, "C")
 
