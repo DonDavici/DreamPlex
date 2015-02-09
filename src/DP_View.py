@@ -289,7 +289,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self["subtitlesLabel"].setText(_("Subtitles:"))
 
 		self["audio"] = Label()
-		self["audio"].setText(_("press 'Audio'"))
+		self["audio"].setText(_("press 'Audio' or 'Radio'"))
 		self["audioLabel"] = Label()
 		self["audioLabel"].setText(_("Audio:"))
 
