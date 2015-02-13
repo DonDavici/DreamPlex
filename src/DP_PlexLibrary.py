@@ -1198,8 +1198,8 @@ class PlexLibrary(Screen):
 
 		for server in servers:
 			entryData = (dict(server.items()))
-			localIp = entryData["localAddresses"]
-			if localIp == ipInConfig:
+			localAddresses = entryData["localAddresses"]
+			if ipInConfig in localAddresses:
 				printl("", self, "C")
 				return entryData["accessToken"]
 
