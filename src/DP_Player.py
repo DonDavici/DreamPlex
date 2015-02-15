@@ -1134,39 +1134,40 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		try:
 			currentTime = self.getPlayPosition()[1] / 90000
 			totalTime = self.getPlayLength()[1] / 90000
-			self.processProgress(EOF, currentTime, totalTime)
+			printl("progress data available, ...", self, "D")
+
+			if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
+				progress = currentTime / float(totalTime/100.0)
+				printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
+			else:
+				progress = 100
+				printl("End of file reached", self, "D")
+
+			if self.multiUser and self.timelineWatcher is not None:
+				self.timelineWatcher.stop()
+
+				urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
+				urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
+				self.plexInstance.doRequest(urlPath)
+
+			#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
+			else:
+				if currentTime < 30:
+					printl("Less that 30 seconds, will not set resume", self, "I")
+
+				#If we are less than 95% complete, store resume time
+				elif progress < 95:
+					printl("Less than 95% progress, will store resume time", self, "I" )
+					self.plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
+
+				#Otherwise, mark as watched
+				else:
+					printl( "Movie marked as watched. Over 95% complete", self, "I")
+					self.plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
+
 		except:
 			printl("no progress data maybe playback never started, returning ...", self, "D")
 			return
-
-		if not EOF and currentTime is not None and currentTime > 0 and totalTime is not None and totalTime > 0:
-			progress = currentTime / float(totalTime/100.0)
-			printl( "played time is %s secs of %s @ %s%%" % ( currentTime, totalTime, progress),self, "I" )
-		else:
-			progress = 100
-			printl("End of file reached", self, "D")
-		
-		if self.multiUser and self.timelineWatcher is not None:
-			self.timelineWatcher.stop()
-
-			urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
-			urlPath += "&state=stopped&time=" + str(currentTime*1000) + "&duration=" + str(totalTime*1000)
-			self.plexInstance.doRequest(urlPath)
-
-		#Legacy PMS Server server support before MultiUser version v0.9.8.0 and if we are not connected via myPlex
-		else:
-			if currentTime < 30:
-				printl("Less that 30 seconds, will not set resume", self, "I")
-		
-			#If we are less than 95% complete, store resume time
-			elif progress < 95:
-				printl("Less than 95% progress, will store resume time", self, "I" )
-				self.plexInstance.doRequest("http://"+self.server+"/:/progress?key="+self.id+"&identifier=com.plexapp.plugins.library&time="+str(currentTime*1000))
-
-			#Otherwise, mark as watched
-			else:
-				printl( "Movie marked as watched. Over 95% complete", self, "I")
-				self.plexInstance.doRequest("http://"+self.server+"/:/scrobble?key="+self.id+"&identifier=com.plexapp.plugins.library")
 
 		printl("", self, "C")
 
