@@ -987,6 +987,10 @@ def getPlexHeader(g_sessionID, asDict = True):
 	boxData = getBoxInformation()
 	boxName = config.plugins.dreamplex.boxName.value
 
+	# why do we use ios!!!!! instead of enigma
+	# Unable to find client profile for device; platform=Enigma, platformVersion=oe20, device=Dreambox, model=500hd
+	# ERROR - [TranscodeUniversalRequest] Unable to find a matching profile
+
 	if asDict:
 		plexHeader={'X-Plex-Platform': "iOS",
 					'X-Plex-Platform-Version': boxData[3],
