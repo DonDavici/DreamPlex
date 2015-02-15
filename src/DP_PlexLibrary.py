@@ -2276,7 +2276,7 @@ class PlexLibrary(Screen):
 		myplex_header = getPlexHeader(self.g_sessionID)
 		myplex_header['X-Plex-Token'] = str(self.serverConfig_myplexToken)
 
-		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=20, port=443)
+		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=30, port=443)
 		conn.request(url=url, method=requestType, headers=myplex_header)
 		data = conn.getresponse()
 		response = data.read()
