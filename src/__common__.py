@@ -417,12 +417,14 @@ def checkPlexEnvironment():
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
 	configFolder = config.plugins.dreamplex.configfolderpath.value
 	cacheFolder = config.plugins.dreamplex.cachefolderpath.value
+	homeUsersFolder = config.plugins.dreamplex.configfolderpath.value + "homeUsers"
 
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
 	checkDirectory(mediaFolder)
 	checkDirectory(configFolder)
 	checkDirectory(cacheFolder)
+	checkDirectory(homeUsersFolder)
 
 	printl2("", "__common__::checkPlexEnvironment", "C")
 
@@ -986,7 +988,7 @@ def getPlexHeader(g_sessionID, asDict = True):
 	boxName = config.plugins.dreamplex.boxName.value
 
 	if asDict:
-		plexHeader={'X-Plex-Platform': "Enigma",
+		plexHeader={'X-Plex-Platform': "iOS",
 					'X-Plex-Platform-Version': boxData[3],
 					'X-Plex-Provides': "player",
 					'X-Plex-Product': "DreamPlex",
@@ -995,10 +997,10 @@ def getPlexHeader(g_sessionID, asDict = True):
 					'X-Plex-Device-Name': boxName,
 					'X-Plex-Model': boxData[1],
 					'X-Plex-Client-Identifier': g_sessionID,
-					'X-Plex-Client-Platform': "Engima"}
+					'X-Plex-Client-Platform': "iOS"}
 	else:
 		plexHeader = []
-		plexHeader.append('X-Plex-Platform:Enigma')# + boxData[2]) # arch
+		plexHeader.append('X-Plex-Platform:iOS')# + boxData[2]) # arch
 		plexHeader.append('X-Plex-Platform-Version:' + boxData[3]) # version
 		plexHeader.append('X-Plex-Provides:player')
 		plexHeader.append('X-Plex-Product:DreamPlex')
@@ -1007,7 +1009,7 @@ def getPlexHeader(g_sessionID, asDict = True):
 		plexHeader.append("X-Plex-Device-Name:" + boxName)
 		plexHeader.append("X-Plex-Model:" + boxData[1]) # model
 		plexHeader.append('X-Plex-Client-Identifier:' + g_sessionID)
-		plexHeader.append("X-Plex-Client-Platform:Enigma")
+		plexHeader.append("X-Plex-Client-Platform:iOS")
 
 	printl2("", "__common__::getPlexHeader", "C")
 	return plexHeader
