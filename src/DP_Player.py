@@ -136,9 +136,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			x.__init__(self)
 		printl("currentIndex: " + str(currentIndex), self, "D")
 
-		# we need this for subtitle screen working properly with autoselected subs
-		self.infobar = self.session.infobar
-
 		self.listViewList = listViewList
 		self.currentIndex = currentIndex
 		self.listCount = len(self.listViewList) - 1# list starts counting with 0
@@ -700,11 +697,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def enableSubtitle(self, subtitles):
 		printl("", self, "S")
 
-		if self.infobar.selected_subtitle != subtitles:
-			self.infobar.subtitles_enabled = False
-			self.infobar.selected_subtitle = subtitles
+		if self.session.infobar.selected_subtitle != subtitles:
+			self.session.infobar.subtitles_enabled = False
+			self.session.infobar.selected_subtitle = subtitles
 			if subtitles:
-				self.infobar.subtitles_enabled = True
+				self.session.infobar.subtitles_enabled = True
 
 		printl("", self, "C")
 
