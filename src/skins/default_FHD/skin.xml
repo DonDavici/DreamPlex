@@ -99,10 +99,10 @@
         </widget>
 
         <!-- settings -->
-        <widget name="config" zPosition="3" position="100,80" size="1720,680" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/sel_bg.png"/>
+        <widget name="config" zPosition="3" position="100,80" size="1720,800" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/sel_bg.png"/>
 
         <!-- hintbox -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,790" zPosition="1" size="1860,130" transparent="0"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,910" zPosition="1" size="1860,130" transparent="0"/>
         <widget source="help" render="Label" position="45,795" size="1840,120" font="OpenSans; 22" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
 
 		<widget name="btn_green" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/lls_buttons/btn_green.png" zPosition="15" position="510,1039" size="30,40" alphatest="blend"/>
@@ -200,10 +200,10 @@
         </widget>
 
         <!-- settings -->
-        <widget name="config" zPosition="3" position="100,80" size="1720,680" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/sel_bg.png"/>
+        <widget name="config" zPosition="3" position="100,80" size="1720,800" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/sel_bg.png"/>
 
         <!-- hintbox -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,790" zPosition="1" size="1860,130" transparent="0"/>
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,910" zPosition="1" size="1860,130" transparent="0"/>
         <widget source="help" render="Label" position="45,795" size="1840,120" font="OpenSans; 22" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
 
         <!-- functions -->
@@ -420,7 +420,7 @@
         </widget>
     </screen>
 	
-	<!-- DPS_ViewList --> <!-- tbd -->
+	<!-- DPS_ViewList -->
     <screen name="DPS_ViewList" position="0,0" size="1920,1080" title=" " flags="wfNoBorder" backgroundColor="#ffffffff">
         
 		<!-- background -->
@@ -607,7 +607,7 @@
        
 	   <!-- tbd -->
 <!--        <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="793,265" size="480,22" font="OpenSans; 22" foregroundColor="#5C5C5C" backgroundColor="#212121"/> -->
-        <widget name="title" transparent="1" zPosition="5" halign="left" valign="top" noWrap="1" position="558,606" size="700,50" font="OpenSans;36" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
+        <widget name="title" transparent="1" zPosition="5" halign="left" valign="bottom" noWrap="1" position="558,596" size="700,50" font="OpenSans;36" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
 	    
 		<widget name="shortDescription" text="" transparent="1" zPosition="10" halign="left" position="1290,675" size="605,334" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
 			    

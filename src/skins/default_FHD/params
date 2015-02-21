@@ -130,7 +130,7 @@
 	
 	<showView name="Backdrop" apiLevel="1" itemsPerPage="12" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="1080" backdropVideoWidth="1920" miniTv="True" posterHeight="268" posterWidth="195" backdropHeight="1080" backdropWidth="1920">
 		<subView name="ShowShows">
-			<element name="title" xCoord="558" yCoord="606" />
+			<element name="title" xCoord="558" yCoord="596" />
 			<element name="grandparentTitle" visible="False"/>		    
 		    <element name="studio" xCoord="903" yCoord="920"/>
 			<element name="duration" xCoord="903" yCoord="955"/>		    
@@ -139,8 +139,8 @@
 		</subView>
 
 		<subView name="ShowSeasons">
-			<element name="title" xCoord="558" yCoord="606" />
-			<element name="grandparentTitle" visible="True"/>
+			<element name="title" xCoord="558" yCoord="596" />
+			<element name="grandparentTitle" visible="False"/>
 			
 			<element name="duration" visible="False"/>
 			<element name="childCount" visible="False"/>					
@@ -150,7 +150,7 @@
 		</subView>
 
 		<subView name="ShowEpisodes">			
-			<element name="title" xCoord="558" yCoord="606" />
+			<element name="title" xCoord="558" yCoord="596" />
 			<element name="grandparentTitle" visible="False"/>
 			<element name="duration" xCoord="903" yCoord="955" visible="True"/>			
 			<element name="audio" visible="True"/>
