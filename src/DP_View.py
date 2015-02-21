@@ -1188,7 +1188,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 	def onToggleView(self):
 		printl("", self, "S")
 
-		if config.plugins.dreamplex.useBackdropVideos.value:
+		if config.plugins.dreamplex.useBackdropVideos.value and self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 		cause = (DP_View.ON_CLOSED_CAUSE_CHANGE_VIEW, )
 		self.leaveNow(cause)
@@ -1284,7 +1284,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 			# we need this for onEnter-func in child lib
 
 			if entryData['tagType'] == "Track" or entryData['tagType'] == "Video":
-				if config.plugins.dreamplex.useBackdropVideos.value:
+				if config.plugins.dreamplex.useBackdropVideos.value and self.loadedStillPictureLib:
 					self.stopBackdropVideo()
 
 				currentIndex = self["listview"].getIndex()
