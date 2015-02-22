@@ -255,7 +255,7 @@ class DPS_SystemCheck(Screen):
 
 		else:
 			remoteUrl = "http://sourceforge.net/projects/dreamplex/files/" + str(updateType) + "/deb/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb/download"
-			cmd = "curl -o /tmp/temp.deb -L -k " + str(remoteUrl) + " && dpkg -i /tmp/temp.deb; rm /tmp/temp.deb"
+			cmd = "curl -o /tmp/temp.deb -L -k " + str(remoteUrl) + " && dpkg -i /tmp/temp.deb; apt-get update && apt-get -f install; rm /tmp/temp.deb"
 			#bintray runing => cmd = "curl -o /tmp/temp.deb -L -k https://bintray.com/artifact/download/dondavici/Dreambox/enigma2-plugin-extensions-dreamplex_" + str(self.latestVersion) + "_all.deb && dpkg -i /tmp/temp.deb; rm /tmp/temp.deb"
 
 		printl("cmd: " + str(cmd), self, "D")
