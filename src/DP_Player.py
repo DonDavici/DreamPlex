@@ -51,6 +51,7 @@ from Components.Sources.StaticText import StaticText
 from Components.Language import language
 from Components.ServiceEventTracker import ServiceEventTracker, InfoBarBase
 
+from Screens.AudioSelection import AudioSelection
 from Screens.InfoBarGenerics import InfoBarShowHide, \
 	InfoBarSeek, InfoBarAudioSelection, \
 	InfoBarServiceNotifications, InfoBarSimpleEventView, \
@@ -64,11 +65,42 @@ from DPH_ScreenHelper import DPH_ScreenHelper
 from __common__ import printl2 as printl, convertSize, encodeThat, getOeVersion
 from __init__ import _ # _ is translation
 
+
+# we need this to see the states for subtitles also in audioselction with yellow button
+SUBTITLES_ENABLED = False
+SUBTITLES_CONTENT = None
+
+#===============================================================================
+#
+#===============================================================================
+class InfobarAudioSelectionExtended(InfoBarAudioSelection):
+	def __init__(self):
+		InfoBarAudioSelection.__init__(self)
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def audioSelection(self):
+		self.session.openWithCallback(self.audioSelected, myAudioSelection, infobar=self.session.infobar or self)
+
+#===============================================================================
+#
+#===============================================================================
+class myAudioSelection(AudioSelection):
+	def __init__(self, session, infobar=None):
+		AudioSelection.__init__(self, session, infobar)
+		self.skinName = ["AudioSelection"]
+
+		# check if we are active and we have content
+		if SUBTITLES_CONTENT and SUBTITLES_ENABLED:
+			# run to set subtitle active in screen
+			self.enableSubtitle(SUBTITLES_CONTENT)
+
 #===============================================================================
 #
 #===============================================================================
 class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
-		InfoBarSeek, InfoBarAudioSelection, HelpableScreen,
+		InfoBarSeek, InfobarAudioSelectionExtended, HelpableScreen,
 		InfoBarServiceNotifications, InfoBarSimpleEventView,
 		InfoBarSubtitleSupport, InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications, DPH_ScreenHelper):
 
@@ -129,7 +161,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.calculateEndingTime = True
 
 		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
-				InfoBarAudioSelection, InfoBarSimpleEventView, \
+				InfobarAudioSelectionExtended, InfoBarSimpleEventView, \
 				InfoBarServiceNotifications, InfoBarSubtitleSupport, \
 				InfoBarServiceErrorPopupSupport, InfoBarExtensions, InfoBarNotifications:
 			printl("x: " + str(x), self, "D")
@@ -692,16 +724,18 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		printl("", self, "C")
 
 	#===========================================================================
-	# same as enableSubtitles() in AudioSelection.py
+	#
 	#===========================================================================
 	def enableSubtitle(self, subtitles):
 		printl("", self, "S")
 
-		if self.session.infobar.selected_subtitle != subtitles:
-			self.session.infobar.subtitles_enabled = False
-			self.session.infobar.selected_subtitle = subtitles
-			if subtitles:
-				self.session.infobar.subtitles_enabled = True
+		self.setSelectedSubtitle(subtitles)
+		self.setSubtitlesEnable()
+
+		global SUBTITLES_ENABLED
+		global SUBTITLES_CONTENT
+		SUBTITLES_ENABLED = True
+		SUBTITLES_CONTENT = subtitles
 
 		printl("", self, "C")
 
@@ -1544,3 +1578,5 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		copy2(self.whatPoster, self.tempPoster)
 
 		printl("", self, "C")
+
+
