@@ -705,7 +705,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 					if myLanguageFromPlex == myLanguage:
 						printl("we have a match ...", self, "D")
-						self.enableSubtitle(subs[0])
+						self.enableSubtitleNow(subs[0])
 						self.subtitleWatcher.stop()
 
 					else:
@@ -726,16 +726,31 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	#===========================================================================
 	#
 	#===========================================================================
-	def enableSubtitle(self, subtitles):
+	def enableSubtitleNow(self, subtitles):
 		printl("", self, "S")
+		success = False
+		try:
+			self.setSelectedSubtitle(subtitles)
+			self.setSubtitlesEnable()
+			success = True
 
-		self.setSelectedSubtitle(subtitles)
-		self.setSubtitlesEnable()
+		except Exception, e:
+			printl("Subtitle Message: " + str(e), self, "D")
 
-		global SUBTITLES_ENABLED
-		global SUBTITLES_CONTENT
-		SUBTITLES_ENABLED = True
-		SUBTITLES_CONTENT = subtitles
+			try:
+				printl("maybe we are openpli, trying their subtitle function", self, "D")
+				# maybe we are openpli
+				self.enableSubtitle(subtitles)
+				success = True
+
+			except Exception, e:
+				printl("Subtitle Message: " + str(e), self, "D")
+
+		if success:
+			global SUBTITLES_ENABLED
+			global SUBTITLES_CONTENT
+			SUBTITLES_ENABLED = True
+			SUBTITLES_CONTENT = subtitles
 
 		printl("", self, "C")
 
