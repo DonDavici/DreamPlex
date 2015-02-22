@@ -264,6 +264,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 
 		self["sound"] = MultiPixmap()
 
+		self["soundchannels"] = MultiPixmap()
+
 		self["resolution"] = MultiPixmap()
 
 		self["aspect"] = MultiPixmap()
@@ -1817,6 +1819,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self["resolution"].hide()
 		self["rated"].hide()
 		self["sound"].hide()
+		self["soundchannels"].hide()
 
 		printl("", self, "C")
 
@@ -2639,6 +2642,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self["resolution"].hide()
 		self["rated"].hide()
 		self["sound"].hide()
+		self["soundchannels"].hide()
 
 		if not self.usedStillPicture:
 			self.resetBackdropImage()
@@ -2755,6 +2759,53 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 			self["sound"].show()
 		else:
 			self["sound"].hide()
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def handleSoundChannelsPixmaps(self):
+		printl("", self, "S")
+
+		soundchannels = self.details["mediaDataArr"][0].get("audioChannels", "unknown").upper()
+		printl("soundchannels: " + str(soundchannels), self, "D")
+
+		if soundchannels == "2": #2.0
+			found = True
+			self["soundchannels"].setPixmapNum(0)
+
+		elif soundchannels == "3": #2.1
+			found = True
+			self["soundchannels"].setPixmapNum(1)
+
+		elif soundchannels == "6":
+			found = True
+			self["soundchannels"].setPixmapNum(2)
+
+		elif soundchannels == "7":
+			found = True
+			self["soundchannels"].setPixmapNum(3)
+
+		elif soundchannels == "8":
+			found = True
+			self["soundchannels"].setPixmapNum(4)
+
+		elif soundchannels == "9":
+			found = True
+			self["soundchannels"].setPixmapNum(5)
+
+		elif soundchannels == "UNKNOWN" or soundchannels == "":
+			found = False
+
+		else:
+			printl("we have a value but no match!! soundchannels: " + str(soundchannels), self, "I")
+			found = False
+
+		if found:
+			self["soundchannels"].show()
+		else:
+			self["soundchannels"].hide()
 
 		printl("", self, "C")
 

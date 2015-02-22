@@ -40,7 +40,7 @@ def getDefaultCineElementsList():
 
 	elementsList = ["pagination", "total", "backdrop", "poster", "writer", "resolution", "cast", "audio", "info",
 	                "aspect", "codec", "rated", "title", "grandparentTitle" ,"tag", "shortDescription", "subtitles", "director",
-	                "genre", "year", "duration", "rating_stars", "sound", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
+	                "genre", "year", "duration", "rating_stars", "sound", "soundchannels", "pagination", "total", "leafCount", "unviewedLeafCount", "viewedLeafCount",
 	                "videoCodec", "bitrate", "videoFrameRate", "audioChannels", "aspectRatio",
 	                "videoResolution", "audioCodec", "file", "childCount", "studio"]
 
@@ -303,11 +303,12 @@ def getShowViewDefaults():
 	params["elements"]["director"]["visible"]                      = False
 	params["elements"]["writer"]["visible"]                        = False
 	params["elements"]["cast"]["visible"]                          = False
-	params["elements"]["codec"]["visible"]                          = False
-	params["elements"]["aspect"]["visible"]                          = False
-	params["elements"]["resolution"]["visible"]                          = False
-	params["elements"]["rated"]["visible"]                          = False
-	params["elements"]["sound"]["visible"]                          = False
+	params["elements"]["codec"]["visible"]                         = False
+	params["elements"]["aspect"]["visible"]                        = False
+	params["elements"]["resolution"]["visible"]                    = False
+	params["elements"]["rated"]["visible"]                         = False
+	params["elements"]["sound"]["visible"]                         = False
+	params["elements"]["soundchannels"]["visible"]                 = False
 
 	# add addional params in elements
 	# params["elements"]["backdrop"]["height"]                       = "315"

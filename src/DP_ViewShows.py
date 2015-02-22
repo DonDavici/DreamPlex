@@ -190,6 +190,7 @@ class DPS_ViewShows(DP_View):
 				self.handleAspectPixmaps()
 				self.handleResolutionPixmaps()
 				self.handleSoundPixmaps()
+				self.handleSoundChannelsPixmaps()
 
 			if self.tagType != self.lastTagType:
 				self.showMediaFunctions()

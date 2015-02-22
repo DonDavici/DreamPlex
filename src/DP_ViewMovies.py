@@ -105,6 +105,7 @@ class DPS_ViewMovies(DP_View):
 			self.handleResolutionPixmaps()
 			self.handleRatedPixmaps()
 			self.handleSoundPixmaps()
+			self.handleSoundChannelsPixmaps()
 
 		# final sets
 		self.setDuration()
