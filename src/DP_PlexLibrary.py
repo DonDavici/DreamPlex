@@ -528,12 +528,12 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMixedContentFromSection(self, url):
+	def getMixedContentFromSection(self, url, fromRemotePlayer=False):
 		printl("", self, "S")
 		printl("url: " + str(url), self, "D")
 
 		printl("", self, "C")
-		return self.getMediaData(url, tagType = "Video", nextViewMode = "play", currentViewMode = "ShowMovies")
+		return self.getMediaData(url, tagType = "Video", nextViewMode = "play", currentViewMode = "ShowMovies", fromRemotePlayer=fromRemotePlayer)
 
 	#===============================================================================
 	#
@@ -739,7 +739,7 @@ class PlexLibrary(Screen):
 	#===========================================================================
 	#
 	#===========================================================================
-	def getMediaData(self, url, tagType, nextViewMode, currentViewMode, switchMedias=False):
+	def getMediaData(self, url, tagType, nextViewMode, currentViewMode, switchMedias=False, fromRemotePlayer=False):
 		printl("", self, "S")
 		fullList=[]
 
@@ -752,6 +752,12 @@ class PlexLibrary(Screen):
 		else:
 			# find coressponding tags in xml
 			entries = tree.findall(tagType)
+
+			if fromRemotePlayer:
+				# if there are no entries it might be that we are music for this reason we search for Track as well
+				if not entries:
+					tagType = "Track"
+					entries = tree.findall(tagType)
 
 			# write global xml data to entryData
 			mediaContainer  = (dict(tree.items()))

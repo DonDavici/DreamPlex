@@ -274,7 +274,7 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 						self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.g_serverConfig, self.currentCompleteAddress, machineIdentifier))
 
-						listViewList, mediaContainer = self.plexInstance.getMoviesFromSection(self.currentProtocol + "://" + self.currentAddress + ":" + self.currentPort + self.currentKey)
+						listViewList, mediaContainer = self.plexInstance.getMixedContentFromSection(self.currentProtocol + "://" + self.currentAddress + ":" + self.currentPort + self.currentKey, fromRemotePlayer=True)
 
 						autoPlayMode = False
 
