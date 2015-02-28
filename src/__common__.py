@@ -29,7 +29,7 @@ import shutil
 import math
 import uuid
 
-from enigma import addFont, loadPNG, loadJPG
+from enigma import addFont, loadPNG, loadJPG, getDesktop
 from skin import loadSkin
 from Components.config import config
 from Components.AVSwitch import AVSwitch
@@ -57,6 +57,7 @@ except ImportError:
 # CONSTANTS
 #===============================================================================
 version = "0.1"
+boxResoltion = None
 skinAuthors = ""
 skinResolution = "HD"
 skinCompatibility = "v2"
@@ -358,6 +359,24 @@ def registerPlexFonts():
 #===============================================================================
 #
 #===============================================================================
+def getBoxResolution():
+	printl2("", "__common__::getBoxResolution", "S")
+	global boxResoltion
+
+	if boxResoltion is None:
+		screenwidth = getDesktop(0).size().width()
+
+		if screenwidth and screenwidth == 1920:
+			boxResoltion = "FHD"
+		else:
+			boxResoltion = "HD"
+
+	printl2("", "__common__::getBoxResolution", "C")
+	return boxResoltion
+
+#===============================================================================
+#
+#===============================================================================
 def loadSkinParams():
 	printl2("", "__common__::loadSkinParams", "S")
 
@@ -391,9 +410,21 @@ def loadPlexSkin():
 	@return none
 	"""
 	printl2("", "__common__::loadPlexSkin", "S")
-	printl2("current skin: " + str(config.plugins.dreamplex.skin.value), "__common__::loadPlexSkin", "S")
 
-	skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
+	skinName = str(config.plugins.dreamplex.skin.value)
+	printl2("current skin: " + skinName, "__common__::loadPlexSkin", "S")
+
+	# if we are the our default we switch automatically between the resolutions
+	if skinName == "default":
+		myType = getBoxResolution()
+		if myType == "FHD":
+			skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "_FHD/skin.xml"
+		else:
+			skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
+
+	# if not we load whatever is set
+	else:
+		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
 
 	if skin:
 		loadSkin(skin)

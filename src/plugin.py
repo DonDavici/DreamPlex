@@ -16,7 +16,7 @@ from DP_Player import DP_Player
 from enigma import eTimer
 
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
-from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion
+from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion, getBoxResolution
 
 from enigma import getDesktop
 
@@ -318,9 +318,10 @@ def sessionStart(reason, **kwargs):
 #===============================================================================
 #noinspection PyUnusedLocal
 def Plugins(**kwargs):
-	screenwidth = getDesktop(0).size().width()
 	myList = []
-	if screenwidth and screenwidth == 1920:
+	boxResolution = getBoxResolution()
+
+	if boxResolution == "FHD":
 		myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogoHD.png", fnc=main))
 	else:
 		myList.append(PluginDescriptor(name = "DreamPlex", description = "plex client for enigma2", where = [PluginDescriptor.WHERE_PLUGINMENU], icon = "pluginLogo.png", fnc=main))

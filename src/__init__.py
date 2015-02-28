@@ -371,7 +371,7 @@ def getInstalledSkins():
 	try:
 		for skin in os.listdir(config.plugins.dreamplex.skinfolderpath.value):
 			print("skin: " + str(skin), None, "D")
-			if os.path.isdir(os.path.join(config.plugins.dreamplex.skinfolderpath.value, skin)):
+			if os.path.isdir(os.path.join(config.plugins.dreamplex.skinfolderpath.value, skin)) and skin != "default_FHD": # we exclude the default FHD because we switch between HD and FHD automatically
 				mySkins.append(skin)
 	except Exception, ex:
 		printl("no skin found in Dreamplex", "__init__::getInstalledSkins", "D")
