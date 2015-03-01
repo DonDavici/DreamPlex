@@ -173,7 +173,7 @@ class DPS_ViewShows(DP_View):
 			else:
 				self.pname = self.details["parentRatingKey"]
 
-			if self.currentViewName == "Backdrop":
+			if self.currentViewName.endswith("Backdrop"):
 				#we change this because the backdrops of episodes are low quality and will be very pixi
 				self.changeBackdrop = False
 			else:
