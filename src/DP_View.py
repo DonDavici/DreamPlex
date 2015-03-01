@@ -36,7 +36,6 @@ from Components.ProgressBar import ProgressBar
 from Components.ScrollLabel import ScrollLabel
 from Components.AVSwitch import AVSwitch
 from Components.Sources.List import List
-from Components.config import NumericalTextInput
 
 from Screens.ChoiceBox import ChoiceBox
 from Screens.MessageBox import MessageBox
@@ -58,7 +57,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen, DPH_Filter
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion
+from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion, checkXmlFile, getXmlContent
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -158,8 +157,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 
 		DPH_MultiColorFunctions.__init__(self)
 		DPH_Filter.__init__(self)
-
-		#NumericalTextInput.__init__(self)
 
 		self.initScreen(libraryName)
 
@@ -745,7 +742,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self.setColorFunction(color="red", level="3", functionList=("Server Settings", self.showServerSettings))
 		self.setColorFunction(color="green", level="3", functionList=("Plex Settings", self.showGeneralSettings))
 		self.setColorFunction(color="yellow", level="3", functionList=(_("delete Medias"), self.deleteMedias))
-		self.setColorFunction(color="blue", level="3", functionList=None)
+		self.setColorFunction(color="blue", level="3", functionList=(_("use for Mapping"), self.useForMappingHelper))
 
 		self.setColorFunction(color="red", level="4", functionList=("", self.toggleFilterMode)) # name is empty because we set it dynamical
 		self.setColorFunction(color="green", level="4", functionList=None)
@@ -770,6 +767,139 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
 
 		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def useForMappingHelper(self):
+		printl("", self, "S")
+		import string
+		from DP_Mappings import DPS_MappingsEntryList
+
+		isWindowsLocation = False
+		remotePath = self["file"].getText()
+
+		if "\\" in remotePath:
+			isWindowsLocation = True
+			remotePath = remotePath.replace("\\", "/")
+
+		pathElements = string.split(remotePath, "/")
+		fileName = pathElements[-1]
+
+		# search for the file on the box
+		localPath = self.searchForLocalFile(fileName)
+
+		if localPath is not None:
+			printl("remotePath: " + str(remotePath), self, "D")
+			printl("localPath: " + str(localPath), self, "D")
+
+			# first we remove the filename itself
+			currentRemotePath, currentLocalPath, reductionSuccessState = self.reduceMappings(remotePath, localPath, fileName)
+
+			# now we reduce the identical folders
+			while reductionSuccessState:
+				pathElements = string.split(currentRemotePath, "/")
+				currentLimiter = pathElements[-2] # [-1] would lead to " " empty limiter due to the fact that there is a / at the end
+				printl("pathElements: " + str(pathElements), self, "D")
+				currentRemotePath, currentLocalPath, reductionSuccessState = self.reduceMappings(currentRemotePath, currentLocalPath, currentLimiter)
+
+			# finally
+			if isWindowsLocation:
+				currentRemotePath = currentRemotePath.replace("/", "\\")
+
+			printl("currentRemotePath: " + str(currentRemotePath), self, "D")
+			printl("currentLocalPath: " + str(currentLocalPath), self, "D")
+
+			serverID = self.serverConfig.id.value
+			printl("serverID: " + str(serverID), self, "D")
+
+			self.location = config.plugins.dreamplex.configfolderpath.value + "mountMappings"
+			checkXmlFile(self.location)
+			tree = getXmlContent(self.location)
+
+			isUnique = self.checkForDuplicateMapping(serverID, tree, currentRemotePath, currentLocalPath)
+
+			if isUnique:
+				mappingsObject = DPS_MappingsEntryList([], serverID, tree)
+				mappingsObject.addNewMapping(currentRemotePath, currentLocalPath)
+				text = "Mapping added successfully.\n\nRemotePath: " + str(currentRemotePath) + "\nLocalPath: " + str(currentLocalPath)
+			else:
+				text = "Duplicate mapping detected.\n\nRemotePath: " + str(currentRemotePath) + "\nLocalPath: " + str(currentLocalPath) + "\n\nWe are not saving this!"
+		else:
+			# we did not found the file on the box
+			text = "Couldn't find the file on your box.\n\nPlease check if the mount in /mnt/net/ is working!"
+
+		self.session.open(MessageBox,_("\n%s") % text, MessageBox.TYPE_INFO)
+
+		printl("", self, "C")
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def checkForDuplicateMapping(self, serverID, tree, currentRemotePath, currentLocalPath):
+		printl("", self, "S")
+		isUnique = True
+
+		printl("serverID: " + str(serverID), self, "D")
+		for server in tree.findall("server"):
+			printl("servername: " + str(server.get('id')), self, "D")
+			if str(server.get('id')) == str(serverID):
+
+				for mapping in server.findall('mapping'):
+					remotePathPart = mapping.attrib.get("remotePathPart")
+					localPathPart = mapping.attrib.get("localPathPart")
+
+					if remotePathPart == currentRemotePath and localPathPart == currentLocalPath:
+						isUnique = False
+
+		printl("", self, "C")
+		return isUnique
+	#===========================================================================
+	#
+	#===========================================================================
+	def reduceMappings(self, currentRemotePath, currentLocalPath, currentLimiter):
+		printl("", self, "S")
+		printl("currentRemotePath: " + str(currentRemotePath), self, "D")
+		printl("currentLocalPath: " + str(currentLocalPath), self, "D")
+		printl("currentLimiter: " + str(currentLimiter), self, "D")
+
+		localPathIndex = str(currentLocalPath).find(str(currentLimiter))
+		remotePathIndex = str(currentRemotePath).find(str(currentLimiter))
+
+		printl("localPathIndex: " + str(localPathIndex), self, "D")
+		printl("remotePathIndex: " + str(remotePathIndex), self, "D")
+
+		if localPathIndex != -1 and remotePathIndex != -1 and localPathIndex != 0 and remotePathIndex != 0:
+			remotePathResult = str(currentRemotePath)[0:remotePathIndex]
+			localPathResult = str(currentLocalPath)[0:localPathIndex]
+
+			printl("remotePathResult: " + str(remotePathResult), self, "D")
+			printl("localPathResult: " + str(localPathResult), self, "D")
+			reductionSuccessState = True
+		else:
+			reductionSuccessState = False
+			remotePathResult = currentRemotePath
+			localPathResult = currentLocalPath
+
+		printl("", self, "C")
+		return remotePathResult, localPathResult, reductionSuccessState
+
+	#===========================================================================
+	#
+	#===========================================================================
+	def searchForLocalFile(self, fileName):
+		printl("", self, "S")
+		import os
+
+		for root, dirs, files in os.walk("/hdd", topdown=False):
+			for currentFile in files:
+				if currentFile == fileName:
+					localPath = os.path.join(root, currentFile)
+					return localPath
+
+		#if we find nothing we return nothing
+		printl("", self, "C")
+		return None
 
 	#===========================================================================
 	#
