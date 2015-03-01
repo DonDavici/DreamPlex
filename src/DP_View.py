@@ -388,14 +388,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 
 		# Backdrops
 		self.EXpicloadBackdrop = ePicLoad()
-		if self.currentViewName == "Backdrop":
-			self.backdrop_postfix = "_backdrop_1280x720_v2.jpg"
-			self.backdropHeight = "720"
-			self.backdropWidth = "1280"
-		else:
-			self.backdropHeight = self.viewParams["settings"]["backdropHeight"]
-			self.backdropWidth = self.viewParams["settings"]["backdropWidth"]
-			self.backdrop_postfix = "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + "_v2.jpg"
+		self.backdropHeight = self.viewParams["settings"]["backdropHeight"]
+		self.backdropWidth = self.viewParams["settings"]["backdropWidth"]
+		self.backdrop_postfix = "_backdrop_" + self.backdropWidth + "x" + self.backdropHeight + "_v2.jpg"
 
 		# now we try to enable stillPictureSupport
 		if self.stillPictureEnabledInSettings and self.stillPictureEnabledInView:
