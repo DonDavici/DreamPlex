@@ -81,7 +81,7 @@ def getNoneDirectoryElements():
 def getDefaultSettingsList():
 	printl("", "DP_ViewFactory::getDefaultSettingsList", "S")
 
-	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth", "posterHeight", "posterWidth", "backdropHeight", "backdropWidth", "miniTv"]
+	settingsList = ["itemsPerPage", "apiLevel", "screen", "backdropVideos", "name", "backdropVideoHeight", "backdropVideoWidth", "posterHeight", "posterWidth", "backdropHeight", "backdropWidth", "miniTv", "type"]
 
 	printl("", "DP_ViewFactory::getDefaultSettingsList", "C")
 	return settingsList

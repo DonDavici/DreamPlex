@@ -169,6 +169,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self.currentViewName = str(self.viewParams["settings"]["name"])
 		printl("self.currentViewName: " + str(self.currentViewName), self, "D")
 
+		self.currentViewType = str(self.viewParams["settings"]["type"])
+
 		self.stillPictureEnabledInView = self.viewParams["settings"]["backdropVideos"]
 		self.stillPictureEnabledInSettings = config.plugins.dreamplex.useBackdropVideos.value
 
