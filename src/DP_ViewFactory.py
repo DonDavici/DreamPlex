@@ -143,7 +143,7 @@ def getViewsFromSkinParams(myType):
 		defaultParams = getMusicViewDefaults()
 		
 	else:
-		raise Exception()
+		raise Exception
 
 	for view in tree.findall(myType):
 		# lets copy params to new alterable variable
