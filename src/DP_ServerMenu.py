@@ -38,7 +38,7 @@ from DPH_Singleton import Singleton
 from DPH_MovingLabel import DPH_HorizontalMenu
 from DP_HelperScreens import DPS_InputBox
 from DP_Syncer import DPS_Syncer
-from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen, DPH_Filter
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_Screen, DPH_Filter, DPH_PlexScreen
 from DP_ViewFactory import getGuiElements
 from DP_Users import DPS_Users
 
@@ -49,7 +49,7 @@ from __init__ import _ # _ is translation
 #===============================================================================
 #
 #===============================================================================
-class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filter):
+class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filter, DPH_PlexScreen):
 
 	g_horizontal_menu = False
 
@@ -74,6 +74,7 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 		DPH_Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
 		DPH_Filter.__init__(self)
+		DPH_PlexScreen.__init__(self)
 
 		self.selectionOverride = None
 		printl("selectionOverride:" +str(self.selectionOverride), self, "D")
@@ -127,11 +128,13 @@ class DPS_ServerMenu(DPH_Screen, DPH_HorizontalMenu, DPH_ScreenHelper, DPH_Filte
 
 		self.setTitle(_("Server Menu"))
 
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
+
 		if self.miniTv:
 			self.initMiniTv()
 
 		if self.g_serverConfig.myplexHomeUsers.value:
-			self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 			self["btn_green"].show()
 			self["btn_greenText"].setText(_("Switch User"))
 			self["text_HomeUserLabel"].setText(_("Current User:"))

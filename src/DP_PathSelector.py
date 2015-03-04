@@ -30,6 +30,7 @@ from Components.FileList import FileList
 from Components.Label import Label
 
 from DP_ViewFactory import getGuiElements
+from DPH_ScreenHelper import DPH_PlexScreen
 
 from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
@@ -37,7 +38,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 # 
 #===========================================================================
-class DPS_PathSelector(Screen):
+class DPS_PathSelector(Screen, DPH_PlexScreen):
 
 	#===========================================================================
 	# 
@@ -46,6 +47,7 @@ class DPS_PathSelector(Screen):
 		printl("", self, "S")
 		
 		Screen.__init__(self, session)
+		DPH_PlexScreen.__init__(self)
 
 		self.guiElements = getGuiElements()
 
@@ -86,10 +88,11 @@ class DPS_PathSelector(Screen):
 	def finishLayout(self):
 		printl("", self, "S")
 
-		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
+
 		self["btn_redText"].setText(_("Cancel"))
 
-		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
 		self["btn_greenText"].setText(_("Ok"))
 
 		self["targetText"].setText(_("Target: "))

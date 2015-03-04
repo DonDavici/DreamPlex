@@ -37,8 +37,6 @@ from Screens.ChoiceBox import ChoiceBox
 from Screens.InputBox import InputBox
 from Screens.Screen import Screen
 
-from Tools import Notifications
-
 from __common__ import printl2 as printl
 from __init__ import initServerEntryConfig, _ # _ is translation
 

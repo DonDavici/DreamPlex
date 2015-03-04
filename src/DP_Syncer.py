@@ -45,9 +45,9 @@ from Screens.Screen import Screen
 from Tools.Directories import fileExists
 
 from DP_PlexLibrary import PlexLibrary
-from DP_ViewFactory import getViews
+from DP_ViewFactory import getViews, getGuiElements
 from DPH_Singleton import Singleton
-from DPH_ScreenHelper import DPH_ScreenHelper
+from DPH_ScreenHelper import DPH_ScreenHelper, DPH_PlexScreen
 
 from __common__ import printl2 as printl, isValidSize, encodeThat, getSkinResolution, getOeVersion
 from __init__ import _ # _ is translation
@@ -55,7 +55,7 @@ from __init__ import _ # _ is translation
 #===========================================================================
 #
 #===========================================================================
-class DPS_Syncer(Screen, DPH_ScreenHelper):
+class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 
 	_session = None
 	_mode = None
@@ -63,6 +63,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 	def __init__(self, session, mode, serverConfig=None):
 		Screen.__init__(self, session)
 		DPH_ScreenHelper.__init__(self)
+		DPH_PlexScreen.__init__(self)
+
+		self.guiElements = getGuiElements()
 
 		self.initScreen("syncer")
 		self.serverConfig = serverConfig
@@ -120,6 +123,9 @@ class DPS_Syncer(Screen, DPH_ScreenHelper):
 		printl("", self, "S")
 
 		self.setTitle("Server - Syncer")
+
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
 
 		if self.miniTv:
 			self.initMiniTv()

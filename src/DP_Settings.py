@@ -39,11 +39,13 @@ from __common__ import printl2 as printl
 from __init__ import _ # _ is translation
 
 from DP_PathSelector import DPS_PathSelector
+from DPH_ScreenHelper import DPH_PlexScreen
+from DP_ViewFactory import getGuiElements
 
 #===============================================================================
 #
 #===============================================================================
-class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
+class DPS_Settings(Screen, ConfigListScreen, HelpableScreen, DPH_PlexScreen):
 
 	_hasChanged = False
 	_session = None
@@ -54,6 +56,9 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		
 		Screen.__init__(self, session)
 		HelpableScreen.__init__(self)
+		DPH_PlexScreen.__init__(self)
+
+		self.guiElements = getGuiElements()
 		
 		self.cfglist = []
 		ConfigListScreen.__init__(self, self.cfglist, session, on_change = self._changed)
@@ -90,6 +95,9 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	def finishLayout(self):
 		printl("", self, "S")
 
+		# first we set the pics for buttons
+		self.setColorFunctionIcons()
+
 		self["txt_green"].hide()
 		self["btn_green"].hide()
 
@@ -101,12 +109,12 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 	def createSetup(self):
 		printl("", self, "S")
 		
-		separator = "".ljust(120,"_")
+		separator = "".ljust(240,"_")
 		
 		self.cfglist = []
 		
 		# GENERAL SETTINGS
-		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("General Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Boxname"), config.plugins.dreamplex.boxName, _("Enter the name of your box, e.g. Livingroom.")))
 		self.cfglist.append(getConfigListEntry(_("> Used Skin"), config.plugins.dreamplex.skin, _("If you change the skin you have to restart at least the GUI!")))
 		self.cfglist.append(getConfigListEntry(_("> Show Plugin in Main Menu"), config.plugins.dreamplex.showInMainMenu, _(" ")))
@@ -118,7 +126,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			self.cfglist.append(getConfigListEntry(_("> Check for updates on startup"), config.plugins.dreamplex.checkForUpdateOnStartup, _("If activated on each start we will check if there is a new version depending on your update type.")))
 			self.cfglist.append(getConfigListEntry(_("> Updatetype"), config.plugins.dreamplex.updateType, _("Use Beta only if you really want to help with testing")))
 		# USERINTERFACE SETTINGS
-		self.cfglist.append(getConfigListEntry(_("Userinterface Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Userinterface Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Summerize Servers"), config.plugins.dreamplex.summerizeServers, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Summerize Sections"), config.plugins.dreamplex.summerizeSections, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Show Filter for Section"), config.plugins.dreamplex.showFilter, _(" ")))
@@ -155,13 +163,13 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 			self.cfglist.append(getConfigListEntry(_("> Detail type for additional data"), config.plugins.dreamplex.showDetailsInListDetailType, _(" ")))
 
 		# VIEW SETTINGS
-		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Path Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Default View for Movies"), config.plugins.dreamplex.defaultMovieView, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Default View for Shows"), config.plugins.dreamplex.defaultShowView, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Default View for Music"), config.plugins.dreamplex.defaultMusicView, _(" ")))
 
 		# PATH SETTINGS
-		self.cfglist.append(getConfigListEntry(_("Path Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Path Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		
 		self.mediafolderpath = getConfigListEntry(_("> Media Folder Path"), config.plugins.dreamplex.mediafolderpath, _(" "))
 		self.cfglist.append(self.mediafolderpath)
@@ -179,14 +187,14 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen):
 		self.cfglist.append(self.logfolderpath)
 
 		# REMOTE
-		self.cfglist.append(getConfigListEntry(_("Remote Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Remote Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Activate Remote Player"), config.plugins.dreamplex.remoteAgent, _(" ")))
 		if config.plugins.dreamplex.remoteAgent.value:
 			self.cfglist.append(getConfigListEntry(_("> Remote Player Port"), config.plugins.dreamplex.remotePort, _(" ")))
 
 
 		# MISC
-		self.cfglist.append(getConfigListEntry(_("Misc Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Misc Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		self.cfglist.append(getConfigListEntry(_("> Debug Mode"), config.plugins.dreamplex.debugMode, _(" ")))
 
 		if config.plugins.dreamplex.debugMode.value:

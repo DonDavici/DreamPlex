@@ -148,11 +148,27 @@ class DPH_PlexScreen(object):
 	#
 	#===============================================================================
 	def setColorFunctionIcons(self):
-		# first we set the pics for buttons
-		self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
-		self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
-		self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
-		self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		# first we set the pics for buttons if existing
+		try:
+			self["btn_red"].instance.setPixmapFromFile(self.guiElements["key_red"])
+
+		except:
+			pass
+
+		try:
+			self["btn_green"].instance.setPixmapFromFile(self.guiElements["key_green"])
+		except:
+			pass
+
+		try:
+			self["btn_yellow"].instance.setPixmapFromFile(self.guiElements["key_yellow"])
+		except:
+			pass
+
+		try:
+			self["btn_blue"].instance.setPixmapFromFile(self.guiElements["key_blue"])
+		except:
+			pass
 
 #===============================================================================
 #
