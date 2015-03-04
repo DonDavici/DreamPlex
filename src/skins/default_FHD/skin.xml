@@ -348,14 +348,14 @@
         </widget>
 
 		<!-- menu bar -->
-        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/main_menu.png" position="0,580" zPosition="-1" size="1920,350" alphatest="blend" transparent="1"/>
+        <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/main_menu-fs8.png" position="0,580" zPosition="-1" size="1920,350" alphatest="blend" transparent="1"/>
 		
 		<!-- moving targets -->
-        <widget name="-2" transparent="1" zPosition="8" position="10,680" size="380,150" font="OpenSans; 38" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
-        <widget name="-1" transparent="1" zPosition="8" position="390,680" size="380,150" font="OpenSans; 38" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
-        <widget name="0" transparent="1" zPosition="8" position="770,680" size="380,150" font="OpenSans; 44" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
-        <widget name="+1" transparent="1" zPosition="8" position="1150,680" size="380,150" font="OpenSans; 38" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
-        <widget name="+2" transparent="1" zPosition="8" position="1530,680" size="380,150" font="OpenSans; 38" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
+        <widget name="-2" transparent="1" zPosition="8" position="10,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
+        <widget name="-1" transparent="1" zPosition="8" position="390,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
+        <widget name="0" transparent="1" zPosition="8" position="770,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
+        <widget name="+1" transparent="1" zPosition="8" position="1150,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
+        <widget name="+2" transparent="1" zPosition="8" position="1530,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
 
         <!-- picons -->
         <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_movies.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
@@ -553,16 +553,7 @@
 		<widget name="L2" transparent="1" zPosition="10" position="1825,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
 		<widget name="L3" transparent="1" zPosition="10" position="1845,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
 		<widget name="L4" transparent="1" zPosition="10" position="1865,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
-
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1034" size="80,1" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1074" size="80,1" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1825,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1845,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1865,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1885,1034" size="1,35" zPosition="11"/>
-
-	</screen>    
+    </screen>
 
     <!-- DPS_ViewBackdrop -->
     <screen name="DPS_ViewBackdrop" position="0,0" size="1920,1080" title=" " flags="wfNoBorder" backgroundColor="#ff111111">
@@ -694,16 +685,7 @@
 		<widget name="L2" transparent="1" zPosition="10" position="1825,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
 		<widget name="L3" transparent="1" zPosition="10" position="1845,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
 		<widget name="L4" transparent="1" zPosition="10" position="1865,1034" size="20,35" font="OpenSans; 20" halign="center" valign="center"/>
-
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1034" size="80,1" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1034" size="80,1" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1805,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1825,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1845,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1865,1034" size="1,35" zPosition="11"/>
-		<eLabel backgroundColor="white" foregroundColor="#3c000000" name="" position="1885,1034" size="1,35" zPosition="11"/>
-
-    </screen>    
+    </screen>
 
     <!-- DPS_VideoPlayer --> 
     <screen name="DPS_VideoPlayer" position="0,0" size="1920,1080" title="InfoBar" flags="wfNoBorder" backgroundColor="#ffffffff">
