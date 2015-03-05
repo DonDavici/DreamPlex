@@ -365,11 +365,14 @@ def getBoxResolution():
 
 	if boxResoltion is None:
 		screenwidth = getDesktop(0).size().width()
+		printl2("screenwidth => " + str(screenwidth), "__common__::getBoxResolution", "D")
 
 		if screenwidth and screenwidth == 1920:
 			boxResoltion = "FHD"
 		else:
 			boxResoltion = "HD"
+
+	printl2("boxResoltion => " + str(boxResoltion), "__common__::getBoxResolution", "D")
 
 	printl2("", "__common__::getBoxResolution", "C")
 	return boxResoltion
