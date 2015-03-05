@@ -1,0 +1,755 @@
+# English translations for enigma2-plugin-extentions-dreamplex package.
+# Copyright (C) 2013 THE enigma2-plugin-extentions-dreamplex'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the enigma2-plugin-extentions-dreamplex package.
+# Automatically generated, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: enigma2-plugin-extentions-dreamplex 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-06 16:15+0100\n"
+"PO-Revision-Date: 2015-03-05 22:38+0100\n"
+"Last-Translator: DonDavici <dondavici@gmail.com>\n"
+"Language-Team: none\n"
+"Language: da_DK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.4\n"
+
+msgid " "
+msgstr " "
+
+msgid " > Autostart"
+msgstr " > Autostart"
+
+msgid " > Connection Type"
+msgstr " > Forbindelsestype"
+
+msgid " > Name"
+msgstr " > Navn"
+
+msgid " > Playback Type"
+msgstr " > Afspilnings type"
+
+msgid " > State"
+msgstr " > Tilstand"
+
+msgid " > Use Wake on Lan (WoL)"
+msgstr " > Brug Wake on Lan (WoL)"
+
+msgid " >> DNS"
+msgstr " >> DNS"
+
+msgid " >> IP"
+msgstr " >> IP"
+
+msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
+msgstr " >> Mac adresse (StÃ¸rrelse: 12 alfanumerisk ingen seperator) kun for WoL"
+
+msgid " >> Port"
+msgstr " >> Port"
+
+msgid " >> Segmentsize in seconds"
+msgstr " >> SegmentstÃ¸rrelse i sekunder"
+
+msgid " >> Transcoding quality"
+msgstr " >> Transcoding kvalitet"
+
+msgid " >> Use universal Transcoder"
+msgstr " >> Brug universal Transcoder"
+
+msgid " >> Wait for server delay (max 180 seconds) only for WoL"
+msgstr " >> Vent pÃ¥ server forsinkelse (max 180 sekunder) kun for WoL"
+
+msgid " >> myPLEX Password"
+msgstr " >> myPLEX Kodeord"
+
+msgid " >> myPLEX URL"
+msgstr " >> myPLEX URL"
+
+msgid " >> myPLEX Username"
+msgstr " >> myPLEX Brugernavn"
+
+msgid " >> myPLEX renew myPlex token"
+msgstr " >> myPLEX forny myPlex godkendelse"
+
+msgid ""
+" This file was partially played.\n"
+"\n"
+" Do you want to resume?"
+msgstr ""
+" Denne fil er kun delvist afspillet.\n"
+"\n"
+" Vil du fortsÃ¦tte?"
+
+#, python-format
+msgid "%s"
+msgstr "%s"
+
+msgid "(current 'Default')"
+msgstr "(nuvÃ¦rende 'Standard')"
+
+msgid "-"
+msgstr "-"
+
+msgid "1.5Mbps, 480p"
+msgstr "1.5Mbps, 480p"
+
+msgid "1024x768, 2mbps"
+msgstr "1024x768, 2mbps"
+
+msgid "10Mbps, 1080p"
+msgstr "10Mbps, 1080p"
+
+msgid "1280x720, 3mbps"
+msgstr "1280x720, 3mbps"
+
+msgid "1280x720, 4mbps"
+msgstr "1280x720, 4mbps"
+
+msgid "12Mbps, 1080p"
+msgstr "12Mbps, 1080p"
+
+msgid "1920x1080, 10mbps"
+msgstr "1920x1080, 10mbps"
+
+msgid "1920x1080, 12mbps"
+msgstr "1920x1080, 12mbps"
+
+msgid "1920x1080, 20mbps"
+msgstr "1920x1080, 20mbps"
+
+msgid "1920x1080, 8mbps"
+msgstr "1920x1080, 8mbps"
+
+msgid "208kbps, 160p, 15fps"
+msgstr "208kbps, 160p, 15fps"
+
+msgid "20Mbps, 1080p"
+msgstr "20Mbps, 1080p"
+
+msgid "2Mbps, 720p"
+msgstr "2Mbps, 720p"
+
+msgid "320kbps, 240p"
+msgstr "320kbps, 240p"
+
+msgid "3Mbps, 720p"
+msgstr "3Mbps, 720p"
+
+msgid "420x240, 320kbps"
+msgstr "420x240, 320kbps"
+
+msgid "4Mbps, 720p"
+msgstr "4Mbps, 720p"
+
+msgid "576x320, 720 kbps"
+msgstr "576x320, 720 kbps"
+
+msgid "64kbps, 128p, 3fps"
+msgstr "64kbps, 128p, 3fps"
+
+msgid "720kbps, 320p"
+msgstr "720kbps, 320p"
+
+msgid "720x480, 1,5mbps"
+msgstr "720x480, 1,5mbps"
+
+msgid "8Mbps, 1080p"
+msgstr "8Mbps, 1080p"
+
+msgid "96kbps, 128p, 12fps"
+msgstr "96kbps, 128p, 12fps"
+
+msgid "> Cache Folder Path"
+msgstr "> Sti til cache"
+
+msgid "> Check for updates on startup"
+msgstr "> Tjek for opdateringer ved start"
+
+msgid "> Config Folder Path"
+msgstr "> Stil til konfigurations folder"
+
+msgid "> Debug Mode"
+msgstr "> Debug Tilstand"
+
+msgid "> Detail type for additional data"
+msgstr "> Detaljer for yderligere data"
+
+msgid "> Log Folder Path"
+msgstr "> Sti til lognings folder"
+
+msgid "> Media Folder Path"
+msgstr "> Stil til medie folder"
+
+msgid "> Player Temp Path"
+msgstr "> Sti til afspillerens temp mappe"
+
+msgid "> Show Filter for Section"
+msgstr "> Vis filter for sektionen."
+
+msgid "> Show Infobar when buffer drained"
+msgstr "> Vis infobar nÃ¥r bufferen er tom"
+
+msgid "> Show Plugin in Main Menu"
+msgstr "> Vis plugin i hovedmenu"
+
+msgid "> Show Seen/Unseen count in TvShows"
+msgstr "> Vis tÃ¦ller for sete/usete i TVShow"
+
+msgid "> Show additional data for myPlex sections"
+msgstr "> Vis yderligere data for myPlex sektioner."
+
+msgid "> Stop Live TV on startup"
+msgstr "> Stop Live TV ved start"
+
+msgid "> Summerize Sections"
+msgstr "> Summer Sektioner"
+
+msgid "> Updatetype"
+msgstr "> Opdateringstype"
+
+msgid "> Use Cache for Sections"
+msgstr "> Brug cache til Sektioner"
+
+msgid "> Use Picture Cache"
+msgstr "> Brug Billed Cache"
+
+msgid "> Use fastScroll as default"
+msgstr "> Brug fastScroll som standard"
+
+msgid "> Used Skin"
+msgstr "> Skin i brug"
+
+msgid ">> Play Themes in TV Shows"
+msgstr ">> Afspil temaer i TV Shows"
+
+msgid ">> Show Backdrops as Videos"
+msgstr ">> Vis Backdrops som Videoer"
+
+msgid "About"
+msgstr "Om"
+
+msgid "Add"
+msgstr "TilfÃ¸j"
+
+msgid "Add Entry"
+msgstr "TilfÃ¸j punkt"
+
+msgid "Adding new mapping was not completed"
+msgstr "TilfÃ¸jelse af ny sti ikke komplet"
+
+msgid "All"
+msgstr "Alle"
+
+msgid "All Filmy"
+msgstr "Alle Filmy"
+
+msgid "All Movies"
+msgstr "Alle Film"
+
+msgid "All Shows"
+msgstr "Alle Shows"
+
+msgid "All episodes"
+msgstr "Alle episoder"
+
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+msgid "Audio Functions"
+msgstr "Lyd funktioner"
+
+msgid "Audio:"
+msgstr "Lyd:"
+
+msgid "By Collection"
+msgstr "Efter Samling"
+
+msgid "By Content Rating"
+msgstr "Efter Indholdsvurdering"
+
+msgid "By Country"
+msgstr "Efter Land"
+
+msgid "By Decade"
+msgstr "Efter Ã…rti"
+
+msgid "By Director"
+msgstr "Efter InstruktÃ¸r"
+
+msgid "By First Letter"
+msgstr "Efter fÃ¸rste bogstav"
+
+msgid "By Folder"
+msgstr "Efter Folder"
+
+msgid "By Genre"
+msgstr "Efter Genre"
+
+msgid "By Rating"
+msgstr "Efter Vurdering"
+
+msgid "By Resolution"
+msgstr "Efter OplÃ¸sning"
+
+msgid "By Starring Actor"
+msgstr "Efter Hovedskuespiller"
+
+msgid "By Year"
+msgstr "Efter Ã…r"
+
+msgid "Cancel"
+msgstr "Fortryd"
+
+msgid "Channels"
+msgstr "Kanaler"
+
+msgid "Check DreamPlex installation data."
+msgstr "Tjek Dreamplex installations data."
+
+msgid "Check curl installation data."
+msgstr "Tjek curl installations data."
+
+msgid "Check for 'gst-plugin-fragmented if you are using OE16."
+msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger OE16."
+
+msgid "Check for 'gst-plugins-bad-fragmented if you are using OE20."
+msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger  OE20."
+
+msgid "Check for update."
+msgstr "Tjek for opdatering."
+
+msgid "Clear default view"
+msgstr "Ryd standard udseende"
+
+msgid "Close"
+msgstr "Luk"
+
+msgid "Connection Settings"
+msgstr "Forbindelses Indstillinger"
+
+msgid "Could not install "
+msgstr "Kunne ikke installeres"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "Delete"
+msgstr "Slet"
+
+msgid "Delete Entry"
+msgstr "Slet Punkt"
+
+msgid "Deleting aborted!"
+msgstr "Sletning afbrudt!"
+
+msgid "Direct Local"
+msgstr "Direct Local"
+
+msgid "Discover"
+msgstr "Opdag"
+
+msgid "DreamPlex"
+msgstr "DreamPlex"
+
+msgid "Edit"
+msgstr "Rediger"
+
+msgid ""
+"Enigma2 must be restarted!\n"
+"Should Enigma2 now restart?"
+msgstr ""
+"Enigma2 skal genstartes!\n"
+"Skal Enigma2 genstartes nu?"
+
+msgid "Enter this server automatically on startup."
+msgstr "Start op pÃ¥ denne server."
+
+msgid "Enter your remote path segment here:"
+msgstr "TilfÃ¸j fjernstis afsnit her:"
+
+msgid "Exit"
+msgstr "Exit"
+
+msgid "General Settings"
+msgstr "Generelle Indstillinger"
+
+msgid "Genre:"
+msgstr "Genre:"
+
+msgid "Help"
+msgstr "HjÃ¦lp"
+
+msgid "I will now try to play the file via transcode."
+msgstr "Jeg vil nu prÃ¸ve pÃ¥ at afspille filen med transcoding."
+
+msgid "IP"
+msgstr "IP"
+
+msgid "If activated on each start we will check if there is a new version depending on your update type."
+msgstr "Hvis aktiveret vil vi tjekke for en ny version ved start, afhÃ¦ngigt af hvilken software type du har."
+
+msgid "If you are using myPlex"
+msgstr "Hvis du bruger myPlex"
+
+msgid "If you change the skin you have to restart at least the GUI!"
+msgstr "Hvis du Ã¦ndrer skin skal du mindst genstarte GUI!"
+
+msgid "Information:\n"
+msgstr "Information:\n"
+
+msgid "Initiate Library refresh"
+msgstr "Start Biblioteks opdatering"
+
+msgid "Invalid Location"
+msgstr "Ugyldig lokation"
+
+msgid "Location:"
+msgstr "Lokation:"
+
+msgid "MYPLEX"
+msgstr "MYPLEX"
+
+msgid "Mappings"
+msgstr "Stier"
+
+msgid "Mark media unwatched"
+msgstr "Marker medie som uset"
+
+msgid "Mark media watched"
+msgstr "Marker medie som set"
+
+msgid "Media Functions"
+msgstr "Medie Funktioner"
+
+msgid "Misc Settings"
+msgstr "Forskellige indstillinger"
+
+msgid "Movies"
+msgstr "Film"
+
+msgid "Music"
+msgstr "Musik"
+
+#, python-format
+msgid ""
+"MyPlex Token error:\n"
+"Check Username and Password.\n"
+"%s"
+msgstr ""
+"MyPlex Godkendelses fejl:\n"
+"Tjek Brugernavn og Kodeord.\n"
+"%s"
+
+msgid "Name"
+msgstr "Navn"
+
+msgid "No internet connection available!"
+msgstr "Internetforbindelse ikke tilgÃ¦ngelig!"
+
+msgid "No plugins available"
+msgstr "Ingen plugins tilgÃ¦ngelige"
+
+msgid "No update available"
+msgstr "Ingen opdatering tilgÃ¦ngelig"
+
+msgid "Not available"
+msgstr "Ikke tilgÃ¦ngelig"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "On Deck"
+msgstr "On Deck"
+
+msgid "Options"
+msgstr "Indstillinger"
+
+msgid "Pages:"
+msgstr "Sider:"
+
+msgid "Path Settings"
+msgstr "Sti Indstillinger"
+
+msgid "Pictures"
+msgstr "Billeder"
+
+msgid "Playback Settings"
+msgstr "Afspilnings Indstillinger"
+
+msgid "Please enter your search string!"
+msgstr "Skriv venligst din sÃ¸ge streng!"
+
+msgid "Please verify you direct local settings"
+msgstr "Tjek venligst dine direct local indstillinger."
+
+msgid ""
+"Plexserver seems to be offline. Please check your your settings or connection!\n"
+" Retry?"
+msgstr ""
+"Plexserveren ser ud til at vÃ¦re offline. Tjek venligst dine indstillinger eller forbindelsen!\n"
+" ForsÃ¸g igen?"
+
+msgid ""
+"Plexserver seems to be offline. Start with Wake on Lan settings? \n"
+"\n"
+"Please note: \n"
+"If you press yes the spinner will run for "
+msgstr ""
+"Plexserveren ser ud til at vÃ¦re offline. Start med Wak on Lan indstillinger? \n"
+"\n"
+"Noter venlighst: \n"
+"Hvis du trykker ja vil systemet prÃ¸ve i  "
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Press exit to return"
+msgstr "Tryk exit for at vende tilbage"
+
+msgid "Really delete this Server Entry?"
+msgstr "Vil du virkelig slette denne Server tilfÃ¸jelse?"
+
+msgid "Recently Added"
+msgstr "TilfÃ¸jet for nyligt"
+
+msgid "Recently Aired"
+msgstr "Sendt for nyligt"
+
+msgid "Recently Released"
+msgstr "Udkommet for nyligt"
+
+msgid "Recently Viewed"
+msgstr "Set for nyligt"
+
+msgid "Recently Viewed Episodes"
+msgstr "For nyligt sete episoder"
+
+msgid "Recently Viewed Shows"
+msgstr "Fornyligt sete episoder"
+
+msgid "Refresh this section"
+msgstr "Opdater denne sektion"
+
+msgid "Runtime:"
+msgstr "Spilletid:"
+
+msgid "Save"
+msgstr "Gem"
+
+msgid "Search Episodes..."
+msgstr "SÃ¸g i Episoder..."
+
+msgid "Search Shows..."
+msgstr "SÃ¸g i Shows..."
+
+msgid "Search..."
+msgstr "SÃ¸g..."
+
+msgid "Select filter"
+msgstr "VÃ¦lg filter"
+
+msgid "Select media to play"
+msgstr "VÃ¦lg medie til afspilning"
+
+msgid "Select server"
+msgstr "VÃ¦lg server"
+
+msgid "Select sort"
+msgstr "VÃ¦lg sortering"
+
+msgid "Select view"
+msgstr "VÃ¦lg opstilling"
+
+msgid "Series"
+msgstr "Serier"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "Set view as default"
+msgstr "VÃ¦lg opstilling som standard "
+
+msgid "Settings"
+msgstr "Indstillinger"
+
+msgid "Show media details"
+msgstr "Vis medie detaljer"
+
+msgid "Shows"
+msgstr "Shows"
+
+msgid "Sorry I didn't find the file on the provided locations"
+msgstr "Beklager, jeg kunne ikke finde filen pÃ¥ de angivne lokationer."
+
+msgid "Sorry unable to perform action, something has failed!!"
+msgstr "Beklager kunne udfÃ¸re handlingen, noget virkede ikke efter hensigten!!"
+
+msgid "State"
+msgstr "Tilstand"
+
+msgid "Streamed"
+msgstr "Streamed"
+
+msgid "Subtitle Functions"
+msgstr "Undertekst Funktioner"
+
+msgid "Subtitles:"
+msgstr "Undertekster:"
+
+msgid "System"
+msgstr "System"
+
+msgid "Systemcheck"
+msgstr "Systemtjek"
+
+msgid "TV Shows"
+msgstr "TV Shows"
+
+msgid ""
+"The selected plugin is not installed!\n"
+" Do you want to proceed to install?"
+msgstr ""
+"Det valgte plugin er ikke installeret!\n"
+" Vil du fortsÃ¦tte med installering?"
+
+#, python-format
+msgid "This Box can't decode %s streams!"
+msgstr "Denne Boks kan ikke decode %s streams!"
+
+msgid "Toggle state to on/off to show this server in lost or not."
+msgstr "Skift tilstanden til til/sluk for at vise om denne server er forsvundet eller ej."
+
+msgid "Total:"
+msgstr "Total:"
+
+msgid "Transcoded"
+msgstr "Transcoded"
+
+msgid "Tv Shows"
+msgstr "Tv Shows"
+
+msgid "UNEXPECTED ERROR:"
+msgstr "UVENTET FEJL:"
+
+#, python-format
+msgid ""
+"UNEXPECTED ERROR:\n"
+"This is the answer from the request ...\n"
+"%s"
+msgstr ""
+"UVENTET FEJL:\n"
+"Dette er svaret fra forspÃ¸rgslen ...\n"
+"%s"
+
+msgid "Unwatched"
+msgstr "Usete"
+
+msgid "Use Beta only if you really want to help with testing"
+msgstr "Brug kun Beta hvis du virkelig gerne vil hjÃ¦lpe med at teste"
+
+msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
+msgstr "Brug dette hvis du ikke har nok plads pÃ¥ boksen sÃ¥som en harddisk."
+
+msgid "Use this if you have m1v videos as backdrops"
+msgstr "Brug dette hvis du har m1v videoer som backdrops"
+
+msgid "Userinterface Settings"
+msgstr "Brugerflade indstillinger"
+
+msgid "Wake On Lan Settings"
+msgstr "Wake On Lan Indstillinger"
+
+msgid "Warning:"
+msgstr "Advarsel:"
+
+msgid "Year:"
+msgstr "Ã…r:"
+
+msgid "You can use Systemcheck in the menu."
+msgstr "Du kan bruge Systemtjek i menuen."
+
+msgid "You have to reenter the section to see the changes!"
+msgstr "Du skal hoppe ud og ind af sektionen for at se Ã¦ndringerne!"
+
+msgid "You need curl installed for this feature! Please check in System ..."
+msgstr "Du skal have curl installeret for at kunne bruge denne funktion! Tjek venligst i System ..."
+
+msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
+msgstr "Du skal have gstreamer_fragmented installeret for bruge denne funktion! Tjek venligst i System ... "
+
+#, python-format
+msgid ""
+"Your Box can't decode this video stream!\n"
+"%s"
+msgstr ""
+"Din Boks kan ikke dekode denne video stream!\n"
+"%s"
+
+msgid "Your current Version is "
+msgstr "Din nuvÃ¦rende Version er "
+
+msgid "by Albums"
+msgstr "efter Album"
+
+msgid "by Artists"
+msgstr "efter Kunstner"
+
+msgid "check myPlex Token"
+msgstr "Tjek myPlex godkendelse"
+
+msgid "fastScroll = Off"
+msgstr "fastScroll = af"
+
+msgid "fastScroll = On"
+msgstr "fastScroll = til"
+
+msgid "for the user:"
+msgstr "for brugeren:"
+
+msgid "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
+msgstr "fandt mips32el (OE 2.0) => Tjek for 'gst-plugins-bad-fragmented"
+
+msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
+msgstr "fandt mipsel (OE 1.6) => Tjek for 'gst-plugin-fragmented"
+
+msgid "load additional data"
+msgstr "tilfÃ¸j yderligere data"
+
+msgid "mappings"
+msgstr "stier"
+
+msgid "myPlex Token:"
+msgstr "myPlex godkendelse:"
+
+msgid "no xml as response - directory"
+msgstr "ingen xml som svar - bibliotek"
+
+msgid "no xml as response - tree"
+msgstr "ingen xml som svar  - trÃ¦"
+
+msgid "no xml as response - viewGroup"
+msgstr "ingen xml som svar  - viewGroup"
+
+msgid "not available"
+msgstr "ikke tilgÃ¦ngelig"
+
+msgid "please check if curl is installed."
+msgstr "Tjek venligst om curl er installeret."
+
+msgid "plex client for enigma2"
+msgstr "plex klient for enigma2"
+
+#, python-format
+msgid "set Filter (set to '%s')"
+msgstr "indstil Filter (sÃ¦t til '%s')"
+
+msgid "show media functions"
+msgstr "vis media funktioner"
+
+msgid "toggle View "
+msgstr "Ã¦ndre Visning"
+
