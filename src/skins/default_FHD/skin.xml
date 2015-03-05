@@ -391,8 +391,7 @@
 			<convert type="ClockToText">Date</convert>
 		</widget>
 
-		
-	   <!-- tbd -->
+		<!-- tbd -->
 		<widget name="text_HomeUserLabel" position="110,1034" zPosition="15" size="120,40" font="OpenSans;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 		<widget name="text_HomeUser" position="210,1034" zPosition="15" size="260,40" font="OpenSans;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
@@ -443,7 +442,7 @@
 
 		<!-- backgrounds --> 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/frame-fs8.png" position="0,0" zPosition="47" size="1920,1080" alphatest="blend" transparent="1"/>
-		
+
 		<widget name="backdrop" transparent="0" zPosition="45" position="51,127" size="822,462" alphatest="blend"/>
 		<widget name="stillPicture" backgroundColor="#ff111111" zPosition="-3" position="51,127" size="822,462"/>
 		<widget name="miniTv" position="51,127" size="822,462" zPosition="43" backgroundColor="#ff111111"/>
@@ -468,63 +467,63 @@
 		</widget>
 				
 		<!-- general -->
-		<widget name="title" transparent="1" zPosition="5" halign="left" position="245,722" size="800,50" font="OpenSans;36" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<!-- <widget name="tag" transparent="1" zPosition="51" halign="left" valign="left" noWrap="1" position="245,433" size="650,51" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#212121"/> -->
+		<widget name="title" transparent="1" zPosition="5" halign="left" position="245,722" size="800,50" font="OpenSans;30" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="tag" transparent="1" zPosition="51" halign="left" valign="left" noWrap="1" position="245,755" size="650,51" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#212121"/>
 
-		<widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="245,770" size="990,272" font="OpenSans;24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="shortDescription" text="" transparent="1" zPosition="99" halign="left" position="245,780" size="990,250" font="OpenSans;20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/five_stars_dark-fs8.png" zPosition="83" position="395,602" size="141,29" alphatest="blend" transparent="1"/>
 		<widget name="rating_stars" zPosition="84" position="395,602" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/five_stars_bright-fs8.png"/>
 
-		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1250,725" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="year" transparent="1" zPosition="4" halign="left" position="1375,725" size="290,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="1250,760" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="genre" transparent="1" zPosition="4" halign="left" position="1375,760" size="290,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="1250,830" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="director" transparent="1" zPosition="4" halign="left" position="1375,830" size="290,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="1250,795" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="writer" transparent="1" zPosition="4" halign="left" position="1375,795" size="290,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="castLabel" transparent="1" zPosition="4" halign="left" position="1250,865" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="cast" transparent="1" zPosition="4" halign="left"  position="1375,865" size="500,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="1250,900" size="120,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="subtitles" transparent="1" zPosition="4" halign="left" position="1375,900" size="200,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="1250,935" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audio" transparent="1" zPosition="4" halign="left" position="1375,935" size="400,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="studioLabel" transparent="1" zPosition="4" halign="left" position="1250,970" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="studio" transparent="1" zPosition="4" halign="left" position="1375,970" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="1250,1005" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="duration" transparent="1" zPosition="4" halign="left"  position="1375,1005" size="290,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="1250,725" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="year" transparent="1" zPosition="4" halign="left" position="1375,725" size="290,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="1250,760" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="genre" transparent="1" zPosition="4" halign="left" position="1375,760" size="290,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="1250,830" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="director" transparent="1" zPosition="4" halign="left" position="1375,830" size="290,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="1250,795" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="writer" transparent="1" zPosition="4" halign="left" position="1375,795" size="290,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="castLabel" transparent="1" zPosition="4" halign="left" position="1250,865" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="cast" transparent="1" zPosition="4" halign="left"  position="1375,865" size="500,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="1250,900" size="120,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="subtitles" transparent="1" zPosition="4" halign="left" position="1375,900" size="200,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="1250,935" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audio" transparent="1" zPosition="4" halign="left" position="1375,935" size="400,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="studioLabel" transparent="1" zPosition="4" halign="left" position="1250,970" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="studio" transparent="1" zPosition="4" halign="left" position="1375,970" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="1250,1005" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="duration" transparent="1" zPosition="4" halign="left"  position="1375,1005" size="290,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<!-- tv show specific -->
-		<widget name="grandparentTitle" transparent="1" zPosition="83" halign="left" position="245,95" size="680,35" font="OpenSans;24" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
-		<widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="1250,830" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="1375,830" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="leafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,865" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="leafCount" transparent="1" zPosition="6" halign="left" position="1375,865" size="300,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="viewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,900" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="viewedLeafCount" transparent="1" zPosition="6" halign="left"  position="1375,900" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,935" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="1375,935" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-	<!-- ???	<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="210,225" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#000000"/>
-		<widget name="info" transparent="1" zPosition="9" halign="left" position="310,225" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#000000"/> -->
+		<widget name="grandparentTitle" transparent="1" zPosition="83" halign="left" position="245,95" size="680,35" font="OpenSans;20" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
+		<widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="1250,830" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="1375,830" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="leafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,865" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="leafCount" transparent="1" zPosition="6" halign="left" position="1375,865" size="300,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="viewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,900" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="viewedLeafCount" transparent="1" zPosition="6" halign="left"  position="1375,900" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="6" halign="left" position="1250,935" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCount" transparent="1" zPosition="6" halign="left" position="1375,935" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="210,225" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
+		<widget name="info" transparent="1" zPosition="9" halign="left" position="310,225" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#000000"/>
 		
 		<!-- detail pane -->
-		<widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="245,760" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoCodec" transparent="1" zPosition="9" halign="left" position="395,760" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="bitrateLabel" transparent="1" zPosition="9" halign="left" position="245,795" size="120,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="bitrate" transparent="1" zPosition="9" halign="left" position="395,795" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="videoFrameRateLabel" transparent="1" zPosition="9" halign="left" position="245,830" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoFrameRate" transparent="1" zPosition="9" halign="left"  position="395,830" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioChannelsLabel" transparent="1" zPosition="9" halign="left" position="245,865" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audioChannels" transparent="1" zPosition="9" halign="left"  position="395,865" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="aspectRatioLabel" transparent="1" zPosition="9" halign="left" position="245,900" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="aspectRatio" transparent="1" zPosition="9" halign="left"  position="395,900" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="videoResolutionLabel" transparent="1" zPosition="9" halign="left" position="245,935" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoResolution" transparent="1" zPosition="9" halign="left"  position="395,935" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioCodecLabel" transparent="1" zPosition="9" halign="left" position="245,970" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audioCodec" transparent="1" zPosition="9" halign="left"  position="395,970" size="620,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="245,1005" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="file" transparent="1" zPosition="9" halign="left"  position="395,1005" size="800,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="245,760" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoCodec" transparent="1" zPosition="9" halign="left" position="395,760" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="bitrateLabel" transparent="1" zPosition="9" halign="left" position="245,795" size="120,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="bitrate" transparent="1" zPosition="9" halign="left" position="395,795" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoFrameRateLabel" transparent="1" zPosition="9" halign="left" position="245,830" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoFrameRate" transparent="1" zPosition="9" halign="left"  position="395,830" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioChannelsLabel" transparent="1" zPosition="9" halign="left" position="245,865" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audioChannels" transparent="1" zPosition="9" halign="left"  position="395,865" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="aspectRatioLabel" transparent="1" zPosition="9" halign="left" position="245,900" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="aspectRatio" transparent="1" zPosition="9" halign="left"  position="395,900" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoResolutionLabel" transparent="1" zPosition="9" halign="left" position="245,935" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoResolution" transparent="1" zPosition="9" halign="left"  position="395,935" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioCodecLabel" transparent="1" zPosition="9" halign="left" position="245,970" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audioCodec" transparent="1" zPosition="9" halign="left"  position="395,970" size="620,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="245,1005" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="file" transparent="1" zPosition="9" halign="left"  position="395,1005" size="800,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
 		<widget name="casePic" zPosition="49" position="0,730" size="240,292" alphatest="blend" transparent="0"/>
 		<widget name="poster" transparent="1" zPosition="50" position="32,740" size="195,268" alphatest="blend"/>
@@ -562,7 +561,7 @@
 	<!-- DPS_ViewBackdrop -->
 	<screen name="DPS_ViewBackdrop" position="0,0" size="1920,1080" title=" " flags="wfNoBorder" backgroundColor="#ff111111">
 		<!-- background -->
-		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/background3.png" position="0,0" zPosition="-1" size="1920,1080" transparent="0" alphatest="blend"/>
+		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/background3-fs8.png" position="0,0" zPosition="-1" size="1920,1080" transparent="0" alphatest="blend"/>
 
 		<!-- title -->
 		<widget source="Title" text="" render="Label" transparent="1" zPosition="4" position="15,14" size="190,30" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" halign="left"/>
@@ -580,8 +579,8 @@
 		<widget name="totalLabel" transparent="1" zPosition="-88" halign="left" position="35,13" size="60,30" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#000000"/>
 		<widget name="total" transparent="1" zPosition="4" halign="left" position="88,14" size="100,30" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#0f0f0f"/>
 
-		<widget name="paginationLabel" transparent="1" zPosition="50" halign="left" position="650,13" size="60,32" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f"/>
-		<widget name="pagination" transparent="1" zPosition="50" halign="left" position="716,13" size="150,32" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#0f0f0f"/>
+		<widget name="paginationLabel" transparent="1" zPosition="50" halign="left" position="900,13" size="60,32" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f"/>
+		<widget name="pagination" transparent="1" zPosition="50" halign="left" position="966,13" size="150,32" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#0f0f0f"/>
 
 		<widget source="listview" render="Listbox" zPosition="8" position="15,611" size="535,400" scrollbarMode="showNever" foregroundColor="#5C5C5C" foregroundColorSelected="#ffffff" backgroundColor="#212121" transparent="1" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_list.png" backgroundPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/sel_bg.png">
 			<convert type="TemplatedMultiContent">
@@ -600,69 +599,69 @@
 		<widget name="codec" position="1630,618" size="100,48" transparent="1" alphatest="blend" zPosition="49" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/codec-vc1-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/codec-h.264-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/codec-mpeg4-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/codec-mpeg2-fs8.png"/>
 		<widget name="rated" position="1763,611" size="64,64" transparent="1" alphatest="blend" zPosition="51" pixmaps="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/rated-pg13-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/rated-pg-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/rated-r-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/rated-nc-17-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/fsk-0-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/rated-not-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/fsk-6-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/fsk-12-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/fsk-16-fs8.png,/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/fsk-18-fs8.png" />
 
-	   <!-- tbd -->
-<!--        <widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="793,265" size="480,22" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#212121"/> -->
-		<widget name="title" transparent="1" zPosition="5" halign="left" valign="bottom" noWrap="1" position="558,596" size="700,50" font="OpenSans;36" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
+		<widget name="title" transparent="1" zPosition="5" halign="left" valign="bottom" noWrap="1" position="558,596" size="700,50" font="OpenSans;30" foregroundColor="#FFFFFF" backgroundColor="#212121"/>
 
-		<widget name="shortDescription" text="" transparent="1" zPosition="10" halign="left" position="1290,675" size="605,334" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="shortDescription" text="" transparent="1" zPosition="10" halign="left" position="1290,675" size="605,334" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/five_stars_dark-fs8.png" zPosition="83" position="600,650" size="141,29" alphatest="blend" transparent="1"/>
 		<widget name="rating_stars" zPosition="84" position="600,650" size="141,29" transparent="1" orientation="orHorizontal" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/icons/five_stars_bright-fs8.png"/>
 	   
-		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="783,640" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="year" transparent="1" zPosition="4" halign="left" position="903,640" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="783,675" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="genre" transparent="1" zPosition="4" halign="left" position="903,675" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="783,710" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="writer" transparent="1" zPosition="4" halign="left" position="903,710" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="783,745" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="director" transparent="1" zPosition="4" halign="left" position="903,745" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="castLabel" transparent="1" zPosition="4" halign="left" position="783,780" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="cast" transparent="1" zPosition="4" halign="left"  position="903,780" size="370,70" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="783,850" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="subtitles" transparent="1" zPosition="4" halign="left" position="903,850" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="783,885" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audio" transparent="1" zPosition="4" halign="left" position="903,885" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="studioLabel" transparent="1" zPosition="4" halign="left" position="783,920" size="170,30" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="studio" transparent="1" zPosition="4" halign="left" position="903,920" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="783,955" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="duration" transparent="1" zPosition="4" halign="left"  position="903,955" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="yearLabel" transparent="1" zPosition="4" halign="left" position="783,640" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="year" transparent="1" zPosition="4" halign="left" position="903,640" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="genreLabel" transparent="1" zPosition="4" halign="left" position="783,675" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="genre" transparent="1" zPosition="4" halign="left" position="903,675" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="writerLabel" transparent="1" zPosition="4" halign="left" position="783,710" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="writer" transparent="1" zPosition="4" halign="left" position="903,710" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="directorLabel" transparent="1" zPosition="4" halign="left" position="783,745" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="director" transparent="1" zPosition="4" halign="left" position="903,745" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="castLabel" transparent="1" zPosition="4" halign="left" position="783,780" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="cast" transparent="1" zPosition="4" halign="left"  position="903,780" size="370,70" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="subtitlesLabel" transparent="1" zPosition="4" halign="left" position="783,850" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="subtitles" transparent="1" zPosition="4" halign="left" position="903,850" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioLabel" transparent="1" zPosition="4" halign="left" position="783,885" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audio" transparent="1" zPosition="4" halign="left" position="903,885" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="studioLabel" transparent="1" zPosition="4" halign="left" position="783,920" size="170,30" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="studio" transparent="1" zPosition="4" halign="left" position="903,920" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="durationLabel" transparent="1" zPosition="4" halign="left" position="783,955" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="duration" transparent="1" zPosition="4" halign="left" position="903,955" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+
+		<widget name="tag" transparent="1" zPosition="48" halign="left" valign="center" noWrap="1" position="558,980" size="480,22" font="OpenSans; 20" foregroundColor="#5C5C5C" backgroundColor="#212121"/>
 
 		<!-- detail pane -->
-		<widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="1290,675" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoCodec" transparent="1" zPosition="9" halign="left" position="1445,675" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="bitrateLabel" transparent="1" zPosition="9" halign="left" position="1290,710" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="bitrate" transparent="1" zPosition="9" halign="left" position="1445,710" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="videoFrameRateLabel" transparent="1" zPosition="9" halign="left" position="1290,745" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoFrameRate" transparent="1" zPosition="9" halign="left"  position="1445,745" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioChannelsLabel" transparent="1" zPosition="9" halign="left" position="1290,780" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audioChannels" transparent="1" zPosition="9" halign="left"  position="1445,780" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="aspectRatioLabel" transparent="1" zPosition="9" halign="left" position="1290,815" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="aspectRatio" transparent="1" zPosition="9" halign="left"  position="1445,815" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="videoResolutionLabel" transparent="1" zPosition="9" halign="left" position="1290,850" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="videoResolution" transparent="1" zPosition="9" halign="left"  position="1445,850" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="audioCodecLabel" transparent="1" zPosition="9" halign="left" position="1290,885" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="audioCodec" transparent="1" zPosition="9" halign="left"  position="1445,885" size="370,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
-		<widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="1290,920" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="file" transparent="1" zPosition="9" halign="left"  position="1445,920" size="455,102" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoCodecLabel" transparent="1" zPosition="9" halign="left" position="1290,675" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoCodec" transparent="1" zPosition="9" halign="left" position="1445,675" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="bitrateLabel" transparent="1" zPosition="9" halign="left" position="1290,710" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="bitrate" transparent="1" zPosition="9" halign="left" position="1445,710" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoFrameRateLabel" transparent="1" zPosition="9" halign="left" position="1290,745" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoFrameRate" transparent="1" zPosition="9" halign="left"  position="1445,745" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioChannelsLabel" transparent="1" zPosition="9" halign="left" position="1290,780" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audioChannels" transparent="1" zPosition="9" halign="left"  position="1445,780" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="aspectRatioLabel" transparent="1" zPosition="9" halign="left" position="1290,815" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="aspectRatio" transparent="1" zPosition="9" halign="left"  position="1445,815" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="videoResolutionLabel" transparent="1" zPosition="9" halign="left" position="1290,850" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="videoResolution" transparent="1" zPosition="9" halign="left"  position="1445,850" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="audioCodecLabel" transparent="1" zPosition="9" halign="left" position="1290,885" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="audioCodec" transparent="1" zPosition="9" halign="left"  position="1445,885" size="370,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="fileLabel" transparent="1" zPosition="9" halign="left" position="1290,920" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="file" transparent="1" zPosition="9" halign="left"  position="1445,920" size="455,102" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<!-- tv show specific --><!-- tbd -->
-		<widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="940,685" size="520,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="940,685" size="520,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
 
-		<widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="783,780" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="940,780" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="783,780" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="940,780" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
-		<widget name="leafCountLabel" transparent="1" zPosition="4" halign="left" position="783,815" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="leafCount" transparent="1" zPosition="4" halign="left" position="940,815" size="300,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="leafCountLabel" transparent="1" zPosition="4" halign="left" position="783,815" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="leafCount" transparent="1" zPosition="4" halign="left" position="940,815" size="300,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
-		<widget name="viewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,850" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="viewedLeafCount" transparent="1" zPosition="4" halign="left"  position="940,850" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="viewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,850" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="viewedLeafCount" transparent="1" zPosition="4" halign="left"  position="940,850" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
-		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,885" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="unviewedLeafCount" transparent="1" zPosition="4" halign="left" position="940,885" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,885" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCount" transparent="1" zPosition="4" halign="left" position="940,885" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
-		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="783,388" size="170,35" font="OpenSans; 24" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="info" transparent="1" zPosition="9" halign="left" position="903,388" size="170,35" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="783,388" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="info" transparent="1" zPosition="9" halign="left" position="903,388" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		<!-- tv show specific ende-->
 			
 		<widget name="casePic" zPosition="49" position="543,676" size="240,292" alphatest="blend" transparent="0"/>
@@ -709,7 +708,7 @@
 		<widget source="mediaTitle" render="Label" zPosition="4" position="210,803" size="1500,50" font="OpenSans; 36" halign="left" valign="top" noWrap="1" foregroundColor="#FF8C00" backgroundColor="#40000000" transparent="1" />
 		<widget name="endingTime" zPosition="10" position="1420,803" transparent="1" size="500,42" valign="top" halign="right" font="OpenSans;36" foregroundColor="#FF8C00" backgroundColor="#40000000" noWrap="1"/>
 
-		<widget name="shortDescription" text="" zPosition="99" halign="left" position="220,880" size="1710,204" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1"/>
+		<widget name="shortDescription" text="" zPosition="99" halign="left" position="220,880" size="1710,204" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1"/>
 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/back_progress.png" position="210,850" size="1700,1" zPosition="3" transparent="1" />
 
@@ -720,7 +719,7 @@
 			<convert type="ServicePosition">Position</convert>
 		</widget>
 
-		<widget source="session.CurrentService" render="Label" position="210,844" size="160,38" font="OpenSans; 24" halign="right" valign="center" zPosition="4" backgroundColor="#40000000" transparent="1" foregroundColor="#FF8C00">
+		<widget source="session.CurrentService" render="Label" position="210,844" size="160,38" font="OpenSans; 20" halign="right" valign="center" zPosition="4" backgroundColor="#40000000" transparent="1" foregroundColor="#FF8C00">
 			<convert type="ServicePosition">Length</convert>
 		</widget>
 
@@ -754,7 +753,7 @@
 		<widget source="mediaTitle" render="Label" zPosition="4" position="210,803" size="1500,50" font="OpenSans; 36" halign="left" valign="top" noWrap="1" foregroundColor="#FF8C00" backgroundColor="#40000000" transparent="1" />
 		<widget name="endingTime" zPosition="10" position="1420,803" transparent="1" size="500,42" valign="top" halign="right" font="OpenSans;36" foregroundColor="#FF8C00" backgroundColor="#40000000" noWrap="1"/>
 
-		<widget name="shortDescription" text="" zPosition="99" halign="left" position="220,880" size="1710,204" font="OpenSans; 24" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1"/>
+		<widget name="shortDescription" text="" zPosition="99" halign="left" position="220,880" size="1710,204" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1"/>
 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/back_progress.png" position="210,850" size="1700,1" zPosition="3" transparent="1" />
 
@@ -765,7 +764,7 @@
 			<convert type="ServicePosition">Position</convert>
 		</widget>
 
-		<widget source="session.CurrentService" render="Label" position="210,844" size="160,38" font="OpenSans; 24" halign="right" valign="center" zPosition="4" backgroundColor="#40000000" transparent="1" foregroundColor="#FF8C00">
+		<widget source="session.CurrentService" render="Label" position="210,844" size="160,38" font="OpenSans; 20" halign="right" valign="center" zPosition="4" backgroundColor="#40000000" transparent="1" foregroundColor="#FF8C00">
 			<convert type="ServicePosition">Length</convert>
 		</widget>
 
