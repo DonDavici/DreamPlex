@@ -25,23 +25,23 @@
         <widget name="+2" transparent="1" zPosition="8" position="1530,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
 
         <!-- picons -->
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">serverEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_system.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_system.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">settingsEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_info.png"  zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_info.png"  zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">aboutEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_system.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_system.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">systemEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_tv.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_tv.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">LiveTv</convert>
             <convert type="ConditionalShowHide" />
         </widget>
@@ -106,7 +106,7 @@
         <widget source="help" render="Label" position="45,795" size="1840,120" font="OpenSans; 18" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
 
 		<widget name="btn_green" zPosition="15" position="510,1045" size="30,40" alphatest="blend"/>
-		<widget name="txt_green" position="550,1034" zPosition="15" size="360,40" font="OpenSans;18" halign="left" valign="center" backgroundColor="#3c000000" transparent="1"/>
+		<widget name="btn_greenText" position="550,1034" zPosition="15" size="360,40" font="OpenSans;18" halign="left" valign="center" backgroundColor="#3c000000" transparent="1"/>
     </screen>
 
     <!-- DPS_SystemCheck -->
@@ -177,10 +177,10 @@
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_yellow" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_blue" zPosition="6" position="1310,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" name="btn_yellowText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" name="btn_blueText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_yellowText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_blueText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 
     <!-- DPS_ServerConfig -->
@@ -211,10 +211,10 @@
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_yellow" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_blue" zPosition="6" position="1310,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" name="btn_yellowText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" name="btn_blueText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_yellowText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_blueText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 
     <!-- DPS_Mappings --> 
@@ -239,8 +239,8 @@
         <!-- functions -->
         <widget name="btn_red" zPosition="6" position="110,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 	
 	<!-- DPS_PathSelector -->    
@@ -267,8 +267,8 @@
         <!-- functions -->
         <widget name="btn_red" zPosition="6" position="110,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 
     <!-- DPS_Users --> 
@@ -294,9 +294,9 @@
         <widget name="btn_red" zPosition="6" position="110,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_yellow" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="950,1034" size="360,40" name="btn_yellowText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_yellowText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 
     <!-- DPS_Syncer -->     
@@ -327,9 +327,9 @@
         <widget name="btn_red" zPosition="6" position="110,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_blue" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="txt_red" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="txt_green" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="1350,1034" size="360,40" name="txt_blue" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_blueText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" transparent="1" zPosition="1"/>
     </screen>
 
     <!--DPS_ServerMenu -->
@@ -358,23 +358,23 @@
         <widget name="+2" transparent="1" zPosition="8" position="1530,680" size="380,150" font="OpenSans; 34" halign="center" valign="center" foregroundColor="#ffffff" backgroundColor="#0f0f0f"/>
 
         <!-- picons -->
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_movies.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_movies.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">movieEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_shows.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_shows.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">showEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_music.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/menu_music.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">musicEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">mixedEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
-        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1250,150" size="350,350" alphatest="blend" >
             <convert type="MenuEntryCompare">serverFilter</convert>
             <convert type="ConditionalShowHide" />
         </widget>
@@ -393,11 +393,11 @@
 
 		
        <!-- tbd -->
-		<widget name="text_HomeUserLabel" position="110,1034" zPosition="15" size="120,40" font="OpenSans;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
-		<widget name="text_HomeUser" position="210,1034" zPosition="15" size="260,40" font="OpenSans;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+		<widget name="text_HomeUserLabel" position="110,1034" zPosition="15" size="120,40" font="OpenSans;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+		<widget name="text_HomeUser" position="210,1034" zPosition="15" size="260,40" font="OpenSans;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
 
 		<widget name="btn_green" zPosition="15" position="410,1034" size="30,40" alphatest="blend"/>
-		<widget name="btn_greenText" position="550,1034" zPosition="15" size="360,40" font="OpenSans;22" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
+		<widget name="btn_greenText" position="550,1034" zPosition="15" size="360,40" font="OpenSans;18" halign="left" valign="center" foregroundColor="#5C5C5C" backgroundColor="#000000" transparent="1"/>
     </screen>
 
     <!-- DPS_InputBox --> 
@@ -545,10 +545,10 @@
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_yellow" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_blue" zPosition="6" position="1310,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="950,1034" size="360,40" name="btn_yellowText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="1350,1034" size="360,40" name="btn_blueText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_yellowText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_blueText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" transparent="1" zPosition="1"/>
 
 		<!-- functions -->
 		<widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="center,center" size="75,80" font="OpenSans;70" foregroundColor="#FF8C00" transparent="1"/>
@@ -677,10 +677,10 @@
 		<widget name="btn_green" zPosition="6" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_yellow" zPosition="6" position="910,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_blue" zPosition="6" position="1310,1045" size="30,40" alphatest="blend"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="150,1034" size="360,40" name="btn_redText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="550,1034" size="360,40" name="btn_greenText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="950,1034" size="360,40" name="btn_yellowText" transparent="1" zPosition="1"/>
-		<widget backgroundColor="#3c000000" font="OpenSans; 20" halign="left" valign="center" position="1350,1034" size="360,40" name="btn_blueText" transparent="1" zPosition="1"/>
+		<widget name="btn_redText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="150,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_greenText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="550,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_yellowText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="950,1034" size="360,40" transparent="1" zPosition="1"/>
+		<widget name="btn_blueText" backgroundColor="#3c000000" font="OpenSans; 18" halign="left" valign="center" position="1350,1034" size="360,40" transparent="1" zPosition="1"/>
 
 		<!-- functions -->
 		<widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="center,center" size="75,80" font="OpenSans;70" foregroundColor="#FF8C00" transparent="1"/>

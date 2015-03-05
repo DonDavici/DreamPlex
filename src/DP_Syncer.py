@@ -86,19 +86,19 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 		# we use this counter to reset scorll label every x entries to stay responsive
 		self.counter = 0
 
-		self["txt_green"] = Label()
+		self["btn_greenText"] = Label()
 		if self._mode == "sync":
-			self["txt_green"].setText(_("Start Sync"))
+			self["btn_greenText"].setText(_("Start Sync"))
 		else:
-			self["txt_green"].setText(_("Start Rendering"))
+			self["btn_greenText"].setText(_("Start Rendering"))
 		self["btn_green"] = Pixmap()
 
-		self["txt_blue"] = Label()
-		self["txt_blue"].setText(_("Background"))
+		self["btn_blueText"] = Label()
+		self["btn_blueText"].setText(_("Background"))
 		self["btn_blue"] = Pixmap()
 
-		self["txt_red"] = Label()
-		self["txt_red"].setText(_("Abort"))
+		self["btn_redText"] = Label()
+		self["btn_redText"].setText(_("Abort"))
 		self["btn_red"] = Pixmap()
 
 		self["setupActions"] = ActionMap(["DPS_Syncer"],
@@ -156,14 +156,14 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 		self.mediaSyncerInfo.setMode(self._mode)
 
 		if self.mediaSyncerInfo.isRunning():
-			self["txt_green"].hide()
+			self["btn_greenText"].hide()
 			self["btn_green"].hide()
 
 		else:
-			self["txt_red"].hide()
+			self["btn_redText"].hide()
 			self["btn_red"].hide()
 
-			self["txt_blue"].hide()
+			self["btn_blueText"].hide()
 			self["btn_blue"].hide()
 
 		if self._mode == "render" and not isRunning:
@@ -204,13 +204,13 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 
 		if self.mediaSyncerInfo.isRunning():
 			self.cancel()
-			self["txt_green"].show()
+			self["btn_greenText"].show()
 			self["btn_green"].show()
 
-			self["txt_blue"].hide()
+			self["btn_blueText"].hide()
 			self["btn_blue"].hide()
 
-			self["txt_red"].hide()
+			self["btn_redText"].hide()
 			self["btn_red"].hide()
 
 		printl("", self, "C")
@@ -244,12 +244,12 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 
 		if not self.mediaSyncerInfo.isRunning():
 			self.doMediaSync()
-			self["txt_blue"].show()
+			self["btn_blueText"].show()
 			self["btn_blue"].show()
 			self["btn_red"].show()
-			self["txt_red"].show()
+			self["btn_redText"].show()
 			self["btn_green"].hide()
-			self["txt_green"].hide()
+			self["btn_greenText"].hide()
 
 		printl("", self, "C")
 
@@ -318,10 +318,10 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 		printl("", self, "S")
 
 		self["output"].appendText(_("\n\nFinished"))
-		self["txt_blue"].hide()
+		self["btn_blueText"].hide()
 		self["btn_blue"].hide()
 
-		self["txt_red"].hide()
+		self["btn_redText"].hide()
 		self["btn_red"].hide()
 
 		printl("", self, "C")

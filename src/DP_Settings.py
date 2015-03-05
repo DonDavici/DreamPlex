@@ -65,7 +65,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen, DPH_PlexScreen):
 		
 		self._hasChanged = False
 
-		self["txt_green"] = Label()
+		self["btn_greenText"] = Label()
 		self["btn_green"] = Pixmap()
 
 		self["help"] = StaticText()
@@ -98,7 +98,7 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen, DPH_PlexScreen):
 		# first we set the pics for buttons
 		self.setColorFunctionIcons()
 
-		self["txt_green"].hide()
+		self["btn_greenText"].hide()
 		self["btn_green"].hide()
 
 		printl("", self, "C")
@@ -213,8 +213,8 @@ class DPS_Settings(Screen, ConfigListScreen, HelpableScreen, DPH_PlexScreen):
 		
 		self._hasChanged = True
 
-		self["txt_green"].show()
-		self["txt_green"].setText(_("Save"))
+		self["btn_greenText"].show()
+		self["btn_greenText"].setText(_("Save"))
 		self["btn_green"].show()
 
 		printl("", self, "C")
