@@ -47,40 +47,37 @@
 		<subView name="ShowMovies">
 		<element name="miniTv" xCoord="51" yCoord="127"/>
 		</subView>
-	</movieView>	
+	</movieView>
 
 	<movieView name="Backdrop" type="Backdrop" apiLevel="1" itemsPerPage="12" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="1080" backdropVideoWidth="1920" miniTv="True" posterHeight="268" posterWidth="195" backdropHeight="1080" backdropWidth="1920">
 		<subView name="ShowMovies">
 			<element name="backdrop" visible="True" height="1080" width="1920"/>
-		    <element name="miniTv" xCoord="0" yCoord="0"/>
+			<element name="miniTv" xCoord="0" yCoord="0"/>
 		</subView>
-
 	</movieView>
 	
-	-->
-
 	<!-- SHOW VIEWS -->
 	<showView name="List" type="List" apiLevel="1" itemsPerPage="15" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="462" backdropVideoWidth="822" miniTv="True" posterHeight="268" posterWidth="195" backdropHeight="462" backdropWidth="822">
 		<subView name="ShowShows">	
-		    <element name="grandparentTitle" visible="False"/>
-		    <element name="title" xCoord="245" yCoord="722" />
-		    <element name="shortDescription" xCoord="245" yCoord="770" visible="True"/>
-		    <element name="studio" xCoord="1375" yCoord="970"/>
-		    <element name="duration" xCoord="1375" yCoord="1005"/>
+			<element name="grandparentTitle" visible="False"/>
+			<element name="title" xCoord="245" yCoord="722" />
+			<element name="shortDescription" xCoord="245" yCoord="770" visible="True"/>
+			<element name="studio" xCoord="1375" yCoord="970"/>
+			<element name="duration" xCoord="1375" yCoord="1005"/>
 		</subView>
-        
-		<subView name="ShowSeasons">						
+
+		<subView name="ShowSeasons">
 			<element name="grandparentTitle" visible="True"/>
 			<element name="title" xCoord="245" yCoord="722" />
 			<element name="shortDescription" xCoord="245" yCoord="770"/>
 			<element name="duration" visible="False"/>
-			<element name="childCount" visible="False"/>						
+			<element name="childCount" visible="False"/>
 			<element name="studio" xCoord="1375" yCoord="970"/>
 			<element name="info" visible="False"/>
-			<element name="btn_yellow" visible="False"/>			
+			<element name="btn_yellow" visible="False"/>
 		</subView>
 
-		<subView name="ShowEpisodes">		
+		<subView name="ShowEpisodes">
 			<element name="grandparentTitle" visible="False"/>
 			<element name="title" xCoord="245" yCoord="722" />
 			<element name="shortDescription" xCoord="245" yCoord="770"/>
@@ -88,16 +85,14 @@
 			<element name="writer" visible="True" xCoord="1375" yCoord="795"/>
 			<element name="subtitles" visible="True" xCoord="1375" yCoord="900"/>
 			<element name="audio" visible="True" xCoord="1375" yCoord="935"/>
-			<element name="duration" visible="True" xCoord="1375" yCoord="1005"/>									
+			<element name="duration" visible="True" xCoord="1375" yCoord="1005"/>
 			<element name="codec" visible="True"/>
 			<element name="aspect" visible="True"/>
 			<element name="resolution" visible="True"/>
 			<element name="sound" visible="True"/>
-					    
 			<element name="leafCount" visible="False"/>
 			<element name="viewedLeafCount" visible="False"/>
 			<element name="unviewedLeafCount" visible="False"/>
-			
 			<element name="info" xCoord="990" yCoord="550" visible="True"/>
 			<element name="btn_yellow" visible="True"/>
 		</subView>
@@ -121,21 +116,19 @@
 			<element name="leafCount" visible="False"/>
 			<element name="viewedLeafCount" visible="False"/>
 			<element name="unviewedLeafCount" visible="False"/>
-
 			<element name="info" xCoord="990" yCoord="550" visible="True"/>
 			<element name="btn_yellow" visible="True"/>
 		</subView>
 	</showView>
 
-	
 	<showView name="Backdrop" type="Backdrop" apiLevel="1" itemsPerPage="12" screen="DPS_ViewBackdrop" backdropVideos="True" backdropVideoHeight="1080" backdropVideoWidth="1920" miniTv="True" posterHeight="268" posterWidth="195" backdropHeight="1080" backdropWidth="1920">
 		<subView name="ShowShows">
 			<element name="title" xCoord="558" yCoord="596" />
-			<element name="grandparentTitle" visible="False"/>		    
-		    <element name="studio" xCoord="903" yCoord="920"/>
-			<element name="duration" xCoord="903" yCoord="955"/>		    
-		    <element name="shortDescription" visible="True" xCoord="1290" yCoord="675"/>
-		    <element name="rated" xCoord="1763" yCoord="611"/>
+			<element name="grandparentTitle" visible="False"/>
+			<element name="studio" xCoord="903" yCoord="920"/>
+			<element name="duration" xCoord="903" yCoord="955"/>
+			<element name="shortDescription" visible="True" xCoord="1290" yCoord="675"/>
+			<element name="rated" xCoord="1763" yCoord="611"/>
 		</subView>
 
 		<subView name="ShowSeasons">
@@ -143,24 +136,24 @@
 			<element name="grandparentTitle" visible="False"/>
 			
 			<element name="duration" visible="False"/>
-			<element name="childCount" visible="False"/>					
+			<element name="childCount" visible="False"/>
 			
 			<element name="info" visible="False"/>
 			<element name="btn_yellow" visible="False"/>
 		</subView>
 
-		<subView name="ShowEpisodes">			
+		<subView name="ShowEpisodes">
 			<element name="title" xCoord="558" yCoord="596" />
 			<element name="grandparentTitle" visible="False"/>
-			<element name="duration" xCoord="903" yCoord="955" visible="True"/>			
+			<element name="duration" xCoord="903" yCoord="955" visible="True"/>
 			<element name="audio" visible="True"/>
-			<element name="subtitles" visible="True"/>						
+			<element name="subtitles" visible="True"/>
 			<element name="codec" visible="True"/>
 			<element name="aspect" visible="True"/>
 			<element name="resolution" visible="True"/>
 			<element name="sound" visible="True"/>
 			<element name="writer" visible="True"/>
-		    <element name="rated" xCoord="1763" yCoord="611"/>
+			<element name="rated" xCoord="1763" yCoord="611"/>
 			
 			<element name="leafCount" visible="False"/>
 			<element name="viewedLeafCount" visible="False"/>
@@ -190,8 +183,7 @@
 			<element name="info" visible="True"/>
 			<element name="btn_yellow" visible="True"/>
 		</subView>
-	</showView>	
-	-->
+	</showView>
 
 	<!-- MUSIC VIEWS -->
 	<musicView name="List" type="List" apiLevel="1" itemsPerPage="12" screen="DPS_ViewList" backdropVideos="True" backdropVideoHeight="321" backdropVideoWidth="555" miniTv="True" posterHeight="268" posterWidth="195" backdropHeight="315" backdropWidth="560">
