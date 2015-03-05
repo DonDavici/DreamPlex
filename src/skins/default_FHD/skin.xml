@@ -374,6 +374,10 @@
             <convert type="MenuEntryCompare">mixedEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/picons/dreamplex.png" zPosition="10" position="1450,150" size="350,350" alphatest="blend" >
+            <convert type="MenuEntryCompare">serverFilter</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
 
         <!-- mini-tv -->
         <ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/frame-fs8.png" position="0,0" zPosition="11" size="1920,1080" alphatest="blend" transparent="1"/>

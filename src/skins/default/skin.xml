@@ -383,6 +383,10 @@
             <convert type="MenuEntryCompare">mixedEntry</convert>
             <convert type="ConditionalShowHide" />
         </widget>
+        <widget source="menu" render="Pixmap" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/picons/dreamplex.png" zPosition="10" position="800,120" size="350,350" alphatest="blend" >
+            <convert type="MenuEntryCompare">serverFilter</convert>
+            <convert type="ConditionalShowHide" />
+        </widget>
 
         <!-- filter -->
         <widget name="number_key_popup" zPosition="51" halign="left" valign="center" position="501,310" size="75,80" font="OpenSans;70" foregroundColor="#FF8C00" transparent="1"/>

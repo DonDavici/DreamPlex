@@ -421,11 +421,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 	def createSetup(self):
 		printl("", self, "S")
 
-		separator = "".ljust(90,"_")
+		separator = "".ljust(250,"_")
 
 		self.cfglist = []
 		##
-		self.cfglist.append(getConfigListEntry(_("General Settings") + separator, config.plugins.dreamplex.about, _("-")))
+		self.cfglist.append(getConfigListEntry(_("General Settings ") + separator, config.plugins.dreamplex.about, _("-")))
 		##
 		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("Toggle state to on/off to show this server in lost or not.")))
 		self.cfglist.append(getConfigListEntry(_(" > Autostart"), self.current.autostart, _("Enter this server automatically on startup.")))
@@ -433,7 +433,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		self.cfglist.append(getConfigListEntry(_(" > Trailer"), self.current.loadExtraData, _(" ")))
 
 		##
-		self.cfglist.append(getConfigListEntry(_("Connection Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Connection Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
 		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
 
@@ -451,7 +451,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self.addMyPlexSettings()
 
 		##
-		self.cfglist.append(getConfigListEntry(_("Playback Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Playback Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
 
 		self.cfglist.append(getConfigListEntry(_(" > Playback Type"), self.current.playbackType, _(" ")))
@@ -480,14 +480,14 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		if self.current.playbackType.value == "2":
 			##
-			self.cfglist.append(getConfigListEntry(_("Subtitle Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+			self.cfglist.append(getConfigListEntry(_("Subtitle Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 			##
 			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.srtRenamingForDirectLocal, _(" ")))
 			if self.current.srtRenamingForDirectLocal.value:
 				self.cfglist.append(getConfigListEntry(_(" >> Target subtitle language"), self.current.subtitlesLanguage, _(" ")))
 
 		##
-		self.cfglist.append(getConfigListEntry(_("Wake On Lan Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Wake On Lan Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
 		self.cfglist.append(getConfigListEntry(_(" > Use Wake on Lan (WoL)"), self.current.wol, _(" ")))
 
@@ -496,19 +496,11 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			self.cfglist.append(getConfigListEntry(_(" >> Wait for server delay (max 180 seconds) only for WoL"), self.current.wol_delay, _(" ")))
 
 		##
-		self.cfglist.append(getConfigListEntry(_("Sync Settings") + separator, config.plugins.dreamplex.about, _(" ")))
+		self.cfglist.append(getConfigListEntry(_("Sync Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
 		self.cfglist.append(getConfigListEntry(_(" > Sync Movies Medias"), self.current.syncMovies, _(" ")))
 		self.cfglist.append(getConfigListEntry(_(" > Sync Shows Medias"), self.current.syncShows, _(" ")))
 		self.cfglist.append(getConfigListEntry(_(" > Sync Music Medias"), self.current.syncMusic, _(" ")))
-
-		#===================================================================
-		#
-		# getConfigListEntry(_("Transcode Type (no function yet but soon ;-)"), self.current.transcodeType),
-		# getConfigListEntry(_("Quality (no function yet but soon ;-)"), self.current.quality),
-		# getConfigListEntry(_("Audio Output (no function yet but soon ;-)"), self.current.audioOutput),
-		# getConfigListEntry(_("Stream Mode (no function yet but soon ;-)"), self.current.streamMode),
-		#===================================================================
 
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
