@@ -157,7 +157,6 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.calculateEndingTime = False
 		else:
 			self.skinName = "DPS_VideoPlayer"
-			self["endingTime"] = Label()
 			self.calculateEndingTime = True
 
 		for x in HelpableScreen, InfoBarShowHide, InfoBarBase, InfoBarSeek, \
@@ -214,6 +213,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self["poster"] = Pixmap()
 		self["shortDescription"] = Label()
 		self["mediaTitle"] = StaticText()
+		self["endingTime"] = Label()
 
 		# init volume object
 		self.volumeHandler= eDVBVolumecontrol.getInstance()
@@ -1297,6 +1297,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				endingTime = localtime()
 
 			self["endingTime"].setText(strftime("%H:%M:%S", endingTime))
+		else:
+			self["endingTime"].hide()
 
 		if self.multiUserServer:
 			try:

@@ -175,6 +175,7 @@ def getViewsFromSkinParams(myType):
 					configfile.save()
 					Notifications.AddNotification(MessageBox, "DreamPlex crashed due to a skin error!\nSwitching back to default in settings.\n", type=MessageBox.TYPE_INFO, timeout=10)
 				else:
+					printl("this value: " + str(value) + "is misssing ....", "DP_ViewFactory::getViewsFromSkinParams", "D")
 					raise Exception
 			else:
 				currentParams["settings"][setting] = translateValues(value)

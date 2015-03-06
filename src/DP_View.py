@@ -1652,8 +1652,6 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		# now we set the currentViewMode to be able to alter skin elements according to their settings in the params file
 		self.selection = self["listview"].getCurrent()
 
-		printl("selection: " + str(self.selection), self, "D")
-
 		# none is possible if there is no data in the section
 		if self.selection is not None:
 			self.currentViewMode = self.selection[1]["currentViewMode"]
