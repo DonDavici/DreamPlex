@@ -64,6 +64,7 @@ skinCompatibility = "v2"
 skinDebugMode = False
 skinHighlightedColor = "#e69405"
 skinNormalColor = "#ffffff"
+skinFolder = None
 g_boxData = None
 screens = []
 liveTv = None
@@ -414,23 +415,9 @@ def loadPlexSkin():
 	"""
 	printl2("", "__common__::loadPlexSkin", "S")
 
-	skinName = str(config.plugins.dreamplex.skin.value)
-	printl2("current skin: " + skinName, "__common__::loadPlexSkin", "S")
+	currentSkin = getSkinFolder() + "/skin.xml"
 
-	# if we are the our default we switch automatically between the resolutions
-	if skinName == "default":
-		myType = getBoxResolution()
-		if myType == "FHD":
-			skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "_FHD/skin.xml"
-		else:
-			skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
-
-	# if not we load whatever is set
-	else:
-		skin = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "/skin.xml"
-
-	if skin:
-		loadSkin(skin)
+	loadSkin(currentSkin)
 
 	printl2("", "__common__::loadPlexSkin", "C")
 
@@ -664,6 +651,26 @@ def setBoxInformation():
 	g_boxData = (manu, model, g_archType, g_oeVersion)
 
 	printl2("", "__common__::_setBoxtype", "C")
+
+#===========================================================================
+#
+#===========================================================================
+def setSkinFolder(currentSkinFolder):
+	printl2("", "__common__::setSkinFolder", "S")
+
+	global skinFolder
+	skinFolder = currentSkinFolder
+
+	printl2("", "__common__::setSkinFolder", "C")
+
+#===========================================================================
+# there is no / at the end
+#===========================================================================
+def getSkinFolder():
+	printl2("", "__common__::getSkinFolder", "S")
+
+	printl2("", "__common__::getSkinFolder", "C")
+	return skinFolder
 
 #===========================================================================
 #
