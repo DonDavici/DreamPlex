@@ -2133,7 +2133,6 @@ class PlexLibrary(Screen):
 				printl("myFile " + str(myFile),self, "D")
 
 				subtitleFileOrig = path + myFileWoExtension + "." + language + ".srt"
-				printl("subtitleFileOrig " + str(subtitleFileOrig),self, "D")
 
 				#check if there is a srt file with specific language
 				if fileExists(subtitleFileOrig):
@@ -2143,6 +2142,8 @@ class PlexLibrary(Screen):
 						copyfile(subtitleFileOrig, subtitleFileTemp)
 					else:
 						printl("using existing srt file ...")
+				else:
+					printl("unable to find the following subtitle file ... " + str(subtitleFileOrig),self, "D")
 
 		elif protocol == "http":
 			printl( "We are playing a stream", self, "I")
