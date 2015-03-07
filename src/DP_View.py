@@ -1547,7 +1547,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		printl("", self, "C")
 
 	#===========================================================================
-	#
+	# cause is used e.g. toggle view
 	#===========================================================================
 	def leaveNow(self, cause=None):
 		printl("", self, "S")
@@ -1555,8 +1555,9 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		if self.loadedStillPictureLib:
 			self.stopBackdropVideo()
 
-		if not config.plugins.dreamplex.stopLiveTvOnStartup.value and cause is None: # cause is used e.g. toggle view
-			self.restoreLiveTv()
+		# this seems to be uneeded
+		# if not config.plugins.dreamplex.stopLiveTvOnStartup.value and cause is None:
+		# 	self.restoreLiveTv()
 
 		if cause is not None:
 			printl("", self, "C")
