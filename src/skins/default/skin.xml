@@ -804,7 +804,8 @@
 		<widget name="bufferslider" position="37,15" size="500,8" zPosition="10" transparent="1" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default/images/progress-fs8.png" />
 
 	</screen>
-	<!-- LCD screen -->
+
+    <!-- LCD screen -->
 	<screen name="DreamPlexPlayerSummary" position="0,0" size="132,64" id="1">
 		<!-- Movie name -->
 		<widget source="session.CurrentService" render="Label" position="1,1" size="130,37" font="Regular;16" halign="center">

@@ -129,7 +129,7 @@
 		<widget name="header" zPosition="3" position="40,80" size="1220,30" transparent="1" backgroundColor="#212121" font="OpenSans;18"/>
 
 		<!-- content -->
-		<widget name="content" zPosition="3" position="40,120" size="1720,680" font="OpenSans;18" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png"/>
+		<widget name="content" zPosition="3" position="40,120" size="1720,680" transparent="1" itemHeight="40" scrollbarMode="showOnDemand" foregroundColor="#5C5C5C" backgroundColor="#212121" foregroundColorSelected="#ffffff" selectionPixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/focus_settings.png"/>
 
 	</screen>
 
@@ -749,10 +749,8 @@
 		</widget>
 
 		<widget name="poster" transparent="1" zPosition="49" position="4,808" size="195,268" alphatest="blend"/>
-
 		<widget source="mediaTitle" render="Label" zPosition="4" position="210,803" size="1500,50" font="OpenSans; 36" halign="left" valign="top" noWrap="1" foregroundColor="#FF8C00" backgroundColor="#40000000" transparent="1" />
 		<widget name="endingTime" zPosition="10" position="1420,803" transparent="1" size="500,42" valign="top" halign="right" font="OpenSans;36" foregroundColor="#FF8C00" backgroundColor="#40000000" noWrap="1"/>
-
 		<widget name="shortDescription" text="" zPosition="99" halign="left" position="220,880" size="1710,204" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#40000000" transparent="1"/>
 
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/back_progress.png" position="210,850" size="1700,1" zPosition="3" transparent="1" />
