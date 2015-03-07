@@ -1671,6 +1671,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 	def refresh(self):
 		printl("", self, "S")
 
+		# todo we can make this as option if the new boxes have enough power to cicle through the list and showing backdrops as well fast
 		# we kill a former timer to start a new one
 		if self.refreshTimer is not None:
 			self.refreshTimer.stop()
