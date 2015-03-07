@@ -321,7 +321,6 @@ def registerSkinParamsInstance():
 	setSkinFolder(currentSkinFolder=skinfolder)
 	printl("current skinfolder: " + skinfolder, "__common__::registerSkinParamsInstance", "S")
 
-
 	configXml = getXmlContent(skinfolder + "/params")
 	Singleton().getSkinParamsInstance(configXml)
 
