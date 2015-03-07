@@ -1967,14 +1967,23 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 				# check if showiframe lib loaded ...
 				if self.loadedStillPictureLib and "ratingKey" in self.details:
 					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
-					backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
-					printl("backdrop: " + str(backdrop), self, "D")
 
-					# check if the backdrop file exists
-					if os.access(backdrop, os.F_OK):
+					#first we need to remove the file extension
+					myFileWoExtension = self.whatBackdrop
+
+					# now add the m1v file extension
+					self.whatBackdrop = myFileWoExtension + ".m1v"
+
+					# we used this code earlier. but this leads to no m1v usage in shows
+					# todo after tests remove this
+					# backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
+					printl("backdrop: " + str(self.whatBackdrop), self, "D")
+
+					# check if the backdrop m1v exists
+					if os.access(self.whatBackdrop, os.F_OK):
 						printl("yes", self, "D")
 						self["miniTv"].show()
-						self["stillPicture"].setStillPicture(backdrop)
+						self["stillPicture"].setStillPicture(self.whatBackdrop)
 						self["backdrop"].hide()
 						self.usedStillPicture = True
 					else:
