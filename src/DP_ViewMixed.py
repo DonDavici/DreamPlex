@@ -64,6 +64,8 @@ class DPS_ViewMixed(DP_View):
 		# we use this for filtermode at startup
 		self.filterableContent = True
 
+		self.setMediaFunctions()
+
 		if self.details.get("type") == "movie" or self.details.get("type") == "episode":
 			# handle pictures
 			self.changeBackdrop = True
@@ -111,7 +113,6 @@ class DPS_ViewMixed(DP_View):
 
 			# final sets
 			self.setDuration()
-			self.setMediaFunctions()
 
 		elif self.details.get("type") == "season":
 			# handle pictures

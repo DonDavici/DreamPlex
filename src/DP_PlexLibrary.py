@@ -2831,11 +2831,17 @@ class PlexLibrary(Screen):
 	def getFullListEntry(self, entryData, url, viewState = None, isDirectory = False):
 		printl("", self, "S")
 
-		if not isDirectory and "ratingKey" in entryData:
-			# build specific context menu entries
+		# TODO check after some time if we can delete this
+		# if not isDirectory and "ratingKey" in entryData:
+		# 	# build specific context menu entries
+		# 	contextMenu = self.buildContextMenu(url, entryData['ratingKey'], entryData['server'])
+		# else:
+		# 	# directories have no contextMenu
+		# 	contextMenu = None
+
+		if "ratingKey" in entryData:
 			contextMenu = self.buildContextMenu(url, entryData['ratingKey'], entryData['server'])
 		else:
-			# directories have no contextMenu
 			contextMenu = None
 
 		# build url for content

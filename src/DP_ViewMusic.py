@@ -66,6 +66,8 @@ class DPS_ViewMusic(DP_View):
 		# we use this for filtermode at startup
 		self.filterableContent = True
 
+		self.setMediaFunctions()
+
 		if "type" in self.details:
 			if self.details["type"] == "folder":
 				self.fromDirectory = True
