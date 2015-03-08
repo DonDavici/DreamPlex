@@ -287,19 +287,14 @@ def initServerEntryConfig():
 	return config.plugins.dreamplex.Entries[i]
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def registerSkinParamsInstance():
 	printl("", "__init__::registerSkinParamsInstance", "S")
 
+	boxResolution = str(getBoxResolution())
 	skinName = str(config.plugins.dreamplex.skin.value)
 	printl("current skin: " + skinName, "__common__::registerSkinParamsInstance", "S")
-
-	boxResolution = str(getBoxResolution())
-	printl("boxResolution: " + boxResolution, "__common__::registerSkinParamsInstance", "S")
-
-	skinResolution = str(getSkinResolution())
-	printl("skinResolution: " + skinResolution, "__common__::registerSkinParamsInstance", "S")
 
 	# if we are our default we switch automatically between the resolutions
 	if skinName == "default":
@@ -307,24 +302,42 @@ def registerSkinParamsInstance():
 			skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value + "_FHD"
 		else:
 			skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value
-
-	# if not we load whatever is set
 	else:
-		if boxResolution == "FHD" and skinResolution == "FHD":
-			skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value
-		else:
-			# if there is setup another FHD skin but the box skin is HD we switch automatically to default HD skin to avoid wrong screen size
-			# which leads to unconfigurable dreamplex
-			skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default"
-			printl("switching to default due to mismatch of box and skin resolution!")
+		skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/" + config.plugins.dreamplex.skin.value
 
 	setSkinFolder(currentSkinFolder=skinfolder)
-	printl("current skinfolder: " + skinfolder, "__common__::registerSkinParamsInstance", "S")
+	printl("current skinfolder: " + skinfolder, "__common__::checkSkinResolution", "S")
 
 	configXml = getXmlContent(skinfolder + "/params")
 	Singleton().getSkinParamsInstance(configXml)
 
 	printl("", "__init__::registerSkinParamsInstance", "C")
+
+#===============================================================================
+# 
+#===============================================================================
+def checkSkinResolution():
+	printl("", "__init__::checkSkinResolution", "S")
+
+	boxResolution = str(getBoxResolution())
+	printl("boxResolution: " + boxResolution, "__common__::checkSkinResolution", "S")
+
+	skinResolution = str(getSkinResolution())
+	printl("skinResolution: " + skinResolution, "__common__::checkSkinResolution", "S")
+
+	if boxResolution == "HD" and skinResolution == "FHD":
+		# if there is setup another FHD skin but the box skin is HD we switch automatically to default HD skin to avoid wrong screen size
+		# which leads to unconfigurable dreamplex
+		skinfolder = "/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default"
+		printl("switching to default due to mismatch of box and skin resolution!")
+
+		setSkinFolder(currentSkinFolder=skinfolder)
+		printl("current skinfolder: " + skinfolder, "__common__::checkSkinResolution", "S")
+
+		configXml = getXmlContent(skinfolder + "/params")
+		Singleton().getSkinParamsInstance(configXml)
+
+	printl("", "__init__::checkSkinResolution", "C")
 
 #===============================================================================
 # 
@@ -491,11 +504,12 @@ def prepareEnvironment():
 	printGlobalSettings()
 	initPlexServerConfig()
 	registerSkinParamsInstance()
+	loadSkinParams()
+	checkSkinResolution()
 	getViewTypesForSettings()
 	checkPlexEnvironment()
 	registerPlexFonts()
 	loadPlexPlugins()
-	loadSkinParams()
 
 #===============================================================================
 #
