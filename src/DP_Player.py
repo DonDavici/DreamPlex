@@ -807,7 +807,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.transcoderHeartbeat is not None:
 			self.transcoderHeartbeat.stop()
 
-		self.timelineWatcher.start(5000,False)
+		self.timelineWatcher.start(30000,False)
 
 		printl("", self, "S")
 	#===========================================================================
