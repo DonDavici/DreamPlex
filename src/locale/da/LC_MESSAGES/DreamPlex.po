@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: enigma2-plugin-extentions-dreamplex 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-06 16:15+0100\n"
-"PO-Revision-Date: 2015-03-05 22:38+0100\n"
-"Last-Translator: DonDavici <dondavici@gmail.com>\n"
+"PO-Revision-Date: 2015-03-08 01:40+0100\n"
+"Last-Translator: lupine <a_ecklon@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
@@ -46,13 +46,13 @@ msgid " >> IP"
 msgstr " >> IP"
 
 msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
-msgstr " >> Mac adresse (StÃ¸rrelse: 12 alfanumerisk ingen seperator) kun for WoL"
+msgstr " >> Mac adresse (Størrelse: 12 alfanumerisk ingen seperator) kun for WoL"
 
 msgid " >> Port"
 msgstr " >> Port"
 
 msgid " >> Segmentsize in seconds"
-msgstr " >> SegmentstÃ¸rrelse i sekunder"
+msgstr " >> Segmentstørrelse i sekunder"
 
 msgid " >> Transcoding quality"
 msgstr " >> Transcoding kvalitet"
@@ -61,7 +61,7 @@ msgid " >> Use universal Transcoder"
 msgstr " >> Brug universal Transcoder"
 
 msgid " >> Wait for server delay (max 180 seconds) only for WoL"
-msgstr " >> Vent pÃ¥ server forsinkelse (max 180 sekunder) kun for WoL"
+msgstr " >> Vent på server forsinkelse (max 180 sekunder) kun for WoL"
 
 msgid " >> myPLEX Password"
 msgstr " >> myPLEX Kodeord"
@@ -82,14 +82,14 @@ msgid ""
 msgstr ""
 " Denne fil er kun delvist afspillet.\n"
 "\n"
-" Vil du fortsÃ¦tte?"
+" Vil du fortsætte?"
 
 #, python-format
 msgid "%s"
 msgstr "%s"
 
 msgid "(current 'Default')"
-msgstr "(nuvÃ¦rende 'Standard')"
+msgstr "(nuværende 'Standard')"
 
 msgid "-"
 msgstr "-"
@@ -191,13 +191,13 @@ msgid "> Show Filter for Section"
 msgstr "> Vis filter for sektionen."
 
 msgid "> Show Infobar when buffer drained"
-msgstr "> Vis infobar nÃ¥r bufferen er tom"
+msgstr "> Vis infobar når bufferen er tom"
 
 msgid "> Show Plugin in Main Menu"
 msgstr "> Vis plugin i hovedmenu"
 
 msgid "> Show Seen/Unseen count in TvShows"
-msgstr "> Vis tÃ¦ller for sete/usete i TVShow"
+msgstr "> Vis tæller for sete/usete i TVShow"
 
 msgid "> Show additional data for myPlex sections"
 msgstr "> Vis yderligere data for myPlex sektioner."
@@ -233,13 +233,13 @@ msgid "About"
 msgstr "Om"
 
 msgid "Add"
-msgstr "TilfÃ¸j"
+msgstr "Tilføj"
 
 msgid "Add Entry"
-msgstr "TilfÃ¸j punkt"
+msgstr "Tilføj punkt"
 
 msgid "Adding new mapping was not completed"
-msgstr "TilfÃ¸jelse af ny sti ikke komplet"
+msgstr "Tilføjelse af ny sti ikke komplet"
 
 msgid "All"
 msgstr "Alle"
@@ -275,13 +275,13 @@ msgid "By Country"
 msgstr "Efter Land"
 
 msgid "By Decade"
-msgstr "Efter Ã…rti"
+msgstr "Efter Årti"
 
 msgid "By Director"
-msgstr "Efter InstruktÃ¸r"
+msgstr "Efter Instruktør"
 
 msgid "By First Letter"
-msgstr "Efter fÃ¸rste bogstav"
+msgstr "Efter første bogstav"
 
 msgid "By Folder"
 msgstr "Efter Folder"
@@ -293,13 +293,13 @@ msgid "By Rating"
 msgstr "Efter Vurdering"
 
 msgid "By Resolution"
-msgstr "Efter OplÃ¸sning"
+msgstr "Efter Opløsning"
 
 msgid "By Starring Actor"
 msgstr "Efter Hovedskuespiller"
 
 msgid "By Year"
-msgstr "Efter Ã…r"
+msgstr "Efter År"
 
 msgid "Cancel"
 msgstr "Fortryd"
@@ -366,10 +366,10 @@ msgstr ""
 "Skal Enigma2 genstartes nu?"
 
 msgid "Enter this server automatically on startup."
-msgstr "Start op pÃ¥ denne server."
+msgstr "Start op på denne server."
 
 msgid "Enter your remote path segment here:"
-msgstr "TilfÃ¸j fjernstis afsnit her:"
+msgstr "Tilføj fjernstis afsnit her:"
 
 msgid "Exit"
 msgstr "Exit"
@@ -381,22 +381,22 @@ msgid "Genre:"
 msgstr "Genre:"
 
 msgid "Help"
-msgstr "HjÃ¦lp"
+msgstr "Hjælp"
 
 msgid "I will now try to play the file via transcode."
-msgstr "Jeg vil nu prÃ¸ve pÃ¥ at afspille filen med transcoding."
+msgstr "Jeg vil nu prøve på at afspille filen med transcoding."
 
 msgid "IP"
 msgstr "IP"
 
 msgid "If activated on each start we will check if there is a new version depending on your update type."
-msgstr "Hvis aktiveret vil vi tjekke for en ny version ved start, afhÃ¦ngigt af hvilken software type du har."
+msgstr "Hvis aktiveret vil vi tjekke for en ny version ved start, afhængigt af hvilken software type du har."
 
 msgid "If you are using myPlex"
 msgstr "Hvis du bruger myPlex"
 
 msgid "If you change the skin you have to restart at least the GUI!"
-msgstr "Hvis du Ã¦ndrer skin skal du mindst genstarte GUI!"
+msgstr "Hvis du ændrer skin skal du mindst genstarte GUI!"
 
 msgid "Information:\n"
 msgstr "Information:\n"
@@ -448,16 +448,16 @@ msgid "Name"
 msgstr "Navn"
 
 msgid "No internet connection available!"
-msgstr "Internetforbindelse ikke tilgÃ¦ngelig!"
+msgstr "Internetforbindelse ikke tilgængelig!"
 
 msgid "No plugins available"
-msgstr "Ingen plugins tilgÃ¦ngelige"
+msgstr "Ingen plugins tilgængelige"
 
 msgid "No update available"
-msgstr "Ingen opdatering tilgÃ¦ngelig"
+msgstr "Ingen opdatering tilgængelig"
 
 msgid "Not available"
-msgstr "Ikke tilgÃ¦ngelig"
+msgstr "Ikke tilgængelig"
 
 msgid "OK"
 msgstr "OK"
@@ -481,7 +481,7 @@ msgid "Playback Settings"
 msgstr "Afspilnings Indstillinger"
 
 msgid "Please enter your search string!"
-msgstr "Skriv venligst din sÃ¸ge streng!"
+msgstr "Skriv venligst din søge streng!"
 
 msgid "Please verify you direct local settings"
 msgstr "Tjek venligst dine direct local indstillinger."
@@ -490,8 +490,8 @@ msgid ""
 "Plexserver seems to be offline. Please check your your settings or connection!\n"
 " Retry?"
 msgstr ""
-"Plexserveren ser ud til at vÃ¦re offline. Tjek venligst dine indstillinger eller forbindelsen!\n"
-" ForsÃ¸g igen?"
+"Plexserveren ser ud til at være offline. Tjek venligst dine indstillinger eller forbindelsen!\n"
+" Forsøg igen?"
 
 msgid ""
 "Plexserver seems to be offline. Start with Wake on Lan settings? \n"
@@ -499,10 +499,10 @@ msgid ""
 "Please note: \n"
 "If you press yes the spinner will run for "
 msgstr ""
-"Plexserveren ser ud til at vÃ¦re offline. Start med Wak on Lan indstillinger? \n"
+"Plexserveren ser ud til at være offline. Start med Wak on Lan indstillinger? \n"
 "\n"
 "Noter venlighst: \n"
-"Hvis du trykker ja vil systemet prÃ¸ve i  "
+"Hvis du trykker ja vil systemet prøve i  "
 
 msgid "Port"
 msgstr "Port"
@@ -511,10 +511,10 @@ msgid "Press exit to return"
 msgstr "Tryk exit for at vende tilbage"
 
 msgid "Really delete this Server Entry?"
-msgstr "Vil du virkelig slette denne Server tilfÃ¸jelse?"
+msgstr "Vil du virkelig slette denne Server tilføjelse?"
 
 msgid "Recently Added"
-msgstr "TilfÃ¸jet for nyligt"
+msgstr "Tilføjet for nyligt"
 
 msgid "Recently Aired"
 msgstr "Sendt for nyligt"
@@ -541,28 +541,28 @@ msgid "Save"
 msgstr "Gem"
 
 msgid "Search Episodes..."
-msgstr "SÃ¸g i Episoder..."
+msgstr "Søg i Episoder..."
 
 msgid "Search Shows..."
-msgstr "SÃ¸g i Shows..."
+msgstr "Søg i Shows..."
 
 msgid "Search..."
-msgstr "SÃ¸g..."
+msgstr "Søg..."
 
 msgid "Select filter"
-msgstr "VÃ¦lg filter"
+msgstr "Vælg filter"
 
 msgid "Select media to play"
-msgstr "VÃ¦lg medie til afspilning"
+msgstr "Vælg medie til afspilning"
 
 msgid "Select server"
-msgstr "VÃ¦lg server"
+msgstr "Vælg server"
 
 msgid "Select sort"
-msgstr "VÃ¦lg sortering"
+msgstr "Vælg sortering"
 
 msgid "Select view"
-msgstr "VÃ¦lg opstilling"
+msgstr "Vælg opstilling"
 
 msgid "Series"
 msgstr "Serier"
@@ -571,7 +571,7 @@ msgid "Server"
 msgstr "Server"
 
 msgid "Set view as default"
-msgstr "VÃ¦lg opstilling som standard "
+msgstr "Vælg opstilling som standard "
 
 msgid "Settings"
 msgstr "Indstillinger"
@@ -583,10 +583,10 @@ msgid "Shows"
 msgstr "Shows"
 
 msgid "Sorry I didn't find the file on the provided locations"
-msgstr "Beklager, jeg kunne ikke finde filen pÃ¥ de angivne lokationer."
+msgstr "Beklager, jeg kunne ikke finde filen på de angivne lokationer."
 
 msgid "Sorry unable to perform action, something has failed!!"
-msgstr "Beklager kunne udfÃ¸re handlingen, noget virkede ikke efter hensigten!!"
+msgstr "Beklager kunne udføre handlingen, noget virkede ikke efter hensigten!!"
 
 msgid "State"
 msgstr "Tilstand"
@@ -614,7 +614,7 @@ msgid ""
 " Do you want to proceed to install?"
 msgstr ""
 "Det valgte plugin er ikke installeret!\n"
-" Vil du fortsÃ¦tte med installering?"
+" Vil du fortsætte med installering?"
 
 #, python-format
 msgid "This Box can't decode %s streams!"
@@ -642,17 +642,17 @@ msgid ""
 "%s"
 msgstr ""
 "UVENTET FEJL:\n"
-"Dette er svaret fra forspÃ¸rgslen ...\n"
+"Dette er svaret fra forspørgslen ...\n"
 "%s"
 
 msgid "Unwatched"
 msgstr "Usete"
 
 msgid "Use Beta only if you really want to help with testing"
-msgstr "Brug kun Beta hvis du virkelig gerne vil hjÃ¦lpe med at teste"
+msgstr "Brug kun Beta hvis du virkelig gerne vil hjælpe med at teste"
 
 msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
-msgstr "Brug dette hvis du ikke har nok plads pÃ¥ boksen sÃ¥som en harddisk."
+msgstr "Brug dette hvis du ikke har nok plads på boksen såsom en harddisk."
 
 msgid "Use this if you have m1v videos as backdrops"
 msgstr "Brug dette hvis du har m1v videoer som backdrops"
@@ -667,13 +667,13 @@ msgid "Warning:"
 msgstr "Advarsel:"
 
 msgid "Year:"
-msgstr "Ã…r:"
+msgstr "År:"
 
 msgid "You can use Systemcheck in the menu."
 msgstr "Du kan bruge Systemtjek i menuen."
 
 msgid "You have to reenter the section to see the changes!"
-msgstr "Du skal hoppe ud og ind af sektionen for at se Ã¦ndringerne!"
+msgstr "Du skal hoppe ud og ind af sektionen for at se ændringerne!"
 
 msgid "You need curl installed for this feature! Please check in System ..."
 msgstr "Du skal have curl installeret for at kunne bruge denne funktion! Tjek venligst i System ..."
@@ -690,7 +690,7 @@ msgstr ""
 "%s"
 
 msgid "Your current Version is "
-msgstr "Din nuvÃ¦rende Version er "
+msgstr "Din nuværende Version er "
 
 msgid "by Albums"
 msgstr "efter Album"
@@ -717,7 +717,7 @@ msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
 msgstr "fandt mipsel (OE 1.6) => Tjek for 'gst-plugin-fragmented"
 
 msgid "load additional data"
-msgstr "tilfÃ¸j yderligere data"
+msgstr "tilføj yderligere data"
 
 msgid "mappings"
 msgstr "stier"
@@ -729,13 +729,13 @@ msgid "no xml as response - directory"
 msgstr "ingen xml som svar - bibliotek"
 
 msgid "no xml as response - tree"
-msgstr "ingen xml som svar  - trÃ¦"
+msgstr "ingen xml som svar  - træ"
 
 msgid "no xml as response - viewGroup"
 msgstr "ingen xml som svar  - viewGroup"
 
 msgid "not available"
-msgstr "ikke tilgÃ¦ngelig"
+msgstr "ikke tilgængelig"
 
 msgid "please check if curl is installed."
 msgstr "Tjek venligst om curl er installeret."
@@ -745,11 +745,10 @@ msgstr "plex klient for enigma2"
 
 #, python-format
 msgid "set Filter (set to '%s')"
-msgstr "indstil Filter (sÃ¦t til '%s')"
+msgstr "indstil Filter (sæt til '%s')"
 
 msgid "show media functions"
 msgstr "vis media funktioner"
 
 msgid "toggle View "
-msgstr "Ã¦ndre Visning"
-
+msgstr "ændre Visning"
