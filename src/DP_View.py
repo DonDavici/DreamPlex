@@ -57,7 +57,7 @@ from DPH_Singleton import Singleton
 from DPH_ScreenHelper import DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Screen, DPH_Filter
 from DP_ViewFactory import getNoneDirectoryElements, getDefaultDirectoryElementsList, getGuiElements
 
-from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion, checkXmlFile, getXmlContent
+from __common__ import printl2 as printl, loadPicture, durationToTime, getLiveTv, encodeThat, getOeVersion, checkXmlFile, getXmlContent, getSkinResolution
 from __plugin__ import Plugin
 from __init__ import _ # _ is translation
 
@@ -180,6 +180,8 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		self.loadLibrary = loadLibraryFnc
 
 		self.setListViewElementsCount()
+
+		self.skinResulution = getSkinResolution()
 
 		self.usePicCache = config.plugins.dreamplex.usePicCache.value
 
@@ -1969,21 +1971,24 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 					printl("self.loadedStillPictureLib: " + str(self.loadedStillPictureLib), self, "D")
 
 					#first we need to remove the file extension
-					myFileWoExtension = self.whatBackdrop
+					myFileWoExtension = self.whatBackdrop[:-4]
 
 					# now add the m1v file extension
-					self.whatBackdrop = myFileWoExtension + ".m1v"
+					backdropMovie = myFileWoExtension + ".m1v"
 
-					# we used this code earlier. but this leads to no m1v usage in shows
-					# todo after tests remove this
-					# backdrop = config.plugins.dreamplex.mediafolderpath.value + str(self.image_prefix) + "_" + str(self.details["ratingKey"]) + "_backdrop_1280x720_v2.m1v"
-					printl("backdrop: " + str(self.whatBackdrop), self, "D")
+					if self.skinResulution == "FHD":
+						new_backdrop_postfix = "_backdrop_1920x1080_v2"
+					else:
+						new_backdrop_postfix = "_backdrop_1280x720_v2"
+
+					backdropMovie = backdropMovie.replace(self.backdrop_postfix[:-4], new_backdrop_postfix)
+					printl("backdropMovie: " + str(backdropMovie), self, "D")
 
 					# check if the backdrop m1v exists
-					if os.access(self.whatBackdrop, os.F_OK):
+					if os.access(backdropMovie, os.F_OK):
 						printl("yes", self, "D")
 						self["miniTv"].show()
-						self["stillPicture"].setStillPicture(self.whatBackdrop)
+						self["stillPicture"].setStillPicture(backdropMovie)
 						self["backdrop"].hide()
 						self.usedStillPicture = True
 					else:
