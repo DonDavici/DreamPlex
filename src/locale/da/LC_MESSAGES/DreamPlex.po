@@ -5,359 +5,76 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: enigma2-plugin-extentions-dreamplex 1.0\n"
+"Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-06 16:15+0100\n"
-"PO-Revision-Date: 2015-03-08 01:40+0100\n"
+"POT-Creation-Date: 2014-10-07 22:19+0100\n"
+"PO-Revision-Date: 2015-03-08 10:21+0100\n"
 "Last-Translator: lupine <a_ecklon@hotmail.com>\n"
 "Language-Team: none\n"
-"Language: da_DK\n"
+"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.4\n"
 
-msgid " "
-msgstr " "
-
-msgid " > Autostart"
-msgstr " > Autostart"
-
-msgid " > Connection Type"
-msgstr " > Forbindelsestype"
-
-msgid " > Name"
-msgstr " > Navn"
-
-msgid " > Playback Type"
-msgstr " > Afspilnings type"
-
-msgid " > State"
-msgstr " > Tilstand"
-
-msgid " > Use Wake on Lan (WoL)"
-msgstr " > Brug Wake on Lan (WoL)"
-
-msgid " >> DNS"
-msgstr " >> DNS"
-
-msgid " >> IP"
-msgstr " >> IP"
-
-msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
-msgstr " >> Mac adresse (Størrelse: 12 alfanumerisk ingen seperator) kun for WoL"
-
-msgid " >> Port"
-msgstr " >> Port"
-
-msgid " >> Segmentsize in seconds"
-msgstr " >> Segmentstørrelse i sekunder"
-
-msgid " >> Transcoding quality"
-msgstr " >> Transcoding kvalitet"
-
-msgid " >> Use universal Transcoder"
-msgstr " >> Brug universal Transcoder"
-
-msgid " >> Wait for server delay (max 180 seconds) only for WoL"
-msgstr " >> Vent på server forsinkelse (max 180 sekunder) kun for WoL"
-
-msgid " >> myPLEX Password"
-msgstr " >> myPLEX Kodeord"
-
-msgid " >> myPLEX URL"
-msgstr " >> myPLEX URL"
-
-msgid " >> myPLEX Username"
-msgstr " >> myPLEX Brugernavn"
-
-msgid " >> myPLEX renew myPlex token"
-msgstr " >> myPLEX forny myPlex godkendelse"
-
-msgid ""
-" This file was partially played.\n"
-"\n"
-" Do you want to resume?"
-msgstr ""
-" Denne fil er kun delvist afspillet.\n"
-"\n"
-" Vil du fortsætte?"
-
-#, python-format
-msgid "%s"
-msgstr "%s"
-
-msgid "(current 'Default')"
-msgstr "(nuværende 'Standard')"
-
-msgid "-"
-msgstr "-"
-
-msgid "1.5Mbps, 480p"
-msgstr "1.5Mbps, 480p"
-
-msgid "1024x768, 2mbps"
-msgstr "1024x768, 2mbps"
-
-msgid "10Mbps, 1080p"
-msgstr "10Mbps, 1080p"
-
-msgid "1280x720, 3mbps"
-msgstr "1280x720, 3mbps"
-
-msgid "1280x720, 4mbps"
-msgstr "1280x720, 4mbps"
-
-msgid "12Mbps, 1080p"
-msgstr "12Mbps, 1080p"
-
-msgid "1920x1080, 10mbps"
-msgstr "1920x1080, 10mbps"
-
-msgid "1920x1080, 12mbps"
-msgstr "1920x1080, 12mbps"
-
-msgid "1920x1080, 20mbps"
-msgstr "1920x1080, 20mbps"
-
-msgid "1920x1080, 8mbps"
-msgstr "1920x1080, 8mbps"
-
-msgid "208kbps, 160p, 15fps"
-msgstr "208kbps, 160p, 15fps"
-
-msgid "20Mbps, 1080p"
-msgstr "20Mbps, 1080p"
-
-msgid "2Mbps, 720p"
-msgstr "2Mbps, 720p"
-
-msgid "320kbps, 240p"
-msgstr "320kbps, 240p"
-
-msgid "3Mbps, 720p"
-msgstr "3Mbps, 720p"
-
-msgid "420x240, 320kbps"
-msgstr "420x240, 320kbps"
-
-msgid "4Mbps, 720p"
-msgstr "4Mbps, 720p"
-
-msgid "576x320, 720 kbps"
-msgstr "576x320, 720 kbps"
-
-msgid "64kbps, 128p, 3fps"
-msgstr "64kbps, 128p, 3fps"
-
-msgid "720kbps, 320p"
-msgstr "720kbps, 320p"
-
-msgid "720x480, 1,5mbps"
-msgstr "720x480, 1,5mbps"
-
-msgid "8Mbps, 1080p"
-msgstr "8Mbps, 1080p"
-
-msgid "96kbps, 128p, 12fps"
-msgstr "96kbps, 128p, 12fps"
-
-msgid "> Cache Folder Path"
-msgstr "> Sti til cache"
-
-msgid "> Check for updates on startup"
-msgstr "> Tjek for opdateringer ved start"
-
-msgid "> Config Folder Path"
-msgstr "> Stil til konfigurations folder"
-
-msgid "> Debug Mode"
-msgstr "> Debug Tilstand"
-
-msgid "> Detail type for additional data"
-msgstr "> Detaljer for yderligere data"
-
-msgid "> Log Folder Path"
-msgstr "> Sti til lognings folder"
-
-msgid "> Media Folder Path"
-msgstr "> Stil til medie folder"
-
-msgid "> Player Temp Path"
-msgstr "> Sti til afspillerens temp mappe"
-
-msgid "> Show Filter for Section"
-msgstr "> Vis filter for sektionen."
-
-msgid "> Show Infobar when buffer drained"
-msgstr "> Vis infobar når bufferen er tom"
-
-msgid "> Show Plugin in Main Menu"
-msgstr "> Vis plugin i hovedmenu"
-
-msgid "> Show Seen/Unseen count in TvShows"
-msgstr "> Vis tæller for sete/usete i TVShow"
-
-msgid "> Show additional data for myPlex sections"
-msgstr "> Vis yderligere data for myPlex sektioner."
-
-msgid "> Stop Live TV on startup"
-msgstr "> Stop Live TV ved start"
-
-msgid "> Summerize Sections"
-msgstr "> Summer Sektioner"
-
-msgid "> Updatetype"
-msgstr "> Opdateringstype"
-
-msgid "> Use Cache for Sections"
-msgstr "> Brug cache til Sektioner"
-
-msgid "> Use Picture Cache"
-msgstr "> Brug Billed Cache"
-
-msgid "> Use fastScroll as default"
-msgstr "> Brug fastScroll som standard"
-
-msgid "> Used Skin"
-msgstr "> Skin i brug"
-
-msgid ">> Play Themes in TV Shows"
-msgstr ">> Afspil temaer i TV Shows"
-
-msgid ">> Show Backdrops as Videos"
-msgstr ">> Vis Backdrops som Videoer"
-
-msgid "About"
-msgstr "Om"
-
-msgid "Add"
-msgstr "Tilføj"
-
-msgid "Add Entry"
-msgstr "Tilføj punkt"
-
-msgid "Adding new mapping was not completed"
-msgstr "Tilføjelse af ny sti ikke komplet"
-
-msgid "All"
-msgstr "Alle"
-
-msgid "All Filmy"
-msgstr "Alle Filmy"
-
-msgid "All Movies"
-msgstr "Alle Film"
-
-msgid "All Shows"
-msgstr "Alle Shows"
-
-msgid "All episodes"
-msgstr "Alle episoder"
-
-msgid "Are you sure?"
-msgstr "Er du sikker?"
-
-msgid "Audio Functions"
-msgstr "Lyd funktioner"
-
-msgid "Audio:"
-msgstr "Lyd:"
-
-msgid "By Collection"
-msgstr "Efter Samling"
-
-msgid "By Content Rating"
-msgstr "Efter Indholdsvurdering"
-
-msgid "By Country"
-msgstr "Efter Land"
-
-msgid "By Decade"
-msgstr "Efter Årti"
-
-msgid "By Director"
-msgstr "Efter Instruktør"
-
-msgid "By First Letter"
-msgstr "Efter første bogstav"
-
-msgid "By Folder"
-msgstr "Efter Folder"
-
-msgid "By Genre"
-msgstr "Efter Genre"
-
-msgid "By Rating"
-msgstr "Efter Vurdering"
-
-msgid "By Resolution"
-msgstr "Efter Opløsning"
-
-msgid "By Starring Actor"
-msgstr "Efter Hovedskuespiller"
-
-msgid "By Year"
-msgstr "Efter År"
-
-msgid "Cancel"
-msgstr "Fortryd"
-
-msgid "Channels"
-msgstr "Kanaler"
-
-msgid "Check DreamPlex installation data."
-msgstr "Tjek Dreamplex installations data."
-
-msgid "Check curl installation data."
-msgstr "Tjek curl installations data."
-
-msgid "Check for 'gst-plugin-fragmented if you are using OE16."
-msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger OE16."
-
-msgid "Check for 'gst-plugins-bad-fragmented if you are using OE20."
-msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger  OE20."
-
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:71
+msgid "Check for gst-plugin-fragmented"
+msgstr "Tjek for fragmenteret-gst-plugin"
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:74
+msgid "Check for gst-plugins-bad-fragmented"
+msgstr "Tjek for fragmenteret-gst-plugin"
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:78
+msgid "Check for gst-plugin-fragmented if you are using OE16."
+msgstr "Tjek for fragmenteret-gst-plugin hvis du bruger OE16."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:79
+msgid "Check for gst-plugins-bad-fragmented if you are using OE20."
+msgstr "Tjek for slemt-fragmenteret-gst-plugin hvis du bruger OE20."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:81
+msgid "Check openSSL installation data."
+msgstr "Tjek venligst openSSL installations data."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:82
+msgid "Check mjpegtools intallation data."
+msgstr "Tjek venligst mjpegtools installations data."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:83
+msgid "Check python imaging installation data."
+msgstr "Tjek venligst python imaging installations data."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:84
+msgid "Check python textutils installation data."
+msgstr "Tjek venligst python textutils installations data."
+
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:87
 msgid "Check for update."
 msgstr "Tjek for opdatering."
 
-msgid "Clear default view"
-msgstr "Ryd standard udseende"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:102
+msgid "System - Systemcheck"
+msgstr "System - Systemtjek"
 
-msgid "Close"
-msgstr "Luk"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:104
+msgid "Functions List:"
+msgstr "Funktionsliste"
 
-msgid "Connection Settings"
-msgstr "Forbindelses Indstillinger"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:168
+msgid "Your current Version is "
+msgstr "Din nuværende Version er "
 
-msgid "Could not install "
-msgstr "Kunne ikke installeres"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:172
+msgid "No update available"
+msgstr "Ingen opdatering tilgængelig"
 
-msgid "DNS"
-msgstr "DNS"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:176
+msgid "No internet connection available or openssl is not installed!"
+msgstr "Ingen internet forbindelse tilgængelig eller openssl er ikke installeret."
 
-msgid "Delete"
-msgstr "Slet"
-
-msgid "Delete Entry"
-msgstr "Slet Punkt"
-
-msgid "Deleting aborted!"
-msgstr "Sletning afbrudt!"
-
-msgid "Direct Local"
-msgstr "Direct Local"
-
-msgid "Discover"
-msgstr "Opdag"
-
-msgid "DreamPlex"
-msgstr "DreamPlex"
-
-msgid "Edit"
-msgstr "Rediger"
-
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:264
 msgid ""
 "Enigma2 must be restarted!\n"
 "Should Enigma2 now restart?"
@@ -365,75 +82,211 @@ msgstr ""
 "Enigma2 skal genstartes!\n"
 "Skal Enigma2 genstartes nu?"
 
-msgid "Enter this server automatically on startup."
-msgstr "Start op på denne server."
-
-msgid "Enter your remote path segment here:"
-msgstr "Tilføj fjernstis afsnit her:"
-
-msgid "Exit"
-msgstr "Exit"
-
-msgid "General Settings"
-msgstr "Generelle Indstillinger"
-
-msgid "Genre:"
-msgstr "Genre:"
-
-msgid "Help"
-msgstr "Hjælp"
-
-msgid "I will now try to play the file via transcode."
-msgstr "Jeg vil nu prøve på at afspille filen med transcoding."
-
-msgid "IP"
-msgstr "IP"
-
-msgid "If activated on each start we will check if there is a new version depending on your update type."
-msgstr "Hvis aktiveret vil vi tjekke for en ny version ved start, afhængigt af hvilken software type du har."
-
-msgid "If you are using myPlex"
-msgstr "Hvis du bruger myPlex"
-
-msgid "If you change the skin you have to restart at least the GUI!"
-msgstr "Hvis du ændrer skin skal du mindst genstarte GUI!"
-
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:280
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:382
 msgid "Information:\n"
 msgstr "Information:\n"
 
-msgid "Initiate Library refresh"
-msgstr "Start Biblioteks opdatering"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:388
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:391
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:394
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:397
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:400
+msgid ""
+"The selected plugin is not installed!\n"
+" Do you want to proceed to install?"
+msgstr ""
+"Det valgte plugin er ikke installeret!\n"
+" Vil du fortsætte med installering?"
 
-msgid "Invalid Location"
-msgstr "Ugyldig lokation"
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:440
+#: /hdd/workspaces/DreamPlex/src/DP_SystemCheck.py:579
+msgid "Could not install "
+msgstr "Kunne ikke installeres"
 
-msgid "Location:"
-msgstr "Lokation:"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
+msgid "IP"
+msgstr "IP"
 
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
+msgid "DNS"
+msgstr "DNS"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:172
 msgid "MYPLEX"
 msgstr "MYPLEX"
 
-msgid "Mappings"
-msgstr "Stier"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
+msgid "Streamed"
+msgstr "Streamed"
 
-msgid "Mark media unwatched"
-msgstr "Marker medie som uset"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
+msgid "Transcoded"
+msgstr "Transcoded"
 
-msgid "Mark media watched"
-msgstr "Marker medie som set"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:176
+msgid "Direct Local"
+msgstr "Direct Local"
 
-msgid "Media Functions"
-msgstr "Medie Funktioner"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "64kbps, 128p, 3fps"
+msgstr "64kbps, 128p, 3fps"
 
-msgid "Misc Settings"
-msgstr "Forskellige indstillinger"
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "96kbps, 128p, 12fps"
+msgstr "96kbps, 128p, 12fps"
 
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "208kbps, 160p, 15fps"
+msgstr "208kbps, 160p, 15fps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "320kbps, 240p"
+msgstr "320kbps, 240p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "720kbps, 320p"
+msgstr "720kbps, 320p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "1.5Mbps, 480p"
+msgstr "1.5Mbps, 480p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "2Mbps, 720p"
+msgstr "2Mbps, 720p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "3Mbps, 720p"
+msgstr "3Mbps, 720p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "4Mbps, 720p"
+msgstr "4Mbps, 720p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "8Mbps, 1080p"
+msgstr "8Mbps, 1080p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "10Mbps, 1080p"
+msgstr "10Mbps, 1080p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "12Mbps, 1080p"
+msgstr "12Mbps, 1080p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:215
+msgid "20Mbps, 1080p"
+msgstr "20Mbps, 1080p"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "420x240, 320kbps"
+msgstr "420x240, 320kbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "576x320, 720 kbps"
+msgstr "576x320, 720 kbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "720x480, 1,5mbps"
+msgstr "720x480, 1,5mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1024x768, 2mbps"
+msgstr "1024x768, 2mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1280x720, 3mbps"
+msgstr "1280x720, 3mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1280x720, 4mbps"
+msgstr "1280x720, 4mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1920x1080, 8mbps"
+msgstr "1920x1080, 8mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1920x1080, 10mbps"
+msgstr "1920x1080, 10mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1920x1080, 12mbps"
+msgstr "1920x1080, 12mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:219
+msgid "1920x1080, 20mbps"
+msgstr "1920x1080, 20mbps"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:301 /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:248
 msgid "Movies"
 msgstr "Film"
 
+#: /hdd/workspaces/DreamPlex/src/__init__.py:304
+msgid "TV Shows"
+msgstr "TV Serier"
+
+#: /hdd/workspaces/DreamPlex/src/__init__.py:307 /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:250
+#: /hdd/workspaces/DreamPlex/src/DP_ViewMusic.py:56
 msgid "Music"
 msgstr "Musik"
 
+#: /hdd/workspaces/DreamPlex/src/__init__.py:310
+msgid "Mixed"
+msgstr "Blandet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_HelperScreens.py:51
+msgid "Search ..."
+msgstr "Søg ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:249
+msgid "Tv Shows"
+msgstr "Tv Serier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:255
+msgid "Pictures"
+msgstr "Billeder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:256
+msgid "Channels"
+msgstr "Kanaler"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:381
+msgid "onDeck"
+msgstr "Igangværende"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:388
+msgid "New"
+msgstr "Nyt"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:395
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:472
+msgid "No data in this section!"
+msgstr "Ingen data i denne sektion"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:771
+msgid "Season"
+msgstr "Sæson"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1011
+msgid "Press exit to return"
+msgstr "Tryk exit for at vende tilbage"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1012
+msgid "If you are using myPlex"
+msgstr "Hvis du bruger myPlex"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1013
+msgid "please check if python-pyopenssl is installed."
+msgstr "tjek venligst om python-pyopenssl er installeret"
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1014
+msgid "You can use Systemcheck in the menu."
+msgstr "Du kan bruge Systemtjek i menuen."
+
+#: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:1103
 #, python-format
 msgid ""
 "MyPlex Token error:\n"
@@ -444,55 +297,313 @@ msgstr ""
 "Tjek Brugernavn og Kodeord.\n"
 "%s"
 
-msgid "Name"
-msgstr "Navn"
+#: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:90
+msgid "Cancel"
+msgstr "Fortryd"
 
-msgid "No internet connection available!"
-msgstr "Internetforbindelse ikke tilgængelig!"
+#: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:93
+msgid "Ok"
+msgstr "Ok"
 
-msgid "No plugins available"
-msgstr "Ingen plugins tilgængelige"
+#: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:95
+msgid "Target: "
+msgstr "Mål:"
 
-msgid "No update available"
-msgstr "Ingen opdatering tilgængelig"
+#: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:97
+msgid "Pathselector"
+msgstr "Sti vælger"
 
-msgid "Not available"
-msgstr "Ikke tilgængelig"
+#: /hdd/workspaces/DreamPlex/src/DP_PathSelector.py:187
+msgid "Invalid Location"
+msgstr "Ugyldig lokation"
 
-msgid "OK"
-msgstr "OK"
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:113
+msgid "Delete Entry"
+msgstr "Slet Punkt"
 
-msgid "On Deck"
-msgstr "On Deck"
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:116
+msgid "Add Entry"
+msgstr "Tilføj punkt"
 
-msgid "Options"
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:119
+msgid "Something went wrong while opening mappings xml!"
+msgstr "Noget gik galt ved åbning af mappings XML!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:165
+msgid "Enter your remote path segment here:"
+msgstr "Tilføj fjernstis afsnit her:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:167 /hdd/workspaces/DreamPlex/src/DP_Mappings.py:182
+msgid "Adding new mapping was not completed"
+msgstr "Tilføjelse af ny sti ikke komplet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:88
+msgid "Start Sync"
+msgstr "Start synkronisering"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:90
+msgid "Start Rendering"
+msgstr "Start rendering"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:94
+msgid "Background"
+msgstr "Baggrund"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:98
+msgid "Abort"
+msgstr "Afbryd"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:143
+#, python-format
+msgid ""
+"\n"
+"%s"
+msgstr ""
+"\n"
+"%s"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:164
+msgid ""
+"Please note to run at least once the sync media function within the server menu.\n"
+"This will download the needed files in the right size of 1280x720."
+msgstr ""
+"Medie synkroniserings funktionen skal mindst kører engang fra server menuen.\n"
+"Dette vil downloade de nødvendige i filer i størrelsen 1280x720."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:167
+msgid ""
+"This will download all medias from the selected server.\n"
+"\n"
+"Additional to this we download the pictures in 1280x720 for better fullscreen backdrops."
+msgstr ""
+"Dette vil downloade alle medier fra den valgte server.\n"
+"\n"
+"Derudover vil vi hente billeder i 1280x720 for bedre fuldskærms baggrunde."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:169
+msgid "Reconnecting to background task ...\n"
+msgstr "Genskaber forbindelse til baggrundstjeneste ...\n"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:314
+msgid ""
+"\n"
+"\n"
+"Finished"
+msgstr ""
+"\n"
+"\n"
+"Afsluttet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:330
+msgid ""
+"\n"
+"\n"
+"Cancelled!"
+msgstr ""
+"\n"
+"\n"
+"Afbrudt!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:343
+msgid ""
+"Sync or Renderer is still running!\n"
+"Continue in background?"
+msgstr ""
+"Synkronisering eller rendering kører stadig!\n"
+"Fortsæt i baggrunden?"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:534
+msgid "DreamPlex: Rendering finished!\n"
+msgstr "DreamPlex: Rendering færdig!\n"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:536
+msgid "DreamPlex: Mediasync finished!\n"
+msgstr "DreamPlex: Mediesynkronisering færdig!\n"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:707
+msgid ""
+"\n"
+"\n"
+"Starting to search for picture files with 1920x1080 in its name ..."
+msgstr ""
+"\n"
+"\n"
+"Søgning efter billedfiler med 1920x1080 i navnet startet ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:709
+msgid ""
+"\n"
+"\n"
+"Starting to search for picture files with 1280x720 in its name ..."
+msgstr ""
+"\n"
+"\n"
+"Søgning efter billedfiler med 1280x720 i navnet startet ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:725
+msgid ""
+"\n"
+"\n"
+"Files found: "
+msgstr ""
+"\n"
+"\n"
+"Fundne filer:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:752
+msgid "backdrop video exists under the location "
+msgstr "baggrunds video eksisterer i denne lokation"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:757
+msgid "trying to render backdrop now ...: "
+msgstr "prøver at rendere baggrunden nu"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:796
+msgid "Error: "
+msgstr "Fejl:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:807
+#, python-format
+msgid ""
+"Error!\n"
+"Error-message:%s"
+msgstr ""
+"Fejl!\n"
+"Fejlbesked:%s"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:810
+msgid ""
+"\n"
+"\n"
+"No Files found. Nothing to do!"
+msgstr ""
+"\n"
+"\n"
+"Ingen filer fundet."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:817 /hdd/workspaces/DreamPlex/src/DP_Syncer.py:939
+msgid ""
+"Process aborted.\n"
+"Press Exit to close."
+msgstr ""
+"Proces afbrudt.\n"
+"Tryk på exit for at lukke."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:819
+msgid ""
+"\n"
+"\n"
+"We are done!"
+msgstr ""
+"\n"
+"\n"
+"Vi er færdige!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:897
+msgid ""
+"\n"
+"\n"
+"starting ..."
+msgstr ""
+"\n"
+"\n"
+"starter ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:920
+msgid ""
+"\n"
+"\n"
+"Fetching complete library data. This could take a while ..."
+msgstr ""
+"\n"
+"\n"
+"Henter alle biblioteks data. Dette kan tage et stykke tid ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:941
+msgid "We did it :-)"
+msgstr "Vi gjorde det :-)"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:944
+#, python-format
+msgid ""
+"Error!\n"
+"Error-message:%s\n"
+"Press Exit to close."
+msgstr ""
+"Fejl!\n"
+"Fejl besked:%s\n"
+"Tryk på exit for at lukke."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1059
+msgid "title: "
+msgstr "titel:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1078
+msgid "found backdrop - size("
+msgstr "fandt baggrund - størrelse("
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1084
+msgid "backdrop not found, trying to download ..."
+msgstr "baggrund ikke fundet, prøver at hente ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1104
+msgid "found poster - size("
+msgstr "fandt poster - størrelse("
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1110
+msgid "poster not found, trying to download ..."
+msgstr "poster ikke funder, prøver at hente ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1173
+msgid "... success"
+msgstr "... succes"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1179
+msgid "... failed"
+msgstr "... fejlet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_ViewShows.py:57
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:60
+msgid "Shows"
+msgstr "Serier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:118 /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:302
+msgid "Main Menu"
+msgstr "Hoved Menu"
+
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:178 /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:395
+msgid "System"
+msgstr "System"
+
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:336
+msgid "UNEXPECTED ERROR:"
+msgstr "UVENTET FEJL:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:348
+msgid "Settings"
 msgstr "Indstillinger"
 
-msgid "Pages:"
-msgstr "Sider:"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:349
+msgid "Server"
+msgstr "Server"
 
-msgid "Path Settings"
-msgstr "Sti Indstillinger"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:350
+msgid "Systemcheck"
+msgstr "Systemtjek"
 
-msgid "Pictures"
-msgstr "Billeder"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:351
+msgid "Backdrops"
+msgstr "Baggrunde"
 
-msgid "Playback Settings"
-msgstr "Afspilnings Indstillinger"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:396
+msgid "LiveTv"
+msgstr "Live TV"
 
-msgid "Please enter your search string!"
-msgstr "Skriv venligst din søge streng!"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:397
+msgid "About"
+msgstr "Om"
 
-msgid "Please verify you direct local settings"
-msgstr "Tjek venligst dine direct local indstillinger."
-
-msgid ""
-"Plexserver seems to be offline. Please check your your settings or connection!\n"
-" Retry?"
-msgstr ""
-"Plexserveren ser ud til at være offline. Tjek venligst dine indstillinger eller forbindelsen!\n"
-" Forsøg igen?"
-
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:457
 msgid ""
 "Plexserver seems to be offline. Start with Wake on Lan settings? \n"
 "\n"
@@ -504,183 +615,58 @@ msgstr ""
 "Noter venlighst: \n"
 "Hvis du trykker ja vil systemet prøve i  "
 
-msgid "Port"
-msgstr "Port"
+#: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:467
+msgid ""
+"Plexserver seems to be offline. Please check your your settings or connection!\n"
+" Retry?"
+msgstr ""
+"Plexserveren ser ud til at være offline. Tjek venligst dine indstillinger eller forbindelsen!\n"
+" Forsøg igen?"
 
-msgid "Press exit to return"
-msgstr "Tryk exit for at vende tilbage"
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:275
+msgid "Error:"
+msgstr "Fejl:"
 
-msgid "Really delete this Server Entry?"
-msgstr "Vil du virkelig slette denne Server tilføjelse?"
-
-msgid "Recently Added"
-msgstr "Tilføjet for nyligt"
-
-msgid "Recently Aired"
-msgstr "Sendt for nyligt"
-
-msgid "Recently Released"
-msgstr "Udkommet for nyligt"
-
-msgid "Recently Viewed"
-msgstr "Set for nyligt"
-
-msgid "Recently Viewed Episodes"
-msgstr "For nyligt sete episoder"
-
-msgid "Recently Viewed Shows"
-msgstr "Fornyligt sete episoder"
-
-msgid "Refresh this section"
-msgstr "Opdater denne sektion"
-
-msgid "Runtime:"
-msgstr "Spilletid:"
-
-msgid "Save"
-msgstr "Gem"
-
-msgid "Search Episodes..."
-msgstr "Søg i Episoder..."
-
-msgid "Search Shows..."
-msgstr "Søg i Shows..."
-
-msgid "Search..."
-msgstr "Søg..."
-
-msgid "Select filter"
-msgstr "Vælg filter"
-
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:296 /hdd/workspaces/DreamPlex/src/DP_View.py:618
 msgid "Select media to play"
 msgstr "Vælg medie til afspilning"
 
-msgid "Select server"
-msgstr "Vælg server"
-
-msgid "Select sort"
-msgstr "Vælg sortering"
-
-msgid "Select view"
-msgstr "Vælg opstilling"
-
-msgid "Series"
-msgstr "Serier"
-
-msgid "Server"
-msgstr "Server"
-
-msgid "Set view as default"
-msgstr "Vælg opstilling som standard "
-
-msgid "Settings"
-msgstr "Indstillinger"
-
-msgid "Show media details"
-msgstr "Vis medie detaljer"
-
-msgid "Shows"
-msgstr "Shows"
-
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:353
 msgid "Sorry I didn't find the file on the provided locations"
 msgstr "Beklager, jeg kunne ikke finde filen på de angivne lokationer."
 
-msgid "Sorry unable to perform action, something has failed!!"
-msgstr "Beklager kunne udføre handlingen, noget virkede ikke efter hensigten!!"
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:354
+msgid "Location:"
+msgstr "Lokation:"
 
-msgid "State"
-msgstr "Tilstand"
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:355
+msgid "Please verify you direct local settings"
+msgstr "Tjek venligst dine direct local indstillinger."
 
-msgid "Streamed"
-msgstr "Streamed"
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:356
+msgid "I will now try to play the file via transcode."
+msgstr "Jeg vil nu prøve på at afspille filen med transcoding."
 
-msgid "Subtitle Functions"
-msgstr "Undertekst Funktioner"
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:358
+msgid "Warning:"
+msgstr "Advarsel:"
 
-msgid "Subtitles:"
-msgstr "Undertekster:"
-
-msgid "System"
-msgstr "System"
-
-msgid "Systemcheck"
-msgstr "Systemtjek"
-
-msgid "TV Shows"
-msgstr "TV Shows"
-
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:371
 msgid ""
-"The selected plugin is not installed!\n"
-" Do you want to proceed to install?"
+" This file was partially played.\n"
+"\n"
+" Do you want to resume?"
 msgstr ""
-"Det valgte plugin er ikke installeret!\n"
-" Vil du fortsætte med installering?"
+" Denne fil er kun delvist afspillet.\n"
+"\n"
+" Vil du fortsætte?"
 
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:712 /hdd/workspaces/DreamPlex/src/DP_Player.py:729
 #, python-format
 msgid "This Box can't decode %s streams!"
 msgstr "Denne Boks kan ikke decode %s streams!"
 
-msgid "Toggle state to on/off to show this server in lost or not."
-msgstr "Skift tilstanden til til/sluk for at vise om denne server er forsvundet eller ej."
-
-msgid "Total:"
-msgstr "Total:"
-
-msgid "Transcoded"
-msgstr "Transcoded"
-
-msgid "Tv Shows"
-msgstr "Tv Shows"
-
-msgid "UNEXPECTED ERROR:"
-msgstr "UVENTET FEJL:"
-
-#, python-format
-msgid ""
-"UNEXPECTED ERROR:\n"
-"This is the answer from the request ...\n"
-"%s"
-msgstr ""
-"UVENTET FEJL:\n"
-"Dette er svaret fra forspørgslen ...\n"
-"%s"
-
-msgid "Unwatched"
-msgstr "Usete"
-
-msgid "Use Beta only if you really want to help with testing"
-msgstr "Brug kun Beta hvis du virkelig gerne vil hjælpe med at teste"
-
-msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
-msgstr "Brug dette hvis du ikke har nok plads på boksen såsom en harddisk."
-
-msgid "Use this if you have m1v videos as backdrops"
-msgstr "Brug dette hvis du har m1v videoer som backdrops"
-
-msgid "Userinterface Settings"
-msgstr "Brugerflade indstillinger"
-
-msgid "Wake On Lan Settings"
-msgstr "Wake On Lan Indstillinger"
-
-msgid "Warning:"
-msgstr "Advarsel:"
-
-msgid "Year:"
-msgstr "År:"
-
-msgid "You can use Systemcheck in the menu."
-msgstr "Du kan bruge Systemtjek i menuen."
-
-msgid "You have to reenter the section to see the changes!"
-msgstr "Du skal hoppe ud og ind af sektionen for at se ændringerne!"
-
-msgid "You need curl installed for this feature! Please check in System ..."
-msgstr "Du skal have curl installeret for at kunne bruge denne funktion! Tjek venligst i System ..."
-
-msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
-msgstr "Du skal have gstreamer_fragmented installeret for bruge denne funktion! Tjek venligst i System ... "
-
+#: /hdd/workspaces/DreamPlex/src/DP_Player.py:746 /hdd/workspaces/DreamPlex/src/DP_Player.py:766
 #, python-format
 msgid ""
 "Your Box can't decode this video stream!\n"
@@ -689,66 +675,965 @@ msgstr ""
 "Din Boks kan ikke dekode denne video stream!\n"
 "%s"
 
-msgid "Your current Version is "
-msgstr "Din nuværende Version er "
+#: /hdd/workspaces/DreamPlex/src/DPH_MovingLabel.py:120
+msgid "no Data"
+msgstr "ingen Data"
 
-msgid "by Albums"
-msgstr "efter Album"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:253
+msgid "Total:"
+msgstr "Total:"
 
-msgid "by Artists"
-msgstr "efter Kunstner"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:260
+msgid "Pages:"
+msgstr "Sider:"
 
-msgid "check myPlex Token"
-msgstr "Tjek myPlex godkendelse"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:290
+msgid "Cast:"
+msgstr "Medvirkende:"
 
-msgid "fastScroll = Off"
-msgstr "fastScroll = af"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:295
+msgid "press 'Text'"
+msgstr "tryk 'Text'"
 
-msgid "fastScroll = On"
-msgstr "fastScroll = til"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:297
+msgid "Subtitles:"
+msgstr "Undertekster:"
 
-msgid "for the user:"
-msgstr "for brugeren:"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:300
+msgid "press 'Audio'"
+msgstr "tryk 'Audio'"
 
-msgid "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
-msgstr "fandt mips32el (OE 2.0) => Tjek for 'gst-plugins-bad-fragmented"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:302
+msgid "Audio:"
+msgstr "Lyd:"
 
-msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
-msgstr "fandt mipsel (OE 1.6) => Tjek for 'gst-plugin-fragmented"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:305
+msgid "press 'Info'"
+msgstr "tryk 'Info'"
 
-msgid "load additional data"
-msgstr "tilføj yderligere data"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:307
+msgid "Info:"
+msgstr "Info:"
 
-msgid "mappings"
-msgstr "stier"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:311
+msgid "Director:"
+msgstr "Instruktør:"
 
-msgid "myPlex Token:"
-msgstr "myPlex godkendelse:"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:315
+msgid "Writer:"
+msgstr "Forfatter:"
 
-msgid "no xml as response - directory"
-msgstr "ingen xml som svar - bibliotek"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:319
+msgid "Genre:"
+msgstr "Genre:"
 
-msgid "no xml as response - tree"
-msgstr "ingen xml som svar  - træ"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:323
+msgid "Year:"
+msgstr "År:"
 
-msgid "no xml as response - viewGroup"
-msgstr "ingen xml som svar  - viewGroup"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:327
+msgid "Medias:"
+msgstr "Medier:"
 
-msgid "not available"
-msgstr "ikke tilgængelig"
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:331
+msgid "Unseen:"
+msgstr "Uset:"
 
-msgid "please check if curl is installed."
-msgstr "Tjek venligst om curl er installeret."
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:335
+msgid "Seen:"
+msgstr "Set:"
 
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:339
+msgid "Seasons:"
+msgstr "Sæsoner:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:343
+msgid "Studio:"
+msgstr "Studie:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:347
+msgid "Runtime:"
+msgstr "Spilletid:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:360
+msgid "Video Codec:"
+msgstr "Video Codec:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:364
+msgid "Bitrate:"
+msgstr "Bitrate:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:368
+msgid "Framerate:"
+msgstr "Framerate:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:372
+msgid "Audio Channels:"
+msgstr "Lyd Kanaler:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:376
+msgid "Aspect Ratio:"
+msgstr "Billedformat:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:380
+msgid "Resultion:"
+msgstr "Opløsning:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:384
+msgid "Audio Codec:"
+msgstr "Lyd Codec:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:388
+msgid "File:"
+msgstr "Fil:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:597
+msgid ""
+"No extras found ...\n"
+"\n"
+"Press exit to return."
+msgstr ""
+"Intet ekstra indhold fundet ...\n"
+"\n"
+"Tryk på exit for at vende tilbage."
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:751
+msgid "playback mode '"
+msgstr "afspilningstilstand'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:753
+msgid "View '"
+msgstr "Visning'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:756 /hdd/workspaces/DreamPlex/src/DP_View.py:1382
+msgid "show 'Details'"
+msgstr "vis 'Detaljer'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:760
+msgid "delete Medias"
+msgstr "slet medier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:796 /hdd/workspaces/DreamPlex/src/DP_View.py:814
+msgid "playmode 'multi'"
+msgstr "afspilning 'multi'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:798 /hdd/workspaces/DreamPlex/src/DP_View.py:811
+msgid "playmode 'single'"
+msgstr "afspilning 'enkelt'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:827 /hdd/workspaces/DreamPlex/src/DP_View.py:845
+msgid "resume 'On'"
+msgstr "genoptag 'Til'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:829 /hdd/workspaces/DreamPlex/src/DP_View.py:842
+msgid "resume 'Off'"
+msgstr "genoptag 'Fra'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:860
+msgid "fastScroll 'On'"
+msgstr "fastScroll 'Til'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:862
+msgid "fastScroll 'Off'"
+msgstr "fastScroll 'Fra'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:945
+msgid "turn filter mode off"
+msgstr "afbryd filtrerings tilstand"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:1405
+msgid "show 'Description'"
+msgstr "vis 'Beskrivelse'"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:1993
+msgid "/"
+msgstr "/"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2005
+msgid "Mark media unwatched"
+msgstr "Marker medie som uset"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2006
+msgid "Mark media watched"
+msgstr "Marker medie som set"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2007
+msgid "Initiate Library refresh"
+msgstr "Start Biblioteks opdatering"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2010
+msgid "Media Functions"
+msgstr "Medie Funktioner"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2067
+msgid ""
+"Subtitle Functions\n"
+"\n"
+"Please take note that switching the subtitles here will take only effect if you enable transcoding!"
+msgstr ""
+"Undertekstfunktioner\n"
+"\n"
+"Bemærk venligst at undertekstfunktionen kun virker hvis du bruger transcoding!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2106
+msgid ""
+"Audio Functions\n"
+"\n"
+"Please take note that switching the language here will take only effect if you enable transcoding!"
+msgstr ""
+"Lydfunktioner\n"
+"\n"
+"Bemærk venligst at ændringer af lydsporet kun virker hvis du bruger transcoding!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2173
+msgid "Are you sure?"
+msgstr "Er du sikker?"
+
+#: /hdd/workspaces/DreamPlex/src/DP_View.py:2187
+msgid "Deleting aborted!"
+msgstr "Sletning afbrudt!"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:31
+msgid "All"
+msgstr "Alle"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:32
+msgid "All Movies"
+msgstr "Alle Film"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:33
+msgid "All Filmy"
+msgstr "Alle Filmy"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:34
+msgid "All Shows"
+msgstr "Alle Serier"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:35
+msgid "All episodes"
+msgstr "Alle episoder"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:36
+msgid "By Genre"
+msgstr "Efter Genre"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:37
+msgid "By Folder"
+msgstr "Efter Folder"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:38
+msgid "By First Letter"
+msgstr "Efter første bogstav"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:39
+msgid "By Resolution"
+msgstr "Efter Opløsning"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:40
+msgid "By Rating"
+msgstr "Efter Vurdering"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:41
+msgid "By Country"
+msgstr "Efter Land"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:42
+msgid "By Director"
+msgstr "Efter Instruktør"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:43
+msgid "By Decade"
+msgstr "Efter Årti"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:44
+msgid "By Year"
+msgstr "Efter År"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:45
+msgid "By Collection"
+msgstr "Efter Samling"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:46
+msgid "By Content Rating"
+msgstr "Efter Indholdsvurdering"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:47
+msgid "By Starring Actor"
+msgstr "Efter Hovedskuespiller"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:48
+msgid "Recently Aired"
+msgstr "Sendt for nyligt"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:49
+msgid "Recently Added"
+msgstr "Tilføjet for nyligt"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:50
+msgid "Recently Released"
+msgstr "Udkommet for nyligt"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:51
+msgid "Recently Viewed"
+msgstr "Set for nyligt"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:52
+msgid "Recently Viewed Episodes"
+msgstr "For nyligt sete episoder"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:53
+msgid "Recently Viewed Shows"
+msgstr "Fornyligt sete serier"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:54
+msgid "Unwatched"
+msgstr "Usete"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:55
+msgid "On Deck"
+msgstr "On Deck"
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:56
+msgid "Search..."
+msgstr "Søg..."
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:57
+msgid "Search Shows..."
+msgstr "Søg i Serier..."
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:58
+msgid "Search Episodes..."
+msgstr "Søg i Episoder..."
+
+#: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:61
+msgid "Series"
+msgstr "Serier"
+
+#: /hdd/workspaces/DreamPlex/src/plugin.py:47
+msgid "DreamPlex"
+msgstr "DreamPlex"
+
+#: /hdd/workspaces/DreamPlex/src/plugin.py:163
 msgid "plex client for enigma2"
 msgstr "plex klient for enigma2"
 
-#, python-format
-msgid "set Filter (set to '%s')"
-msgstr "indstil Filter (sæt til '%s')"
+#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:113
+msgid "Server Menu"
+msgstr "Server Menu"
 
-msgid "show media functions"
-msgstr "vis media funktioner"
+#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:231
+msgid "Please enter your search string: "
+msgstr "Indtast venligst din søge streng:"
 
-msgid "toggle View "
-msgstr "ændre Visning"
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:109 /hdd/workspaces/DreamPlex/src/DP_Server.py:385
+msgid "General Settings"
+msgstr "Generelle Indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:109 /hdd/workspaces/DreamPlex/src/DP_Settings.py:112
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:113 /hdd/workspaces/DreamPlex/src/DP_Settings.py:115
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:122 /hdd/workspaces/DreamPlex/src/DP_Settings.py:123
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124 /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:126 /hdd/workspaces/DreamPlex/src/DP_Settings.py:129
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:138 /hdd/workspaces/DreamPlex/src/DP_Settings.py:148
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:150 /hdd/workspaces/DreamPlex/src/DP_Settings.py:152
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:154 /hdd/workspaces/DreamPlex/src/DP_Settings.py:157
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:158 /hdd/workspaces/DreamPlex/src/DP_Settings.py:159
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:160 /hdd/workspaces/DreamPlex/src/DP_Settings.py:163
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:165 /hdd/workspaces/DreamPlex/src/DP_Settings.py:168
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:171 /hdd/workspaces/DreamPlex/src/DP_Settings.py:174
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:177 /hdd/workspaces/DreamPlex/src/DP_Settings.py:181
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:182 /hdd/workspaces/DreamPlex/src/DP_Settings.py:184
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:187 /hdd/workspaces/DreamPlex/src/DP_Settings.py:188
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:389 /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:393 /hdd/workspaces/DreamPlex/src/DP_Server.py:395
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:398 /hdd/workspaces/DreamPlex/src/DP_Server.py:402
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:403 /hdd/workspaces/DreamPlex/src/DP_Server.py:411
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:414 /hdd/workspaces/DreamPlex/src/DP_Server.py:438
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:440 /hdd/workspaces/DreamPlex/src/DP_Server.py:443
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:444 /hdd/workspaces/DreamPlex/src/DP_Server.py:447
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:449 /hdd/workspaces/DreamPlex/src/DP_Server.py:450
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:451 /hdd/workspaces/DreamPlex/src/DP_Server.py:474
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:475
+msgid " "
+msgstr " "
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+msgid "> Boxname"
+msgstr "> Boxnavn"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
+msgid "Enter the name of your box, e.g. Livingroom."
+msgstr "Skriv navnet på din boks, f.eks. stue."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:111
+msgid "> Used Skin"
+msgstr "> Skin i brug"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:111
+msgid "If you change the skin you have to restart at least the GUI!"
+msgstr "Hvis du ændrer skin skal du mindst genstarte GUI!"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:112
+msgid "> Show Plugin in Main Menu"
+msgstr "> Vis plugin i hovedmenu"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:113
+msgid "> Use Cache for Sections"
+msgstr "> Brug cache til Sektioner"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:114
+msgid "> Use Picture Cache"
+msgstr "> Brug Billed Cache"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:114
+msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
+msgstr "Brug dette hvis du ikke har nok plads på boksen såsom en harddisk."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:115
+msgid "> Show Infobar when buffer drained"
+msgstr "> Vis infobar når bufferen er tom"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
+msgid "> Show Player Poster on external LCD"
+msgstr "> Vis poster på en ekstern LCD"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
+msgid "e.g. lcd4linux"
+msgstr "f.eks. lcd4linux"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
+msgid "> Check for updates on startup"
+msgstr "> Tjek for opdateringer ved start"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:119
+msgid ""
+"If activated on each start we will check if there is a new version depending on your update type."
+msgstr ""
+"Hvis aktiveret vil vi tjekke for en ny version ved start, afhængigt af hvilken software type du "
+"har."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:120
+msgid "> Updatetype"
+msgstr "> Opdateringstype"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:120
+msgid "Use Beta only if you really want to help with testing"
+msgstr "Brug kun Beta hvis du virkelig gerne vil hjælpe med at teste"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:122
+msgid "Userinterface Settings"
+msgstr "Brugerflade indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:123
+msgid "> Summerize Sections"
+msgstr "> Summer Sektioner"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124
+msgid "> Show Filter for Section"
+msgstr "> Vis filter for sektionen."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
+msgid "> Show Seen/Unseen count in TvShows"
+msgstr "> Vis tæller for sete/usete i TV Serier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:126
+msgid "> Start with Filtermode"
+msgstr "> Start i filtreringstilstand"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
+msgid "> Show Backdrops as Videos"
+msgstr "> Vis baggrunde som videoer"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:128
+msgid "Use this if you have m1v videos as backdrops"
+msgstr "Brug dette hvis du har m1v videoer som backdrops"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:129
+msgid "> Stop Live TV on startup"
+msgstr "> Stop Live TV ved start"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:138
+msgid ">> Play Themes in TV Shows"
+msgstr ">> Afspil temaer i TV Serier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:148
+msgid "> Use fastScroll as default"
+msgstr "> Brug fastScroll som standard"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:150
+msgid "> Show liveTv in Views instead of backdrops"
+msgstr "> Vis Live TV i visninger i stedet for baggrunde"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:152
+msgid "> Show additional data for myPlex sections"
+msgstr "> Vis yderligere data for myPlex sektioner."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:154
+msgid "> Detail type for additional data"
+msgstr "> Detaljer for yderligere data"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:157 /hdd/workspaces/DreamPlex/src/DP_Settings.py:163
+msgid "Path Settings"
+msgstr "Sti Indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:158
+msgid "> Default View for Movies"
+msgstr "> Standard visning for film"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:159
+msgid "> Default View for Shows"
+msgstr "> Standard visning for serier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:160
+msgid "> Default View for Music"
+msgstr "> Standard visning for musik"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:165
+msgid "> Media Folder Path"
+msgstr "> Stil til medie folder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:168
+msgid "> Config Folder Path"
+msgstr "> Stil til konfigurations folder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:171
+msgid "> Cache Folder Path"
+msgstr "> Sti til cache"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:174
+msgid "> Player Temp Path"
+msgstr "> Sti til afspillerens temp mappe"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:177
+msgid "> Log Folder Path"
+msgstr "> Sti til lognings folder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:181
+msgid "Remote Settings"
+msgstr "Fjernbetjeningsindstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:182 /hdd/workspaces/DreamPlex/src/DP_Settings.py:184
+msgid "> Activate Remote Player"
+msgstr "> Aktiver fjern afspiller"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:187
+msgid "Misc Settings"
+msgstr "Forskellige indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:188
+msgid "> Debug Mode"
+msgstr "> Debug Tilstand"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:191
+msgid "> Write debugfile"
+msgstr "> Skriv debugfil"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:191
+msgid "Without this option we just print to console."
+msgstr "Uden denne funktion skriver vi til console."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Settings.py:207 /hdd/workspaces/DreamPlex/src/DP_Server.py:509
+msgid "Save"
+msgstr "Gem"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:103
+msgid "Server List:"
+msgstr "Server liste:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:106
+msgid ""
+"Name                                         IP/myPlex                                             "
+"Port/Email                                        Active"
+msgstr ""
+"Navn                                         IP/myPlex                                             "
+"Port/Email                                        Aktiv"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:108
+msgid ""
+"Name                                         IP/myPlex                                  Port/"
+"Email                                  Active"
+msgstr ""
+"Navn                                         IP/myPlex                                  Port/"
+"Email                                  Aktiv"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:110
+msgid "Delete"
+msgstr "Slet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:111
+msgid "Add"
+msgstr "Tilføj"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:112
+msgid "Sync Media"
+msgstr "Synkroniser medie"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:113
+msgid "Discover"
+msgstr "Opdag"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:189
+msgid "Really delete this Server Entry?"
+msgstr "Vil du virkelig slette denne Server tilføjelse?"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:271
+msgid "Select server"
+msgstr "Vælg server"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:385
+msgid "-"
+msgstr "-"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:387
+msgid " > State"
+msgstr " > Tilstand"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:387
+msgid "Toggle state to on/off to show this server in lost or not."
+msgstr "Skift tilstanden til til/sluk for at vise om denne server er forsvundet eller ej."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:388
+msgid " > Autostart"
+msgstr " > Autostart"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:388
+msgid "Enter this server automatically on startup."
+msgstr "Start op på denne server."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:389
+msgid " > Name"
+msgstr " > Navn"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:390
+msgid " > Trailer"
+msgstr "> Forfilm"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:393
+msgid "Connection Settings"
+msgstr "Forbindelses Indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:395
+msgid " > Connection Type"
+msgstr " > Forbindelsestype"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:398
+msgid " > Local Authentication"
+msgstr "> Lokal Autorisation"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:402
+msgid " >> DNS"
+msgstr " >> DNS"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:403 /hdd/workspaces/DreamPlex/src/DP_Server.py:475
+msgid " >> Port"
+msgstr " >> Port"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:411
+msgid "Playback Settings"
+msgstr "Afspilnings Indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:414
+msgid " > Playback Type"
+msgstr " > Afspilnings type"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:420
+msgid " >> Use universal Transcoder"
+msgstr " >> Brug universal Transcoder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:420 /hdd/workspaces/DreamPlex/src/DP_Server.py:422
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:423 /hdd/workspaces/DreamPlex/src/DP_Server.py:425
+msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
+msgstr ""
+"Du skal have gstreamer_fragmented installeret for bruge denne funktion! Tjek venligst i System ... "
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:422 /hdd/workspaces/DreamPlex/src/DP_Server.py:425
+msgid " >> Transcoding quality"
+msgstr " >> Transcoding kvalitet"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:423
+msgid " >> Segmentsize in seconds"
+msgstr " >> Segmentstørrelse i sekunder"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:438
+msgid "Wake On Lan Settings"
+msgstr "Wake On Lan Indstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:440
+msgid " > Use Wake on Lan (WoL)"
+msgstr " > Brug Wake on Lan (WoL)"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:443
+msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
+msgstr " >> Mac adresse (Størrelse: 12 alfanumerisk ingen seperator) kun for WoL"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:444
+msgid " >> Wait for server delay (max 180 seconds) only for WoL"
+msgstr " >> Vent på server forsinkelse (max 180 sekunder) kun for WoL"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:447
+msgid "Sync Settings"
+msgstr "Synkroniseringsindstillinger"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:449
+msgid " > Sync Movies Medias"
+msgstr "> Synkroniser film medie"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:450
+msgid " > Sync Shows Medias"
+msgstr "> Synkroniser serie medie"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:451
+msgid " > Sync Music Medias"
+msgstr "> Synkroniser music medie"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:474
+msgid " >> IP"
+msgstr " >> IP"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:485
+msgid " >> myPLEX URL"
+msgstr " >> myPLEX URL"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:485 /hdd/workspaces/DreamPlex/src/DP_Server.py:486
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:487
+msgid "You need openSSL installed for this feature! Please check in System ..."
+msgstr "openSSL skal være installeret for anvende denne funktion! Tjek venligst i System ..."
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:486
+msgid " >> myPLEX Username"
+msgstr " >> myPLEX Brugernavn"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:487
+msgid " >> myPLEX Password"
+msgstr " >> myPLEX Kodeord"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:512
+msgid "Mappings"
+msgstr "Stier"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:516
+msgid "get local auth Token"
+msgstr "hent lokal Token"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:524
+msgid "check myPlex Token"
+msgstr "Tjek myPlex godkendelse"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:525
+msgid "(re)create myPlex Token"
+msgstr "(gen)etabler myPlex Token"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:639
+msgid "Local Token:"
+msgstr "Lokal Token:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:639 /hdd/workspaces/DreamPlex/src/DP_Server.py:642
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:658 /hdd/workspaces/DreamPlex/src/DP_Server.py:661
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:671
+msgid "for the user:"
+msgstr "for brugeren:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:658 /hdd/workspaces/DreamPlex/src/DP_Server.py:671
+msgid "myPlex Token:"
+msgstr "myPlex godkendelse:"
+
+#: /hdd/workspaces/DreamPlex/src/DP_Server.py:671
+msgid "myPlex Localtoken:"
+msgstr "myPlex Lokaltoken:"
+
+msgid ""
+"For currentlyRunning feature just activate.\n"
+"For section management you have to connect your server successfully to myPlex once.\n"
+"After that just disable your Portforwarding policy."
+msgstr ""
+"Aktiver for currentlyRunning \n"
+"\vFor sektionsstyring må du have forbundet til serveren til myPlex mindst en gang.\n"
+"Efter dette kan du slette din port videresendelse."
+
+msgid "Reading section of the server ..."
+msgstr "Læser sektionen fra serveren  ..."
+
+msgid "checking for medias with ratingKey: "
+msgstr "tjekker for medier med ratingKey:"
+
+msgid "Toggle state to on/off"
+msgstr "Ændre status til til/fra"
+
+msgid ""
+"Process aborted.\n"
+"Press OK to close."
+msgstr ""
+"Proces afbrudt.\n"
+"Tryk ok for at afbryde"
+
+msgid "got movie url: "
+msgstr "film url:"
+
+msgid "got show url: "
+msgstr "serie url:"
+
+msgid "got music url: "
+msgstr "musik url:"
+
+msgid "checking for  "
+msgstr "søger efter"
+
+msgid "download_url: "
+msgstr "download_url:"
+
+#~ msgid " >> myPLEX renew myPlex token"
+#~ msgstr " >> myPLEX forny myPlex godkendelse"
+
+#~ msgid "%s"
+#~ msgstr "%s"
+
+#~ msgid "(current 'Default')"
+#~ msgstr "(nuværende 'Standard')"
+
+#~ msgid ">> Show Backdrops as Videos"
+#~ msgstr ">> Vis Backdrops som Videoer"
+
+#~ msgid "Audio Functions"
+#~ msgstr "Lyd funktioner"
+
+#~ msgid "Check DreamPlex installation data."
+#~ msgstr "Tjek Dreamplex installations data."
+
+#~ msgid "Check curl installation data."
+#~ msgstr "Tjek curl installations data."
+
+#~ msgid "Check for 'gst-plugin-fragmented if you are using OE16."
+#~ msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger OE16."
+
+#~ msgid "Check for 'gst-plugins-bad-fragmented if you are using OE20."
+#~ msgstr "Tjek for 'gst-plugin-fragmentation hvis du bruger  OE20."
+
+#~ msgid "Clear default view"
+#~ msgstr "Ryd standard udseende"
+
+#~ msgid "Close"
+#~ msgstr "Luk"
+
+#~ msgid "Edit"
+#~ msgstr "Rediger"
+
+#~ msgid "Exit"
+#~ msgstr "Exit"
+
+#~ msgid "Help"
+#~ msgstr "Hjælp"
+
+#~ msgid "Name"
+#~ msgstr "Navn"
+
+#~ msgid "No internet connection available!"
+#~ msgstr "Internetforbindelse ikke tilgængelig!"
+
+#~ msgid "No plugins available"
+#~ msgstr "Ingen plugins tilgængelige"
+
+#~ msgid "Not available"
+#~ msgstr "Ikke tilgængelig"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Options"
+#~ msgstr "Indstillinger"
+
+#~ msgid "Please enter your search string!"
+#~ msgstr "Skriv venligst din søge streng!"
+
+#~ msgid "Port"
+#~ msgstr "Port"
+
+#~ msgid "Refresh this section"
+#~ msgstr "Opdater denne sektion"
+
+#~ msgid "Select filter"
+#~ msgstr "Vælg filter"
+
+#~ msgid "Select sort"
+#~ msgstr "Vælg sortering"
+
+#~ msgid "Select view"
+#~ msgstr "Vælg opstilling"
+
+#~ msgid "Set view as default"
+#~ msgstr "Vælg opstilling som standard "
+
+#~ msgid "Show media details"
+#~ msgstr "Vis medie detaljer"
+
+#~ msgid "Sorry unable to perform action, something has failed!!"
+#~ msgstr "Beklager kunne udføre handlingen, noget virkede ikke efter hensigten!!"
+
+#~ msgid "State"
+#~ msgstr "Tilstand"
+
+#~ msgid "Subtitle Functions"
+#~ msgstr "Undertekst Funktioner"
+
+#~ msgid ""
+#~ "UNEXPECTED ERROR:\n"
+#~ "This is the answer from the request ...\n"
+#~ "%s"
+#~ msgstr ""
+#~ "UVENTET FEJL:\n"
+#~ "Dette er svaret fra forspørgslen ...\n"
+#~ "%s"
+
+#~ msgid "You have to reenter the section to see the changes!"
+#~ msgstr "Du skal hoppe ud og ind af sektionen for at se ændringerne!"
+
+#~ msgid "You need curl installed for this feature! Please check in System ..."
+#~ msgstr ""
+#~ "Du skal have curl installeret for at kunne bruge denne funktion! Tjek venligst i System ..."
+
+#~ msgid "by Albums"
+#~ msgstr "efter Album"
+
+#~ msgid "by Artists"
+#~ msgstr "efter Kunstner"
+
+#~ msgid "fastScroll = Off"
+#~ msgstr "fastScroll = af"
+
+#~ msgid "fastScroll = On"
+#~ msgstr "fastScroll = til"
+
+#~ msgid "found mips32el (OE 2.0) => Check for 'gst-plugins-bad-fragmented"
+#~ msgstr "fandt mips32el (OE 2.0) => Tjek for 'gst-plugins-bad-fragmented"
+
+#~ msgid "found mipsel (OE 1.6) => Check for 'gst-plugin-fragmented"
+#~ msgstr "fandt mipsel (OE 1.6) => Tjek for 'gst-plugin-fragmented"
+
+#~ msgid "load additional data"
+#~ msgstr "tilføj yderligere data"
+
+#~ msgid "mappings"
+#~ msgstr "stier"
+
+#~ msgid "no xml as response - directory"
+#~ msgstr "ingen xml som svar - bibliotek"
+
+#~ msgid "no xml as response - tree"
+#~ msgstr "ingen xml som svar  - træ"
+
+#~ msgid "no xml as response - viewGroup"
+#~ msgstr "ingen xml som svar  - viewGroup"
+
+#~ msgid "not available"
+#~ msgstr "ikke tilgængelig"
+
+#~ msgid "please check if curl is installed."
+#~ msgstr "Tjek venligst om curl er installeret."
+
+#~ msgid "set Filter (set to '%s')"
+#~ msgstr "indstil Filter (sæt til '%s')"
+
+#~ msgid "show media functions"
+#~ msgstr "vis media funktioner"
+
+#~ msgid "toggle View "
+#~ msgstr "ændre Visning"
