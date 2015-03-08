@@ -1540,7 +1540,9 @@ class PlexLibrary(Screen):
 
 		printl("remotePathPart: " + str(remotePathPart), self, "D")
 		printl("localPathPart: " + str(localPathPart), self, "D")
+
 		myFile = self.currentFile
+		printl("original file string: " + str(myFile), self, "D")
 
 		myFile = myFile.replace(remotePathPart, localPathPart)
 
