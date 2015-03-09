@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-07 22:19+0100\n"
-"PO-Revision-Date: 2015-03-08 10:21+0100\n"
+"PO-Revision-Date: 2015-03-09 18:26+0100\n"
 "Last-Translator: lupine <a_ecklon@hotmail.com>\n"
 "Language-Team: none\n"
 "Language: da\n"
@@ -243,7 +243,7 @@ msgstr "Søg ..."
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:249
 msgid "Tv Shows"
-msgstr "Tv Serier"
+msgstr "TV Serier"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:255
 msgid "Pictures"
@@ -319,7 +319,7 @@ msgstr "Ugyldig lokation"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:113
 msgid "Delete Entry"
-msgstr "Slet Punkt"
+msgstr "Slet punkt"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Mappings.py:116
 msgid "Add Entry"
@@ -548,11 +548,11 @@ msgstr "baggrund ikke fundet, prøver at hente ..."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1104
 msgid "found poster - size("
-msgstr "fandt poster - størrelse("
+msgstr "fandt plakat - størrelse("
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1110
 msgid "poster not found, trying to download ..."
-msgstr "poster ikke funder, prøver at hente ..."
+msgstr "plakat ikke fundet, prøver at hente ..."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:1173
 msgid "... success"
@@ -569,7 +569,7 @@ msgstr "Serier"
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:118 /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:302
 msgid "Main Menu"
-msgstr "Hoved Menu"
+msgstr "Hovedmenu"
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:178 /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:395
 msgid "System"
@@ -769,7 +769,7 @@ msgstr "Framerate:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:372
 msgid "Audio Channels:"
-msgstr "Lyd Kanaler:"
+msgstr "Antal lydkanaler:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:376
 msgid "Aspect Ratio:"
@@ -983,7 +983,7 @@ msgstr "For nyligt sete episoder"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:53
 msgid "Recently Viewed Shows"
-msgstr "Fornyligt sete serier"
+msgstr "For nyligt sete serier"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:54
 msgid "Unwatched"
@@ -991,7 +991,7 @@ msgstr "Usete"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:55
 msgid "On Deck"
-msgstr "On Deck"
+msgstr "Igangværende"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:56
 msgid "Search..."
@@ -1019,7 +1019,7 @@ msgstr "plex klient for enigma2"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:113
 msgid "Server Menu"
-msgstr "Server Menu"
+msgstr "Server menu"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:231
 msgid "Please enter your search string: "
@@ -1095,7 +1095,7 @@ msgstr "> Vis infobar når bufferen er tom"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
 msgid "> Show Player Poster on external LCD"
-msgstr "> Vis poster på en ekstern LCD"
+msgstr "> Vis plakat på en ekstern LCD"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:116
 msgid "e.g. lcd4linux"
@@ -1376,15 +1376,15 @@ msgstr "Synkroniseringsindstillinger"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:449
 msgid " > Sync Movies Medias"
-msgstr "> Synkroniser film medie"
+msgstr "> Synkroniser film medier"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:450
 msgid " > Sync Shows Medias"
-msgstr "> Synkroniser serie medie"
+msgstr "> Synkroniser serie medier"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:451
 msgid " > Sync Music Medias"
-msgstr "> Synkroniser music medie"
+msgstr "> Synkroniser musik medier"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:474
 msgid " >> IP"
