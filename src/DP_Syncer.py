@@ -70,6 +70,8 @@ class DPS_Syncer(Screen, DPH_ScreenHelper, DPH_PlexScreen):
 		self.initScreen("syncer")
 		self.serverConfig = serverConfig
 
+		self.resolution = getSkinResolution()
+
 		if serverConfig is not None:
 			# now that we know the server we establish global plexInstance
 			self.plexInstance = Singleton().getPlexInstance(PlexLibrary(self.session, self.serverConfig))
