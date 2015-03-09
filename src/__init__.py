@@ -182,7 +182,7 @@ def initServerEntryConfig():
 	config.plugins.dreamplex.Entries[i].loadExtraData 	= ConfigSelection(default="0", choices = [("0", "None"),("1", "Plex Pass"), ("2", "YTTrailer")])
 
 	config.plugins.dreamplex.Entries[i].srtRenamingForDirectLocal	= ConfigYesNo()
-	config.plugins.dreamplex.Entries[i].subtitlesLanguage       = ConfigText(default = "de", visible_width = 2, fixed_size = False)
+	config.plugins.dreamplex.Entries[i].subtitlesLanguage       = ConfigText(default = "de", visible_width = 10, fixed_size = False)
 	config.plugins.dreamplex.Entries[i].useForcedSubtitles			= ConfigYesNo(default = True)
 
 
