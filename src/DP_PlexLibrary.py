@@ -1633,7 +1633,7 @@ class PlexLibrary(Screen):
 			selected = stream.get('selected', "")
 			if stream['streamType'] == '3' and selected == '1': #subtitle
 				try:
-					index = stream.get(stream['index'], "-1")
+					index = stream.get('index', "-1")
 
 					selectedSubtitle = {		'id': stream['id'],
 								'index': 		index,
