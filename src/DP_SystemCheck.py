@@ -38,7 +38,7 @@ from Screens.MessageBox import MessageBox
 from Screens.Screen import Screen
 from Screens.Console import Console as SConsole
 
-from __common__ import printl2 as printl, testInetConnectivity, getUserAgentHeader, getBoxArch, getOeVersion
+from __common__ import printl2 as printl, testInetConnectivity, getUserAgentHeader, getBoxArch, getOeVersion, revokeCacheFiles
 
 from __init__ import getVersion, _ # _ is translation
 
@@ -87,6 +87,8 @@ class DPS_SystemCheck(Screen):
 		if config.plugins.dreamplex.showUpdateFunction.value:
 			vlist.append((_("Check for update."), "check_Update"))
 
+		vlist.append((_("Revoke cache files manually"), "revoke_cache"))
+
 		self["header"] = Label()
 		self["content"] = MenuList(vlist)
 
@@ -119,6 +121,9 @@ class DPS_SystemCheck(Screen):
 
 		if content == "check_Update":
 			self.checkForUpdate()
+		elif content == "revoke_cache":
+			revokeCacheFiles()
+			self.session.openWithCallback(self.close, MessageBox,_("Cache files successfully deleted."), MessageBox.TYPE_INFO)
 		else:
 			self.package = content
 
