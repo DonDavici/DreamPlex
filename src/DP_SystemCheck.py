@@ -81,7 +81,7 @@ class DPS_SystemCheck(Screen):
 		vlist.append((_("Check openSSL installation data."), "python-pyopenssl"))
 		vlist.append((_("Check mjpegtools intallation data."), "mjpegtools"))
 		vlist.append((_("Check python imaging installation data."), "python-imaging"))
-		vlist.append((_("Check python textutils installation data."), "check_textutils"))
+		vlist.append((_("Check python textutils installation data."), "python-textutils"))
 		vlist.append((_("Check curl installation data."), "curl"))
 
 		if config.plugins.dreamplex.showUpdateFunction.value:
