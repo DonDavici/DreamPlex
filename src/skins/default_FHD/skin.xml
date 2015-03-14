@@ -103,7 +103,7 @@
 
 		<!-- hintbox -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,890" zPosition="1" size="1860,130" transparent="0"/>
-		<widget source="help" render="Label" position="45,795" size="1840,120" font="OpenSans; 18" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
+		<widget source="help" render="Label" position="45,900" size="1840,120" font="OpenSans; 18" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
 
 		<widget name="btn_green" zPosition="15" position="510,1045" size="30,40" alphatest="blend"/>
 		<widget name="btn_greenText" position="550,1034" zPosition="15" size="360,40" font="OpenSans;18" halign="left" valign="center" backgroundColor="#3c000000" transparent="1"/>
@@ -204,7 +204,7 @@
 
 		<!-- hintbox -->
 		<ePixmap pixmap="/usr/lib/enigma2/python/Plugins/Extensions/DreamPlex/skins/default_FHD/images/hintbox.png" position="40,890" zPosition="1" size="1860,130" transparent="0"/>
-		<widget source="help" render="Label" position="45,795" size="1840,120" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
+		<widget source="help" render="Label" position="45,900" size="1840,120" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#0f0f0f" zPosition="30" transparent="1"/>
 
 		<!-- functions -->
 		<widget name="btn_red" zPosition="6" position="110,1045" size="30,40" alphatest="blend"/>
