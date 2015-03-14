@@ -429,16 +429,16 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		##
 		self.cfglist.append(getConfigListEntry(_(" > State"), self.current.state, _("Toggle state to on/off to show this server in lost or not.")))
 		self.cfglist.append(getConfigListEntry(_(" > Autostart"), self.current.autostart, _("Enter this server automatically on startup.")))
-		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _(" ")))
-		self.cfglist.append(getConfigListEntry(_(" > Trailer"), self.current.loadExtraData, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Name"), self.current.name, _("Simply a name for better overview")))
+		self.cfglist.append(getConfigListEntry(_(" > Trailer"), self.current.loadExtraData, _("Enable trailer function. Only works with PlexPass or YYTrailer plugin.")))
 
 		##
 		self.cfglist.append(getConfigListEntry(_("Connection Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Connection Type"), self.current.connectionType, _("Select your type how the box is reachable.")))
 
 		if self.current.connectionType.value == "0" or self.current.connectionType.value == "1": # IP or DNS
-			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" > Local Authentication"), self.current.localAuth, _("Use this if you secured your plex server in the settings.")))
 			if self.current.connectionType.value == "0":
 				self.addIpSettings()
 			else:
@@ -469,7 +469,7 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 
 		elif self.current.playbackType.value == "2":
 			self.useMappings = True
-			self.cfglist.append(getConfigListEntry(_("> Search and use forced subtitles"), self.current.useForcedSubtitles, _(" ")))
+			self.cfglist.append(getConfigListEntry(_("> Search and use forced subtitles"), self.current.useForcedSubtitles, _("Monitor playback to activate subtitles automatically if needed. You have to enable subtitles with 'Text'-Buttion first.")))
 
 		elif self.current.playbackType.value == "3":
 			self.useMappings = False
@@ -482,9 +482,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 			##
 			self.cfglist.append(getConfigListEntry(_("Subtitle Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 			##
-			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.srtRenamingForDirectLocal, _(" ")))
+			self.cfglist.append(getConfigListEntry(_(" >> Enable Subtitle renaming in direct local mode"), self.current.srtRenamingForDirectLocal, _("Renames filename.eng.srt automatically to filename.srt so e2 is able to read them.")))
 			if self.current.srtRenamingForDirectLocal.value:
-				self.cfglist.append(getConfigListEntry(_(" >> Target subtitle language"), self.current.subtitlesLanguage, _(" ")))
+				self.cfglist.append(getConfigListEntry(_(" >> Target subtitle language"), self.current.subtitlesLanguage, _("Search string that should be removed from srt file.")))
 
 		##
 		self.cfglist.append(getConfigListEntry(_("Wake On Lan Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
@@ -498,9 +498,9 @@ class DPS_ServerConfig(ConfigListScreen, Screen, DPH_PlexScreen):
 		##
 		self.cfglist.append(getConfigListEntry(_("Sync Settings ") + separator, config.plugins.dreamplex.about, _(" ")))
 		##
-		self.cfglist.append(getConfigListEntry(_(" > Sync Movies Medias"), self.current.syncMovies, _(" ")))
-		self.cfglist.append(getConfigListEntry(_(" > Sync Shows Medias"), self.current.syncShows, _(" ")))
-		self.cfglist.append(getConfigListEntry(_(" > Sync Music Medias"), self.current.syncMusic, _(" ")))
+		self.cfglist.append(getConfigListEntry(_(" > Sync Movies Medias"), self.current.syncMovies, _("Sync this content.")))
+		self.cfglist.append(getConfigListEntry(_(" > Sync Shows Medias"), self.current.syncShows, _("Sync this content.")))
+		self.cfglist.append(getConfigListEntry(_(" > Sync Music Medias"), self.current.syncMusic, _("Sync this content.")))
 
 		self["config"].list = self.cfglist
 		self["config"].l.setList(self.cfglist)
