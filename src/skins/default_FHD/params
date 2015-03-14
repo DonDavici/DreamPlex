@@ -133,7 +133,7 @@
 
 		<subView name="ShowSeasons">
 			<element name="title" xCoord="558" yCoord="596" />
-			<element name="grandparentTitle" visible="False"/>
+			<element name="grandparentTitle" visible="True"/>
 			
 			<element name="duration" visible="False"/>
 			<element name="childCount" visible="False"/>

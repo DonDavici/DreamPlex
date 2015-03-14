@@ -646,19 +646,19 @@
 		<widget name="file" transparent="1" zPosition="9" halign="left"  position="1445,920" size="455,102" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<!-- tv show specific --><!-- tbd -->
-		<widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="940,685" size="520,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
+		<widget name="grandparentTitle" transparent="1" zPosition="5" halign="left" position="783,745" size="520,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
 
 		<widget name="childCountLabel" transparent="1" zPosition="6" halign="left" position="783,780" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="940,780" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="childCount" transparent="1" zPosition="6" halign="left" position="903,780" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<widget name="leafCountLabel" transparent="1" zPosition="4" halign="left" position="783,815" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="leafCount" transparent="1" zPosition="4" halign="left" position="940,815" size="300,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="leafCount" transparent="1" zPosition="4" halign="left" position="903,815" size="300,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<widget name="viewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,850" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="viewedLeafCount" transparent="1" zPosition="4" halign="left"  position="940,850" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="viewedLeafCount" transparent="1" zPosition="4" halign="left"  position="903,850" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 
 		<widget name="unviewedLeafCountLabel" transparent="1" zPosition="4" halign="left" position="783,885" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
-		<widget name="unviewedLeafCount" transparent="1" zPosition="4" halign="left" position="940,885" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
+		<widget name="unviewedLeafCount" transparent="1" zPosition="4" halign="left" position="903,885" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
 		
 		<widget name="infoLabel" transparent="1" zPosition="9" halign="left" position="783,388" size="170,35" font="OpenSans; 20" foregroundColor="#FF8C00" backgroundColor="#212121"/>
 		<widget name="info" transparent="1" zPosition="9" halign="left" position="903,388" size="170,35" font="OpenSans; 20" foregroundColor="#ffffff" backgroundColor="#212121"/>
