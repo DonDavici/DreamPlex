@@ -42,7 +42,7 @@ from Tools.Directories import fileExists, copyfile
 from Screens.Screen import Screen
 
 from __plugin__ import getPlugin, Plugin
-from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeThat, getUUID
+from __common__ import printl2 as printl, getXmlContent, getPlexHeader, encodeThat, getUUID, revokeCacheFiles
 from __init__ import _ # _ is translation
 
 #===============================================================================
@@ -1395,6 +1395,9 @@ class PlexLibrary(Screen):
 			printl("", self, "C")
 			return False
 
+		except Exception, ex:
+			printl( "error: " + str(ex), self, "D")
+
 	#========================================================================
 	#
 	#========================================================================
@@ -2576,7 +2579,7 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 
 		if override is True:
-			printl( "Transcode override.  Will play media with addon transcoding settings", self, "I")
+			printl( "Transcode override. Will play media with addon transcoding settings", self, "I")
 			self.g_transcode="true"
 	
 		if self.g_transcode == "true":
@@ -2602,7 +2605,11 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 
 		printl("", self, "C")
-		return self.g_myplex_accessTokenDict[server]["hToken"]
+		try:
+			return self.g_myplex_accessTokenDict[server]["hToken"]
+		except:
+			revokeCacheFiles()
+			return None
 
 	#===========================================================================
 	# 
@@ -2611,7 +2618,11 @@ class PlexLibrary(Screen):
 		printl("", self, "S")
 
 		printl("", self, "C")
-		return self.g_myplex_accessTokenDict[server]["aToken"]
+		try:
+			return self.g_myplex_accessTokenDict[server]["aToken"]
+		except:
+			revokeCacheFiles()
+			return None
 
 	#===========================================================================
 	# 
@@ -2619,8 +2630,12 @@ class PlexLibrary(Screen):
 	def get_uTokenForServer(self, server):
 		printl("", self, "S")
 
-		printl("", self, "C")   
-		return self.g_myplex_accessTokenDict[server]["uToken"]
+		printl("", self, "C")
+		try:
+			return self.g_myplex_accessTokenDict[server]["uToken"]
+		except:
+			revokeCacheFiles()
+			return None
 
 	#===========================================================================
 	# 

@@ -28,6 +28,7 @@ import datetime
 import shutil
 import math
 import uuid
+import glob
 
 from enigma import addFont, loadPNG, loadJPG, getDesktop
 from skin import loadSkin
@@ -197,7 +198,27 @@ def getSkinResolution():
 	return skinResolution
 
 #===============================================================================
-# 
+#
+#===============================================================================
+def revokeCacheFiles():
+	printl2("", "__common__::revokeCacheFiles", "S")
+	cachePath = config.plugins.dreamplex.cachefolderpath.value
+
+	try:
+		os.chdir(cachePath)
+		files=glob.glob('*.cache')
+		for filename in files:
+			os.unlink(filename)
+
+		printl2("", "__common__::revokeCacheFiles", "C")
+
+	except Exception, ex:
+		printl2("Exception(" + str(type(ex)) + "): " + str(ex), "__common__::revokeCacheFiles", "E")
+
+		printl2("", "__common__::revokeCacheFiles", "C")
+
+#===============================================================================
+#
 #===============================================================================
 def writeToLog(dmode, out):
 	"""
