@@ -110,6 +110,7 @@ class DPS_ViewMixed(DP_View):
 				self.handleResolutionPixmaps()
 				self.handleRatedPixmaps()
 				self.handleSoundPixmaps()
+				self.handleSoundChannelsPixmaps()
 
 			# final sets
 			self.setDuration()
