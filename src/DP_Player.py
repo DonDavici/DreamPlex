@@ -267,7 +267,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		self.setPlayerData()
 
 		self.startTimelineWatcher()
-		self.timelineWatcher.start(5000,False)
+
+		if self.timelineWatcher is not None:
+			self.timelineWatcher.start(5000,False)
 
 		printl("", self, "C")
 
@@ -631,8 +633,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.playbackType == "2":
 			self["bufferslider"].setValue(100)
 
-			# we start here too because it seems that direct local does not hit the buffer full function
-			self.timelineWatcher.start(5000,False)
+			if self.timelineWatcher is not None:
+				# we start here too because it seems that direct local does not hit the buffer full function
+				self.timelineWatcher.start(5000,False)
+
 			if self.subtitleWatcher is not None:
 				self.subtitleWatcher.start(10000,False)
 
@@ -789,7 +793,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 			self.transcoderHeartbeat.start(10000,False)
 
-		self.timelineWatcher.stop()
+		if self.timelineWatcher is not None:
+			self.timelineWatcher.stop()
 
 		super(DP_Player,self).pauseService()
 
@@ -807,7 +812,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.transcoderHeartbeat is not None:
 			self.transcoderHeartbeat.stop()
 
-		self.timelineWatcher.start(30000,False)
+		if self.timelineWatcher is not None:
+			self.timelineWatcher.start(30000,False)
 
 		printl("", self, "S")
 	#===========================================================================
@@ -1065,7 +1071,8 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			printl( "Buffer filled start playing", self, "I")
 			self.setSeekState(self.SEEK_STATE_PLAY)
 
-		self.timelineWatcher.start(5000,False)
+		if self.timelineWatcher is not None:
+			self.timelineWatcher.start(5000,False)
 
 		#printl("", self, "C")
 
@@ -1075,7 +1082,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 	def bufferEmpty(self):
 		#printl("", self, "S")
 		
-		if self.multiUser and self.timelineWatcher is not None:
+		if self.timelineWatcher is not None:
 			self.timelineWatcher.stop()
 
 		#printl("", self, "C")
@@ -1124,10 +1131,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			remove(self.tempPoster)
 
 		# we destroy here all variables to be sure that they are away
-		if getOeVersion() != "oe22":
-			self.timelineWatcher.stop()
-		else:
-			self.timelineWatcherConn = None
+		if self.timelineWatcher is not None:
+			if getOeVersion() != "oe22":
+				self.timelineWatcher.stop()
+			else:
+				self.timelineWatcherConn = None
 
 		# we stop playback here
 		self.session.nav.stopService()
@@ -1189,7 +1197,7 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 				progress = 100
 				printl("End of file reached", self, "D")
 
-			if self.multiUser and self.timelineWatcher is not None:
+			if self.timelineWatcher is not None:
 				self.timelineWatcher.stop()
 
 				urlPath = self.server + "/:/timeline?containerKey=/library/sections/onDeck&key=/library/metadata/" + self.id + "&ratingKey=" + self.id
