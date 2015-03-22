@@ -18,8 +18,6 @@ from enigma import eTimer
 from __init__ import prepareEnvironment, startEnvironment, _ # _ is translation
 from __common__ import getUUID, saveLiveTv, getLiveTv, getOeVersion, getBoxResolution
 
-from enigma import getDesktop
-
 #===============================================================================
 # GLOBALS
 #===============================================================================
@@ -44,10 +42,7 @@ def main(session, **kwargs):
 def DPS_MainMenu(*args, **kwargs):
 	import DP_MainMenu
 
-	# save liveTvData
-	saveLiveTv(global_session.nav.getCurrentlyPlayingServiceReference())
-
-	# this loads the skin
+ 	# this loads the skin
 	startEnvironment()
 
 	return DP_MainMenu.DPS_MainMenu(*args, **kwargs)
