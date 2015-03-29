@@ -130,6 +130,7 @@ class HttpDeamon(Thread):
 
 		if not self.myIp:
 			self.deamonState = False
+			self.registered = False
 			return
 
 		try:
