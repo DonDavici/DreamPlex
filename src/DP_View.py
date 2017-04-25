@@ -3148,7 +3148,7 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 	def restoreLiveTv(self):
 		printl("", self, "S")
 
-		if not self.liveTvInViews:
+		if self.liveTvInViews:
 			printl("restoring liveTv", self, "D")
 			self.session.nav.playService(getLiveTv())
 
