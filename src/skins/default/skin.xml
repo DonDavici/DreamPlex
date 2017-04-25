@@ -52,7 +52,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -75,7 +75,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -92,7 +92,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -119,7 +119,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -163,7 +163,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -193,7 +193,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -233,7 +233,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -257,7 +257,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -289,7 +289,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -316,7 +316,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -393,7 +393,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -427,7 +427,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -445,7 +445,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -588,7 +588,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -724,7 +724,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
@@ -769,7 +769,7 @@
 
 		<!-- clock -->
 		<widget source="global.CurrentTime" render="Label" position="920,13" size="169,30" zPosition="4" font="OpenSans; 18" halign="left" foregroundColor="#e69405" backgroundColor="#0f0f0f" transparent="1" valign="top">
-			<convert type="ClockToText">default</convert>
+			<convert type="ClockToText">Default</convert>
 		</widget>
 		<widget source="global.CurrentTime" render="Label" position="830,13" size="390,30" zPosition="4" font="OpenSans; 18" halign="right" foregroundColor="#5C5C5C" backgroundColor="#0f0f0f" transparent="1">
 			<convert type="ClockToText">Date</convert>
