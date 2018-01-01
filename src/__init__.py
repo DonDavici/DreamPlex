@@ -49,7 +49,7 @@ from __common__ import getVersion, registerPlexFonts, loadSkinParams, loadPlexSk
 #
 #===============================================================================
 version = getVersion()
-source = "feed" # other option is "ipk"
+source = "ipk" # other option is "ipk"
 
 defaultPluginFolderPath = resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/")
 defaultSkinsFolderPath	= resolveFilename(SCOPE_PLUGINS, "Extensions/DreamPlex/skins")

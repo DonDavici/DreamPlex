@@ -25,6 +25,7 @@ You should have received a copy of the GNU General Public License
 import sys
 import time
 import httplib
+import ssl
 
 from os import system, popen
 from Screens.Standby import TryQuitMainloop
@@ -142,16 +143,17 @@ class DPS_SystemCheck(Screen):
 		if testInetConnectivity() and self.checkInstallationState(True):
 			printl( "Starting request", self, "D")
 
-			conn = httplib.HTTPSConnection("api.github.com",timeout=10, port=443)
-			conn.request(url="/repos/DonDavici/DreamPlex/tags", method="GET", headers=getUserAgentHeader())
-			data = conn.getresponse()
-			self.response = data.read()
+			#conn = httplib.HTTPSConnection("api.github.com",timeout=10, port=443)
+			#conn.request(url="/repos/DonDavici/DreamPlex/tags", method="GET", headers=getUserAgentHeader())
+			#data = conn.getresponse()
+			#self.response = data.read()
 
-			printl("response: " + str(self.response), self, "D")
+			#printl("response: " + str(self.response), self, "D")
 			starter = 19
-			closer = self.response.find('",', 0, 50)
-			printl("closer: " + str(closer), self, "D")
-			latestVersion = self.response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
+			#closer = self.response.find('",', 0, 50)
+			#printl("closer: " + str(closer), self, "D")
+			latestVersion = "2.1.3"
+			#latestVersion = self.response[starter:closer] # is a bit dirty but better than forcing users to install simplejson
 			printl("latestVersion: " + str(latestVersion), self, "D")
 
 			installedVersion = getVersion()

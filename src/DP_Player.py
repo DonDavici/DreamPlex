@@ -485,9 +485,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.whatPoster is None:
 			self.buildPosterData()
 
-		if getOeVersion() != "oe22":
-			self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-		else:
+		#if getOeVersion() != "oe22":
+		#	self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		#else:
 			self.EXpicloadPoster.startDecode(self.whatPoster,False)
 
 		self.ptr = self.EXpicloadPoster.getData()
@@ -766,10 +766,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.timelineWatcher = eTimer()
 
-		if getOeVersion() != "oe22":
-			self.timelineWatcher.callback.append(self.updateTimeline)
-		else:
-			self.timelineWatcherConn = self.timelineWatcher.timeout.connect(self.updateTimeline)
+		#if getOeVersion() != "oe22":
+			#self.timelineWatcher.callback.append(self.updateTimeline)
+		#else:
+		self.timelineWatcherConn = self.timelineWatcher.timeout.connect(self.updateTimeline)
 
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")
