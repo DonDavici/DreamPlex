@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DreamPlex\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-07 04:35+0100\n"
-"PO-Revision-Date: 2014-08-07 04:36+0100\n"
+"POT-Creation-Date: 2018-09-15 17:06+0200\n"
+"PO-Revision-Date: 2018-09-15 17:50+0200\n"
 "Last-Translator: DonDavici <dondavici@gmail.com>\n"
 "Language-Team: dondavici@gmail.com <dondavici@gmail.com>\n"
 "Language: fr\n"
@@ -16,302 +16,974 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Loco-Parser: loco_parse_po\n"
 "X-Loco-Target-Locale: zz_ZZ\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: DPH_Translations.py:31
-msgid "All"
-msgstr "Tous"
-
-#: DPH_Translations.py:32
-msgid "All Movies"
-msgstr "Tous les films"
-
-#: DPH_Translations.py:33
-msgid "All Filmy"
-msgstr "Tous les films (?)"
-
-#: DPH_Translations.py:34
-msgid "All Shows"
-msgstr "Toutes les séries"
-
-#: DPH_Translations.py:35
-msgid "All episodes"
-msgstr "Toutes les épisodes"
-
-#: DPH_Translations.py:36
-msgid "By Genre"
-msgstr "Par genre"
-
-#: DPH_Translations.py:37
-msgid "By Folder"
-msgstr "Par dossier"
-
-#: DPH_Translations.py:38
-msgid "By First Letter"
-msgstr "Par la première lettre"
-
-#: DPH_Translations.py:39
-msgid "By Resolution"
-msgstr "Par la résolution"
-
-#: DPH_Translations.py:40
-msgid "By Rating"
-msgstr "Par l'évaluation"
-
-#: DPH_Translations.py:41
-msgid "By Country"
-msgstr "Par le pays"
-
-#: DPH_Translations.py:42
-msgid "By Director"
-msgstr "Par le régisseur"
-
-#: DPH_Translations.py:43
-msgid "By Decade"
-msgstr "Par la décade"
-
-#: DPH_Translations.py:44
-msgid "By Year"
-msgstr "Par l'année"
-
-#: DPH_Translations.py:45
-msgid "By Collection"
-msgstr "Par la collection"
-
-#: DPH_Translations.py:46
-msgid "By Content Rating"
-msgstr "Par l'évaluation du contenu"
-
-#: DPH_Translations.py:47
-msgid "By Starring Actor"
-msgstr "Par le rôle principal"
-
-#: DPH_Translations.py:48
-msgid "Recently Aired"
-msgstr "Récemment sorti"
-
-#: DPH_Translations.py:49
-msgid "Recently Added"
-msgstr "Récemment ajouté"
-
-#: DPH_Translations.py:50
-msgid "Recently Released"
-msgstr "Récemment sorti"
-
-#: DPH_Translations.py:51
-msgid "Recently Viewed"
-msgstr "Récemment vu"
-
-#: DPH_Translations.py:52
-msgid "Recently Viewed Episodes"
-msgstr "Episodes récemment vues"
-
-#: DPH_Translations.py:53
-msgid "Recently Viewed Shows"
-msgstr "Séries récemment vues"
-
-#: DPH_Translations.py:54
-msgid "Unwatched"
-msgstr "Non vu"
-
-#: DPH_Translations.py:55
-msgid "On Deck"
-msgstr "Sur le Deck"
-
-#: DPH_Translations.py:56
-msgid "Search..."
-msgstr "Recherche..."
-
-#: DPH_Translations.py:57
-msgid "Search Shows..."
-msgstr "Chercher les séries..."
-
-#: DPH_Translations.py:58
-msgid "Search Episodes..."
-msgstr "Chercher les épisodes..."
-
-#: DPH_Translations.py:59 DP_ServerMenu.py:440 DP_ViewMovies.py:54
-#: __init__.py:295
-msgid "Movies"
-msgstr "Films"
-
-#: DPH_Translations.py:60 DP_ViewShows.py:57
-msgid "Shows"
-msgstr "Shows"
-
-#: DPH_Translations.py:61
-msgid "Series"
-msgstr "Séries"
-
-#: DP_About.py:67 DP_MainMenu.py:399
-msgid "About"
-msgstr "Info"
-
-#: DP_HelperScreens.py:51
-msgid "Search ..."
-msgstr "Recherche ..."
-
-#: DP_MainMenu.py:118 DP_MainMenu.py:304
-msgid "Main Menu"
-msgstr "Menu principal"
-
-#: DP_MainMenu.py:177 DP_MainMenu.py:397
-msgid "System"
-msgstr "Système"
-
-#: DP_MainMenu.py:338 DP_PlexLibrary.py:2088
-msgid "UNEXPECTED ERROR:"
-msgstr "ERREUR INATTENDUE:"
-
-#: DP_MainMenu.py:350
-msgid "Settings"
-msgstr "Paramètres"
-
-#: DP_MainMenu.py:351
-msgid "Server"
-msgstr "Serveur"
-
-#: DP_MainMenu.py:352
-msgid "Systemcheck"
-msgstr "Vérifier l'installation"
-
-#: DP_MainMenu.py:353
-msgid "Backdrops"
-msgstr "Arrière-plans"
-
-#: DP_MainMenu.py:398
-msgid "LiveTv"
-msgstr "LiveTv"
-
-#: DP_MainMenu.py:459
+#: ../src/DP_Syncer.py:344
 msgid ""
-"Plexserver seems to be offline. Start with Wake on Lan settings? \n"
 "\n"
-"Please note: \n"
-"If you press yes the spinner will run for "
+"\n"
+"Cancelled!"
 msgstr ""
-"Plexserver semble être hors ligne. Afficher les paramètres WOL (Wake on "
-"Lan) ? \n"
 "\n"
-"Attention :\n"
-"Si vous appuyez sur Oui, le spinner s'affichera pendant "
+"\n"
+"Annulé!"
 
-#: DP_MainMenu.py:469
+#: ../src/DP_Syncer.py:969
 msgid ""
-"Plexserver seems to be offline. Please check your your settings or "
-"connection!\n"
-" Retry?"
+"\n"
+"\n"
+"Fetching complete library data. This could take a while ..."
 msgstr ""
-"Plexserver semble être hors ligne. Vérifiez vos paramètres et / ou la "
-"connexion !\n"
-" Réessayer ?"
+"\n"
+"\n"
+"Récupération des données complètes de la bibliothèque. Cela pourrait prendre un certain temps..."
 
-#: DP_Mappings.py:104
-msgid "Delete Entry"
-msgstr "Supprimer l'entrée"
+#: ../src/DP_Syncer.py:756
+msgid ""
+"\n"
+"\n"
+"Files found: "
+msgstr ""
+"\n"
+"\n"
+"Fichiers trouvés : "
 
-#: DP_Mappings.py:107
-msgid "Add Entry"
-msgstr "Ajouter une entrée"
+#: ../src/DP_Syncer.py:328
+msgid ""
+"\n"
+"\n"
+"Finished"
+msgstr ""
+"\n"
+"\n"
+"Términé"
 
-#: DP_Mappings.py:152
-msgid "Enter your remote path segment here:"
-msgstr "Entrez le chemin distant:"
+#: ../src/DP_Syncer.py:859
+msgid ""
+"\n"
+"\n"
+"No Files found. Nothing to do!"
+msgstr ""
+"\n"
+"\n"
+"Aucun fichier trouvé. Rien à faire!"
 
-#: DP_Mappings.py:154 DP_Mappings.py:169
-msgid "Adding new mapping was not completed"
-msgstr "Ajout de mapping n'a pas réussi "
+#: ../src/DP_Syncer.py:730
+msgid ""
+"\n"
+"\n"
+"Starting to search for picture files with 1280x720 in its name ..."
+msgstr ""
+"\n"
+"\n"
+"Rechercher les images avec 1280x720 dans leurs noms ..."
 
-#: DP_PathSelector.py:90
-msgid "Cancel"
-msgstr "Annuler"
+#: ../src/DP_Syncer.py:728
+msgid ""
+"\n"
+"\n"
+"Starting to search for picture files with 1920x1080 in its name ..."
+msgstr ""
+"\n"
+"\n"
+"Rechercher les images avec 1920x1080 dans leurs noms ..."
 
-#: DP_PathSelector.py:93
-msgid "Ok"
-msgstr "Ok"
+#: ../src/DP_Syncer.py:868
+msgid ""
+"\n"
+"\n"
+"We are done!"
+msgstr ""
+"\n"
+"\n"
+"Terminé!"
 
-#: DP_PathSelector.py:95
-msgid "Target: "
-msgstr "Cible: "
+#: ../src/DP_Syncer.py:946
+msgid ""
+"\n"
+"\n"
+"starting ..."
+msgstr ""
+"\n"
+"\n"
+"démarrage ..."
 
-#: DP_PathSelector.py:97
-msgid "Pathselector"
-msgstr "Sélecteur chemin"
+#: ../src/DP_ServerMenu.py:593 ../src/DP_Syncer.py:151 ../src/DP_View.py:766
+#: ../src/DP_View.py:831 ../src/DP_View.py:1665
+#, python-format
+msgid ""
+"\n"
+"%s"
+msgstr ""
+"\n"
+"%s"
 
-#: DP_PathSelector.py:187
-msgid "Invalid Location"
-msgstr "Location invalide"
+#: ../src/DP_Server.py:436 ../src/DP_Server.py:445 ../src/DP_Server.py:446
+#: ../src/DP_Server.py:454 ../src/DP_Server.py:457 ../src/DP_Server.py:483
+#: ../src/DP_Server.py:490 ../src/DP_Server.py:492 ../src/DP_Server.py:495
+#: ../src/DP_Server.py:496 ../src/DP_Server.py:499 ../src/DP_Server.py:523
+#: ../src/DP_Server.py:524 ../src/DP_Settings.py:117 ../src/DP_Settings.py:129
+#: ../src/DP_Settings.py:166 ../src/DP_Settings.py:172
+#: ../src/DP_Settings.py:190 ../src/DP_Settings.py:197
+msgid " "
+msgstr " "
 
-#: DP_Player.py:231
-msgid "Select media to play"
-msgstr "Choisir le média à afficher"
+#: ../src/DP_Server.py:431
+msgid " > Autostart"
+msgstr " > Démarrage automatique"
 
-#: DP_Player.py:285
-msgid "Sorry I didn't find the file on the provided locations"
-msgstr "Navré, je n'ai pas trouvé le fichier à la location indiquée"
+#: ../src/DP_Server.py:438
+msgid " > Connection Type"
+msgstr " > Type de connexion"
 
-#: DP_Player.py:286
-msgid "Location:"
-msgstr "Position:"
+#: ../src/DP_Server.py:441
+msgid " > Local Authentication"
+msgstr " > Authentication locale"
 
-#: DP_Player.py:287
-msgid "Please verify you direct local settings"
-msgstr "Verifiez les paramètres pour 'direct local'"
+#: ../src/DP_Server.py:432
+msgid " > Name"
+msgstr " > Nom"
 
-#: DP_Player.py:288
-msgid "I will now try to play the file via transcode."
-msgstr "Essayer de jouer le fichier en le transcodant."
+#: ../src/DP_Server.py:457
+msgid " > Playback Type"
+msgstr " > Type de lecture"
 
-#: DP_Player.py:290
-msgid "Warning:"
-msgstr "Attention:"
+#: ../src/DP_Server.py:430
+msgid " > State"
+msgstr " > Etat"
 
-#: DP_Player.py:303
+#: ../src/DP_Server.py:501
+msgid " > Sync Movies Medias"
+msgstr " > Sync médias Films"
+
+#: ../src/DP_Server.py:503
+msgid " > Sync Music Medias"
+msgstr " > Sync médias Musique"
+
+#: ../src/DP_Server.py:502
+msgid " > Sync Shows Medias"
+msgstr " > Sync médias Spectacles"
+
+#: ../src/DP_Server.py:433
+msgid " > Trailer"
+msgstr " > Bande-annonce"
+
+#: ../src/DP_Server.py:492
+msgid " > Use Wake on Lan (WoL)"
+msgstr " > Utiliser Wake on Lan (WoL)"
+
+#: ../src/DP_Server.py:445
+msgid " >> DNS"
+msgstr " >> DNS"
+
+#: ../src/DP_Server.py:485
+msgid " >> Enable Subtitle renaming in direct local mode"
+msgstr " >> activer le renommage des sous-titres en mode local direct"
+
+#: ../src/DP_Server.py:523
+msgid " >> IP"
+msgstr " >> IP"
+
+#: ../src/DP_Server.py:495
+msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
+msgstr " >> Mac Addresse (taille: 12 charactères alphanumeriques sans séparateur) uniquement pour WoL"
+
+#: ../src/DP_Server.py:446 ../src/DP_Server.py:524
+msgid " >> Port"
+msgstr " >> Port"
+
+#: ../src/DP_Server.py:466
+msgid " >> Segmentsize in seconds"
+msgstr " >> Segmentsize en secondes"
+
+#: ../src/DP_Server.py:542
+msgid " >> Settings Pincode"
+msgstr " >> Paramètres PIN Code"
+
+#: ../src/DP_Server.py:487
+msgid " >> Target subtitle language"
+msgstr "  >> langue sous-titre cible"
+
+#: ../src/DP_Server.py:465 ../src/DP_Server.py:468
+msgid " >> Transcoding quality"
+msgstr " >> Qualité de rencodage"
+
+#: ../src/DP_Server.py:540
+msgid " >> Use Settings Protection"
+msgstr " >> Utiliser la protection des paramètres"
+
+#: ../src/DP_Server.py:463
+msgid " >> Use universal Transcoder"
+msgstr " >> Utiliser le Transcoder universel"
+
+#: ../src/DP_Server.py:496
+msgid " >> Wait for server delay (max 180 seconds) only for WoL"
+msgstr " >> Attendre sur le serveur  (max. 180 secondes) uniquement pour WoL"
+
+#: ../src/DP_Server.py:538
+msgid " >> myPLEX Home Users"
+msgstr " >> myPLEX Utilisateurs domestiques"
+
+#: ../src/DP_Server.py:536
+msgid " >> myPLEX Password"
+msgstr " >> myPLEX mot de passe"
+
+#: ../src/DP_Server.py:544
+msgid " >> myPLEX Pin Protection"
+msgstr " >> myPlex Protection PIN"
+
+#: ../src/DP_Server.py:546
+msgid " >> myPLEX Pincode"
+msgstr " >> myPLEX code PIN"
+
+#: ../src/DP_Server.py:534
+msgid " >> myPLEX URL"
+msgstr " >> myPlex URL"
+
+#: ../src/DP_Server.py:535
+msgid " >> myPLEX Username"
+msgstr " >> myPLEX Nom d'utilisateur"
+
+#: ../src/DP_Player.py:448
 msgid ""
 " This file was partially played.\n"
 "\n"
 " Do you want to resume?"
 msgstr ""
-"Fichier déjà joué. \n"
+" Fichier déjà joué partiellement. \n"
 "\n"
-"Continuer (Oui) ou Recommencer dès le début (Non) ?"
+"Voulez-vous reprendre la lecture?"
 
-#: DP_Player.py:585 DP_Player.py:602
-#, python-format
-msgid "This Box can't decode %s streams!"
-msgstr "Ce flux (%s) ne peut pas être lue"
+#: ../src/DP_Server.py:591
+msgid "(re)create myPlex Token"
+msgstr "(re)créer myPlex Token"
 
-#: DP_Player.py:619 DP_Player.py:639
+#: ../src/DP_Server.py:428
+msgid "-"
+msgstr "-"
+
+#: ../src/DP_Syncer.py:1236
+msgid "... failed"
+msgstr "... a échoué"
+
+#: ../src/DP_Syncer.py:1230
+msgid "... success"
+msgstr "... succès"
+
+#: ../src/DP_View.py:2094
+msgid "/"
+msgstr "/"
+
+#: ../src/DP_Settings.py:180
+msgid "/hdd/dreamplex/cache"
+msgstr ""
+
+#: ../src/DP_Settings.py:177
+msgid "/hdd/dreamplex/config"
+msgstr ""
+
+#: ../src/DP_Settings.py:174
+msgid "/hdd/dreamplex/medias"
+msgstr ""
+
+#: ../src/DP_Settings.py:183 ../src/DP_Settings.py:186
+msgid "/tmp"
+msgstr "/tmp"
+
+#: ../src/__init__.py:241
+msgid "1.5Mbps, 480p"
+msgstr "1.5Mbps, 480p"
+
+#: ../src/__init__.py:245
+msgid "1024x768, 2mbps"
+msgstr "1024x768, 2mbps"
+
+#: ../src/__init__.py:241
+msgid "10Mbps, 1080p"
+msgstr "10Mbps, 1080p"
+
+#: ../src/__init__.py:245
+msgid "1280x720, 3mbps"
+msgstr "1280x720, 3mbps"
+
+#: ../src/__init__.py:245
+msgid "1280x720, 4mbps"
+msgstr "1280x720, 4mbps"
+
+#: ../src/__init__.py:241
+msgid "12Mbps, 1080p"
+msgstr "12Mbps, 1080p"
+
+#: ../src/__init__.py:245
+msgid "1920x1080, 10mbps"
+msgstr "1920x1080, 10mbps"
+
+#: ../src/__init__.py:245
+msgid "1920x1080, 12mbps"
+msgstr "1920x1080, 12mbps"
+
+#: ../src/__init__.py:245
+msgid "1920x1080, 20mbps"
+msgstr "1920x1080, 20mbps"
+
+#: ../src/__init__.py:245
+msgid "1920x1080, 8mbps"
+msgstr "1920x1080, 8mbps"
+
+#: ../src/__init__.py:241
+msgid "208kbps, 160p, 15fps"
+msgstr "208kbps, 160p, 15fps"
+
+#: ../src/__init__.py:241
+msgid "20Mbps, 1080p"
+msgstr "20Mbps, 1080p"
+
+#: ../src/__init__.py:241
+msgid "2Mbps, 720p"
+msgstr "2Mbps, 720p"
+
+#: ../src/__init__.py:241
+msgid "320kbps, 240p"
+msgstr "320kbps, 240p"
+
+#: ../src/__init__.py:241
+msgid "3Mbps, 720p"
+msgstr "3Mbps, 720p"
+
+#: ../src/__init__.py:245
+msgid "420x240, 320kbps"
+msgstr "420x240, 320kbps"
+
+#: ../src/__init__.py:241
+msgid "4Mbps, 720p"
+msgstr "4Mbps, 720p"
+
+#: ../src/__init__.py:245
+msgid "576x320, 720 kbps"
+msgstr "576x320, 720 kbps"
+
+#: ../src/__init__.py:241
+msgid "64kbps, 128p, 3fps"
+msgstr "64kbps, 128p, 3fps"
+
+#: ../src/__init__.py:241
+msgid "720kbps, 320p"
+msgstr "720kbps, 320p"
+
+#: ../src/__init__.py:245
+msgid "720x480, 1,5mbps"
+msgstr "720x480, 1,5mbps"
+
+#: ../src/__init__.py:241
+msgid "8Mbps, 1080p"
+msgstr "8Mbps, 1080p"
+
+#: ../src/__init__.py:241
+msgid "96kbps, 128p, 12fps"
+msgstr "96kbps, 128p, 12fps"
+
+#: ../src/DP_Player.py:680 ../src/DP_Player.py:698
+msgid "<unknown>"
+msgstr "<inconnu>"
+
+#: ../src/DP_Settings.py:191
+msgid "> Activate Remote Player"
+msgstr "> Activer lecteur distant"
+
+#: ../src/DP_Settings.py:118
+msgid "> Boxname"
+msgstr "> Nom de la boîte"
+
+#: ../src/DP_Settings.py:180
+msgid "> Cache Folder Path"
+msgstr "> Chemin du dossier cache (tampon)"
+
+#: ../src/DP_Settings.py:126
+msgid "> Check for updates on startup"
+msgstr "> Vérifier les mises à jours au démarrage"
+
+#: ../src/DP_Settings.py:177
+msgid "> Config Folder Path"
+msgstr "> Chemin du dossier configuration"
+
+#: ../src/DP_Settings.py:198
+msgid "> Debug Mode"
+msgstr "> Mode débogage"
+
+#: ../src/DP_Settings.py:167
+msgid "> Default View for Movies"
+msgstr "> Vue par défaut pour les films"
+
+#: ../src/DP_Settings.py:169
+msgid "> Default View for Music"
+msgstr "> Vue par défaut pour la musique"
+
+#: ../src/DP_Settings.py:168
+msgid "> Default View for Shows"
+msgstr "> Vue par défaut pour les séries"
+
+#: ../src/DP_Settings.py:163
+msgid "> Detail type for additional data"
+msgstr "> Type de donnée pour les données supplémentaire"
+
+#: ../src/DP_Settings.py:135
+msgid "> Exit function in Player"
+msgstr "> Quitter la fonction dans le lecteur"
+
+#: ../src/DP_Settings.py:186
+msgid "> Log Folder Path"
+msgstr "> Chemin du dossier des logs"
+
+#: ../src/DP_Settings.py:174
+msgid "> Media Folder Path"
+msgstr "> Chemin du dossier média"
+
+#: ../src/DP_Settings.py:183
+msgid "> Player Temp Path"
+msgstr "> Chemin du dossier temporaire du lecteur"
+
+#: ../src/DP_Settings.py:193
+msgid "> Remote Player Port"
+msgstr "> Port du lecteur distant"
+
+#: ../src/DP_Server.py:472
+msgid "> Search and use forced subtitles"
+msgstr "> Rechercher et utiliser les sous-titres forcés"
+
+#: ../src/DP_Settings.py:137
+msgid "> Show Backdrops as Videos"
+msgstr "> Afficher les vidéo dans l'arrière plan"
+
+#: ../src/DP_Settings.py:132
+msgid "> Show Filter for Section"
+msgstr "> Afficher les filtres pour la section"
+
+#: ../src/DP_Settings.py:123
+msgid "> Show Player Poster on external LCD"
+msgstr "> Afficher l'affiche du lecteur sur l'écran LCD externe"
+
+#: ../src/DP_Settings.py:120
+msgid "> Show Plugin in Main Menu"
+msgstr "> Afficher le plugin dans le menu principal"
+
+#: ../src/DP_Settings.py:133
+msgid "> Show Seen/Unseen count in TvShows"
+msgstr "> Afficher le nombre Vu / Non vu dans les séries"
+
+#: ../src/DP_Settings.py:161
+msgid "> Show additional data for myPlex sections"
+msgstr "> Afficher les données supplémentaires pour la section myPlex"
+
+#: ../src/DP_Settings.py:159
+msgid "> Show liveTv in Views instead of backdrops"
+msgstr "> Afficher LiveTV dans les Vues à la place des vidéo arrière-plan"
+
+#: ../src/DP_Settings.py:134
+msgid "> Start with Filtermode"
+msgstr "> Démarrer avec le mode filtres"
+
+#: ../src/DP_Settings.py:138
+msgid "> Stop Live TV on startup"
+msgstr "> Arrêter Live-TV au démarrage"
+
+#: ../src/DP_Settings.py:131
+msgid "> Summerize Sections"
+msgstr "> Résumer les séctions"
+
+#: ../src/DP_Settings.py:130
+msgid "> Summerize Servers"
+msgstr "> Résumer des serveurs"
+
+#: ../src/DP_Settings.py:127
+msgid "> Updatetype"
+msgstr "> Type de mise à jour"
+
+#: ../src/DP_Settings.py:121
+msgid "> Use Cache for Sections"
+msgstr "> Utiliser cache (tampon) pour les vues"
+
+#: ../src/DP_Settings.py:122
+msgid "> Use Picture Cache"
+msgstr "> Utiliser cache (tampon) pour les photos"
+
+#: ../src/DP_Settings.py:157
+msgid "> Use fastScroll as default"
+msgstr "> Utiliser FastScroll par défaut"
+
+#: ../src/DP_Settings.py:119
+msgid "> Used Skin"
+msgstr "> Thème utilisé"
+
+#: ../src/DP_Settings.py:201
+msgid "> Write debugfile"
+msgstr "> Ecrire debugfile"
+
+#: ../src/DP_Settings.py:147
+msgid ">> Play Themes in TV Shows"
+msgstr ">> Jouer la bande sonore dans les séries TV"
+
+#: ../src/DP_Syncer.py:103
+msgid "Abort"
+msgstr "Abandon"
+
+#: ../src/DP_About.py:66 ../src/DP_MainMenu.py:399
+msgid "About"
+msgstr "Info"
+
+#: ../src/DP_Settings.py:191
+msgid "Activate to be able to use with any app with remote function for Plex."
+msgstr "Activer pour être en mesure d'utiliser avec n'importe quelle application avec fonction à distance pour Plex."
+
+#: ../src/DP_Server.py:114
+msgid "Add"
+msgstr "Ajouter"
+
+#: ../src/DP_Mappings.py:116
+msgid "Add Entry"
+msgstr "Ajouter une entrée"
+
+#: ../src/DP_Users.py:119
+msgid "Add User"
+msgstr "Ajouter un utilisateur"
+
+#: ../src/DP_Mappings.py:167 ../src/DP_Mappings.py:182
+msgid "Adding new mapping was not completed"
+msgstr "Ajout de mapping n'a pas réussi"
+
+#: ../src/DP_Users.py:243
+msgid "Adding new user was not completed"
+msgstr "L'ajout d'un nouvel utilisateur n'a pas été terminé"
+
+#: ../src/DPH_Translations.py:31
+msgid "All"
+msgstr "Tous"
+
+#: ../src/DPH_Translations.py:33
+msgid "All Filmy"
+msgstr "Tous les films (?)"
+
+#: ../src/DPH_Translations.py:32
+msgid "All Movies"
+msgstr "Tous les films"
+
+#: ../src/DPH_Translations.py:34
+msgid "All Shows"
+msgstr "Toutes les séries"
+
+#: ../src/DPH_Translations.py:35
+msgid "All episodes"
+msgstr "Toutes les épisodes"
+
+#: ../src/DP_View.py:2300
+msgid "Are you sure?"
+msgstr "Êtes-vous sûr ?"
+
+#: ../src/DP_Server.py:540
+msgid "Ask for pin?"
+msgstr "Demander pin?"
+
+#: ../src/DP_View.py:371
+msgid "Aspect Ratio:"
+msgstr "Raport:"
+
+#: ../src/DP_View.py:367
+msgid "Audio Channels:"
+msgstr "Pistes son:"
+
+#: ../src/DP_View.py:379
+msgid "Audio Codec:"
+msgstr "Codecs son:"
+
+#: ../src/DP_View.py:2233
+msgid ""
+"Audio Functions\n"
+"\n"
+"Please take note that switching the language here will take only effect if you enable transcoding!"
+msgstr ""
+"Fonctions son\n"
+"\n"
+"Notez que changement de langue ici aura l'effet UNIQUEMENT si vous activez le transcodage!"
+
+#: ../src/DP_View.py:297
+msgid "Audio:"
+msgstr "Son:"
+
+#: ../src/DP_MainMenu.py:353
+msgid "Backdrops"
+msgstr "Arrière-plans"
+
+#: ../src/DP_Syncer.py:99
+msgid "Background"
+msgstr "Arrière-plan"
+
+#: ../src/DP_View.py:359
+msgid "Bitrate:"
+msgstr "Débit:"
+
+#: ../src/DPH_Translations.py:45
+msgid "By Collection"
+msgstr "Par la collection"
+
+#: ../src/DPH_Translations.py:46
+msgid "By Content Rating"
+msgstr "Par l'évaluation du contenu"
+
+#: ../src/DPH_Translations.py:41
+msgid "By Country"
+msgstr "Par le pays"
+
+#: ../src/DPH_Translations.py:43
+msgid "By Decade"
+msgstr "Par la décade"
+
+#: ../src/DPH_Translations.py:42
+msgid "By Director"
+msgstr "Par le régisseur"
+
+#: ../src/DPH_Translations.py:38
+msgid "By First Letter"
+msgstr "Par la première lettre"
+
+#: ../src/DPH_Translations.py:37
+msgid "By Folder"
+msgstr "Par dossier"
+
+#: ../src/DPH_Translations.py:36
+msgid "By Genre"
+msgstr "Par genre"
+
+#: ../src/DPH_Translations.py:40
+msgid "By Rating"
+msgstr "Par l'évaluation"
+
+#: ../src/DPH_Translations.py:39
+msgid "By Resolution"
+msgstr "Par la résolution"
+
+#: ../src/DPH_Translations.py:47
+msgid "By Starring Actor"
+msgstr "Par le rôle principal"
+
+#: ../src/DPH_Translations.py:44
+msgid "By Year"
+msgstr "Par l'année"
+
+#: ../src/DP_SystemCheck.py:126
+msgid "Cache files successfully deleted."
+msgstr "Fichiers cache supprimés avec succès."
+
+#: ../src/DP_Settings.py:133
+msgid "Calculate and show them for tv shows."
+msgstr "Calculez et montrez-les pour les émissions de télévision."
+
+#: ../src/DP_PathSelector.py:94
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../src/DP_View.py:285
+msgid "Cast:"
+msgstr "Acteur:"
+
+#: ../src/DP_Settings.py:193
+msgid "Change the port to your needs."
+msgstr "Changez le port à vos besoins."
+
+#: ../src/DP_PlexLibrary.py:258
+msgid "Channels"
+msgstr "Chaînes"
+
+#: ../src/DP_SystemCheck.py:85
+msgid "Check curl installation data."
+msgstr "Vérifier les donnés d’installation de cURL."
+
+#: ../src/DP_SystemCheck.py:71
+msgid "Check for gst-plugin-fragmented"
+msgstr "Vérifiez gst-plugin-fragmented"
+
+#: ../src/DP_SystemCheck.py:78
+msgid "Check for gst-plugin-fragmented if you are using OE16."
+msgstr "Vérifiez gst-plugin-fragmented si vous utilisez OE16."
+
+#: ../src/DP_SystemCheck.py:74
+msgid "Check for gst-plugins-bad-fragmented"
+msgstr "Vérifiez gst-plugin-fragmented"
+
+#: ../src/DP_SystemCheck.py:79
+msgid "Check for gst-plugins-bad-fragmented if you are using OE20."
+msgstr "Vérifiez gst-plugin-fragmented si vous utilisez OE20."
+
+#: ../src/DP_SystemCheck.py:88
+msgid "Check for update."
+msgstr "Vérifier les mises à jour."
+
+#: ../src/DP_SystemCheck.py:82
+msgid "Check mjpegtools intallation data."
+msgstr "Vérifier l'installation des mjpegtools."
+
+#: ../src/DP_SystemCheck.py:81
+msgid "Check openSSL installation data."
+msgstr "Vérifiez les données d'installation d'OpenSSL."
+
+#: ../src/DP_SystemCheck.py:83
+msgid "Check python imaging installation data."
+msgstr "Vérifier les données d’installation de python imaging."
+
+#: ../src/DP_SystemCheck.py:84
+msgid "Check python textutils installation data."
+msgstr "Vérifiez les données d'installation de Python textutils."
+
+#: ../src/DP_Users.py:253
+msgid "Confirmed User from Plex was configured!"
+msgstr "L'utilisateur confirmé de Plex a été configuré!"
+
+#: ../src/DP_Server.py:436
+msgid "Connection Settings "
+msgstr "Paramètres de connexion "
+
+#: ../src/DP_ServerMenu.py:140
+msgid "Current User:"
+msgstr "Utilisateur actuel:"
+
+#: ../src/__init__.py:175
+msgid "DNS"
+msgstr "DNS"
+
+#: ../src/DP_Server.py:113
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ../src/DP_Mappings.py:113
+msgid "Delete Entry"
+msgstr "Supprimer l'entrée"
+
+#: ../src/DP_Users.py:116
+msgid "Delete User"
+msgstr "Supprimer utilisateur"
+
+#: ../src/DP_View.py:2314
+msgid "Deleting aborted!"
+msgstr "Suppression annulée !"
+
+#: ../src/DP_View.py:1021 ../src/__init__.py:179
+msgid "Direct Local"
+msgstr "Direct Local"
+
+#: ../src/DP_View.py:306
+msgid "Director:"
+msgstr "Régisseur:"
+
+#: ../src/DP_Server.py:116
+msgid "Discover"
+msgstr "Chercher"
+
+#: ../src/plugin.py:56
+msgid "DreamPlex"
+msgstr "DreamPlex"
+
+#: ../src/DP_Syncer.py:559
+msgid "DreamPlex: Mediasync finished!\n"
+msgstr "DreamPlex: Synchronisation des médias terminé!\n"
+
+#: ../src/DP_Syncer.py:557
+msgid "DreamPlex: Rendering finished!\n"
+msgstr "DreamPlex: Rendu terminé!\n"
+
+#: ../src/DP_Users.py:122
+msgid "Edit User"
+msgstr "Modifier l'utilisateur"
+
+#: ../src/DP_Settings.py:198
+msgid "Enable only if needed. Slows down rapidly."
+msgstr "Activer uniquement si nécessaire. Ralentit rapidement."
+
+#: ../src/DP_Server.py:433
+msgid "Enable trailer function. Only works with PlexPass or YYTrailer plugin."
+msgstr "Activer la fonction bande-annonce. Fonctionne uniquement avec PlexPass ou YYTrailer plugin."
+
+#: ../src/DP_SystemCheck.py:365
+msgid ""
+"Enigma2 must be restarted!\n"
+"Should Enigma2 now restart?"
+msgstr ""
+"Enigma2 doit être redémarrer !\n"
+"Redémarrer mainenant ?"
+
+#: ../src/DP_Settings.py:118
+msgid "Enter the name of your box, e.g. Livingroom."
+msgstr "Saisissez le nom de votre boîte, par exemple, Living."
+
+#: ../src/DP_Users.py:191
+msgid "Enter the pin here:"
+msgstr "Entrez le PIN ici:"
+
+#: ../src/DP_Users.py:156 ../src/DP_Users.py:170
+msgid "Enter the username here:"
+msgstr "Saisissez le nom d'utilisateur ici:"
+
+#: ../src/DP_Server.py:431
+msgid "Enter this server automatically on startup."
+msgstr "Utiliser ce serveur par défaut au démarrage."
+
+#: ../src/DP_Mappings.py:165
+msgid "Enter your remote path segment here:"
+msgstr "Entrez le chemin distant:"
+
+#: ../src/DP_Syncer.py:742 ../src/DP_Syncer.py:856
 #, python-format
 msgid ""
-"Your Box can't decode this video stream!\n"
-"%s"
+"Error!\n"
+"Error-message:%s"
 msgstr ""
-"Cette vidéo ne peut pas être lue\n"
-"(%s)"
+"Erreur!\n"
+"Message d'erreur : %s"
 
-#: DP_PlexLibrary.py:355 DP_PlexLibrary.py:432
-msgid "No data in this section!"
-msgstr "Pas de données dans cette section!"
+#: ../src/DP_Syncer.py:993
+#, python-format
+msgid ""
+"Error!\n"
+"Error-message:%s\n"
+"Press Exit to close."
+msgstr ""
+"Erreur!\n"
+"Message d'erreur: %s\n"
+"Appuyez sur Exit pour fermer."
 
-#: DP_PlexLibrary.py:915
-msgid "Press exit to return"
-msgstr "Appuyer sur Exit pour sortir"
+#: ../src/DP_Player.py:352 ../src/DP_Server.py:720 ../src/DP_Server.py:739
+msgid "Error:"
+msgstr "Erreur:"
 
-#: DP_PlexLibrary.py:916
+#: ../src/DP_Syncer.py:845
+msgid "Error: "
+msgstr "Erreur: "
+
+#: ../src/DP_View.py:383
+msgid "File:"
+msgstr "Fichier:"
+
+#: ../src/DP_View.py:363
+msgid "Framerate:"
+msgstr "Img/sec:"
+
+#: ../src/DP_SystemCheck.py:107
+msgid "Functions List:"
+msgstr "Fonctions média:"
+
+#: ../src/DP_Server.py:428 ../src/DP_Settings.py:117
+msgid "General Settings "
+msgstr "Paramètres généraux "
+
+#: ../src/DP_View.py:314
+msgid "Genre:"
+msgstr "Genre:"
+
+#: ../src/DP_Server.py:584 ../src/DP_ServerMenu.py:227
+msgid "Home Users"
+msgstr "Utilisateurs domestiques"
+
+#: ../src/DP_Player.py:433
+msgid "I will now try to play the file via transcode."
+msgstr "Essayer de jouer le fichier en le transcodant."
+
+#: ../src/__init__.py:175
+msgid "IP"
+msgstr "IP"
+
+#: ../src/DP_Settings.py:126
+msgid "If activated on each start we will check if there is a new version depending on your update type."
+msgstr "Si activé, à chaque démarrage nous vérifions les mises à jours, selon le type de mise à jour choisi."
+
+#: ../src/DP_Settings.py:161
+msgid "If server summerize is off you can here add additional information for better overview."
+msgstr "Si le résumé du serveur est désactivé, vous pouvez ici ajouter des informations supplémentaires pour une meilleure vue d'ensemble."
+
+#: ../src/DP_PlexLibrary.py:1059
 msgid "If you are using myPlex"
 msgstr "Si vous utilisez myPlex"
 
-#: DP_PlexLibrary.py:917
-msgid "please check if curl is installed."
-msgstr "vérifiez si le cURL est installé."
+#: ../src/DP_Settings.py:119
+msgid "If you change the skin you have to restart at least the GUI!"
+msgstr "Lors du changement du Skin vous devez redémarrer le GUI !"
 
-#: DP_PlexLibrary.py:918
-msgid "You can use Systemcheck in the menu."
-msgstr "Vous pouvez utiliez Systemcheck dans le menu."
+#: ../src/DP_View.py:302
+msgid "Info:"
+msgstr "Info:"
 
-#: DP_PlexLibrary.py:1007
+#: ../src/DP_SystemCheck.py:298 ../src/DP_SystemCheck.py:381
+msgid "Information:\n"
+msgstr "Information:\n"
+
+#: ../src/DP_View.py:2108
+msgid "Initiate Library refresh"
+msgstr "Démarrer mise à jour de la librairie"
+
+#: ../src/DP_PathSelector.py:190
+msgid "Invalid Location"
+msgstr "Location invalide"
+
+#: ../src/DP_MainMenu.py:398
+msgid "LiveTv"
+msgstr "LiveTv"
+
+#: ../src/DP_Server.py:717
+msgid "Local Token:"
+msgstr "Jeton local:"
+
+#: ../src/DP_Player.py:431
+msgid "Location:"
+msgstr "Position:"
+
+#: ../src/__init__.py:175
+msgid "MYPLEX"
+msgstr "MYPLEX"
+
+#: ../src/DP_MainMenu.py:120 ../src/DP_MainMenu.py:304
+msgid "Main Menu"
+msgstr "Menu principal"
+
+#: ../src/DP_Server.py:571
+msgid "Mappings"
+msgstr "Mappage"
+
+#: ../src/DP_View.py:2106
+msgid "Mark media unwatched"
+msgstr "Marquer comme non vu"
+
+#: ../src/DP_View.py:2107
+msgid "Mark media watched"
+msgstr "Marquer comme vu"
+
+#: ../src/DP_View.py:2111
+msgid "Media Functions"
+msgstr "Fonctions média"
+
+#: ../src/DP_View.py:322
+msgid "Medias:"
+msgstr "Médias:"
+
+#: ../src/DP_Settings.py:197
+msgid "Misc Settings "
+msgstr "Paramètres divers "
+
+#: ../src/DP_ViewMixed.py:54 ../src/__init__.py:380
+msgid "Mixed"
+msgstr "Mixte"
+
+#: ../src/DP_Server.py:472
+msgid "Monitor playback to activate subtitles automatically if needed. You have to enable subtitles with 'Text'-Buttion first."
+msgstr "Surveillez la lecture pour activer automatiquement les sous-titres si nécessaire. Vous devez d’abord activer les sous-titres avec le bouton ‘Text'."
+
+#: ../src/DPH_Translations.py:59 ../src/DP_PlexLibrary.py:250
+#: ../src/DP_ViewMovies.py:52 ../src/__init__.py:371
+msgid "Movies"
+msgstr "Films"
+
+#: ../src/DP_PlexLibrary.py:252 ../src/DP_ViewMusic.py:56
+#: ../src/__init__.py:377
+msgid "Music"
+msgstr "Musique"
+
+#: ../src/DP_PlexLibrary.py:1150
 #, python-format
 msgid ""
 "MyPlex Token error:\n"
@@ -322,511 +994,138 @@ msgstr ""
 "Vérifiez votre nom d'utilisateur et votre mot de passe.\n"
 "%s"
 
-#: DP_Server.py:102
-msgid "Server List:"
-msgstr "Serveurs:"
+#: ../src/DP_Server.py:109
+msgid "Name                                         IP/myPlex                                             Port/Email                                        Active"
+msgstr "Nom                                           IP/myPlex                                            Port/Email                                         Actif"
 
-#: DP_Server.py:103
+#: ../src/DP_Server.py:111
+msgid "Name                                         IP/myPlex                                  Port/Email                                  Active"
+msgstr "Nom                                         IP/myPlex                                   Port/Email                                   Actif"
+
+#: ../src/DP_PlexLibrary.py:429
+msgid "New"
+msgstr "Nouvelle"
+
+#: ../src/DP_PlexLibrary.py:436 ../src/DP_PlexLibrary.py:513
+msgid "No data in this section!"
+msgstr "Pas de données dans cette section!"
+
+#: ../src/DP_View.py:582
 msgid ""
-"Name                                         IP/"
-"myPlex                                  Port/"
-"Email                                  Active"
-msgstr ""
-"Nom                                          IP/"
-"myPlex                                   Port/"
-"Email                                  Actif "
-
-#: DP_Server.py:105
-msgid "Delete"
-msgstr "Supprimer"
-
-#: DP_Server.py:106
-msgid "Add"
-msgstr "Ajouter"
-
-#: DP_Server.py:107
-msgid "Sync Media"
-msgstr "Synchroniser médias"
-
-#: DP_Server.py:108
-msgid "Discover"
-msgstr "Chercher"
-
-#: DP_Server.py:184
-msgid "Really delete this Server Entry?"
-msgstr "Etes-vous sûr vouloir supprimer ce serveur ?"
-
-#: DP_Server.py:270
-msgid "Select server"
-msgstr "Choisir le serveur"
-
-#: DP_Server.py:388 DP_Settings.py:110
-msgid "General Settings"
-msgstr "Règlages générales"
-
-#: DP_Server.py:388
-msgid "-"
-msgstr "-"
-
-#: DP_Server.py:390
-msgid " > State"
-msgstr "> Etat"
-
-#: DP_Server.py:390
-msgid "Toggle state to on/off to show this server in lost or not."
-msgstr "Changer Etat en oui/non pour afficher le serveur."
-
-#: DP_Server.py:391
-msgid " > Autostart"
-msgstr " > Démarrage automatique"
-
-#: DP_Server.py:391
-msgid "Enter this server automatically on startup."
-msgstr "Utiliser ce serveur par défaut au démarrage"
-
-#: DP_Server.py:392
-msgid " > Name"
-msgstr " > Nom"
-
-#: DP_Server.py:392 DP_Server.py:395 DP_Server.py:397 DP_Server.py:406
-#: DP_Server.py:407 DP_Server.py:413 DP_Server.py:416 DP_Server.py:441
-#: DP_Server.py:443 DP_Server.py:446 DP_Server.py:447 DP_Server.py:470
-#: DP_Server.py:471 DP_Settings.py:110 DP_Settings.py:112 DP_Settings.py:113
-#: DP_Settings.py:115 DP_Settings.py:121 DP_Settings.py:122 DP_Settings.py:123
-#: DP_Settings.py:124 DP_Settings.py:125 DP_Settings.py:128 DP_Settings.py:137
-#: DP_Settings.py:147 DP_Settings.py:149 DP_Settings.py:151 DP_Settings.py:153
-#: DP_Settings.py:156 DP_Settings.py:157 DP_Settings.py:158 DP_Settings.py:159
-#: DP_Settings.py:162 DP_Settings.py:164 DP_Settings.py:167 DP_Settings.py:170
-#: DP_Settings.py:173 DP_Settings.py:176 DP_Settings.py:180 DP_Settings.py:181
-msgid " "
-msgstr " "
-
-#: DP_Server.py:395
-msgid "Connection Settings"
-msgstr "Paramètres de connexion"
-
-#: DP_Server.py:397
-msgid " > Connection Type"
-msgstr " > Type de connexion"
-
-#: DP_Server.py:400
-msgid " > Local Authentication"
-msgstr " > Authentication locale"
-
-#: DP_Server.py:400
-msgid "Toggle state to on/off"
-msgstr "Changer l'état à oui/non"
-
-#: DP_Server.py:406
-msgid " >> DNS"
-msgstr " >> DNS"
-
-#: DP_Server.py:407 DP_Server.py:471
-msgid " >> Port"
-msgstr " >> Port"
-
-#: DP_Server.py:413
-msgid "Playback Settings"
-msgstr "Paramètres de lecture"
-
-#: DP_Server.py:416
-msgid " > Playback Type"
-msgstr " > Type de lecture"
-
-#: DP_Server.py:422
-msgid " >> Use universal Transcoder"
-msgstr " >> Utiliser le Transcoder universel"
-
-#: DP_Server.py:422 DP_Server.py:424 DP_Server.py:425 DP_Server.py:427
-msgid ""
-"You need gstreamer_fragmented installed for this feature! Please check in "
-"System ... "
-msgstr ""
-"Vous devez installer \n"
-"gstreamer_fragmented pour utiliser cette option\n"
-"Vérifier l'installation dans le Système ..."
-
-#: DP_Server.py:424 DP_Server.py:427
-msgid " >> Transcoding quality"
-msgstr " >> Qualité de rencodage"
-
-#: DP_Server.py:425
-msgid " >> Segmentsize in seconds"
-msgstr " >> Segmentsize en secondes"
-
-#: DP_Server.py:441
-msgid "Wake On Lan Settings"
-msgstr "Paramètres Wake On Lan"
-
-#: DP_Server.py:443
-msgid " > Use Wake on Lan (WoL)"
-msgstr " > Utiliser Wake on Lan (WoL)"
-
-#: DP_Server.py:446
-msgid " >> Mac address (Size: 12 alphanumeric no seperator) only for WoL"
-msgstr ""
-" >> Mac Addresse (taille: 12 charactères alphanumeriques sans séparateur) "
-"uniquement pour WoL"
-
-#: DP_Server.py:447
-msgid " >> Wait for server delay (max 180 seconds) only for WoL"
-msgstr " >> Attendre sur le serveur  (max. 180 secondes) uniquement pour WoL"
-
-#: DP_Server.py:470
-msgid " >> IP"
-msgstr " >> IP"
-
-#: DP_Server.py:481
-msgid " >> myPLEX URL"
-msgstr " >> myPlex URL"
-
-#: DP_Server.py:481 DP_Server.py:482 DP_Server.py:483 DP_Server.py:484
-msgid "You need curl installed for this feature! Please check in System ..."
-msgstr ""
-"Pour cette options vous avez besoin du cURL ! Vérifier l'instalation dans le "
-"Système ..."
-
-#: DP_Server.py:482
-msgid " >> myPLEX Username"
-msgstr " >> myPLEX Nom d'utilisateur"
-
-#: DP_Server.py:483
-msgid " >> myPLEX Password"
-msgstr " >> myPLEX mot de passe"
-
-#: DP_Server.py:484
-msgid " >> myPLEX renew myPlex token"
-msgstr " >> myPlex token renouveler"
-
-#: DP_Server.py:506 DP_Settings.py:197
-msgid "Save"
-msgstr "Sauvegarder"
-
-#: DP_Server.py:509
-msgid "Mappings"
-msgstr "Mappage"
-
-#: DP_Server.py:517
-msgid "check myPlex Token"
-msgstr "vérifier myPlex Token"
-
-#: DP_Server.py:518
-msgid "(re)create myPlex Token"
-msgstr "(re)créer myPlex Token"
-
-#: DP_Server.py:607 DP_Server.py:620
-msgid "myPlex Token:"
-msgstr "vérifier myPlex Token"
-
-#: DP_Server.py:607 DP_Server.py:610 DP_Server.py:620
-msgid "for the user:"
-msgstr "pour l'utilisateur:"
-
-#: DP_Server.py:610
-msgid "Error:"
-msgstr "Erreur:"
-
-#: DP_ServerMenu.py:112
-msgid "Server Menu"
-msgstr "Serveur menu"
-
-#: DP_ServerMenu.py:230
-msgid "Please enter your search string: "
-msgstr "Entrez votre recherche: "
-
-#: DP_ServerMenu.py:428 DP_Syncer.py:136 DP_View.py:1453
-#, python-format
-msgid ""
+"No extras found ...\n"
 "\n"
-"%s"
+"Press exit to return."
 msgstr ""
+"Aucun extras trouvé...\n"
 "\n"
-"%s"
+"Appuyez sur Exit pour revenir."
 
-#: DP_ServerMenu.py:441
-msgid "Tv Shows"
-msgstr "TV Séries"
+#: ../src/DP_SystemCheck.py:176
+msgid "No internet connection available or openssl is not installed!"
+msgstr "Aucune connexion Internet disponible ou openssl n'est pas installé!"
 
-#: DP_ServerMenu.py:442 DP_ViewMusic.py:56 __init__.py:301
-msgid "Music"
-msgstr "Musique"
+#: ../src/DP_SystemCheck.py:172
+msgid "No update available"
+msgstr "Pas de mise à jour"
 
-#: DP_ServerMenu.py:448
+#: ../src/DP_Settings.py:157
+msgid "No update for addiontal informations in media views to speed up."
+msgstr "Aucune mise à jour pour les informations additionnelles dans les vues des médias pour accélérer."
+
+#: ../src/DP_PathSelector.py:96
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/DPH_Translations.py:55
+msgid "On Deck"
+msgstr "Sur le Deck"
+
+#: ../src/DP_View.py:253
+msgid "Pages:"
+msgstr "Pages:"
+
+#: ../src/DP_Settings.py:166 ../src/DP_Settings.py:172
+msgid "Path Settings "
+msgstr "Paramètres du chemin d'accès "
+
+#: ../src/DP_PathSelector.py:100
+msgid "Pathselector"
+msgstr "Sélecteur chemin"
+
+#: ../src/DP_PlexLibrary.py:257
 msgid "Pictures"
 msgstr "Photos"
 
-#: DP_ServerMenu.py:449
-msgid "Channels"
-msgstr "Chaînes"
+#: ../src/DP_Server.py:542
+msgid "Pincode for changing settings"
+msgstr "Pincode pour modifier les paramètres"
 
-#: DP_Settings.py:111
-msgid "> Used Skin"
-msgstr "> Thème utilisé"
+#: ../src/DP_Server.py:546
+msgid "Pincode for switching back from any home user."
+msgstr "Pincode pour la commutation de retour de n'importe quel utilisateur à la maison."
 
-#: DP_Settings.py:111
-msgid "If you change the skin you have to restart at least the GUI!"
-msgstr "Lors du changement du Skin vous devez redémarrer le GUI !"
+#: ../src/DP_Server.py:454
+msgid "Playback Settings "
+msgstr "Paramètres de lecture "
 
-#: DP_Settings.py:112
-msgid "> Show Plugin in Main Menu"
-msgstr "> Afficher le plugin dans le menu principal"
+#: ../src/DP_Settings.py:147
+msgid "Plays tv show themes automatically."
+msgstr "Joue automatiquement les thèmes de l'émission TV."
 
-#: DP_Settings.py:113
-msgid "> Use Cache for Sections"
-msgstr "> Utiliser cache (tampon) pour les vues"
+#: ../src/DP_Server.py:390 ../src/DP_ServerMenu.py:249
+#: ../src/DP_ServerMenu.py:254
+msgid "Please enter the pincode!"
+msgstr "Veuillez entrer dans le pincode!"
 
-#: DP_Settings.py:114
-msgid "> Use Picture Cache"
-msgstr "> Utiliser cache (tampon) pour les photos"
+#: ../src/DP_ServerMenu.py:379
+msgid "Please enter your search string: "
+msgstr "Entrez votre recherche: "
 
-#: DP_Settings.py:114
+#: ../src/DP_Syncer.py:175
 msgid ""
-"Use this if you do not have enough space on your box e.g. no hdd drive just "
-"flash."
-msgstr ""
-"Utiliser ceci si vous n'avez pas suffisement d'espace sur votre box, p.ex "
-"pas de disque dur, uniquement flash."
-
-#: DP_Settings.py:115
-msgid "> Show Infobar when buffer drained"
-msgstr "> Afficher la barre d'information lorsque la cache (tampon) est vide"
-
-#: DP_Settings.py:118
-msgid "> Check for updates on startup"
-msgstr "> Vérifier les mises à jours au démarrage"
-
-#: DP_Settings.py:118
-msgid ""
-"If activated on each start we will check if there is a new version depending "
-"on your update type."
-msgstr ""
-"Si activé, à chaque démarrage nous vérifions les mises à jours, selon le "
-"type de mise à jour choisi."
-
-#: DP_Settings.py:119
-msgid "> Updatetype"
-msgstr "> Type de mise à jour"
-
-#: DP_Settings.py:119
-msgid "Use Beta only if you really want to help with testing"
-msgstr "Utiliser les versions Betas si vous voulez aider à tester"
-
-#: DP_Settings.py:121
-msgid "Userinterface Settings"
-msgstr "Paramètres d'interface utilisateur"
-
-#: DP_Settings.py:122
-msgid "> Summerize Sections"
-msgstr "> Résumer les séctions"
-
-#: DP_Settings.py:123
-msgid "> Show Filter for Section"
-msgstr "> Afficher les filtres pour la section"
-
-#: DP_Settings.py:124
-msgid "> Show Seen/Unseen count in TvShows"
-msgstr "> Afficher le nombre Vu / Non vu dans les séries"
-
-#: DP_Settings.py:125
-msgid "> Start with Filtermode"
-msgstr "> Démarrer avec le mode filtres"
-
-#: DP_Settings.py:127
-msgid "> Show Backdrops as Videos"
-msgstr "> Afficher les vidéo dans l'arrière plan"
-
-#: DP_Settings.py:127
-msgid "Use this if you have m1v videos as backdrops"
-msgstr "Utiliser ces paramètres avec les m1v vidéos d'arrière plan"
-
-#: DP_Settings.py:128
-msgid "> Stop Live TV on startup"
-msgstr "> Arrêter Live-TV au démarrage"
-
-#: DP_Settings.py:137
-msgid ">> Play Themes in TV Shows"
-msgstr ">> Jouer la bande sonore dans les séries TV"
-
-#: DP_Settings.py:147
-msgid "> Use fastScroll as default"
-msgstr "> Utiliser FastScroll par défaut"
-
-#: DP_Settings.py:149
-msgid "> Show liveTv in Views instead of backdrops"
-msgstr "> Afficher LiveTV dans les Vues à la place des vidéo arrière-plan"
-
-#: DP_Settings.py:151
-msgid "> Show additional data for myPlex sections"
-msgstr "> Afficher les données supplémentaires pour la section myPlex"
-
-#: DP_Settings.py:153
-msgid "> Detail type for additional data"
-msgstr "> Type de donnée pour les données supplémentaire "
-
-#: DP_Settings.py:156 DP_Settings.py:162
-msgid "Path Settings"
-msgstr "Paramètres de chemin"
-
-#: DP_Settings.py:157
-msgid "> Default View for Movies"
-msgstr "> Vue par défaut pour les films"
-
-#: DP_Settings.py:158
-msgid "> Default View for Shows"
-msgstr "> Vue par défaut pour les séries"
-
-#: DP_Settings.py:159
-msgid "> Default View for Music"
-msgstr "> Vue par défaut pour la musique"
-
-#: DP_Settings.py:164
-msgid "> Media Folder Path"
-msgstr "> Chemin du dossier média"
-
-#: DP_Settings.py:167
-msgid "> Config Folder Path"
-msgstr "> Chemin du dossier configuration"
-
-#: DP_Settings.py:170
-msgid "> Cache Folder Path"
-msgstr "> Chemin du dossier cache (tampon)"
-
-#: DP_Settings.py:173
-msgid "> Player Temp Path"
-msgstr "> Chemin du dossier temporaire du lecteur"
-
-#: DP_Settings.py:176
-msgid "> Log Folder Path"
-msgstr "> Chemin du dossier des logs"
-
-#: DP_Settings.py:180
-msgid "Misc Settings"
-msgstr "Autres paramètres"
-
-#: DP_Settings.py:181
-msgid "> Debug Mode"
-msgstr "> Mode débogage"
-
-#: DP_Syncer.py:86
-msgid "Start Sync"
-msgstr "Syncroniser"
-
-#: DP_Syncer.py:88
-msgid "Start Rendering"
-msgstr "Démarrer rendu"
-
-#: DP_Syncer.py:92
-msgid "Background"
-msgstr "Arrière-plan"
-
-#: DP_Syncer.py:96
-msgid "Abort Sync"
-msgstr "Annuler synchronisation"
-
-#: DP_Syncer.py:157
-msgid ""
-"Please note to run at least once the sync media function within the server "
-"menu.\n"
+"Please note to run at least once the sync media function within the server menu.\n"
 "This will download the needed files in the right size of 1280x720."
 msgstr ""
-"N'oubliez pas d'effectuer au moins une fois la synchronisation dans les menu "
-"serveur.\n"
+"N'oubliez pas d'effectuer au moins une fois la synchronisation dans les menu serveur.\n"
 "Ceci téléchargera les fichier nécessaires au bon format (1280x720)."
 
-#: DP_Syncer.py:160
+#: ../src/DP_Syncer.py:173
 msgid ""
-"This will download all medias from the selected server.\n"
-"\n"
-"Additional to this we downlaod the pictures in 1280x720 for better "
-"fullscreen backdrops."
+"Please note to run at least once the sync media function within the server menu.\n"
+"This will download the needed files in the right size of 1920x1080."
 msgstr ""
-"Ceci télécharge tous les médias depuis le serveur.\n"
-"\n"
-"En plus on télécharge toutes les images dans la résolution 1280x720 pour "
-"meilleurs qualité d'arrière-plans. "
+"N'oubliez pas d'effectuer au moins une fois la synchronisation dans les menu serveur.\n"
+"Ceci téléchargera les fichier nécessaires au bon format de 1920x1080."
 
-#: DP_Syncer.py:162
-msgid "Reconnecting to background task ...\n"
-msgstr "Connexion à la tâche de fond...\n"
+#: ../src/DP_Player.py:432
+msgid "Please verify you direct local settings"
+msgstr "Verifiez les paramètres pour 'direct local'"
 
-#: DP_Syncer.py:297
+#: ../src/DP_MainMenu.py:469
 msgid ""
-"\n"
-"\n"
-"Finished"
+"Plexserver seems to be offline. Please check your your settings or connection!\n"
+" Retry?"
 msgstr ""
-"\n"
-"\n"
-"Términé"
+"Plexserver semble être hors ligne. Vérifiez vos paramètres et / ou la connexion !\n"
+" Réessayer ?"
 
-#: DP_Syncer.py:313
-msgid "Cancelled!"
-msgstr "Annulé!"
-
-#: DP_Syncer.py:326
+#: ../src/DP_MainMenu.py:459
 msgid ""
-"Sync or Renderer is still running!\n"
-"Continue in background?"
+"Plexserver seems to be offline. Start with Wake on Lan settings? \n"
+"\n"
+"Please note: \n"
+"If you press yes the spinner will run for "
 msgstr ""
-"Synchronisation en cours!\n"
-"Continuer en arrière-plan ?"
+"Plexserver semble être hors ligne. Afficher les paramètres WOL (Wake on Lan) ? \n"
+"\n"
+"Attention :\n"
+"Si vous appuyez sur Oui, le spinner s'affichera pendant "
 
-#: DP_Syncer.py:463
-msgid "DreamPlex: Rendering finished!\n"
-msgstr "DreamPlex: Rendu terminé!\n"
+#: ../src/DP_PlexLibrary.py:1058
+msgid "Press exit to return"
+msgstr "Appuyer sur Exit pour sortir"
 
-#: DP_Syncer.py:465
-msgid "DreamPlex: Mediasync finished!\n"
-msgstr "DreamPlex: Synchronisation des médias terminé!\n"
-
-#: DP_Syncer.py:587
-msgid ""
-"\n"
-"\n"
-"Starting to search for picture files with 1280x720 in its name ..."
-msgstr ""
-"\n"
-"\n"
-"Rechercher les images avec 1280x720 dans leurs noms ..."
-
-#: DP_Syncer.py:596
-msgid ""
-"\n"
-"\n"
-"Files found: "
-msgstr ""
-"\n"
-"\n"
-"Fichiers trouvés : "
-
-#: DP_Syncer.py:623
-msgid "backdrop video exists under the location "
-msgstr "vidéos arrière-plan existent dans la location "
-
-#: DP_Syncer.py:628
-msgid "trying to render backdrop now ...: "
-msgstr "rendu des arrière-plan en cours ... : "
-
-#: DP_Syncer.py:660
-#, python-format
-msgid ""
-"Error!\n"
-"Error-message:%s"
-msgstr ""
-"Erreur!\n"
-"Message d'erreur : %s "
-
-#: DP_Syncer.py:663
-msgid ""
-"\n"
-"\n"
-"No Files found. Nothing to do!"
-msgstr ""
-"\n"
-"\n"
-"Aucun fichier trouvé. Rien à faire! "
-
-#: DP_Syncer.py:670
+#: ../src/DP_Syncer.py:866 ../src/DP_Syncer.py:988
 msgid ""
 "Process aborted.\n"
 "Press Exit to close."
@@ -834,472 +1133,545 @@ msgstr ""
 "Action annuée.\n"
 "Appuyer sur Quitter pour fermer."
 
-#: DP_Syncer.py:672
-msgid ""
-"\n"
-"\n"
-"We are done!"
-msgstr ""
-"\n"
-"\n"
-"Terminé!"
+#: ../src/DP_Server.py:192
+msgid "Really delete this Server Entry?"
+msgstr "Etes-vous sûr vouloir supprimer ce serveur ?"
 
-#: DP_Syncer.py:721
-msgid "starting ..."
-msgstr "démarrage ..."
+#: ../src/DPH_Translations.py:49
+msgid "Recently Added"
+msgstr "Récemment ajouté"
 
-#: DP_Syncer.py:736
-msgid "Reading section of the server ..."
-msgstr "Lecture de la section serveur ..."
+#: ../src/DPH_Translations.py:48
+msgid "Recently Aired"
+msgstr "Récemment sorti"
 
-#: DP_Syncer.py:820
-msgid ""
-"Process aborted.\n"
-"Press OK to close."
-msgstr ""
-"Action annulée.\n"
-"Appuyer sur OK pour fermer. "
+#: ../src/DPH_Translations.py:50
+msgid "Recently Released"
+msgstr "Récemment sorti"
 
-#: DP_Syncer.py:822
-msgid "We did it :-)"
-msgstr "Terminé."
+#: ../src/DPH_Translations.py:51
+msgid "Recently Viewed"
+msgstr "Récemment vu"
 
-#: DP_Syncer.py:825
-#, python-format
-msgid ""
-"Error!\n"
-"Error-message:%s\n"
-"Press OK to close."
-msgstr ""
-"Erreur!\n"
-"Message d'erreur: %s\n"
-"Appuyez sur OK pour quitter."
+#: ../src/DPH_Translations.py:52
+msgid "Recently Viewed Episodes"
+msgstr "Episodes récemment vues"
 
-#: DP_Syncer.py:841
-msgid "checking for medias with ratingKey: "
-msgstr "vérification des médias avec ratingKey:"
+#: ../src/DPH_Translations.py:53
+msgid "Recently Viewed Shows"
+msgstr "Séries récemment vues"
 
-#: DP_Syncer.py:863
-msgid "found backdrop"
-msgstr "trouvé l'arrière-plan "
+#: ../src/DP_Syncer.py:183
+msgid "Reconnecting to background task ...\n"
+msgstr "Connexion à la tâche de fond...\n"
 
-#: DP_Syncer.py:869
-msgid "backdrop not found, trying to download ..."
-msgstr "arrière-plan non trouvé, essaie de télécharger ..."
+#: ../src/DP_Settings.py:190
+msgid "Remote Settings "
+msgstr "Paramètres distants "
 
-#: DP_Syncer.py:889
-msgid "found poster"
-msgstr "trouvé le poster "
+#: ../src/DP_Server.py:485
+msgid "Renames filename.eng.srt automatically to filename.srt so e2 is able to read them."
+msgstr "Renomme nomdufichier.fr.srt automatiquement en nomdufichier.srt pour que E2 soit capable de les lire."
 
-#: DP_Syncer.py:895
-msgid "poster not found, trying to download ..."
-msgstr "poster non trouvé, essaie de télécharger ..."
-
-#: DP_SystemCheck.py:72
-msgid "Check for gst-plugin-fragmented"
-msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE16."
-
-#: DP_SystemCheck.py:75
-msgid "Check for gst-plugins-bad-fragmented"
-msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE20. "
-
-#: DP_SystemCheck.py:79
-msgid "Check for gst-plugin-fragmented if you are using OE16."
-msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE16. "
-
-#: DP_SystemCheck.py:80
-msgid "Check for gst-plugins-bad-fragmented if you are using OE20."
-msgstr "Vérifiez gst-plugin-fragemented si vous utilisez OE20. "
-
-#: DP_SystemCheck.py:82
-msgid "Check curl installation data."
-msgstr "Vérifier l'installation du cURL ?"
-
-#: DP_SystemCheck.py:83
-msgid "Check mjpegtools intallation data."
-msgstr "Vérifier l'installation des mjpegtools ? "
-
-#: DP_SystemCheck.py:84
-msgid "Check python imaging installation data."
-msgstr "Vérifier l'installation de python imaging ?"
-
-#: DP_SystemCheck.py:87
-msgid "Check for update."
-msgstr "Vérifier les mises à jour ?"
-
-#: DP_SystemCheck.py:102
-msgid "System - Systemcheck"
-msgstr "Vérifier l'installation"
-
-#: DP_SystemCheck.py:104
-msgid "Functions List:"
-msgstr "Fonctions média:"
-
-#: DP_SystemCheck.py:163
-msgid "Your current Version is "
-msgstr "Votre version actuelle est "
-
-#: DP_SystemCheck.py:166
-msgid "No update available"
-msgstr "Pas de mise à jour"
-
-#: DP_SystemCheck.py:169
-msgid "No internet connection available or curl is not installed!"
-msgstr "Aucune connection internet trouvée ou cURL pas trouvé !"
-
-#: DP_SystemCheck.py:262
-msgid ""
-"Enigma2 must be restarted!\n"
-"Should Enigma2 now restart?"
-msgstr ""
-"Enigma2 doit être redémarrer !\n"
-"Redémarrer mainenant ?"
-
-#: DP_SystemCheck.py:278 DP_SystemCheck.py:366
-msgid "Information:\n"
-msgstr "Information:\n"
-
-#: DP_SystemCheck.py:372 DP_SystemCheck.py:375 DP_SystemCheck.py:378
-#: DP_SystemCheck.py:381
-msgid ""
-"The selected plugin is not installed!\n"
-" Do you want to proceed to install?"
-msgstr ""
-"Le plugin sélectionné n'est pas installé!\n"
-"Installer le plugin maintenant ?"
-
-#: DP_SystemCheck.py:421 DP_SystemCheck.py:532
-msgid "Could not install "
-msgstr "Echec d'installation"
-
-#: DP_View.py:244
-msgid "Total:"
-msgstr "Total:"
-
-#: DP_View.py:251
-msgid "Pages:"
-msgstr "Pages:"
-
-#: DP_View.py:281
-msgid "Cast:"
-msgstr "Joue: "
-
-#: DP_View.py:286
-msgid "press 'Text'"
-msgstr "appuyez 'Text'"
-
-#: DP_View.py:288
-msgid "Subtitles:"
-msgstr "Sous-titres:"
-
-#: DP_View.py:291
-msgid "press 'Audio'"
-msgstr "appuyez 'Audio'"
-
-#: DP_View.py:293
-msgid "Audio:"
-msgstr "Son:"
-
-#: DP_View.py:296
-msgid "press 'Info'"
-msgstr "appuyez 'Info'"
-
-#: DP_View.py:298
-msgid "Info:"
-msgstr "Info:"
-
-#: DP_View.py:302
-msgid "Director:"
-msgstr "Régisseur:"
-
-#: DP_View.py:306
-msgid "Writer:"
-msgstr "Scénariste:: "
-
-#: DP_View.py:310
-msgid "Genre:"
-msgstr "Genre:"
-
-#: DP_View.py:314
-msgid "Year:"
-msgstr "Année:"
-
-#: DP_View.py:318
-msgid "Medias:"
-msgstr "Médias:"
-
-#: DP_View.py:322
-msgid "Unseen:"
-msgstr "Non vus:"
-
-#: DP_View.py:326
-msgid "Seen:"
-msgstr "Vus:"
-
-#: DP_View.py:330
-msgid "Seasons:"
-msgstr "Saison:"
-
-#: DP_View.py:334
-msgid "Studio:"
-msgstr "Studio:"
-
-#: DP_View.py:338
-msgid "Runtime:"
-msgstr "Durée:"
-
-#: DP_View.py:351
-msgid "Video Codec:"
-msgstr "Codec vidéo:"
-
-#: DP_View.py:355
-msgid "Bitrate:"
-msgstr "Débit:"
-
-#: DP_View.py:359
-msgid "Framerate:"
-msgstr "Img/sec:"
-
-#: DP_View.py:363
-msgid "Audio Channels:"
-msgstr "Pistes son:"
-
-#: DP_View.py:367
-msgid "Aspect Ratio:"
-msgstr "Raport:"
-
-#: DP_View.py:371
+#: ../src/DP_View.py:375
 msgid "Resultion:"
 msgstr "Résolution:"
 
-#: DP_View.py:375
-msgid "Audio Codec:"
-msgstr "Codecs son:"
+#: ../src/DP_SystemCheck.py:90
+msgid "Revoke cache files manually"
+msgstr "Révoquer manuellement les fichiers de cache"
 
-#: DP_View.py:379
-msgid "File:"
-msgstr "Fichier:"
+#: ../src/DP_View.py:342
+msgid "Runtime:"
+msgstr "Durée:"
 
-#: DP_View.py:640
-msgid "playback mode 'default'"
-msgstr "mode lecture 'défaut'"
+#: ../src/DP_Server.py:568 ../src/DP_Settings.py:217
+msgid "Save"
+msgstr "Sauvegarder"
 
-#: DP_View.py:642
-msgid "View '"
-msgstr "Vue '"
+#: ../src/DP_Settings.py:121
+msgid "Save plex server answers in cache to speed up a bit."
+msgstr "Enregistrez les réponses du serveur Plex dans le cache pour accélérer un peu."
 
-#: DP_View.py:645 DP_View.py:1246
-msgid "show 'Details'"
-msgstr "afficher 'Détails'"
+#: ../src/DP_HelperScreens.py:51
+msgid "Search ..."
+msgstr "Recherche ..."
 
-#: DP_View.py:670 DP_View.py:688
-msgid "playmode 'multi'"
-msgstr "mode lecture 'multi'"
+#: ../src/DPH_Translations.py:58
+msgid "Search Episodes..."
+msgstr "Chercher les épisodes..."
 
-#: DP_View.py:672 DP_View.py:685
-msgid "playmode 'single'"
-msgstr "mode lecture 'un'"
+#: ../src/DPH_Translations.py:57
+msgid "Search Shows..."
+msgstr "Chercher les séries..."
 
-#: DP_View.py:701 DP_View.py:719
-msgid "resume 'On'"
-msgstr "résumer 'Oui'"
+#: ../src/DP_Server.py:487
+msgid "Search string that should be removed from srt file."
+msgstr "Chaîne de recherche qui doit être supprimée du fichier SRT."
 
-#: DP_View.py:703 DP_View.py:716
-msgid "resume 'Off'"
-msgstr "résumer 'Non'"
+#: ../src/DPH_Translations.py:56
+msgid "Search..."
+msgstr "Recherche..."
 
-#: DP_View.py:734
-msgid "fastScroll 'On'"
-msgstr "fastScroll 'Oui'"
+#: ../src/DP_PlexLibrary.py:818
+msgid "Season"
+msgstr "Saison"
 
-#: DP_View.py:736
-msgid "fastScroll 'Off'"
-msgstr "fastScroll 'Non'"
+#: ../src/DP_View.py:334
+msgid "Seasons:"
+msgstr "Saison:"
 
-#: DP_View.py:779 __init__.py:177
+#: ../src/DP_View.py:330
+msgid "Seen:"
+msgstr "Vus:"
+
+#: ../src/DP_Player.py:373 ../src/DP_View.py:600
+msgid "Select media to play"
+msgstr "Choisir le média à afficher"
+
+#: ../src/DP_Server.py:274
+msgid "Select server"
+msgstr "Choisir le serveur"
+
+#: ../src/DP_Server.py:438
+msgid "Select your type how the box is reachable."
+msgstr "Sélectionnez votre type comment la boîte est accessible."
+
+#: ../src/DPH_Translations.py:61
+msgid "Series"
+msgstr "Séries"
+
+#: ../src/DP_MainMenu.py:351
+msgid "Server"
+msgstr "Serveur"
+
+#: ../src/DP_Server.py:106
+msgid "Server List:"
+msgstr "Serveurs:"
+
+#: ../src/DP_ServerMenu.py:129
+msgid "Server Menu"
+msgstr "Serveur menu"
+
+#: ../src/DP_MainMenu.py:350
+msgid "Settings"
+msgstr "Paramètres"
+
+#: ../src/DP_Settings.py:132
+msgid "Show additional filter in an additional menu step e.g. OnDeck"
+msgstr "Afficher le filtre supplémentaire dans une étape de menu supplémentaire p. ex. Ondeck"
+
+#: ../src/DP_Settings.py:159
+msgid "Show live tv while you are navigating through your libs."
+msgstr "Montrez la télévision en direct pendant que vous naviguez dans votre libs."
+
+#: ../src/DPH_Translations.py:60 ../src/DP_ViewShows.py:57
+msgid "Shows"
+msgstr "Shows"
+
+#: ../src/DP_Server.py:432
+msgid "Simply a name for better overview"
+msgstr "Simplement un nom pour une meilleure vue d'ensemble"
+
+#: ../src/DP_Mappings.py:119
+msgid "Something went wrong while opening mappings xml!"
+msgstr "Quelque chose s'est mal passé lors de l'ouverture de mappages XML!"
+
+#: ../src/DP_Users.py:125
+msgid "Something went wrong while opening users xml!"
+msgstr "Quelque chose s'est mal passé lors de l'ouverture des utilisateurs XML!"
+
+#: ../src/DP_Player.py:430
+msgid "Sorry I didn't find the file on the provided locations"
+msgstr "Navré, je n'ai pas trouvé le fichier à la location indiquée"
+
+#: ../src/DP_Settings.py:163
+msgid "Specifiy the type of additional data."
+msgstr "Spécifier le type de donnée supplémentaire."
+
+#: ../src/DP_Settings.py:135
+msgid "Specifiy what the exit button in the player should do."
+msgstr "Spécifiez ce que le bouton EXIT dans le lecteur doit faire."
+
+#: ../src/DP_Settings.py:167 ../src/DP_Settings.py:168
+#: ../src/DP_Settings.py:169
+msgid "Specify what view type should start automatically."
+msgstr "Spécifiez le type d'affichage qui doit démarrer automatiquement."
+
+#: ../src/DP_Syncer.py:95
+msgid "Start Rendering"
+msgstr "Démarrer rendu"
+
+#: ../src/DP_Syncer.py:93
+msgid "Start Sync"
+msgstr "Syncroniser"
+
+#: ../src/DP_Settings.py:134
+msgid "Start with filtermode in any media view."
+msgstr "Démarrer avec le mode filtre sur n’importe quel média."
+
+#: ../src/DP_Settings.py:138
+msgid "Stop live TV. Enables 'play themes', 'use backdrop videos'"
+msgstr "Arrêtez la télé en direct. Active les «thèmes de jeu», «utilisation des vidéos de toile de fond»"
+
+#: ../src/DP_View.py:1021 ../src/__init__.py:179
 msgid "Streamed"
 msgstr "Streamed"
 
-#: DP_View.py:779 __init__.py:177
-msgid "Transcoded"
-msgstr "Transcodé"
+#: ../src/DP_View.py:338
+msgid "Studio:"
+msgstr "Studio:"
 
-#: DP_View.py:779 __init__.py:177
-msgid "Direct Local"
-msgstr "Direct Local"
-
-#: DP_View.py:822
-msgid "turn filter mode off"
-msgstr "désactiver mode filtre"
-
-#: DP_View.py:1269
-msgid "show 'Description'"
-msgstr "afficher 'Déscription'"
-
-#: DP_View.py:1844
-msgid "/"
-msgstr "/"
-
-#: DP_View.py:1856
-msgid "Mark media unwatched"
-msgstr "Marquer comme non vu"
-
-#: DP_View.py:1857
-msgid "Mark media watched"
-msgstr "Marquer comme vu"
-
-#: DP_View.py:1858
-msgid "Initiate Library refresh"
-msgstr "Démarrer mise à jour de la librairie"
-
-#: DP_View.py:1861
-msgid "Media Functions"
-msgstr "Fonctions média"
-
-#: DP_View.py:1918
+#: ../src/DP_View.py:2194
 msgid ""
 "Subtitle Functions\n"
 "\n"
-"Please take note that switching the subtitles here will take only effect if "
-"you enable transcoding!"
+"Please take note that switching the subtitles here will take only effect if you use direct local or transcoding!"
 msgstr ""
 "Fonctions sous-titres\n"
 "\n"
-"Notez que changement de sous-titres ici aura l'effet UNIQUEMENT si vous "
-"activez le transcodage!"
+"Notez que changer de sous-titres ici n’aura effet que si vous regardez en local ou en transcodage!"
 
-#: DP_View.py:1957
+#: ../src/DP_Server.py:483
+msgid "Subtitle Settings "
+msgstr "Paramètres des sous-titres "
+
+#: ../src/DP_View.py:292
+msgid "Subtitles:"
+msgstr "Sous-titres:"
+
+#: ../src/DP_Settings.py:131
+msgid "Summerize sections in an additional menu step."
+msgstr "Les sections résumées dans une étape supplémentaire de menu."
+
+#: ../src/DP_Settings.py:130
+msgid "Summerize servers in an additional menu step. (myPlex only)"
+msgstr "Résumez les serveurs dans une étape de menu supplémentaire. (myPlex seulement)"
+
+#: ../src/DP_ServerMenu.py:139
+msgid "Switch User"
+msgstr "Basculer l’utilisateur"
+
+#: ../src/DP_Server.py:115
+msgid "Sync Media"
+msgstr "Synchroniser médias"
+
+#: ../src/DP_Server.py:499
+msgid "Sync Settings "
+msgstr "Paramètres Sync "
+
+#: ../src/DP_Syncer.py:357
 msgid ""
-"Audio Functions\n"
-"\n"
-"Please take note that switching the language here will take only effect if "
-"you enable transcoding!"
+"Sync or Renderer is still running!\n"
+"Continue in background?"
 msgstr ""
-"Fonctions son\n"
-"\n"
-"Notez que changement de langue ici aura l'effet UNIQUEMENT si vous activez "
-"le transcodage!"
+"Synchronisation en cours!\n"
+"Continuer en arrière-plan ?"
 
-#: DP_View.py:2023
-msgid "Are you sure?"
-msgstr "Êtes-vous sûr ?"
+#: ../src/DP_Server.py:501 ../src/DP_Server.py:502 ../src/DP_Server.py:503
+msgid "Sync this content."
+msgstr "Synchronisez ce contenu."
 
-#: DP_View.py:2037
-msgid "Deleting aborted!"
-msgstr "Suppression annulée !"
+#: ../src/DP_MainMenu.py:180 ../src/DP_MainMenu.py:397
+msgid "System"
+msgstr "Système"
 
-#: __init__.py:173
-msgid "IP"
-msgstr "IP"
+#: ../src/DP_SystemCheck.py:105
+msgid "System - Systemcheck"
+msgstr "Vérifier l'installation"
 
-#: __init__.py:173
-msgid "DNS"
-msgstr "DNS"
+#: ../src/DP_MainMenu.py:352
+msgid "Systemcheck"
+msgstr "Vérifier l'installation"
 
-#: __init__.py:173
-msgid "MYPLEX"
-msgstr "MYPLEX"
-
-#: __init__.py:215
-msgid "64kbps, 128p, 3fps"
-msgstr "64kbps, 128p, 3fps"
-
-#: __init__.py:215
-msgid "96kbps, 128p, 12fps"
-msgstr "96kbps, 128p, 12fps"
-
-#: __init__.py:215
-msgid "208kbps, 160p, 15fps"
-msgstr "208kbps, 160p, 15fps"
-
-#: __init__.py:215
-msgid "320kbps, 240p"
-msgstr "320kbps, 240p"
-
-#: __init__.py:215
-msgid "720kbps, 320p"
-msgstr "720kbps, 320p"
-
-#: __init__.py:215
-msgid "1.5Mbps, 480p"
-msgstr "1.5Mbps, 480p"
-
-#: __init__.py:215
-msgid "2Mbps, 720p"
-msgstr "2Mbps, 720p"
-
-#: __init__.py:215
-msgid "3Mbps, 720p"
-msgstr "3Mbps, 720p"
-
-#: __init__.py:215
-msgid "4Mbps, 720p"
-msgstr "4Mbps, 720p"
-
-#: __init__.py:215
-msgid "8Mbps, 1080p"
-msgstr "8Mbps, 1080p"
-
-#: __init__.py:215
-msgid "10Mbps, 1080p"
-msgstr "10Mbps, 1080p"
-
-#: __init__.py:215
-msgid "12Mbps, 1080p"
-msgstr "12Mbps, 1080p"
-
-#: __init__.py:215
-msgid "20Mbps, 1080p"
-msgstr "20Mbps, 1080p"
-
-#: __init__.py:219
-msgid "420x240, 320kbps"
-msgstr "420x240, 320kbps"
-
-#: __init__.py:219
-msgid "576x320, 720 kbps"
-msgstr "576x320, 720 kbps"
-
-#: __init__.py:219
-msgid "720x480, 1,5mbps"
-msgstr "720x480, 1,5mbps"
-
-#: __init__.py:219
-msgid "1024x768, 2mbps"
-msgstr "1024x768, 2mbps"
-
-#: __init__.py:219
-msgid "1280x720, 3mbps"
-msgstr "1280x720, 3mbps"
-
-#: __init__.py:219
-msgid "1280x720, 4mbps"
-msgstr "1280x720, 4mbps"
-
-#: __init__.py:219
-msgid "1920x1080, 8mbps"
-msgstr "1920x1080, 8mbps"
-
-#: __init__.py:219
-msgid "1920x1080, 10mbps"
-msgstr "1920x1080, 10mbps"
-
-#: __init__.py:219
-msgid "1920x1080, 12mbps"
-msgstr "1920x1080, 12mbps"
-
-#: __init__.py:219
-msgid "1920x1080, 20mbps"
-msgstr "1920x1080, 20mbps"
-
-#: __init__.py:298
+#: ../src/__init__.py:374
 msgid "TV Shows"
 msgstr "TV Séries"
 
-#: plugin.py:28
-msgid "DreamPlex"
-msgstr "DreamPlex"
+#: ../src/DP_PathSelector.py:98
+msgid "Target: "
+msgstr "Cible: "
 
-#: plugin.py:51
+#: ../src/DP_SystemCheck.py:304
+msgid ""
+"The selected lib/package/plugin is not installed!\n"
+" Do you want to proceed to install?"
+msgstr ""
+"Le plugin/lib/paquet sélectionné n'est pas installé!\n"
+"Voulez-vous l’installer maintenant ?"
+
+#: ../src/DP_Users.py:228
+msgid "The user was not found!"
+msgstr "L'utilisateur n'a pas été trouvé!"
+
+#: ../src/DP_Player.py:939 ../src/DP_Player.py:956
+#, python-format
+msgid "This Box can't decode %s streams!"
+msgstr "Cette boîte ne peut pas décoder le flux %s!"
+
+#: ../src/DP_Syncer.py:181
+msgid ""
+"This will download all medias from the selected server.\n"
+"\n"
+"Additional to this we download the pictures in 1280x720 for better fullscreen backdrops."
+msgstr ""
+"Ceci télécharge tous les médias depuis le serveur.\n"
+"\n"
+"En plus on télécharge toutes les images en 1280x720 pour une meilleure qualité d'arrière-plans en plein écran."
+
+#: ../src/DP_Syncer.py:179
+msgid ""
+"This will download all medias from the selected server.\n"
+"\n"
+"Additional to this we download the pictures in 1920x1080 for better fullscreen backdrops."
+msgstr ""
+"Ceci télécharge tous les médias depuis le serveur.\n"
+"\n"
+"En plus on télécharge toutes les images en 1920x1080 pour une meilleure qualité d'arrière-plans en plein écran."
+
+#: ../src/DP_Server.py:430
+msgid "Toggle state to on/off to show this server in lost or not."
+msgstr "Changer Etat en oui/non pour afficher le serveur."
+
+#: ../src/DP_View.py:246
+msgid "Total:"
+msgstr "Total:"
+
+#: ../src/DP_View.py:1021 ../src/__init__.py:179
+msgid "Transcoded"
+msgstr "Transcodé"
+
+#: ../src/DP_PlexLibrary.py:251
+msgid "Tv Shows"
+msgstr "TV Séries"
+
+#: ../src/DP_MainMenu.py:338
+msgid "UNEXPECTED ERROR:"
+msgstr "ERREUR INATTENDUE:"
+
+#: ../src/DP_View.py:326
+msgid "Unseen:"
+msgstr "Non vus:"
+
+#: ../src/DPH_Translations.py:54
+msgid "Unwatched"
+msgstr "Non vu"
+
+#: ../src/DP_Settings.py:127
+msgid "Use Beta only if you really want to help with testing"
+msgstr "Utiliser les versions Betas si vous voulez aider à tester"
+
+#: ../src/DP_Server.py:538
+msgid "Use Home Users?"
+msgstr "Utiliser les utilisateurs domestiques?"
+
+#: ../src/DP_Server.py:544
+msgid "Use Pinprotection for switch back to myPlex user?"
+msgstr "Utilisez Pinprotection pour revenir à myPlex utilisateur?"
+
+#: ../src/DP_Settings.py:137
+msgid "Use this if you have m1v videos as backdrops"
+msgstr "Utiliser ces paramètres avec les m1v vidéos d'arrière plan"
+
+#: ../src/DP_Server.py:441
+msgid "Use this if you secured your plex server in the settings."
+msgstr "Utilisez-le si vous avez sécurisé votre serveur Plex dans les paramètres."
+
+#: ../src/DP_Settings.py:122
+msgid "Use this only if you do have enough space on your hdd drive or flash."
+msgstr "Utiliser ceci si vous n'avez pas suffisamment d'espace sur votre box sur votre disque dur ou flash."
+
+#: ../src/DP_Settings.py:120
+msgid "Use this to start the plugin direct in the main menu."
+msgstr "Utilisez cette option pour démarrer le plugin directement dans le menu principal."
+
+#: ../src/DP_Settings.py:129
+msgid "Userinterface Settings "
+msgstr "Paramètres d'interface utilisateur "
+
+#: ../src/DP_View.py:355
+msgid "Video Codec:"
+msgstr "Codec vidéo:"
+
+#: ../src/DP_View.py:736
+msgid "View '"
+msgstr "Vue '"
+
+#: ../src/DP_Server.py:490
+msgid "Wake On Lan Settings "
+msgstr "Paramètres réveil depuis le réseau (Wake On Lan) "
+
+#: ../src/DP_Player.py:435
+msgid "Warning:"
+msgstr "Attention:"
+
+#: ../src/DP_Syncer.py:990
+msgid "We did it :-)"
+msgstr "Terminé."
+
+#: ../src/DP_Settings.py:201
+msgid "Without this option we just print to console."
+msgstr "Sans cette option, nous venons l’imprimer sur la console."
+
+#: ../src/DP_View.py:310
+msgid "Writer:"
+msgstr "Scénariste:"
+
+#: ../src/DP_View.py:318
+msgid "Year:"
+msgstr "Année:"
+
+#: ../src/DP_PlexLibrary.py:1061
+msgid "You can use Systemcheck in the menu."
+msgstr "Vous pouvez utiliez Systemcheck dans le menu."
+
+#: ../src/DP_Server.py:463 ../src/DP_Server.py:465 ../src/DP_Server.py:466
+#: ../src/DP_Server.py:468
+msgid "You need gstreamer_fragmented installed for this feature! Please check in System ... "
+msgstr "Vous devez installer gstreamer_fragmented pour utiliser cette option Vérifier l'installation sur le Système ... "
+
+#: ../src/DP_Server.py:534 ../src/DP_Server.py:535 ../src/DP_Server.py:536
+msgid "You need openSSL installed for this feature! Please check in System ..."
+msgstr "Vous avez besoin d'OpenSSL installé pour cette fonctionnalité! S'il vous plaît vérifier dans le système..."
+
+#: ../src/DP_Player.py:973 ../src/DP_Player.py:993
+#, python-format
+msgid ""
+"Your Box can't decode this video stream!\n"
+"%s"
+msgstr ""
+"Cette vidéo ne peut pas être lue\n"
+"(%s)"
+
+#: ../src/DP_SystemCheck.py:168
+msgid "Your current Version is "
+msgstr "Votre version actuelle est "
+
+#: ../src/DP_Syncer.py:1141
+msgid "backdrop not found, trying to download ..."
+msgstr "arrière-plan non trouvé, essaie de télécharger ..."
+
+#: ../src/DP_Syncer.py:783
+msgid "backdrop video exists under the location "
+msgstr "vidéos arrière-plan existent dans la location "
+
+#: ../src/DP_View.py:743
+msgid "delete Medias"
+msgstr "supprimer les médias"
+
+#: ../src/DP_Settings.py:123
+msgid "e.g. lcd4linux"
+msgstr "p. ex. lcd4linux"
+
+#: ../src/DP_View.py:978
+msgid "fastScroll 'Off'"
+msgstr "fastScroll 'Non'"
+
+#: ../src/DP_View.py:976
+msgid "fastScroll 'On'"
+msgstr "fastScroll 'Oui'"
+
+#: ../src/DP_Server.py:717 ../src/DP_Server.py:720 ../src/DP_Server.py:736
+#: ../src/DP_Server.py:739
+msgid "for the user:"
+msgstr "pour l'utilisateur:"
+
+#: ../src/DP_Syncer.py:1135
+msgid "found backdrop - size("
+msgstr "trouvé l'arrière-plan - taille("
+
+#: ../src/DP_Syncer.py:1161
+msgid "found poster - size("
+msgstr "trouvé le poster - taille("
+
+#: ../src/DP_Server.py:575
+msgid "get local auth Token"
+msgstr "obtenir un jeton d'authentification local"
+
+#: ../src/DP_Server.py:736
+msgid "myPlex Token:"
+msgstr "vérifier myPlex Token:"
+
+#: ../src/DPH_MovingLabel.py:120
+msgid "no Data"
+msgstr "pas de données"
+
+#: ../src/DP_PlexLibrary.py:422
+msgid "onDeck"
+msgstr "onDeck"
+
+#: ../src/DP_View.py:734
+msgid "playback mode '"
+msgstr "mode de lecture'"
+
+#: ../src/DP_View.py:912 ../src/DP_View.py:930
+msgid "playmode 'multi'"
+msgstr "mode lecture 'multi'"
+
+#: ../src/DP_View.py:914 ../src/DP_View.py:927
+msgid "playmode 'single'"
+msgstr "mode lecture 'un'"
+
+#: ../src/DP_PlexLibrary.py:1060
+msgid "please check if python-pyopenssl is installed."
+msgstr "veuillez vérifier si python-pyopenssl est installé."
+
+#: ../src/plugin.py:327
 msgid "plex client for enigma2"
 msgstr "Plex client pour Enigma2"
+
+#: ../src/DP_Syncer.py:1167
+msgid "poster not found, trying to download ..."
+msgstr "poster non trouvé, essaie de télécharger ..."
+
+#: ../src/DP_View.py:295
+msgid "press 'Audio' or 'Radio'"
+msgstr "appuyez sur 'audio' ou 'radio'"
+
+#: ../src/DP_View.py:300
+msgid "press 'Info'"
+msgstr "appuyez 'Info'"
+
+#: ../src/DP_View.py:290
+msgid "press 'Text'"
+msgstr "appuyez 'Text'"
+
+#: ../src/DP_View.py:945 ../src/DP_View.py:958
+msgid "resume 'Off'"
+msgstr "résumer 'Non'"
+
+#: ../src/DP_View.py:943 ../src/DP_View.py:961
+msgid "resume 'On'"
+msgstr "résumer 'Oui'"
+
+#: ../src/DP_View.py:1486
+msgid "show 'Description'"
+msgstr "afficher 'Déscription'"
+
+#: ../src/DP_View.py:739 ../src/DP_View.py:1463
+msgid "show 'Details'"
+msgstr "afficher 'Détails'"
+
+#: ../src/DP_Syncer.py:810
+msgid "skipping because unsupported image type. "
+msgstr "ignorer parce que le type d'image non prise en charge. "
+
+#: ../src/DP_Syncer.py:1116
+msgid "title: "
+msgstr "titre: "
+
+#: ../src/DP_Syncer.py:788
+msgid "trying to render backdrop now ...: "
+msgstr "rendu des arrière-plan en cours ... : "
+
+#: ../src/DP_View.py:1061
+msgid "turn filter mode off"
+msgstr "désactiver mode filtre"
+
+#: ../src/DP_View.py:744
+msgid "use for Mapping"
+msgstr "utiliser pour Mappage"
+
+#: ../src/DP_Server.py:736
+msgid "with the id:"
+msgstr "avec l'ID:"
