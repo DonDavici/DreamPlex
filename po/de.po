@@ -243,7 +243,7 @@ msgstr "Wenn myPlex verwendet wird"
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:924
 msgid "please check if curl is installed."
-msgstr "überprüfen Sie ob curl intalliert ist."
+msgstr "überprüfen Sie Ihre curl-Installation."
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:925
 msgid "You can use Systemcheck in the menu."
@@ -397,15 +397,15 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Dateien gefunden:"
+"Files gefunden:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:626
 msgid "backdrop video exists under the location "
-msgstr "Hintergrundvideo existiert bereits"
+msgstr "Backdrop Video existiert bereits"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:631
 msgid "trying to render backdrop now ...: "
-msgstr "versuche das Hintergrundvideo zu rendern ...:"
+msgstr "versuche das Backdropvideo zu rendern ...:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:663
 #, python-format
@@ -490,7 +490,7 @@ msgstr "Poster gefunden - Größe("
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:902
 msgid "poster not found, trying to download ..."
-msgstr "Poster nicht gefunden, versuche es herunterzuladen ..."
+msgstr "poster nicht gefunden, versuche es herunterzuladen ..."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:926
 msgid "... success"
@@ -581,10 +581,7 @@ msgid ""
 " This file was partially played.\n"
 "\n"
 " Do you want to resume?"
-msgstr ""
-" Diese Datei wurde teilweise abgespielt.\n"
-"\n"
-" Fortsetzen (Ja) oder  Neustart (Nein) ?"
+msgstr "Fortsetzen (Ja) oder  Neustart (Nein) ?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:585
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:602
@@ -610,7 +607,7 @@ msgstr "Seiten:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:281
 msgid "Cast:"
-msgstr "Besetzung:"
+msgstr "Cast:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:286
 msgid "press 'Text'"
@@ -694,7 +691,7 @@ msgstr "Audio Kanäle"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:367
 msgid "Aspect Ratio:"
-msgstr "Seitenverhältnis:"
+msgstr "Aspect Ratio:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:371
 msgid "Resultion:"
@@ -706,11 +703,11 @@ msgstr "Audio Codec:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:379
 msgid "File:"
-msgstr "Datei:"
+msgstr "File:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:640
 msgid "playback mode 'default'"
-msgstr "Abspielmodus 'standard'"
+msgstr "playback mode 'default'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:642
 msgid "View '"
@@ -724,22 +721,22 @@ msgstr "Zeige Details"
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:670
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:688
 msgid "playmode 'multi'"
-msgstr "Abspielmodus 'mehrere'"
+msgstr "playmode 'multi'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:672
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:685
 msgid "playmode 'single'"
-msgstr "Abspielmodus 'einzeln'"
+msgstr "plabmode 'single'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:701
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:719
 msgid "resume 'On'"
-msgstr "fortsetzen 'An'"
+msgstr "resume 'On'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:703
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:716
 msgid "resume 'Off'"
-msgstr "fortsetzen 'Aus'"
+msgstr "resume 'Off'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:734
 msgid "fastScroll 'On'"
@@ -771,7 +768,7 @@ msgstr "Markiere Medien als gesehen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:1860
 msgid "Initiate Library refresh"
-msgstr "Bibliotheksaktualisierung starten"
+msgstr "Initiiere Bibliotheksaktualisierung"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:1863
 msgid "Media Functions"
@@ -815,7 +812,7 @@ msgstr "Alle Filme"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:33
 msgid "All Filmy"
-msgstr "Alle Filme"
+msgstr "Alle Filme2"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:34
 msgid "All Shows"
@@ -823,83 +820,83 @@ msgstr "Alle Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:35
 msgid "All episodes"
-msgstr "Alle Episoden"
+msgstr "alle Episoden"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:36
 msgid "By Genre"
-msgstr "Nach Genre"
+msgstr "nach Genre"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:37
 msgid "By Folder"
-msgstr "Nach Verzeichnis"
+msgstr "nach Verzeichnis"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:38
 msgid "By First Letter"
-msgstr "Nach ersten Buchstaben"
+msgstr "nach ersten Buchstaben"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:39
 msgid "By Resolution"
-msgstr "Nach Auflösung"
+msgstr "nach Auflösung"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:40
 msgid "By Rating"
-msgstr "Nach Bewertung"
+msgstr "nach Bewertung"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:41
 msgid "By Country"
-msgstr "Nach Land"
+msgstr "nach Land"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:42
 msgid "By Director"
-msgstr "Nach Regisseur"
+msgstr "nach Regisseur"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:43
 msgid "By Decade"
-msgstr "Nach Dekade"
+msgstr "nach Dekade"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:44
 msgid "By Year"
-msgstr "Nach Jahr"
+msgstr "nach Jahr"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:45
 msgid "By Collection"
-msgstr "Nach Sammlung"
+msgstr "nach Sammlung"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:46
 msgid "By Content Rating"
-msgstr "Nach Inhaltsbewertung"
+msgstr "nach Inhaltsbewertung"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:47
 msgid "By Starring Actor"
-msgstr "Nach Hauptdarsteller"
+msgstr "nach Hauptdarsteller"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:48
 msgid "Recently Aired"
-msgstr "Zuletzt ausgestrahlt"
+msgstr "zuletzt  ausgestrahlt"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:49
 msgid "Recently Added"
-msgstr "Zuletzt hinzugefügt"
+msgstr "zuletzt  hinzugefügt"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:50
 msgid "Recently Released"
-msgstr "Zuletzt veröffentlicht"
+msgstr "zuletzt  veröffentlicht"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:51
 msgid "Recently Viewed"
-msgstr "Zuletzt gesehen"
+msgstr "zuletzt  gesehen"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:52
 msgid "Recently Viewed Episodes"
-msgstr "Zuletzt gesehene Episoden"
+msgstr "zuletzt  gesehene Episoden"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:53
 msgid "Recently Viewed Shows"
-msgstr "Zuletzt gesehene Shows"
+msgstr "zuletzt  gesehene Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:54
 msgid "Unwatched"
-msgstr "Ungesehen"
+msgstr "Nicht gesehen"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:55
 msgid "On Deck"
@@ -911,11 +908,11 @@ msgstr "Suche..."
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:57
 msgid "Search Shows..."
-msgstr "Suche Shows..."
+msgstr "Suche Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:58
 msgid "Search Episodes..."
-msgstr "Suche Episoden..."
+msgstr "Suche Episoden"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:61
 msgid "Series"
@@ -931,14 +928,14 @@ msgstr "Plex-Client für Enigma2"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:112
 msgid "Server Menu"
-msgstr "Server Menü"
+msgstr "Server Menu"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:230
 msgid "Please enter your search string: "
 msgstr "Bitte geben Sie Ihren Suchbegriff ein:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:441
-msgid "TV Shows"
+msgid "Tv Shows"
 msgstr "Serien"
 
 #: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:448
@@ -1005,7 +1002,7 @@ msgstr "> Verwende Bilder-Zwischenspeicher(Cache) "
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:114
 msgid "Use this if you do not have enough space on your box e.g. no hdd drive just flash."
-msgstr "Verwende diese Einstellung wenn ungenügend physkalischer Speicher vorhanden ist"
+msgstr "Verwende diese Einstellung wenn nicht genügend phys. Speicher vorhanden ist"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:115
 msgid "> Show Infobar when buffer drained"
@@ -1061,7 +1058,7 @@ msgstr "> Stoppe Live-TV beim Start"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:137
 msgid ">> Play Themes in TV Shows"
-msgstr ">> Spiele Themen bei TV Shows ab"
+msgstr ">> Spiele Themen ab bei TV Shows"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:147
 msgid "> Use fastScroll as default"
@@ -1069,7 +1066,7 @@ msgstr "> Nutze FastScroll als Voreinstellung"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:149
 msgid "> Show liveTv in Views instead of backdrops"
-msgstr "> Zeige LiveTV statt Hintergrundbilder"
+msgstr "> Zeige liveTv statt Hintergrundbilder"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:151
 msgid "> Show additional data for myPlex sections"
@@ -1146,7 +1143,7 @@ msgstr "Hinzufügen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:107
 msgid "Sync Media"
-msgstr "Sync Medien"
+msgstr "Sync Medias"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:108
 msgid "Discover"
@@ -1198,7 +1195,7 @@ msgstr "> Lokale Authentifizierung"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:400
 msgid "Toggle state to on/off"
-msgstr "Statuswechsel An/Aus"
+msgstr "Statuswechsel on/off"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:406
 msgid " >> DNS"
@@ -1231,11 +1228,11 @@ msgstr "Für dieses Feature wird gstreamer_fragmented benötigt ! Bitte installi
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:424
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:427
 msgid " >> Transcoding quality"
-msgstr " >> Transkodierungsqualität"
+msgstr " >> Transcoding Qualität"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:425
 msgid " >> Segmentsize in seconds"
-msgstr " >> Segmentgröße in Sekunden"
+msgstr " >> Segmentsize in Sekunden"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:441
 msgid "Wake On Lan Settings"
@@ -1282,7 +1279,7 @@ msgstr " >> myPlex Token erneuern"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:509
 msgid "Mappings"
-msgstr "Zuordnungen"
+msgstr "Mappings"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:517
 msgid "check myPlex Token"
@@ -1315,16 +1312,16 @@ msgstr "Fehler:"
 #~ "Drücke OK um zu schließen."
 
 #~ msgid "got movie url: "
-#~ msgstr "movie url: "
+#~ msgstr "movie url:"
 
 #~ msgid "got show url: "
-#~ msgstr "Serien url: "
+#~ msgstr "serien url:"
 
 #~ msgid "got music url: "
-#~ msgstr "Music url: "
+#~ msgstr "music url:"
 
 #~ msgid "checking for  "
-#~ msgstr "Suche nach  "
+#~ msgstr "suche nach"
 
 #~ msgid "download_url: "
-#~ msgstr "download_url: "
+#~ msgstr "download_url:"
