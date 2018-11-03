@@ -937,18 +937,6 @@ msgstr "Server Menü"
 msgid "Please enter your search string: "
 msgstr "Bitte geben Sie Ihren Suchbegriff ein:"
 
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:441
-msgid "TV Shows"
-msgstr "Serien"
-
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:448
-msgid "Pictures"
-msgstr "Bilder"
-
-#: /hdd/workspaces/DreamPlex/src/DP_ServerMenu.py:449
-msgid "Channels"
-msgstr "Kanäle"
-
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:110
 msgid "General Settings"
 msgstr "Generelle Einstellungen"
