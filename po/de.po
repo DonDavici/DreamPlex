@@ -226,7 +226,7 @@ msgstr "Musik"
 
 #: /hdd/workspaces/DreamPlex/src/DP_HelperScreens.py:51
 msgid "Search ..."
-msgstr "Suche..."
+msgstr "Suche ..."
 
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:355
 #: /hdd/workspaces/DreamPlex/src/DP_PlexLibrary.py:432
@@ -341,7 +341,7 @@ msgid ""
 "\n"
 "Additional to this we download the pictures in 1280x720 for better fullscreen backdrops."
 msgstr ""
-"Es werden alle Medias vom ausgewählten Server herunter geladen.\n"
+"Es werden alle Medien vom ausgewählten Server herunter geladen.\n"
 "\n"
 "Zusätzlich dazu werden die Bilder in einer Qualität von 1280x720 für hochauflösende Backdrops heruntergeladen."
 
@@ -424,7 +424,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Keine Files gefunden. Nichts zu tun!"
+"Keine Dateien gefunden. Nichts zu tun!"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:673
 #: /hdd/workspaces/DreamPlex/src/DP_Syncer.py:823
@@ -544,13 +544,18 @@ msgid ""
 "\n"
 "Please note: \n"
 "If you press yes the spinner will run for "
-msgstr " "
+msgstr ""
+"Plex Server scheint offline zu sein. WakeOnLan starten? \n"
+"\n"
+"Bitte beachten: \n"
+"Wenn Sie Ja drücken, läuft der Spinner "
 
 #: /hdd/workspaces/DreamPlex/src/DP_MainMenu.py:469
 msgid ""
 "Plexserver seems to be offline. Please check your your settings or connection!\n"
 " Retry?"
-msgstr "Der Plexserver ist nicht erreichbar, bitte Verbindung prüfen.  Wiederholen?"
+msgstr "Der Plexserver ist nicht erreichbar, bitte Verbindung oder Einstellungen prüfen!\n"
+" Wiederholen?"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:231
 msgid "Select media to play"
@@ -654,7 +659,7 @@ msgstr "Jahr:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:318
 msgid "Medias:"
-msgstr "Medias:"
+msgstr "Medien:"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:322
 msgid "Unseen:"
@@ -714,7 +719,7 @@ msgstr "Abspielmodus 'standard'"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:642
 msgid "View '"
-msgstr "View '"
+msgstr "Ansicht '"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:645
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:1246
@@ -783,7 +788,7 @@ msgid ""
 "\n"
 "Please take note that switching the subtitles here will take only effect if you enable transcoding!"
 msgstr ""
-"Sbutitle Funktionen\n"
+"Untertitel Funktionen\n"
 "\n"
 "Bitte beachten Sie, dass die Änderung nur aktiv wird wenn als Abspielmodus transkodieren verwenden!"
 
@@ -911,7 +916,7 @@ msgstr "Suche..."
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:57
 msgid "Search Shows..."
-msgstr "Suche Shows..."
+msgstr "Suche Serien..."
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:58
 msgid "Search Episodes..."
@@ -1029,7 +1034,7 @@ msgstr "> Zeige Filter für Bereiche"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:124
 msgid "> Show Seen/Unseen count in TvShows"
-msgstr "> Zeige Gesehen/Ungesehen Statistik bei TV-Shows"
+msgstr "> Zeige Gesehen/Ungesehen Statistik bei Serien"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:125
 msgid "> Start with Filtermode"
@@ -1049,7 +1054,7 @@ msgstr "> Stoppe Live-TV beim Start"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:137
 msgid ">> Play Themes in TV Shows"
-msgstr ">> Spiele Themen bei TV Shows ab"
+msgstr ">> Spiele Themen bei Serien ab"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Settings.py:147
 msgid "> Use fastScroll as default"
@@ -1254,7 +1259,7 @@ msgstr ">> myPlex URL"
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:483
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:484
 msgid "You need curl installed for this feature! Please check in System ..."
-msgstr "Für dieses Feature wird curl benötigt ! Bitte installieren das Plugin."
+msgstr "Für dieses Feature wird curl benötigt ! Bitte installieren Sie das Plugin."
 
 #: /hdd/workspaces/DreamPlex/src/DP_Server.py:482
 msgid " >> myPLEX Username"
