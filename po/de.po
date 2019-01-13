@@ -575,7 +575,7 @@ msgstr "Bitte lokale Einstellungen übeprüfen"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:288
 msgid "I will now try to play the file via transcode."
-msgstr "Versuche die Datei via Transcode abzuspielen"
+msgstr "Versuche die Datei via Transcode abzuspielen (Umstellung auf Transcoding: Blaue Taste in der Auswahl-Liste)"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:290
 msgid "Warning:"
@@ -595,7 +595,7 @@ msgstr ""
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:602
 #, python-format
 msgid "This Box can't decode %s streams!"
-msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden (Umstellung: Blaue Taste in der Auswahl-Liste)"
+msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden (Umstellung auf Transcoding: Blaue Taste in der Auswahl-Liste)"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:619
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:639
@@ -603,7 +603,7 @@ msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden (Umstellung
 msgid ""
 "Your Box can't decode this video stream!\n"
 "%s"
-msgstr "Dieses Video (%s) kann nicht dekodiert/wiedergegeben werden"
+msgstr "Dieses Video (%s) kann nicht dekodiert/wiedergegeben werden (Umstellung auf Transcoding: Blaue Taste in der Auswahl-Liste)"
 
 #: /hdd/workspaces/DreamPlex/src/DP_View.py:244
 msgid "Total:"
