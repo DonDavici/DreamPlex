@@ -595,7 +595,7 @@ msgstr ""
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:602
 #, python-format
 msgid "This Box can't decode %s streams!"
-msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden"
+msgstr "Dieser Stream (%s) kann nicht dekodiert/wiedergegeben werden (Umstellung: Blaue Taste in der Auswahl-Liste)"
 
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:619
 #: /hdd/workspaces/DreamPlex/src/DP_Player.py:639
