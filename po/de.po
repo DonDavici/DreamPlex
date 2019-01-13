@@ -836,7 +836,7 @@ msgstr "Nach Genre"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:37
 msgid "By Folder"
-msgstr "Nach Verzeichnis"
+msgstr "Nach Verzeichnis (+Plex Version)"
 
 #: /hdd/workspaces/DreamPlex/src/DPH_Translations.py:38
 msgid "By First Letter"
