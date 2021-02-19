@@ -2973,6 +2973,10 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		elif resolution == "480" or resolution == "576" or resolution == "SD":
 			found = True
 			self["resolution"].setPixmapNum(2)
+			
+		elif resolution == "2160" or resolution == "4K" :
+			found = True
+			self["resolution"].setPixmapNum(3)
 
 		elif resolution == "UNKNOWN" or resolution == "":
 			found = False
