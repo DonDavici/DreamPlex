@@ -57,7 +57,7 @@ except ImportError:
 #===============================================================================
 # CONSTANTS
 #===============================================================================
-version = "2.1.3"
+version = "2.1.6"
 boxResoltion = None
 skinAuthors = ""
 skinResolution = "HD"
@@ -459,7 +459,7 @@ def checkPlexEnvironment():
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
 	configFolder = config.plugins.dreamplex.configfolderpath.value
 	cacheFolder = config.plugins.dreamplex.cachefolderpath.value
-	homeUsersFolder = config.plugins.dreamplex.configfolderpath.value + "homeUsers"
+	homeUsersFolder = config.plugins.dreamplex.configfolderpath.value
 
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
