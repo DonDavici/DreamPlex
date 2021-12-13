@@ -235,7 +235,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			iPlayableService.evUser+12: self.__evPluginError,
 			iPlayableService.evBuffering: self.__evUpdatedBufferInfo,
 			iPlayableService.evEOF: self.__evEOF,
+			iPlayableService.evUpdatedInfo: self.__evUpdatedInfo,
 		})
+
+		self.resume = False
 
 		if not sessionData:
 			if self.isExtraData:
@@ -251,6 +254,13 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 			self.setSeekState(self.SEEK_STATE_PLAY)
 
 			self.onLayoutFinish.append(self.resumePlayerData)
+
+	def __evUpdatedInfo(self):
+		if self.resume and self.resumeStamp is not None and self.resumeStamp > 0.0:
+			self.seekwatcherThread = eTimer()
+			self.seekwatcherThread_conn = self.seekwatcherThread.timeout.connect(self.seekWatcher)
+			self.seekwatcherThread.start(900, False)
+			return
 
 	#==============================================================================
 	#
@@ -485,9 +495,9 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		if self.whatPoster is None:
 			self.buildPosterData()
 
-		if getOeVersion() != "oe22":
-			self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
-		else:
+		#if getOeVersion() != "oe22":
+		#	self.EXpicloadPoster.startDecode(self.whatPoster,0,0,False)
+		#else:
 			self.EXpicloadPoster.startDecode(self.whatPoster,False)
 
 		self.ptr = self.EXpicloadPoster.getData()
@@ -619,9 +629,11 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 		service1 = self.session.nav.getCurrentService()
 		self.seek = service1 and service1.seek()
 
-		if resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
-			self.seekwatcherThread = threading.Thread(target=self.seekWatcher,args=(self,))
-			self.seekwatcherThread.start()
+		self.resume = resume
+		#if resume == True and self.resumeStamp is not None and self.resumeStamp > 0.0:
+		#	self.seekwatcherThread = eTimer()
+		#	self.seekwatcherThread_conn = self.seekwatcherThread.timeout.connect(self.seekWatcher)
+		#	self.seekwatcherThread.start(990,False)
 
 		self.startTimelineWatcher()
 
@@ -766,10 +778,10 @@ class DP_Player(Screen, InfoBarBase, InfoBarShowHide, InfoBarCueSheetSupport,
 
 		self.timelineWatcher = eTimer()
 
-		if getOeVersion() != "oe22":
-			self.timelineWatcher.callback.append(self.updateTimeline)
-		else:
-			self.timelineWatcherConn = self.timelineWatcher.timeout.connect(self.updateTimeline)
+		#if getOeVersion() != "oe22":
+			#self.timelineWatcher.callback.append(self.updateTimeline)
+		#else:
+		self.timelineWatcherConn = self.timelineWatcher.timeout.connect(self.updateTimeline)
 
 		if self.multiUserServer:
 			printl("we are a multiuser server", self, "D")

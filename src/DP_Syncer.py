@@ -401,9 +401,9 @@ class MediaSyncerInfo(object):
 
 		if not self.running:
 			self.backgroundMediaSyncer = BackgroundMediaSyncer()
-			if getOeVersion() != "oe22":
-				self.backgroundMediaSyncer.MessagePump.recv_msg.get().append(self.gotThreadMsg)
-				self.backgroundMediaSyncer.ProgressPump.recv_msg.get().append(self.gotThreadProgressMsg)
+			if getOeVersion() != "oe22" and getOeVersion() != "oe25":
+				self.backgroundMediaSyncer.MessagePump.recv_msg.connect(self.gotThreadMsg)
+				self.backgroundMediaSyncer.ProgressPump.recv_msg.connect(self.gotThreadProgressMsg)
 			else:
 				self.backgroundMediaSyncerConn = self.backgroundMediaSyncer.MessagePump.recv_msg.connect(self.gotThreadMsg)
 				self.backgroundMediaSyncerConn = self.backgroundMediaSyncer.ProgressPump.recv_msg.connect(self.gotThreadProgressMsg)

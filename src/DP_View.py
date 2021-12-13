@@ -2065,10 +2065,11 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		# we use this to give enough time to jump through the list before we start encoding pics and reading all the data that have to be switched = SPEEDUP :-)
 		self.refreshTimer = eTimer()
 
-		if getOeVersion() != "oe22":
-			self.refreshTimer.callback.append(self.showBackdrop)
-		else:
-			self.refreshTimerConn = self.refreshTimer.timeout.connect(self.showBackdrop)
+		#if getOeVersion() != "oe22":
+			#self.refreshTimer.callback.append(self.showBackdrop)
+		#else:
+
+		self.refreshTimerConn = self.refreshTimer.timeout.connect(self.showBackdrop)
 
 		self.refreshTimer.start(500, True)
 
@@ -2972,6 +2973,10 @@ class DP_View(DPH_Screen, DPH_ScreenHelper, DPH_MultiColorFunctions, DPH_Filter)
 		elif resolution == "480" or resolution == "576" or resolution == "SD":
 			found = True
 			self["resolution"].setPixmapNum(2)
+			
+		elif resolution == "2160" or resolution == "4K" :
+			found = True
+			self["resolution"].setPixmapNum(3)
 
 		elif resolution == "UNKNOWN" or resolution == "":
 			found = False

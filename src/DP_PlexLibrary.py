@@ -23,6 +23,7 @@ You should have received a copy of the GNU General Public License
 # IMPORT
 #===============================================================================
 import httplib
+import ssl
 import socket
 import sys
 import base64
@@ -1279,7 +1280,7 @@ class PlexLibrary(Screen):
 		myplex_header['Authorization'] = "Basic %s" % base64string
 		myplex_header['X-Plex-Username'] = self.g_myplex_username
 
-		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=20, port=443)
+		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=20, port=443, context=ssl._create_unverified_context())
 		conn.request(url="/users/sign_in.xml", method="POST", headers=myplex_header)
 		data = conn.getresponse()
 		response = data.read()
@@ -2290,7 +2291,7 @@ class PlexLibrary(Screen):
 		myplex_header = getPlexHeader(self.g_sessionID)
 		myplex_header['X-Plex-Token'] = str(self.serverConfig_myplexToken)
 
-		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=30, port=443)
+		conn = httplib.HTTPSConnection(MYPLEX_SERVER, timeout=30, port=443, context=ssl._create_unverified_context())
 		conn.request(url=url, method=requestType, headers=myplex_header)
 		data = conn.getresponse()
 		response = data.read()

@@ -57,7 +57,7 @@ except ImportError:
 #===============================================================================
 # CONSTANTS
 #===============================================================================
-version = "0.1"
+version = "2.1.6"
 boxResoltion = None
 skinAuthors = ""
 skinResolution = "HD"
@@ -459,7 +459,7 @@ def checkPlexEnvironment():
 	mediaFolder = config.plugins.dreamplex.mediafolderpath.value
 	configFolder = config.plugins.dreamplex.configfolderpath.value
 	cacheFolder = config.plugins.dreamplex.cachefolderpath.value
-	homeUsersFolder = config.plugins.dreamplex.configfolderpath.value + "homeUsers"
+	homeUsersFolder = config.plugins.dreamplex.configfolderpath.value
 
 	checkDirectory(playerTempFolder)
 	checkDirectory(logFolder)
@@ -747,7 +747,7 @@ def  setOeVersion():
 	if (2, 6, 8) > sys.version_info > (2, 6, 6):
 		oeVersion = "oe16"
 
-	if (2, 7, 4) > sys.version_info > (2, 7, 0):
+	if sys.version_info > (2, 7, 0):
 		oeVersion = "oe20"
 
 		# check for new oe2.2

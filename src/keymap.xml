@@ -12,6 +12,16 @@
     They can also be combine, eg. flags="mr"
     -->
 	<map context="DP_MainMenuActions">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_F1" mapto="red" flags="m" />
+			<key id="KEY_F2" mapto="green" flags="m" />
+			<key id="KEY_F3" mapto="yellow" flags="m" />
+			<key id="KEY_F4" mapto="blue" flags="m" />
+			<key id="KEY_ENTER" mapto="ok" flags="m" />
+			<key id="KEY_ESC" mapto="cancel" flags="m" />
+			<key id="KEY_F5" mapto="info" flags="m" />
+			<key id="KEY_F6" mapto="menu" flags="m" />
+		</device>
 		<key id="KEY_OK" mapto="ok" flags="m" />
 		<key id="KEY_EXIT" mapto="cancel" flags="m" />
 		<key id="KEY_ESC" mapto="cancel" flags="m" />
@@ -29,6 +39,9 @@
 	</map>
 
     <map context="DP_PluginCloser">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_ESC" mapto="stop" flags="m" />
+		</device>
         <key id="KEY_STOP" mapto="stop" flags="m" />
     </map>
 	
@@ -38,6 +51,25 @@
 	</map>
 
 	<map context="DP_View">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_RED" mapto="red" flags="b" />
+			<key id="KEY_RED" mapto="red_long" flags="l" />
+			<key id="KEY_YELLOW" mapto="yellow" flags="b" />
+			<key id="KEY_YELLOW" mapto="yellow_long" flags="l" />
+			<key id="KEY_GREEN" mapto="green" flags="b" />
+			<key id="KEY_GREEN" mapto="green_long" flags="l" />
+			<key id="KEY_BLUE" mapto="blue" flags="b" />
+			<key id="KEY_BLUE" mapto="blue_long" flags="l" />
+			<key id="KEY_ENTER" mapto="ok" flags="m" />
+			<key id="KEY_ESC" mapto="cancel" flags="m" />
+			<key id="KEY_F5" mapto="info" flags="m" />
+			<key id="KEY_F6" mapto="menu" flags="m" />
+			<key id="KEY_F8" mapto="video" flags="m" />
+			<key id="KEY_F7" mapto="audio" flags="m" />
+			<key id="KEY_F11" mapto="text" flags="m" />
+			<key id="KEY_ESC" mapto="stop" flags="m" />
+			<key id="KEY_F10" mapto="audio" flags="m" />
+		</device>
 		<key id="KEY_OK" mapto="ok" flags="m" />
 		<key id="KEY_MENU" mapto="menu" flags="m" />
 		<key id="KEY_EXIT" mapto="cancel" flags="m" />
@@ -90,6 +122,16 @@
 	</map>
 
     <map context="DPS_Player">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_F1" mapto="red" flags="m" />
+			<key id="KEY_F2" mapto="green" flags="m" />
+			<key id="KEY_F3" mapto="yellow" flags="m" />
+			<key id="KEY_F4" mapto="blue" flags="m" />
+			<key id="KEY_ENTER" mapto="ok" flags="m" />
+			<key id="KEY_ESC" mapto="cancel" flags="m" />
+			<key id="KEY_F5" mapto="info" flags="m" />
+			<key id="KEY_F6" mapto="menu" flags="m" />
+		</device>
 		<key id="KEY_BLUE" mapto="seekManual" flags="m" />
 		<key id="KEY_RED" mapto="seekManual" flags="m" />
         <key id="KEY_PREVIOUS" mapto="playPrevious" flags="m" />
@@ -104,6 +146,17 @@
 	</map>
 
     <map context="DPS_Syncer">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_RED" mapto="red" flags="b" />
+			<key id="KEY_RED" mapto="red_long" flags="l" />
+			<key id="KEY_BLUE" mapto="blue" flags="b" />
+			<key id="KEY_BLUE" mapto="blue_long" flags="l" />
+			<key id="KEY_YELLOW" mapto="yellow" flags="b" />
+			<key id="KEY_YELLOW" mapto="yellow_long" flags="l" />
+			<key id="KEY_GREEN" mapto="green" flags="b" />
+			<key id="KEY_GREEN" mapto="green_long" flags="l" />
+			<key id="KEY_ESC" mapto="cancel" flags="m" />
+		</device>
 		<key id="KEY_RED" mapto="red" flags="b" />
 		<key id="KEY_RED" mapto="red_long" flags="l" />
         <key id="KEY_BLUE" mapto="blue" flags="b" />
@@ -120,6 +173,9 @@
 	</map>
 
     <map context="DPS_ServerConfig">
+		<device name="compatible: pcKeyboard">
+			<key id="KEY_ESC" mapto="cancel" flags="m" />
+		</device>
 		<key id="KEY_LEFT" mapto="left" flags="m" />
 		<key id="KEY_RIGHT" mapto="right" flags="m" />
         <key id="KEY_EXIT" mapto="cancel" flags="m" />
